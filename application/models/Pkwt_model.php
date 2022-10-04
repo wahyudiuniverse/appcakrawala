@@ -1,0 +1,279 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Pkwt_model extends CI_Model {
+ 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->database();
+    }
+ 
+	public function get_pkwt()
+	{
+	  return $this->db->get("xin_employee_contract");
+	}
+	
+
+
+	// $CI->db->select('*');
+	// $CI->db->from('xin_employee_contract');
+	// $CI->db->where('contract_id', $userid);
+	// $CI->db->join('user_email', 'user_email.user_id = emails.id', 'left');
+	// $query = $CI->db->get(); 
+
+	public function get_pkwt_employee() {
+	
+		// $condition = "invoice_id =" . "'" . $id . "'";
+		$this->db->select('*');
+		$this->db->from('xin_employee_contract');
+		// $this->db->where($id);
+		// $this->db->limit(1);
+		$this->db->join('xin_employees','xin_employees.employee_id = xin_employee_contract.employee_id','left');
+		// $query = $this->db->get();
+		return $this->db->get();
+
+	}
+
+
+	public function get_pkwt_approval() {
+	
+		$this->db->select('*');
+		$this->db->from('xin_employee_contract');
+		$this->db->join('xin_employees','xin_employees.user_id = xin_employee_contract.employee_id','left');
+		$this->db->where ( 'status_approve', 0);
+		return $this->db->get();
+		// $query = $this->db->get ();
+  //   	return $query->result ();
+
+	}
+
+
+		// get all employes temporary
+	public function get_pkwt_temp($importid) {
+		
+		$sql = 'SELECT * FROM xin_employee_contract_temp WHERE uploadid = ?';
+		$binds = array($importid);
+		$query = $this->db->query($sql, $binds);
+	    return $query;
+	}
+	
+
+	// get employees list> reports
+	public function filter_employees_reports($company_id,$department_id,$project_id,$sub_project_id) {
+
+		// 0-0-0-0
+		  if($company_id==0 && $department_id==0 && $project_id==0 && $sub_project_id==0) {
+		 	 return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id NOT IN (1)");
+		// 1-0-0-0
+		  } else if($company_id!=0 && $department_id==0 && $project_id==0 && $sub_project_id==0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-1-0-0
+		  } else if($company_id!=0 && $department_id!=0 && $project_id==0 && $sub_project_id==0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$department_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-1-1-0
+		  } else if($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id==0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND project_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$department_id,$project_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-1-1-1
+		  } else if($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id!=0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND project_id = ? AND sub_project_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$department_id,$project_id,$sub_project_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 0-0-1-0
+		  } else if ($company_id==0 && $department_id==0 && $project_id!=0 && $sub_project_id==0) {
+		 	  $sql = "SELECT * from xin_employees where project_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($project_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 0-0-1-1
+		  } else if ($company_id==0 && $department_id==0 && $project_id!=0 && $sub_project_id!=0) {
+		 	  $sql = "SELECT * from xin_employees where project_id = ? AND sub_project_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($project_id,$sub_project_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-0-1-0
+		  } else if ($company_id!=0 && $department_id==0 && $project_id!=0 && $sub_project_id==0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND project_id = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$project_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		  } else {
+			  return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id NOT IN (1)");
+		  }
+	}
+
+	// get employees list> reports
+	public function filter_employees_reports_none($company_id,$department_id,$project_id,$sub_project_id) {
+
+			  return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (21300023)");
+		  
+	}
+
+	// Function to add record in table
+	public function add_pkwt_record($data){
+		$this->db->insert('xin_employee_contract', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+	// Function to add record in table
+	public function add($data){
+		$this->db->insert('xin_employee_contract', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
+	// Function to add record in table
+	public function addtemp($data){
+		$this->db->insert('xin_employee_contract_temp', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
+
+	// Function to add record in table > document info
+	public function document_pkwt_add($data){
+		$this->db->insert('xin_employee_contract_pdf', $data);
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+	// Function to Delete selected record from table
+	public function delete_temp_by_employeeid(){
+		$this->db->where('employee_id', 'NIK');
+		$this->db->delete('xin_employee_contract_temp');
+		
+	}
+
+	// get single employee
+	public function read_pkwt_info($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE contract_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+		
+	}
+
+
+	// get single pkwt by nosurat
+	public function read_pkwt_info_by_nosurat($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE no_surat = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+
+	// Function to update record in table > basic_info
+	public function update_error_temp($data, $id) {
+		$this->db->where('secid', $id);
+		if( $this->db->update('xin_employee_contract_temp',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+	public function get_taxes() {
+	  return $this->db->get("xin_tax_types");
+	}
+	 
+	public function get_single_pkwt($id) {
+		
+		$sql = 'SELECT * FROM xin_employee_contract WHERE contract_id = ?';
+		$binds = array(1);
+		$query = $this->db->query($sql, $binds);
+	 	return $query->result();
+	}
+
+
+	// get single pkwt by userid
+	public function get_single_pkwt_by_userid($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ? ORDER BY contract_id DESC';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);		
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+		public function get_pkwt_by_userid($id) {
+		$query = $this->db->query("
+
+SELECT contract.contract_id, contract.no_surat, contract.employee_id, contract.from_date, contract.to_date, pdf.document_file, pdf.createdat
+FROM xin_employee_contract contract
+LEFT JOIN ( SELECT * FROM xin_employee_contract_pdf GROUP BY kontrak_id) pdf ON pdf.kontrak_id = contract.contract_id
+WHERE contract.employee_id = '$id'
+"
+
+		);
+		return $query->result();
+	}
+
+
+
+
+	// get single pkwt by userid
+	public function get_pkwt_file($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract_pdf WHERE kontrak_id = ? ORDER BY secid DESC';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);		
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+	
+	// Function to update record in table
+	public function update_pkwt_record($data, $id){
+		$this->db->where('contract_id', $id);
+		if( $this->db->update('xin_employee_contract',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+	
+	
+}
+?>

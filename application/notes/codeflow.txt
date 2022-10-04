@@ -1,0 +1,8 @@
+#SUBMIT #SAVE
+employee_detail.php => controller/admin/Employees.php 
+
+#RULE
+tb_xin_roles
+
+#IMPORT
+view/admin/component/header.php
