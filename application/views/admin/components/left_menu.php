@@ -813,18 +813,6 @@
 
 
           <?php 
-          if (in_array('109',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['imp_new_employee_active']))echo $arr_mod['imp_new_employee_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importnewemployees');?>"> <?php echo $this->lang->line('xin_import_new_employee');?> 
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-        
-          <?php 
           if (in_array('127',$role_resources_ids)) { 
           ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['employees_active']))echo $arr_mod['employees_active'];?>"> 
@@ -836,16 +824,38 @@
           ?>
 
           <?php 
-          if (in_array('129',$role_resources_ids)) { 
+          if (in_array('109',$role_resources_ids)) { 
           ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['saltab_active']))echo $arr_mod['saltab_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importsaltab');?>" > <?php echo $this->lang->line('xin_import_excl_saltab');?> 
+            <li class="sidenav-item <?php if(!empty($arr_mod['imp_new_employee_active']))echo $arr_mod['imp_new_employee_active'];?>"> 
+              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importnewemployees');?>"> <?php echo $this->lang->line('xin_import_new_employee');?> 
               </a> 
             </li>
           <?php 
           } 
           ?>
 
+          <?php 
+          if (in_array('232',$role_resources_ids)) { 
+          ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['ratecard_active']))echo $arr_mod['ratecard_active'];?>"> 
+              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importratecard');?>" > <?php echo $this->lang->line('xin_import_excl_ratecard');?> 
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('469',$role_resources_ids)) { 
+          ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['eslip_active']))echo $arr_mod['eslip_active'];?>"> 
+              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importeslip');?>" > <?php echo $this->lang->line('xin_import_excl_eslip');?> 
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+          
         </ul>
       </li>
     <?php 

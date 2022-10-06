@@ -276,7 +276,7 @@ class ImportExcelEmployees extends MY_Controller
 				$this->Employees_model->update_error_temp($datas, $user[0]->secid);
 
 				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
-				echo $$user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
+				echo $user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
 
 			}
 
@@ -380,7 +380,7 @@ class ImportExcelEmployees extends MY_Controller
 		}
 
 				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
-				echo $$user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
+				echo $user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
 
 			}
 

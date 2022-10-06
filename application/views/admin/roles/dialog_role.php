@@ -819,10 +819,18 @@ dataSource: [
 		{ 
 			id: "", 
 			class: "role-checkbox-modal custom-control-input", 
-			text: "<?php echo $this->lang->line('xin_import_excl_saltab');?>",  
+			text: "<?php echo $this->lang->line('xin_import_excl_ratecard');?>",  
 			add_info: "", 
-			value: "129", 
-			check: "<?php if(isset($_GET['role_id'])) { if(in_array('129',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+			value: "232", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('232',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_import_excl_eslip');?>",  
+			add_info: "", 
+			value: "469", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('469',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 		}
 		]
 	},

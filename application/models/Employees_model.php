@@ -112,6 +112,49 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+
+	// get single employee by NIP
+	public function read_eslip_info_by_nip_periode($id, $periode) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? and periode = ?';
+		$binds = array($id, $periode);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// get single employee by NIP
+	public function read_eslip_info_by_id($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE secid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// get single employee by NIP
+	public function read_eslip_by_nip($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query;
+		} else {
+			return null;
+		}
+	}
+
 	// get all my team employes > not super admin
 	public function get_employees_my_team($cid) {
 		
@@ -263,7 +306,21 @@ class Employees_model extends CI_Model {
 		}
 	}
 
-	 public function CheckExistNIK($id) {
+	 public function CheckExistNIP_Periode($id, $periode) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? and periode = ?';
+		$binds = array($id,$periode);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+
+	 public function CheckExistNIP($id) {
 	
 		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
 		$binds = array($id);
@@ -275,8 +332,6 @@ class Employees_model extends CI_Model {
 			return null;
 		}
 	}
-
-
 	// check employeeID
 	public function check_employee_id($id) {
 	
@@ -340,6 +395,15 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+	// Function to add record in table
+	public function addeslip($data){
+		$this->db->insert('xin_employees_eslip', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
 
 	// Function to add record in table
 	public function addtemp($data){
@@ -416,6 +480,16 @@ class Employees_model extends CI_Model {
 		}		
 	}
 	
+	// Function to update record in table > basic_info
+	public function update_error_eslip_temp($data, $id){
+		$this->db->where('secid', $id);
+		if( $this->db->update('xin_employees_eslip_temp',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 	// Function to update record in table > change_password
 	public function change_password($data, $id){
 		$this->db->where('user_id', $id);

@@ -360,6 +360,26 @@ class Xin_model extends CI_Model {
 			$arr['pkwt_request_open'] = 'open';
 			return $arr;
 		}
+
+		else if($mClass=='importexcel' && $mMethod=='importnewemployees') {
+			$arr['imp_new_employee_active'] = 'active';
+			$arr['importexcel_open'] = 'open';
+			return $arr;
+		} else if($mClass=='importexcel' && $mMethod=='importratecard') {
+			$arr['ratecard_active'] = 'active';
+			$arr['importexcel_open'] = 'open';
+			return $arr;
+		} else if($mClass=='importexcel' && $mMethod=='importeslip') {
+			$arr['eslip_active'] = 'active';
+			$arr['importexcel_open'] = 'open';
+			return $arr;
+		}
+		else if($mClass=='importexcel') {
+			$arr['employees_active'] = 'active';
+			$arr['importexcel_open'] = 'open';
+			return $arr;
+		}
+
 		else if($mClass=='payroll' && $mMethod=='payslip') {
 			$arr['pay_generate_active'] = 'active';
 			$arr['payrl_open'] = 'open';
@@ -816,7 +836,20 @@ class Xin_model extends CI_Model {
 		} else {
 			return null;
 		}
+	}
+
+	// get single employee
+	public function read_eslip_temp_info($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip_temp WHERE secid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
 		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
 	}
 
 	// get single employee
@@ -4028,6 +4061,13 @@ function tgl_pkwt(){
 function rupiah($angka){
 	
 	$hasil_rupiah = "Rp " . number_format($angka,0,',','.');
+	return $hasil_rupiah;
+ 
+}
+
+function rupiah_titik($angka){
+	
+	$hasil_rupiah = number_format($angka,0,',','.');
 	return $hasil_rupiah;
  
 }

@@ -531,6 +531,7 @@ class Project_model extends CI_Model {
 		
 		return $query->result();
 	}
+
 	//////////////////////////////	
 	// get calendar project > hold
 	public function calendar_user_hold_projects($id) {

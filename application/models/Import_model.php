@@ -31,6 +31,19 @@
 		}
 	}
 
+	public function get_temp_eslip($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip_temp WHERE uploadid = ? AND status_error is null';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+
 
 	 	public function get_temp_pkwt($id) {
 	
@@ -66,6 +79,16 @@
 		
 		return $query;
 	}
+
+		// get all employes temporary
+	public function get_eslip_temp($importid) {
+		
+		$sql = 'SELECT * FROM xin_employees_eslip_temp WHERE uploadid = ?';
+		$binds = array($importid);
+		$query = $this->db->query($sql, $binds);
+	    return $query;
+	}
+
 	
 	// Function to add record in table
 	public function add($data){
@@ -103,5 +126,23 @@
 			return false;
 		}		
 	}
+
+	// Function to add record in table
+	public function addtemp($data){
+		$this->db->insert('xin_employees_eslip_temp', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
+	// Function to Delete selected record from table
+	public function delete_temp_by_nip(){
+		$this->db->where('nip', 'NIP');
+		$this->db->delete('xin_employees_eslip_temp');
+		
+	}
+	
 }
 ?>
