@@ -288,6 +288,21 @@
     ?>
 
 
+<!-- Manage Employees -->
+
+      <?php 
+      if (in_array('470',$role_resources_ids)) { ?>
+        <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_active']))echo $arr_mod['man_employees_active'];?>"> 
+          <a href="<?php echo site_url('admin/reports/manage_employees');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div><?php echo $this->lang->line('xin_manage_employees');?></div>
+          </a> 
+        </li>
+      <?php 
+      } 
+      ?>
+
 <!-- Kontrak -->
 
       <?php 

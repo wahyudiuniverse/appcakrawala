@@ -799,31 +799,43 @@ echo form_input($edata_usr8);
 <div class="modal-body">
   <div class="row">
     <div class="col-sm-6">
+
+
       <div class="form-group">
-        <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?><i class="hrpremium-asterisk">*</i></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="<?php echo $account_title;?>" id="account_name">
+        <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk"></i></label>
+        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>"type="text" value="<?php echo $bank_name;?>" disabled>
       </div>
+
+
+
       <div class="form-group">
-        <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk">*</i></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="<?php echo $account_number;?>" id="account_number">
+        <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?><i class="hrpremium-asterisk"></i></label>
+        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="<?php echo $account_title;?>" disabled>
       </div>
+
     </div>
+
     <div class="col-sm-6">
+
+
       <div class="form-group">
-        <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk">*</i></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="<?php echo $bank_name;?>" id="bank_name">
+        <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk"></i></label>
+        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="<?php echo $account_number;?>" disabled>
       </div>
-      <div class="form-group">
-        <label for="bank_code"><?php echo $this->lang->line('xin_e_details_bank_code');?><i class="hrpremium-asterisk">*</i></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_code');?>" name="bank_code" type="text" value="<?php echo $bank_code;?>" id="bank_code">
-      </div>
+
+
+                            <div class="form-group">
+                              <label for="bank_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select class="form-control" name="bank_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value="0" <?php if($is_confirm==0){?> selected <?php }?>>ON CHECKING</option>
+                                <option value="1" <?php if($is_confirm==1){?> selected <?php }?>>CONFIRM</option>
+          
+                              </select>
+                            </div>
+
+
     </div>
-    <div class="col-sm-12">
-      <div class="form-group">
-        <label for="bank_branch"><?php echo $this->lang->line('xin_e_details_bank_branch');?></label>
-        <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="<?php echo $bank_branch;?>" id="bank_branch">
-      </div>
-    </div>
+
   </div>
 </div>
 <div class="modal-footer"> <?php echo form_button(array('data-dismiss' => 'modal', 'type' => 'button', 'class' => 'btn btn-secondary', 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_close'))); ?> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_update'))); ?> </div>

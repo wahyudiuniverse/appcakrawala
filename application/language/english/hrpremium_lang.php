@@ -595,7 +595,7 @@ $lang['xin_e_details_to_date'] = "To Date";
 $lang['xin_e_details_frm_date'] = "From Date";
 $lang['xin_e_details_post'] = "Posisi/Jabatan";
 $lang['xin_e_details_acc_title'] = "Nama Akun";
-$lang['xin_e_details_acc_number'] = "Nomor Akun";
+$lang['xin_e_details_acc_number'] = "Nomor Rekening";
 $lang['xin_e_details_bank_name'] = "Nama Bank";
 $lang['xin_e_details_bank_code'] = "Kode Bank";
 $lang['xin_e_details_bank_branch'] = "Bank Branch";
@@ -3054,6 +3054,7 @@ $lang['left_sub_projects'] = 'Sub Project';
 $lang['xin_nip'] = 'NIP';
 $lang['xin_kk'] = 'No KK';
 $lang['xin_ktp'] = 'No KTP';
+$lang['xin_nomor_ktp'] = 'Nomor KTP';
 $lang['xin_npwp'] = 'No NPWP';
 $lang['xin_pin'] = 'PIN';
 $lang['xin_eslip'] = 'E-SLIP';
@@ -3072,6 +3073,17 @@ $lang['xin_template_pkwt'] = 'Template PKWT';
 $lang['xin_inhouse'] = 'In-House';
 $lang['xin_project'] = 'Project';
 $lang['xin_akses_project'] = 'Akses Projects';
+$lang['xin_manage_employees'] = 'Manage Employees';
+$lang['xin_manage_employees_resign'] = 'Resign';
+$lang['xin_manage_employees_bpjs'] = 'BPJS';
+$lang['xin_manage_employees_document'] = 'Document';
+$lang['xin_manage_employees_rekening'] = 'Rekening';
+$lang['xin_manage_employees_status'] = 'Status Karyawan';
+$lang['xin_document_status'] = 'Status Dokumen';
+$lang['xin_manage_employees_blacklist'] = 'Blacklist';
+$lang['xin_document_id'] = 'Dokumen';
+$lang['xin_rekening'] = 'Rekening';
+$lang['xin_reset_password'] = 'Reset Password';
 
 
 

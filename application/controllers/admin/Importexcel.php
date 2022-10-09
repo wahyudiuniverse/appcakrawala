@@ -654,7 +654,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Project_model->get_projects();
 		$data['path_url'] = 'hrpremium_import_eslip';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('109',$role_resources_ids)) {
+		if(in_array('469',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/import_excel/import_eslip", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load

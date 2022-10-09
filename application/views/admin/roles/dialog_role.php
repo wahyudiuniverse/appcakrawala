@@ -757,6 +757,68 @@ dataSource: [
 	},
 
 
+//MANAGE KARYAWAN
+	{ 
+		id: "", 
+		class: "role-checkbox-modal custom-control-input", 
+		text: "<?php echo $this->lang->line('xin_manage_employees');?>",  
+		check: "<?php if(isset($_GET['role_id'])) { if(in_array('470',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", 
+		add_info: "<?php echo $this->lang->line('xin_create_edit_view_delete');?>", 
+		value: "470",
+		items: 
+		[
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_role_enable');?>",  
+			add_info: "<?php echo $this->lang->line('xin_role_enable');?>", 
+			value: "470", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('470',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_manage_employees_resign');?>",  
+			add_info: "<?php echo $this->lang->line('xin_manage_employees_resign');?>", 
+			value: "471", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('471',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_manage_employees_bpjs');?>",  
+			add_info: "<?php echo $this->lang->line('xin_manage_employees_bpjs');?>", 
+			value: "472", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('472',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_manage_employees_document');?>",  
+			add_info: "<?php echo $this->lang->line('xin_manage_employees_document');?>", 
+			value: "473", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('473',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_manage_employees_rekening');?>",  
+			add_info: "<?php echo $this->lang->line('xin_manage_employees_rekening');?>", 
+			value: "474", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('474',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_manage_employees_blacklist');?>",  
+			add_info: "<?php echo $this->lang->line('xin_manage_employees_blacklist');?>", 
+			value: "475", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('475',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		}
+		]
+	},
+
+
 //KARYAWAN AKSES
 	{ 
 		id: "", 

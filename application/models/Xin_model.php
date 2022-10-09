@@ -76,7 +76,7 @@ class Xin_model extends CI_Model {
 
 	public function clean_post($post_name) {
 	   $name = trim($post_name);
-	   $Evalue = array('-','alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=',"'",'/','cmd','!',"('","')", '|');
+	   $Evalue = array('-','alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=',"'",'/','cmd','!',"('","')", '|', ' ');
 	   $post_name = str_replace($Evalue, '', $name); 
 	   $post_name = preg_replace('/^(\d{1,2}[^0-9])/m', '', $post_name);
 	  // $post_name = htmlspecialchars(trim($post_name), ENT_QUOTES, "UTF-8");
@@ -185,7 +185,11 @@ class Xin_model extends CI_Model {
 			$arr['req_employee_active'] = 'active';
 			$arr['stff_open'] = 'open';
 			return $arr;
-		} 
+		} else if($mClass=='employees' && $mMethod=='emp_edit') {
+			$arr['man_employees_active'] = 'active';
+			$arr['man_employees_open'] = 'open';
+			return $arr;
+		}
 		else if($mClass=='employees') {
 			$arr['hremp_active'] = 'active';
 			$arr['stff_open'] = 'open';
@@ -337,7 +341,11 @@ class Xin_model extends CI_Model {
 			$arr['pay_mang_active'] = 'active';
 			$arr['payrl_open'] = 'open';
 			return $arr;
-		} 
+		} else if($mClass=='reports' && $mMethod=='manage_employees') {
+			$arr['man_employees_active'] = 'active';
+			$arr['man_employees_open'] = 'open';
+			return $arr;
+		}
 
 		else if($mClass=='mypkwt') {
 			$arr['my_pkwt_active'] = 'active';
