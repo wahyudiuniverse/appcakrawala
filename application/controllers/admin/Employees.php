@@ -1508,10 +1508,11 @@ class Employees extends MY_Controller {
 			// 	$Return['error'] = $this->lang->line('xin_employee_error_employee_id');
 			// } else 
 			if($this->input->post('emp_status')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_first_name');
-			} else if($this->input->post('date_of_end')==='') {
-			 	$Return['error'] = $this->lang->line('xin_employee_error_email');
-			}
+				$Return['error'] = 'Status Karyawan kosong...!';
+			} 
+			// else if($this->input->post('date_of_end')==='') {
+			//  	$Return['error'] = $this->lang->line('xin_employee_error_email');
+			// }
 
 			if($Return['error']!=''){
        		$this->output($Return);
