@@ -779,7 +779,7 @@ class Employees extends MY_Controller {
 				$comp_name,
 				$contact_info,
 				$tgllahir,
-				$role_status,
+				$role_name,
 			);
       
 	  }

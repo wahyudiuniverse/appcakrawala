@@ -169,6 +169,7 @@ if($attendances->num_rows() < 1) {
     $session = $this->session->userdata('username');
     $user_info = $this->Exin_model->read_user_info($session['user_id']);
 
+  $eslip_release = $this->Employees_model->read_eslip_by_nip($session['employee_id']);
 ?>
 <div class="media align-items-center mb-4">
   <img src="<?php echo $lde_file;?>" alt="" class="d-block ui-w-100 rounded-circle">
@@ -354,19 +355,51 @@ if($attendances->num_rows() < 1) {
   ?>
 
 
+
+<!-- ESLIP STATUS -->
+<?php
+  if(!is_null($eslip_release)){
+    foreach($eslip_release->result() as $r) {
+?>
+
+  <div class="col-sm-6 col-xl-3">
+    <div class="card mb-4">
+      <a href="<?php echo site_url().'admin/importexceleslip/view/'.$r->nip.'/'.$r->secid;?>" target="_blank">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-3">
+            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
+            <p style="font-size: 18px;"><?php echo $r->periode;?></p>
+          </div>
+        </div>
+      </div>
+      </a>
+    </div>
+  </div>
+
+<?php
+    }
+
+  } else {
+?>
   <div class="col-sm-6 col-xl-3">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-3">
-            <div class="text-muted small">E-SLIP</div>
-            <div class="text-large">Belum Tersedia..!</div>
+            <div class="text-muted small"><?php echo $this->lang->line('xin_eslip');?></div>
+            <div class="text-large">Tidak Ditemukan..!</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+<?php
+  }
+?>
+
 
   <div class="col-sm-6 col-xl-3">
     <div class="card mb-4">
