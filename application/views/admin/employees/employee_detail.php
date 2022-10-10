@@ -1353,49 +1353,60 @@ $leave_user = $this->Xin_model->read_user_info($eid);
 						 );
 						echo form_input($data_usr4);
 					  ?>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?><i class="hrpremium-asterisk">*</i></label>
-                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="" id="account_name">
+
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk">*</i></label>
+                              <select name="bank_name" id="bank_name" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name');?>">
+                                <option value=""></option>
+                                <?php 
+                                foreach ( $list_bank as $bank ) { 
+                                ?>
+                                  <option value="<?php echo $bank->bank_name;?>"> <?php echo $bank->bank_name;?></option>
+                                <?php 
+                                } 
+                                ?>                                 
+                              </select>
+                            </div>
+                          </div>
+                            
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="" id="account_number">
+                            </div>
                           </div>
                         </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk">*</i></label>
-                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="" id="account_number">
+                          
+                        <div class="row">
+                          <div class="col-md-6">
+                            <div class="form-group">
+                              <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="" id="account_name">
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk">*</i></label>
-                            <select name="bank_name" id="bank_name" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name');?>">
-                              <option value=""></option>
-                              <?php foreach($list_bank as $bank) {?>
-                              <option value="<?php echo $bank->bank_name;?>"> <?php echo $bank->bank_name;?></option>
-                              <?php } ?>
-                                                            <input class="form-control" name="bank_code" type="hidden" value="<?php echo $bank->bank_code;?>">
-                                                            
-                            </select>
-                          </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="bank_branch"><?php echo $this->lang->line('xin_e_details_bank_branch');?></label>
-                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="" id="bank_branch">
-                          </div>
-                        </div>
+
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="bank_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                                <select class="form-control" name="bank_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                  <!-- <option value=""></option> -->
+                                  <option value="0">ON CHECKING</option>
+                                  <!-- <option value="1">CONFIRM</option> -->
+                                </select>
+                              </div>
+                          </div> 
                       </div>
 
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                          </div>
-                        </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
                       </div>
+                    </div>
+                  </div>
+                      
                       <?php echo form_close(); ?> </div>
                   </div>
                   <div class="tab-pane fade" id="account-cpassword">

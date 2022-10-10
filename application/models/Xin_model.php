@@ -811,6 +811,19 @@ class Xin_model extends CI_Model {
 		}
 	}
 	
+	 // get single country
+	 public function read_bank_code($namabank) {
+	
+		$sql = 'SELECT * FROM mt_bank WHERE bank_name = ?';
+		$binds = array($namabank);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 	// Function to update record in table
 	public function login_update_record($data, $id){
 		$this->db->where('user_id', $id);

@@ -831,7 +831,11 @@
 
 <!-- import modul -->
     <?php 
-    if (in_array('126',$role_resources_ids)) {
+    if (in_array('126',$role_resources_ids)
+      ||in_array('127',$role_resources_ids)
+      ||in_array('109',$role_resources_ids)
+      ||in_array('232',$role_resources_ids)
+      ||in_array('469',$role_resources_ids)) {
     ?>
       <li class="<?php if(!empty($arr_mod['importexcel_open']))echo $arr_mod['importexcel_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 

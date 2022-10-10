@@ -1691,6 +1691,7 @@ class Employees extends MY_Controller {
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
 			$this->load->view("admin/employees/employee_detail", $data);
+			$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		} else {
 			redirect('admin/');
 		}
@@ -1705,25 +1706,35 @@ class Employees extends MY_Controller {
 		$data = array();
 		
 		foreach($bank_account->result() as $r) {			
+
+				$banklist = $this->Xin_model->read_bank_code($r->bank_name);
+				if(!is_null($banklist)){
+					$code_bank = $banklist[0]->bank_code;
+				} else {
+					$code_bank = '--';	
+				}
 		
 				if($r->is_confirm==1){
 			  	$confirm_norek = '<button type="button" class="btn btn-xs btn-outline-success">Confirm</button>';
+			  	$edit = '';
+			  	$delete = '';
 				} else {
 			  	$confirm_norek = '<button type="button" class="btn btn-xs btn-outline-danger">On Checking</button>';
+			  	$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"> <button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->bankaccount_id . '" data-field_type="bank_account"><i class="fas fa-pencil-alt"></i></button></span>';
+					$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->bankaccount_id . '" data-token_type="bank_account"><i class="fas fa-trash-restore"></i></button></span>';
 				}
 
+				if($user_info[0]->user_role_id==1){
+					$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"> <button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->bankaccount_id . '" data-field_type="bank_account"><i class="fas fa-pencil-alt"></i></button></span>';
+					$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->bankaccount_id . '" data-token_type="bank_account"><i class="fas fa-trash-restore"></i></button></span>';
+					$action = $edit.$delete;
+				} else {
+					$action = $delete;
+				}
 
 			$data[] = array(
-				'
-				<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'">
-					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->bankaccount_id . '" data-field_type="bank_account"><i class="fas fa-pencil-alt"></i>
-					</button>
-				</span>
-				<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'">
-					<button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->bankaccount_id . '" data-token_type="bank_account"><i class="fas fa-trash-restore"></i>
-					</button>
-				</span>',
-				$r->bank_code,
+				$action,
+				$code_bank,
 				$r->bank_name,
 				$r->account_number,
 				$r->account_title,
@@ -1820,8 +1831,6 @@ class Employees extends MY_Controller {
 			$Return['error'] = $this->lang->line('xin_employee_error_acc_number');
 		} else if($this->input->post('bank_name')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_bank_name');
-		} else if($this->input->post('bank_code')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_bank_code');
 		}
 				
 		if($Return['error']!=''){
@@ -1830,7 +1839,7 @@ class Employees extends MY_Controller {
 	
 		$data = array(
 		'bank_name' => $this->input->post('bank_name'),
-		'bank_code' => $this->input->post('bank_code'),
+		'bank_code' => '1',
 		'account_number' => $this->input->post('account_number'),
 		'account_title' => $this->input->post('account_title'),
 		'bank_branch' => $this->input->post('bank_branch'),
