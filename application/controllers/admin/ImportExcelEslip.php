@@ -96,6 +96,7 @@ class ImportExcelEslip extends MY_Controller
 			  
 			  $importid = $r->uploadid;
 			  $nip = $r->nip;
+			  $fullname = $r->fullname;
 			  $periode = $r->periode;
 			  $project = $r->project;
 			  $area = $r->area;
@@ -173,6 +174,7 @@ class ImportExcelEslip extends MY_Controller
 		   	$error,
 				// $importid,
 				$nip,
+				$fullname,
 				$periode,
 				$project,
 				$area,
@@ -247,6 +249,7 @@ class ImportExcelEslip extends MY_Controller
 			} else {
 
 				$nip = $user[0]->nip;
+				$fullname = $user[0]->fullname;
 				$periode = $user[0]->periode;
 				$project = $user[0]->project;
 				$area = $user[0]->area;
@@ -287,6 +290,7 @@ class ImportExcelEslip extends MY_Controller
 
 				$data = array(
 					'nip' => $nip,
+					'fullname' => $fullname,
 					'periode' => $periode,
 					'project' => $project,
 					'area' => $area,
@@ -377,6 +381,7 @@ class ImportExcelEslip extends MY_Controller
 					} else {
 
 				$nip = $user[0]->nip;
+				$fullname = $user[0]->fullname;
 				$periode = $user[0]->periode;
 				$project = $user[0]->project;
 				$area = $user[0]->area;
@@ -417,6 +422,7 @@ class ImportExcelEslip extends MY_Controller
 
 				$data = array(
 					'nip' => $nip,
+					'fullname' => $fullname,
 					'periode' => $periode,
 					'project' => $project,
 					'area' => $area,
@@ -687,7 +693,7 @@ class ImportExcelEslip extends MY_Controller
 						<table cellpadding="1" cellspacing="0">
 							<tr>
 								<td>Project</td>
-								<td colspan="2">: '.$project.'</td>
+								<td colspan="2">: '.strtoupper($project).'</td>
 							</tr>
 						</table>
 					</td>
@@ -697,7 +703,7 @@ class ImportExcelEslip extends MY_Controller
 						<table cellpadding="1" cellspacing="0">
 							<tr>
 								<td>Nama</td>
-								<td colspan="2">: '.$namalengkap.'</td>
+								<td colspan="2">: '.strtoupper($namalengkap).'</td>
 							</tr>
 						</table>
 					</td>
@@ -705,7 +711,7 @@ class ImportExcelEslip extends MY_Controller
 						<table cellpadding="1" cellspacing="0">
 							<tr>
 								<td>Area</td>
-								<td colspan="2">: '.$area.'</td>
+								<td colspan="2">: '.strtoupper($area).'</td>
 							</tr>
 						</table>
 					</td>
@@ -715,7 +721,7 @@ class ImportExcelEslip extends MY_Controller
 						<table cellpadding="1" cellspacing="0">
 							<tr>
 								<td>Periode</td>
-								<td colspan="2">: '.$periode.'</td>
+								<td colspan="2">: '.strtoupper($periode).'</td>
 							</tr>
 						</table>
 					</td>

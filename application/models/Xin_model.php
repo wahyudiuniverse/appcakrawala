@@ -345,6 +345,10 @@ class Xin_model extends CI_Model {
 			$arr['man_employees_active'] = 'active';
 			$arr['man_employees_open'] = 'open';
 			return $arr;
+		} else if($mClass=='reports' && $mMethod=='bpjs_employees') {
+			$arr['bpjs_employees_active'] = 'active';
+			$arr['bpjs_employees_open'] = 'open';
+			return $arr;
 		}
 
 		else if($mClass=='mypkwt') {

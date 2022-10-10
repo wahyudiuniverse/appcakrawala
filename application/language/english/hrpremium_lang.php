@@ -3084,6 +3084,7 @@ $lang['xin_manage_employees_blacklist'] = 'Blacklist';
 $lang['xin_document_id'] = 'Dokumen';
 $lang['xin_rekening'] = 'Rekening';
 $lang['xin_reset_password'] = 'Reset Password';
+$lang['xin_emp_bpjs'] = 'BPJS Employees';
 
 
 

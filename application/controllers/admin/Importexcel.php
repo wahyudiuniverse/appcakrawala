@@ -627,14 +627,14 @@ class ImportExcel extends MY_Controller
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_import_new_employee').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_import_new_employee');
+		$data['title'] = $this->lang->line('xin_import_excl_ratecard').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_ratecard');
 		$data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_new_employees';
+		$data['path_url'] = 'hrpremium_import_ratecard';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('109',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/new_employees", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_ratecard", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -855,43 +855,44 @@ class ImportExcel extends MY_Controller
 						$data = array(
 						'uploadid' => $uploadid,
 						'nip' => $line[0],
-						'periode' => $line[1],
-						'project' => $line[2],
-						'area' =>$line[3],
-						'hari_kerja' => $line[4],
-						'gaji_pokok' => $line[5],
-						'allow_jabatan' => $line[6],
-						'allow_konsumsi' => $line[7],
-						'allow_transport' => $line[8],
-						'allow_rent' => $line[9],
-						'allow_comunication' => $line[10],
-						'allow_parking' => $line[11],
-						'allow_residence_cost' => $line[12],
-						'allow_device' => $line[13],
-						'penyesuaian_umk' => $line[14],
-						'insentive'	=> $line[15],
-						'overtime' => $line[16],
-						'overtime_national_day' => $line[17],
-						'overtime_rapel' => $line[18],
-						'kompensasi' => $line[19],
-						'bonus' => $line[20],
-						'thr' => $line[21],
-						'bpjs_tk_deduction' => $line[22],
-						'bpjs_ks_deduction' => $line[23],
-						'jaminan_pensiun_deduction' => $line[24],
-						'pendapatan' => $line[25],
-						'bpjs_tk' => $line[26],
-						'bpjs_ks' => $line[27],
-						'jaminan_pensiun' => $line[28],
-						'pph' => $line[29],
-						'penalty_late' => $line[30],
-						'penalty_attend' => $line[31],
-						'deduction' => $line[32],
-						'simpanan_pokok' => $line[33],
-						'simpanan_wajib_koperasi' => $line[34],
-						'pembayaran_pinjaman' => $line[35],
-						'biaya_admin_bank' => $line[36],
-						'total' => $line[37],
+						'fullname' => $line[1],
+						'periode' => $line[2],
+						'project' => $line[3],
+						'area' =>$line[4],
+						'hari_kerja' => $line[5],
+						'gaji_pokok' => $line[6],
+						'allow_jabatan' => $line[7],
+						'allow_konsumsi' => $line[8],
+						'allow_transport' => $line[9],
+						'allow_rent' => $line[10],
+						'allow_comunication' => $line[11],
+						'allow_parking' => $line[12],
+						'allow_residence_cost' => $line[13],
+						'allow_device' => $line[14],
+						'penyesuaian_umk' => $line[15],
+						'insentive'	=> $line[16],
+						'overtime' => $line[17],
+						'overtime_national_day' => $line[18],
+						'overtime_rapel' => $line[19],
+						'kompensasi' => $line[20],
+						'bonus' => $line[21],
+						'thr' => $line[22],
+						'bpjs_tk_deduction' => $line[23],
+						'bpjs_ks_deduction' => $line[24],
+						'jaminan_pensiun_deduction' => $line[25],
+						'pendapatan' => $line[26],
+						'bpjs_tk' => $line[27],
+						'bpjs_ks' => $line[28],
+						'jaminan_pensiun' => $line[29],
+						'pph' => $line[30],
+						'penalty_late' => $line[31],
+						'penalty_attend' => $line[32],
+						'deduction' => $line[33],
+						'simpanan_pokok' => $line[34],
+						'simpanan_wajib_koperasi' => $line[35],
+						'pembayaran_pinjaman' => $line[36],
+						'biaya_admin_bank' => $line[37],
+						'total' => $line[38],
 
 
 						);

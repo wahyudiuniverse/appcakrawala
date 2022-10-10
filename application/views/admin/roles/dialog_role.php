@@ -819,6 +819,37 @@ dataSource: [
 	},
 
 
+//KARYAWAN BPJS
+	{ 
+		id: "", 
+		class: "role-checkbox-modal custom-control-input", 
+		text: "<?php echo $this->lang->line('xin_emp_bpjs');?>",  
+		check: "<?php if(isset($_GET['role_id'])) { if(in_array('476',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>", 
+		add_info: "<?php echo $this->lang->line('xin_create_edit_view_delete');?>", 
+		value: "476",
+		items: 
+		[
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_role_enable');?>",  
+			add_info: "<?php echo $this->lang->line('xin_role_enable');?>", 
+			value: "476", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('476',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_role_view_menu');?>",  
+			add_info: "<?php echo $this->lang->line('xin_role_view_menu');?>", 
+			value: "477", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('477',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		}
+		]
+	},
+
+
 //KARYAWAN AKSES
 	{ 
 		id: "", 

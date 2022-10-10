@@ -303,6 +303,21 @@
       } 
       ?>
 
+<!-- BPJS Employees -->
+
+      <?php 
+      if (in_array('476',$role_resources_ids)) { ?>
+        <li class="sidenav-item <?php if(!empty($arr_mod['bpjs_employees_active']))echo $arr_mod['bpjs_employees_active'];?>"> 
+          <a href="<?php echo site_url('admin/reports/bpjs_employees');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div><?php echo $this->lang->line('xin_emp_bpjs');?></div>
+          </a> 
+        </li>
+      <?php 
+      } 
+      ?>
+
 <!-- Kontrak -->
 
       <?php 

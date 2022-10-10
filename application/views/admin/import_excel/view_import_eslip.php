@@ -50,6 +50,7 @@
           <tr>
             <th style="width: 70px;">Action / <?php echo $this->lang->line('xin_import_status_error');?></th>
             <th style="width: 30px;"><?php echo $this->lang->line('xin_nik');?></th>
+            <th style="width: 80px;">Fullname</th>
             <th style="width: 80px;">Periode</th>
             <th style="width: 150px;">Project</th>
             <th style="width: 100px;">Area</th>
