@@ -48,6 +48,14 @@ $posisi = $this->Designation_model->read_designation_information($designation_id
           $status = 'Aktif';
       }
 
+      if($status_resign==2){
+        $status_resign = 'RESIGN';
+      } else if ($status_resign==3){
+        $status_resign = 'BLACKLIST';
+      } else {
+        $status_resign = 'ACTIVE';
+      }
+
 ?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $leave_categories_ids = explode(',',$leave_categories);?>
@@ -381,9 +389,9 @@ $posisi = $this->Designation_model->read_designation_information($designation_id
                               <label for="emp_status"><?php echo $this->lang->line('xin_manage_employees_status');?></label>
                               <select class="form-control" name="emp_status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_manage_employees_status');?>">
                                 <option value=""></option>
-                                <option value="AKTIF" <?php if($status_resign == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
-                                <option value="RESIGN" <?php if($status_resign == 'RESIGN'):?> selected="selected"<?php endif;?>>RESIGN</option>
-                                <option value="BLACKLIST" <?php if($status_resign == 'BLACKLIST'):?> selected="selected"<?php endif;?>>BLACKLIST</option>
+                                <option value="1" <?php if($status_resign == '1'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="2" <?php if($status_resign == '2'):?> selected="selected"<?php endif;?>>RESIGN</option>
+                                <option value="3" <?php if($status_resign == '3'):?> selected="selected"<?php endif;?>>BLACKLIST</option>
                               </select>
                             </div>
                           </div>

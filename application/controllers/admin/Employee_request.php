@@ -201,7 +201,7 @@ class Employee_request extends MY_Controller {
 			    }
 			}
 
-		   	$fullname = $this->Xin_model->clean_post($this->input->post('fullname'));
+		   	$fullname = $this->input->post('fullname');
 				$office_lokasi = $this->input->post('office_lokasi');
 				$project_id = $this->input->post('project_id');
 				$sub_project_id = $this->input->post('sub_project');

@@ -43,10 +43,11 @@ $(document).ready(function() {
 		var company_id = $('#aj_company').val();
 		var department_id = $('#aj_department').val();
 		var designation_id = $('#designation_id').val();
+		var status_resign = $('#aj_status').val();
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"reports/report_manage_employees_list/"+company_id+"/"+department_id+"/"+designation_id+"/"+subproject_id+"/",
+				url : site_url+"reports/report_manage_employees_list/"+company_id+"/"+department_id+"/"+project_id+"/"+subproject_id+"/"+status_resign+"/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',

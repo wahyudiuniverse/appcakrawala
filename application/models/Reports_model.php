@@ -183,51 +183,88 @@ class Reports_model extends CI_Model {
 	
 	
 	// get employees list> reports
-	public function filter_employees_reports($company_id,$department_id,$project_id,$sub_project_id) {
+	public function filter_employees_reports($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
 
-		// 0-0-0-0
-		  if($company_id==0 && $department_id==0 && $project_id==0 && $sub_project_id==0) {
+			// if($status_resign==1){
+			// 	$status_resign=='AKTIF';
+			// } else if ($status_resign==2){
+			// 	$status_resign=='RESIGN';
+			// } else if ($status_resign==3){
+			// 	$status_resign=='BLACKLIST';
+			// }
+		// 0-0-0-0-0
+		  if($company_id==0 && $department_id==0 && $project_id==0 && $sub_project_id==0 && $status_resign==0) {
 		 	 return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id NOT IN (1)");
-		// 1-0-0-0
-		  } else if($company_id!=0 && $department_id==0 && $project_id==0 && $sub_project_id==0) {
+		// 1-0-0-0-0
+		  } else if($company_id!=0 && $department_id==0 && $project_id==0 && $sub_project_id==0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where company_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($company_id);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
-		// 1-1-0-0
-		  } else if($company_id!=0 && $department_id!=0 && $project_id==0 && $sub_project_id==0) {
+		// 1-1-0-0-0
+		  } else if($company_id!=0 && $department_id!=0 && $project_id==0 && $sub_project_id==0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($company_id,$department_id);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
-		// 1-1-1-0
-		  } else if($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id==0) {
+		// 1-1-1-0-0
+		  } else if($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id==0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND project_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($company_id,$department_id,$project_id);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
-		// 1-1-1-1
-		  } else if($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id!=0) {
+		// 1-1-1-1-0
+		  } else if($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id!=0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND project_id = ? AND sub_project_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($company_id,$department_id,$project_id,$sub_project_id);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
-		// 0-0-1-0
-		  } else if ($company_id==0 && $department_id==0 && $project_id!=0 && $sub_project_id==0) {
+		// 0-0-1-0-0
+		  } else if ($company_id==0 && $department_id==0 && $project_id!=0 && $sub_project_id==0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where project_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($project_id);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
-		// 0-0-1-1
-		  } else if ($company_id==0 && $department_id==0 && $project_id!=0 && $sub_project_id!=0) {
+		// 0-0-1-1-0
+		  } else if ($company_id==0 && $department_id==0 && $project_id!=0 && $sub_project_id!=0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where project_id = ? AND sub_project_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($project_id,$sub_project_id);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
-		// 1-0-1-0
-		  } else if ($company_id!=0 && $department_id==0 && $project_id!=0 && $sub_project_id==0) {
+		// 1-0-1-0-0
+		  } else if ($company_id!=0 && $department_id==0 && $project_id!=0 && $sub_project_id==0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where company_id = ? AND project_id = ? AND employee_id NOT IN (1)";
 			  $binds = array($company_id,$project_id);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-0-0-0-1
+		  } else if ($company_id!=0 && $department_id==0 && $project_id==0 && $sub_project_id==0 && $status_resign!=0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$status_resign);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-1-0-0-1
+		  } else if ($company_id!=0 && $department_id!=0 && $project_id==0 && $sub_project_id==0 && $status_resign!=0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND department_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$department_id, $status_resign);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-1-1-0-1
+		  } else if ($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id!=0 && $status_resign!=0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND department_id = ? AND $project_id = ? AND $sub_project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$department_id, $project_id, $sub_project_id, $status_resign);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-0-1-0-1
+		  } else if ($company_id!=0 && $department_id==0 && $project_id!=0 && $sub_project_id==0 && $status_resign!=0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id, $project_id, $status_resign);
+			  $query = $this->db->query($sql, $binds);
+			  return $query;
+		// 1-1-1-1-1
+		  } else if ($company_id!=0 && $department_id!=0 && $project_id!=0 && $sub_project_id!=0 && $status_resign!=0) {
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND department_id = ? AND $project_id = ? AND $sub_project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+			  $binds = array($company_id,$department_id, $project_id, $sub_project_id, $status_resign);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;
 		  } else {
@@ -237,7 +274,7 @@ class Reports_model extends CI_Model {
 
 
 	// get employees list> reports
-	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id) {
+	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
 	}
 

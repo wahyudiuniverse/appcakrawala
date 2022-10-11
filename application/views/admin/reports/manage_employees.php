@@ -97,8 +97,20 @@
           </div>   
         </div>
 
+        <div class="col-md mb-2">
+          <div class="form-group">
+            <label class="form-label"><?php echo $this->lang->line('dashboard_xin_status');?></label>
+            <select class="form-control" name="status_resign" id="aj_status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
+              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+              <option value="1">AKTIF</option>
+              <option value="2">RESIGN</option>
+              <option value="3">BLACKLIST</option>
+            </select>
+          </div>   
+        </div>
 
-        <div class="col-md col-xl-2 mb-4">
+
+        <div class="col-md col-xl-1  mb-1">
           <label class="form-label d-none d-md-block">&nbsp;</label>
             <button type="submit" class="btn btn-secondary btn-block"><?php echo $this->lang->line('xin_get');?></button>
         </div>
@@ -116,7 +128,7 @@
           <table class="datatables-demo table table-striped table-bordered" id="xin_table" style="width:100%;table-layout: fixed;">
             <thead>
               <tr>
-                <th style="width: 50px;"><?php echo $this->lang->line('xin_pin');?></th>
+                <th style="width: 100px;"><?php echo $this->lang->line('xin_pin');?></th>
                 <th style="width: 60px;"><?php echo $this->lang->line('xin_nip');?></th>
                 <th style="width: 160px;"><?php echo $this->lang->line('xin_employees_full_name');?></th>
                 <th style="width: 150px;"><?php echo $this->lang->line('left_company');?></th>
@@ -124,11 +136,11 @@
                 <th style="width: 200px;"><?php echo $this->lang->line('left_designation');?></th>
                 <th style="width: 120px;"><?php echo $this->lang->line('left_projects');?></th>
                 <th style="width: 120px;"><?php echo $this->lang->line('left_sub_projects');?></th>
-                <th style="width: 50px;"><?php echo $this->lang->line('xin_employee_gender');?></th>
+                <th style="width: 60px;"><?php echo $this->lang->line('xin_employee_gender');?></th>
                 <th style="width: 50px;"><?php echo $this->lang->line('xin_employee_mstatus');?></th>
                 <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_dob');?></th>
                 <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_doj');?></th>
-                <th style="width: 150px;"><?php echo $this->lang->line('dashboard_email');?></th>
+                <th style="width: 160px;"><?php echo $this->lang->line('dashboard_email');?></th>
                 <th style="width: 100px;"><?php echo $this->lang->line('xin_contact_number');?></th>
                 <th style="width: 400px;"><?php echo $this->lang->line('xin_address');?></th>
                 <th style="width: 110px;"><?php echo $this->lang->line('xin_kk');?></th>
