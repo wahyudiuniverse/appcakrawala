@@ -162,7 +162,7 @@ class ImportExcelEmployees extends MY_Controller
 				$location_id,
 				$department_id,
 				$designation_id,
-				$project_id,
+				$r->project_id,
 				$subproject_id,
 				$email,
 				$marital_status,

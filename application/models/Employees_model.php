@@ -305,7 +305,19 @@ class Employees_model extends CI_Model {
 			return null;
 		}
 	}
-
+	 public function CheckExistNIK($id) {
+	
+		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+	
 	 public function CheckExistNIP_Periode($id, $periode) {
 	
 		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? and periode = ?';
