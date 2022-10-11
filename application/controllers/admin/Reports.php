@@ -370,18 +370,14 @@ class Reports extends MY_Controller
 		
 		$company_id = $this->uri->segment(4);
 		$department_id = $this->uri->segment(5);
-
 		$project_id = $this->uri->segment(6);
 		$subproject_id = $this->uri->segment(7);
-
-		// $designation_id = $this->uri->segment(6);
+		$status_resign = $this->uri->segment(8);
 
 		if($company_id==0 || is_null($company_id)){
-
-		$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id);
+			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
 		}else{
-
-		$employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id);
+			$employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
 		}
 		
 		$data = array();
@@ -491,11 +487,23 @@ class Reports extends MY_Controller
 			} else {
 				$alamat = '--';	
 			}
+
+				if($r->status_resign==2){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
+				} else if ($r->status_resign==3) {
+
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+				} else {
+
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
+				}
+
 			// get status
 			if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
 			elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
 						
 			$data[] = array(
+				$stat,
 				$r->employee_id,
 				$full_name,
 				$comp_name,

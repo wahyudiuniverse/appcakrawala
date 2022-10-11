@@ -97,6 +97,17 @@
           </div>   
         </div>
 
+        <div class="col-md mb-2">
+          <div class="form-group">
+            <label class="form-label"><?php echo $this->lang->line('dashboard_xin_status');?></label>
+            <select class="form-control" name="status_resign" id="aj_status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
+              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+              <option value="1">AKTIF</option>
+              <option value="2">RESIGN</option>
+              <option value="3">BLACKLIST</option>
+            </select>
+          </div>   
+        </div>
 
         <div class="col-md col-xl-2 mb-4">
           <label class="form-label d-none d-md-block">&nbsp;</label>
@@ -116,6 +127,7 @@
           <table class="datatables-demo table table-striped table-bordered" id="xin_table" style="width:100%;table-layout: fixed;">
             <thead>
               <tr>
+                <th style="width: 60px;">Status</th>
                 <th style="width: 60px;"><?php echo $this->lang->line('xin_nip');?></th>
                 <th style="width: 160px;"><?php echo $this->lang->line('xin_employees_full_name');?></th>
                 <th style="width: 150px;"><?php echo $this->lang->line('left_company');?></th>
