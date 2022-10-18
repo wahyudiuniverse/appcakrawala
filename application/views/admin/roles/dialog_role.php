@@ -1290,6 +1290,24 @@ dataSource: [
 				check: "<?php if(isset($_GET['role_id'])) { if(in_array('260',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 			}]
 		},
+		// daftar esign
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_esign_register');?>",  
+			add_info: "<?php echo $this->lang->line('xin_add_edit_delete_role_info');?>", 
+			value: "478", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('478',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>",
+			items: [
+			{ 
+				id: "", 
+				class: "role-checkbox-modal custom-control-input", 
+				text: "<?php echo $this->lang->line('xin_role_enable');?>",  
+				add_info: "<?php echo $this->lang->line('xin_role_enable');?>", 
+				value: "478", 
+				check: "<?php if(isset($_GET['role_id'])) { if(in_array('478',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+			}]
+		},
 		{ 
 			id: "", 
 			class: "role-checkbox-modal custom-control-input", 

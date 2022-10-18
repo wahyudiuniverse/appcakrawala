@@ -373,6 +373,7 @@ class Reports extends MY_Controller
 		$project_id = $this->uri->segment(6);
 		$subproject_id = $this->uri->segment(7);
 		$status_resign = $this->uri->segment(8);
+	
 
 		if($company_id==0 || is_null($company_id)){
 			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);

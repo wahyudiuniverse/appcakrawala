@@ -159,10 +159,27 @@ class Pkwt_model extends CI_Model {
 		}		
 	}
 
+	// Function to add record in table
+	public function addsign($data){
+		$this->db->insert('xin_documents_qrcode', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
 	// Function to Delete selected record from table
 	public function delete_temp_by_employeeid(){
 		$this->db->where('employee_id', 'NIK');
 		$this->db->delete('xin_employee_contract_temp');
+		
+	}
+
+	// Function to Delete selected record from table
+	public function delete_sign_doc($id){
+		$this->db->where('secid', $id);
+		$this->db->delete('xin_documents_qrcode');
 		
 	}
 
@@ -194,6 +211,30 @@ class Pkwt_model extends CI_Model {
 		} else {
 			return null;
 		}
+	}
+
+	public function get_esign_all() {
+
+		// $sql = 'SELECT * FROM xin_documents_qrcode WHERE employee_id not IN (1)';
+		$sql = 'SELECT * FROM xin_documents_qrcode ORDER BY secid DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+	// get single employee
+	public function read_esign_doc($id) {
+	
+		$sql = 'SELECT * FROM xin_documents_qrcode WHERE doc_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+		
 	}
 
 

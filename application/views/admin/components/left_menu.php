@@ -722,6 +722,16 @@
             ?>
 
             <?php 
+            if(in_array('478',$role_resources_ids)) { 
+            ?>
+              <li class="sidenav-item <?php if(!empty($arr_mod['esign_active']))echo $arr_mod['esign_active'];?>"> 
+                <a class="sidenav-link" href="<?php echo site_url('admin/esign/');?>" > <?php echo $this->lang->line('xin_esign_register');?> </a> 
+              </li>
+            <?php 
+            } 
+            ?>
+
+            <?php 
             if(in_array('11',$role_resources_ids)) { 
             ?>
               <li class="sidenav-item <?php if(!empty($arr_mod['ann_active']))echo $arr_mod['ann_active'];?>"> 

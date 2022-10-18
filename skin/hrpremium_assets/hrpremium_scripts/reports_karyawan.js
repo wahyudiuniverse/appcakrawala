@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"karyawan/report_employees_list/0/0/0/0/",
+            url : site_url+"karyawan/report_employees_list/0/0/0/0/0/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -33,14 +33,17 @@ $(document).ready(function() {
 	$("#employee_reports").submit(function(e){
 		/*Form Submit*/
 		e.preventDefault();
+
 		var company_id = $('#aj_company').val();
 		var department_id = $('#aj_department').val();
 		var project_id = $('#aj_project').val();
 		var subproject_id = $('#aj_subproject').val();
+		var status_resign = $('#aj_status').val();
+		
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"karyawan/report_employees_list/"+company_id+"/"+department_id+"/"+project_id+"/"+subproject_id+"/",
+				url : site_url+"karyawan/report_employees_list/"+company_id+"/"+department_id+"/"+project_id+"/"+subproject_id+"/"+status_resign+"/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',

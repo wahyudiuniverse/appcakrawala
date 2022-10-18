@@ -3085,6 +3085,10 @@ $lang['xin_document_id'] = 'Dokumen';
 $lang['xin_rekening'] = 'Rekening';
 $lang['xin_reset_password'] = 'Reset Password';
 $lang['xin_emp_bpjs'] = 'BPJS Employees';
+$lang['xin_esign_register'] = 'Daftar E-SIGN';
+$lang['xin_jenis_dokumen'] = 'Jenis Dokumen';
+$lang['xin_sign_manager'] = 'Manager Sign';
+$lang['xin_no_dokumen'] = 'Nomor Dokumen';
 
 
 
