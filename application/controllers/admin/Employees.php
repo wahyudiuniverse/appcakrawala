@@ -1522,7 +1522,7 @@ class Employees extends MY_Controller {
 			$emp_status = $this->Xin_model->clean_post($this->input->post('emp_status'));
 			// $join_end = $this->input->post('date_of_end');
 			$deskripsi_resign = $this->Xin_model->clean_post($this->input->post('desc_resign'));
-			if($emp_status=='AKTIF'){
+			if($emp_status=='1'){
 				$status_emp = '1';
 				$dol = '';
 			} else {

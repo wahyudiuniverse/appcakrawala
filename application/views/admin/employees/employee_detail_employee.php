@@ -900,8 +900,8 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         </div>
                         <div class="col-md-7">
                           <div class="form-group" id="designation_ajax">
-                            <label for="address_1" class="control-label"><?php echo $this->lang->line('xin_address');?></label>
-                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="address_1" type="text">
+                            <label for="address_1" class="control-label"><?php echo $this->lang->line('xin_address_domisili');?></label>
+                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_domisili');?>" name="address_1" type="text">
                           </div>
                         </div>
                       </div>
@@ -1136,7 +1136,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="description" class="control-label"><?php echo $this->lang->line('xin_description');?></label>
+                  <label for="description" class="control-label"><?php echo $this->lang->line('xin_jurusan');?></label>
                     <textarea class="form-control" placeholder="Keterangan" data-show-counter="1" data-limit="300" name="description" cols="30" rows="3" id="d_description"></textarea>
                 </div>
               </div>

@@ -179,7 +179,7 @@ class Esign extends MY_Controller {
 
 		$docid = date('ymdHis');
 		$image_name='esign'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
-		$domain = 'http://apps-cakrawala/esign/doc/'.$docid;
+		$domain = 'https://apps-cakrawala.com/esign/doc/'.$docid;
 		$params['data'] = $domain; //data yang akan di jadikan QR CODE
 		$params['level'] = 'H'; //H=High
 		$params['size'] = 10;
