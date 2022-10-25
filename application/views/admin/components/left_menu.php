@@ -161,6 +161,35 @@
     ?>
 
 
+<!-- MENU CALL CENTER -->
+    <?php 
+    if (in_array('479',$role_resources_ids)) {
+    ?>
+      <li class="<?php if(!empty($arr_mod['callcenter_open']))echo $arr_mod['callcenter_open'];?> sidenav-item"> 
+        <a href="#" class="sidenav-link sidenav-toggle"> 
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+          <div><?php echo $this->lang->line('xin_menu_cs');?></div>
+        </a>
+        
+        <ul class="sidenav-menu">
+          <?php 
+          if (in_array('480',$role_resources_ids)) { 
+          ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['whatsapp_active']))echo $arr_mod['whatsapp_active'];?>"> 
+              <a class="sidenav-link" href="<?php echo site_url('admin/Customerservices/');?>" > <?php echo $this->lang->line('xin_whatsapp_blast');?> 
+              </a>
+            </li>
+          <?php 
+          } 
+          ?>
+
+        </ul>
+      </li>
+    <?php 
+    } 
+    ?>
+
+
 <!-- pkwt -->
     <?php 
     if (in_array('34',$role_resources_ids) 
@@ -364,6 +393,21 @@
       } 
       ?>
       
+
+<!-- Surat Keterangan Kerja / Paklaring -->
+
+      <?php 
+      if (in_array('486',$role_resources_ids)) { ?>
+        <li class="sidenav-item <?php if(!empty($arr_mod['skk_active']))echo $arr_mod['skk_active'];?>"> 
+          <a href="<?php echo site_url('admin/skk/');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div><?php echo $this->lang->line('xin_surat_keterangan_kerja');?></div>
+          </a> 
+        </li>
+      <?php 
+      } 
+      ?>
 
 <!-- Request PKW -->
     <?php 

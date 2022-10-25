@@ -2083,6 +2083,15 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+	// get all my team employes > not super admin
+	public function get_all_employees_resign() {
+		
+		$sql = 'SELECT user_id, employee_id, CONCAT( employee_id, " - ", first_name) AS fullname FROM xin_employees WHERE is_active = 1 AND  status_resign = 2 AND employee_id not IN (1)';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
 	// public function get_maxid() {
 	// 	$sql = 'SELECT max(employee_id) AS maxid FROM xin_employees';
 	// 	$query = $this->db->query($sql);

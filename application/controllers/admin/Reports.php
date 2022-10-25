@@ -51,13 +51,22 @@ class Reports extends MY_Controller
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_hr_report_title').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_title');
-		$data['path_url'] = 'hrpremium_reports';
-		$data['all_companies'] = $this->Xin_model->get_companies();
+		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('110',$role_resources_ids) || in_array('111',$role_resources_ids) || in_array('112',$role_resources_ids) || in_array('113',$role_resources_ids) || in_array('114',$role_resources_ids) || in_array('115',$role_resources_ids) || in_array('116',$role_resources_ids) || in_array('117',$role_resources_ids) || in_array('409',$role_resources_ids) || in_array('83',$role_resources_ids) || in_array('84',$role_resources_ids) || in_array('85',$role_resources_ids) || in_array('86',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/layout/hrpremium_reports", $data, TRUE);
+		$data['title'] = $this->lang->line('xin_hr_report_employees').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+		$data['path_url'] = 'reports_employees';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		if(in_array('139',$role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if(in_array('117',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employees", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -468,25 +477,25 @@ class Reports extends MY_Controller
 			if(!is_null($r->kk_no)){
 				$kk = $r->kk_no;
 			} else {
-				$alamat = '--';	
+				$kk = '--';	
 			}
 
 			if(!is_null($r->ktp_no)){
 				$ktp = $r->ktp_no;
 			} else {
-				$alamat = '--';	
+				$ktp = '--';	
 			}
 
 			if(!is_null($r->npwp_no)){
 				$npwp = $r->npwp_no;
 			} else {
-				$alamat = '--';	
+				$npwp = '--';	
 			}
 
 			if(!is_null($r->private_code)){
 				$pin = $r->private_code;
 			} else {
-				$alamat = '--';	
+				$pin = '--';	
 			}
 
 				if($r->status_resign==2){
@@ -655,25 +664,25 @@ class Reports extends MY_Controller
 			if(!is_null($r->kk_no)){
 				$kk = $r->kk_no;
 			} else {
-				$alamat = '--';	
+				$kk = '--';	
 			}
 
 			if(!is_null($r->ktp_no)){
 				$ktp = $r->ktp_no;
 			} else {
-				$alamat = '--';	
+				$ktp = '--';	
 			}
 
 			if(!is_null($r->npwp_no)){
 				$npwp = $r->npwp_no;
 			} else {
-				$alamat = '--';	
+				$npwp = '--';	
 			}
 
 			if(!is_null($r->private_code)){
 				$pin = $r->private_code;
 			} else {
-				$alamat = '--';	
+				$pin = '--';	
 			}
 
 							$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
@@ -845,25 +854,25 @@ class Reports extends MY_Controller
 			if(!is_null($r->kk_no)){
 				$kk = $r->kk_no;
 			} else {
-				$alamat = '--';	
+				$kk = '--';	
 			}
 
 			if(!is_null($r->ktp_no)){
 				$ktp = $r->ktp_no;
 			} else {
-				$alamat = '--';	
+				$ktp = '--';	
 			}
 
 			if(!is_null($r->npwp_no)){
 				$npwp = $r->npwp_no;
 			} else {
-				$alamat = '--';	
+				$npwp = '--';	
 			}
 
 			if(!is_null($r->private_code)){
 				$pin = $r->private_code;
 			} else {
-				$alamat = '--';	
+				$pin = '--';	
 			}
 
 							$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';

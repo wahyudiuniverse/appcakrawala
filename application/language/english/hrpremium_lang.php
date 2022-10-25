@@ -3091,6 +3091,11 @@ $lang['xin_esign_register'] = 'Daftar E-SIGN';
 $lang['xin_jenis_dokumen'] = 'Jenis Dokumen';
 $lang['xin_sign_manager'] = 'Manager Sign';
 $lang['xin_no_dokumen'] = 'Nomor Dokumen';
+$lang['xin_menu_cs'] = 'Menu Call Center';
+$lang['xin_whatsapp_blast'] = 'Whatsapp Blast';
+$lang['xin_daftar_karyawan'] = 'Daftar Karyawan';
+$lang['xin_surat_keterangan_kerja'] = 'Surat Keterangan Kerja';
+$lang['xin_success_delete'] = 'Hapus Data Berhasil...';
 
 
 

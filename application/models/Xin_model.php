@@ -213,11 +213,18 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} 
 
+		else if($mClass=='customerservices') {
+			$arr['whatsapp_active'] = 'active';
+			$arr['callcenter_open'] = 'open';
+			return $arr;
+		}
 		else if($mClass=='usermobile') {
 			$arr['project_active'] = 'active';
 			$arr['usermobile_open'] = 'open';
 			return $arr;
 		}
+
+
 		else if($mClass=='usermobile') {
 			$arr['callplan_active'] = 'active';
 			$arr['usermobile_open'] = 'open';
@@ -4017,6 +4024,7 @@ function count_pkwt(){
 		$query = $this->db->query($sql);
 		return $query->num_rows();
 }
+
 function count_nip(){
 	
 		$sql = "SELECT  MAX(SUBSTRING(employee_id, -5)) + 1 AS newcount FROM xin_employees;";

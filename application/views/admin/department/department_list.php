@@ -67,7 +67,7 @@
         </div>
         <div class="form-group">
           <label for="first_name"><?php echo $this->lang->line('left_company');?></label>
-          <select class=" form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
+          <select class=" form-control" name="employee_id" id="aj_employee" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
             <option value=""></option>
             <?php foreach($get_all_companies as $company) {?>
             <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
