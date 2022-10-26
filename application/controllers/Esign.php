@@ -23,6 +23,7 @@ class Esign extends MY_Controller {
 		$this->load->model("Designation_model");
 		$this->load->model("Department_model");
 		$this->load->model("Pkwt_model");
+		$this->load->model("Esign_model");
 		$this->load->helper('string');
 		$this->load->library('email');
 	}
@@ -53,6 +54,28 @@ class Esign extends MY_Controller {
 		}
 		$nodoc = $this->uri->segment(3);
 		$srcdoc = $this->Pkwt_model->read_esign_doc($nodoc);
+
+		$data['title'] = 'E-Sign PT. Siprama Cakrawala';
+		$session = $this->session->userdata('c_user_id');
+		if(!empty($session)){
+			redirect('');
+		}
+		$data['all_dept'] = $this->Xin_model->get_departments();
+		$data['all_designation'] = $this->Xin_model->get_designations();
+		$data['all_project'] = $this->Xin_model->get_projects();
+		$data['nodoc']= $srcdoc[0]->nomor_dokumen;
+		$data['path_url'] = 'job_create_user';
+		$data['subview'] = $this->load->view("frontend/hrpremium/esign_view", $data, TRUE);
+		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
+    }  
+
+	 public function sk() {
+		$system = $this->Xin_model->read_setting_info(1);
+		if($system[0]->module_recruitment!='true'){
+			redirect('admin/');
+		}
+		$nodoc = $this->uri->segment(3);
+		$srcdoc = $this->Esign_model->read_skk($nodoc);
 
 		$data['title'] = 'E-Sign PT. Siprama Cakrawala';
 		$session = $this->session->userdata('c_user_id');

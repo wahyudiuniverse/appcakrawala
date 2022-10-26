@@ -217,7 +217,7 @@ class Skk extends MY_Controller {
 
 		$docid = date('ymdHis');
 		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
-		$domain = 'https://apps-cakrawala.com/esign/doc/'.$docid;
+		$domain = 'https://apps-cakrawala.com/esign/sk/'.$docid;
 		$params['data'] = $domain; //data yang akan di jadikan QR CODE
 		$params['level'] = 'H'; //H=High
 		$params['size'] = 10;
@@ -329,8 +329,8 @@ class Skk extends MY_Controller {
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$vpin = $this->uri->segment(4);
-		$vskk = $this->uri->segment(5);
+		$vskk = $this->uri->segment(4);
+		$vpin = $this->uri->segment(5);
 		// $employee_id = $this->uri->segment(5);
 
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
@@ -429,95 +429,37 @@ class Skk extends MY_Controller {
 
 				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
 				$nip = $eskk[0]->nip;
-				// $namalengkap = $employee[0]->first_name;
-				// $periode = $eslip[0]->periode;
-				// $project = $eslip[0]->project;
-				// $area = $eslip[0]->area;
-				// $hari_kerja = $eslip[0]->hari_kerja;
-				// $gaji_pokok = $eslip[0]->gaji_pokok;
-				// $allow_jabatan = $eslip[0]->allow_jabatan;
-				// $allow_konsumsi = $eslip[0]->allow_konsumsi;
-				// $allow_transport = $eslip[0]->allow_transport;
+				$nomor_dokumen = $eskk[0]->nomor_dokumen;
+				$nip = $eskk[0]->nip;
+				$fullname = $employee[0]->first_name;
+				$join_date = $this->Xin_model->tgl_indo($eskk[0]->join_date);
+				$resign_date = $this->Xin_model->tgl_indo($eskk[0]->resign_date);
+				$qr_code = $eskk[0]->qr_code;
+				$ktp_no = $employee[0]->ktp_no;
+				$address = $employee[0]->address;
+				$createdon = $this->Xin_model->tgl_indo(substr($eskk[0]->createdon,0,10));
 				// $allow_rent = $eslip[0]->allow_rent;
 				// $allow_comunication = $eslip[0]->allow_comunication;
-				// $allow_parking = $eslip[0]->allow_parking;
-				// $allow_residence_cost = $eslip[0]->allow_residence_cost;
-				// $allow_device = $eslip[0]->allow_device;
-				// $penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				// $insentive = $eslip[0]->insentive;
-				// $overtime = $eslip[0]->overtime;
-				// $overtime_national_day = $eslip[0]->overtime_national_day;
-				// $overtime_rapel = $eslip[0]->overtime_rapel;
-				// $kompensasi = $eslip[0]->kompensasi;
-				// $bonus = $eslip[0]->bonus;
-				// $thr = $eslip[0]->thr;
-				// $bpjs_tk_deduction = $eslip[0]->bpjs_tk_deduction;
-				// $bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
-				// $jaminan_pensiun_deduction = $eslip[0]->jaminan_pensiun_deduction;
-				// $pendapatan = $eslip[0]->pendapatan;
-				// $bpjs_tk = $eslip[0]->bpjs_tk;
-				// $bpjs_ks = $eslip[0]->bpjs_ks;
-				// $jaminan_pensiun = $eslip[0]->jaminan_pensiun;
-				// $pph = $eslip[0]->pph;
-				// $penalty_late = $eslip[0]->penalty_late;
-				// $penalty_attend = $eslip[0]->penalty_attend;
-				// $deduction = $eslip[0]->deduction;
-				// $simpanan_pokok = $eslip[0]->simpanan_pokok;
-				// $simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
-				// $pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
-				// $biaya_admin_bank = $eslip[0]->biaya_admin_bank;
-				// $total = $eslip[0]->total;
+
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
 	
 
-				$pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				$transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				$armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
+					$designation = $this->Xin_model->read_user_xin_designation($employee[0]->designation_id);
+					if(!is_null($designation)){
+						$jabatan = $designation[0]->designation_name;
+					} else {
+						$jabatan = $designation[0]->designation_name;
+					}
 
 			} else {
 
 			}
 
-
 			$tbl_2 = '
 
 					<div style="text-align: center; text-justify: inter-word;">
-						<b><u>SURAT KETERANGAN KERJA</u><br>No.058818/REF-HRD/SC/IX/2022</b>
+						<b><u>SURAT KETERANGAN KERJA</u><br>No.'.$nomor_dokumen.'</b>
 					</div>
 				<br>
 
@@ -560,28 +502,28 @@ class Skk extends MY_Controller {
 
 					<tr>
 						<td>ID Karyawan</td>
-						<td colspan="3">: 23500123</td>
+						<td colspan="3">: '.$nip.'</td>
 					</tr>
 
 					<tr>
 						<td>Nama Lengkap</td>
-						<td colspan="3">: Raden Ryan Setyawan</td>
+						<td colspan="3">: '.$fullname.'</td>
 					</tr>
 
 
 					<tr>
 						<td>Jabatan Terakhir</td>
-						<td colspan="3">: AEMD/S</td>
+						<td colspan="3">: '.$jabatan.'</td>
 					</tr>
 
 					<tr>
 						<td>Nomor KTP</td>
-						<td colspan="3">: 123456789012345</td>
+						<td colspan="3">: '.$ktp_no.'</td>
 					</tr>
 
 					<tr>
 						<td>Alamat KTP</td>
-						<td colspan="3">: Jl. Karang arum no. 45 Rt02/02 kel Cipedes sukajadi</td>
+						<td colspan="3">: '.$address.'</td>
 					</tr>
 
 				</table>
@@ -591,7 +533,7 @@ class Skk extends MY_Controller {
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Adalah benar karyawan yang bekerja di Perusahaan kami sejak tanggal 03 Agustus 2022 sampai dengan 31 Agustus 2022 yang ditempatkan pada PROMOSINDO <br> <br>
+								<td>Adalah benar karyawan yang bekerja di Perusahaan kami sejak tanggal '.$join_date.' sampai dengan '.$resign_date.' yang ditempatkan pada PROMOSINDO <br> <br>
 									Selama bekerja Sdra. Raden Ryan Setyawan telah menujukan tanggung jawa dan kinerja yang baik dan dengan ini perusahaan mengucapkan terima kasih.<br><br>
 									Demikian surat keterangan ini dibuat, agar dapat digunakan sebagaimana mestinya.
 								</td>
@@ -603,14 +545,14 @@ class Skk extends MY_Controller {
 <table cellpadding="2" cellspacing="0" border="0">
 
 				<tr>
-					<td>Depok, 29 September 2022</td>
+					<td>Depok, '.$createdon.'</td>
 					<td></td>
 				</tr>
 
 				<tr>
 					<td><br>
-				<img src="https://blogger.googleusercontent.com/img/a/AVvXsEiF5sdS35sA6gGSDaXKKzGFYxma7Zmwm8JtE_VJwEGqXOoHz7Wq1IqXXv2XgQMdcIL1YUstYUbj2ocFsH5EwN1LppQ-MYMCrLhZsmPkjcFHd47Ik8m--kwrQkv9P-fyH_yn36f66OVLeOwlP6bi4vDDKUJ5NFBNxzBwkmwU_tumi4wr0wyKWs9JwmgN" alt="Trulli" width="167" height="95"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
-					<td><br><br><br><br><br><br><br><b><br><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+					<td><br><br><br><br><br><br><br><b><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 				</tr>
 
 				<tr>
@@ -635,10 +577,10 @@ $tbl_2 .= '';
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Depok, 29 September 2022</td>
+								<td>Depok, '.$createdon.'</td>
 							</tr>	
 							<tr>						
-								<td>No.058818/REF-HRD/SC/IX/2022</td>
+								<td>No.'.$nomor_dokumen.'</td>
 							</tr>
 				</table>
 
@@ -698,28 +640,28 @@ $tbl_2 .= '';
 
 					<tr>
 						<td>ID Karyawan</td>
-						<td colspan="3">: 23500123</td>
+						<td colspan="3">: '.$nip.'</td>
 					</tr>
 
 					<tr>
 						<td>Nama Lengkap</td>
-						<td colspan="3">: Raden Ryan Setyawan</td>
+						<td colspan="3">: '.$fullname.'</td>
 					</tr>
 
 
 					<tr>
 						<td>Jabatan Terakhir</td>
-						<td colspan="3">: AEMD/S</td>
+						<td colspan="3">: '.$jabatan.'</td>
 					</tr>
 
 					<tr>
 						<td>Nomor KTP</td>
-						<td colspan="3">: 123456789012345</td>
+						<td colspan="3">: '.$ktp_no.'</td>
 					</tr>
 
 					<tr>
 						<td>Alamat KTP</td>
-						<td colspan="3">: Jl. Karang arum no. 45 Rt02/02 kel Cipedes sukajadi</td>
+						<td colspan="3">: '.$address.'</td>
 					</tr>
 
 				</table>
@@ -728,7 +670,7 @@ $tbl_2 .= '';
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Bahwa benar karyawan kami di atas, telah bekerja di PROMOSINDO dari tanggal 03 Agustus 2022 sampai dengan 31 Agustus 2022.
+								<td>Bahwa benar karyawan kami di atas, telah bekerja di PROMOSINDO dari tanggal '.$join_date.' sampai dengan '.$resign_date.'.
 								</td>
 							</tr>
 				</table>
@@ -748,25 +690,25 @@ $tbl_2 .= '';
 
 				<tr>
 					<td></td>
-					<td>Hormat kami,</td>
+					<td style="text-align:center;">Hormat kami,</td>
 				</tr>
 
 				<tr>
 					<td></td>
-					<td>PT SIPRAMA CAKRAWALA</td>
+					<td style="text-align:center;">PT SIPRAMA CAKRAWALA</td>
 				</tr>
 
 
 				<tr>
-				
-					<td><br><br><br><br><br><br><br><b><br><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-					<td><br>
-				<img src="https://blogger.googleusercontent.com/img/a/AVvXsEiF5sdS35sA6gGSDaXKKzGFYxma7Zmwm8JtE_VJwEGqXOoHz7Wq1IqXXv2XgQMdcIL1YUstYUbj2ocFsH5EwN1LppQ-MYMCrLhZsmPkjcFHd47Ik8m--kwrQkv9P-fyH_yn36f66OVLeOwlP6bi4vDDKUJ5NFBNxzBwkmwU_tumi4wr0wyKWs9JwmgN" alt="Trulli" width="167" height="95"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+
+					<td><br><br><br><br><br><br><br><b><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<td style="text-align:center;"><br>
+				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
 				</tr>
 
 				<tr>
 					<td></td>
-					<td>SM HR/GA</td>
+					<td style="text-align:center;">SM HR/GA</td>
 				</tr>
 
 				</table>

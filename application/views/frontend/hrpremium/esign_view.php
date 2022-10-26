@@ -15,14 +15,10 @@
                 <input type="hidden" name="company_id" value="2" />
 
 <!-- 
-					<img src="<?php echo base_url();?>skin/img/inka.jpg" alt="" style="width: 200px; display: block;
-  margin-left: auto;
-  margin-right: auto;"/> -->
-
                 <p class="form-row form-row-wide" style="text-align: center;">
-					<img src="<?php echo base_url();?>skin/img/inka.png" alt="" style="width: 200px;"/>
+					<img src="<?php //echo base_url();?>skin/img/inka.png" alt="" style="width: 200px;"/>
 				</p>
-
+ -->
 
  <table border="1" style="border-style: solid; border-color: coral;">
 
@@ -70,62 +66,6 @@
         </tr>
     </table>
 
-
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-				<p class="form-row form-row-wide">
-					<label for="last_name">Department:
-						<i class="ln ln-icon-Male"></i>					
-						<select id="department_id" name="department_id" data-placeholder="Choose Category" class="chosen-select">
-						<option value=""></option>
-                        <?php foreach($all_dept as $dept):?>
-                        <option value="<?php echo $dept->department_id;?>"><?php echo $dept->department_name;?></option>
-                        <?php endforeach;?>
-					</select>
-					</label>
-				</p>
-
-				<p class="form-row form-row-wide">
-					<label for="last_name">Posisi/Jabatan:
-						<i class="ln ln-icon-Male"></i>					
-						<select id="pos_id" name="pos_id" data-placeholder="Choose Category" class="chosen-select">
-						<option value=""></option>
-                        <?php foreach($all_designation as $posi):?>
-                        <option value="<?php echo $posi->designation_id;?>"><?php echo $posi->designation_name;?></option>
-                        <?php endforeach;?>
-					</select>
-					</label>
-				</p>
-
-				<p class="form-row form-row-wide">
-					<label for="last_name">Project:
-						<i class="ln ln-icon-Male"></i>					
-						<select id="project_id" name="project_id" data-placeholder="Choose Category" class="chosen-select">
-						<option value=""></option>
-                        <?php foreach($all_project as $pro):?>
-                        <option value="<?php echo $pro->project_id;?>"><?php echo $pro->title;?></option>
-                        <?php endforeach;?>
-					</select>
-					</label>
-				</p>
-
-				<p class="form-row form-row-wide">
-					<label for="email2">Email Address:
-						<i class="ln ln-icon-Mail"></i>
-						<input type="text" class="input-text" name="email" id="email1" value="" />
-					</label>
-				</p>
-
-                <p class="form-row form-row-wide">
-					<label for="contact_number">Contact Number:
-						<i class="ln ln-icon-Phone-2"></i>
-						<input type="text" class="input-text" name="contact_number" id="contact_number1" value="" />
-					</label>
-				</p>
-				
-				<p class="form-row">
-					<input type="submit" class="button border fw margin-top-10" name="register" value="Register" />
-				</p>
 
 				</form>
 			</div>
