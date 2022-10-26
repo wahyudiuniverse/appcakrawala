@@ -29,6 +29,22 @@ class Esign_model extends CI_Model {
 		}
 	}
 
+
+	// get single employee
+	public function read_skk_by_doc($id) {
+	
+		$sql = 'SELECT * FROM xin_qrcode_skk WHERE doc_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+		
+	}
+
 	public function get_all_employees_resign()
 	{
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname FROM xin_employees WHERE is_active = 1 AND  status_resign = 2 AND employee_id not IN (1)");

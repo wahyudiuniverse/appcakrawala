@@ -225,7 +225,7 @@ class Skk extends MY_Controller {
 		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 
 		$data = array(
-		'docid' => $docid,
+		'doc_id' => $docid,
 		'jenis_dokumen' => '2',
 		'nomor_dokumen' => $this->input->post('nomordoc'),
 		'nip' => $this->input->post('manag_sign'),

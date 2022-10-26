@@ -64,6 +64,7 @@ class Esign extends MY_Controller {
 		$data['all_designation'] = $this->Xin_model->get_designations();
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['nodoc']= $srcdoc[0]->nomor_dokumen;
+		$data['release_date'] = $this->Xin_model->tgl_indo(substr($srcdoc[0]->createdat,0,10));
 		$data['path_url'] = 'job_create_user';
 		$data['subview'] = $this->load->view("frontend/hrpremium/esign_view", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
@@ -75,7 +76,7 @@ class Esign extends MY_Controller {
 			redirect('admin/');
 		}
 		$nodoc = $this->uri->segment(3);
-		$srcdoc = $this->Esign_model->read_skk($nodoc);
+		$srcdoc = $this->Esign_model->read_skk_by_doc($nodoc);
 
 		$data['title'] = 'E-Sign PT. Siprama Cakrawala';
 		$session = $this->session->userdata('c_user_id');
@@ -86,6 +87,7 @@ class Esign extends MY_Controller {
 		$data['all_designation'] = $this->Xin_model->get_designations();
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['nodoc']= $srcdoc[0]->nomor_dokumen;
+		$data['release_date']= $this->Xin_model->tgl_indo(substr($srcdoc[0]->createdon,0,10));
 		$data['path_url'] = 'job_create_user';
 		$data['subview'] = $this->load->view("frontend/hrpremium/esign_view", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load

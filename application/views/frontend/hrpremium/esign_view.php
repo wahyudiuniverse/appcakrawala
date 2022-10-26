@@ -48,7 +48,7 @@
         </tr>
         <tr>
             <td>TANGGAL TERBIT&ensp;&ensp;&ensp;</td>
-            <td><b> : <?php echo $nodoc;?></b></td>
+            <td><b> : <?php echo $release_date;?></b></td>
         </tr>
     </table>
 
