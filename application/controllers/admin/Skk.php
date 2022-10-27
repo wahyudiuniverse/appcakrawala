@@ -214,6 +214,9 @@ class Skk extends MY_Controller {
        		$this->output($Return);
     	}
 	
+		$count_skk = $this->Esign_model->count_skk();
+		$nomor_surat = sprintf("%05d", $count_skk[0]->maxid +1).$this->input->post('nomordoc');
+
 
 		$docid = date('ymdHis');
 		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
@@ -227,7 +230,7 @@ class Skk extends MY_Controller {
 		$data = array(
 		'doc_id' => $docid,
 		'jenis_dokumen' => '2',
-		'nomor_dokumen' => $this->input->post('nomordoc'),
+		'nomor_dokumen' => $nomor_surat,
 		'nip' => $this->input->post('manag_sign'),
 		'join_date'  => $this->input->post('join_date'),
 		'resign_date'  => $this->input->post('resign_date'),
@@ -452,6 +455,13 @@ class Skk extends MY_Controller {
 						$jabatan = $designation[0]->designation_name;
 					}
 
+					$project = $this->Xin_model->read_user_xin_designation($employee[0]->designation_id);
+					if(!is_null($designation)){
+						$jabatan = $designation[0]->designation_name;
+					} else {
+						$jabatan = $designation[0]->designation_name;
+					}
+
 			} else {
 
 			}
@@ -545,19 +555,19 @@ class Skk extends MY_Controller {
 <table cellpadding="2" cellspacing="0" border="0">
 
 				<tr>
-					<td>Depok, '.$createdon.'</td>
-					<td></td>
+					<td style="text-align:center;">Depok, '.$createdon.'</td>
+					
 				</tr>
 
 				<tr>
-					<td><br>
+					<td style="text-align:center;"><br>
 				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
-					<td><br><br><br><br><br><br><br><b><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					
 				</tr>
 
 				<tr>
-					<td>SM HR/GA</td>
-					<td></td>
+					<td style="text-align:center;">SM HR/GA</td>
+					
 				</tr>
 
 				</table>

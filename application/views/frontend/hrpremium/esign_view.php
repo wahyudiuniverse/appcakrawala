@@ -32,7 +32,7 @@
         </tr>
         <tr>
             <td>JABATAN&ensp;&ensp;&ensp;</td>
-            <td><b> : SENIOR MANAGER HR, GA & IT</b></td>
+            <td><b> : SENIOR MANAGER HRD</b></td>
         </tr>
         <tr>
             <td>PERUSAHAAN&ensp;&ensp;&ensp;</td>

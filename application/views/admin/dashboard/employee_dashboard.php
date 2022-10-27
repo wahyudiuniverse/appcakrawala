@@ -11,6 +11,10 @@ if($user_info[0]->profile_picture!='' && $user_info[0]->profile_picture!='no fil
 		$lde_file = base_url().'uploads/profile/default_female.jpg';
 	}
 }
+// PAKLARING CEK
+
+
+  $skk_release = $this->Esign_model->read_skk_by_nip($user_info[0]->employee_id);
 
 // PKWT START
 
@@ -45,6 +49,7 @@ if(!is_null($designation)){
 } else {
 	$designation_name = '--';	
 }
+
 $role_user = $this->Xin_model->read_user_role_info($user_info[0]->user_role_id);
 if(!is_null($role_user)){
 	$role_resources_ids = explode(',',$role_user[0]->role_resources);
@@ -54,19 +59,8 @@ if(!is_null($role_user)){
 ?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
-<?php $announcement = $this->Announcement_model->get_new_announcements();?>
-<?php foreach($announcement as $new_announcement):?>
-<?php
-	$current_date = strtotime(date('Y-m-d'));
-	$announcement_end_date = strtotime($new_announcement->end_date);
-	if($current_date <= $announcement_end_date) {
-?>
 
-<div class="alert alert-success alert-dismissible fade in mb-1" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-  <strong><?php echo $new_announcement->title;?>:</strong> <?php echo $new_announcement->summary;?> <a href="#" class="alert-link" data-toggle="modal" data-target=".view-modal-annoucement" data-announcement_id="<?php echo $new_announcement->announcement_id;?>"><?php echo $this->lang->line('xin_view');?></a> </div>
-<?php } ?>
-<?php endforeach;?>
+
 <?php
 $att_date =  date('d-M-Y');
 $attendance_date = date('d-M-Y');
@@ -75,177 +69,78 @@ $get_day = strtotime($att_date);
 $day = date('l', $get_day);
 $strtotime = strtotime($attendance_date);
 $new_date = date('d-M-Y', $strtotime);
-// office shift
-$u_shift = $this->Timesheet_model->read_office_shift_information($user_info[0]->office_shift_id);
-if(!is_null($u_shift)){
-	// get clock in/clock out of each employee
-	if($day == 'Monday') {
-		if($u_shift[0]->monday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_monday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->monday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->monday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	} else if($day == 'Tuesday') {
-		if($u_shift[0]->tuesday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_tuesday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->tuesday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->tuesday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	} else if($day == 'Wednesday') {
-		if($u_shift[0]->wednesday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_wednesday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->wednesday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->wednesday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	} else if($day == 'Thursday') {
-		if($u_shift[0]->thursday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_thursday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->thursday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->thursday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	} else if($day == 'Friday') {
-		if($u_shift[0]->friday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_friday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->friday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->friday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	} else if($day == 'Saturday') {
-		if($u_shift[0]->saturday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_saturday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->saturday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->saturday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	} else if($day == 'Sunday') {
-		if($u_shift[0]->sunday_in_time==''){
-			$office_shift = $this->lang->line('dashboard_today_sunday_shift');
-		} else {
-			$in_time =  new DateTime($u_shift[0]->sunday_in_time. ' ' .$attendance_date);
-			$out_time =  new DateTime($u_shift[0]->sunday_out_time. ' ' .$attendance_date);
-			$clock_in = $in_time->format('h:i a');
-			$clock_out = $out_time->format('h:i a');
-			$office_shift = $this->lang->line('dashboard_office_shift').': '.$clock_in.' '.$this->lang->line('dashboard_to').' '.$clock_out;
-		}
-	}
-	$emp_shift = '1';
-} else {
-	$office_shift = $this->lang->line('xin_office_shift_not_assigned');
-	$emp_shift = '0';
-}
 ?>
+
 <?php $sys_arr = explode(',',$system[0]->system_ip_address); ?>
-<?php $attendances = $this->Timesheet_model->attendance_time_checks($user_info[0]->user_id); $dat = $attendances->result();?>
 <?php
-$bgatt = 'bg-success';
-if($attendances->num_rows() < 1) {
-	$bgatt = 'bg-success';
-} else {
-	$bgatt = 'bg-danger';
-}
 
     $session = $this->session->userdata('username');
     $user_info = $this->Exin_model->read_user_info($session['user_id']);
-
-  $eslip_release = $this->Employees_model->read_eslip_by_nip($session['employee_id']);
+    $eslip_release = $this->Employees_model->read_eslip_by_nip($session['employee_id']);
 ?>
-<div class="media align-items-center mb-4">
-  <img src="<?php echo $lde_file;?>" alt="" class="d-block ui-w-100 rounded-circle">
-  <div class="media-body ml-4">
-    <h4 class="font-weight-bold mb-0"><?php echo $user_info[0]->first_name. ' ' .$user_info[0]->last_name;?> 
-    
-    </h4>
-    <div class="text-muted mb-2">ID: <?php echo $user_info[0]->employee_id;?></div>
-    <?php if($emp_shift == 1){?>
-		<?php $attributes = array('name' => 'set_clocking', 'id' => 'set_clocking', 'autocomplete' => 'off', 'class' => 'form');?>
-        <?php $hidden = array('exuser_id' => $session['user_id']);?>
-        <?php echo form_open('admin/timesheet/set_clocking', $attributes, $hidden);?>
-        <input type="hidden" name="timeshseet" value="<?php echo $user_info[0]->user_id;?>">
-
-
-        
-        
-        <?php echo form_close(); ?>
-    <?php } ?>
-  </div>
-</div>
 
 <div class="row mt-3">
-  <?php if(in_array('14',$role_resources_ids)) { ?>
-  <?php if($system[0]->module_awards=='true'){?>
-  <div class="col-sm-6 col-xl-3">
-  <a href="<?php echo site_url('admin/awards/');?>">
-    <div class="card mb-4">
+
+
+<!-- ESLIP STATUS -->
+<?php
+  if(!is_null($skk_release)){
+    foreach($skk_release->result() as $r) {
+?>
+
+  <div class="col-sm-6 col-xl-4">
+    <div class="card mb-5">
+      <a href="<?php echo site_url().'admin/skk/view/'.$r->secid.'/'.$r->nip;?>" target="_blank">
       <div class="card-body">
         <div class="d-flex align-items-center">
-          <div class="ion ion-ios-trophy display-4 text-success"></div>
-          <div class="ml-3">
-            <div class="text-muted small"><?php echo $this->Exin_model->total_employee_awards_dash();?> <?php echo $this->lang->line('left_awards');?></div>
-            <div class="text-large"><?php echo $this->lang->line('xin_view');?></div>
-
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted normal"><?php echo $this->lang->line('xin_paklaring'). ' '.'Periode:';?></div>
+            <p style="font-size: 18px;"><?php echo $r->nomor_dokumen;?></p>
           </div>
         </div>
       </div>
+      </a>
     </div>
-    </a>
   </div>
-  <?php } ?>
-  <?php } else {?>
-  <?php if(in_array('28',$role_resources_ids)) { ?>
-  <div class="col-sm-6 col-xl-3">
-  <a href="<?php echo site_url('admin/timesheet/attendance/');?>">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-md-clock display-4 text-success"></div>
-          <div class="ml-3">
-            <div class="text-muted small"><?php echo $this->lang->line('dashboard_attendance');?></div>
-            <div class="text-large"><?php echo $this->lang->line('xin_view');?></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </a>
-  </div>
-  <?php } ?>
-  <?php } ?>
 
+<?php
+    }
 
-<!-- PKWT STATUS -->
-
-  <?php 
-  if($pkwtid=='0'){
-  ?>
-
-
-  <div class="col-sm-6 col-xl-3">
+  } else {
+?>
+  <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
+            <div class="text-muted small"><?php echo $this->lang->line('xin_paklaring');?></div>
+            <div class="text-large">Tidak Ditemukan..!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
+  }
+?>
+
+</div>
+
+<div class="row mt-3">
+
+<!-- PKWT STATUS -->
+  <?php 
+  if($pkwtid=='0'){
+  ?>
+
+  <div class="col-sm-6 col-xl-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_pkwt');?></div>
             <div class="text-large">Belum Tersedia..!</div>
           </div>
@@ -258,36 +153,31 @@ if($attendances->num_rows() < 1) {
   } else {
   ?>
 
-
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
   <a href="<?php echo site_url('admin/pkwt/view/'.$pkwtid.'/'.$user_info[0]->employee_id);?>" target="_blank">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_pkwt');?></div>
             <div class="text-large"><?php echo $this->lang->line('xin_download');?>
           <i class="fa fa-check-circle" aria-hidden="true" style="color:#03b403"></i></div>
-          
             <div class="text-muted small"><?php echo $nomorsurat;?></div>
           </div>
-
         </div>
-
       </div>
     </div>
     </a>
   </div>
 
-
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
   <a href="<?php echo site_url('admin/mypkwt/uploadpkwt/'.$pkwtid.'/'.$user_info[0]->employee_id);?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_pkwt');?></div>
             <div class="text-large"><?php echo $this->lang->line('xin_upload');?>
             <?php if($uploaded == 1){
@@ -313,13 +203,13 @@ if($attendances->num_rows() < 1) {
   </div>
 
 
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
   <a href="<?php echo site_url('#');?>" target="_blank">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_pkwt');?></div>
             <div class="text-large"><?php echo $this->lang->line('xin_pkwt_terima');?>
 
@@ -353,7 +243,8 @@ if($attendances->num_rows() < 1) {
   <?php
   }
   ?>
-
+</div>
+<div class="row mt-3">
 
 
 <!-- ESLIP STATUS -->
@@ -362,13 +253,13 @@ if($attendances->num_rows() < 1) {
     foreach($eslip_release->result() as $r) {
 ?>
 
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <a href="<?php echo site_url().'admin/importexceleslip/view/'.$r->nip.'/'.$r->secid;?>" target="_blank">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
             <p style="font-size: 18px;"><?php echo $r->periode;?></p>
           </div>
@@ -383,12 +274,12 @@ if($attendances->num_rows() < 1) {
 
   } else {
 ?>
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_eslip');?></div>
             <div class="text-large">Tidak Ditemukan..!</div>
           </div>
@@ -399,14 +290,17 @@ if($attendances->num_rows() < 1) {
 <?php
   }
 ?>
+</div>
 
 
-  <div class="col-sm-6 col-xl-3">
+<div class="row mt-3">
+
+  <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small">BPJS TK</div>
             <div class="text-large">Belum Tersedia..!</div>
           </div>
@@ -415,12 +309,12 @@ if($attendances->num_rows() < 1) {
     </div>
   </div>
 
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small">BPJS Kesehatan</div>
             <div class="text-large">Belum Tersedia..!</div>
           </div>
@@ -430,13 +324,13 @@ if($attendances->num_rows() < 1) {
   </div>
 
   <?php if(in_array('37',$role_resources_ids)) { ?>
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
   <a href="<?php echo site_url('admin/payroll/payment_history/');?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-calculator display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('left_payslips');?></div>
             <div class="text-large"><?php echo $this->lang->line('xin_view');?></div>
           </div>
@@ -447,13 +341,13 @@ if($attendances->num_rows() < 1) {
   </div>
   <?php } ?>
   <?php if(in_array('46',$role_resources_ids)) { ?>
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
   <a href="<?php echo site_url('admin/timesheet/leave/');?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-md-calendar display-4 text-danger"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_performance_management');?></div>
             <div class="text-large"><?php echo $this->lang->line('left_leave');?></div>
           </div>
@@ -465,13 +359,13 @@ if($attendances->num_rows() < 1) {
  <?php } ?>
  <?php if($system[0]->module_travel=='true'){?>
  <?php if(in_array('17',$role_resources_ids)) { ?>
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
   <a href="<?php echo site_url('admin/travel/');?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-md-paper-plane display-4 text-warning"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_travel');?></div>
             <div class="text-large"><?php echo $this->lang->line('xin_requests');?></div>
           </div>

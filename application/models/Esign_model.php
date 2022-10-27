@@ -30,6 +30,20 @@ class Esign_model extends CI_Model {
 	}
 
 
+	// get single employee by NIP
+	public function read_skk_by_nip($id) {
+	
+		$sql = 'SELECT * FROM xin_qrcode_skk WHERE nip = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query;
+		} else {
+			return null;
+		}
+	}
+
 	// get single employee
 	public function read_skk_by_doc($id) {
 	

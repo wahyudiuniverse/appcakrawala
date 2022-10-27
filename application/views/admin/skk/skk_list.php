@@ -7,9 +7,9 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 
  <?php //$all_employees = $this->Employees_model->get_all_employees_resign();?>
-<?php $count_skk = $this->Esign_model->count_skk();?>
+// <?php $count_skk = $this->Esign_model->count_skk();?>
 <?php $romawi = $this->Xin_model->tgl_pkwt();?>
-<?php $nomor_surat = sprintf("%05d", $count_skk[0]->maxid +1).'/'.'REF-HRD/SC/'.$romawi;?>
+<?php $nomor_surat = '/'.'REF-HRD/SC/'.$romawi;?>
 
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}

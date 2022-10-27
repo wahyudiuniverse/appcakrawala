@@ -363,6 +363,21 @@
       } 
       ?>
 
+<!-- PAKLARING -->
+
+      <?php 
+      if (in_array('501',$role_resources_ids)) { ?>
+        <li class="sidenav-item <?php if(!empty($arr_mod['paklaring_active']))echo $arr_mod['paklaring_active'];?>"> 
+          <a href="<?php echo site_url('admin/paklaring/');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div><?php echo $this->lang->line('xin_paklaring');?></div>
+          </a> 
+        </li>
+      <?php 
+      } 
+      ?>
+
 <!-- Request Employee -->
 
       <?php 
@@ -1066,10 +1081,10 @@
             ?>
 
             <?php 
-            if(in_array('400',$role_resources_ids)) { 
+            if(in_array('501',$role_resources_ids)) { 
             ?>
               <li class="sidenav-item <?php if(!empty($arr_mod['expired_documents_active']))echo $arr_mod['expired_documents_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/employees/expired_documents/');?>" > <?php echo $this->lang->line('xin_e_details_exp_documents');?> </a> 
+                <a class="sidenav-link" href="<?php echo site_url('admin/employees/expired_documents/');?>" > <?php echo $this->lang->line('xin_paklaring');?> </a> 
               </li>
             <?php 
             } 

@@ -1525,18 +1525,29 @@ class Employees extends MY_Controller {
 			if($emp_status=='1'){
 				$status_emp = '1';
 				$dol = '';
-			} else {
-				$status_emp = '0';
-				$dol = $this->input->post('date_of_end');;
-			}
-			
-	
+
 			$data = array(
 			'status_employee' => $status_emp, //0 = resign, 1 = aktif
 			'status_resign' => $emp_status,
 			'date_of_leaving' => $dol,
 			'description_resign' => $deskripsi_resign,
 			);
+
+			} else {
+				$status_emp = '0';
+				$dol = $this->input->post('date_of_end');
+
+			$data = array(
+			'status_employee' => $status_emp, //0 = resign, 1 = aktif
+			'status_resign' => $emp_status,
+			'date_of_leaving' => $dol,
+			'description_resign' => $deskripsi_resign,
+			'user_role_id' => '9',
+			);
+
+			}
+			
+
 
 			$id = $this->input->post('user_id');
 			$result = $this->Employees_model->basic_info($data,$id);

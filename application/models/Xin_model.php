@@ -373,6 +373,11 @@ class Xin_model extends CI_Model {
 			$arr['eslip_open'] = 'open';
 			return $arr;
 		}
+		else if($mClass=='paklaring') {
+			$arr['paklaring_active'] = 'active';
+			$arr['paklaring_open'] = 'open';
+			return $arr;
+		}
 		else if($mClass=='reports' && $mMethod=='pkwt') {
 			$arr['pkwt_request_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';

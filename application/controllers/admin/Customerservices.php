@@ -408,7 +408,7 @@ class Customerservices extends MY_Controller
 				$pin = '--';	
 			}
 
-			$copypaste = '<textarea rows="3" cols="20">*'.$full_name.'*&#13;&#10;*'.$r->employee_id.'*&#13;&#10;*'.$pin.'*</textarea>';
+			$copypaste = '<textarea rows="3" cols="20">Nama Lengkap: *'.$full_name.'*&#13;&#10;NIP: *'.$r->employee_id.'*&#13;&#10;PIN: *'.$pin.'*</textarea>';
 
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';

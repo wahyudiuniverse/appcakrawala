@@ -38,6 +38,7 @@ class Dashboard extends MY_Controller {
 		  $this->load->model('Tickets_model');
 		  $this->load->model('Assets_model');
 		  $this->load->model('Awards_model');
+		  $this->load->model('Esign_model');
 		  // $this->load->model('Pkwt_model');
      }
 	

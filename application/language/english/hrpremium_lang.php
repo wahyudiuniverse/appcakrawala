@@ -3096,6 +3096,7 @@ $lang['xin_whatsapp_blast'] = 'Whatsapp Blast';
 $lang['xin_daftar_karyawan'] = 'Daftar Karyawan';
 $lang['xin_surat_keterangan_kerja'] = 'Surat Keterangan Kerja';
 $lang['xin_success_delete'] = 'Hapus Data Berhasil...';
+$lang['xin_paklaring'] = 'Paklaring';
 
 
 
