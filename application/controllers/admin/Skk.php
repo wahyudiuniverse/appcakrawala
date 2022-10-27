@@ -13,20 +13,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Skk extends MY_Controller {
 	
 	 public function __construct() {
-        parent::__construct();
-		$this->load->library('session');
-		$this->load->helper('form');
-		$this->load->helper('url');
-		$this->load->helper('html');
-		$this->load->database();
-		$this->load->library('form_validation');
-		$this->load->library('ciqrcode');
-		//load the model
-		$this->load->model("Esign_model");
-		$this->load->model("Location_model");
-		$this->load->model("Xin_model");
-		$this->load->model("Employees_model");
-		$this->load->model("Company_model");
+      parent::__construct();
+			$this->load->library('session');
+			$this->load->helper('form');
+			$this->load->helper('url');
+			$this->load->helper('html');
+			$this->load->database();
+			$this->load->library('form_validation');
+			$this->load->library('ciqrcode');
+			//load the model
+			$this->load->model("Esign_model");
+			$this->load->model("Location_model");
+			$this->load->model("Xin_model");
+			$this->load->model("Employees_model");
+			$this->load->model("Company_model");
+			$this->load->model("Project_model");
 			$this->load->library('Pdf');
 			$this->load->helper('string');
 	}
@@ -94,8 +95,7 @@ class Skk extends MY_Controller {
 			$nip = $r->nip;
 			$createdat = $this->Xin_model->tgl_indo(substr($r->createdon,0,10));
 			// // get user > head
-			// $head_user = $this->Xin_model->read_user_info($r->employee_id);
-			// // user full name
+			// user full name
 			if($jenis_doc==1){
 				$jdoc = 'SK Kerja';
 			} else if ($jenis_doc==2) {
@@ -106,6 +106,13 @@ class Skk extends MY_Controller {
 				$jdoc = '--';	
 			}
 			
+			$head_user = $this->Employees_model->read_employee_info_by_nik($r->nip);
+			if(!is_null($head_user)){
+				$fullname = $head_user[0]->first_name;
+			} else {
+				$fullname = '--';	
+			}
+
 			// // get company
 			// $company = $this->Xin_model->read_company_info($r->company_id);
 			// if(!is_null($company)){
@@ -150,6 +157,7 @@ class Skk extends MY_Controller {
 				$combhr,
 				$nomor_dokumen,
 				$nip,
+				$fullname,
 				$jdoc,
 				$createdat,
 				$viewqr
@@ -455,11 +463,11 @@ class Skk extends MY_Controller {
 						$jabatan = $designation[0]->designation_name;
 					}
 
-					$project = $this->Xin_model->read_user_xin_designation($employee[0]->designation_id);
+					$project = $this->Project_model->read_project_information($employee[0]->project_id);
 					if(!is_null($designation)){
-						$jabatan = $designation[0]->designation_name;
+						$project_name = $project[0]->title;
 					} else {
-						$jabatan = $designation[0]->designation_name;
+						$project_name = $project[0]->title;
 					}
 
 			} else {
@@ -543,7 +551,7 @@ class Skk extends MY_Controller {
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Adalah benar karyawan yang bekerja di Perusahaan kami sejak tanggal '.$join_date.' sampai dengan '.$resign_date.' yang ditempatkan pada PROMOSINDO <br> <br>
+								<td>Adalah benar karyawan yang bekerja di Perusahaan kami sejak tanggal '.$join_date.' sampai dengan '.$resign_date.' yang ditempatkan pada <b>'.$project_name.'</b><br> <br>
 									Selama bekerja Sdra. Raden Ryan Setyawan telah menujukan tanggung jawa dan kinerja yang baik dan dengan ini perusahaan mengucapkan terima kasih.<br><br>
 									Demikian surat keterangan ini dibuat, agar dapat digunakan sebagaimana mestinya.
 								</td>
@@ -572,7 +580,8 @@ class Skk extends MY_Controller {
 
 				</table>
 
-			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektornik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.</i></p>
+			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektornik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
+			*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>
 
 				';
 
@@ -680,10 +689,11 @@ $tbl_2 .= '';
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Bahwa benar karyawan kami di atas, telah bekerja di PROMOSINDO dari tanggal '.$join_date.' sampai dengan '.$resign_date.'.
+								<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_date.' sampai dengan '.$resign_date.'.
 								</td>
 							</tr>
 				</table>
+
 <br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
@@ -723,7 +733,10 @@ $tbl_2 .= '';
 
 				</table>
 
-			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
+
+			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektornik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
+			*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>
+
 				';
 			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 

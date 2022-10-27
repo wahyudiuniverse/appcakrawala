@@ -7,7 +7,7 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 
  <?php //$all_employees = $this->Employees_model->get_all_employees_resign();?>
-// <?php $count_skk = $this->Esign_model->count_skk();?>
+<?php $count_skk = $this->Esign_model->count_skk();?>
 <?php $romawi = $this->Xin_model->tgl_pkwt();?>
 <?php $nomor_surat = '/'.'REF-HRD/SC/'.$romawi;?>
 
@@ -84,6 +84,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 <th><?php echo $this->lang->line('xin_action');?></th>
                 <th><i class="fa fa-building-o"></i> <?php echo $this->lang->line('xin_no_dokumen');?></th>
                 <th>NIP</th>
+                <th>Nama Lengkap</th>
                 <th><?php echo $this->lang->line('xin_jenis_dokumen');?></th>
                 <th>Tanggal Terbit</th>
                 <th>QR Code</th>
