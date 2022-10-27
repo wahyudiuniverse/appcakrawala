@@ -483,7 +483,7 @@ class Skk extends MY_Controller {
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Yang bertanda tangan di bawah ini,</td>
+								<td>Depok, '.$createdon.'<br>Yang bertanda tangan di bawah ini,</td>
 							</tr>
 				</table>
 
@@ -563,7 +563,7 @@ class Skk extends MY_Controller {
 <table cellpadding="2" cellspacing="0" border="0">
 
 				<tr>
-					<td style="text-align:center;">Depok, '.$createdon.'</td>
+					<td style="text-align:center;">PT. SIPRAMA CAKRAWALA</td>
 					
 				</tr>
 
@@ -580,7 +580,7 @@ class Skk extends MY_Controller {
 
 				</table>
 
-			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektornik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
+			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
 			*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>
 
 				';
@@ -734,7 +734,7 @@ $tbl_2 .= '';
 				</table>
 
 
-			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektornik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
+			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
 			*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>
 
 				';

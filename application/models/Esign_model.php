@@ -61,7 +61,13 @@ class Esign_model extends CI_Model {
 
 	public function get_all_employees_resign()
 	{
-	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname FROM xin_employees WHERE is_active = 1 AND  status_resign = 2 AND employee_id not IN (1)");
+	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname 
+FROM xin_employees 
+WHERE is_active = 1 
+AND  status_resign = 2 
+AND employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
+UNION
+SELECT 1 AS nip FROM DUAL)");
   	  return $query->result();
 	}
 
