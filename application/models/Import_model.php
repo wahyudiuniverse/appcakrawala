@@ -18,6 +18,7 @@
 	  return $query->result();
 	}
 	 
+
 	public function get_temp_employees($id) {
 	
 		$sql = 'SELECT * FROM xin_employees_temp WHERE uploadid = ? AND status_error is null';
@@ -29,6 +30,17 @@
 		} else {
 			return false;
 		}
+	}
+
+
+ 	// get all employes
+	public function get_all_temp_eslip() {
+
+		$sql = 'SELECT uploadid, periode, project, project_sub, COUNT(nip) AS total_mp FROM xin_employees_eslip
+GROUP BY uploadid, periode, project, project_sub;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
 	}
 
 	public function get_temp_eslip($id) {

@@ -53,6 +53,7 @@
             <th style="width: 80px;">Fullname</th>
             <th style="width: 80px;">Periode</th>
             <th style="width: 150px;">Project</th>
+            <th style="width: 150px;">Sub-Project</th>
             <th style="width: 100px;">Area</th>
             <th style="width: 30px;">Hari Kerja</th>
             <th style="width: 50px;">Gaji Pokok</th>

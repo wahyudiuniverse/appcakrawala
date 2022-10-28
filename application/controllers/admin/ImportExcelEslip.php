@@ -27,6 +27,7 @@ class ImportExcelEslip extends MY_Controller
 		$this->load->model("Callplan_model");
 		$this->load->model("Customers_model");
 		$this->load->model("Import_model");
+		$this->load->model("Designation_model");
 			$this->load->library("pagination");
 			$this->load->library('Pdf');
 			$this->load->helper('string');
@@ -99,6 +100,7 @@ class ImportExcelEslip extends MY_Controller
 			  $fullname = $r->fullname;
 			  $periode = $r->periode;
 			  $project = $r->project;
+			  $project_sub = $r->project_sub;
 			  $area = $r->area;
 			  $hari_kerja = $r->hari_kerja;
 			  $gaji_pokok = $r->gaji_pokok;
@@ -177,6 +179,7 @@ class ImportExcelEslip extends MY_Controller
 				$fullname,
 				$periode,
 				$project,
+				$project_sub,
 				$area,
 				$hari_kerja,
 				$gaji_pokok,
@@ -248,10 +251,12 @@ class ImportExcelEslip extends MY_Controller
 
 			} else {
 
+				$uploadid = $user[0]->uploadid;
 				$nip = $user[0]->nip;
 				$fullname = $user[0]->fullname;
 				$periode = $user[0]->periode;
 				$project = $user[0]->project;
+				$project_sub = $user[0]->project_sub;
 				$area = $user[0]->area;
 				$hari_kerja = $user[0]->hari_kerja;
 				$gaji_pokok = $user[0]->gaji_pokok;
@@ -286,13 +291,16 @@ class ImportExcelEslip extends MY_Controller
 				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
 				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
 				$biaya_admin_bank = $user[0]->biaya_admin_bank;
+				$adjustment = $user[0]->adjustment;
 				$total = $user[0]->total;
 
 				$data = array(
+					'uploadid' => $uploadid,
 					'nip' => $nip,
 					'fullname' => $fullname,
 					'periode' => $periode,
 					'project' => $project,
+					'project_sub' => $project_sub,
 					'area' => $area,
 					'hari_kerja' => $hari_kerja,
 					'gaji_pokok' => $gaji_pokok,
@@ -327,9 +335,9 @@ class ImportExcelEslip extends MY_Controller
 					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
 					'pembayaran_pinjaman' => $pembayaran_pinjaman,
 					'biaya_admin_bank' => $biaya_admin_bank,
+					'adjustment' => $adjustment,
 					'total' => $total,
-
-					'created_by' => $session['user_id'],
+					// 'created_by' => $session['user_id'],
 				);
 
 				//$id = $this->input->post('user_id');
@@ -354,9 +362,11 @@ class ImportExcelEslip extends MY_Controller
 	public function temp_to_primary_all() {
 		/* Define return | here result is used to return user data and error for error message */
 		// $status_id = $this->uri->segment(4);
-
+		// $session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
 		$upload_id = $this->uri->segment(4);
-
 
 
 		$tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
@@ -380,10 +390,12 @@ class ImportExcelEslip extends MY_Controller
 
 					} else {
 
+				$uploadid = $user[0]->uploadid;
 				$nip = $user[0]->nip;
 				$fullname = $user[0]->fullname;
 				$periode = $user[0]->periode;
 				$project = $user[0]->project;
+				$project_sub = $user[0]->project_sub;
 				$area = $user[0]->area;
 				$hari_kerja = $user[0]->hari_kerja;
 				$gaji_pokok = $user[0]->gaji_pokok;
@@ -418,13 +430,17 @@ class ImportExcelEslip extends MY_Controller
 				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
 				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
 				$biaya_admin_bank = $user[0]->biaya_admin_bank;
+				$adjustment = $user[0]->adjustment;
 				$total = $user[0]->total;
+				// $userid = $session['user_id'];
 
 				$data = array(
+					'uploadid' => $uploadid,
 					'nip' => $nip,
 					'fullname' => $fullname,
 					'periode' => $periode,
 					'project' => $project,
+					'project_sub' => $project_sub,
 					'area' => $area,
 					'hari_kerja' => $hari_kerja,
 					'gaji_pokok' => $gaji_pokok,
@@ -459,8 +475,8 @@ class ImportExcelEslip extends MY_Controller
 					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
 					'pembayaran_pinjaman' => $pembayaran_pinjaman,
 					'biaya_admin_bank' => $biaya_admin_bank,
-					'total' => $total,
-					'created_by' => $session['user_id'],
+					'adjustment' => $adjustment,
+					'total' => $total,	
 				);
 
 						//$id = $this->input->post('user_id');
@@ -495,6 +511,13 @@ class ImportExcelEslip extends MY_Controller
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
 		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
 		$employee = $this->Employees_model->read_employee_info_by_nik($vpin);
+
+		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
+				if(!is_null($designation)){
+					$posisi = $designation[0]->designation_name;
+				} else {
+					$posisi = '--';	
+				}
 
 		// if($eslip[0]->status_kirim==1){
 			// $bMargin = $this->getBreakMargin();
@@ -625,6 +648,7 @@ class ImportExcelEslip extends MY_Controller
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
 				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
 				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
+				$adjustment = $eslip[0]->adjustment;
 				$total = $eslip[0]->total;
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
@@ -734,6 +758,20 @@ class ImportExcelEslip extends MY_Controller
 						</table>
 					</td>
 				</tr>
+
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td>Posisi/Jabatan</td>
+								<td colspan="2">: '.$posisi.'</td>
+							</tr>
+						</table>
+					</td>
+					<td>
+					</td>
+				</tr>
+
 			</table>
 			<br><br>
 			<table cellpadding="3" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
@@ -1072,7 +1110,6 @@ $tbl_2 .= '
 						</table>
 					</td>
 				</tr>
-
 				<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">
@@ -1217,8 +1254,31 @@ $tbl_2 .= '
 					</td>
 				</tr>
 
-			</table>
+			</table>';
 
+if($adjustment!=0){
+$tbl_2 .= '
+
+			<br>
+			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
+			</table>
+			<br>
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+}
+$tbl_2 .= '
 			<br><br>
 
 

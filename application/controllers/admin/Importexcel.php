@@ -858,41 +858,43 @@ class ImportExcel extends MY_Controller
 						'fullname' => $line[1],
 						'periode' => $line[2],
 						'project' => $line[3],
-						'area' =>$line[4],
-						'hari_kerja' => $line[5],
-						'gaji_pokok' => $line[6],
-						'allow_jabatan' => $line[7],
-						'allow_konsumsi' => $line[8],
-						'allow_transport' => $line[9],
-						'allow_rent' => $line[10],
-						'allow_comunication' => $line[11],
-						'allow_parking' => $line[12],
-						'allow_residence_cost' => $line[13],
-						'allow_device' => $line[14],
-						'penyesuaian_umk' => $line[15],
-						'insentive'	=> $line[16],
-						'overtime' => $line[17],
-						'overtime_national_day' => $line[18],
-						'overtime_rapel' => $line[19],
-						'kompensasi' => $line[20],
-						'bonus' => $line[21],
-						'thr' => $line[22],
-						'bpjs_tk_deduction' => $line[23],
-						'bpjs_ks_deduction' => $line[24],
-						'jaminan_pensiun_deduction' => $line[25],
-						'pendapatan' => $line[26],
-						'bpjs_tk' => $line[27],
-						'bpjs_ks' => $line[28],
-						'jaminan_pensiun' => $line[29],
-						'pph' => $line[30],
-						'penalty_late' => $line[31],
-						'penalty_attend' => $line[32],
-						'deduction' => $line[33],
-						'simpanan_pokok' => $line[34],
-						'simpanan_wajib_koperasi' => $line[35],
-						'pembayaran_pinjaman' => $line[36],
-						'biaya_admin_bank' => $line[37],
-						'total' => $line[38],
+						'project_sub' => $line[4],
+						'area' =>$line[5],
+						'hari_kerja' => $line[6],
+						'gaji_pokok' => $line[7],
+						'allow_jabatan' => $line[8],
+						'allow_konsumsi' => $line[9],
+						'allow_transport' => $line[10],
+						'allow_rent' => $line[11],
+						'allow_comunication' => $line[12],
+						'allow_parking' => $line[13],
+						'allow_residence_cost' => $line[14],
+						'allow_device' => $line[15],
+						'penyesuaian_umk' => $line[16],
+						'insentive'	=> $line[17],
+						'overtime' => $line[18],
+						'overtime_national_day' => $line[19],
+						'overtime_rapel' => $line[20],
+						'kompensasi' => $line[21],
+						'bonus' => $line[22],
+						'thr' => $line[23],
+						'bpjs_tk_deduction' => $line[24],
+						'bpjs_ks_deduction' => $line[25],
+						'jaminan_pensiun_deduction' => $line[26],
+						'pendapatan' => $line[27],
+						'bpjs_tk' => $line[28],
+						'bpjs_ks' => $line[29],
+						'jaminan_pensiun' => $line[30],
+						'pph' => $line[31],
+						'penalty_late' => $line[32],
+						'penalty_attend' => $line[33],
+						'deduction' => $line[34],
+						'simpanan_pokok' => $line[35],
+						'simpanan_wajib_koperasi' => $line[36],
+						'pembayaran_pinjaman' => $line[37],
+						'biaya_admin_bank' => $line[38],
+						'adjustment' => $line[39],
+						'total' => $line[40],
 
 
 						);
@@ -932,6 +934,77 @@ class ImportExcel extends MY_Controller
 		redirect('admin/ImportExcelEslip?upid='.$uploadid);
 
 	}
+
+
+  public function history_upload_eslip_list() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/import_excel/import_eslip", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_temp_eslip();
+
+		$data = array();
+
+          foreach($history_eslip->result() as $r) {
+			  	$periode = $r->periode;
+			  	$project = $r->project;
+			  	$project_sub = $r->project_sub;
+			  	$total_mp = $r->total_mp;
+			  // get country
+			  // $country = $this->Xin_model->read_country_info($r->country);
+			  // if(!is_null($country)){
+			  // 	$c_name = $country[0]->country_name;
+			  // } else {
+				 //  $c_name = '--';	
+			  // }
+			  // get company
+			  // $company = $this->Xin_model->read_company_info($r->company_id);
+			  // if(!is_null($company)){
+			  // 	$comp_name = $company[0]->name;
+			  // } else {
+				 //  $comp_name = '--';	
+			  // }
+
+
+			  	$view_data = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->uploadid . '">View Data</button>';
+
+     	$data[] = array(
+			  $view_data,
+       	$periode,
+				$project,
+        $project_sub,
+       	$total_mp,
+				'$r->total_mp',
+      );
+    }
+
+          $output = array(
+               "draw" => $draw,
+                 "recordsTotal" => $history_eslip->num_rows(),
+                 "recordsFiltered" => $history_eslip->num_rows(),
+                 "data" => $data
+            );
+          echo json_encode($output);
+          exit();
+  }
 
 } 
 ?>
