@@ -514,9 +514,9 @@ class ImportExcelEslip extends MY_Controller
 
 		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
 				if(!is_null($designation)){
-					$posisi = $designation[0]->designation_name;
+					$jabatan = $designation[0]->designation_name;
 				} else {
-					$posisi = '--';	
+					$jabatan = '--';	
 				}
 
 		// if($eslip[0]->status_kirim==1){
@@ -764,7 +764,7 @@ class ImportExcelEslip extends MY_Controller
 						<table cellpadding="1" cellspacing="0">
 							<tr>
 								<td>Posisi/Jabatan</td>
-								<td colspan="2">: '.$posisi.'</td>
+								<td colspan="2">: '.$jabatan.'</td>
 							</tr>
 						</table>
 					</td>
