@@ -32,6 +32,18 @@
 		}
 	}
 
+	public function get_eslip_by_id($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE secid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
 
  	// get all employes
 	public function get_all_temp_eslip() {

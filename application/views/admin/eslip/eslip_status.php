@@ -35,13 +35,13 @@ $reports_to = get_reports_team_data($session['user_id']); ?>
     foreach($eslip_release->result() as $r) {
 ?>
 
-  <div class="col-sm-6 col-xl-3">
+  <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <a href="<?php echo site_url().'admin/importexceleslip/view/'.$r->nip.'/'.$r->secid;?>" target="_blank">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
             <p style="font-size: 18px;"><?php echo $r->periode;?></p>
           </div>

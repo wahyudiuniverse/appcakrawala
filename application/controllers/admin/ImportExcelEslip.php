@@ -500,6 +500,12 @@ class ImportExcelEslip extends MY_Controller
 
 
 	public function view() {
+
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
 		$system = $this->Xin_model->read_setting_info(1);		
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -507,6 +513,19 @@ class ImportExcelEslip extends MY_Controller
 		$vpin = $this->uri->segment(4);
 		$ideslip = $this->uri->segment(5);
 		// $employee_id = $this->uri->segment(5);
+
+
+		if($session['employee_id'] != $vpin) {
+			redirect('admin/');
+		}
+				// $cekEmp = $this->Employees_model->read_employee_info_by_nik($vpin);
+
+
+				// $cekEslip = $this->Import_model->get_eslip_by_id($ideslip);
+				// if(!is_null($cekEslip)){
+				// 	redirect('admin/');
+				// }
+
 
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
 		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
@@ -558,9 +577,9 @@ class ImportExcelEslip extends MY_Controller
 			$pdf->SetAuthor('HRCakrawala');
 			$pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
 
-			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
-			$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
-			$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
+			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
+			$pdf->SetSubject($this->lang->line('xin_eslip'));
+			$pdf->SetKeywords($this->lang->line('xin_eslip'));
 			// set font
 			$pdf->SetFont('helvetica', 'B', 10);
 					
@@ -654,14 +673,14 @@ class ImportExcelEslip extends MY_Controller
 				$tanggalcetak = date("Y-m-d");
 	
 
-				$pengirim = $eslip[0]->nip;
+				// $pengirim = $eslip[0]->nip;
 				  // if(!is_null($pengirim)){
 				  // 	$supplier_name = $pengirim[0]->name;
 				  // } else {
 					 //  $supplier_name = '--';	
 				  // }
 
-				$transporter = $eslip[0]->nip;
+				// $transporter = $eslip[0]->nip;
 				  // if(!is_null($transporter)){
 				  // 	$trans_name = $transporter[0]->name;
 				  // } else {
@@ -684,7 +703,7 @@ class ImportExcelEslip extends MY_Controller
 				// 	  $alamat_tujuan = '--';	
 				//   }
 
-				$armada = $eslip[0]->nip;
+				// $armada = $eslip[0]->nip;
 				  // if(!is_null($armada)){
 				  // 	$platnomor = $armada[0]->no_polisi;
 				  // } else {
@@ -693,6 +712,7 @@ class ImportExcelEslip extends MY_Controller
 
 
 			} else {
+				redirect('admin/');
 
 			}
 
