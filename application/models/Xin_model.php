@@ -68,6 +68,8 @@ class Xin_model extends CI_Model {
 	}
 	
 
+
+
 	public function get_bank()
 	{
 	  $query = $this->db->query("SELECT * from mt_bank");
@@ -1408,7 +1410,18 @@ class Xin_model extends CI_Model {
   	  return $query->num_rows();
 	}
 	
-	
+	public function count_emp_resign()
+	{
+
+	  $query = $this->db->query("SELECT employee_id 
+FROM xin_employees 
+WHERE status_resign = '2' 
+AND employee_id 
+NOT IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk)");
+  	  return $query->num_rows();
+
+	}
+
 	// notifications
 	public function count_user_notify_leave_applications($user_id)
 	{

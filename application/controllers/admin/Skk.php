@@ -255,6 +255,7 @@ class Skk extends MY_Controller {
 		}
 		$this->output($Return);
 		exit;
+		header("location:index.php");
 		}
 	}
 	
@@ -445,6 +446,7 @@ class Skk extends MY_Controller {
 				$fullname = $employee[0]->first_name;
 				$join_date = $this->Xin_model->tgl_indo($eskk[0]->join_date);
 				$resign_date = $this->Xin_model->tgl_indo($eskk[0]->resign_date);
+				$waktu_kerja = $eskk[0]->waktu_kerja;
 				$qr_code = $eskk[0]->qr_code;
 				$ktp_no = $employee[0]->ktp_no;
 				$address = $employee[0]->address;
@@ -473,6 +475,8 @@ class Skk extends MY_Controller {
 			} else {
 
 			}
+
+			if($waktu_kerja>=3){
 
 			$tbl_2 = '
 
@@ -547,7 +551,7 @@ class Skk extends MY_Controller {
 				</table>
 				<br>
 
-			<br><br>
+				<br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
@@ -557,10 +561,10 @@ class Skk extends MY_Controller {
 								</td>
 							</tr>
 				</table>
-<br>
-<br>
-<br>
-<table cellpadding="2" cellspacing="0" border="0">
+				<br>
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0">
 
 				<tr>
 					<td style="text-align:center;">PT. SIPRAMA CAKRAWALA</td>
@@ -580,18 +584,11 @@ class Skk extends MY_Controller {
 
 				</table>
 
-			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
-			*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>
-
-				';
-
-	
-$tbl_2 .= '';
+				<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>';
 			$pdf->writeHTML($tbl_2, true, false, false, false, '');
 
-
 			$tbl_ttd = '			
-			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -603,7 +600,7 @@ $tbl_2 .= '';
 							</tr>
 				</table>
 
-<br><br>
+				<br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
@@ -613,14 +610,14 @@ $tbl_2 .= '';
 								<td>Dinas Ketenagakerjaan</td>
 							</tr>	
 				</table>
-<br><br><br><br>
+				<br><br><br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td>Dengan hormat.</td>
 							</tr>
 				</table>
-<br><br>
+				<br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
@@ -694,7 +691,7 @@ $tbl_2 .= '';
 							</tr>
 				</table>
 
-<br><br>
+				<br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td>Demikian surat ini kami sampaikan sebagai kelengkapan untuk pengurusan penarikan Jaminan Ketenagakerjaan (BPJS).
@@ -702,11 +699,11 @@ $tbl_2 .= '';
 							</tr>
 				</table>
 
-<br>
-<br>
-<br>
+				<br>
+				<br>
+				<br>
 
-<table cellpadding="2" cellspacing="0" border="0">
+				<table cellpadding="2" cellspacing="0" border="0">
 
 				<tr>
 					<td></td>
@@ -734,21 +731,161 @@ $tbl_2 .= '';
 				</table>
 
 
-			<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>
-			*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>
-
-				';
+				<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>';
 			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
+			} else {
+
+				$tbl_ttd = '
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Depok, '.$createdon.'</td>
+								</tr>	
+								<tr>						
+									<td>No.'.$nomor_dokumen.'</td>
+								</tr>
+					</table>
+
+					<br><br>
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Kepada Yth.</td>
+								</tr>
+								<tr>
+									<td>Dinas Ketenagakerjaan</td>
+								</tr>	
+					</table>
+					<br><br><br><br>
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Dengan hormat.</td>
+								</tr>
+					</table>
+					<br><br>
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Kami yang bertanda tangan di bawah ini:</td>
+								</tr>
+					</table>
 
 
-			$lampiran = '';
-			$pdf->writeHTML($lampiran, true, false, false, false, '');
-		
-			$fname = strtolower($fname);
+
+					<br>
+					<br>
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+						<tr>
+							<td>Nama</td>
+							<td colspan="3">: Maitsa Valenska Pristiyanty</td>
+						</tr>
+
+						<tr>
+							<td>Jabatan</td>
+							<td colspan="3">: SM HR/GA</td>
+						</tr>
+
+					</table>
+					<br>
+					<br>
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Dengan ini kami sampaikan bahwa:</td>
+								</tr>
+					</table>
+					<br>
+					<br>
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+
+						<tr>
+							<td>ID Karyawan</td>
+							<td colspan="3">: '.$nip.'</td>
+						</tr>
+
+						<tr>
+							<td>Nama Lengkap</td>
+							<td colspan="3">: '.$fullname.'</td>
+						</tr>
+
+
+						<tr>
+							<td>Jabatan Terakhir</td>
+							<td colspan="3">: '.$jabatan.'</td>
+						</tr>
+
+						<tr>
+							<td>Nomor KTP</td>
+							<td colspan="3">: '.$ktp_no.'</td>
+						</tr>
+
+						<tr>
+							<td>Alamat KTP</td>
+							<td colspan="3">: '.$address.'</td>
+						</tr>
+
+					</table>
+					<br><br><br>
+
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_date.' sampai dengan '.$resign_date.'.
+									</td>
+								</tr>
+					</table>
+
+					<br><br>
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+								<tr>
+									<td>Demikian surat ini kami sampaikan sebagai kelengkapan untuk pengurusan penarikan Jaminan Ketenagakerjaan (BPJS).
+									</td>
+								</tr>
+					</table>
+
+					<br>
+					<br>
+					<br>
+
+					<table cellpadding="2" cellspacing="0" border="0">
+
+					<tr>
+						<td></td>
+						<td style="text-align:center;">Hormat kami,</td>
+					</tr>
+
+					<tr>
+						<td></td>
+						<td style="text-align:center;">PT SIPRAMA CAKRAWALA</td>
+					</tr>
+
+
+					<tr>
+
+						<td><br><br><br><br><br><br><br><b><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						<td style="text-align:center;"><br>
+					<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+					</tr>
+
+					<tr>
+						<td></td>
+						<td style="text-align:center;">SM HR/GA</td>
+					</tr>
+
+					</table>
+
+
+					<p style="font-size: 10px;"><i>*Bahwa dokumen ini sudah ditandatangani secara <b>Elektronik</b> dan dapat dipertanggung jawabkan menurut hukum yang berlaku.<br>*Tandatangan Elektronik yang tercantum secara resmi dikeluarkan oleh PT. Siprama Cakrawala.</i></p>';
+				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
+			}
+
+
+			$fname = strtolower($nip);
 			$pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
-			$pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
+			$pdf->Output('skk'.$fname.'_'.$pay_month.'.pdf', 'I');
 			ob_end_flush();
 
 		// } else {

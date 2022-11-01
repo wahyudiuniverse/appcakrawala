@@ -86,7 +86,7 @@
 
 
 <div class="card <?php echo $get_animate;?>">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_locations');?></span> </div>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all');?></strong> History E-SLIP</span> </div>
   <div class="card-body">
     <div class="card-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
@@ -97,7 +97,7 @@
             <th>Project</th>
             <th>Sub Project</th>
             <th>Total MPP</th>
-            <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_added_by');?></th>
+            <th><i class="fa fa-user"></i> Dibuat Oleh</th>
           </tr>
         </thead>
       </table>

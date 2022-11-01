@@ -100,6 +100,7 @@ $(document).ready(function() {
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
 					Ladda.stopAll();
+					window.location.reload();
 				}
 			}
 		});

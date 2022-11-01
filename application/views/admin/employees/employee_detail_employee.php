@@ -160,15 +160,12 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                               <input name="department_id" type="hidden" value="<?php echo $department_id;?>">
                               <input name="designation_id" type="hidden" value="<?php echo $designation_id;?>">
                               <input name="role" type="hidden" value="<?php echo $user_role_id;?>">
-
-            
-     
-                            
+                    
 <!--firstname-->
                           <div class="col-md-4">
                             <div class="form-group">
-                              <label for="first_name"><?php echo $this->lang->line('xin_employee_first_name');?><i class="hrpremium-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_first_name');?>" name="first_name" type="text" value="<?php echo $first_name;?>">
+                              <label for="first_name"><?php echo $this->lang->line('xin_employees_full_name');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="first_name" type="text" value="<?php echo $first_name;?>">
                             </div>
                           </div>
 

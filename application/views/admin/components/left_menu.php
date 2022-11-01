@@ -30,6 +30,7 @@
 
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 <?php $arr_mod = $this->Xin_model->select_module_class($this->router->fetch_class(),$this->router->fetch_method()); ?>
+<?php $count_emp_resign = $this->Xin_model->count_emp_resign();?>
 <?php
 
   if($theme[0]->sub_menu_icons != ''){
@@ -357,7 +358,7 @@
             <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
           <i class="sidenav-icon ion ion-logo-buffer"></i>
             <div><?php echo $this->lang->line('xin_eslip');?></div>
-          </a> 
+          </a>             
         </li>
       <?php 
       } 
@@ -417,7 +418,9 @@
           <a href="<?php echo site_url('admin/skk/');?>" class="sidenav-link"> 
             <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
           <i class="sidenav-icon ion ion-logo-buffer"></i>
-            <div><?php echo $this->lang->line('xin_surat_keterangan_kerja');?></div>
+            <div><?php echo $this->lang->line('xin_surat_keterangan_kerja');?></div> &nbsp; <span class="badge badge-success badge-pill">
+                <?php echo $count_emp_resign; ?>
+              </span>
           </a> 
         </li>
       <?php 

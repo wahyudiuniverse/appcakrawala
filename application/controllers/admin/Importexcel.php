@@ -786,7 +786,11 @@ class ImportExcel extends MY_Controller
 
 	// Validate and add info in database
 	public function import_eslip() {
-	
+			$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
 		// if($this->input->post('is_ajax')=='3') {		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -895,6 +899,7 @@ class ImportExcel extends MY_Controller
 						'biaya_admin_bank' => $line[38],
 						'adjustment' => $line[39],
 						'total' => $line[40],
+						'createdby' => $employee_id,
 
 
 						);
@@ -964,17 +969,16 @@ class ImportExcel extends MY_Controller
 		$data = array();
 
           foreach($history_eslip->result() as $r) {
-			  	$periode = $r->periode;
-			  	$project = $r->project;
-			  	$project_sub = $r->project_sub;
-			  	$total_mp = $r->total_mp;
-			  // get country
-			  // $country = $this->Xin_model->read_country_info($r->country);
-			  // if(!is_null($country)){
-			  // 	$c_name = $country[0]->country_name;
-			  // } else {
-				 //  $c_name = '--';	
-			  // }
+          	$uploadid = $r->uploadid;
+				  	$periode = $r->periode;
+				  	$project = $r->project;
+				  	$project_sub = $r->project_sub;
+				  	$total_mp = $r->total_mp;
+
+				  	$preiode_param = str_replace(" ","",$r->periode);
+				  	$project_param = str_replace(" ","",$r->project);
+				  	$project_sub_param = str_replace(" ","",$r->project_sub);
+
 			  // get company
 			  // $company = $this->Xin_model->read_company_info($r->company_id);
 			  // if(!is_null($company)){
@@ -983,8 +987,7 @@ class ImportExcel extends MY_Controller
 				 //  $comp_name = '--';	
 			  // }
 
-
-			  	$view_data = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->uploadid . '">View Data</button>';
+			  	$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
 
      	$data[] = array(
 			  $view_data,
@@ -992,7 +995,7 @@ class ImportExcel extends MY_Controller
 				$project,
         $project_sub,
        	$total_mp,
-				'$r->total_mp',
+				$total_mp,
       );
     }
 
@@ -1005,6 +1008,28 @@ class ImportExcel extends MY_Controller
           echo json_encode($output);
           exit();
   }
+
+
+	// expired page
+	// public function preview() {
+	
+	// 	$session = $this->session->userdata('username');
+	// 	if(empty($session)){ 
+	// 		redirect('admin/');
+	// 	}
+	// 	$data['title'] = $this->lang->line('xin_import_excl_eslip').' | '.$this->Xin_model->site_title();
+	// 	$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip');
+	// 	$data['all_projects'] = $this->Project_model->get_projects();
+	// 	$data['path_url'] = 'hrpremium_import_eslip';
+	// 	$role_resources_ids = $this->Xin_model->user_role_resource();
+	// 	if(in_array('469',$role_resources_ids)) {
+	// 		// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+	// 		$data['subview'] = $this->load->view("admin/import_excel/import_eslip", $data, TRUE);
+	// 		$this->load->view('admin/layout/layout_main', $data); //page load
+	// 	} else {
+	// 		redirect('admin/dashboard');
+	// 	}
+	// }
 
 } 
 ?>

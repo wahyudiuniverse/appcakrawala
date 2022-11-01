@@ -200,7 +200,8 @@ class Reports extends MY_Controller
 		if(in_array('139',$role_resources_ids)) {
 			$data['all_projects'] = $this->Project_model->get_project_exist_all();
 		} else {
-			$data['all_projects'] = $this->Project_model->get_project_exist();
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+			// $data['all_projects'] = $this->Project_model->get_project_exist();
 		}
 
 		$data['all_designations'] = $this->Designation_model->all_designations();

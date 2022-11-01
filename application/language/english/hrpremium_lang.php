@@ -3094,11 +3094,10 @@ $lang['xin_no_dokumen'] = 'Nomor Dokumen';
 $lang['xin_menu_cs'] = 'Menu Call Center';
 $lang['xin_whatsapp_blast'] = 'Whatsapp Blast';
 $lang['xin_daftar_karyawan'] = 'Daftar Karyawan';
-$lang['xin_surat_keterangan_kerja'] = 'Surat Keterangan Kerja';
+$lang['xin_surat_keterangan_kerja'] = 'SK Kerja';
 $lang['xin_success_delete'] = 'Hapus Data Berhasil...';
 $lang['xin_paklaring'] = 'Paklaring';
-
-
+$lang['xin_preview_eslip'] = 'Preview ESLIP';
 
 ///////////////////////////////////////////////// end hrpremium v2.0.1
 /* End of file hrpremium_lang.php */

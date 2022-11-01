@@ -94,6 +94,7 @@ $(document).ready(function() {
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
+					window.location.reload();
 				}
 			}
 		});

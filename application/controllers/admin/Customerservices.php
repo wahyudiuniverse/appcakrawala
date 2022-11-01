@@ -408,7 +408,8 @@ class Customerservices extends MY_Controller
 				$pin = '--';	
 			}
 
-			$copypaste = '<textarea rows="3" cols="20">Nama Lengkap: *'.$full_name.'*&#13;&#10;NIP: *'.$r->employee_id.'*&#13;&#10;PIN: *'.$pin.'*</textarea>';
+			$copypaste = '
+			<textarea rows="4" cols="20">*C.I.S -> Employees Registration.*&#13;&#10;&#13;&#10;Nama Lengkap: *'.$full_name.'*&#13;&#10;NIP: *'.$r->employee_id.'*&#13;&#10;PIN: *'.$pin.'**&#13;&#10;&#13;&#10;Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.*&#13;&#10;Link : *https://apps-cakrawala.com/admin*&#13;&#10;&#13;&#10;Lakukan Pembaharuan PIN anda secara berkala, dengan cara&#13;&#10;Pilih Menu *Employee* kemudian akses Menu *My Profile* dan *Ubah Pin*&#13;&#10;&#13;&#10;Jika ada yang ditanyakan hubungi IT-Care di Nomor Whatsapp: 085174123434&#13;&#10;Terima kasih.&#13;&#10;&#13;&#10;PT SIPRAMA CAKRAWALA SYSTEM</textarea>';
 
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
