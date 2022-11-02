@@ -65,6 +65,12 @@ body {font-family: Arial, Helvetica, sans-serif;}
           </div>
 
 
+          <div class="form-group">
+                        <label for="join_date">Closing BPJS</label>
+                        <input class="form-control date" placeholder="Tanggal Penutupan BPJS" readonly="readonly" name="closing_date_bpjs" type="text" value="">
+          </div>
+
+
         <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
         <?php echo form_close(); ?> </div>
     </div>

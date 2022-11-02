@@ -225,7 +225,6 @@ class Skk extends MY_Controller {
 		$count_skk = $this->Esign_model->count_skk();
 		$nomor_surat = sprintf("%05d", $count_skk[0]->maxid +1).$this->input->post('nomordoc');
 
-
 		$docid = date('ymdHis');
 		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
 		$domain = 'https://apps-cakrawala.com/esign/sk/'.$docid;
@@ -235,6 +234,12 @@ class Skk extends MY_Controller {
 		$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 
+		if($this->input->post('closing_date_bpjs')!=''){
+			$bpjs_date = $this->input->post('closing_date_bpjs');
+		} else {
+			$bpjs_date = $this->input->post('resign_date');
+		}
+
 		$data = array(
 		'doc_id' => $docid,
 		'jenis_dokumen' => '2',
@@ -242,6 +247,7 @@ class Skk extends MY_Controller {
 		'nip' => $this->input->post('manag_sign'),
 		'join_date'  => $this->input->post('join_date'),
 		'resign_date'  => $this->input->post('resign_date'),
+		'bpjs_date' => $bpjs_date,
 		'qr_code' => $image_name,
 		'createdby' => 1,
 		);
@@ -446,6 +452,7 @@ class Skk extends MY_Controller {
 				$fullname = $employee[0]->first_name;
 				$join_date = $this->Xin_model->tgl_indo($eskk[0]->join_date);
 				$resign_date = $this->Xin_model->tgl_indo($eskk[0]->resign_date);
+				$closing_bpjs = $this->Xin_model->tgl_indo($eskk[0]->bpjs_date);
 				$waktu_kerja = $eskk[0]->waktu_kerja;
 				$qr_code = $eskk[0]->qr_code;
 				$ktp_no = $employee[0]->ktp_no;
@@ -686,7 +693,7 @@ class Skk extends MY_Controller {
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_date.' sampai dengan '.$resign_date.'.
+								<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_date.' sampai dengan '.$closing_bpjs.'.
 								</td>
 							</tr>
 				</table>

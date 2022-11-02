@@ -19,7 +19,7 @@ class Esign_model extends CI_Model {
 	}
 
 	 public function read_skk($id) {
-		$sql = "SELECT secid, doc_id, jenis_dokumen, nomor_dokumen, nip, join_date, resign_date, TIMESTAMPDIFF(MONTH, join_date, resign_date) AS waktu_kerja, qr_code, createdby, createdon FROM xin_qrcode_skk WHERE secid = ? ";
+		$sql = "SELECT secid, doc_id, jenis_dokumen, nomor_dokumen, nip, join_date, resign_date, bpjs_date, TIMESTAMPDIFF(MONTH, join_date, resign_date) AS waktu_kerja, qr_code, createdby, createdon FROM xin_qrcode_skk WHERE secid = ? ";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
@@ -318,7 +318,7 @@ SELECT 1 AS nip FROM DUAL)");
 	public function get_esign_skk() {
 
 		// $sql = 'SELECT * FROM xin_documents_qrcode WHERE employee_id not IN (1)';
-		$sql = 'SELECT * FROM xin_qrcode_skk ORDER BY secid DESC LIMIT 50';
+		$sql = 'SELECT * FROM xin_qrcode_skk ORDER BY secid DESC LIMIT 500';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
