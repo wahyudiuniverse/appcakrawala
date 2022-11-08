@@ -83,12 +83,12 @@ class ImportExcelEslip extends MY_Controller
 			redirect('admin/');
 		}
 
-		// $product_id = $this->uri->segment(4);
-		$uploadid_segment = '20221029111847383';
+		$uploadid_segment = $this->uri->segment(4);
+		// $uploadid_segment = '20221029111847383';
 		$data['title'] = $this->lang->line('xin_preview_eslip').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_preview_eslip');
 
-		$product_id = 
+		// $product_id = 
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$data['uploadid'] = $uploadid_segment;
 		// $data['all_posisi'] = $this->Xin_model->get_designations();
@@ -279,12 +279,13 @@ class ImportExcelEslip extends MY_Controller
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		$employees_temp = $this->Import_model->get_eslip_temp($product_id);
+		$employees_temp = $this->Import_model->get_eslip_preview($product_id);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data = array();
 
-    foreach($employees_temp->result() as $r) {
+    		foreach($employees_temp->result() as $r) {
 			  
+			  $secid = $r->secid;
 			  $importid = $r->uploadid;
 			  $nip = $r->nip;
 			  $fullname = $r->fullname;
@@ -334,7 +335,7 @@ class ImportExcelEslip extends MY_Controller
 
 
 
-			  	$error = '<a href="'.site_url().'admin/Importexceleslip/preview_pdf/'.$nip.'/'.$nip.'/'.$nip.'/'.$nip.'"><button type="button" class="btn btn-xs btn-outline-success">PDF</button></a>';
+			  	$error = '<a href="'.site_url().'admin/Importexceleslip/preview_pdf/'.$nip.'/'.$secid.'/'.$nip.'/'.$nip.'"><button type="button" class="btn btn-xs btn-outline-success">PDF</button></a>';
 
 
 		   $data[] = array(
@@ -458,6 +459,7 @@ class ImportExcelEslip extends MY_Controller
 				$biaya_admin_bank = $user[0]->biaya_admin_bank;
 				$adjustment = $user[0]->adjustment;
 				$total = $user[0]->total;
+				$createdby = $user[0]->createdby;
 
 				$data = array(
 					'uploadid' => $uploadid,
@@ -502,7 +504,7 @@ class ImportExcelEslip extends MY_Controller
 					'biaya_admin_bank' => $biaya_admin_bank,
 					'adjustment' => $adjustment,
 					'total' => $total,
-					// 'created_by' => $session['user_id'],
+					'createdby' => $createdby,
 				);
 
 				//$id = $this->input->post('user_id');
@@ -597,7 +599,7 @@ class ImportExcelEslip extends MY_Controller
 				$biaya_admin_bank = $user[0]->biaya_admin_bank;
 				$adjustment = $user[0]->adjustment;
 				$total = $user[0]->total;
-				// $userid = $session['user_id'];
+				$createdby = $user[0]->createdby;
 
 				$data = array(
 					'uploadid' => $uploadid,
@@ -642,6 +644,7 @@ class ImportExcelEslip extends MY_Controller
 					'biaya_admin_bank' => $biaya_admin_bank,
 					'adjustment' => $adjustment,
 					'total' => $total,	
+					'createdby' => $createdby,
 				);
 
 						//$id = $this->input->post('user_id');
@@ -1510,23 +1513,23 @@ class ImportExcelEslip extends MY_Controller
 
 	public function preview_pdf() {
 
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
+		// $session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
 
 		$system = $this->Xin_model->read_setting_info(1);		
 		 // create new PDF document
-   	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+   		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$vpin = $this->uri->segment(4);
+		$vnip = $this->uri->segment(4);
 		$ideslip = $this->uri->segment(5);
 		// $employee_id = $this->uri->segment(5);
 
 
-		if($session['employee_id'] != $vpin) {
-			redirect('admin/');
-		}
+		// if($session['employee_id'] != $vpin) {
+		// 	redirect('admin/');
+		// }
 				// $cekEmp = $this->Employees_model->read_employee_info_by_nik($vpin);
 
 
@@ -1538,7 +1541,7 @@ class ImportExcelEslip extends MY_Controller
 
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
 		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
-		$employee = $this->Employees_model->read_employee_info_by_nik($vpin);
+		$employee = $this->Employees_model->read_employee_info_by_nik($vnip);
 
 		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
 				if(!is_null($designation)){
@@ -1584,7 +1587,7 @@ class ImportExcelEslip extends MY_Controller
 
 
 			$pdf->SetAuthor('HRCakrawala');
-			$pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
+			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
 
 			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
 			$pdf->SetSubject($this->lang->line('xin_eslip'));

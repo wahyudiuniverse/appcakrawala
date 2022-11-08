@@ -563,7 +563,7 @@ class Skk extends MY_Controller {
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td>Adalah benar karyawan yang bekerja di Perusahaan kami sejak tanggal '.$join_date.' sampai dengan '.$resign_date.' yang ditempatkan pada <b>'.$project_name.'</b><br> <br>
-									Selama bekerja Sdra. Raden Ryan Setyawan telah menujukan tanggung jawa dan kinerja yang baik dan dengan ini perusahaan mengucapkan terima kasih.<br><br>
+									Selama bekerja Sdr. '.$fullname.' telah menujukan tanggung jawa dan kinerja yang baik dan dengan ini perusahaan mengucapkan terima kasih.<br><br>
 									Demikian surat keterangan ini dibuat, agar dapat digunakan sebagaimana mestinya.
 								</td>
 							</tr>

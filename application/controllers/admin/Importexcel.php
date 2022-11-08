@@ -964,7 +964,7 @@ class ImportExcel extends MY_Controller
 		// } else {
 		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
 		// }
-		$history_eslip = $this->Import_model->get_all_temp_eslip();
+		$history_eslip = $this->Import_model->get_all_eslip();
 
 		$data = array();
 
@@ -974,20 +974,26 @@ class ImportExcel extends MY_Controller
 				  	$project = $r->project;
 				  	$project_sub = $r->project_sub;
 				  	$total_mp = $r->total_mp;
+				  	$createdby = $r->createdby;
 
 				  	$preiode_param = str_replace(" ","",$r->periode);
 				  	$project_param = str_replace(" ","",$r->project);
 				  	$project_sub_param = str_replace(" ","",$r->project_sub);
 
-			  // get company
-			  // $company = $this->Xin_model->read_company_info($r->company_id);
-			  // if(!is_null($company)){
-			  // 	$comp_name = $company[0]->name;
-			  // } else {
-				 //  $comp_name = '--';	
-			  // }
+			  // get created
+			  $empname = $this->Employees_model->read_employee_info($r->createdby);
+			  if(!is_null($empname)){
+			  	$fullname = $empname[0]->first_name;
+			  } else {
+				  $fullname = '--';	
+			  }
 
-			  	$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				  	if($project_sub=='INHOUSE' || $project_sub=='INHOUSE AREA'){
+			  			$view_data = '';
+				  	} else {
+			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				  	}
+
 
      	$data[] = array(
 			  $view_data,
@@ -995,7 +1001,7 @@ class ImportExcel extends MY_Controller
 				$project,
         $project_sub,
        	$total_mp,
-				$total_mp,
+				$fullname,
       );
     }
 

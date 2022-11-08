@@ -45,6 +45,17 @@
 		}
 	}
 
+
+ 	// get all employes
+	public function get_all_eslip() {
+
+		$sql = 'SELECT uploadid, periode, project, project_sub, createdby, COUNT(nip) AS total_mp FROM xin_employees_eslip
+GROUP BY uploadid;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
  	// get all employes
 	public function get_all_temp_eslip() {
 
@@ -102,6 +113,16 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$query = $this->db->query($sql, $binds);
 		
 		return $query;
+	}
+
+
+		// get all employes temporary
+	public function get_eslip_preview($importid) {
+		
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE uploadid = ?';
+		$binds = array($importid);
+		$query = $this->db->query($sql, $binds);
+	    return $query;
 	}
 
 		// get all employes temporary
