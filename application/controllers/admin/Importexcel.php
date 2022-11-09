@@ -936,7 +936,7 @@ class ImportExcel extends MY_Controller
     	}
 
 		
-		redirect('admin/ImportExcelEslip?upid='.$uploadid);
+		redirect('admin/Importexceleslip?upid='.$uploadid);
 
 	}
 

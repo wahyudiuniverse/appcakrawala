@@ -3696,7 +3696,7 @@ ORDER BY `expiry_date`");
 
 	// get all table rows 
 	public function get_marital_status() {
-	 	return  $query = $this->db->query("SELECT * from mt_marital");
+	 	return  $query = $this->db->query("SELECT * from mt_marital ORDER BY name_marital ASC");
 	}
 
 	// Function to add record in table
