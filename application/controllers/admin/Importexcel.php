@@ -970,6 +970,7 @@ class ImportExcel extends MY_Controller
 
           foreach($history_eslip->result() as $r) {
           	$uploadid = $r->uploadid;
+          	$up_date = $r->up_date;
 				  	$periode = $r->periode;
 				  	$project = $r->project;
 				  	$project_sub = $r->project_sub;
@@ -997,6 +998,7 @@ class ImportExcel extends MY_Controller
 
      	$data[] = array(
 			  $view_data,
+			  $up_date,
        	$periode,
 				$project,
         $project_sub,

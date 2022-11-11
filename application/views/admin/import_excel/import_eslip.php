@@ -93,6 +93,7 @@
         <thead>
           <tr>
             <th><?php echo $this->lang->line('xin_action');?></th>
+            <th>UpDate</th>
             <th>Periode</th>
             <th>Project</th>
             <th>Sub Project</th>

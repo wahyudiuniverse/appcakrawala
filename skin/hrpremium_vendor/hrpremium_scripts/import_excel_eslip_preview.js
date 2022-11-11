@@ -78,7 +78,8 @@ $( document ).on( "click", ".delete", function() {
 		// 	$('[data-toggle="tooltip"]').tooltip();          
 		// 	}
 		// });
-		window.location.href = window.location.href;
+		window.location.reload();
+		// window.location.href = window.location.href;
 		// xin_table.api().ajax.reload(function(){
 
 		// 	toastr.success(data);
@@ -88,9 +89,9 @@ $( document ).on( "click", ".delete", function() {
 
 
 
- $( document ).on( "click", ".importall", function() {
+ $( document ).on( "click", ".hapusall", function() {
 	
-	jQuery.get(base_url+"/temp_to_primary_all/"+jQuery(this).data('user-id'), function(data, status){
+	jQuery.get(base_url+"/hapus_eslip_preview/"+jQuery(this).data('user-id'), function(data, status){
 
 		// var xin_table = $('#xin_table').dataTable({
 		// 	"bDestroy": true,
@@ -104,7 +105,33 @@ $( document ).on( "click", ".delete", function() {
 		// 	$('[data-toggle="tooltip"]').tooltip();          
 		// 	}
 		// });
-		window.location.href = window.location.href;
+		window.location.reload();
+		// window.location.href = window.location.href;
+		// xin_table.api().ajax.reload(function(){
+
+		// 	toastr.success(data);
+		// }, true);
+	});
+});
+
+ $( document ).on( "click", ".release", function() {
+	
+	jQuery.get(base_url+"/release_eslip_preview/"+jQuery(this).data('user-id'), function(data, status){
+
+		// var xin_table = $('#xin_table').dataTable({
+		// 	"bDestroy": true,
+		// 	"ajax": {
+		// 		url : base_url+"/view_import_excel_employees/?upid="+$('#uploadid').val(),
+		// 		type : 'GET'
+		// 	},
+		// dom: 'lBfrtip',
+		// "buttons": ['csv', 'excel', 'pdf', 'print'],
+		// 	"fnDrawCallback": function(settings){
+		// 	$('[data-toggle="tooltip"]').tooltip();          
+		// 	}
+		// });
+		window.location.reload();
+		// window.location.href = window.location.href;
 		// xin_table.api().ajax.reload(function(){
 
 		// 	toastr.success(data);

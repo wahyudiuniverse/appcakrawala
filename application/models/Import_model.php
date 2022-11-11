@@ -49,8 +49,8 @@
  	// get all employes
 	public function get_all_eslip() {
 
-		$sql = 'SELECT uploadid, periode, project, project_sub, createdby, COUNT(nip) AS total_mp FROM xin_employees_eslip
-GROUP BY uploadid;';
+		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_eslip
+GROUP BY uploadid ORDER BY uploadid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -151,7 +151,30 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->delete('xin_users');
 		
 	}
+		// Function to Delete selected record from table
+	public function delete_all_eslip_preview($uploadid){
+		$this->db->where('uploadid', $uploadid);
+		$this->db->delete('xin_employees_eslip');
+		
+	}
+
+		// Function to Delete selected record from table
+	public function delete_all_eslip_temp_preview($uploadid){
+		$this->db->where('uploadid', $uploadid);
+		$this->db->delete('xin_employees_eslip_temp');
+		
+	}
 	
+	// Function to update record in table > basic_info
+	public function update_release_eslip($data, $id){
+		$this->db->where('uploadid', $id);
+		if( $this->db->update('xin_employees_eslip',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 	// Function to update record in table
 	public function update_record($data, $id){
 		$this->db->where('user_id', $id);

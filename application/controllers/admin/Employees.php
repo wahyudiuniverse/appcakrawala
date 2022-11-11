@@ -1118,6 +1118,7 @@ class Employees extends MY_Controller {
 			'company_id' => $result[0]->company_id,
 			'location_id' => $result[0]->location_id,
 			'office_shift_id' => $result[0]->office_shift_id,
+			'project_id' => $result[0]->project_id,
 			'ereports_to' => $result[0]->reports_to,
 			'username' => $result[0]->username,
 			'email' => $result[0]->email,

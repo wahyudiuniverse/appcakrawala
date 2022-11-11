@@ -165,7 +165,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="first_name"><?php echo $this->lang->line('xin_employees_full_name');?><i class="hrpremium-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="first_name" type="text" value="<?php echo $first_name;?>">
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="first_name" type="text" value="<?php echo $first_name;?>" <?php if($project_id==13) {echo 'disabled';}?>>
                             </div>
                           </div>
 

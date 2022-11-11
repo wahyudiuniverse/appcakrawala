@@ -29,12 +29,22 @@
       <div class="col-md-3">
       </div>         
 
-      <div class="col-md col-xl-2 mb-4" style="padding-right: 0px;">
+      <div class="" style="margin-right: 25px;">
         <label class="form-label d-none d-md-block">&nbsp;</label>
 
       <div class="btn btn-success" data-toggle="tooltip" data-state="primary" data-placement="top" style="padding: inherit;">
                   <div>
-                    <a class="dropdown-item importall" href="javascript:void(0)" data-status="1" data-user-id="<?php echo $uploadid;?>" style="color: azure;">Hapus Semua</a>
+                    <a class="dropdown-item release" href="javascript:void(0)" data-status="1" data-user-id="<?php echo $uploadid;?>" style="color: azure;">RELEASE ALL</a>
+                  </div>
+                </div>
+      </div>
+
+      <div class="" style="margin-right: 25px;">
+        <label class="form-label d-none d-md-block">&nbsp;</label>
+
+      <div class="btn btn-danger" data-toggle="tooltip" data-state="primary" data-placement="top" style="padding: inherit;">
+                  <div>
+                    <a class="dropdown-item hapusall" href="javascript:void(0)" data-status="1" data-user-id="<?php echo $uploadid;?>" style="color: azure;">DELETE ALL</a>
                   </div>
                 </div>
       </div>
@@ -48,7 +58,7 @@
       <table class="datatables-demo table table-striped table-bordered" id="xin_table" style="table-layout: fixed;">
         <thead>
           <tr>
-            <th style="width: 70px;">Action / <?php echo $this->lang->line('xin_import_status_error');?></th>
+            <th style="width: 70px;">Status</th>
             <th style="width: 30px;"><?php echo $this->lang->line('xin_nik');?></th>
             <th style="width: 80px;">Fullname</th>
             <th style="width: 80px;">Periode</th>

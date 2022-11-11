@@ -29,14 +29,30 @@
       <div class="col-md-3">
       </div>         
 
-      <div class="col-md col-xl-2 mb-4" style="padding-right: 0px;">
+      <div class="" style="margin-right: 25px;">
         <label class="form-label d-none d-md-block">&nbsp;</label>
 
       <div class="btn btn-success" data-toggle="tooltip" data-state="primary" data-placement="top" style="padding: inherit;">
                   <div>
-                    <a class="dropdown-item importall" href="javascript:void(0)" data-status="1" data-user-id="<?php echo $uploadid;?>" style="color: azure;">Import Semua</a>
+                    <a class="dropdown-item importall" href="javascript:void(0)" data-status="1" data-user-id="<?php echo $uploadid;?>" style="color: azure;">IMPORT SEMUA</a>
                   </div>
+
+
                 </div>
+
+      </div>
+
+      <div class="" style="margin-right: 25px;">
+        <label class="form-label d-none d-md-block">&nbsp;</label>
+
+      <div class="btn btn-secondary" data-toggle="tooltip" data-state="primary" data-placement="top" style="padding: inherit;">
+                  <div>
+                    <a class="dropdown-item back" href="<?php echo site_url().'admin/importexcel/importeslip/';?>" data-status="1" data-user-id="<?php echo $uploadid;?>" style="color: azure;">SELESAI</a>
+                  </div>
+
+
+                </div>
+                
       </div>
     </div>
 

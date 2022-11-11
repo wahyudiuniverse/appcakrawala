@@ -78,7 +78,8 @@ $( document ).on( "click", ".delete", function() {
 		// 	$('[data-toggle="tooltip"]').tooltip();          
 		// 	}
 		// });
-		window.location.href = window.location.href;
+		window.location.reload();
+		// window.location.href = window.location.href;
 		// xin_table.api().ajax.reload(function(){
 
 		// 	toastr.success(data);
@@ -104,7 +105,8 @@ $( document ).on( "click", ".delete", function() {
 		// 	$('[data-toggle="tooltip"]').tooltip();          
 		// 	}
 		// });
-		window.location.href = window.location.href;
+		window.location.reload();
+		// window.location.href = window.location.href;
 		// xin_table.api().ajax.reload(function(){
 
 		// 	toastr.success(data);

@@ -111,4 +111,5 @@ $( document ).on( "click", ".delete", function() {
 		// 	toastr.success(data);
 		// }, true);
 	});
+
 });

@@ -328,6 +328,7 @@ class ImportExcelEslip extends MY_Controller
 			  $pembayaran_pinjaman = $r->pembayaran_pinjaman;
 			  $biaya_admin_bank = $r->biaya_admin_bank;
 			  $total = $r->total;
+			  $release = $r->release;
 
 				$now = new DateTime(date("Y-m-d"));
 
@@ -337,9 +338,15 @@ class ImportExcelEslip extends MY_Controller
 
 			  	$error = '<a href="'.site_url().'admin/Importexceleslip/preview_pdf/'.$nip.'/'.$secid.'/'.$nip.'/'.$nip.'"><button type="button" class="btn btn-xs btn-outline-success">PDF</button></a>';
 
+			  	if($release==0){
+			  		$status_release = '<button type="button" class="btn btn-xs btn-outline-secondary">DRAF</button>';
+			  	} else {
+			  		$status_release = '<button type="button" class="btn btn-xs btn-outline-success">RELEASE</button>';
+			  	}
+
 
 		   $data[] = array(
-		   	$error,
+		   	$error.' '.$status_release,
 				// $importid,
 				$nip,
 				$fullname,
@@ -530,9 +537,9 @@ class ImportExcelEslip extends MY_Controller
 		/* Define return | here result is used to return user data and error for error message */
 		// $status_id = $this->uri->segment(4);
 		// $session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
 		$upload_id = $this->uri->segment(4);
 
 
@@ -664,6 +671,49 @@ class ImportExcelEslip extends MY_Controller
 
 		//$this->output($Return);
 		//exit;
+	}
+
+
+	// Validate and update status info in database // status info
+	public function hapus_eslip_preview() {
+		/* Define return | here result is used to return user data and error for error message */
+		// $status_id = $this->uri->segment(4);
+		// $session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
+		$upload_id = $this->uri->segment(4);
+
+		$resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
+		$resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
+		// $tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+
+
+	}
+
+	// Validate and update status info in database // status info
+	public function release_eslip_preview() {
+		/* Define return | here result is used to return user data and error for error message */
+		// $status_id = $this->uri->segment(4);
+		// $session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
+		$upload_id = $this->uri->segment(4);
+
+
+				$datas = array(
+					'release' => 1,
+					'release_date' =>  date("Y-m-d h:i:s"),
+				);
+
+				$this->Import_model->update_release_eslip($datas, $upload_id);
+
+
+		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
+		// $tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+
+
 	}
 
 
