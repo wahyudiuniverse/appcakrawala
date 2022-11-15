@@ -982,7 +982,7 @@ class ImportExcel extends MY_Controller
 				  	$project_sub_param = str_replace(" ","",$r->project_sub);
 
 			  // get created
-			  $empname = $this->Employees_model->read_employee_info($r->createdby);
+			  $empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
 			  if(!is_null($empname)){
 			  	$fullname = $empname[0]->first_name;
 			  } else {

@@ -3,7 +3,7 @@
 
 <div class="form-group">
   <label class="form-label"><?php echo $this->lang->line('left_sub_projects');?><i class="hrpremium-asterisk">*</i></label>
-  <select class="form-control" name="sub_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_sub_projects');?>">
+  <select class="form-control" name="sub_project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_sub_projects');?>">
     <option value=""><?php echo $this->lang->line('left_sub_projects');?></option>
     <?php foreach($result as $subproject) {?>
     <option value="<?php echo $subproject->secid?>"><?php echo $subproject->sub_project_name;?></option>

@@ -1119,6 +1119,7 @@ class Employees extends MY_Controller {
 			'location_id' => $result[0]->location_id,
 			'office_shift_id' => $result[0]->office_shift_id,
 			'project_id' => $result[0]->project_id,
+			'sub_project_id' => $result[0]->sub_project_id,
 			'ereports_to' => $result[0]->reports_to,
 			'username' => $result[0]->username,
 			'email' => $result[0]->email,
@@ -1444,10 +1445,10 @@ class Employees extends MY_Controller {
 			'contact_no' => $contact_no,
 			'date_of_birth' => $date_of_birth,
 			'company_id' => $this->input->post('company_id'),
-			// 'view_companies_id' => $view_companies_id,
+			'project_id' => $this->input->post('project_id'),
+			'sub_project_id' => $this->input->post('sub_project_id'),
 			'location_id' => $this->input->post('location_id'),
 			'department_id' => $this->input->post('department_id'),
-			// 'sub_department_id' => $this->input->post('subdepartment_id'),
 			'designation_id' => $this->input->post('designation_id'),
 			'date_of_joining' => $date_of_joining,
 			'date_of_leaving' => $this->input->post('date_of_leaving'),
@@ -2878,6 +2879,28 @@ class Employees extends MY_Controller {
 		} else {
 			redirect('admin/');
 		}
+	}
+
+
+	 // get location > departments
+	public function get_projects_subprojects() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'id_project' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_project_sub_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
 	}
 
 	// get company > locations

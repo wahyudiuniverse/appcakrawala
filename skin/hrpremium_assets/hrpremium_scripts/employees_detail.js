@@ -307,6 +307,12 @@ $(document).ready(function(){
 		});
 	});
 	
+	jQuery("#aj_projects_ajax").change(function(){
+		jQuery.get(base_url+"/get_projects_subprojects/"+jQuery(this).val(), function(data, status){
+			jQuery('#sub_projects_ajax').html(data);
+		});
+	});
+	
 	$(".nav-tabs-link").click(function(){
 		var profile_id = $(this).data('profile');
 		var profile_block = $(this).data('profile-block');

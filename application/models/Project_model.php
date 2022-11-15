@@ -39,6 +39,33 @@ class Project_model extends CI_Model {
 		}
 	}
 	
+	 public function read_all_project_information($id) {
+	
+		//$sql = 'SELECT * FROM xin_projects WHERE project_id = ?';
+		$sql = 'SELECT * FROM xin_projects';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	 public function read_all_sub_project_information($id) {
+	
+		//$sql = 'SELECT * FROM xin_projects WHERE project_id = ?';
+		$sql = 'SELECT * FROM xin_projects_sub';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 
 	// get single project by id
 	public function read_single_project($id) {

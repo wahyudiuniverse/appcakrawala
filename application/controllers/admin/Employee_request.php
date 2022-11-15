@@ -182,7 +182,7 @@ class Employee_request extends MY_Controller {
 					$Return['error'] = $this->lang->line('xin_employee_error_location_office');
 				} else if ($this->input->post('project_id')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_project');
-				} else if ($this->input->post('sub_project')==''){
+				} else if ($this->input->post('sub_project_id')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_sub_project');
 				} else if ($this->input->post('department_id')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_department');
@@ -204,7 +204,7 @@ class Employee_request extends MY_Controller {
 		   	$fullname = $this->input->post('fullname');
 				$office_lokasi = $this->input->post('office_lokasi');
 				$project_id = $this->input->post('project_id');
-				$sub_project_id = $this->input->post('sub_project');
+				$sub_project_id = $this->input->post('sub_project_id');
 				$department_id = $this->input->post('department_id');
 				$posisi = $this->input->post('posisi');
 				$date_of_join = $this->input->post('date_of_join');

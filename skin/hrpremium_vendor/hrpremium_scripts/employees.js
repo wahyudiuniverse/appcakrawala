@@ -66,6 +66,7 @@ $(document).ready(function() {
 			jQuery('#ajax_office_shift').html(data);
 		});
 	});
+
 	jQuery("#filter_company").change(function(){
 		if(jQuery(this).val() == 0){
 			jQuery('#filter_location').prop('selectedIndex', 0);	
