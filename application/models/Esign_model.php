@@ -318,7 +318,7 @@ SELECT 1 AS nip FROM DUAL)");
 	public function get_esign_skk() {
 
 		// $sql = 'SELECT * FROM xin_documents_qrcode WHERE employee_id not IN (1)';
-		$sql = 'SELECT * FROM xin_qrcode_skk ORDER BY secid DESC LIMIT 500';
+		$sql = 'SELECT * FROM xin_qrcode_skk ORDER BY secid DESC LIMIT 50';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

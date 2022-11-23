@@ -3098,6 +3098,7 @@ $lang['xin_surat_keterangan_kerja'] = 'SK Kerja';
 $lang['xin_success_delete'] = 'Hapus Data Berhasil...';
 $lang['xin_paklaring'] = 'Paklaring';
 $lang['xin_preview_eslip'] = 'Preview ESLIP';
+$lang['xin_sk_report'] = 'SK Kerja Report';
 
 ///////////////////////////////////////////////// end hrpremium v2.0.1
 /* End of file hrpremium_lang.php */

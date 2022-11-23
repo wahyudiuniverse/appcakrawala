@@ -41,7 +41,6 @@ class Reports extends MY_Controller
 		  $this->load->model("Roles_model");
 		  $this->load->model("Designation_model");
 		  $this->load->model("Pkwt_model");
-		  $this->load->model("Project_model");
      }
 	 
 	// reports
@@ -213,6 +212,36 @@ class Reports extends MY_Controller
 		}
 	}
 
+
+		// employees report
+	public function skk_report() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_sk_report').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_sk_report');
+		$data['path_url'] = 'reports_skk';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		if(in_array('139',$role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+			// $data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if(in_array('470',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/skk_list", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 
 		// employees report
 	public function bpjs_employees() {
@@ -707,7 +736,7 @@ class Reports extends MY_Controller
 			$data[] = array(
 				$edits,
 				$r->employee_id,
-				$full_name,
+				strtoupper($full_name),
 				$comp_name,
 				$department_name,
 				$designation_name,
@@ -737,6 +766,117 @@ class Reports extends MY_Controller
 	  exit();
     }
 
+	public function report_skk_list() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/skk_list", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		$company_id = $this->uri->segment(4);
+		$department_id = $this->uri->segment(5);
+
+		$project_id = $this->uri->segment(6);
+		$subproject_id = $this->uri->segment(7);
+		$status_resign = $this->uri->segment(8);
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		// $designation_id = $this->uri->segment(6);
+
+
+		if($company_id==0 || is_null($company_id)){
+		// $employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+
+		$esign = $this->Reports_model->filter_esign_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+
+		}else{
+		// $employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+
+		$esign = $this->Reports_model->filter_esign_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+
+		}
+		
+		$data = array();
+
+        foreach($esign->result() as $r) {		  
+
+        	$doc_id = $r->doc_id;
+			$nomor_dokumen = $r->nomor_dokumen;
+			$nip = $r->nip;
+			$jenis_doc = $r->jenis_dokumen;
+			$createdat = $this->Xin_model->tgl_indo(substr($r->createdon,0,10));
+
+			$head_user = $this->Employees_model->read_employee_info_by_nik($r->nip);
+			if(!is_null($head_user)){
+				$fullname = $head_user[0]->first_name;
+
+
+				$project = $this->Project_model->read_single_project($head_user[0]->project_id);
+				if(!is_null($project)){
+					$project_name = $project[0]->title;
+				} else {
+					$project_name = '--';	
+				}
+
+
+			} else {
+				$fullname = '--';	
+			}
+
+			// JENIS DOKUMENT
+			if($jenis_doc==1){
+				$jdoc = 'SK KERJA';
+			} else if ($jenis_doc==2) {
+				$jdoc = 'PAKLARING';	
+			} else if ($jenis_doc==3) {
+				$jdoc = 'SK KERJA & PAKLARING';	
+			} else {
+				$jdoc = '--';	
+			}
+
+
+			if(in_array('487',$role_resources_ids)) { //view
+				$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/skk/view/'.$r->secid.'/'.$nip.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
+			} else {
+				$view = '';
+			}
+
+			if(in_array('489',$role_resources_ids)) { // delete
+				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->secid . '"><span class="fas fa-trash-restore"></span></button></span>';
+			} else {
+				$delete = '';
+			}
+
+			// $ititle = $r->department_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_department_head').': '.$dep_head.'<i></i></i></small>';
+			$combhr = $delete.' '.$view;
+						
+			$data[] = array(
+				$combhr,
+				$nomor_dokumen,
+				$nip,
+				$fullname,
+				$jdoc,
+				$createdat,
+				$project_name,
+			);
+      
+	  }
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $esign->num_rows(),
+			 "recordsFiltered" => $esign->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+    }
 
 	public function report_bpjs_employees_list() {
 

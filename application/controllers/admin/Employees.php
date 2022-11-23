@@ -4637,7 +4637,8 @@ class Employees extends MY_Controller {
 	
 		$data = array(
 		'password' => $password_hash,
-		'private_code' => $this->input->post('new_password')
+		'private_code' => $this->input->post('new_password'),
+		'password_change' => 1
 		);
 		$id = $this->input->post('user_id');
 		$result = $this->Employees_model->change_password($data,$id);

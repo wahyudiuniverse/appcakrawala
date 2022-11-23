@@ -380,6 +380,16 @@ class Xin_model extends CI_Model {
 			$arr['paklaring_open'] = 'open';
 			return $arr;
 		}
+		else if($mClass=='skk') {
+			$arr['skk_active'] = 'active';
+			$arr['dokumen_open'] = 'open';
+			return $arr;
+		}
+		else if($mClass=='reports' && $mMethod=='skk_report') {
+			$arr['skk_report_active'] = 'active';
+			$arr['dokumen_open'] = 'open';
+			return $arr;
+		}
 		else if($mClass=='reports' && $mMethod=='pkwt') {
 			$arr['pkwt_request_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';
