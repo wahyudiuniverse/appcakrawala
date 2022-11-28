@@ -61,7 +61,7 @@ $reports_to = get_reports_team_data($session['user_id']); ?>
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-3">
+          <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_eslip');?></div>
             <div class="text-large">Tidak Ditemukan..!</div>
           </div>

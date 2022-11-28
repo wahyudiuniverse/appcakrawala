@@ -323,6 +323,26 @@ dataSource: [
 	},
 
 
+// BPJS KARTU
+	{ 
+		id: "", 
+		class: "role-checkbox-modal custom-control-input", 
+		text: "<?php echo $this->lang->line('xin_manage_employees_bpjs');?>",  
+		add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", 
+		value: "502",  
+		items: [
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_role_enable');?>",  
+			add_info: "<?php echo $this->lang->line('xin_role_enable');?>", 
+			value: "502",
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('140',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		}
+		]
+	},
+
+
 // REQUEST EMPLOYEE
 	{ 
 		id: "", 

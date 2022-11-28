@@ -375,6 +375,13 @@ class Xin_model extends CI_Model {
 			$arr['eslip_open'] = 'open';
 			return $arr;
 		}
+
+		else if($mClass=='bpjs_kartu') {
+			$arr['bpjs_active'] = 'active';
+			$arr['bpjs_open'] = 'open';
+			return $arr;
+		}
+
 		else if($mClass=='paklaring') {
 			$arr['paklaring_active'] = 'active';
 			$arr['paklaring_open'] = 'open';

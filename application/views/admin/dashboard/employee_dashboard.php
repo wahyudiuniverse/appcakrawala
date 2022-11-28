@@ -295,19 +295,11 @@ $new_date = date('d-M-Y', $strtotime);
 
 <div class="row mt-3">
 
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted small">BPJS TK</div>
-            <div class="text-large">Belum Tersedia..!</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+
+<!-- BPJS KS STATUS -->
+<?php
+  if(!is_null($user_info[0]->bpjs_ks_status)){
+?>
 
   <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
@@ -315,68 +307,112 @@ $new_date = date('d-M-Y', $strtotime);
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
-            <div class="text-muted small">BPJS Kesehatan</div>
-            <div class="text-large">Belum Tersedia..!</div>
+            <div class="text-muted small">BPJS KESEHATAN &nbsp&nbsp
+              <?php 
+                if($user_info[0]->bpjs_ks_status == 'AKTIF'){
+                  ?>
+                  <button type="button" class="btn btn-xs btn-outline-success"><?php echo $user_info[0]->bpjs_ks_status;?></button>
+                  <?php
+                } else {
+                  ?>
+                  <button type="button" class="btn btn-xs btn-outline-danger"><?php echo $user_info[0]->bpjs_ks_status;?></button>
+                  <?php
+                }
+              ?>
+              </div>
+            <div class="text-large"><?php echo $user_info[0]->bpjs_ks_no;?></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <?php if(in_array('37',$role_resources_ids)) { ?>
+<?php 
+
+  } else {
+?>
+
   <div class="col-sm-6 col-xl-4">
-  <a href="<?php echo site_url('admin/payroll/payment_history/');?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
-          <div class="ion ion-ios-calculator display-4 text-info"></div>
+          <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('left_payslips');?></div>
-            <div class="text-large"><?php echo $this->lang->line('xin_view');?></div>
+            <div class="text-muted small">BPJS KESEHATAN &nbsp&nbsp
+              <button type="button" class="btn btn-xs btn-outline-success">-</button></div>
+            <div class="text-large">Tidak Ditemukan..!</div>
           </div>
         </div>
       </div>
     </div>
-    </a>
   </div>
-  <?php } ?>
-  <?php if(in_array('46',$role_resources_ids)) { ?>
+
+<?php
+  }
+?>
+
+
+
+<!-- BPJS TK STATUS -->
+<?php
+  if(!is_null($user_info[0]->bpjs_tk_status)){
+?>
+
   <div class="col-sm-6 col-xl-4">
-  <a href="<?php echo site_url('admin/timesheet/leave/');?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
-          <div class="ion ion-md-calendar display-4 text-danger"></div>
+          <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('xin_performance_management');?></div>
-            <div class="text-large"><?php echo $this->lang->line('left_leave');?></div>
+            <div class="text-muted small">BPJS KETENAGAKERJAAN &nbsp&nbsp
+              <?php 
+                if($user_info[0]->bpjs_tk_status == 'AKTIF'){
+                  ?>
+                  <button type="button" class="btn btn-xs btn-outline-success"><?php echo $user_info[0]->bpjs_tk_status;?></button>
+                  <?php
+                } else {
+                  ?>
+                  <button type="button" class="btn btn-xs btn-outline-danger"><?php echo $user_info[0]->bpjs_tk_status;?></button>
+                  <?php
+                }
+              ?>
+              </div>
+            <div class="text-large"><?php echo $user_info[0]->bpjs_tk_no;?></div>
           </div>
         </div>
       </div>
     </div>
-    </a>
   </div>
- <?php } ?>
- <?php if($system[0]->module_travel=='true'){?>
- <?php if(in_array('17',$role_resources_ids)) { ?>
+
+<?php 
+
+  } else {
+?>
+
   <div class="col-sm-6 col-xl-4">
-  <a href="<?php echo site_url('admin/travel/');?>">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
-          <div class="ion ion-md-paper-plane display-4 text-warning"></div>
+          <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('xin_travel');?></div>
-            <div class="text-large"><?php echo $this->lang->line('xin_requests');?></div>
+            <div class="text-muted small">BPJS KETENAGAKERJAAN &nbsp&nbsp
+              <button type="button" class="btn btn-xs btn-outline-success">-</button></div>
+            <div class="text-large">Tidak Ditemukan..!</div>
           </div>
         </div>
       </div>
     </div>
-    </a>
   </div>
- <?php } ?>
- <?php } ?>
+
+<?php
+  }
+?>
+
 </div>
+
+
+
+
 <?php if(in_array('37',$role_resources_ids)) { ?>
 <div class="card mb-4">
   <h6 class="card-header with-elements">

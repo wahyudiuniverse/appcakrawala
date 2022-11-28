@@ -364,6 +364,22 @@
       } 
       ?>
 
+
+<!-- BPJS -->
+
+      <?php 
+      if (in_array('502',$role_resources_ids)) { ?>
+        <li class="sidenav-item <?php if(!empty($arr_mod['bpjs_active']))echo $arr_mod['bpjs_active'];?>"> 
+          <a href="<?php echo site_url('admin/bpjs_kartu/');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div><?php echo $this->lang->line('xin_manage_employees_bpjs');?></div>
+          </a>             
+        </li>
+      <?php 
+      } 
+      ?>
+
 <!-- PAKLARING -->
 
       <?php 
