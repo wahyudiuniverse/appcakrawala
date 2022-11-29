@@ -1073,6 +1073,26 @@ class Employees_model extends CI_Model {
 	  $query = $this->db->query("SELECT * from xin_document_type");
   	  return $query->result();
 	}
+
+	// get all document types
+	public function all_document_types_ready($id) {
+
+
+		$sql = 'SELECT * 
+FROM xin_document_type 
+WHERE document_type_id 
+NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents WHERE employee_id = ?)';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+
+	}
+
 	
 	// get all education level
 	public function all_education_level() {
@@ -2056,7 +2076,7 @@ class Employees_model extends CI_Model {
 			return true;
 		} else {
 			return false;
-		}		
+		}
 	}
 	// get single record > company | office shift
 	 public function ajax_company_officeshift_information($id) {
@@ -2072,6 +2092,21 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+
+
+	// get single project by id
+	public function read_ethnicity($id) {
+	
+		$sql = 'SELECT * FROM xin_ethnicity_type WHERE ethnicity_type_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 
 
 	// get all my team employes > not super admin

@@ -1161,6 +1161,7 @@ class Employees extends MY_Controller {
 			'view_companies_id' => $result[0]->view_companies_id,
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
+			'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),
 			'all_education_level' => $this->Employees_model->all_education_level(),
 			'all_qualification_language' => $this->Employees_model->all_qualification_language(),
 			'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
@@ -1447,6 +1448,164 @@ class Employees extends MY_Controller {
 			'company_id' => $this->input->post('company_id'),
 			'project_id' => $this->input->post('project_id'),
 			'sub_project_id' => $this->input->post('sub_project_id'),
+			'location_id' => $this->input->post('location_id'),
+			'department_id' => $this->input->post('department_id'),
+			'designation_id' => $this->input->post('designation_id'),
+			'date_of_joining' => $date_of_joining,
+			'date_of_leaving' => $this->input->post('date_of_leaving'),
+			'ethnicity_type' => $this->input->post('ethnicity_type'),
+			'gender' => $this->input->post('gender'),
+			'marital_status' => $this->input->post('marital_status'),
+			'blood_group' => $this->input->post('blood_group'),
+			'leave_categories' => $cat_ids,
+			// 'office_shift_id' => $this->input->post('office_shift_id'),
+			'address' => $address,
+			'state' => $this->input->post('estate'),
+			'city' => $this->input->post('ecity'),
+			'zipcode' => $this->input->post('ezipcode'),
+			'nationality_id' => $this->input->post('nationality_id'),
+			//'citizenship_id' => $this->input->post('citizenship_id'),
+			'reports_to' => $this->input->post('reports_to'),
+			// 'is_active' => $this->input->post('status'),
+			'user_role_id' => $this->input->post('role'),
+			);
+
+			$id = $this->input->post('user_id');
+			$result = $this->Employees_model->basic_info($data,$id);
+
+			if ($result == TRUE) {
+				$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_msg');
+			}
+
+			$this->output($Return);
+			exit;
+
+		}
+	}
+
+	public function basic_info_emp() {
+	
+		if($this->input->post('type')=='basic_info') {		
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array(
+				'result'=>'', 
+				'error'=>'', 
+				'csrf_hash'=>''
+			);
+
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		
+			//$office_shift_id = $this->input->post('office_shift_id');
+			$system = $this->Xin_model->read_setting_info(1);
+			
+			//cek string aneh
+			/*
+			if(preg_match("/^(\pL{1,}[ ]?)+$/u",$this->input->post('last_name'))!=1) {
+				$Return['error'] = $this->lang->line('xin_hr_string_error');
+			}*/
+
+			/* Server side PHP input validation */	
+			// if($this->input->post('employee_id')==='') {
+			// 	$Return['error'] = $this->lang->line('xin_employee_error_employee_id');
+			// } else 
+			if($this->input->post('first_name')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_first_name');
+			} else if($this->input->post('email')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_email');
+			} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+				$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
+			} else if($this->input->post('contact_no')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
+			} else if($this->input->post('date_of_birth')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_date_of_birth');
+			} else if($this->input->post('ibu_kandung')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+			}
+
+			// else if($this->Xin_model->validate_date($this->input->post('date_of_birth'),'Y-m-d') == false) {
+			//  	$Return['error'] = $this->lang->line('xin_hr_date_format_error');
+			// } 
+
+			else if($this->input->post('company_id')==='') {
+			 	$Return['error'] = $this->lang->line('error_company_field');
+			} else if($this->input->post('location_id')==='') {
+			 	$Return['error'] = $this->lang->line('xin_location_field_error');
+			} else if($this->input->post('department_id')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_department');
+			} else if($this->input->post('subdepartment_id')==='') {
+        $Return['error'] = $this->lang->line('xin_hr_sub_department_field_error');
+			} else if($this->input->post('designation_id')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_designation');
+			} else if($this->input->post('date_of_joining')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_joining_date');
+			} 
+			// else if($this->Xin_model->validate_date($this->input->post('date_of_joining'),'Y-m-d') == false) {
+			//  	$Return['error'] = $this->lang->line('xin_hr_date_format_error');
+			// } 
+
+			else if($this->input->post('role')==='') {
+			 	$Return['error'] = $this->lang->line('xin_employee_error_user_role');
+			} else if(!preg_match('/^([0-9]*)$/', $this->input->post('contact_no'))) {
+			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
+			}
+				
+			if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+		
+			if($this->input->post('username')=='' || $this->input->post('username')==null){
+
+				$employee_id = $this->input->post('employee_id');
+				$username = $this->input->post('employee_id');
+			} else {
+				$employee_id = $this->input->post('username');
+				$username = $this->input->post('username');
+			}
+
+			$first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
+			$ibu_kandung = $this->input->post('ibu_kandung');
+			$contact_no = $this->Xin_model->clean_post($this->input->post('contact_no'));
+			$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
+
+			if($this->input->post('date_of_joining')=='' || $this->input->post('date_of_joining')==null) {
+				$date_of_joining = $this->input->post('tanggal_bergabung');
+			} else {
+				$date_of_joining = $this->input->post('date_of_joining');
+			}
+
+			$leave_categories = array($this->input->post('leave_categories'));
+			$cat_ids = implode(',',$this->input->post('leave_categories'));
+			$address = $this->input->post('address');
+			
+			$module_attributes = $this->Custom_fields_model->all_hrpremium_module_attributes();
+			$count_module_attributes = $this->Custom_fields_model->count_module_attributes();	
+			$i=1;
+			// 	if($count_module_attributes > 0){
+			// 	 foreach($module_attributes as $mattribute) {
+			// 		 if($mattribute->validation == 1){
+			// 			 if($i!=1) {
+			// 			 } else if($this->input->post($mattribute->attribute)=='') {
+			// 				$Return['error'] = $this->lang->line('xin_hrpremium_custom_field_the').' '.$mattribute->attribute_label.' '.$this->lang->line('xin_hrpremium_custom_field_is_required');
+			// 			}
+			// 		 }
+			// 	 }		
+			// 	 if($Return['error']!=''){
+			// 		$this->output($Return);
+			// 	}	
+			// }
+	
+			$data = array(
+			'employee_id' => $employee_id,
+			'username' => $username,
+			'first_name' => $first_name,
+			// 'last_name' => $last_name,
+			'ibu_kandung' => $ibu_kandung,
+			'email' => $this->input->post('email'),
+			'contact_no' => $contact_no,
+			'date_of_birth' => $date_of_birth,
+			'company_id' => $this->input->post('company_id'),
 			'location_id' => $this->input->post('location_id'),
 			'department_id' => $this->input->post('department_id'),
 			'designation_id' => $this->input->post('designation_id'),
@@ -3525,6 +3684,7 @@ class Employees extends MY_Controller {
 		$description = $this->Xin_model->clean_post($this->input->post('description'));
 		// clean date fields
 		$date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
+		$document_type = $this->input->post('document_type_id');
 	
 		$data = array(
 		'document_type_id' => $this->input->post('document_type_id'),
@@ -3537,9 +3697,13 @@ class Employees extends MY_Controller {
 		'employee_id' => $this->input->post('user_id'),
 		'created_at' => date('d-m-Y'),
 		);
+
 		$result = $this->Employees_model->document_info_add($data);
+
 		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_employee_d_info_added');
+
+				$Return['result'] = $this->lang->line('xin_employee_d_info_added');
+
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}

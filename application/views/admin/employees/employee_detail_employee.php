@@ -138,7 +138,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                         );
                       ?>
 
-                      <?php echo form_open_multipart('admin/employees/basic_info', $attributes, $hidden);?>
+                      <?php echo form_open_multipart('admin/employees/basic_info_emp', $attributes, $hidden);?>
                       <div class="bg-white">
                         <div class="row">
 
@@ -1272,7 +1272,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                             <label for="relation"><?php echo $this->lang->line('xin_e_details_dtype');?><i class="hrpremium-asterisk">*</i></label>
                             <select name="document_type_id" id="document_type_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_choose_dtype');?>">
                               <option value=""></option>
-                              <?php foreach($all_document_types as $document_type) {?>
+                              <?php foreach($all_document_types_ready as $document_type) {?>
                               <option value="<?php echo $document_type->document_type_id;?>"> <?php echo $document_type->document_type;?></option>
                               <?php } ?>
                             </select>

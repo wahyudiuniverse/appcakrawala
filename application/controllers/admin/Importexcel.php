@@ -874,31 +874,33 @@ class ImportExcel extends MY_Controller
 						'allow_parking' => $line[13],
 						'allow_residence_cost' => $line[14],
 						'allow_device' => $line[15],
-						'penyesuaian_umk' => $line[16],
-						'insentive'	=> $line[17],
-						'overtime' => $line[18],
-						'overtime_national_day' => $line[19],
-						'overtime_rapel' => $line[20],
-						'kompensasi' => $line[21],
-						'bonus' => $line[22],
-						'thr' => $line[23],
-						'bpjs_tk_deduction' => $line[24],
-						'bpjs_ks_deduction' => $line[25],
-						'jaminan_pensiun_deduction' => $line[26],
-						'pendapatan' => $line[27],
-						'bpjs_tk' => $line[28],
-						'bpjs_ks' => $line[29],
-						'jaminan_pensiun' => $line[30],
-						'pph' => $line[31],
-						'penalty_late' => $line[32],
-						'penalty_attend' => $line[33],
-						'deduction' => $line[34],
-						'simpanan_pokok' => $line[35],
-						'simpanan_wajib_koperasi' => $line[36],
-						'pembayaran_pinjaman' => $line[37],
-						'biaya_admin_bank' => $line[38],
-						'adjustment' => $line[39],
-						'total' => $line[40],
+						'allow_kasir' => $line[16],
+						'allow_trans_meal' => $line[17],
+						'penyesuaian_umk' => $line[18],
+						'insentive'	=> $line[19],
+						'overtime' => $line[20],
+						'overtime_national_day' => $line[21],
+						'overtime_rapel' => $line[22],
+						'kompensasi' => $line[23],
+						'bonus' => $line[24],
+						'thr' => $line[25],
+						'bpjs_tk_deduction' => $line[26],
+						'bpjs_ks_deduction' => $line[27],
+						'jaminan_pensiun_deduction' => $line[28],
+						'pendapatan' => $line[29],
+						'bpjs_tk' => $line[30],
+						'bpjs_ks' => $line[31],
+						'jaminan_pensiun' => $line[32],
+						'pph' => $line[33],
+						'penalty_late' => $line[34],
+						'penalty_attend' => $line[35],
+						'deduction' => $line[36],
+						'simpanan_pokok' => $line[37],
+						'simpanan_wajib_koperasi' => $line[38],
+						'pembayaran_pinjaman' => $line[39],
+						'biaya_admin_bank' => $line[40],
+						'adjustment' => $line[41],
+						'total' => $line[42],
 						'createdby' => $employee_id,
 
 
@@ -973,13 +975,13 @@ class ImportExcel extends MY_Controller
           	$up_date = $r->up_date;
 				  	$periode = $r->periode;
 				  	$project = $r->project;
-				  	$project_sub = $r->project_sub;
+				  	$project_sub = $this->Xin_model->clean_post($r->project_sub);
 				  	$total_mp = $r->total_mp;
 				  	$createdby = $r->createdby;
 
 				  	$preiode_param = str_replace(" ","",$r->periode);
 				  	$project_param = str_replace(" ","",$r->project);
-				  	$project_sub_param = str_replace(" ","",$r->project_sub);
+				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->project_sub)));
 
 			  // get created
 			  $empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);

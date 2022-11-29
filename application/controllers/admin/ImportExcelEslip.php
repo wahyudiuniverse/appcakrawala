@@ -441,6 +441,10 @@ class ImportExcelEslip extends MY_Controller
 				$allow_parking = $user[0]->allow_parking;
 				$allow_residence_cost = $user[0]->allow_residence_cost;
 				$allow_device = $user[0]->allow_device;
+
+				$allow_kasir = $user[0]->allow_kasir;
+				$allow_trans_meal = $user[0]->allow_trans_meal;
+
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
 				$overtime = $user[0]->overtime;
@@ -486,6 +490,10 @@ class ImportExcelEslip extends MY_Controller
 					'allow_parking' => $allow_parking,
 					'allow_residence_cost' => $allow_residence_cost,
 					'allow_device' => $allow_device,
+
+					'allow_kasir' => $allow_kasir,
+					'allow_trans_meal' => $allow_trans_meal,
+
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
 					'overtime' => $overtime,
@@ -581,6 +589,8 @@ class ImportExcelEslip extends MY_Controller
 				$allow_parking = $user[0]->allow_parking;
 				$allow_residence_cost = $user[0]->allow_residence_cost;
 				$allow_device = $user[0]->allow_device;
+				$allow_kasir = $user[0]->allow_kasir;
+				$allow_trans_meal = $user[0]->allow_trans_meal;
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
 				$overtime = $user[0]->overtime;
@@ -626,6 +636,8 @@ class ImportExcelEslip extends MY_Controller
 					'allow_parking' => $allow_parking,
 					'allow_residence_cost' => $allow_residence_cost,
 					'allow_device' => $allow_device,
+					'allow_kasir' => $allow_kasir,
+					'allow_trans_meal' => $allow_trans_meal,
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
 					'overtime' => $overtime,
@@ -861,6 +873,8 @@ class ImportExcelEslip extends MY_Controller
 				$allow_parking = $eslip[0]->allow_parking;
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
 				$allow_device = $eslip[0]->allow_device;
+				$allow_kasir = $eslip[0]->allow_kasir;
+				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
 				$overtime = $eslip[0]->overtime;
@@ -1144,6 +1158,38 @@ class ImportExcelEslip extends MY_Controller
 								<td colspan="4">Tunjangan Laptop</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+
+			if($allow_kasir!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kasir</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_trans_meal!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Transport + Meal</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -1706,6 +1752,11 @@ class ImportExcelEslip extends MY_Controller
 				$allow_parking = $eslip[0]->allow_parking;
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
 				$allow_device = $eslip[0]->allow_device;
+
+				$allow_kasir = $eslip[0]->allow_kasir;
+				$allow_trans_meal = $eslip[0]->allow_trans_meal;
+
+
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
 				$overtime = $eslip[0]->overtime;
@@ -1989,6 +2040,39 @@ class ImportExcelEslip extends MY_Controller
 								<td colspan="4">Tunjangan Laptop</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($allow_kasir!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kasir</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+
+			if($allow_trans_meal!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Transport + Meal</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>

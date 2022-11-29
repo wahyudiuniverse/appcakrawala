@@ -1057,6 +1057,49 @@ class Xin_model extends CI_Model {
 		}
 	}
 	
+	// get single company
+	public function read_document_ktp($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_documents WHERE employee_id = ? AND document_type_id = 1';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+
+	// get single company
+	public function read_document_kk($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_documents WHERE employee_id = ? AND document_type_id = 2';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// get single company
+	public function read_document_npwp($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_documents WHERE employee_id = ? AND document_type_id = 4';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	public function get_employee_officeshift($id) {
 	 	
 		$sql = 'SELECT * FROM xin_employee_shift WHERE employee_id = ?';

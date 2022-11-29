@@ -624,7 +624,7 @@ class Reports extends MY_Controller
 			if(!is_null($department)){
 				$department_name = $department[0]->department_name;
 			} else {
-				$department_name = '--';	
+				$department_name = '--';
 			}
 
 			// get designation
@@ -639,16 +639,46 @@ class Reports extends MY_Controller
 			if(!is_null($project)){
 				$project_name = $project[0]->title;
 			} else {
-				$project_name = '--';	
+				$project_name = '--';
 			}
 
 			$subproject = $this->Project_model->read_single_subproject($r->sub_project_id);
 			if(!is_null($subproject)){
 				$subproject_name = $subproject[0]->sub_project_name;
 			} else {
-				$subproject_name = '--';	
+				$subproject_name = '--';
 			}
 
+// $agama = '--';
+			$ethnicity = $this->Employees_model->read_ethnicity($r->ethnicity_type);
+			if(!is_null($ethnicity)){
+				$agama = $ethnicity[0]->type;
+			} else {
+				$agama = '--';
+			}
+
+
+			$docktp = $this->Xin_model->read_document_ktp($r->user_id);
+			if(!is_null($docktp)){
+				$ktp = $docktp[0]->title;
+			} else {
+				$ktp = '--';
+			}
+
+
+			$dockk = $this->Xin_model->read_document_kk($r->user_id);
+			if(!is_null($dockk)){
+				$kk = $dockk[0]->title;
+			} else {
+				$kk = '--';
+			}
+
+			$docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
+			if(!is_null($docnpwp)){
+				$npwp = $docnpwp[0]->title;
+			} else {
+				$npwp = '--';
+			}
 
 			if(!is_null($r->gender)){
 				$gender = $r->gender;
@@ -673,11 +703,19 @@ class Reports extends MY_Controller
 			} else {
 				$doj = '--';	
 			}
+
+			if(!is_null($r->date_of_leaving)){
+				$dol = $r->date_of_leaving;
+			} else {
+				$dol = '--';	
+			}
+
 			if(!is_null($r->email)){
 				$email = $r->email;
 			} else {
 				$email = '--';	
 			}
+
 			if(!is_null($r->contact_no)){
 				$kontak = $r->contact_no;
 			} else {
@@ -690,23 +728,21 @@ class Reports extends MY_Controller
 				$alamat = '--';	
 			}
 
-
-			if(!is_null($r->kk_no)){
-				$kk = $r->kk_no;
+			if(!is_null($r->bpjs_tk_no)){
+				$bpjstk = $r->bpjs_tk_no;
 			} else {
-				$kk = '--';	
+				$bpjstk = '--';	
+			}
+			if(!is_null($r->bpjs_ks_no)){
+				$bpjsks = $r->bpjs_ks_no;
+			} else {
+				$bpjsks = '--';
 			}
 
-			if(!is_null($r->ktp_no)){
-				$ktp = $r->ktp_no;
+			if(!is_null($r->ibu_kandung)){
+				$ibu = $r->ibu_kandung;
 			} else {
-				$ktp = '--';	
-			}
-
-			if(!is_null($r->npwp_no)){
-				$npwp = $r->npwp_no;
-			} else {
-				$npwp = '--';	
+				$ibu = '--';	
 			}
 
 			if(!is_null($r->private_code)){
@@ -715,7 +751,7 @@ class Reports extends MY_Controller
 				$pin = '--';	
 			}
 
-							$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
 				} else if ($r->status_resign==3) {
@@ -742,16 +778,23 @@ class Reports extends MY_Controller
 				$designation_name,
 				$project_name,
 				$subproject_name,
-				$gender,
-				$marital,
+				'-', // AREA
+				'-', // TEMPAT LAHIR
 				$this->Xin_model->tgl_indo($dob),
 				$this->Xin_model->tgl_indo($doj),
+				$this->Xin_model->tgl_indo($dol),
+				$gender,
+				$marital,
+				$agama, // agama
 				$email,
 				$kontak,
 				$alamat,
 				$kk,
 				$ktp,
 				$npwp,
+				$bpjstk,
+				$bpjsks,
+				$ibu
 				// $pin
 			);
       
