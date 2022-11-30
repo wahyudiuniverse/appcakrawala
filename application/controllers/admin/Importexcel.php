@@ -991,8 +991,14 @@ class ImportExcel extends MY_Controller
 				  $fullname = '--';	
 			  }
 
-				  	if($project_sub=='INHOUSE' || $project_sub=='INHOUSE AREA'){
+				  	if($project_sub=='INHOUSE' || $project_sub=='INHOUSE AREA' || $project_sub=='AREA' || $project_sub=='HO'){
+				  		if($session['user_id']=='1'){
+
+			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				  		} else {
+				  			
 			  			$view_data = '';
+				  		}
 				  	} else {
 			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
 				  	}

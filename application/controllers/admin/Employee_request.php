@@ -71,7 +71,7 @@ class Employee_request extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_employees_request();
+		$employee = $this->Employees_model->get_monitoring_request();
 
 		$data = array();
 
@@ -86,9 +86,17 @@ class Employee_request extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
+				$approved_by = $r->approved_by;
 			  
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Request</button>';
+				if($approved_by==null){
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval</button>';
+				} else {
+					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Approved</button>';
+				}
+
 
 				$projects = $this->Project_model->read_single_project($r->project);
 				if(!is_null($projects)){
@@ -226,9 +234,14 @@ class Employee_request extends MY_Controller {
 				'doj' => $date_of_join,
 				'contact_no' => $contact_no,
 				'nik_ktp' => $ktp_no,
+
+				'verified_by' =>  1,
+				'verified_date' => date("Y-m-d"),
+
 				// 'pincode' => $this->input->post('pin_code'),
 				// 'createdon' => date('Y-m-d h:i:s'),
-				'createdby' => $session['user_id']
+				'createdby' => $session['user_id'],
+				'modifiedon' => date('Y-m-d h:i:s')
 			);
 
 			$iresult = $this->Employees_model->addrequest($data);

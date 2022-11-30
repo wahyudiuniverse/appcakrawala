@@ -403,6 +403,7 @@ class Employee_request_verify extends MY_Controller {
 				'migrasi' => '1',
 				'approved_by' =>  $session['user_id'],
 				'approved_date' => date("Y-m-d"),
+				'modifiedon' => date('Y-m-d h:i:s')
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 

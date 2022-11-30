@@ -1482,6 +1482,14 @@ NOT IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk)");
 
 	}
 
+	public function count_emp_request()
+	{
+
+	  $query = $this->db->query("SELECT * FROM xin_employee_request WHERE verified_by IS NOT null AND approved_by IS null");
+  	  return $query->num_rows();
+
+	}
+
 	// notifications
 	public function count_user_notify_leave_applications($user_id)
 	{

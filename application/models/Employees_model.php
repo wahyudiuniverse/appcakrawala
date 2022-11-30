@@ -18,6 +18,15 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+ 	// monitoring request
+	public function get_monitoring_request() {
+
+		$sql = 'SELECT * FROM xin_employee_request ORDER BY modifiedon DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
  	// get all employes
 	public function get_employees_request() {
 

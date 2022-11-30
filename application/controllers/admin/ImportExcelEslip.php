@@ -1529,7 +1529,7 @@ class ImportExcelEslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Biaya Admin Bank</td>
+								<td colspan="4">Biaya Admin</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -2412,7 +2412,7 @@ class ImportExcelEslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Biaya Admin Bank</td>
+								<td colspan="4">Biaya Admin</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
