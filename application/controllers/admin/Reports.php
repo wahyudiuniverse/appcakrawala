@@ -745,10 +745,10 @@ class Reports extends MY_Controller
 				$ibu = '--';	
 			}
 
-			if(!is_null($r->private_code)){
+			if($r->password_change==0){
 				$pin = $r->private_code;
 			} else {
-				$pin = '--';	
+				$pin = '******';	
 			}
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
@@ -773,6 +773,7 @@ class Reports extends MY_Controller
 				$edits,
 				$r->employee_id,
 				strtoupper($full_name),
+				$pin,
 				$comp_name,
 				$department_name,
 				$designation_name,

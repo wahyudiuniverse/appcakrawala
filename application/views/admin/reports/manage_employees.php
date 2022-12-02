@@ -131,6 +131,7 @@
                 <th style="width: 100px;">Status</th>
                 <th style="width: 60px;"><?php echo $this->lang->line('xin_nip');?></th>
                 <th style="width: 160px;"><?php echo $this->lang->line('xin_employees_full_name');?></th>
+                <th style="width: 150px;">PIN</th>
                 <th style="width: 150px;"><?php echo $this->lang->line('left_company');?></th>
                 <th style="width: 150px;"><?php echo $this->lang->line('left_department');?></th>
                 <th style="width: 200px;"><?php echo $this->lang->line('left_designation');?></th>
