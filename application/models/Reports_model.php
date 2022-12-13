@@ -285,15 +285,17 @@ class Reports_model extends CI_Model {
 	}
 
 
-	// get employees list> reports
-	public function filter_esign_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
-		return $query = $this->db->query("SELECT * FROM xin_qrcode_skk ORDER BY secid DESC LIMIT 50");
-	}
 
 	// get employees list> reports
 	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
 		// return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
+	}
+
+
+	// get employees list> reports
+	public function filter_esign_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
+		return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip not in('0') ORDER BY secid DESC LIMIT 500");
 	}
 }
 ?>

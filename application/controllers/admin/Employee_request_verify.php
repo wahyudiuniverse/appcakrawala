@@ -89,7 +89,7 @@ class Employee_request_verify extends MY_Controller {
 				$nik_ktp = $r->nik_ktp;
 			  
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Verified</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval</button>';
 
 				$projects = $this->Project_model->read_single_project($r->project);
 				if(!is_null($projects)){

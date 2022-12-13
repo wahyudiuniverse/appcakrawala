@@ -858,19 +858,29 @@ class Reports extends MY_Controller
 			$createdat = $this->Xin_model->tgl_indo(substr($r->createdon,0,10));
 
 			$head_user = $this->Employees_model->read_employee_info_by_nik($r->nip);
+
 			if(!is_null($head_user)){
 				$fullname = $head_user[0]->first_name;
-
-
-				$project = $this->Project_model->read_single_project($head_user[0]->project_id);
-				if(!is_null($project)){
-					$project_name = $project[0]->title;
+				if(!is_null($head_user[0]->project_id)){
+					$project = $this->Project_model->read_single_project($head_user[0]->project_id);
+					if(!is_null($project)){
+						$project_name = $project[0]->title;
+					} else {
+						$project_name = '--';	
+					}
+					
+					// $project_name = '--';
 				} else {
-					$project_name = '--';	
+					$project_name = '--';
 				}
+				// $project_name = $head_user[0]->project_id;
 
+
+					// $project_name = '--';
 
 			} else {
+
+					$project_name = '--';
 				$fullname = '--';	
 			}
 
@@ -886,13 +896,13 @@ class Reports extends MY_Controller
 			}
 
 
-			if(in_array('487',$role_resources_ids)) { //view
+			if(in_array('470',$role_resources_ids)) { //view
 				$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/skk/view/'.$r->secid.'/'.$nip.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
 			} else {
 				$view = '';
 			}
 
-			if(in_array('489',$role_resources_ids)) { // delete
+			if(in_array('470',$role_resources_ids)) { // delete
 				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->secid . '"><span class="fas fa-trash-restore"></span></button></span>';
 			} else {
 				$delete = '';

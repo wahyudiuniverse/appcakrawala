@@ -441,9 +441,9 @@ class ImportExcelEslip extends MY_Controller
 				$allow_parking = $user[0]->allow_parking;
 				$allow_residence_cost = $user[0]->allow_residence_cost;
 				$allow_device = $user[0]->allow_device;
-
 				$allow_kasir = $user[0]->allow_kasir;
 				$allow_trans_meal = $user[0]->allow_trans_meal;
+				$allow_vitamin = $user[0]->allow_vitamin;
 
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
@@ -460,6 +460,7 @@ class ImportExcelEslip extends MY_Controller
 				$bpjs_tk = $user[0]->bpjs_tk;
 				$bpjs_ks = $user[0]->bpjs_ks; 
 				$jaminan_pensiun = $user[0]->jaminan_pensiun;
+				$deposit = $user[0]->deposit;
 				$pph = $user[0]->pph;
 				$penalty_late = $user[0]->penalty_late;
 				$penalty_attend = $user[0]->penalty_attend;
@@ -490,9 +491,9 @@ class ImportExcelEslip extends MY_Controller
 					'allow_parking' => $allow_parking,
 					'allow_residence_cost' => $allow_residence_cost,
 					'allow_device' => $allow_device,
-
 					'allow_kasir' => $allow_kasir,
 					'allow_trans_meal' => $allow_trans_meal,
+					'allow_vitamin' => $allow_vitamin,
 
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
@@ -509,6 +510,7 @@ class ImportExcelEslip extends MY_Controller
 					'bpjs_tk' => $bpjs_tk,
 					'bpjs_ks' => $bpjs_ks,
 					'jaminan_pensiun' => $jaminan_pensiun,
+					'deposit' => $deposit,
 					'pph' => $pph,
 					'penalty_late' => $penalty_late,
 					'penalty_attend' => $penalty_attend,
@@ -591,6 +593,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_device = $user[0]->allow_device;
 				$allow_kasir = $user[0]->allow_kasir;
 				$allow_trans_meal = $user[0]->allow_trans_meal;
+				$allow_vitamin = $user[0]->allow_vitamin;
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
 				$overtime = $user[0]->overtime;
@@ -607,6 +610,7 @@ class ImportExcelEslip extends MY_Controller
 				$bpjs_ks = $user[0]->bpjs_ks; 
 				$jaminan_pensiun = $user[0]->jaminan_pensiun;
 				$pph = $user[0]->pph;
+				$deposit = $user[0]->deposit;
 				$penalty_late = $user[0]->penalty_late;
 				$penalty_attend = $user[0]->penalty_attend;
 				$deduction = $user[0]->deduction;
@@ -638,6 +642,7 @@ class ImportExcelEslip extends MY_Controller
 					'allow_device' => $allow_device,
 					'allow_kasir' => $allow_kasir,
 					'allow_trans_meal' => $allow_trans_meal,
+					'allow_vitamin' => $allow_vitamin,
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
 					'overtime' => $overtime,
@@ -653,6 +658,7 @@ class ImportExcelEslip extends MY_Controller
 					'bpjs_tk' => $bpjs_tk,
 					'bpjs_ks' => $bpjs_ks,
 					'jaminan_pensiun' => $jaminan_pensiun,
+					'deposit' => $deposit,
 					'pph' => $pph,
 					'penalty_late' => $penalty_late,
 					'penalty_attend' => $penalty_attend,
@@ -875,6 +881,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_device = $eslip[0]->allow_device;
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
+				$allow_vitamin = $eslip[0]->allow_vitamin;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
 				$overtime = $eslip[0]->overtime;
@@ -890,6 +897,7 @@ class ImportExcelEslip extends MY_Controller
 				$bpjs_tk = $eslip[0]->bpjs_tk;
 				$bpjs_ks = $eslip[0]->bpjs_ks;
 				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
+				$deposit = $eslip[0]->deposit;
 				$pph = $eslip[0]->pph;
 				$penalty_late = $eslip[0]->penalty_late;
 				$penalty_attend = $eslip[0]->penalty_attend;
@@ -1196,6 +1204,21 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 			}
 
+			if($allow_vitamin!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Medicine</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($penyesuaian_umk!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -1436,6 +1459,18 @@ class ImportExcelEslip extends MY_Controller
 								<td colspan="4">*Jaminan Pensiun</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">*Deposit</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -1752,10 +1787,9 @@ class ImportExcelEslip extends MY_Controller
 				$allow_parking = $eslip[0]->allow_parking;
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
 				$allow_device = $eslip[0]->allow_device;
-
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-
+				$allow_vitamin = $eslip[0]->allow_vitamin;
 
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
@@ -1772,6 +1806,7 @@ class ImportExcelEslip extends MY_Controller
 				$bpjs_tk = $eslip[0]->bpjs_tk;
 				$bpjs_ks = $eslip[0]->bpjs_ks;
 				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
+				$deposit = $eslip[0]->deposit;
 				$pph = $eslip[0]->pph;
 				$penalty_late = $eslip[0]->penalty_late;
 				$penalty_attend = $eslip[0]->penalty_attend;
@@ -2079,6 +2114,22 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 			}
 
+
+			if($allow_vitamin!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Medicine</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($penyesuaian_umk!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2319,6 +2370,18 @@ class ImportExcelEslip extends MY_Controller
 								<td colspan="4">*Jaminan Pensiun</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">*Deposit</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>

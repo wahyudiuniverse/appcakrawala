@@ -82,7 +82,7 @@ class Employees_model extends CI_Model {
 	// get single employee by NIP
 	public function read_employee_info_by_nik($id) {
 	
-		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
+		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ? AND user_id not in (1)';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

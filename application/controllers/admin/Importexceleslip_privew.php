@@ -576,7 +576,7 @@ class Importexceleslip_privew extends MY_Controller
 
 
 			$pdf->SetAuthor('HRCakrawala');
-			$pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
+			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
 
 			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
 			$pdf->SetSubject($this->lang->line('xin_eslip'));
@@ -934,6 +934,54 @@ $tbl_2 .= '
 				</tr>';
 }
 
+
+			if($allow_kasir!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kasir</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+
+			if($allow_trans_meal!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Transport + Meal</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+if($allow_vitamin!=0){	
+$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Medicine</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+}
+
 if($penyesuaian_umk!=0){	
 $tbl_2 .= '
 				<tr>
@@ -1174,6 +1222,18 @@ $tbl_2 .= '
 								<td colspan="4">*Jaminan Pensiun</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">*Deposit</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
