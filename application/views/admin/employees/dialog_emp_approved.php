@@ -216,6 +216,41 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- ALAMAT KTP -->
+      <div class="col-sm-4">
+        <div>
+          <label for="alamat_ktp"><?php echo $this->lang->line('xin_address');?></label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$address;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- PENEMPATAN -->
+      <div class="col-sm-4">
+        <div>
+          <label for="penempatan"><?php echo $this->lang->line('xin_placement');?></label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$penempatan;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -227,28 +262,12 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$request_by[0]->first_name;?></label>
+          <label for="plant"><?php echo ': '.$request_by[0]->first_name. ' ('.$createdon.')';?></label>
         </div>
       </div>
     </div>
   </div>
 
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- VERIFIED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('xin_request_employee_verifiedby');?></label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$verified_name;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -260,7 +279,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$approved_name;?></label>
+          <label for="plant"><?php echo ': '.$approved_name. ' ('.$modifiedon.')';?></label>
         </div>
       </div>
     </div>

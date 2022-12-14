@@ -92,7 +92,7 @@
                 <th style="width:120px;"><?php echo $this->lang->line('xin_e_details_date');?></th>
                 <th style="width:120px;"><?php echo $this->lang->line('dashboard_clock_in');?></th>
                 <th style="width:120px;"><?php echo $this->lang->line('dashboard_clock_out');?></th>
-                <th style="width:120px;"><?php echo $this->lang->line('dashboard_total_work');?></th>
+                <th style="width:120px;">Total Jam Kerja</th>
               </tr>
             </thead>
           </table>

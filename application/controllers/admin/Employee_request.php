@@ -202,6 +202,8 @@ class Employee_request extends MY_Controller {
 					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
 				} else if ($this->input->post('nomor_ktp')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
+				} else if ($this->input->post('alamat_ktp')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
 				}
 
 					if($Return['error']!=''){
@@ -218,6 +220,8 @@ class Employee_request extends MY_Controller {
 				$date_of_join = $this->input->post('date_of_join');
 				$contact_no = $this->input->post('nomor_hp');
 				$ktp_no = $this->input->post('nomor_ktp');
+				$alamat_ktp = $this->input->post('alamat_ktp');
+				$penempatan = $this->input->post('penempatan');
 				
 			// $options = array('cost' => 12);
 			// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
@@ -234,14 +238,16 @@ class Employee_request extends MY_Controller {
 				'doj' => $date_of_join,
 				'contact_no' => $contact_no,
 				'nik_ktp' => $ktp_no,
+				'address' => $alamat_ktp,
+				'penempatan' => $penempatan,
 
 				'verified_by' =>  1,
-				'verified_date' => date("Y-m-d"),
+				'verified_date' => date("Y-m-d h:i:s"),
 
 				// 'pincode' => $this->input->post('pin_code'),
-				// 'createdon' => date('Y-m-d h:i:s'),
-				'createdby' => $session['user_id'],
-				'modifiedon' => date('Y-m-d h:i:s')
+				'createdon' => date('Y-m-d h:i:s'),
+				'createdby' => $session['user_id']
+				// 'modifiedon' => date('Y-m-d h:i:s')
 			);
 
 			$iresult = $this->Employees_model->addrequest($data);
@@ -277,11 +283,17 @@ class Employee_request extends MY_Controller {
 				'email' => $result[0]->migrasi,
 				'logo' => $result[0]->tgl_migrasi,
 				'contact_number' => $result[0]->nip,
+				'address' => $result[0]->address,
+				'penempatan' => $result[0]->penempatan,
 				'idrequest' => $result[0]->secid,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->createdby),
 				'verified_by' => $this->Employees_model->read_employee_info($result[0]->verified_by),
 				'approved_by' => $this->Employees_model->read_employee_info($result[0]->approved_by),
 				// 'idefault_timezone' => $result[0]->default_timezone,
+
+				'createdon' => $result[0]->createdon,
+				'modifiedon' => $result[0]->modifiedon,
+
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);

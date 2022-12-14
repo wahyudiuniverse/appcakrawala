@@ -1227,7 +1227,7 @@ class Reports extends MY_Controller
 
 			$data[] = array (
 				$attend[$i]->employee_id,
-				$emp[0]->first_name .' '. $emp[0]->last_name,
+				strtoupper($emp[0]->first_name .' '. $emp[0]->last_name),
 				$cust[0]->customer_name,
 				$attend[$i]->date_phone,
 				$attend[$i]->time_in,

@@ -41,7 +41,7 @@
       <div class="card-body">
         <?php $attributes = array('name' => 'add_employee', 'id' => 'xin-form', 'autocomplete' => 'off');?>
         <?php $hidden = array('_user' => $session['user_id']);?>
-        <?php echo form_open_multipart('admin/employees/request_add_employee', $attributes, $hidden);?>
+        <?php echo form_open_multipart('admin/employee_request/request_add_employee', $attributes, $hidden);?>
         <div class="form-body">
           <div class="row">
             <div class="col-md-6">
@@ -171,6 +171,39 @@
 
             <!-- end row -->
             </div>
+
+            <div class="col-md-12">
+              <div class="row">
+                <!--PROJECT-->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="alamat_ktp"><?php echo $this->lang->line('xin_address');?><i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address');?>" name="alamat_ktp" type="text" value="">
+                  </div>
+                </div>
+
+
+                <!-- PENEMPATAN -->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="penempatan"><?php echo $this->lang->line('xin_placement');?><i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_placement');?>" name="penempatan" type="text" value="">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+
+
+              </div>
+
+            <!-- end row -->
+            </div>
+
+
+
           </div>
 
         </div>

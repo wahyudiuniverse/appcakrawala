@@ -263,12 +263,18 @@ class Employee_request_approve extends MY_Controller {
 				'contact_no' => $result[0]->contact_no,
 				'email' => $result[0]->migrasi,
 				'logo' => $result[0]->tgl_migrasi,
-				'contact_number' => $result[0]->nip,
+				'contact_number' => $result[0]->contact_no,
+				'address' => $result[0]->address,
+				'penempatan' => $result[0]->penempatan,
 				'idrequest' => $result[0]->secid,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->createdby),
 				'verified_by' => $this->Employees_model->read_employee_info($result[0]->verified_by),
 				'approved_by' => $this->Employees_model->read_employee_info($result[0]->approved_by),
 				// 'idefault_timezone' => $result[0]->default_timezone,
+
+				'createdon' => $result[0]->createdon,
+				'modifiedon' => $result[0]->modifiedon,
+				
 				'check_employee' => $this->Employees_model->read_employee_info_by_nik_ktp($result[0]->nik_ktp),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
@@ -399,7 +405,7 @@ class Employee_request_approve extends MY_Controller {
 			$data_up = array(
 				'migrasi' => '1',
 				'approved_by' =>  $session['user_id'],
-				'approved_date' => date("Y-m-d"),
+				'approved_date' => date("Y-m-d h:i:s"),
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 

@@ -265,11 +265,17 @@ class Employee_request_verify extends MY_Controller {
 				'email' => $result[0]->migrasi,
 				'logo' => $result[0]->tgl_migrasi,
 				'contact_number' => $result[0]->nip,
+				'address' => $result[0]->address,
+				'penempatan' => $result[0]->penempatan,
 				'idrequest' => $result[0]->secid,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->createdby),
 				'verified_by' => $this->Employees_model->read_employee_info($result[0]->verified_by),
 				'approved_by' => $this->Employees_model->read_employee_info($result[0]->approved_by),
 				// 'idefault_timezone' => $result[0]->default_timezone,
+
+				'createdon' => $result[0]->createdon,
+				'modifiedon' => $result[0]->modifiedon,
+				
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
@@ -367,6 +373,8 @@ class Employee_request_verify extends MY_Controller {
 					$posisi = $employee_request[0]->posisi;
 					$doj = $employee_request[0]->doj;
 					$contact_no = $employee_request[0]->contact_no;
+					$address = $employee_request[0]->address;
+					$penempatan = $employee_request[0]->penempatan;
 					$createdby = $employee_request[0]->createdby;
 
 					// $employee_id = '2'.$employee_request[0]->location_id.$employee_request[0]->department.$count_nip;
@@ -387,6 +395,8 @@ class Employee_request_verify extends MY_Controller {
 						'designation_id' => $posisi,
 						'date_of_joining' => $doj,
 						'contact_no' => $contact_no,
+						'address' => $address,
+						'penempatan' => $penempatan,
 
 						'company_id' => '2',
 						'user_role_id' => '2',
@@ -402,7 +412,7 @@ class Employee_request_verify extends MY_Controller {
 			$data_up = array(
 				'migrasi' => '1',
 				'approved_by' =>  $session['user_id'],
-				'approved_date' => date("Y-m-d"),
+				'approved_date' => date("Y-m-d h:i:s"),
 				'modifiedon' => date('Y-m-d h:i:s')
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
