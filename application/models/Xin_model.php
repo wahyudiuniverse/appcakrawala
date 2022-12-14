@@ -226,7 +226,6 @@ class Xin_model extends CI_Model {
 			return $arr;
 		}
 
-
 		else if($mClass=='usermobile') {
 			$arr['callplan_active'] = 'active';
 			$arr['usermobile_open'] = 'open';
@@ -682,28 +681,8 @@ class Xin_model extends CI_Model {
 			$arr['performance_active'] = 'active';
 			$arr['performance_open'] = 'open';
 			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='employee_leave') {
-			$arr['leave_active'] = 'active';
-			//$arr['attnd_open'] = 'open';
-			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='payslip') {
-			$arr['reports_active'] = 'active';
-			$arr['reports_open'] = 'open';
-			return $arr;
 		} else if($mClass=='reports'  && $mMethod=='employee_attendance') {
-			$arr['reports_active'] = 'active';
-			$arr['reports_open'] = 'open';
-			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='employee_training') {
-			$arr['reports_active'] = 'active';
-			$arr['reports_open'] = 'open';
-			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='projects') {
-			$arr['reports_active'] = 'active';
-			$arr['reports_open'] = 'open';
-			return $arr;
-		} else if($mClass=='reports'  && $mMethod=='tasks') {
-			$arr['reports_active'] = 'active';
+			$arr['remployees_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
 		} else if($mClass=='reports'  && $mMethod=='roles') {

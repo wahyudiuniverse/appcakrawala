@@ -440,7 +440,7 @@
         
         <ul class="sidenav-menu">
           <?php 
-          if (in_array('486',$role_resources_ids)) { 
+          if (in_array('487',$role_resources_ids)) { 
           ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['skk_active']))echo $arr_mod['skk_active'];?>"> 
               <a class="sidenav-link" href="<?php echo site_url('admin/skk/');?>" > <?php echo $this->lang->line('xin_surat_keterangan_kerja');?>  &nbsp; <span class="badge badge-success badge-pill">
@@ -1142,51 +1142,11 @@
     ?>
 
 
-
-<!-- hr report -->
-    <?php 
-    if (in_array('110',$role_resources_ids) || in_array('117',$role_resources_ids)) {
-    ?>
-      <li class="<?php if(!empty($arr_mod['reports_open']))echo $arr_mod['reports_open'];?> sidenav-item"> 
-        <a href="#" class="sidenav-link sidenav-toggle"> 
-          <i class="sidenav-icon ion ion-logo-buffer"></i>
-          <div><?php echo $this->lang->line('xin_hr_report_title');?></div>
-        </a>
-        
-        <ul class="sidenav-menu">
-          <?php 
-          if (in_array('117',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['reports_active']))echo $arr_mod['reports_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/reports/employees/');?>" > <?php echo $this->lang->line('xin_hr_report_employees');?> 
-              </a>
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('105',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['callplan_report_active']))echo $arr_mod['callplan_report_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/callplan');?>" > <?php echo $this->lang->line('xin_callplan');?> 
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-        </ul>
-      </li>
-    <?php 
-    } 
-    ?>
-
-
 <!-- mobile report -->
     <?php 
     if (in_array('110',$role_resources_ids) || in_array('112',$role_resources_ids)) {
     ?>
-      <li class="<?php if(!empty($arr_mod['mobile_report_open']))echo $arr_mod['mobile_report_open'];?> sidenav-item"> 
+      <li class="<?php if(!empty($arr_mod['reports_open']))echo $arr_mod['reports_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
           <div><?php echo $this->lang->line('xin_report_mobileapp');?></div>

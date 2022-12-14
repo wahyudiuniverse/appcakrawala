@@ -57,7 +57,7 @@ class Skk extends MY_Controller {
 		$data['path_url'] = 'skk';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 				
-		if(in_array('486',$role_resources_ids)) {
+		if(in_array('487',$role_resources_ids)) {
 			if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/skk/skk_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -138,13 +138,13 @@ class Skk extends MY_Controller {
 				$edit = '';
 			}
 
-			if(in_array('487',$role_resources_ids)) { //view
+			if(in_array('488',$role_resources_ids)) { //view
 				$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/skk/view/'.$r->secid.'/'.$r->nip.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
 			} else {
 				$view = '';
 			}
 
-			if(in_array('489',$role_resources_ids)) { // delete
+			if(in_array('488',$role_resources_ids)) { // delete
 				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->secid . '"><span class="fas fa-trash-restore"></span></button></span>';
 			} else {
 				$delete = '';

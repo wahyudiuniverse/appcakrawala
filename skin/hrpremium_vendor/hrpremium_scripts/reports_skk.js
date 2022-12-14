@@ -48,7 +48,7 @@ $(document).ready(function() {
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"reports/report_manage_employees_list/"+company_id+"/"+department_id+"/"+project_id+"/"+subproject_id+"/"+status_resign+"/",
+				url : site_url+"reports/report_skk_list/"+company_id+"/"+department_id+"/"+project_id+"/"+subproject_id+"/"+status_resign+"/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',

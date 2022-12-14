@@ -1,5 +1,5 @@
 $(document).ready(function() {
-   var xin_table = $('#xin_table').dataTable({
+   var xin_table = $('#xin_table').dataTable({ 
         "bDestroy": true,
 		"ajax": {
             url : site_url+"reports/empdtwise_attendance_list/",
