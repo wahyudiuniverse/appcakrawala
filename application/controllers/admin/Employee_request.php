@@ -83,6 +83,7 @@ class Employee_request extends MY_Controller {
 				$sub_project = $r->sub_project;
 				$department = $r->department;
 				$posisi = $r->posisi;
+				$penempatan = $r->penempatan;
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
@@ -134,6 +135,7 @@ class Employee_request extends MY_Controller {
 				$nama_subproject,
 				$department_name,
 				$designation_name,
+				$penempatan,
 				$doj,
 				$contact_no
 			);

@@ -1239,8 +1239,8 @@ class Reports extends MY_Controller
 
 	  $output = array(
 		   "draw" => $draw,
-			 "recordsTotal" => $employee->num_rows(),
-			 "recordsFiltered" => $employee->num_rows(),
+			 "recordsTotal" => $attend->num_rows(),
+			 "recordsFiltered" => $attend->num_rows(),
 			 "data" => $data
 		);
 	  echo json_encode($output);

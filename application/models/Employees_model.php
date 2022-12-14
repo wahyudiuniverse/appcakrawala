@@ -21,7 +21,10 @@ class Employees_model extends CI_Model {
  	// monitoring request
 	public function get_monitoring_request() {
 
-		$sql = 'SELECT * FROM xin_employee_request ORDER BY modifiedon DESC';
+		$sql = 'SELECT *
+				FROM xin_employee_request
+				WHERE datediff(current_date(),DATE_FORMAT(createdon, "%Y-%m-%d")) <=30
+				ORDER BY createdon DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -48,7 +51,11 @@ class Employees_model extends CI_Model {
  	// get all employes
 	public function get_employees_request_approve() {
 
-		$sql = 'SELECT * FROM xin_employee_request WHERE migrasi = 1';
+		$sql = 'SELECT *
+				FROM xin_employee_request
+				WHERE datediff(current_date(),DATE_FORMAT(createdon, "%Y-%m-%d")) <=30
+				AND migrasi = 1
+				ORDER BY modifiedon DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
