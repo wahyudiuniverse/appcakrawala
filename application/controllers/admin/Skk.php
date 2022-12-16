@@ -44,7 +44,7 @@ class Skk extends MY_Controller {
 	 public function index()
      {
 		$session = $this->session->userdata('username');
-		if(!$session){ 
+		if(!$session){
 			redirect('admin/');
 		}
 
@@ -52,6 +52,7 @@ class Skk extends MY_Controller {
 		$data['title'] = $this->lang->line('xin_surat_keterangan_kerja').' | '.$this->Xin_model->site_title();
 		$data['all_locations'] = $this->Xin_model->all_locations();
 		$data['all_employees'] = $this->Esign_model->get_all_employees_resign();
+		$data['all_projects'] = $this->Esign_model->get_project_exist_resign();
 		$data['get_all_companies'] = $this->Xin_model->get_companies();
 		$data['breadcrumbs'] = $this->lang->line('xin_surat_keterangan_kerja');
 		$data['path_url'] = 'skk';
@@ -174,6 +175,27 @@ class Skk extends MY_Controller {
           exit();
   }
 
+
+	// get company > departments
+	public function get_projectemp() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'project_id' => $id
+			);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/skk/get_projectemp", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	} 
 
 	// get company > departments
 	public function get_departments() {

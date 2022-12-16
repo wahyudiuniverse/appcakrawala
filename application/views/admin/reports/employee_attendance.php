@@ -86,13 +86,13 @@
                 <th colspan="9"><?php echo $this->lang->line('xin_attendance_report');?></th>
               </tr>
               <tr>
-                <th style="width:120px;"><?php echo $this->lang->line('dashboard_employee_id');?></th>
-                <th style="width:100px;"><?php echo $this->lang->line('dashboard_fullname');?></th>
-                <th style="width:120px;"><?php echo $this->lang->line('left_customer');?></th>
-                <th style="width:120px;"><?php echo $this->lang->line('xin_e_details_date');?></th>
-                <th style="width:120px;"><?php echo $this->lang->line('dashboard_clock_in');?></th>
-                <th style="width:120px;"><?php echo $this->lang->line('dashboard_clock_out');?></th>
-                <th style="width:120px;">Total Jam Kerja</th>
+                <th style="width:50px;">NIP</th>
+                <th style="width:200px;">Nama Lengkap</th>
+                <th style="width:200px;">Toko/Office</th>
+                <th style="width:40px;">Tanggal</th>
+                <th style="width:40px;"><?php echo $this->lang->line('dashboard_clock_in');?></th>
+                <th style="width:40px;"><?php echo $this->lang->line('dashboard_clock_out');?></th>
+                <th style="width:40px;">Total Jam Kerja</th>
               </tr>
             </thead>
           </table>

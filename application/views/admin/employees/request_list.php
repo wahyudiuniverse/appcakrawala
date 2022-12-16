@@ -43,34 +43,57 @@
         <?php $hidden = array('_user' => $session['user_id']);?>
         <?php echo form_open_multipart('admin/employee_request/request_add_employee', $attributes, $hidden);?>
         <div class="form-body">
+
           <div class="row">
             <div class="col-md-6">
               <div class="row">
-                  <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
-                  <input name="company_id" type="hidden" value="<?php echo $employee_id;?>">
+                <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
 
                 <!--NAMA LENGKAP-->
-                <div class="col-md-6">
+                <div class="col-md-8">
                   <div class="form-group">
                     <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name');?><i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="fullname" type="text" value="">
                   </div>
                 </div>
 
-                <!--LOKASI OFFICE-->
-                <div class="col-md-6">
+                <div class="col-md-4">
                   <div class="form-group">
-                    <label for="office_lokasi"><?php echo $this->lang->line('xin_e_details_office_location');?><i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="office_lokasi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
-                      <option value="1">IN-HOUSE</option>
-                      <option value="2">PROJECT</option>
-                    </select>
+                    <label for="nama_ibu">Nama Ibu<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="Nama Ibu" name="nama_ibu" type="text" value="">
                   </div>
                 </div>
               </div>
 
               <div class="row">
 
+                <!--TEMPAT LAHIR-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nomor_hp" class="control-label">Tempat Lahir<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="Tempat Lahir" name="tempat_lahir" type="text" value="">
+                  </div>
+                </div>
+
+                <!--TANGGAL LAHIR-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                  <label for="date_of_birth">Tanggal Lahir<i class="hrpremium-asterisk">*</i></label>
+                  <input class="form-control date" readonly placeholder="Tanggal Lahir" name="date_of_birth" type="text" value="">
+                  </div>
+                </div>
+
+                <!--NO HP-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
                 <!--NO KP-->
                 <div class="col-md-4">
                   <div class="form-group">
@@ -79,28 +102,80 @@
                   </div>
                 </div>
 
-                <!--NO HP-->
-                <div class="col-md-4">
+                <!--ALAMAT SESUAI KTP-->
+                <div class="col-md-8">
                   <div class="form-group">
-                    <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="+62" name="nomor_hp" type="text" value="">
-                  </div>
-                </div>
-
-                <!--TANGGAL JOIN-->
-                <div class="col-md-4">
-                  <div class="form-group">
-                  <label for="date_of_join"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="date_of_join" type="text" value="">
+                    <label for="alamat_ktp"><?php echo $this->lang->line('xin_address_1');?><i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_ktp" type="text" value="">
                   </div>
                 </div>
 
               </div>
+
+              <div class="row">
+
+                <!--NOMOR KK-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="">
+                  </div>
+                </div>
+
+                <!--NPWP-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                  <label for="npwp">NPWP<i class="hrpremium-asterisk">*</i></label>
+                  <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="">
+                  </div>
+                </div>
+
+                <!--EMAIL-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="email" class="control-label">Email<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="example@mail.com" name="email" type="text" value="">
+                  </div>
+                </div>
+
+              </div>
+
+
+
             </div>
 
             <div class="col-md-6">
               <div class="row">
+                <!--PERUSAHAAN-->
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="first_name"><?php echo $this->lang->line('left_company');?><i class="hrpremium-asterisk"></i></label>
+                    <select class="form-control" name="company_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_company');?>">
+                      <option value=""></option>
+                      <?php foreach($all_companies as $company) {?>
+                      <option value="<?php echo $company->company_id;?>"><?php echo $company->name?></option>
+                      <?php } ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="office_lokasi">Office/Project<i class="hrpremium-asterisk">*</i></label>
+                    <select class="form-control" name="office_lokasi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
+                      <option value="1">IN-HOUSE</option>
+                      <option value="2">PROJECT</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="row">
                 <!--PROJECT-->
+
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="projects"><?php echo $this->lang->line('left_projects');?><i class="hrpremium-asterisk">*</i></label>
@@ -169,38 +244,31 @@
 
               </div>
 
-            <!-- end row -->
-            </div>
 
-            <div class="col-md-12">
               <div class="row">
-                <!--PROJECT-->
+
+
+                <!--TANGGAL JOIN-->
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="alamat_ktp"><?php echo $this->lang->line('xin_address');?><i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address');?>" name="alamat_ktp" type="text" value="">
+                  <label for="date_of_join"><?php echo $this->lang->line('xin_employee_doj');?><i class="hrpremium-asterisk">*</i></label>
+                  <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="date_of_join" type="text" value="">
                   </div>
                 </div>
-
 
                 <!-- PENEMPATAN -->
-                <div class="col-md-4">
+                <div class="col-md-6">
                   <div class="form-group">
-                    <label for="penempatan"><?php echo $this->lang->line('xin_placement');?><i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_placement');?>" name="penempatan" type="text" value="">
+                    <label for="penempatan"><?php echo $this->lang->line('xin_placement_area');?><i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_placement_area');?>" name="penempatan" type="text" value="">
                   </div>
                 </div>
-
-              </div>
-
-              <div class="row">
-
-
 
               </div>
 
             <!-- end row -->
             </div>
+
 
 
 

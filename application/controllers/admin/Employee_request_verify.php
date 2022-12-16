@@ -365,17 +365,25 @@ class Employee_request_verify extends MY_Controller {
 
 					$count_nip = $this->Xin_model->count_nip();
 					$employee_request = $this->Employees_model->read_employee_request($id);
-	
-					$nik_ktp = $employee_request[0]->nik_ktp;
+
+
 					$fullname = $employee_request[0]->fullname;
+					$nama_ibu = $employee_request[0]->nama_ibu;
+					$tempat_lahir = $employee_request[0]->tempat_lahir;
+					$tanggal_lahir = $employee_request[0]->tanggal_lahir;
+					$contact_no = $employee_request[0]->contact_no;
+					$nik_ktp = $employee_request[0]->nik_ktp;
+					$address = $employee_request[0]->address;
+					$no_kk = $employee_request[0]->no_kk;
+					$npwp = $employee_request[0]->npwp;
+					$email = $employee_request[0]->email;
+					$company_id = $employee_request[0]->company_id;
 					$location_id = $employee_request[0]->location_id;
 					$project = $employee_request[0]->project;
 					$sub_project = $employee_request[0]->sub_project;
 					$department = $employee_request[0]->department;
 					$posisi = $employee_request[0]->posisi;
 					$doj = $employee_request[0]->doj;
-					$contact_no = $employee_request[0]->contact_no;
-					$address = $employee_request[0]->address;
 					$penempatan = $employee_request[0]->penempatan;
 					$createdby = $employee_request[0]->createdby;
 
@@ -388,8 +396,9 @@ class Employee_request_verify extends MY_Controller {
 					$data_migrate = array(
 						'employee_id' => $employee_id,
 						'username' => $employee_id,
-						'ktp_no' => $nik_ktp,
 						'first_name' => $fullname,
+						'ibu_kandung' => $nama_ibu,
+						'company_id' => $company_id,
 						'location_id' => $location_id,
 						'project_id' => $project,
 						'sub_project_id' => $sub_project,
@@ -398,9 +407,14 @@ class Employee_request_verify extends MY_Controller {
 						'date_of_joining' => $doj,
 						'contact_no' => $contact_no,
 						'address' => $address,
+						'ktp_no' => $nik_ktp,
+						'kk_no' => $no_kk,
+						'npwp_no' => $npwp,
+						'email' => $email,
 						'penempatan' => $penempatan,
+						'tempat_lahir' => $tempat_lahir,
+						'date_of_birth' => $tanggal_lahir,
 
-						'company_id' => '2',
 						'user_role_id' => '2',
 						'is_active' => '1',
 						'password' => $password_hash,

@@ -40,6 +40,8 @@ class Employee_request extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_request_employee').' | '.$this->Xin_model->site_title();
+
+			$data['all_companies'] = $this->Xin_model->get_companies();
 			$data['all_projects'] = $this->Project_model->get_all_projects();
 			$data['all_projects_sub'] = $this->Project_model->get_all_projects();
 			$data['all_departments'] = $this->Department_model->all_departments();
@@ -187,8 +189,28 @@ class Employee_request extends MY_Controller {
 			$system = $this->Xin_model->read_setting_info(1);
 
 				if($this->input->post('fullname')=='') {
-					$Return['error'] = $this->lang->line('xin_employee_error_first_name');
-				} else if ($this->input->post('office_lokasi')=='') {
+					$Return['error'] = "$this->lang->line('xin_employee_error_first_name')";
+				} else if ($this->input->post('nama_ibu')=='') {
+					$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+				} else if ($this->input->post('tempat_lahir')=='') {
+					$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
+				} else if ($this->input->post('date_of_birth')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_tanggal_lahir');
+				} else if ($this->input->post('nomor_hp')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
+				} else if ($this->input->post('nomor_ktp')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
+				} else if ($this->input->post('alamat_ktp')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+				} else if ($this->input->post('nomor_kk')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
+				} else if ($this->input->post('npwp')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_npwp');
+				} else if ($this->input->post('email')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_email');
+				} else if ($this->input->post('company_id')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_company_name');
+				} else if ($this->input->post('office_lokasi')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_location_office');
 				} else if ($this->input->post('project_id')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_project');
@@ -200,13 +222,10 @@ class Employee_request extends MY_Controller {
 					$Return['error'] = $this->lang->line('xin_employee_error_designation');
 				} else if ($this->input->post('date_of_join')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_joining_date');
-				} else if ($this->input->post('nomor_hp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-				} else if ($this->input->post('nomor_ktp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-				} else if ($this->input->post('alamat_ktp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
-				}
+				} else if ($this->input->post('penempatan')==''){
+					$Return['error'] = $this->lang->line('xin_employee_error_penempatan');
+				} 
+
 
 					if($Return['error']!=''){
 					$this->output($Return);
@@ -214,16 +233,24 @@ class Employee_request extends MY_Controller {
 			}
 
 		   	$fullname = $this->input->post('fullname');
+		   	$nama_ibu	= $this->input->post('nama_ibu');
+				$tempat_lahir = $this->input->post('tempat_lahir');
+				$tanggal_lahir = $this->input->post('date_of_birth');
+				$contact_no = $this->input->post('nomor_hp');
+				$ktp_no = $this->input->post('nomor_ktp');
+				$alamat_ktp = $this->input->post('alamat_ktp');
+		   	$nomor_kk	= $this->input->post('nomor_kk');
+		   	$npwp	= $this->input->post('npwp');
+		   	$email	= $this->input->post('email');
+		   	$company_id	= $this->input->post('company_id');
 				$office_lokasi = $this->input->post('office_lokasi');
 				$project_id = $this->input->post('project_id');
 				$sub_project_id = $this->input->post('sub_project_id');
 				$department_id = $this->input->post('department_id');
 				$posisi = $this->input->post('posisi');
 				$date_of_join = $this->input->post('date_of_join');
-				$contact_no = $this->input->post('nomor_hp');
-				$ktp_no = $this->input->post('nomor_ktp');
-				$alamat_ktp = $this->input->post('alamat_ktp');
 				$penempatan = $this->input->post('penempatan');
+
 				
 			// $options = array('cost' => 12);
 			// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
@@ -232,15 +259,22 @@ class Employee_request extends MY_Controller {
 
 			$data = array(
 				'fullname' => $fullname,
+				'nama_ibu' =>$nama_ibu,
+				'tempat_lahir' => $tempat_lahir,
+				'tanggal_lahir' => $tanggal_lahir,
+				'contact_no' => $contact_no,
+				'nik_ktp' => $ktp_no,
+				'address' => $alamat_ktp,
+				'no_kk' => $nomor_kk,
+				'npwp' => $npwp,
+				'email' => $email,
+				'company_id' => $company_id,
 				'location_id' => $office_lokasi,
 				'project' => $project_id,
 				'sub_project' => $sub_project_id,
 				'department' => $department_id,
 				'posisi' => $posisi,
 				'doj' => $date_of_join,
-				'contact_no' => $contact_no,
-				'nik_ktp' => $ktp_no,
-				'address' => $alamat_ktp,
 				'penempatan' => $penempatan,
 
 				'verified_by' =>  1,
@@ -464,24 +498,5 @@ class Employee_request extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	public function delete_document() {
-		
-		if($this->input->post('is_ajax')==2) {
-			$session = $this->session->userdata('username');
-			if(empty($session)){ 
-				redirect('admin/');
-			}
-			/* Define return | here result is used to return user data and error for error message */
-			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-			$id = $this->uri->segment(4);
-			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			$result = $this->Company_model->delete_doc_record($id);
-			if(isset($id)) {
-				$Return['result'] = $this->lang->line('xin_hr_official_document_deleted');
-			} else {
-				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
-			}
-			$this->output($Return);
-		}
-	}
+	
 }

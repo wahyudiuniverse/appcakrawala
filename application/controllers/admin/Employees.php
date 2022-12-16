@@ -1771,6 +1771,8 @@ class Employees extends MY_Controller {
 			'status_resign' => $emp_status,
 			'date_of_leaving' => $dol,
 			'description_resign' => $deskripsi_resign,
+			'user_role_id' => '2',
+			'date_resign_request' => date('Y-m-d H:i:s'),
 			);
 
 			} else {
@@ -1783,6 +1785,7 @@ class Employees extends MY_Controller {
 			'date_of_leaving' => $dol,
 			'description_resign' => $deskripsi_resign,
 			'user_role_id' => '9',
+			'date_resign_request' => date('Y-m-d H:i:s'),
 			);
 
 			}

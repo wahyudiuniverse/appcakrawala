@@ -58,6 +58,14 @@ $(document).ready(function() {
 	});
 	
 
+		//get project
+	jQuery("#aj_project").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_projectemp/"+p_id, function(data, status){
+			jQuery('#subproject_ajax').html(data);			
+		});
+	});
+
 	// get employees
 	jQuery("#aj_employee").change(function(){
 		var c_id = jQuery(this).val();

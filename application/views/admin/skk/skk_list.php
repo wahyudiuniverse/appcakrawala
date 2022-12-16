@@ -49,6 +49,20 @@ body {font-family: Arial, Helvetica, sans-serif;}
         </div>
 
         <div class="form-group">
+          <label class="form-label"><?php echo $this->lang->line('left_projects');?></label>
+          <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+            <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+            <?php 
+              foreach ($all_projects as $projects) {
+            ?>
+                <option value="<?php echo $projects->project_id?>"><?php echo $projects->title?></option>
+            <?php 
+              } 
+            ?>
+          </select>
+        </div>
+
+        <div class="form-group" id="subproject_ajax">
           <label for="first_name"><?php echo $this->lang->line('xin_daftar_karyawan');?></label>
           <select class="form-control" name="manag_sign" id="aj_employee" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_daftar_karyawan');?>" onkeyup="isi_otomatis()">
             <option value=""></option>
@@ -57,7 +71,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
                 if(!is_null($company->bln_skrng)){
 
                   $now = new DateTime(date("Y-m-d"));
-                  $expiredate = new DateTime($company->date_of_leaving);
+                  $expiredate = new DateTime($company->date_resign_request);
                   $d = $now->diff($expiredate)->days;
 
                   if($d<='30'){
