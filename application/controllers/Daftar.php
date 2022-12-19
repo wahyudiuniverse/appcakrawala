@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employer extends MY_Controller {
+class Daftar extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -27,6 +27,230 @@ class Employer extends MY_Controller {
 		$this->load->library('email');
 	}
 	
+
+	public function index() {
+		$system = $this->Xin_model->read_setting_info(1);
+		if($system[0]->module_recruitment!='true'){
+			redirect('admin/');
+		}
+		$data['title'] = 'Dafta Karyawan Baru';
+		$session = $this->session->userdata('c_user_id');
+		if(!empty($session)){
+			redirect('');
+		}
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
+		$data['all_dept'] = $this->Xin_model->get_departments();
+		$data['all_designation'] = $this->Xin_model->get_designations();
+		$data['all_project'] = $this->Xin_model->get_projects();
+		$data['path_url'] = 'job_create_user';
+		$data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
+		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
+  }
+
+
+	// Validate and add info in database
+	public function tambah_kandidat() {
+	
+		if($this->input->post('add_type')=='employer') {
+
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			// $valid_email = $this->Users_model->check_user_email($this->input->post('email'));
+			// $options = array('cost' => 12);
+			// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
+			/* Server side PHP input validation */
+			if($this->input->post('company_id')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_company_name');
+			} else if($this->input->post('first_name')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_first_name');
+			} else if( $this->input->post('tempat_lahir')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
+			} else if($this->input->post('tanggal_lahir')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_tanggal_lahir');
+			} else if($this->input->post('alamat_domisili')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_alamat_domisili');
+			} else if($this->input->post('alamat_ktp')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+			} else if($this->input->post('contact_number')==='') {
+				$Return['error'] = 'Nomor Kotak belum diisi';
+			} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+				$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
+			} else if($this->input->post('nomor_ktp')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_ktp');
+			} else if($this->input->post('nomor_kk')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
+			} else if($this->input->post('npwp')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_npwp');
+			} else if($this->input->post('ibu_kandung')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+			} else if($this->input->post('jenis_kelamin')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_jenis_kelamin');
+			} else if($this->input->post('agama')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_agama');
+			} else if($this->input->post('pernikahan')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_pernikahan');
+			} else if($this->input->post('tinggi_badan')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_tinggi_badan');
+			} else if($this->input->post('berat_badan')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_berat_badan');
+			} else if($this->input->post('last_company')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_last_company');
+			} else if($this->input->post('last_posisi')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_last_posisi');
+			} else if($this->input->post('last_edu')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_last_edu');
+			} else if($this->input->post('school_name')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_school_name');
+			} else if($this->input->post('jurusan')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_jurusan');
+			} else if($this->input->post('project_id')==='') {
+				$Return['error'] = 'Project belum dipilih';
+			} else if($this->input->post('posisi_lamar')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_posisi_lamar');
+			} else if($this->input->post('penempatan')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_penempatan');
+			} else if($this->input->post('bank_name')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_bank_name');
+			} else if($this->input->post('nomor_rek')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_nomor_rek');
+			} else if($this->input->post('pemilik_rek')==='') {
+				$Return['error'] = $this->lang->line('xin_employee_error_pemilik_rek');
+			} else if($_FILES['foto_ktp']['size'] == 0){
+				$Return['error'] = $this->lang->line('xin_employee_error_empty_ktp');
+			}
+			// else if($valid_email->num_rows() > 0) {
+			// 	$Return['error'] = $this->lang->line('xin_rec_email_exists');
+			// } 
+
+				else {
+
+					if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
+						//checking image type
+						$allowed =  array('png','jpg','jpeg','gif');
+						$filename = $_FILES['foto_ktp']['name'];
+						$ext = pathinfo($filename, PATHINFO_EXTENSION);
+						
+						if(in_array($ext,$allowed)){
+							$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
+							$bill_copy = "uploads/employers/";
+							$name = basename($_FILES["foto_ktp"]["name"]);
+							$newfilename = 'employer_ktp'.round(microtime(true)).'.'.$ext;
+							move_uploaded_file($tmp_name, $bill_copy.$newfilename);
+							$fname = $newfilename;
+
+						} else {
+							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+						}
+					} else {
+						$fname = "";
+					}
+
+					if(is_uploaded_file($_FILES['foto_kk']['tmp_name'])) {
+						//checking image type
+						$allowed_kk =  array('png','jpg','jpeg','gif');
+						$filename_kk = $_FILES['foto_kk']['name'];
+						$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
+						
+						if(in_array($ext_kk,$allowed_kk)){
+							$tmp_name_kk = $_FILES["foto_kk"]["tmp_name"];
+							$bill_copy_kk = "uploads/employers/";
+							$name_kk = basename($_FILES["foto_kk"]["name"]);
+							$newfilename_kk = 'employer_kk'.round(microtime(true)).'.'.$ext_kk;
+							move_uploaded_file($tmp_name_kk, $bill_copy_kk.$newfilename_kk);
+							$fname_kk = $newfilename_kk;
+
+						} else {
+							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+						}
+					} else {
+						$fname_kk = "";
+					}
+
+					if(is_uploaded_file($_FILES['foto_rek']['tmp_name'])) {
+						//checking image type
+						$allowed_rek =  array('png','jpg','jpeg','gif');
+						$filename_rek = $_FILES['foto_rek']['name'];
+						$ext_rek = pathinfo($filename_rek, PATHINFO_EXTENSION);
+						
+						if(in_array($ext_rek,$allowed_rek)){
+							$tmp_name_rek = $_FILES["foto_rek"]["tmp_name"];
+							$bill_copy_rek = "uploads/employers/";
+							$name_rek = basename($_FILES["foto_rek"]["name"]);
+							$newfilename_rek = 'employer_rek'.round(microtime(true)).'.'.$ext_rek;
+							move_uploaded_file($tmp_name_rek, $bill_copy_rek.$newfilename_rek);
+							$fname_rek = $newfilename_rek;
+
+						} else {
+							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+						}
+					} else {
+						$fname_rek = "";
+					}
+
+							$data = array(
+
+							// 'uploadid' => '000',
+							// 'employee_id' => '0',
+							'fullname' => $this->input->post('first_name'),
+							'company_id' => $this->input->post('company_id'),
+							'tempat_lahir' => $this->input->post('tempat_lahir'),
+							'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+							'alamat_domisili' => $this->input->post('alamat_domisili'),
+							'alamat_ktp' => $this->input->post('alamat_ktp'),
+							'contact_number' => $this->input->post('contact_number'),
+							'email' => $this->input->post('email'),
+							'nomor_ktp' => $this->input->post('nomor_ktp'),
+							'nomor_kk' => $this->input->post('nomor_kk'),
+							'npwp' => $this->input->post('npwp'),
+							'ibu_kandung' => $this->input->post('ibu_kandung'),
+							'jenis_kelamin' => $this->input->post('jenis_kelamin'),
+							'agama' => $this->input->post('agama'),
+							'pernikahan' => $this->input->post('pernikahan'),
+							'tinggi_badan' => $this->input->post('tinggi_badan'),
+							'berat_badan' => $this->input->post('berat_badan'),
+							'last_company' => $this->input->post('last_company'),
+							'last_posisi' => $this->input->post('last_posisi'),
+							'last_edu' => $this->input->post('last_edu'),
+							'school_name' => $this->input->post('school_name'),
+							'jurusan' => $this->input->post('jurusan'),
+							'project_id' => $this->input->post('project_id'),
+							'posisi_lamar' => $this->input->post('posisi_lamar'),
+							'penempatan' => $this->input->post('penempatan'),
+							'bank_name' => $this->input->post('bank_name'),
+							'nomor_rek' => $this->input->post('nomor_rek'),
+							'pemilik_rek' => $this->input->post('pemilik_rek'),
+
+							'filename_ktp' => $fname,
+							'filename_kk' => $fname_kk,
+							'filename_rek' => $fname_rek
+
+							// 'project_id' => $this->input->post('project_id'),
+							// 'email' => $this->input->post('email'),
+							// 'contact_number' => $this->input->post('contact_number'),
+							// 'created_at' => date('d-m-Y h:i:s')
+							);
+							// add record > model
+							// $result = $this->Users_model->add($data);
+							$result = $this->Employees_model->addkandidat($data);
+
+				}
+
+			if($Return['error']!=''){
+	       		$this->output($Return);
+	    }	
+		
+			if ($result == TRUE) {
+				$Return['result'] = $this->lang->line('xin_hr_success_register_user');
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+			exit;
+		}
+	}
+
 	/*Function to set JSON output*/
 	public function output($Return=array()){
 		/*Set response header*/
@@ -51,24 +275,6 @@ class Employer extends MY_Controller {
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
      }
 
-	public function signup() {
-		$system = $this->Xin_model->read_setting_info(1);
-		if($system[0]->module_recruitment!='true'){
-			redirect('admin/');
-		}
-		$data['title'] = 'Sign Up';
-		$session = $this->session->userdata('c_user_id');
-		if(!empty($session)){
-			redirect('');
-		}
-		$data['all_dept'] = $this->Xin_model->get_departments();
-		$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
-		$data['all_designation'] = $this->Xin_model->get_designations();
-		$data['all_project'] = $this->Xin_model->get_projects();
-		$data['path_url'] = 'job_create_user';
-		$data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
-		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
-  }
 
 	 public function logout() {
 	

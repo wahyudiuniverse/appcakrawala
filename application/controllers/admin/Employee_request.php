@@ -192,23 +192,33 @@ class Employee_request extends MY_Controller {
 					$Return['error'] = "$this->lang->line('xin_employee_error_first_name')";
 				} else if ($this->input->post('nama_ibu')=='') {
 					$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
-				} else if ($this->input->post('tempat_lahir')=='') {
-					$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
-				} else if ($this->input->post('date_of_birth')==''){
+				} 
+
+				// else if ($this->input->post('tempat_lahir')=='') {
+				// 	$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
+				// } 
+
+				else if ($this->input->post('date_of_birth')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_tanggal_lahir');
 				} else if ($this->input->post('nomor_hp')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
 				} else if ($this->input->post('nomor_ktp')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-				} else if ($this->input->post('alamat_ktp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
-				} else if ($this->input->post('nomor_kk')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
-				} else if ($this->input->post('npwp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_npwp');
-				} else if ($this->input->post('email')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_email');
-				} else if ($this->input->post('company_id')==''){
+				} 
+
+				// else if ($this->input->post('alamat_ktp')==''){
+				// 	$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+				// } 
+
+				// else if ($this->input->post('nomor_kk')==''){
+				// 	$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
+				// } 
+
+				// else if ($this->input->post('email')==''){
+				// 	$Return['error'] = $this->lang->line('xin_employee_error_email');
+				// } 
+
+				else if ($this->input->post('company_id')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_company_name');
 				} else if ($this->input->post('office_lokasi')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_location_office');
@@ -498,5 +508,5 @@ class Employee_request extends MY_Controller {
 			$this->output($Return);
 		}
 	}
-	
+
 }

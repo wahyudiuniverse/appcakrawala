@@ -444,6 +444,17 @@ class Employees_model extends CI_Model {
 	}
 
 	// Function to add record in table
+	public function addkandidat($data){
+		$this->db->insert('xin_employee_kandidat', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
+
+	// Function to add record in table
 	public function addrequest($data){
 		$this->db->insert('xin_employee_request', $data);
 		if ($this->db->affected_rows() > 0) {

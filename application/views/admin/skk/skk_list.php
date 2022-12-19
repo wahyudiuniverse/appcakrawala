@@ -66,26 +66,26 @@ body {font-family: Arial, Helvetica, sans-serif;}
           <label for="first_name"><?php echo $this->lang->line('xin_daftar_karyawan');?></label>
           <select class="form-control" name="manag_sign" id="aj_employee" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_daftar_karyawan');?>" onkeyup="isi_otomatis()">
             <option value=""></option>
-            <?php foreach($all_employees as $company) {
+            <?php foreach($all_employees as $emps) {
 
-                if(!is_null($company->bln_skrng)){
+                if(!is_null($emps->bln_skrng)){
 
                   $now = new DateTime(date("Y-m-d"));
-                  $expiredate = new DateTime($company->date_resign_request);
+                  $expiredate = new DateTime($emps->date_resign_request);
                   $d = $now->diff($expiredate)->days;
 
                   if($d<='30'){
             ?>
-                    <option value="<?php echo $company->employee_id?>"><?php echo $company->fullname.' (NEW)';?></option>
+                    <option value="<?php echo $emps->employee_id?>"><?php echo $emps->fullname.' (NEW)';?></option>
             <?php
                   } else {
             ?>
-<option value="<?php echo $company->employee_id?>"><?php echo $company->fullname?></option>
+<option value="<?php echo $emps->employee_id?>"><?php echo $emps->fullname?></option>
             <?php
                   }
                 } else {
             ?>
-<option value="<?php echo $company->employee_id?>"><?php echo $company->fullname?></option>
+<option value="<?php echo $emps->employee_id?>"><?php echo $emps->fullname?></option>
             <?php
                 }
                 ?>

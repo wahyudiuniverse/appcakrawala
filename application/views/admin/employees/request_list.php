@@ -125,7 +125,7 @@
                 <!--NPWP-->
                 <div class="col-md-4">
                   <div class="form-group">
-                  <label for="npwp">NPWP<i class="hrpremium-asterisk">*</i></label>
+                  <label for="npwp">NPWP<i class="hrpremium-asterisk"></i></label>
                   <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="">
                   </div>
                 </div>
