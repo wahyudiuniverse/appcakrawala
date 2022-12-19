@@ -348,7 +348,7 @@ class Esign_model extends CI_Model {
 	public function get_esign_skk() {
 
 		// $sql = 'SELECT * FROM xin_documents_qrcode WHERE employee_id not IN (1)';
-		$sql = 'SELECT * FROM xin_qrcode_skk ORDER BY secid DESC LIMIT 50';
+		$sql = 'SELECT * FROM xin_qrcode_skk WHERE jenis_dokumen NOT IN (0,9) ORDER BY secid DESC LIMIT 50';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

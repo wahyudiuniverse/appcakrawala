@@ -135,11 +135,15 @@ $posisi = $this->Designation_model->read_designation_information($designation_id
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-contract"> 
                     <i class="lnr lnr-pencil text-lightest"></i> &nbsp; <?php //echo $this->lang->line('xin_e_details_contract');?>
                   </a>  -->
-
+<?php
+if($session['user_id']==1){
+?>
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-cpassword"> 
                     <i class="lnr lnr-lock text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_reset_password');?>
                   </a> 
-
+<?php
+}
+?>
                 </div>
               </div>
 
