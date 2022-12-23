@@ -7,6 +7,9 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
+<?php $count_appnae = $this->Xin_model->count_approve_nae();?>
+<?php $count_appnom = $this->Xin_model->count_approve_nom();?>
+<?php $count_apphrd = $this->Xin_model->count_approve_hrd();?>
 <?php $count_emp_request = $this->Xin_model->count_emp_request();?>
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
@@ -17,18 +20,18 @@
     <?php } ?> 
 
     <?php if(in_array('492',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_emp_request.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_appnae.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('493',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_appnom.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('494',$role_resources_ids)) { ?>
     <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_resign_aphrd/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD
-      </a> </li>
+      <?php echo '('.$count_apphrd.')';?></a> </li>
     <?php } ?>
     
     <?php if(in_array('491',$role_resources_ids)) { ?>
