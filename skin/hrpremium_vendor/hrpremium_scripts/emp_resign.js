@@ -74,17 +74,30 @@ $(document).ready(function() {
 		}
 		});
 	});
-	
 
+
+			//get project
 	jQuery("#aj_project").change(function(){
-		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
-			jQuery('#project_sub_project').html(data);
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_project_employees/"+p_id, function(data, status){
+			jQuery('#project_employees_ajax').html(data);			
 		});
-		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
-		// 	jQuery('#ajax_office_shift').html(data);
-		// });
+	});
+
+			//get project
+	jQuery("#aj_ktp").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_ktp/"+p_id, function(data, status){
+			jQuery('#ktp_ajax').html(data);			
+		});
 	});
 	
+	// get departments
+	jQuery("#aj_ktp").change(function(){
+		jQuery.get(base_url+"/get_info/"+jQuery(this).val(), function(data, status){
+			jQuery('#info_ajax').html(data);
+		});
+	});
 	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {

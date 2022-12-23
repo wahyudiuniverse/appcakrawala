@@ -7,6 +7,10 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
+
+<?php $count_appnae = $this->Xin_model->count_approve_nae();?>
+<?php $count_appnom = $this->Xin_model->count_approve_nom();?>
+<?php $count_apphrd = $this->Xin_model->count_approve_hrd();?>
 <?php $count_emp_request = $this->Xin_model->count_emp_request();?>
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
@@ -17,18 +21,18 @@
     <?php } ?>  
     
     <?php if(in_array('492',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_emp_request.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_appnae.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('493',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_appnom.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('494',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_aphrd/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD
-      </a> </li>
+      <?php echo '('.$count_apphrd.')';?></a> </li>
     <?php } ?>
     
     <?php if(in_array('491',$role_resources_ids)) { ?>
@@ -65,7 +69,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="projects"><?php echo $this->lang->line('left_projects');?><i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" id="aj_project" name="project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+                    <select class="form-control" name="project_id" id="aj_project" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
 
                       <option value=""><?php echo $this->lang->line('xin_choose_department');?></option>
                       <?php
@@ -80,10 +84,10 @@
                 </div>
 
                 <!--NAMA LENGKAP-->
-                <div class="col-md-6">
-                  <div class="form-group">
-                   <label for="employee_id"><?php echo $this->lang->line('xin_karyawan');?><i class="hrpremium-asterisk"></i></label>
-                    <select class="form-control" name="employee_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
+                <div class="col-md-6" >
+                  <div class="form-group" id="project_employees_ajax">
+                   <label for="employee_id"><?php echo $this->lang->line('xin_karyawan');?><i class="hrpremium-asterisk">*</i></label>
+                    <select class="form-control" name="employee_id" id="aj_ktp" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
                       <option value=""></option>
                       <?php foreach($all_emp_active as $empactive) {?>
                       <option value="<?php echo $empactive->employee_id;?>"><?php echo $empactive->fullname?></option>
@@ -97,7 +101,7 @@
               <div class="row">
                 <!-- KTP RESIGN -->
                 <div class="col-md-4">
-                  <div class="form-group">
+                  <div class="form-group" id="ktp_ajax">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="">
                   </div>
@@ -106,7 +110,7 @@
                 <!--STATUS RESIGN-->
                 <div class="col-md-4">
                   <div class="form-group">
-                   <label for="employee_id">Status Resign<i class="hrpremium-asterisk"></i></label>
+                   <label for="employee_id">Status Resign<i class="hrpremium-asterisk">*</i></label>
                     <select class="form-control" name="status_resign" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
                       <option value=""></option>
                       <option value="2">RESIGN</option>
@@ -160,7 +164,7 @@
                 <div class="col-md-8">
                   <br>
                   <div class="form-group">
-                  <label for="date_of_birth">Upload Surat Hand Over<i class="hrpremium-asterisk">*</i></label>
+                  <label for="date_of_birth">Upload Surat Hand Over<i class="hrpremium-asterisk"></i></label>
                   <br>
                   <p class="form-row"> &nbsp;&nbsp;
                     <input type="file" id="dok_sover" name="dok_sover" />
@@ -171,15 +175,7 @@
 
             </div>
 
-            <div class="col-md-6">
-
-              <div class="row">
-                <!--PROJECT-->
-
-                <div class="col-md-6">
-                </div>
-
-              </div>
+            <div class="col-md-6" id="info_ajax">
 
               <div class="row">
                 <!--TANGGAL BERGABUNG-->

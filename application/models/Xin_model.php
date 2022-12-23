@@ -1463,10 +1463,40 @@ NOT IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk)");
 
 	public function count_emp_request()
 	{
-
 	  $query = $this->db->query("SELECT * FROM xin_employee_request WHERE verified_by IS NOT null AND approved_by IS null");
   	  return $query->num_rows();
+	}
 
+	public function count_approve_nae()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ('NULL','0')
+		AND approve_resignnae IN ('NULL','0')
+		AND approve_resignnom IN ('NULL','0')");
+  	  return $query->num_rows();
+	}
+
+	public function count_approve_nom()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ('NULL','0')
+		AND approve_resignnae NOT IN ('NULL','0')
+		AND approve_resignnom IN ('NULL','0')
+		AND project_id NOT IN (22)");
+  	  return $query->num_rows();
+	}
+
+	public function count_approve_hrd()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ('NULL','0')
+		AND approve_resignnae NOT IN ('NULL','0')
+		AND approve_resignnom NOT IN ('NULL','0')
+		AND approve_resignhrd IS NULL");
+  	  return $query->num_rows();
 	}
 
 	// notifications

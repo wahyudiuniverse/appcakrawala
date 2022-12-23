@@ -26,6 +26,20 @@ class Employees_model extends CI_Model {
 		WHERE is_active = 1 
 		AND  status_resign = 1
 		AND employee_id not IN (SELECT 1 AS nip FROM DUAL)
+		AND project_id = 50
+		ORDER BY date_of_leaving DESC;");
+  	  return $query->result();
+	}
+
+
+	public function get_all_employees_byproject($id)
+	{
+	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, project_id, date_of_leaving,month(date_of_leaving) bln_skrng
+		FROM xin_employees 
+		WHERE is_active = 1 
+		AND status_resign = 1
+		AND employee_id not IN (SELECT 1 AS nip FROM DUAL)
+		AND project_id = '$id'
 		ORDER BY date_of_leaving DESC;");
   	  return $query->result();
 	}

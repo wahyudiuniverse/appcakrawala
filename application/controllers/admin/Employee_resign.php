@@ -158,7 +158,7 @@ class Employee_resign extends MY_Controller {
 
 
 	 // get location > departments
-	public function get_project_sub_project() {
+	public function get_project_employees() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
@@ -168,7 +168,7 @@ class Employee_resign extends MY_Controller {
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/get_project_sub_project", $data);
+			$this->load->view("admin/employees/get_project_employees", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -177,7 +177,49 @@ class Employee_resign extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
-	
+
+	 // get location > departments
+	public function get_ktp() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'employee_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_ktp", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	 // get location > departments
+	public function get_info() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'employee_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_info", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
 	public function request_employee_resign() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){
