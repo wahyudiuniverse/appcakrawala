@@ -127,7 +127,6 @@ $(document).ready(function() {
 			} 	        
 	   });
 	});
-
 });
 	//open the lateral panel
 	$( document ).on( "click", ".cd-btn", function() {

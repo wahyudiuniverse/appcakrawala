@@ -692,20 +692,21 @@ class Reports extends MY_Controller
 				$marital = '--';	
 			}
 
-			if(!is_null($r->date_of_birth)){
-				$dob = $r->date_of_birth;
+			if($r->date_of_joining!='' || !is_null($r->date_of_birth)){
+				$dob = $this->Xin_model->tgl_indo($r->date_of_joining);
 			} else {
 				$dob = '--';	
 			}
 
-			if(!is_null($r->date_of_joining)){
-				$doj = $r->date_of_joining;
+			if($r->date_of_joining!='' || !is_null($r->date_of_joining)){
+				$doj = $this->Xin_model->tgl_indo($r->date_of_joining);
 			} else {
 				$doj = '--';	
 			}
 
-			if(!is_null($r->date_of_leaving)){
-				$dol = $r->date_of_leaving;
+			if($r->date_of_leaving!='' || !is_null($r->date_of_leaving)){
+				// $dol = $r->date_of_leaving;
+				$dol = $this->Xin_model->tgl_indo($r->date_of_leaving);
 			} else {
 				$dol = '--';	
 			}
@@ -745,10 +746,29 @@ class Reports extends MY_Controller
 				$ibu = '--';	
 			}
 
-			if($r->password_change!=0 || $r->project_id = '22'){
-				$pin = '******';	
+			if(!is_null($r->penempatan)){
+				$penempatan = $r->penempatan;
 			} else {
+				$penempatan = '--';	
+			}
+
+			if(!is_null($r->tempat_lahir)){
+				$tempat_lahir = $r->tempat_lahir;
+			} else {
+				$tempat_lahir = '--';
+			}
+
+			// if($r->dol != '' || !is_null($r->dol)){
+			// 	$dol = $this->Xin_model->tgl_indo($dol);
+			// } else {
+			// 	$dol = '--';	
+			// }
+
+			if($r->password_change==0 || $r->project_id != '22'){
+					
 				$pin = $r->private_code;
+			} else {
+				$pin = '******';
 			}
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
@@ -779,11 +799,11 @@ class Reports extends MY_Controller
 				$designation_name,
 				$project_name,
 				$subproject_name,
-				'-', // AREA
-				'-', // TEMPAT LAHIR
-				$this->Xin_model->tgl_indo($dob),
-				$this->Xin_model->tgl_indo($doj),
-				$this->Xin_model->tgl_indo($dol),
+				$penempatan, // AREA
+				$tempat_lahir, // TEMPAT LAHIR
+				$dob,
+				$doj,
+				$dol,
 				$gender,
 				$marital,
 				$agama, // agama

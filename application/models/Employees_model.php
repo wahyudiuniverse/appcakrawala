@@ -18,6 +18,30 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+
+	public function get_all_employees_all()
+	{
+	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,month(date_of_leaving) bln_skrng
+		FROM xin_employees 
+		WHERE is_active = 1 
+		AND  status_resign = 1
+		AND employee_id not IN (SELECT 1 AS nip FROM DUAL)
+		ORDER BY date_of_leaving DESC;");
+  	  return $query->result();
+	}
+
+	public function get_all_employees_project()
+	{
+	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,month(date_of_leaving) bln_skrng
+		FROM xin_employees 
+		WHERE is_active = 1 
+		AND  status_resign = 1
+		AND project_id NOT IN (22)
+		AND employee_id not IN (SELECT 1 AS nip FROM DUAL)
+		ORDER BY date_of_leaving DESC;");
+  	  return $query->result();
+	}
+
  	// monitoring request
 	public function get_monitoring_request() {
 
@@ -25,6 +49,93 @@ class Employees_model extends CI_Model {
 				FROM xin_employee_request
 				WHERE datediff(current_date(),DATE_FORMAT(createdon, "%Y-%m-%d")) <=30
 				ORDER BY createdon DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_rsign() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")
+		ORDER BY request_resign_date DESC;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_rsign_nae() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")
+		AND approve_resignnae IN ("NULL","0")
+		AND approve_resignnom IN ("NULL","0")
+		ORDER BY request_resign_date DESC;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_rsign_nom() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")
+		AND approve_resignnae NOT IN ("NULL","0")
+		AND approve_resignnom IN ("NULL","0")
+		AND project_id NOT IN (22)
+		ORDER BY request_resign_date DESC;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+
+ 	// monitoring request
+	public function get_monitoring_rsign_ho() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")
+		AND approve_resignnae NOT IN ("NULL","0")
+		AND approve_resignnom IN ("NULL","0")
+		AND project_id = 22
+		ORDER BY request_resign_date DESC;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_rsign_hrd() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")
+		AND approve_resignnae NOT IN ("NULL","0")
+		AND approve_resignnom NOT IN ("NULL","0")
+		AND approve_resignhrd IS NULL
+		ORDER BY request_resign_date DESC;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_rsign_history() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")
+		AND approve_resignnae NOT IN ("NULL","0")
+		AND approve_resignnom NOT IN ("NULL","0")
+		AND approve_resignhrd IS NOT NULL
+		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -464,6 +575,17 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+	// Function to add record in table
+	public function request_resign($data, $id){
+
+		$this->db->where('employee_id', $id);
+		if( $this->db->update('xin_employees',$data)) {
+			return true;
+		} else {
+			return false;
+		}	
+	}
+
 	// Import try
 	public function add_marital($data){
 		$this->db->insert('mt_marital', $data);
@@ -562,6 +684,26 @@ class Employees_model extends CI_Model {
 	public function update_request_employee($data, $id){
 		$this->db->where('secid', $id);
 		if( $this->db->update('xin_employee_request',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+		// Function to update record in table
+	public function update_resign_apnae($data, $id){
+		$this->db->where('user_id', $id);
+		if( $this->db->update('xin_employees',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+		// Function to update record in table
+	public function update_resign_apnom($data, $id){
+		$this->db->where('user_id', $id);
+		if( $this->db->update('xin_employees',$data)) {
 			return true;
 		} else {
 			return false;

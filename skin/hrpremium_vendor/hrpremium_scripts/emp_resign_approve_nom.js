@@ -5,8 +5,6 @@ $(document).ready(function() {
             url : base_url+"/request_list/",
             type : 'GET'
         },
-		dom: 'lBfrtip',
-		"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
 		"fnDrawCallback": function(settings){
 		$('[data-toggle="tooltip"]').tooltip();          
 		}
@@ -30,12 +28,14 @@ $(document).ready(function() {
 				if (JSON.error != '') {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					Ladda.stopAll();
 				} else {
 					$('.delete-modal').modal('toggle');
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);		
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);					
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					Ladda.stopAll();					
 				}
 			}
 		});
@@ -59,7 +59,7 @@ $(document).ready(function() {
 	});
 	
 	// view
-	$('.view-modal-data').on('show.bs.modal', function (event) {
+	$('#modals-slide').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var company_id = button.data('company_id');
 		var modal = $(this);
@@ -85,6 +85,7 @@ $(document).ready(function() {
 		// });
 	});
 	
+	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e){
 		var fd = new FormData(this);
@@ -108,15 +109,17 @@ $(document).ready(function() {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('#xin-form')[0].reset(); // To reset form fields
-					$('.add-form').removeClass('in');
+					$('.add-form').removeClass('show');
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				}
 			},
 			error: function() 
@@ -124,10 +127,10 @@ $(document).ready(function() {
 				toastr.error(JSON.error);
 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 				$('.save').prop('disabled', false);
+					Ladda.stopAll();
 			} 	        
 	   });
 	});
-
 });
 	//open the lateral panel
 	$( document ).on( "click", ".cd-btn", function() {

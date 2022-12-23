@@ -87,7 +87,7 @@ $(document).ready(function() {
 	
 	
 	/* Add data */ /*Form Submit*/
-	$("#xin-form").submit(function(e){
+	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);
 		var obj = $(this), action = obj.attr('name');
 		fd.append("is_ajax", 1);

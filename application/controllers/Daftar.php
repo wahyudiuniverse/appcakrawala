@@ -239,7 +239,7 @@ class Daftar extends MY_Controller {
 
 			if($Return['error']!=''){
 	       		$this->output($Return);
-	    }	
+	    }
 		
 			if ($result == TRUE) {
 				$Return['result'] = $this->lang->line('xin_hr_success_register_user');

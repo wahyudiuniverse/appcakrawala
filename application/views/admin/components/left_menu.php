@@ -395,35 +395,69 @@
       } 
       ?>
 
-<!-- Request Employee -->
 
-      <?php 
-      if (in_array('327',$role_resources_ids)) { ?>
-        <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
-          <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
-            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+<!-- MANAGE EMP -->
+    <?php 
+    if (in_array('327',$role_resources_ids) || in_array('470',$role_resources_ids) || in_array('490',$role_resources_ids)) {
+    ?>
+      <li class="<?php if(!empty($arr_mod['dokumen_open']))echo $arr_mod['dokumen_open'];?> sidenav-item"> 
+        <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
-            <div><?php echo $this->lang->line('xin_request_employee');?></div>
-          </a> 
-        </li>
-      <?php 
-      } 
-      ?>
+          <div><?php echo $this->lang->line('xin_manage_employees');?></div>
+        </a>
+        
+        <ul class="sidenav-menu">
 
-<!-- Manage Employees -->
 
-      <?php 
-      if (in_array('470',$role_resources_ids)) { ?>
-        <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_active']))echo $arr_mod['man_employees_active'];?>"> 
-          <a href="<?php echo site_url('admin/reports/manage_employees');?>" class="sidenav-link"> 
-            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-          <i class="sidenav-icon ion ion-logo-buffer"></i>
-            <div><?php echo $this->lang->line('xin_manage_employees');?></div>
-          </a> 
-        </li>
-      <?php 
-      } 
-      ?>
+          <?php 
+          if (in_array('490',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign/');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div><?php echo $this->lang->line('left_resignations');?></div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('327',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div><?php echo $this->lang->line('xin_request_employee');?></div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('470',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_active']))echo $arr_mod['man_employees_active'];?>"> 
+              <a href="<?php echo site_url('admin/reports/manage_employees');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div><?php echo $this->lang->line('xin_database');?></div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+
+
+        </ul>
+      </li>
+    <?php 
+    } 
+    ?>
+
+
+
       
 
 
