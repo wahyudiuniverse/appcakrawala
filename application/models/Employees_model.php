@@ -320,6 +320,8 @@ class Employees_model extends CI_Model {
 		$query = $this->db->query($sql, $binds);
 	    return $query;
 	}
+
+
 	// get all employes|company>
 	public function get_company_employees_flt($cid) {
 		

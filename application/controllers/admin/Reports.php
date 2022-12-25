@@ -649,7 +649,7 @@ class Reports extends MY_Controller
 				$subproject_name = '--';
 			}
 
-// $agama = '--';
+			// $agama = '--';
 			$ethnicity = $this->Employees_model->read_ethnicity($r->ethnicity_type);
 			if(!is_null($ethnicity)){
 				$agama = $ethnicity[0]->type;
@@ -1203,11 +1203,17 @@ class Reports extends MY_Controller
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['title'] = $this->lang->line('xin_hr_reports_attendance_employee').' | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_attendance_employee');
 		$data['path_url'] = 'reports_employee_attendance';
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		if(in_array('139',$role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
 		if(in_array('112',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/employee_attendance", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -1233,34 +1239,45 @@ class Reports extends MY_Controller
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 
-		$attend = $this->Reports_model->getAttendToday();
+		
+		$company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(5);
+		$employee_id = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
 
-		$employee = $this->Employees_model->get_employees();
+		// if($company_id==0 || is_null($company_id) || $project_id==0 || is_null($project_id)){
+			$attend = $this->Reports_model->filter_report_emp_att_null($company_id,$project_id,$employee_id,$start_date,$end_date);
+		// } else {
+		// 	$attend = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$employee_id,$start_date,$end_date);
+		// }
 
-		$data = array();
+		// $employee = $this->Employees_model->get_employees();
 
-		for($i=0 ; $i < count($attend); $i++) {
+		// $data = array();
 
+		// for($i=0 ; $i < count($attend); $i++) {
+ 		foreach($attend->result() as $r) {
 
-			$emp = $this->Employees_model->read_employee_info_by_nik($attend[$i]->employee_id);
-			$cust = $this->Customers_model->read_single_customer($attend[$i]->customer_id);
+			// $emp = $this->Employees_model->read_employee_info_by_nik($attend[$i]->employee_id);
+			// $cust = $this->Customers_model->read_single_customer($attend[$i]->customer_id);
 
 			$data[] = array (
-				$attend[$i]->employee_id,
-				strtoupper($emp[0]->first_name .' '. $emp[0]->last_name),
-				$cust[0]->customer_name,
-				$attend[$i]->date_phone,
-				$attend[$i]->time_in,
-				$attend[$i]->time_out,
-				$attend[$i]->timestay
+				'$attend[$i]->employee_id',
+				'pp',
+				'$cust[0]->customer_name',
+				'$attend[$i]->date_phone',
+				'$attend[$i]->time_in',
+				'$attend[$i]->time_out',
+				'$attend[$i]->timestay'
 			);
 		}
 
 
 	  $output = array(
 		   "draw" => $draw,
-			 "recordsTotal" => $employee->num_rows(),
-			 "recordsFiltered" => $employee->num_rows(),
+			 "recordsTotal" => $attend->num_rows(),
+			 "recordsFiltered" => $attend->num_rows(),
 			 "data" => $data
 		);
 	  echo json_encode($output);
@@ -1810,6 +1827,27 @@ class Reports extends MY_Controller
 	 }
 	 
 	 
+	 // get company > employees
+	 public function get_project_att() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'company_id' => $id
+			);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/get_project_att", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	 }
+
 	// date wise attendance list > timesheet
     public function employee_date_wise_list()
      {

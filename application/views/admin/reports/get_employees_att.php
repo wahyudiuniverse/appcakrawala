@@ -1,10 +1,11 @@
-<?php $result = $this->Department_model->ajax_company_employee_info($company_id);?>
+<?php $result = $this->Employees_model->get_all_employees_byproject($company_id);?>
+
 <div class="form-group">
-   <label class="form-label"><?php echo $this->lang->line('xin_choose_an_employee');?></label>
-   <select name="employee_id" id="employee_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_choose_an_employee');?>" required>
-    <option value=""></option>
+   <label class="form-label"><?php echo $this->lang->line('xin_karyawan');?></label>
+   <select name="employee_id" id="aj_employee" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>" required>
+    <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
     <?php foreach($result as $employee) {?>
-    <option value="<?php echo $employee->user_id;?>"> <?php echo $employee->first_name.' '.$employee->last_name;?></option>
+    <option value="<?php echo $employee->employee_id;?>"> <?php echo $employee->fullname;?></option>
     <?php } ?>
   </select>             
 </div>

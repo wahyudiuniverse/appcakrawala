@@ -9,7 +9,7 @@ class Reports_model extends CI_Model {
         $this->load->database();
     }
 
-	public function getAttendToday() {
+	public function getAttendToday($company_id,$project_id,$employee_id,$start_date,$end_date) {
 		$query = $this->db->query("
 
 			SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
@@ -321,5 +321,79 @@ class Reports_model extends CI_Model {
 		return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip not in('0') ORDER BY secid DESC LIMIT 500");
 	}
 	}
+
+		// get employees att reports
+	public function filter_report_emp_att_null($company_id,$project_id,$employee_id,$start_date,$end_date) {
+
+		return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+			FROM (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+				FROM xin_trx_cio
+				WHERE c_io = 1
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-21' AND '2022-12-22'
+				ORDER BY createdon DESC) attdin
+			LEFT JOIN (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+				FROM xin_trx_cio
+				WHERE c_io = 2 
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-21' AND '2022-12-22'
+			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
+
+	}
+
+		// get employees att reports
+	public function filter_report_emp_att($company_id,$project_id,$employee_id,$start_date,$end_date) {
+
+		if($company_id==0 && $project_id==0 && $employee_id==0 && $start_date==0 && $end_date==0) {
+		 	return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+			FROM (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+				FROM xin_trx_cio
+				WHERE c_io = 1
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+				ORDER BY createdon DESC) attdin
+			LEFT JOIN (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+				FROM xin_trx_cio
+				WHERE c_io = 2 
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
+		// 1-0-0-0-0
+		 } else if ($company_id!=0 && $project_id!=0 && $employee_id==0 && $start_date!=0 && $end_date!=0){
+		 	return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+			FROM (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+				FROM xin_trx_cio
+				WHERE c_io = 1
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+				ORDER BY createdon DESC) attdin
+			LEFT JOIN (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+				FROM xin_trx_cio
+				WHERE c_io = 2 
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
+		// 1-1-0-0-0
+		 } else {
+			return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+			FROM (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+				FROM xin_trx_cio
+				WHERE c_io = 1
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+				ORDER BY createdon DESC) attdin
+			LEFT JOIN (
+				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+				FROM xin_trx_cio
+				WHERE c_io = 2 
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
+		 }
+
+
+		// return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
+		// return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
+	}
+
 }
 ?>

@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({ 
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"reports/empdtwise_attendance_list/",
+            url : site_url+"reports/empdtwise_attendance_list/0/0/0/0/0/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -14,11 +14,19 @@ $(document).ready(function() {
 	
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' });
-	jQuery("#aj_company").change(function(){
+
+	// jQuery("#aj_company").change(function(){
+	// 	jQuery.get(base_url+"/get_employees_att/"+jQuery(this).val(), function(data, status){
+	// 		jQuery('#employee_ajax').html(data);
+	// 	});
+	// });
+
+	jQuery("#aj_project").change(function(){
 		jQuery.get(base_url+"/get_employees_att/"+jQuery(this).val(), function(data, status){
 			jQuery('#employee_ajax').html(data);
 		});
 	});
+
 	// Month & Year
 	$('.attendance_date').datepicker({
 		changeMonth: true,
@@ -52,13 +60,15 @@ $(document).ready(function() {
 	$("#attendance_datewise_report").submit(function(e){
 		/*Form Submit*/
 		e.preventDefault();
-		var start_date = $('#start_date').val();
-		var end_date = $('#end_date').val();
-		var user_id = $('#employee_id').val();
+		var company_id = $('#aj_company').val();
+		var project_id = $('#aj_project').val();
+		var employee_id = $('#aj_employee').val();
+		var start_date = $('#aj_sdate').val();
+		var end_date = $('#aj_edate').val();
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"reports/employee_date_wise_list/?start_date="+start_date+"&end_date="+end_date+"&user_id="+user_id,
+				url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+employee_id+"/"+start_date+"/"+end_date+"/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',
@@ -70,4 +80,6 @@ $(document).ready(function() {
 		toastr.success('Request Submit.');
 		xin_table2.api().ajax.reload(function(){ }, true);
 	});
+
+
 });

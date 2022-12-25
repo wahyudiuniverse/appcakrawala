@@ -11,7 +11,7 @@
         <input type="hidden" id="user_id" value="0" />
         <?php $attributes = array('name' => 'attendance_datewise_report', 'id' => 'attendance_datewise_report', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
 		<?php $hidden = array('euser_id' => $session['user_id']);?>
-        <?php echo form_open('admin/reports/attendance_xin', $attributes, $hidden);?>
+        <?php echo form_open('admin/reports/employee_attendance', $attributes, $hidden);?>
         <?php
             $data = array(
               'name'        => 'user_id',
@@ -24,45 +24,80 @@
             echo form_input($data);
             ?>
           <div class="form-row">
+
+          <?php 
+            if ($user_info[0]->user_role_id==1) { 
+          ?>
+            <div class="col-md mb-3">
+              <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
+              <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
+                <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+                <?php 
+                  foreach ($all_companies as $company) {
+                ?>
+                    <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
+                <?php 
+                  } 
+                ?>
+              </select>
+            </div>
+          <?php 
+            } else {
+          ?>
+          <?php $ecompany_id = $user_info[0]->company_id;?>
+            
+            <div class="col-md mb-3">
+              <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
+              <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
+                <option value=""><?php echo $this->lang->line('left_company');?></option>
+                <?php 
+                  foreach ($all_companies as $company) {
+                ?>
+                  <?php if ($ecompany_id == $company->company_id): ?>
+                    <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
+                  <?php endif;?>
+                <?php 
+                  } 
+                ?>
+              </select>
+            </div>
+          <?php 
+            } 
+          ?>
+
+
+          <div class="col-md mb-3">
+            <label class="form-label"><?php echo $this->lang->line('left_projects');?></label>
+            <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+              <?php 
+                foreach ($all_projects as $projects) {
+              ?>
+                  <option value="<?php echo $projects->project_id?>"><?php echo $projects->title?></option>
+              <?php 
+                } 
+              ?>
+            </select>
+          </div>
+
+
+        <div class="col-md mb-3">
+          <div class="form-group" id="employee_ajax">
+            <label class="form-label"><?php echo $this->lang->line('xin_karyawan');?></label>
+            <select disabled="disabled" class="form-control" name="department_id" id="aj_employee" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
+              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+            </select>
+          </div>   
+        </div>
+
+
           <div class="col-md mb-3">
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
-              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" type="text" value="<?php echo date('Y-m-d');?>">
+              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>
             <div class="col-md mb-3">
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
-              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" type="text" value="<?php echo date('Y-m-d');?>">
-            </div>
-          <?php if($user_info[0]->user_role_id==1){ ?>
-            <div class="col-md mb-3">
-              <label class="form-label"><?php echo $this->lang->line('module_company_title');?></label>
-              <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>" required>
-                <option value=""></option>
-                <?php foreach($get_all_companies as $company) {?>
-                <option value="<?php echo $company->company_id?>" <?php /*?><?php if($company_id==$company->company_id):?> selected 
-                    <?php endif;?><?php */?>><?php echo $company->name?></option>
-                <?php } ?>
-              </select>
-            </div>
-            <?php } else {?>
-            <?php $ecompany_id = $user_info[0]->company_id;?>
-            <div class="col-md mb-3">
-              <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>" required>
-                <option value=""></option>
-                <?php foreach($get_all_companies as $company) {?>
-                <?php if($ecompany_id == $company->company_id):?>
-                <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
-                <?php endif;?>
-                <?php } ?>
-              </select>
-            </div>
-             <?php } ?>
-            <div class="col-md mb-3">
-            <div class="form-group" id="employee_ajax">
-                <label class="form-label"><?php echo $this->lang->line('xin_choose_an_employee');?></label>
-                <select name="employee_id" id="employee_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_choose_an_employee');?>" required>
-                    <option value="">All</option>
-                  </select>
-            </div>
+              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>
             <div class="col-md col-xl-2 mb-4">
               <label class="form-label d-none d-md-block">&nbsp;</label>
