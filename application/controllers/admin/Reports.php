@@ -1259,17 +1259,28 @@ class Reports extends MY_Controller
 		// for($i=0 ; $i < count($attend); $i++) {
  		foreach($employee->result() as $r) {
 
-			// $emp = $this->Employees_model->read_employee_info_by_nik($attend[$i]->employee_id);
-			// $cust = $this->Customers_model->read_single_customer($attend[$i]->customer_id);
+			$emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			if(!is_null($emp)){
+				$fullname = $emp[0]->first_name;
+			} else {
+				$fullname = '--';	
+			}
+
+			$cust = $this->Customers_model->read_single_customer($r->customer_id);
+			if(!is_null($cust)){
+				$nama_toko = $cust[0]->customer_name;
+			} else {
+				$nama_toko = '--';	
+			}
 
 			$data[] = array (
-				'$attend[$i]->employee_id',
-				'pp',
-				'$cust[0]->customer_name',
-				'$attend[$i]->date_phone',
-				'$attend[$i]->time_in',
-				'$attend[$i]->time_out',
-				'$attend[$i]->timestay'
+				$r->employee_id,
+				$fullname,
+				$nama_toko,
+				$r->date_phone,
+				$r->time_in,
+				$r->time_out,
+				$r->timestay
 			);
 		}
 
@@ -1282,7 +1293,7 @@ class Reports extends MY_Controller
 		);
 	  echo json_encode($output);
 	  exit();
-	  
+
     }
 
 	
