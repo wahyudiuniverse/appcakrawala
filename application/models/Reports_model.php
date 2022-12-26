@@ -345,18 +345,18 @@ class Reports_model extends CI_Model {
 	public function filter_report_emp_att($company_id,$project_id,$employee_id,$start_date,$end_date) {
 
 		if($company_id==0 && $project_id==0 && $employee_id==0 && $start_date==0 && $end_date==0) {
-		 	return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+			return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
 			FROM (
 				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
 				FROM xin_trx_cio
 				WHERE c_io = 1
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-21' AND '2022-12-22'
 				ORDER BY createdon DESC) attdin
 			LEFT JOIN (
 				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
 				FROM xin_trx_cio
 				WHERE c_io = 2 
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-21' AND '2022-12-22'
 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
 		// 1-0-0-0-0
 		 } else if ($company_id!=0 && $project_id!=0 && $employee_id==0 && $start_date!=0 && $end_date!=0){
@@ -365,28 +365,29 @@ class Reports_model extends CI_Model {
 				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
 				FROM xin_trx_cio
 				WHERE c_io = 1
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-20' AND '2022-12-25'
 				ORDER BY createdon DESC) attdin
 			LEFT JOIN (
 				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
 				FROM xin_trx_cio
 				WHERE c_io = 2 
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-20' AND '2022-12-25'
 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
+
 		// 1-1-0-0-0
 		 } else {
-			return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+		return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
 			FROM (
 				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
 				FROM xin_trx_cio
 				WHERE c_io = 1
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-21' AND '2022-12-22'
 				ORDER BY createdon DESC) attdin
 			LEFT JOIN (
 				SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
 				FROM xin_trx_cio
 				WHERE c_io = 2 
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2022-12-21' AND '2022-12-22'
 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
 		 }
 

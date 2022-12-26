@@ -1247,17 +1247,17 @@ class Reports extends MY_Controller
 		$end_date = $this->uri->segment(8);
 
 		// if($company_id==0 || is_null($company_id) || $project_id==0 || is_null($project_id)){
-			$attend = $this->Reports_model->filter_report_emp_att_null($company_id,$project_id,$employee_id,$start_date,$end_date);
+			$employee = $this->Reports_model->filter_report_emp_att_null($company_id,$project_id,$employee_id,$start_date,$end_date);
 		// } else {
-		// 	$attend = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$employee_id,$start_date,$end_date);
+			// $attend = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$employee_id,$start_date,$end_date);
 		// }
 
 		// $employee = $this->Employees_model->get_employees();
 
-		// $data = array();
+		$data = array();
 
 		// for($i=0 ; $i < count($attend); $i++) {
- 		foreach($attend->result() as $r) {
+ 		foreach($employee->result() as $r) {
 
 			// $emp = $this->Employees_model->read_employee_info_by_nik($attend[$i]->employee_id);
 			// $cust = $this->Customers_model->read_single_customer($attend[$i]->customer_id);
@@ -1276,33 +1276,15 @@ class Reports extends MY_Controller
 
 	  $output = array(
 		   "draw" => $draw,
-			 "recordsTotal" => $attend->num_rows(),
-			 "recordsFiltered" => $attend->num_rows(),
+			 "recordsTotal" => $employee->num_rows(),
+			 "recordsFiltered" => $employee->num_rows(),
 			 "data" => $data
 		);
 	  echo json_encode($output);
 	  exit();
+	  
     }
 
-	// reports > employee leave
-	public function employee_leave() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_leave_status').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_leave_status');
-		$data['path_url'] = 'reports_employee_leave';
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('31',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/employee_leave", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
 	
 	// reports > employee training
 	public function employee_training() {
@@ -2288,11 +2270,7 @@ class Reports extends MY_Controller
 			redirect('admin/');
 		}
 	}
-	 
-	 
-	 
-	 
-	 
+
 	 
 } 
 ?>
