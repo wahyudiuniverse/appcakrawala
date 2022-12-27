@@ -3036,6 +3036,7 @@ $lang['xin_import_excl_eslip'] = "Import ESLIP";
 $lang['xin_eslip'] = "E-SLIP";
 $lang['xin_import_excl_employee_view'] = "View Import Employees";
 $lang['xin_import_excl_eslip_view'] = "View Import Eslip";
+$lang['xin_import_excl_ratecard_view'] = "View Import RateCard";
 $lang['xin_import_status_error'] = "Error";
 $lang['xin_import_import_id'] = "Import ID";
 $lang['xin_import_import_company_id'] = "ID Perusahaan";

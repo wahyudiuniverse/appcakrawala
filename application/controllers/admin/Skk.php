@@ -496,16 +496,23 @@ class Skk extends MY_Controller {
 
 					$project = $this->Project_model->read_project_information($employee[0]->project_id);
 					if(!is_null($designation)){
+						if($project[0]->title == 'INHOUSE'){
+
+						$project_name = 'PT. SIPRAMA CACKRAWALA';
+						} else {
+
 						$project_name = $project[0]->title;
+						}
 					} else {
-						$project_name = $project[0]->title;
+						$project_name = '-';
 					}
 
 			} else {
 
 			}
 
-			if($waktu_kerja>=3){
+
+			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '21300004'){
 
 			$tbl_2 = '
 

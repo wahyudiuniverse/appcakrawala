@@ -409,13 +409,14 @@
         <ul class="sidenav-menu">
 
 
+
           <?php 
-          if (in_array('490',$role_resources_ids)) { ?>
+          if (in_array('327',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_resign/');?>" class="sidenav-link"> 
+              <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div><?php echo $this->lang->line('left_resignations');?></div>
+                <div><?php echo $this->lang->line('xin_request_employee');?></div>
               </a> 
             </li>
           <?php 
@@ -425,10 +426,23 @@
           <?php 
           if (in_array('327',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
+              <a href="<?php echo site_url('admin/employee_pkwt/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div><?php echo $this->lang->line('xin_request_employee');?></div>
+                <div><?php echo $this->lang->line('xin_request_pkwt');?></div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('490',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign/');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div><?php echo $this->lang->line('left_resignations');?></div>
               </a> 
             </li>
           <?php 

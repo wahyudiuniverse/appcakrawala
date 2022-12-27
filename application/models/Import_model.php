@@ -55,6 +55,16 @@ GROUP BY uploadid ORDER BY uploadid DESC";
 		$query = $this->db->query($sql);
 	    return $query;
 	}
+ 	// get all employes
+	public function get_all_ratecard() {
+
+		$sql = "SELECT uploadid, periode, project, sub_project, createdby, DATE_FORMAT(createdon,'%Y-%m-%d') AS up_date
+FROM xin_employee_ratecard
+GROUP BY uploadid ORDER BY uploadid DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
 
  	// get all employes
 	public function get_all_temp_eslip() {
@@ -79,6 +89,53 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 	}
 
+	public function get_temp_ratecard($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_ratecard_temp WHERE uploadid = ? AND status_error is null';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+
+
+	// get single employee by NIP
+	public function read_ratecard_info_by_project_periode($project, $periode) {
+	
+		$sql = 'SELECT * FROM xin_employee_ratecard WHERE project_id = ? and periode = ?';
+		$binds = array($project, $periode);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// Function to update record in table > basic_info
+	public function update_error_ratecard_temp($data, $id){
+		$this->db->where('secid', $id);
+		if( $this->db->update('xin_employee_ratecard_temp',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+	// Function to add record in table
+	public function addratecard($data){
+		$this->db->insert('xin_employee_ratecard', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
 
 	 	public function get_temp_pkwt($id) {
 	
@@ -90,6 +147,19 @@ GROUP BY uploadid, periode, project, project_sub;';
 			return $query->result();
 		} else {
 			return false;
+		}
+	}
+
+	 public function CheckExistRatecard_Periode($project, $periode) {
+	
+		$sql = 'SELECT * FROM xin_employee_ratecard WHERE project_id = ? and periode = ?';
+		$binds = array($project,$periode);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
 		}
 	}
 
@@ -134,6 +204,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 	    return $query;
 	}
 
+		// get all employes temporary
+	public function get_ratecard_temp($importid) {
+		
+		$sql = 'SELECT * FROM xin_employee_ratecard_temp WHERE uploadid = ?';
+		$binds = array($importid);
+		$query = $this->db->query($sql, $binds);
+	    return $query;
+	}
 	
 	// Function to add record in table
 	public function add($data){
@@ -212,5 +290,21 @@ GROUP BY uploadid, periode, project, project_sub;';
 		
 	}
 	
+	// Function to Delete selected record from table
+	public function delete_temp_by_pt(){
+		$this->db->where('company_id', 'PT');
+		$this->db->delete('xin_employee_ratecard_temp');
+		
+	}
+
+	// Function to add record in table
+	public function addratecardtemp($data){
+		$this->db->insert('xin_employee_ratecard_temp', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
 }
 ?>

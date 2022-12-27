@@ -891,6 +891,20 @@ class Xin_model extends CI_Model {
 		}
 	}
 
+	// get single rate card
+	public function read_ratecard_temp_info($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_ratecard_temp WHERE secid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get single employee
 	public function read_pkwt_temp_info($id) {
 	

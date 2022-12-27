@@ -285,172 +285,6 @@ class ImportExcel extends MY_Controller
 		}
 	}
 
-	// Validate and add info in database
-	public function import_attendance() {
-	
-		if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		//validate whether uploaded file is a csv file
-   		$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-		
-		if(empty($_FILES['file']['name'])) {
-			$Return['error'] = $this->lang->line('xin_attendance_allowed_size');
-		} else {
-			if(in_array($_FILES['file']['type'],$csvMimes)){
-				if(is_uploaded_file($_FILES['file']['tmp_name'])){
-					
-					// check file size
-					if(filesize($_FILES['file']['tmp_name']) > 512000) {
-						$Return['error'] = $this->lang->line('xin_error_attendance_import_size');
-					} else {
-					
-					//open uploaded csv file with read only mode
-					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-					
-					//skip first line
-					fgetcsv($csvFile);
-					
-					//parse data from csv file line by line
-					while(($line = fgetcsv($csvFile)) !== FALSE){
-							
-						$attendance_date = $line[1];
-						$clock_in = $line[2];
-						$clock_out = $line[3];
-						$clock_in2 = $attendance_date.' '.$clock_in;
-						$clock_out2 = $attendance_date.' '.$clock_out;
-						
-						//total work
-						$total_work_cin =  new DateTime($clock_in2);
-						$total_work_cout =  new DateTime($clock_out2);
-						
-						$interval_cin = $total_work_cout->diff($total_work_cin);
-						$hours_in   = $interval_cin->format('%h');
-						$minutes_in = $interval_cin->format('%i');
-						$total_work = $hours_in .":".$minutes_in;
-						
-						$user = $this->Xin_model->read_user_by_employee_id($line[0]);
-						if(!is_null($user)){
-							$user_id = $user[0]->user_id;
-						} else {
-							$user_id = '0';
-						}
-					
-						$data = array(
-						'employee_id' => $user_id,
-						'attendance_date' => $attendance_date,
-						'clock_in' => $clock_in2,
-						'clock_out' => $clock_out2,
-						'time_late' => $clock_in2,
-						'total_work' => $total_work,
-						'early_leaving' => $clock_out2,
-						'overtime' => $clock_out2,
-						'attendance_status' => 'Present',
-						'clock_in_out' => '0'
-						);
-					$result = $this->Timesheet_model->add_employee_attendance($data);
-				}					
-				//close opened csv file
-				fclose($csvFile);
-	
-				$Return['result'] = $this->lang->line('xin_success_attendance_import');
-				}
-			}else{
-				$Return['error'] = $this->lang->line('xin_error_not_attendance_import');
-			}
-		}else{
-			$Return['error'] = $this->lang->line('xin_error_invalid_file');
-		}
-		} // file empty
-				
-		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
-	
-		
-		$this->output($Return);
-		exit;
-		}
-	}
-	
-	 // Validate and add info in database
-	public function import_leads() {
-	
-		if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		//validate whether uploaded file is a csv file
-   		$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-		
-		if($_FILES['file']['name']==='') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-		} else {
-			if(in_array($_FILES['file']['type'],$csvMimes)){
-				if(is_uploaded_file($_FILES['file']['tmp_name'])){
-					
-					// check file size
-					if(filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
-					
-					//open uploaded csv file with read only mode
-					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-					
-					//skip first line
-					fgetcsv($csvFile);
-					//parse data from csv file line by line
-					while(($line = fgetcsv($csvFile)) !== FALSE){
-						
-						$options = array('cost' => 12);
-						$password_hash = password_hash($line[2], PASSWORD_BCRYPT, $options);
-						$data = array(
-						'name' => $line[0],
-						'email' => $line[1],
-						'client_password' => $password_hash,
-						'contact_number' => $line[3],
-						'company_name' => $line[4],
-						'website_url' => $line[5],
-						'address_1' => $line[6],
-						'address_2' => $line[7],
-						'city' => $line[8],
-						'state' => $line[9],
-						'zipcode' => $line[10],
-						'country' => $line[11],
-						'is_active' => 1,
-						'created_at' => date('Y-m-d H:i:s'),
-						'is_changed' => '0',
-						'client_profile' => '',
-						);
-					$this->Clients_model->add_lead($data);
-				}					
-				//close opened csv file
-				fclose($csvFile);
-	
-				$Return['result'] = $this->lang->line('xin_success_leads_import');
-				}
-			}else{
-				$Return['error'] = $this->lang->line('xin_error_not_leads_import');
-			}
-		}else{
-			$Return['error'] = $this->lang->line('xin_error_invalid_file');
-		}
-		} // file empty
-				
-		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
-	
-		
-		$this->output($Return);
-		exit;
-		}
-	}
-
-
 	// expired page
 	public function importpkwt() {
 	
@@ -596,8 +430,6 @@ class ImportExcel extends MY_Controller
 
 	}
 
-
-
 	// expired page
 	public function importnewemployees() {
 	
@@ -632,7 +464,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Project_model->get_projects();
 		$data['path_url'] = 'hrpremium_import_ratecard';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('109',$role_resources_ids)) {
+		if(in_array('232',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/import_excel/import_ratecard", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -867,42 +699,43 @@ class ImportExcel extends MY_Controller
 						'hari_kerja' => $line[6],
 						'gaji_pokok' => $line[7],
 						'allow_jabatan' => $line[8],
-						'allow_konsumsi' => $line[9],
-						'allow_transport' => $line[10],
-						'allow_rent' => $line[11],
-						'allow_comunication' => $line[12],
-						'allow_parking' => $line[13],
-						'allow_residence_cost' => $line[14],
-						'allow_device' => $line[15],
-						'allow_kasir' => $line[16],
-						'allow_trans_meal' => $line[17],
-						'allow_vitamin' => $line[18],
-						'penyesuaian_umk' => $line[19],
-						'insentive'	=> $line[20],
-						'overtime' => $line[21],
-						'overtime_national_day' => $line[22],
-						'overtime_rapel' => $line[23],
-						'kompensasi' => $line[24],
-						'bonus' => $line[25],
-						'thr' => $line[26],
-						'bpjs_tk_deduction' => $line[27],
-						'bpjs_ks_deduction' => $line[28],
-						'jaminan_pensiun_deduction' => $line[29],
-						'pendapatan' => $line[30],
-						'bpjs_tk' => $line[31],
-						'bpjs_ks' => $line[32],
-						'jaminan_pensiun' => $line[33],
-						'deposit' => $line[34],
-						'pph' => $line[35],
-						'penalty_late' => $line[36],
-						'penalty_attend' => $line[37],
-						'deduction' => $line[38],
-						'simpanan_pokok' => $line[39],
-						'simpanan_wajib_koperasi' => $line[40],
-						'pembayaran_pinjaman' => $line[41],
-						'biaya_admin_bank' => $line[42],
-						'adjustment' => $line[43],
-						'total' => $line[44],
+						'allow_masakerja' => $line[9],
+						'allow_konsumsi' => $line[10],
+						'allow_transport' => $line[11],
+						'allow_rent' => $line[12],
+						'allow_comunication' => $line[13],
+						'allow_parking' => $line[14],
+						'allow_residence_cost' => $line[15],
+						'allow_device' => $line[16],
+						'allow_kasir' => $line[17],
+						'allow_trans_meal' => $line[18],
+						'allow_vitamin' => $line[19],
+						'penyesuaian_umk' => $line[20],
+						'insentive'	=> $line[21],
+						'overtime' => $line[22],
+						'overtime_national_day' => $line[23],
+						'overtime_rapel' => $line[24],
+						'kompensasi' => $line[25],
+						'bonus' => $line[26],
+						'thr' => $line[27],
+						'bpjs_tk_deduction' => $line[28],
+						'bpjs_ks_deduction' => $line[29],
+						'jaminan_pensiun_deduction' => $line[30],
+						'pendapatan' => $line[31],
+						'bpjs_tk' => $line[32],
+						'bpjs_ks' => $line[33],
+						'jaminan_pensiun' => $line[34],
+						'deposit' => $line[35],
+						'pph' => $line[36],
+						'penalty_late' => $line[37],
+						'penalty_attend' => $line[38],
+						'deduction' => $line[39],
+						'simpanan_pokok' => $line[40],
+						'simpanan_wajib_koperasi' => $line[41],
+						'pembayaran_pinjaman' => $line[42],
+						'biaya_admin_bank' => $line[43],
+						'adjustment' => $line[44],
+						'total' => $line[45],
 						'createdby' => $employee_id,
 
 
@@ -943,6 +776,247 @@ class ImportExcel extends MY_Controller
 		redirect('admin/Importexceleslip?upid='.$uploadid);
 
 	}
+
+
+	// Validate and add info in database
+	public function import_ratecard() {
+			$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+						$csvMimes =  array(
+
+							'text/x-comma-separated-values',
+					    'text/comma-separated-values',
+					    'text/semicolon-separated-values',
+					    'application/octet-stream',
+					    'application/vnd.ms-excel',
+					    'application/x-csv',
+					    'text/x-csv',
+					    'text/csv',
+					    'application/csv',
+					    'application/excel',
+					    'application/vnd.msexcel',
+					    'text/plain'
+
+						);
+
+		if($_FILES['file']['name']==='') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if(in_array($_FILES['file']['type'],$csvMimes)){
+				if(is_uploaded_file($_FILES['file']['tmp_name'])){
+					
+					// check file size
+					if(filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+					
+					//open uploaded csv file with read only mode
+					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+					
+					//skip first line
+					// fgetcsv($csvFile,0,';');
+					$d = new DateTime();
+					$datetimestamp = $d->format("YmdHisv");
+					$uploadid = $datetimestamp;
+					// $lastnik = $this->Employees_model->get_maxid();
+					// $formula4 = substr($lastnik,5);
+
+					//parse data from csv file line by line
+					while(($line = fgetcsv($csvFile,1000,';')) !== FALSE){
+
+						// $options = array('cost' => 12);
+						// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+						
+						// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+						// 	$formula2 = '2';
+						// } else {
+						// 	$formula2 = '3';
+						// }
+
+						// $formula3 = sprintf("%03d", $line[3]);
+
+						// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+						// $ids = (int)$formula4+1;
+
+
+						$data = array(
+						'uploadid' => $uploadid,
+						'company_id' => $line[1],
+						'nama_pt' => 'PT Siprama Cakrawala',
+						'periode' => $line[2], //periode
+						'start_date' => $line[3], //start date
+						'end_date' => $line[4], //end date
+						'project_id' => $line[5], //project id
+						'project' => $line[6],//project
+						'sub_project_id' =>$line[7],//sub project id
+						'sub_project' => $line[8], // sub project
+						'kota' => $line[9], //kota
+						'posisi_jabatan' => $line[10],//jabatan
+						'jumlah_mpp' => $line[11],//jumlah mpp
+						'gaji_pokok' => $line[12],//gapok
+						'hari_kerja' => $line[13],//hari kerja
+						'dm_grade' => $line[14], // dm_grade
+						'allow_grade' => $line[15],//grade
+						'dm_konsumsi' => $line[16],//dm_konsumsi
+						'allow_konsumsi' => $line[17],//konsumsi
+						'dm_transport' => $line[18],//dm_transport
+						'allow_transport' => $line[19],//transport
+						'dm_rent' => $line[20],//dm_sewa
+						'allow_rent' => $line[21],//sewa
+						'dm_comunication' => $line[22],
+						'allow_comunication'=> $line[23],
+						'dm_parking'	=> $line[24],//dm_parkir
+						'allow_parking' => $line[25],//parkir
+						'dm_resicance' => $line[26],//dm_residance
+						'allow_residance' => $line[27], //allow resicande
+						'dm_device' => $line[28],//dm_device
+						'allow_device' => $line[29],//device
+						'dm_kasir' => $line[30],//dm kasair
+						'allow_kasir' => $line[31], //allow kasir
+						'dm_trans_meal' => $line[32],//dm_transmeal
+						'allow_trans_meal' => $line[33],//transmeal
+						'dm_medicine' => $line[34],//dm_medical
+						'allow_medicine' => $line[35],//medical
+						'total_allow' => $line[36],//total_tunjangan
+						'gaji_bersih' => $line[37],//gaji bersih
+						'kompensasi' => $line[38],//kompensasi
+						'kompensasi_pt' => $line[39],//kompensasi client
+						'bpjs_tk' => $line[40],//bpjs tk
+						'bpjs_ks' => $line[41],//bpjs ks
+						'insentive' => $line[42],//insentive
+						'total' => $line[43],//total
+						'grand_total' => $line[44],//grand_total
+
+						'createdby' => $employee_id,
+						'createdon' => date('Y-m-d h:i:s'),
+
+
+						);
+					$result = $this->Import_model->addratecardtemp($data);
+
+					// $bank_account_data = array(
+					// 'account_title' => 'Rekening',
+					// 'account_number' => $line[18], //NO. REK
+					// 'bank_name' => $line[19],
+					// 'employee_id' => $last_insert_id,
+					// 'created_at' => date('d-m-Y'),
+					// );
+					// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+						$resultdel = $this->Import_model->delete_temp_by_pt();
+						// $formula4++;
+				}
+				//close opened csv file
+				fclose($csvFile);
+	
+
+				$Return['result'] = $this->lang->line('xin_success_attendance_import');
+				}
+			}else{
+				$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+			}
+		}else{
+			$Return['error'] = $this->lang->line('xin_error_invalid_file');
+		}
+		} // file empty
+				
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+
+		
+		redirect('admin/Importexcelratecard?upid='.$uploadid);
+
+	}
+
+  public function history_upload_ratecard_list() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/import_excel/import_ratecard", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_ratecard();
+
+		$data = array();
+
+          foreach($history_eslip->result() as $r) {
+          	$uploadid = $r->uploadid;
+          	$up_date = $r->up_date;
+				  	$periode = $r->periode;
+				  	$project = $r->project;
+				  	$project_sub = $this->Xin_model->clean_post($r->sub_project);
+				  	$createdby = $r->createdby;
+
+				  	$preiode_param = str_replace(" ","",$r->periode);
+				  	$project_param = str_replace(" ","",$r->project);
+				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->sub_project)));
+
+			  // get created
+			  $empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			  if(!is_null($empname)){
+			  	$fullname = $empname[0]->first_name;
+			  } else {
+				  $fullname = '--';	
+			  }
+
+				  	if($project_sub=='INHOUSE' || $project_sub=='INHOUSE AREA' || $project_sub=='AREA' || $project_sub=='HO'){
+				  		if($session['user_id']=='1'){
+
+			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				  		} else {
+				  			
+			  			$view_data = '';
+				  		}
+				  	} else {
+			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				  	}
+
+
+     	$data[] = array(
+			  $view_data,
+			  $up_date,
+       	$periode,
+				$project,
+        $project_sub,
+				$fullname,
+      );
+    }
+
+          $output = array(
+               "draw" => $draw,
+                 "recordsTotal" => $history_eslip->num_rows(),
+                 "recordsFiltered" => $history_eslip->num_rows(),
+                 "data" => $data
+            );
+          echo json_encode($output);
+          exit();
+  }
 
 
   public function history_upload_eslip_list() {

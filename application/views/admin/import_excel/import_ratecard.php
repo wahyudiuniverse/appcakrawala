@@ -11,21 +11,20 @@
   <div class="sw-container tab-content">
 
     <?php 
-    if(in_array('109',$role_resources_ids)) { 
+    if(in_array('232',$role_resources_ids)) { 
     ?>
       <div id="smartwizard-2-step-1" class="card animated fadeIn tab-pane step-content" style="display: block;">   
 
       <!-- employee import standard -->
       <div class="card-header with-elements"> 
         <span class="card-header-title mr-2">
-          <strong><?php echo $this->lang->line('xin_new_employee');?></strong> 
+          <strong>QUOTATION/RATECARD</strong> 
             <?php echo $this->lang->line('xin_employee_import_csv_file');?>
         </span>
       </div> 
 
       <div class="card-body">
-        <p class="card-text"><?php echo $this->lang->line('xin_employee_import_description_line1');?></p>
-        <p class="card-text"><?php echo $this->lang->line('xin_employee_import_description_line2');?></p>
+
           <h6>
             <a href="<?php echo base_url();?>uploads/csv/template_import_new_employees_2022.xlsx" class="btn btn-primary"> 
               <i class="fa fa-download"></i> 
@@ -45,7 +44,8 @@
             'user_id' => $session['user_id']);
           ?>
 
-          <?php echo form_open_multipart('admin/importexcel/import_newemp', $attributes, $hidden);?>
+          <?php //echo form_open_multipart('admin/importexcel/import_eslip', $attributes, $hidden);?>
+          <?php echo form_open_multipart('admin/importexcel/import_ratecard', $attributes, $hidden);?>
 
             <div class="row">
               <div class="col-md-4">
@@ -81,5 +81,27 @@
     } 
     ?>
 
+
+  </div>
+</div>
+
+
+<div class="card <?php echo $get_animate;?>">
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST</strong> History QUOTATION</span> </div>
+  <div class="card-body">
+    <div class="card-datatable table-responsive">
+      <table class="datatables-demo table table-striped table-bordered" id="xin_table">
+        <thead>
+          <tr>
+            <th><?php echo $this->lang->line('xin_action');?></th>
+            <th>UpDate</th>
+            <th>Periode</th>
+            <th>Project</th>
+            <th>Sub Project</th>
+            <th><i class="fa fa-user"></i> Dibuat Oleh</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
   </div>
 </div>

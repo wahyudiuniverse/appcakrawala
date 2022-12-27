@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ImportExcelEslip extends MY_Controller 
+class Importexcelratecard extends MY_Controller 
 {
 
 	public function __construct(){
@@ -50,21 +50,21 @@ class ImportExcelEslip extends MY_Controller
 			redirect('admin/');
 		}
 
-		$data['title'] = $this->lang->line('xin_import_excl_eslip_view').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip_view');
+		$data['title'] = $this->lang->line('xin_import_excl_ratecard_view').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_ratecard_view');
 
 		$product_id = 
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$data['uploadid'] = $this->input->get('upid', TRUE);
 		// $data['all_posisi'] = $this->Xin_model->get_designations();
 		// $data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['path_url'] = 'import_excel_eslip_view';
+		$data['path_url'] = 'import_excel_ratecard_view';
 		$session = $this->session->userdata('username');
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 				
 		if(in_array('127',$role_resources_ids)) {
 			if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/import_excel/view_import_eslip", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/view_import_ratecard", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 			} else { 
 				redirect('admin/');
@@ -109,12 +109,12 @@ class ImportExcelEslip extends MY_Controller
 		}
 	}
 
-	public function view_import_excel_employees() {
+	public function view_import_excel_ratecard() {
 
 		$datad['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/import_excel/view_import_eslip", $datad);
+			$this->load->view("admin/import_excel/view_import_ratecard", $datad);
 		} else {
 			redirect('admin/');
 		}
@@ -124,64 +124,34 @@ class ImportExcelEslip extends MY_Controller
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		$employees_temp = $this->Import_model->get_eslip_temp($product_id);
+
+		$ratecard_temp = $this->Import_model->get_ratecard_temp($product_id);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data = array();
 
-    foreach($employees_temp->result() as $r) {
+    foreach($ratecard_temp->result() as $r) {
 			  
 			  $importid = $r->uploadid;
-			  $nip = $r->nip;
-			  $fullname = $r->fullname;
 			  $periode = $r->periode;
+			  $end_date = $r->end_date;
+			  $project_id = $r->project_id;
 			  $project = $r->project;
-			  $project_sub = $r->project_sub;
-			  $area = $r->area;
-			  $hari_kerja = $r->hari_kerja;
+			  $kota = $r->kota;
+			  $posisi_jabatan = $r->posisi_jabatan;
+			  $jumlah_mpp = $r->jumlah_mpp;
 			  $gaji_pokok = $r->gaji_pokok;
+			  $hari_kerja = $r->hari_kerja;
 
-			  $allow_jabatan = $r->allow_jabatan;
-			  $allow_konsumsi = $r->allow_konsumsi;
-			  $allow_transport = $r->allow_transport;
-			  $allow_rent = $r->allow_rent;
-			  $allow_comunication = $r->allow_comunication;
-			  $allow_parking = $r->allow_parking;
-			  $allow_residence_cost = $r->allow_residence_cost;
-			  $allow_device = $r->allow_device;
-			  $penyesuaian_umk = $r->penyesuaian_umk;
-			  $insentive = $r->insentive;
-			  $overtime = $r->overtime;
-			  $overtime_national_day = $r->overtime_national_day;
-			  $overtime_rapel = $r->overtime_rapel;
-			  $kompensasi = $r->kompensasi;
-			  $bonus = $r->bonus;
-			  $thr = $r->thr;
-			  $bpjs_tk_deduction = $r->bpjs_tk_deduction;
-			  $bpjs_ks_deduction = $r->bpjs_ks_deduction;
-			  $jaminan_pensiun_deduction = $r->jaminan_pensiun_deduction;
-			  $pendapatan = $r->pendapatan;
-			  $bpjs_tk = $r->bpjs_tk;
-			  $bpjs_ks = $r->bpjs_ks;
-			  $jaminan_pensiun = $r->jaminan_pensiun;
-			  $pph = $r->pph;
-			  $penalty_late = $r->penalty_late;
-			  $penalty_attend = $r->penalty_attend;
-			  $deduction = $r->deduction;
-			  $simpanan_pokok = $r->simpanan_pokok;
-			  $simpanan_wajib_koperasi = $r->simpanan_wajib_koperasi;
-			  $pembayaran_pinjaman = $r->pembayaran_pinjaman;
-			  $biaya_admin_bank = $r->biaya_admin_bank;
-			  $total = $r->total;
 
 				$now = new DateTime(date("Y-m-d"));
 
-				$isExist = $this->Employees_model->CheckExistNIP_Periode($r->nip, $r->periode);
-
+				$isExist = $this->Import_model->CheckExistRatecard_Periode($r->periode, $r->project_id);
+				$error = '<p style="color:#6b4141">Gagal Tersimpan (Duplikat)</p>';
 
 				if(!is_null($r->status_error)){
 					if($r->status_error=='Duplicate'){
 
-						$error = '<p style="color:#6b4141">Gagal Tersimpan (Duplikat NIK)</p>';
+						$error = '<p style="color:#6b4141">Gagal Tersimpan (Duplikat)</p>';
 					} else {
 						$error = '<p style="color:#75b37f">Success Import</p>';
 					}
@@ -191,7 +161,7 @@ class ImportExcelEslip extends MY_Controller
 							// $status_btn = 'btn-success'; 
 							// $status_title = $this->lang->line('xin_employees_active');
 
-							$error = '<p style="color:#f95275">NIK-PERIODE Sudah Terdaftar</p>';
+							$error = '<p style="color:#f95275">PROJECT-PERIODE Sudah Terdaftar</p>';
 
 						}else {
 							$status_btn = 'btn-outline-danger'; 
@@ -206,57 +176,24 @@ class ImportExcelEslip extends MY_Controller
 						}
 				}
 
-
 		   $data[] = array(
 		   	$error,
 				// $importid,
-				$nip,
-				$fullname,
 				$periode,
+				$end_date,
 				$project,
-				$project_sub,
-				$area,
-				$hari_kerja,
+				$kota,
+				$posisi_jabatan,
+				$jumlah_mpp,
 				$gaji_pokok,
-			  $allow_jabatan,
-			  $allow_konsumsi,
-			  $allow_transport,
-			  $allow_rent,
-			  $allow_comunication,
-			  $allow_parking,
-			  $allow_residence_cost,
-			  $allow_device,
-			  $penyesuaian_umk,
-			  $insentive,
-			  $overtime,
-			  $overtime_national_day,
-			  $overtime_rapel,
-			  $kompensasi,
-			  $bonus,
-			  $thr,
-			  $bpjs_tk_deduction,
-			  $bpjs_ks_deduction,
-			  $jaminan_pensiun_deduction,
-			  $pendapatan,
-			  $bpjs_tk,
-			  $bpjs_ks,
-			  $jaminan_pensiun,
-			  $pph,
-			  $penalty_late,
-			  $penalty_attend,
-			  $deduction,
-			  $simpanan_pokok,
-			  $simpanan_wajib_koperasi,
-			  $pembayaran_pinjaman,
-			  $biaya_admin_bank,
-			  $total,
+				$hari_kerja,
 		   );
      }
 
           $output = array(
                "draw" => $draw,
-                 "recordsTotal" => $employees_temp->num_rows(),
-                 "recordsFiltered" => $employees_temp->num_rows(),
+                 "recordsTotal" => $ratecard_temp->num_rows(),
+                 "recordsFiltered" => $ratecard_temp->num_rows(),
                  "data" => $data
             );
           echo json_encode($output);
@@ -409,9 +346,8 @@ class ImportExcelEslip extends MY_Controller
 		// 	$status_id = 0;
 		// }
 		// $user_id = $this->uri->segment(5);
-		$user = $this->Xin_model->read_eslip_temp_info($status_id);
-		$duplicate = $this->Employees_model->read_eslip_info_by_nip_periode($user[0]->nip, $user[0]->periode);
-
+		$user = $this->Xin_model->read_ratecard_temp_info($status_id);
+		$duplicate = $this->Import_model->read_ratecard_info_by_project_periode($user[0]->project_id, $user[0]->periode);
 
 			if(!is_null($duplicate)) {
 				// $error = 'Error';
@@ -420,120 +356,122 @@ class ImportExcelEslip extends MY_Controller
 					'status_error' => 'Duplicate',
 				);
 
-				$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
+				$this->Import_model->update_error_ratecard_temp($datas, $user[0]->secid);
 
 			} else {
 
-				$uploadid = $user[0]->uploadid;
-				$nip = $user[0]->nip;
-				$fullname = $user[0]->fullname;
-				$periode = $user[0]->periode;
-				$project = $user[0]->project;
-				$project_sub = $user[0]->project_sub;
-				$area = $user[0]->area;
-				$hari_kerja = $user[0]->hari_kerja;
-				$gaji_pokok = $user[0]->gaji_pokok;
-				$allow_jabatan = $user[0]->allow_jabatan;
-				$allow_masakerja = $user[0]->allow_masakerja;
-				$allow_konsumsi = $user[0]->allow_konsumsi;
-				$allow_transport = $user[0]->allow_transport;
-				$allow_rent = $user[0]->allow_rent;
-				$allow_comunication = $user[0]->allow_comunication;
-				$allow_parking = $user[0]->allow_parking;
-				$allow_residence_cost = $user[0]->allow_residence_cost;
-				$allow_device = $user[0]->allow_device;
-				$allow_kasir = $user[0]->allow_kasir;
-				$allow_trans_meal = $user[0]->allow_trans_meal;
-				$allow_vitamin = $user[0]->allow_vitamin;
-
-				$penyesuaian_umk = $user[0]->penyesuaian_umk;
-				$insentive = $user[0]->insentive; 
-				$overtime = $user[0]->overtime;
-				$overtime_national_day = $user[0]->overtime_national_day;
-				$overtime_rapel = $user[0]->overtime_rapel;
-				$kompensasi = $user[0]->kompensasi;
-				$bonus = $user[0]->bonus;
-				$thr = $user[0]->thr;
-				$bpjs_tk_deduction = $user[0]->bpjs_tk_deduction;
-				$bpjs_ks_deduction = $user[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $user[0]->jaminan_pensiun_deduction;
-				$pendapatan = $user[0]->pendapatan;
-				$bpjs_tk = $user[0]->bpjs_tk;
-				$bpjs_ks = $user[0]->bpjs_ks; 
-				$jaminan_pensiun = $user[0]->jaminan_pensiun;
-				$deposit = $user[0]->deposit;
-				$pph = $user[0]->pph;
-				$penalty_late = $user[0]->penalty_late;
-				$penalty_attend = $user[0]->penalty_attend;
-				$deduction = $user[0]->deduction;
-				$simpanan_pokok = $user[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $user[0]->biaya_admin_bank;
-				$adjustment = $user[0]->adjustment;
-				$total = $user[0]->total;
-				$createdby = $user[0]->createdby;
+				$uploadid 				= $user[0]->uploadid;
+				$company_id 				= $user[0]->company_id;
+				$nama_pt 					= $user[0]->nama_pt;
+				$periode 					= $user[0]->periode;
+				$start_date 				= $user[0]->start_date;
+				$end_date 				= $user[0]->end_date;
+				$project_id 				= $user[0]->project_id;
+				$project 					= $user[0]->project;
+				$sub_project_id 			= $user[0]->sub_project_id;
+				$sub_project 				= $user[0]->sub_project;
+				$kota 					= $user[0]->kota;
+				$posisi_jabatan 			= $user[0]->posisi_jabatan;
+				$jumlah_mpp 				= $user[0]->jumlah_mpp;
+				$gaji_pokok 				= $user[0]->gaji_pokok;
+				$hari_kerja 				= $user[0]->hari_kerja;
+				$dm_grade 				= $user[0]->dm_grade;
+				$allow_grade 				= $user[0]->allow_grade;
+				$dm_konsumsi 				= $user[0]->dm_konsumsi;
+				$allow_konsumsi 			= $user[0]->allow_konsumsi;
+				$dm_transport 				= $user[0]->dm_transport;
+				$allow_transport 			= $user[0]->allow_transport;
+				$dm_rent 					= $user[0]->dm_rent;
+				$allow_rent 				= $user[0]->allow_rent;
+				$dm_comunication 			= $user[0]->dm_comunication;
+				$allow_comunication 		= $user[0]->allow_comunication;
+				$dm_parking 				= $user[0]->dm_parking;
+				$allow_parking 			= $user[0]->allow_parking;
+				$dm_residance 				= $user[0]->dm_resicance;
+				$allow_residance 			= $user[0]->allow_residance;
+				$dm_device 				= $user[0]->dm_device;
+				$allow_device 				= $user[0]->allow_device;
+				$dm_kasir 				= $user[0]->dm_kasir;
+				$allow_kasir 				= $user[0]->allow_kasir;
+				$dm_trans_meal 			= $user[0]->dm_trans_meal;
+				$allow_trans_meal 			= $user[0]->allow_trans_meal;
+				$dm_medicine 				= $user[0]->dm_medicine;
+				$allow_medicine 			= $user[0]->allow_medicine;
+				$total_allow 				= $user[0]->total_allow;
+				$gaji_bersih 				= $user[0]->gaji_bersih;
+				$kompensasi 				= $user[0]->kompensasi;
+				$kompensasi_pt 			= $user[0]->kompensasi_pt;
+				$bpjs_tk 					= $user[0]->bpjs_tk;
+				$bpjs_ks 					= $user[0]->bpjs_ks;
+				$insentive 				= $user[0]->insentive;
+				$total 					= $user[0]->total;
+				$grand_total 				= $user[0]->grand_total;
+				$createdon 				= $user[0]->createdon;
+				$createdby 				= $user[0]->createdby;
+				// $approve_on = $user[0]->periode;
+				// $approve_by = $user[0]->periode;
 
 				$data = array(
-					'uploadid' => $uploadid,
-					'nip' => $nip,
-					'fullname' => $fullname,
-					'periode' => $periode,
-					'project' => $project,
-					'project_sub' => $project_sub,
-					'area' => $area,
-					'hari_kerja' => $hari_kerja,
-					'gaji_pokok' => $gaji_pokok,
-					'allow_jabatan' => $allow_jabatan,
-					'allow_masakerja' => $allow_masakerja,
-					'allow_konsumsi' => $allow_konsumsi,
-					'allow_transport' => $allow_transport,
-					'allow_rent' => $allow_rent,
-					'allow_comunication' => $allow_comunication,
-					'allow_parking' => $allow_parking,
-					'allow_residence_cost' => $allow_residence_cost,
-					'allow_device' => $allow_device,
-					'allow_kasir' => $allow_kasir,
-					'allow_trans_meal' => $allow_trans_meal,
-					'allow_vitamin' => $allow_vitamin,
-
-					'penyesuaian_umk' => $penyesuaian_umk,
-					'insentive' => $insentive,
-					'overtime' => $overtime,
-					'overtime_national_day' => $overtime_national_day,
-					'overtime_rapel' => $overtime_rapel,
-					'kompensasi' => $kompensasi,
-					'bonus' => $bonus,
-					'thr' => $thr,
-					'bpjs_tk_deduction' => $bpjs_tk_deduction,
-					'bpjs_ks_deduction' => $bpjs_ks_deduction,
-					'jaminan_pensiun_deduction' => $jaminan_pensiun_deduction,
-					'pendapatan' => $pendapatan,
-					'bpjs_tk' => $bpjs_tk,
-					'bpjs_ks' => $bpjs_ks,
-					'jaminan_pensiun' => $jaminan_pensiun,
-					'deposit' => $deposit,
-					'pph' => $pph,
-					'penalty_late' => $penalty_late,
-					'penalty_attend' => $penalty_attend,
-					'deduction' => $deduction,
-					'simpanan_pokok' => $simpanan_pokok,
-					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
-					'pembayaran_pinjaman' => $pembayaran_pinjaman,
-					'biaya_admin_bank' => $biaya_admin_bank,
-					'adjustment' => $adjustment,
-					'total' => $total,
-					'createdby' => $createdby,
+					'uploadid' 			=> $uploadid,
+					'company_id' 			=> $company_id,
+					'nama_pt' 			=> $nama_pt,
+					'periode' 			=> $periode,
+					'start_date' 			=> $start_date,
+					'end_date' 			=> $end_date,
+					'project_id' 			=> $project_id,
+					'project' 			=> $project,
+					'sub_project_id' 		=> $sub_project_id,
+					'sub_project' 			=> $sub_project,
+					'kota'	 			=> $kota,
+					'posisi_jabatan' 		=> $posisi_jabatan,
+					'jumlah_mpp' 			=> $jumlah_mpp,
+					'gaji_pokok' 			=> $gaji_pokok,
+					'hari_kerja' 			=> $hari_kerja,
+					'dm_grade' 			=> $dm_grade,
+					'allow_grade' 			=> $allow_grade,
+					'dm_konsumsi' 			=> $dm_konsumsi,
+					'allow_konsumsi' 		=> $allow_konsumsi,
+					'dm_transport' 		=> $dm_transport,
+					'allow_transport' 		=> $allow_transport,
+					'dm_rent' 			=> $dm_rent,
+					'allow_rent' 			=> $allow_rent,
+					'dm_comunication' 		=> $dm_comunication,
+					'allow_comunication' 	=> $allow_comunication,
+					'dm_parking' 			=> $dm_parking,
+					'allow_parking' 		=> $allow_parking,
+					'dm_residance' 		=> $dm_residance,
+					'allow_residance' 		=> $allow_residance,
+					'dm_device' 			=> $dm_device,
+					'allow_device' 		=> $allow_device,
+					'dm_kasir' 			=> $dm_kasir,
+					'allow_kasir' 			=> $allow_kasir,
+					'dm_trans_meal' 		=> $dm_trans_meal,
+					'allow_trans_meal' 		=> $allow_trans_meal,
+					'dm_medicine' 			=> $dm_medicine,
+					'allow_medicine' 		=> $allow_medicine,
+					'total_allow' 			=> $total_allow,
+					'gaji_bersih' 			=> $gaji_bersih,
+					'kompensasi' 			=> $kompensasi,
+					'kompensasi_pt' 		=> $kompensasi_pt,
+					'bpjs_tk' 			=> $bpjs_tk,
+					'bpjs_ks' 			=> $bpjs_ks,
+					'insentive' 			=> $insentive,
+					'total' 				=> $total,
+					'grand_total' 			=> $grand_total,
+					'createdon' 			=> $createdon,
+					'createdby' 			=> $createdby,
+					'approveon' 			=> $approveon,
+					'approveby' 			=> $approveby,
 				);
 
 				//$id = $this->input->post('user_id');
-				$this->Employees_model->addeslip($data);
+				$this->Import_model->addratecard($data);
 
 				$datas = array(
 					'status_error' => 'Success Import',
 				);
 
-				$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
+				$this->Import_model->update_error_ratecard_temp($datas, $user[0]->secid);
 
 				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
 				echo $user[0]->nip.' '.$this->lang->line('xin_employee_status_updated');
@@ -554,15 +492,12 @@ class ImportExcelEslip extends MY_Controller
 		// }
 		$upload_id = $this->uri->segment(4);
 
+		$tempRatecard = $this->Import_model->get_temp_ratecard($upload_id);
 
-		$tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+		for($i=0; $i< count($tempRatecard); $i++){
 
-		for($i=0; $i< count($tempEmployees); $i++){
-
-
-
-				$user = $this->Xin_model->read_eslip_temp_info($tempEmployees[$i]->secid);
-				$duplicate = $this->Employees_model->read_eslip_info_by_nip_periode($user[0]->nip, $user[0]->periode);
+				$user = $this->Xin_model->read_ratecard_temp_info($tempRatecard[$i]->secid);
+				$duplicate = $this->Import_model->read_ratecard_info_by_project_periode($user[0]->project_id, $user[0]->periode);
 
 
 					if(!is_null($duplicate)) {
@@ -572,122 +507,129 @@ class ImportExcelEslip extends MY_Controller
 							'status_error' => 'Duplicate',
 						);
 
-						$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
+						$this->Import_model->update_error_ratecard_temp($datas, $user[0]->secid);
 
 					} else {
 
-				$uploadid = $user[0]->uploadid;
-				$nip = $user[0]->nip;
-				$fullname = $user[0]->fullname;
-				$periode = $user[0]->periode;
-				$project = $user[0]->project;
-				$project_sub = $user[0]->project_sub;
-				$area = $user[0]->area;
-				$hari_kerja = $user[0]->hari_kerja;
-				$gaji_pokok = $user[0]->gaji_pokok;
-				$allow_jabatan = $user[0]->allow_jabatan;
-				$allow_masakerja = $user[0]->allow_masakerja;
-				$allow_konsumsi = $user[0]->allow_konsumsi;
-				$allow_transport = $user[0]->allow_transport;
-				$allow_rent = $user[0]->allow_rent;
-				$allow_comunication = $user[0]->allow_comunication;
-				$allow_parking = $user[0]->allow_parking;
-				$allow_residence_cost = $user[0]->allow_residence_cost;
-				$allow_device = $user[0]->allow_device;
-				$allow_kasir = $user[0]->allow_kasir;
-				$allow_trans_meal = $user[0]->allow_trans_meal;
-				$allow_vitamin = $user[0]->allow_vitamin;
-				$penyesuaian_umk = $user[0]->penyesuaian_umk;
-				$insentive = $user[0]->insentive; 
-				$overtime = $user[0]->overtime;
-				$overtime_national_day = $user[0]->overtime_national_day;
-				$overtime_rapel = $user[0]->overtime_rapel;
-				$kompensasi = $user[0]->kompensasi;
-				$bonus = $user[0]->bonus;
-				$thr = $user[0]->thr;
-				$bpjs_tk_deduction = $user[0]->bpjs_tk_deduction;
-				$bpjs_ks_deduction = $user[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $user[0]->jaminan_pensiun_deduction;
-				$pendapatan = $user[0]->pendapatan;
-				$bpjs_tk = $user[0]->bpjs_tk;
-				$bpjs_ks = $user[0]->bpjs_ks; 
-				$jaminan_pensiun = $user[0]->jaminan_pensiun;
-				$pph = $user[0]->pph;
-				$deposit = $user[0]->deposit;
-				$penalty_late = $user[0]->penalty_late;
-				$penalty_attend = $user[0]->penalty_attend;
-				$deduction = $user[0]->deduction;
-				$simpanan_pokok = $user[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $user[0]->biaya_admin_bank;
-				$adjustment = $user[0]->adjustment;
-				$total = $user[0]->total;
-				$createdby = $user[0]->createdby;
+				$uploadid 				= $user[0]->uploadid;
+				$company_id 				= $user[0]->company_id;
+				$nama_pt 					= $user[0]->nama_pt;
+				$periode 					= $user[0]->periode;
+				$start_date 				= $user[0]->start_date;
+				$end_date 				= $user[0]->end_date;
+				$project_id 				= $user[0]->project_id;
+				$project 					= $user[0]->project;
+				$sub_project_id 			= $user[0]->sub_project_id;
+				$sub_project 				= $user[0]->sub_project;
+				$kota 					= $user[0]->kota;
+				$posisi_jabatan 			= $user[0]->posisi_jabatan;
+				$jumlah_mpp 				= $user[0]->jumlah_mpp;
+				$gaji_pokok 				= $user[0]->gaji_pokok;
+				$hari_kerja 				= $user[0]->hari_kerja;
+				$dm_grade 				= $user[0]->dm_grade;
+				$allow_grade 				= $user[0]->allow_grade;
+				$dm_konsumsi 				= $user[0]->dm_konsumsi;
+				$allow_konsumsi 			= $user[0]->allow_konsumsi;
+				$dm_transport 				= $user[0]->dm_transport;
+				$allow_transport 			= $user[0]->allow_transport;
+				$dm_rent 					= $user[0]->dm_rent;
+				$allow_rent 				= $user[0]->allow_rent;
+				$dm_comunication 			= $user[0]->dm_comunication;
+				$allow_comunication 		= $user[0]->allow_comunication;
+				$dm_parking 				= $user[0]->dm_parking;
+				$allow_parking 			= $user[0]->allow_parking;
+				$dm_residance 				= $user[0]->dm_resicance;
+				$allow_residance 			= $user[0]->allow_residance;
+				$dm_device 				= $user[0]->dm_device;
+				$allow_device 				= $user[0]->allow_device;
+				$dm_kasir 				= $user[0]->dm_kasir;
+				$allow_kasir 				= $user[0]->allow_kasir;
+				$dm_trans_meal 			= $user[0]->dm_trans_meal;
+				$allow_trans_meal 			= $user[0]->allow_trans_meal;
+				$dm_medicine 				= $user[0]->dm_medicine;
+				$allow_medicine 			= $user[0]->allow_medicine;
+				$total_allow 				= $user[0]->total_allow;
+				$gaji_bersih 				= $user[0]->gaji_bersih;
+				$kompensasi 				= $user[0]->kompensasi;
+				$kompensasi_pt 			= $user[0]->kompensasi_pt;
+				$bpjs_tk 					= $user[0]->bpjs_tk;
+				$bpjs_ks 					= $user[0]->bpjs_ks;
+				$insentive 				= $user[0]->insentive;
+				$total 					= $user[0]->total;
+				$grand_total 				= $user[0]->grand_total;
+				$createdon 				= $user[0]->createdon;
+				$createdby 				= $user[0]->createdby;
+				// $approve_on = $user[0]->periode;
+				// $approve_by = $user[0]->periode;
 
 				$data = array(
-					'uploadid' => $uploadid,
-					'nip' => $nip,
-					'fullname' => $fullname,
-					'periode' => $periode,
-					'project' => $project,
-					'project_sub' => $project_sub,
-					'area' => $area,
-					'hari_kerja' => $hari_kerja,
-					'gaji_pokok' => $gaji_pokok,
-					'allow_jabatan' => $allow_jabatan,
-					'allow_masakerja' => $allow_masakerja,
-					'allow_konsumsi' => $allow_konsumsi,
-					'allow_transport' => $allow_transport,
-					'allow_rent' => $allow_rent,
-					'allow_comunication' => $allow_comunication,
-					'allow_parking' => $allow_parking,
-					'allow_residence_cost' => $allow_residence_cost,
-					'allow_device' => $allow_device,
-					'allow_kasir' => $allow_kasir,
-					'allow_trans_meal' => $allow_trans_meal,
-					'allow_vitamin' => $allow_vitamin,
-					'penyesuaian_umk' => $penyesuaian_umk,
-					'insentive' => $insentive,
-					'overtime' => $overtime,
-					'overtime_national_day' => $overtime_national_day,
-					'overtime_rapel' => $overtime_rapel,
-					'kompensasi' => $kompensasi,
-					'bonus' => $bonus,
-					'thr' => $thr,
-					'bpjs_tk_deduction' => $bpjs_tk_deduction,
-					'bpjs_ks_deduction' => $bpjs_ks_deduction,
-					'jaminan_pensiun_deduction' => $jaminan_pensiun_deduction,
-					'pendapatan' => $pendapatan,
-					'bpjs_tk' => $bpjs_tk,
-					'bpjs_ks' => $bpjs_ks,
-					'jaminan_pensiun' => $jaminan_pensiun,
-					'deposit' => $deposit,
-					'pph' => $pph,
-					'penalty_late' => $penalty_late,
-					'penalty_attend' => $penalty_attend,
-					'deduction' => $deduction,
-					'simpanan_pokok' => $simpanan_pokok,
-					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
-					'pembayaran_pinjaman' => $pembayaran_pinjaman,
-					'biaya_admin_bank' => $biaya_admin_bank,
-					'adjustment' => $adjustment,
-					'total' => $total,	
-					'createdby' => $createdby,
+					'uploadid' 			=> $uploadid,
+					'company_id' 			=> $company_id,
+					'nama_pt' 			=> $nama_pt,
+					'periode' 			=> $periode,
+					'start_date' 			=> $start_date,
+					'end_date' 			=> $end_date,
+					'project_id' 			=> $project_id,
+					'project' 			=> $project,
+					'sub_project_id' 		=> $sub_project_id,
+					'sub_project' 			=> $sub_project,
+					'kota'	 			=> $kota,
+					'posisi_jabatan' 		=> $posisi_jabatan,
+					'jumlah_mpp' 			=> $jumlah_mpp,
+					'gaji_pokok' 			=> $gaji_pokok,
+					'hari_kerja' 			=> $hari_kerja,
+					'dm_grade' 			=> $dm_grade,
+					'allow_grade' 			=> $allow_grade,
+					'dm_konsumsi' 			=> $dm_konsumsi,
+					'allow_konsumsi' 		=> $allow_konsumsi,
+					'dm_transport' 		=> $dm_transport,
+					'allow_transport' 		=> $allow_transport,
+					'dm_rent' 			=> $dm_rent,
+					'allow_rent' 			=> $allow_rent,
+					'dm_comunication' 		=> $dm_comunication,
+					'allow_comunication' 	=> $allow_comunication,
+					'dm_parking' 			=> $dm_parking,
+					'allow_parking' 		=> $allow_parking,
+					'dm_residance' 		=> $dm_residance,
+					'allow_residance' 		=> $allow_residance,
+					'dm_device' 			=> $dm_device,
+					'allow_device' 		=> $allow_device,
+					'dm_kasir' 			=> $dm_kasir,
+					'allow_kasir' 			=> $allow_kasir,
+					'dm_trans_meal' 		=> $dm_trans_meal,
+					'allow_trans_meal' 		=> $allow_trans_meal,
+					'dm_medicine' 			=> $dm_medicine,
+					'allow_medicine' 		=> $allow_medicine,
+					'total_allow' 			=> $total_allow,
+					'gaji_bersih' 			=> $gaji_bersih,
+					'kompensasi' 			=> $kompensasi,
+					'kompensasi_pt' 		=> $kompensasi_pt,
+					'bpjs_tk' 			=> $bpjs_tk,
+					'bpjs_ks' 			=> $bpjs_ks,
+					'insentive' 			=> $insentive,
+					'total' 				=> $total,
+					'grand_total' 			=> $grand_total,
+					'createdon' 			=> $createdon,
+					'createdby' 			=> $createdby,
+					'approveon' 			=> $approveon,
+					'approveby' 			=> $approveby,
+
+					// 'total' => $total,	
+					// 'createdby' => $createdby,
 				);
 
 						//$id = $this->input->post('user_id');
-						$this->Employees_model->addeslip($data);
+						$this->Import_model->addratecard($data);
 
 						$datas = array(
 							'status_error' => 'Success Import',
 						);
 
-						$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
+						$this->Import_model->update_error_ratecard_temp($datas, $user[0]->secid);
 		}
 
 				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
-				echo $user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
+				echo $user[0]->company_id.' '.$this->lang->line('xin_employee_status_updated');
 
 			}
 
@@ -876,7 +818,6 @@ class ImportExcelEslip extends MY_Controller
 				$hari_kerja = $eslip[0]->hari_kerja;
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $user[0]->allow_masakerja;
 				$allow_konsumsi = $eslip[0]->allow_konsumsi;
 				$allow_transport = $eslip[0]->allow_transport;
 				$allow_rent = $eslip[0]->allow_rent;
@@ -1070,21 +1011,6 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 				}
 
-
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
 
 			if($allow_konsumsi!=0){
 				$tbl_2 .= '
@@ -1800,7 +1726,6 @@ class ImportExcelEslip extends MY_Controller
 				$hari_kerja = $eslip[0]->hari_kerja;
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
 				$allow_konsumsi = $eslip[0]->allow_konsumsi;
 				$allow_transport = $eslip[0]->allow_transport;
 				$allow_rent = $eslip[0]->allow_rent;
@@ -1995,20 +1920,6 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 				}
 
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
 
 			if($allow_konsumsi!=0){
 				$tbl_2 .= '
