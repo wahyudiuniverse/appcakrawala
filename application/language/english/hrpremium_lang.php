@@ -3105,6 +3105,7 @@ $lang['xin_request'] = 'Request';
 $lang['xin_verify'] = 'Verify';
 $lang['xin_approve'] = 'Approve';
 $lang['xin_request_pkwt'] = 'Request PKWT';
+$lang['xin_pkwt_digital'] = 'PKWT Digital';
 $lang['xin_template_pkwt'] = 'Template PKWT';
 $lang['xin_inhouse'] = 'In-House';
 $lang['xin_project'] = 'Project';

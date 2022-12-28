@@ -771,6 +771,7 @@ class ImportExcelEslip extends MY_Controller
 		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
 		$employee = $this->Employees_model->read_employee_info_by_nik($vpin);
 
+
 		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
 				if(!is_null($designation)){
 					$jabatan = $designation[0]->designation_name;
@@ -867,6 +868,8 @@ class ImportExcelEslip extends MY_Controller
 
 			if(!is_null($eslip)){
 
+				if($eslip[0]->nip == $employee[0]->employee_id) {
+
 				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
 				$nip = $eslip[0]->nip;
 				$namalengkap = $employee[0]->first_name;
@@ -955,6 +958,9 @@ class ImportExcelEslip extends MY_Controller
 				  // }
 
 
+				} else {
+					redirect('admin/');
+				}
 			} else {
 				redirect('admin/');
 

@@ -104,10 +104,10 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 
 	// get single employee by NIP
-	public function read_ratecard_info_by_project_periode($project, $periode) {
+	public function read_ratecard_info_by_project_periode($periode, $project, $area, $jabatan) {
 	
-		$sql = 'SELECT * FROM xin_employee_ratecard WHERE project_id = ? and periode = ?';
-		$binds = array($project, $periode);
+		$sql = 'SELECT * FROM xin_employee_ratecard WHERE periode = ? and project_id = ? and kota = ? and posisi_jabatan = ?';
+		$binds = array($periode, $project, $area, $jabatan);
 		$query = $this->db->query($sql, $binds);
 		
 		if ($query->num_rows() > 0) {

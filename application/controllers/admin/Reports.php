@@ -787,7 +787,7 @@ class Reports extends MY_Controller
 			if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
 			elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
 
-			$edits = $edit.$stat;
+			$edits = $stat;
 						
 			$data[] = array(
 				$edits,

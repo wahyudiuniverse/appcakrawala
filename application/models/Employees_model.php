@@ -621,7 +621,7 @@ class Employees_model extends CI_Model {
 	
 	// Function to Delete selected record from table
 	public function delete_temp_by_employeeid(){
-		$this->db->where('fullname', 'NAMA LENGKAP');
+		$this->db->where('employee_id', 'nip');
 		$this->db->delete('xin_employees_temp');
 		
 	}

@@ -42,12 +42,12 @@ class Employee_pkwt extends MY_Controller {
 		}
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = $this->lang->line('xin_resignin_employee').' | '.$this->Xin_model->site_title();
+			$data['title'] = $this->lang->line('xin_pkwt_digital').' | '.$this->Xin_model->site_title();
 			$data['all_companies'] = $this->Xin_model->get_companies();
-			$data['all_projects'] = $this->Project_model->get_all_projects();
+			// $data['all_projects'] = $this->Project_model->get_all_projects();
 			if(in_array('139',$role_resources_ids)) {
 				$data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
-				$data['all_projects'] = $this->Project_model->get_project_exist_all();
+				$data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
 			} else {
 				$data['all_emp_active'] = $this->Employees_model->get_all_employees_project();
 				$data['all_projects'] = $this->Project_model->get_project_exist();
@@ -55,10 +55,10 @@ class Employee_pkwt extends MY_Controller {
 
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
-		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
+		$data['breadcrumbs'] = $this->lang->line('xin_pkwt_digital');
 		$data['path_url'] = 'emp_pkwt';
-		if(in_array('490',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
+		if(in_array('376',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/employees/pkwt_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -220,7 +220,7 @@ class Employee_pkwt extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	}
 
-	public function request_employee_resign() {
+	public function request_employee_pkwt() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){
 			redirect('admin/');

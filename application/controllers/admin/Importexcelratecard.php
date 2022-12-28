@@ -133,7 +133,7 @@ class Importexcelratecard extends MY_Controller
 			  
 			  $importid = $r->uploadid;
 			  $periode = $r->periode;
-			  $end_date = $r->end_date;
+			  $date_periode = $r->date_periode;
 			  $project_id = $r->project_id;
 			  $project = $r->project;
 			  $kota = $r->kota;
@@ -180,7 +180,7 @@ class Importexcelratecard extends MY_Controller
 		   	$error,
 				// $importid,
 				$periode,
-				$end_date,
+				$date_periode,
 				$project,
 				$kota,
 				$posisi_jabatan,
@@ -347,7 +347,7 @@ class Importexcelratecard extends MY_Controller
 		// }
 		// $user_id = $this->uri->segment(5);
 		$user = $this->Xin_model->read_ratecard_temp_info($status_id);
-		$duplicate = $this->Import_model->read_ratecard_info_by_project_periode($user[0]->project_id, $user[0]->periode);
+		$duplicate = $this->Import_model->read_ratecard_info_by_project_periode($user[0]->periode, $user[0]->project_id, $user[0]->kota, $user[0]->posisi_jabatan);
 
 			if(!is_null($duplicate)) {
 				// $error = 'Error';
@@ -364,8 +364,7 @@ class Importexcelratecard extends MY_Controller
 				$company_id 				= $user[0]->company_id;
 				$nama_pt 					= $user[0]->nama_pt;
 				$periode 					= $user[0]->periode;
-				$start_date 				= $user[0]->start_date;
-				$end_date 				= $user[0]->end_date;
+				$date_periode 				= $user[0]->date_periode;
 				$project_id 				= $user[0]->project_id;
 				$project 					= $user[0]->project;
 				$sub_project_id 			= $user[0]->sub_project_id;
@@ -377,6 +376,8 @@ class Importexcelratecard extends MY_Controller
 				$hari_kerja 				= $user[0]->hari_kerja;
 				$dm_grade 				= $user[0]->dm_grade;
 				$allow_grade 				= $user[0]->allow_grade;
+				$dm_masa_kerja 			= $user[0]->dm_masa_kerja;
+				$allow_masa_kerja 			= $user[0]->allow_masa_kerja;
 				$dm_konsumsi 				= $user[0]->dm_konsumsi;
 				$allow_konsumsi 			= $user[0]->allow_konsumsi;
 				$dm_transport 				= $user[0]->dm_transport;
@@ -416,8 +417,7 @@ class Importexcelratecard extends MY_Controller
 					'company_id' 			=> $company_id,
 					'nama_pt' 			=> $nama_pt,
 					'periode' 			=> $periode,
-					'start_date' 			=> $start_date,
-					'end_date' 			=> $end_date,
+					'date_periode' 		=> $date_periode,
 					'project_id' 			=> $project_id,
 					'project' 			=> $project,
 					'sub_project_id' 		=> $sub_project_id,
@@ -429,6 +429,8 @@ class Importexcelratecard extends MY_Controller
 					'hari_kerja' 			=> $hari_kerja,
 					'dm_grade' 			=> $dm_grade,
 					'allow_grade' 			=> $allow_grade,
+					'dm_masa_kerja' 		=> $dm_masa_kerja,
+					'allow_masa_kerja' 		=> $allow_masa_kerja,
 					'dm_konsumsi' 			=> $dm_konsumsi,
 					'allow_konsumsi' 		=> $allow_konsumsi,
 					'dm_transport' 		=> $dm_transport,
@@ -497,7 +499,7 @@ class Importexcelratecard extends MY_Controller
 		for($i=0; $i< count($tempRatecard); $i++){
 
 				$user = $this->Xin_model->read_ratecard_temp_info($tempRatecard[$i]->secid);
-				$duplicate = $this->Import_model->read_ratecard_info_by_project_periode($user[0]->project_id, $user[0]->periode);
+				$duplicate = $this->Import_model->read_ratecard_info_by_project_periode($user[0]->periode, $user[0]->project_id, $user[0]->kota, $user[0]->posisi_jabatan);
 
 
 					if(!is_null($duplicate)) {
@@ -515,8 +517,7 @@ class Importexcelratecard extends MY_Controller
 				$company_id 				= $user[0]->company_id;
 				$nama_pt 					= $user[0]->nama_pt;
 				$periode 					= $user[0]->periode;
-				$start_date 				= $user[0]->start_date;
-				$end_date 				= $user[0]->end_date;
+				$date_periode 				= $user[0]->date_periode;
 				$project_id 				= $user[0]->project_id;
 				$project 					= $user[0]->project;
 				$sub_project_id 			= $user[0]->sub_project_id;
@@ -528,6 +529,8 @@ class Importexcelratecard extends MY_Controller
 				$hari_kerja 				= $user[0]->hari_kerja;
 				$dm_grade 				= $user[0]->dm_grade;
 				$allow_grade 				= $user[0]->allow_grade;
+				$dm_masa_kerja 			= $user[0]->dm_masa_kerja;
+				$allow_masa_kerja 			= $user[0]->allow_masa_kerja;
 				$dm_konsumsi 				= $user[0]->dm_konsumsi;
 				$allow_konsumsi 			= $user[0]->allow_konsumsi;
 				$dm_transport 				= $user[0]->dm_transport;
@@ -567,8 +570,7 @@ class Importexcelratecard extends MY_Controller
 					'company_id' 			=> $company_id,
 					'nama_pt' 			=> $nama_pt,
 					'periode' 			=> $periode,
-					'start_date' 			=> $start_date,
-					'end_date' 			=> $end_date,
+					'date_periode' 		=> $date_periode,
 					'project_id' 			=> $project_id,
 					'project' 			=> $project,
 					'sub_project_id' 		=> $sub_project_id,
@@ -580,6 +582,8 @@ class Importexcelratecard extends MY_Controller
 					'hari_kerja' 			=> $hari_kerja,
 					'dm_grade' 			=> $dm_grade,
 					'allow_grade' 			=> $allow_grade,
+					'dm_masa_kerja' 		=> $dm_masa_kerja,
+					'allow_masa_kerja' 		=> $allow_masa_kerja,
 					'dm_konsumsi' 			=> $dm_konsumsi,
 					'allow_konsumsi' 		=> $allow_konsumsi,
 					'dm_transport' 		=> $dm_transport,

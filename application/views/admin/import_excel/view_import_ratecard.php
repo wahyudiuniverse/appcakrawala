@@ -66,7 +66,7 @@
           <tr>
             <th style="width: 70px;">Action / <?php echo $this->lang->line('xin_import_status_error');?></th>
             <th style="width: 140px;">Periode</th>
-            <th style="width: 60px;">Akhir Kontrak</th>
+            <th style="width: 60px;">Tanggal Kontrak</th>
             <th style="width: 100px;">Project</th>
             <th style="width: 80px;">Kota/Are</th>
             <th style="width: 120px;">Jabatan</th>
