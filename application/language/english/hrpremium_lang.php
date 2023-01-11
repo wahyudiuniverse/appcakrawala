@@ -530,7 +530,7 @@ $lang['xin_employee_doj'] = "Tanggal Bergabung";
 $lang['xin_employee_role'] = "Role";
 $lang['xin_employee_gender'] = "Jenis Kelamin";
 $lang['xin_browse'] = "Browse";
-$lang['xin_gender_male'] = "Laki";
+$lang['xin_gender_male'] = "Laki-Laki";
 $lang['xin_gender_female'] = "Perempuan";
 $lang['xin_employee_office_shift'] = "Office Shift";
 $lang['xin_employee_password'] = "PIN";
@@ -539,7 +539,7 @@ $lang['xin_employee_address'] = "Alamat";
 $lang['xin_e_details_basic'] = "Informasi Personal";
 $lang['xin_e_details_user'] = "User";
 $lang['xin_e_details_profileinfo'] = "Informasi Profile";
-$lang['xin_e_details_profile_picture'] = "Profile Picture";
+$lang['xin_e_details_profile_picture'] = "Foto Profile";
 $lang['xin_e_details_contact'] = "Kontak";
 $lang['xin_e_details_social'] = "Social Networking";
 $lang['xin_e_details_document'] = "Dokumen";
@@ -2033,6 +2033,7 @@ $lang['xin_employee_error_jurusan'] = "Kolom Nama Jurusan masih kosong...!";
 $lang['xin_employee_error_posisi_lamar'] = "Kolom Posisi Lamaran masih kosong...!";
 $lang['xin_employee_error_nomor_rek'] = "Kolom Nomor Rekening masih kosong...!";
 $lang['xin_employee_error_pemilik_rek'] = "Kolom Pemilik Rekening masih kosong...!";
+$lang['xin_employee_error_status_pernikahan'] = "Kolom Status Pernikahan...!";
 $lang['xin_employee_error_empty_ktp'] = "Foto KTP masih kosong...!";
 $lang['xin_employee_error_empty_kk'] = "Foto KK masih kosong...!";
 $lang['xin_employee_error_empty_rek'] = "Foto Rekening masih kosong...!";
@@ -3134,6 +3135,7 @@ $lang['xin_success_delete'] = 'Hapus Data Berhasil...';
 $lang['xin_paklaring'] = 'Paklaring';
 $lang['xin_preview_eslip'] = 'Preview ESLIP';
 $lang['xin_sk_report'] = 'SK Kerja Report';
+$lang['xin_profile_tempat_lahir'] = 'Tempat Lahir';
 
 ///////////////////////////////////////////////// end hrpremium v2.0.1
 /* End of file hrpremium_lang.php */

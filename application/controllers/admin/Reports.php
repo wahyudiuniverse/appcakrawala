@@ -693,7 +693,7 @@ class Reports extends MY_Controller
 			}
 
 			if($r->date_of_joining!='' || !is_null($r->date_of_birth)){
-				$dob = $this->Xin_model->tgl_indo($r->date_of_joining);
+				$dob = $this->Xin_model->tgl_indo($r->date_of_birth);
 			} else {
 				$dob = '--';	
 			}
@@ -787,7 +787,13 @@ class Reports extends MY_Controller
 			if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
 			elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
 
-			$edits = $stat;
+			$role_resources_ids = $this->Xin_model->user_role_resource();
+
+			if(in_array('472',$role_resources_ids)) {
+				$edits = $edit.' '.$stat;
+			} else {
+				$edits = $stat;
+			}
 						
 			$data[] = array(
 				$edits,
@@ -1242,15 +1248,14 @@ class Reports extends MY_Controller
 		
 		$company_id = $this->uri->segment(4);
 		$project_id = $this->uri->segment(5);
-		$employee_id = $this->uri->segment(6);
-		$start_date = $this->uri->segment(7);
-		$end_date = $this->uri->segment(8);
+		$start_date = $this->uri->segment(6);
+		$end_date = $this->uri->segment(7);
 
-		// if($company_id==0 || is_null($company_id) || $project_id==0 || is_null($project_id)){
-			$employee = $this->Reports_model->filter_report_emp_att_null($company_id,$project_id,$employee_id,$start_date,$end_date);
-		// } else {
-			// $attend = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$employee_id,$start_date,$end_date);
-		// }
+		if($company_id==0 || is_null($company_id)){
+			$employee = $this->Reports_model->filter_report_emp_att_null();
+		} else {
+			$employee = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$start_date,$end_date);
+		}
 
 		// $employee = $this->Employees_model->get_employees();
 
@@ -1266,6 +1271,13 @@ class Reports extends MY_Controller
 				$fullname = '--';	
 			}
 
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if(!is_null($project)){
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';	
+			}
+
 			$cust = $this->Customers_model->read_single_customer($r->customer_id);
 			if(!is_null($cust)){
 				$nama_toko = $cust[0]->customer_name;
@@ -1276,6 +1288,7 @@ class Reports extends MY_Controller
 			$data[] = array (
 				$r->employee_id,
 				$fullname,
+				$project_name,
 				$nama_toko,
 				$r->date_phone,
 				$r->time_in,
@@ -2093,8 +2106,6 @@ class Reports extends MY_Controller
 				$status = $this->lang->line('xin_absent');
 			}
 		}
-		
-		
 		
 		// check if clock-out for date
 		$check_out = $this->Timesheet_model->attendance_first_out_check($employee[0]->user_id,$attendance_date);		

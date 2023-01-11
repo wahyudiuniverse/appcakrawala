@@ -573,49 +573,38 @@ class Employees extends MY_Controller {
 			$system = $this->Xin_model->read_setting_info(1);
 			$user_info = $this->Xin_model->read_user_info($session['user_id']);
 
-			if($this->input->get("ihr")=='true'){
-				if($this->input->get("company_id")==0 && $this->input->get("location_id")==0 && $this->input->get("department_id")==0 && $this->input->get("designation_id")==0){
-					$employee = $this->Employees_model->get_employees();
-					
-				} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")==0 && $this->input->get("department_id")==0 && $this->input->get("designation_id")==0){
-					$employee = $this->Employees_model->get_company_employees_flt($this->input->get("company_id"));
-				} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")==0 && $this->input->get("designation_id")==0){
-					$employee = $this->Employees_model->get_company_location_employees_flt($this->input->get("company_id"),$this->input->get("location_id"));
-					
-				} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")!=0 && $this->input->get("designation_id")==0){
-					$employee = $this->Employees_model->get_company_location_department_employees_flt($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"));
-					
-				} else if($this->input->get("company_id")!=0 && $this->input->get("location_id")!=0 && $this->input->get("department_id")!=0 && $this->input->get("designation_id")!=0){
-					$employee = $this->Employees_model->get_company_location_department_designation_employees_flt($this->input->get("company_id"),$this->input->get("location_id"),$this->input->get("department_id"),$this->input->get("designation_id"));
-				}
-			} else {
-				if($user_info[0]->user_role_id==1 || $user_info[0]->user_role_id==3) {
-					$employee = $this->Employees_model->get_employees();
-				} else {
-					if(in_array('372',$role_resources_ids)) {
-						$employee = $this->Employees_model->get_employees_for_other($user_info[0]->company_id);
-					} else if(in_array('373',$role_resources_ids)) {
-						$employee = $this->Employees_model->get_employees_for_location($user_info[0]->location_id);
-					} else {
-						$employee = $this->Employees_model->get_employees_for_location($user_info[0]->location_id);
-					}
-				}
-			}
+			$employee = $this->Employees_model->get_employees();
 		
 			$data = array();
 
 			foreach($employee->result() as $r) {
 		
-			// get company
-			$company = $this->Xin_model->read_company_info($r->company_id);
-			if(!is_null($company)){
-				$comp_name = $company[0]->name;
-			} else {
-				$comp_name = '--';	
-			}
-			
-			// user full name 
-			$full_name = $r->first_name.' '.$r->last_name;
+				// user full name 
+				$full_name = $r->first_name.' '.$r->last_name;
+
+				// get company
+				$company = $this->Xin_model->read_company_info($r->company_id);
+				if(!is_null($company)){
+					$comp_name = $company[0]->name;
+				} else {
+					$comp_name = '--';	
+				}
+
+				$projects = $this->Project_model->read_single_project($r->project_id);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+
+				// get designation
+				$designation = $this->Designation_model->read_designation_information($r->designation_id);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
+
 			// user role
 			$role = $this->Xin_model->read_user_role_info($r->user_role_id);
 			if(!is_null($role)){
@@ -626,21 +615,7 @@ class Employees extends MY_Controller {
 
 			$tgllahir = $this->Xin_model->tgl_indo($r->date_of_birth);
 
-			// get report to
-			$reports_to = $this->Xin_model->read_user_info($r->reports_to);
-			// user full name
-			if(!is_null($reports_to)){
-				$manager_name = $reports_to[0]->first_name.' '.$reports_to[0]->last_name;
-			} else {
-				$manager_name = '--';	
-			}
-			// get designation
-			$designation = $this->Designation_model->read_designation_information($r->designation_id);
-			if(!is_null($designation)){
-				$designation_name = $designation[0]->designation_name;
-			} else {
-				$designation_name = '--';	
-			}
+	
 			// department
 			$department = $this->Department_model->read_department_information($r->department_id);
 			if(!is_null($department)){
@@ -648,113 +623,55 @@ class Employees extends MY_Controller {
 			} else {
 			$department_name = '--';	
 			}
-			// location
-			$location = $this->Location_model->read_location_information($r->location_id);
-			if(!is_null($location)){
-			$location_name = $location[0]->location_name;
-			} else {
-			$location_name = '--';	
-			}
+
+
+			// if($r->user_id != '1') {
+			// 	if(in_array('203',$role_resources_ids)) {
+			// 		$del_opt = '<span data-toggle="tooltip" data-state="danger" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fas fa-trash-restore"></span></button></span>';
+			// 	} else {
+			// 		$del_opt = '';
+			// 	}
+			// } else {
+			// 	$del_opt = '';
+			// }
+			// if(in_array('202',$role_resources_ids)) {
+			// 	$view_opt = '<span data-toggle="tooltip" data-state="primary" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="far fa-arrow-alt-circle-right"></span></button></a></span>';
+			// } else {
+			// 	$view_opt = '';
+			// }
+
+			// $function = 
+			// '<br>
+			// 	<div class="btn-group" data-toggle="tooltip" data-state="primary" data-placement="top" title="'.$this->lang->line('xin_change_status').'">
+			// 		<button type="button" class="btn btn-sm md-btn-flat dropdown-toggle '.$status_btn.'" data-toggle="dropdown">'.$status_title.'
+			// 		</button>
+			// 	<div class="dropdown-menu">
+			// 	<a class="dropdown-item statusinfo" href="javascript:void(0)" data-status="1" data-user-id="'.$r->user_id.'">'.$this->lang->line('xin_employees_active').'</a>
+
+			// 	<a class="dropdown-item statusinfo" href="javascript:void(0)" data-status="2" data-user-id="'.$r->user_id.'">'.$this->lang->line('xin_employees_inactive').'</a></div></div>';
+
+			// if($r->wages_type == 1){
+			// 	$bsalary = $this->Xin_model->currency_sign($r->basic_salary);
+			// } else {
+			// 	$bsalary = $this->Xin_model->currency_sign($r->daily_wages);
+			// }
 			
 			
-			$department_designation = $designation_name.' ('.$department_name.')';
-			/*// get status
-			if($r->is_active==0): $status = '<span class="badge badge-pill badge-danger">'.$this->lang->line('xin_employees_inactive').'</span>';
-			elseif($r->is_active==1): $status = '<span class="badge badge-pill badge-success">'.$this->lang->line('xin_employees_active').'</span>';endif;*/
-			
-
-			// get status
-			// if($r->is_active==0)
-			// 	: $status_btn = 'btn-outline-danger'; $status_title = $this->lang->line('xin_employees_inactive');
-			// elseif($r->is_active==1)
-			// 	: $status_btn = 'btn-success'; $status_title = $this->lang->line('xin_employees_active'); 
-			// endif;
-
-			if($r->is_active==1){
-				$status_btn = 'btn-success'; 
-				$status_title = $this->lang->line('xin_employees_active');
-			}else {
-				$status_btn = 'btn-outline-danger'; 
-				$status_title = $this->lang->line('xin_employees_inactive');
-			}
-
-			if($r->user_id != '1') {
-				if(in_array('203',$role_resources_ids)) {
-					$del_opt = '<span data-toggle="tooltip" data-state="danger" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fas fa-trash-restore"></span></button></span>';
-				} else {
-					$del_opt = '';
-				}
-			} else {
-				$del_opt = '';
-			}
-			if(in_array('202',$role_resources_ids)) {
-				$view_opt = '<span data-toggle="tooltip" data-state="primary" data-placement="top" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="far fa-arrow-alt-circle-right"></span></button></a></span>';
-			} else {
-				$view_opt = '';
-			}
-
-			$function = 
-			'<br>
-				<div class="btn-group" data-toggle="tooltip" data-state="primary" data-placement="top" title="'.$this->lang->line('xin_change_status').'">
-					<button type="button" class="btn btn-sm md-btn-flat dropdown-toggle '.$status_btn.'" data-toggle="dropdown">'.$status_title.'
-					</button>
-				<div class="dropdown-menu">
-				<a class="dropdown-item statusinfo" href="javascript:void(0)" data-status="1" data-user-id="'.$r->user_id.'">'.$this->lang->line('xin_employees_active').'</a>
-
-				<a class="dropdown-item statusinfo" href="javascript:void(0)" data-status="2" data-user-id="'.$r->user_id.'">'.$this->lang->line('xin_employees_inactive').'</a></div></div>';
-
-			if($r->wages_type == 1){
-				$bsalary = $this->Xin_model->currency_sign($r->basic_salary);
-			} else {
-				$bsalary = $this->Xin_model->currency_sign($r->daily_wages);
-			}
-			
-			
-			if($r->profile_picture!='' && $r->profile_picture!='no file') {
-				$ol = '<a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$r->profile_picture.'" class="d-block ui-w-30 rounded-circle" alt=""></span></a>';
-			} else {
-				if($r->gender=='Male') { 
-					$de_file = base_url().'uploads/profile/default_male.jpg';
-				 } else {
-					$de_file = base_url().'uploads/profile/default_female.jpg';
-				 }
-				$ol = '<a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><span class="avatar box-32"><img src="'.$de_file.'" class="d-block ui-w-30 rounded-circle" alt=""></span></a>';
-			}
-			//shift info
-			$office_shift = $this->Timesheet_model->read_office_shift_information($r->office_shift_id);
-			if(!is_null($office_shift)){
-				$shift = $office_shift[0]->shift_name;
-			} else {
-				$shift = '<a href="javascript:void(0)" class="badge badge-danger">'.$this->lang->line('xin_office_shift_not_assigned').'</a>';	
-			}			
+			// if($r->profile_picture!='' && $r->profile_picture!='no file') {
+			// 	$ol = '<a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$r->profile_picture.'" class="d-block ui-w-30 rounded-circle" alt=""></span></a>';
+			// } else {
+			// 	if($r->gender=='Male') { 
+			// 		$de_file = base_url().'uploads/profile/default_male.jpg';
+			// 	 } else {
+			// 		$de_file = base_url().'uploads/profile/default_female.jpg';
+			// 	 }
+			// 	$ol = '<a href="'.site_url().'admin/employees/detail/'.$r->user_id.'"><span class="avatar box-32"><img src="'.$de_file.'" class="d-block ui-w-30 rounded-circle" alt=""></span></a>';
+			// }
+		
 
 				$ename = '<a href="'.site_url().'admin/employees/detail/'.$r->user_id.'" class="d-block text-primary">'.$full_name.'</a>'; 
 
-
-			// 1: salary type
-			if($r->wages_type==1){
-				$wages_type = $this->lang->line('xin_payroll_basic_salary');
-				if($system[0]->is_half_monthly==1){
-					$basic_salary = $r->basic_salary / 2;
-				} else {
-					$basic_salary = $r->basic_salary;
-				}
-			} else if($r->wages_type==2){
-				$wages_type = $this->lang->line('xin_employee_daily_wages');
-				$basic_salary = $r->basic_salary;
-			} else {
-				$wages_type = $this->lang->line('xin_payroll_basic_salary');
-				if($system[0]->is_half_monthly==1){
-					$basic_salary = $r->basic_salary / 2;
-				} else {
-					$basic_salary = $r->basic_salary;
-				}				
-			}
-			$basic_salary = $this->Xin_model->currency_sign($basic_salary);
-			$employee_name = '<div class="media align-items-center">
-			'.$ol.'
-			<div class="media-body ml-2">
-			  '.$ename;
+			$employee_name = '<div class="media align-items-center"><div class="media-body ml-2">'.$ename;
 
 			  if(in_array('351',$role_resources_ids)) {
 				$employee_name .= '<div class="text-info small text-truncate"><a href="'.site_url('admin/employees/setup_salary/').$r->user_id.'" class="text-muted" data-state="primary" data-placement="top" data-toggle="tooltip" title="'.$this->lang->line('xin_salary_title').'">'.$this->lang->line('xin_employee_set_salary').': '.$basic_salary.'WHAT'.' <i class="fas fa-arrow-circle-right"></i></a></div><div class="text-success small text-truncate"><a href="'.site_url('admin/employees/setup_salary/').$r->user_id.'" class="text-muted" data-state="primary" data-placement="top" data-toggle="tooltip" title="'.$this->lang->line('xin_employee_set_salary').'">'.$this->lang->line('left_payroll').': '.$wages_type.' <i class="fas fa-arrow-circle-right"></i></a></div>';
@@ -766,21 +683,23 @@ class Employees extends MY_Controller {
 			$employee_name .= '</div>
 		  </div>';
 			
-			$comp_name = '<div class="media align-items-center">
-				<div class="media-body flex-truncate">
-				  '.$comp_name.'
-				  <div class="text-muted small text-truncate">'.$this->lang->line('xin_location').': '.$location_name.'</div>
-				  <div class="text-muted small text-truncate">'.$this->lang->line('left_department').': '.$department_name.'</div>
-				</div>
-			  </div>';			
+			// $comp_name = '<div class="media align-items-center">
+			// 	<div class="media-body flex-truncate">
+			// 	  '.$comp_name.'
+			// 	  <div class="text-muted small text-truncate">'.$this->lang->line('xin_location').': </div>
+			// 	  <div class="text-muted small text-truncate">'.$this->lang->line('left_department').': '.$department_name.'</div>
+			// 	</div>
+			//   </div>';			
 			$contact_info = '<div class="text-muted" data-state="primary" data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_contact_number').'"></div> '.$r->contact_no;
 			
 			
 			$role_status = $role_name;
 			$data[] = array(
-				$r->username,
-				$employee_name,
-				$comp_name,
+				$r->employee_id,
+				$r->ktp_no,
+				$ename,
+				$nama_project,
+				$designation_name,
 				$contact_info,
 				$tgllahir,
 				$role_name,
@@ -1163,6 +1082,11 @@ class Employees extends MY_Controller {
 			'youtube_link' => $result[0]->youtube_link,
 			'leave_categories' => $result[0]->leave_categories,
 			'view_companies_id' => $result[0]->view_companies_id,
+			'ktp_no' => $result[0]->ktp_no,
+			'kk_no' => $result[0]->kk_no,
+			'npwp_no' => $result[0]->npwp_no,
+			'bpjs_tk_no' => $result[0]->bpjs_tk_no,
+			'bpjs_ks_no' => $result[0]->bpjs_ks_no,
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
 			'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),
@@ -2070,9 +1994,9 @@ class Employees extends MY_Controller {
 	}
 
 	// Validate and add info in database // bank account info
-	public function bank_account_info() {
+	public function bank_account_info() { 
 	
-		if($this->input->post('type')=='bank_account_info') {		
+		if($this->input->post('type')=='bank_account_info') {	
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
@@ -3336,71 +3260,112 @@ class Employees extends MY_Controller {
 	// Validate and update info in database // social info
 	public function profile_picture() {
 	
-		if($this->input->post('type')=='profile_picture') {		
+		if($this->input->post('type')=='profile_picture') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		$id = $this->input->post('user_id');
 			
 		/* Check if file uploaded..*/
-		if($_FILES['p_file']['size'] == 0 && null ==$this->input->post('remove_profile_picture')) {
-			$Return['error'] = $this->lang->line('xin_employee_select_picture');
-		} else {
-			if(is_uploaded_file($_FILES['p_file']['tmp_name'])) {
-				//checking image type
-				$allowed =  array('png','jpg','jpeg','pdf','gif');
-				$filename = $_FILES['p_file']['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+		// if($_FILES['p_file']['size'] == 0 && null ==$this->input->post('remove_profile_picture')) {
+		// 	$Return['error'] = $this->lang->line('xin_employee_select_picture');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['p_file']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed =  array('png','jpg','jpeg','pdf','gif');
+		// 		$filename = $_FILES['p_file']['name'];
+		// 		$ext = pathinfo($filename, PATHINFO_EXTENSION);
 				
-				if(in_array($ext,$allowed)){
-					$tmp_name = $_FILES["p_file"]["tmp_name"];
-					$profile = "uploads/profile/";
-					$set_img = base_url()."uploads/profile/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["p_file"]["name"]);
-					$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
-					move_uploaded_file($tmp_name, $profile.$newfilename);
-					$fname = $newfilename;
+		// 		if(in_array($ext,$allowed)){
+
+		// 			// $tmp_name = $_FILES["p_file"]["tmp_name"];
+		// 			// $profile = "uploads/profile/";
+		// 			// $set_img = base_url()."uploads/profile/";
+		// 			// $name = basename($_FILES["p_file"]["name"]);
+		// 			// $newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+		// 			// move_uploaded_file($tmp_name, $profile.$newfilename);
+		// 			// $fname = $newfilename;
 					
-					//UPDATE Employee info in DB
-					$data = array('profile_picture' => $fname);
-					$result = $this->Employees_model->profile_picture($data,$id);
-					if ($result == TRUE) {
-						$Return['result'] = $this->lang->line('xin_employee_picture_updated');
-						$Return['img'] = $set_img.$fname;
-					} else {
-						$Return['error'] = $this->lang->line('xin_error_msg');
-					}
-					$this->output($Return);
-					exit;
+		// 			// //UPDATE Employee info in DB
+		// 			// $data = array('profile_picture' => $fname);
+		// 			// $result = $this->Employees_model->profile_picture($data,$id);
+		// 			// if ($result == TRUE) {
+		// 			// 	$Return['result'] = $this->lang->line('xin_employee_picture_updated');
+		// 			// 	$Return['img'] = $set_img.$fname;
+		// 			// 	// $Return['result'] = $this->lang->line('xin_employee_picture_updated');
+		// 			// 	// $Return['img'] = $set_img.$fname;
+		// 			// } else {
+		// 				$Return['error'] = $this->lang->line('xin_error_msg');
+		// 			// }
+		// 			$this->output($Return);
+		// 			exit;
 					
-				} else {
+		// 		} else {
 					$Return['error'] = $this->lang->line('xin_employee_picture_type');
-				}
-				}
-			}
+		// 		}
+		// 		}
+		// 	}
+
+
+		/* Check if file uploaded..*/
+		// if($_FILES['p_file']['size'] == 0 && null ==$this->input->post('remove_profile_picture')) {
+		// 	$Return['error'] = $this->lang->line('xin_employee_select_picture');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['p_file']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed =  array('png','jpg','jpeg','pdf','gif');
+		// 		$filename = $_FILES['p_file']['name'];
+		// 		$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				
+		// 		if(in_array($ext,$allowed)){
+		// 			$tmp_name = $_FILES["p_file"]["tmp_name"];
+		// 			$profile = "uploads/profile/";
+		// 			$set_img = base_url()."uploads/profile/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["p_file"]["name"]);
+		// 			$newfilename = 'profile_'.round(microtime(true)).'.'.$ext;
+		// 			move_uploaded_file($tmp_name, $profile.$newfilename);
+		// 			$fname = $newfilename;
+					
+		// 			//UPDATE Employee info in DB
+		// 			$data = array('profile_picture' => $fname);
+		// 			$result = $this->Employees_model->profile_picture($data,$id);
+		// 			if ($result == TRUE) {
+		// 				$Return['result'] = $this->lang->line('xin_employee_picture_updated');
+		// 				$Return['img'] = $set_img.$fname;
+		// 			} else {
+		// 				$Return['error'] = $this->lang->line('xin_error_msg');
+		// 			}
+		// 			$this->output($Return);
+		// 			exit;
+					
+		// 		} else {
+		// 			$Return['error'] = $this->lang->line('xin_employee_picture_type');
+		// 		}
+		// 		}
+		// 	}
 			
-			if(null!=$this->input->post('remove_profile_picture')) {
-				//UPDATE Employee info in DB
-				$data = array('profile_picture' => 'no file');				
-				$row = $this->Employees_model->read_employee_information($id);
-				$profile = base_url()."uploads/profile/";
-				$result = $this->Employees_model->profile_picture($data,$id);
-				if ($result == TRUE) {
-					$Return['result'] = $this->lang->line('xin_employee_picture_updated');
-					if($row[0]->gender=='Male') {
-						$Return['img'] = $profile.'default_male.jpg';
-					} else {
-						$Return['img'] = $profile.'default_female.jpg';
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_msg');
-				}
+			// if(null!=$this->input->post('remove_profile_picture')) {
+			// 	//UPDATE Employee info in DB
+			// 	$data = array('profile_picture' => 'no file');				
+			// 	$row = $this->Employees_model->read_employee_information($id);
+			// 	$profile = base_url()."uploads/profile/";
+			// 	$result = $this->Employees_model->profile_picture($data,$id);
+			// 	if ($result == TRUE) {
+			// 		$Return['result'] = $this->lang->line('xin_employee_picture_updated');
+			// 		if($row[0]->gender=='Male') {
+			// 			$Return['img'] = $profile.'default_male.jpg';
+			// 		} else {
+			// 			$Return['img'] = $profile.'default_female.jpg';
+			// 		}
+			// 	} else {
+			// 		$Return['error'] = $this->lang->line('xin_error_msg');
+			// 	}
 				$this->output($Return);
 				exit;
 				
-			}
+			// }
 				
 			if($Return['error']!=''){
 				$this->output($Return);
@@ -3408,6 +3373,7 @@ class Employees extends MY_Controller {
 		}
 	}
 	
+
 	// Validate and update info in database // basic info
 	public function social_info() {
 	
@@ -3456,6 +3422,55 @@ class Employees extends MY_Controller {
 		exit;
 		}
 	}	
+	
+	// Validate and update info in database // basic info
+	// public function social_info() {
+	
+	// 	if($this->input->post('type')=='social_info') {		
+	// 	/* Define return | here result is used to return user data and error for error message */
+	// 	$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+	// 	$Return['csrf_hash'] = $this->security->get_csrf_hash();	
+	// 	if ($this->input->post('facebook_link')!=='' && !filter_var($this->input->post('facebook_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_fb_field_error');
+	// 	} else if ($this->input->post('twitter_link')!=='' && !filter_var($this->input->post('twitter_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_twitter_field_error');
+	// 	} else if ($this->input->post('blogger_link')!=='' && !filter_var($this->input->post('blogger_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_blogger_field_error');
+	// 	} else if ($this->input->post('linkdedin_link')!=='' && !filter_var($this->input->post('linkdedin_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_linkedin_field_error');
+	// 	} else if ($this->input->post('google_plus_link')!=='' && !filter_var($this->input->post('google_plus_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_gplus_field_error');
+	// 	} else if ($this->input->post('instagram_link')!=='' && !filter_var($this->input->post('instagram_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_instagram_field_error');
+	// 	} else if ($this->input->post('pinterest_link')!=='' && !filter_var($this->input->post('pinterest_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_pinterest_field_error');
+	// 	} else if ($this->input->post('youtube_link')!=='' && !filter_var($this->input->post('youtube_link'), FILTER_VALIDATE_URL)) {
+	// 		$Return['error'] = $this->lang->line('xin_hr_youtube_field_error');
+	// 	}
+	// 	if($Return['error']!=''){
+	// 		$this->output($Return);
+	// 	}
+	// 	$data = array(
+	// 	'facebook_link' => $this->input->post('facebook_link'),
+	// 	'twitter_link' => $this->input->post('twitter_link'),
+	// 	'blogger_link' => $this->input->post('blogger_link'),
+	// 	'linkdedin_link' => $this->input->post('linkdedin_link'),
+	// 	'google_plus_link' => $this->input->post('google_plus_link'),
+	// 	'instagram_link' => $this->input->post('instagram_link'),
+	// 	'pinterest_link' => $this->input->post('pinterest_link'),
+	// 	'youtube_link' => $this->input->post('youtube_link')
+	// 	);
+	// 	$id = $this->input->post('user_id');
+	// 	$result = $this->Employees_model->social_info($data,$id);
+	// 	if ($result == TRUE) {
+	// 		$Return['result'] = $this->lang->line('xin_success_update_social_info');
+	// 	} else {
+	// 		$Return['error'] = $this->lang->line('xin_error_msg');
+	// 	}
+	// 	$this->output($Return);
+	// 	exit;
+	// 	}
+	// }	
 	
 	// Validate and update info in database // contact info
 	public function update_contacts_info() {

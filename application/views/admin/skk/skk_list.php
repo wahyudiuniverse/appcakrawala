@@ -9,7 +9,7 @@
  <?php //$all_employees = $this->Employees_model->get_all_employees_resign();?>
 <?php $count_skk = $this->Esign_model->count_skk();?>
 <?php $romawi = $this->Xin_model->tgl_pkwt();?>
-<?php $nomor_surat = '/'.'REF-HRD/SC/'.$romawi;?>
+<?php $nomor_surat = '/'.'REF-HRD/[SC-KAC]/'.$romawi;?>
 
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
@@ -46,6 +46,20 @@ body {font-family: Arial, Helvetica, sans-serif;}
         <div class="form-group">
           <label for="nodoc"><?php echo $this->lang->line('xin_no_dokumen');?></label>
           <input type="text" class="form-control" name="nomordoc" value="<?php echo $nomor_surat;?>">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
+          <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
+            <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
+            <?php 
+              foreach ($all_companies as $company) {
+            ?>
+                <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
+            <?php 
+              } 
+            ?>
+          </select>
         </div>
 
         <div class="form-group">

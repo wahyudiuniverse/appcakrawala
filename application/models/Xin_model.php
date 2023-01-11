@@ -76,6 +76,13 @@ class Xin_model extends CI_Model {
   	  return $query->result();
 	}
 
+
+	public function get_bank_code()
+	{
+	  $query = $this->db->query("SELECT secid, concat(bank_name, ' (', bank_code, ')' ) AS bank_name from mt_bank");
+  	  return $query->result();
+	}
+
 	public function clean_post($post_name) {
 	   $name = trim($post_name);
 	   $Evalue = array('-','alert','<script>','</script>','</php>','<php>','<p>','\r\n','\n','\r','=',"'",'/','cmd','!',"('","')", '|');
@@ -3783,6 +3790,13 @@ ORDER BY `expiry_date`");
 	// get all table rows 
 	public function get_ethnicity_type() {
 	 	return  $query = $this->db->query("SELECT * from xin_ethnicity_type");
+	}
+
+	
+	// get all education level
+	public function get_ethnicity_type_result() {
+	  $query = $this->db->query("SELECT * from xin_ethnicity_type");
+  	  return $query->result();
 	}
 
 	// get all table rows 

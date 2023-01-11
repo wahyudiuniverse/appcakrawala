@@ -76,6 +76,13 @@
       </a>
     </li>
 
+    <!-- profile -->
+
+          <li class="sidenav-item <?php if(!empty($arr_mod['myprofile_active']))echo $arr_mod['myprofile_active'];?>"> 
+            <a class="sidenav-link" href="<?php echo site_url('admin/profile/');?>"> <?php echo $this->lang->line('header_my_profile');?> 
+            </a> 
+          </li>
+
     <?php 
     if(in_array('13',$role_resources_ids) 
       || in_array('7',$role_resources_ids) 
@@ -409,7 +416,6 @@
         <ul class="sidenav-menu">
 
 
-
           <?php 
           if (in_array('327',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
@@ -461,8 +467,6 @@
           <?php 
           } 
           ?>
-
-
 
         </ul>
       </li>

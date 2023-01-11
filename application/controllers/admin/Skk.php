@@ -53,7 +53,7 @@ class Skk extends MY_Controller {
 		$data['all_locations'] = $this->Xin_model->all_locations();
 		$data['all_employees'] = $this->Esign_model->get_all_employees_resign();
 		$data['all_projects'] = $this->Esign_model->get_project_exist_resign();
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['breadcrumbs'] = $this->lang->line('xin_surat_keterangan_kerja');
 		$data['path_url'] = 'skk';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -243,9 +243,6 @@ class Skk extends MY_Controller {
 			
        		$this->output($Return);
     	}
-	
-		$count_skk = $this->Esign_model->count_skk();
-		$nomor_surat = sprintf("%05d", $count_skk[0]->maxid +1).$this->input->post('nomordoc');
 
 		$docid = date('ymdHis');
 		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
@@ -262,6 +259,28 @@ class Skk extends MY_Controller {
 			$bpjs_date = $this->input->post('resign_date');
 		}
 
+
+		$last = new DateTime(date("2022-12-31"));
+		$resign_date = new DateTime($this->input->post('resign_date'));
+
+		if($resign_date<$last){
+			$sign_fullname = 'Maitsa Valenska Pristiyanty';
+		} else {
+			$sign_fullname = 'Asti Prastista';
+		}
+
+		if($this->input->post('company_id')=='2'){
+			$ns = str_replace('[SC-KAC]','SC',$this->input->post('nomordoc'));
+		} else if ($this->input->post('company_id')=='3'){
+			$ns = str_replace('[SC-KAC]','KAC',$this->input->post('nomordoc'));
+		} else {
+			$ns = $this->input->post('company_id');
+		}
+		
+		$count_skk = $this->Esign_model->count_skk();
+		$nomor_surat = sprintf("%05d", $count_skk[0]->maxid +1).$ns;
+
+
 		$data = array(
 		'doc_id' => $docid,
 		'jenis_dokumen' => '2',
@@ -271,6 +290,11 @@ class Skk extends MY_Controller {
 		'resign_date'  => $this->input->post('resign_date'),
 		'bpjs_date' => $bpjs_date,
 		'qr_code' => $image_name,
+
+		'sign_fullname' => $sign_fullname,
+		'sign_jabatan' => 'Senior Manager HR-GA',
+		'sign_company' => $this->input->post('company_id'),
+
 		'createdby' => 1,
 		);
 
@@ -377,6 +401,72 @@ class Skk extends MY_Controller {
 		$employee = $this->Employees_model->read_employee_info_by_nik($vpin);
 		$eskk = $this->Esign_model->read_skk($vskk);
 
+
+			if(!is_null($eskk)){
+
+				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
+				$nip = $eskk[0]->nip;
+				$nomor_dokumen = $eskk[0]->nomor_dokumen;
+				$nip = $eskk[0]->nip;
+				$fullname = $employee[0]->first_name;
+				$join_date = $this->Xin_model->tgl_indo($eskk[0]->join_date);
+				$resign_date = $this->Xin_model->tgl_indo($eskk[0]->resign_date);
+
+				if($eskk[0]->nip == '21500005'){
+					$join_bpjs = $this->Xin_model->tgl_indo('2022-05-01');
+					// $join_bpjs = $this->Xin_model->tgl_indo($eskk[0]->bpjs_join);
+				}else{
+					$join_bpjs = $this->Xin_model->tgl_indo($eskk[0]->join_date);
+				}
+
+				if($eskk[0]->sign_company==2){
+					$logo_cover = 'tcpdf_logo.jpg';
+					$header_namae = 'PT. Siprama Cakrawala';
+				} else {
+					$logo_cover = 'tcpdf_logo_kac.png';
+					$header_namae = 'PT. Krista Aulia Cakrawala';
+				}
+
+				$closing_bpjs = $this->Xin_model->tgl_indo($eskk[0]->bpjs_date);
+				$waktu_kerja = $eskk[0]->waktu_kerja;
+				$qr_code = $eskk[0]->qr_code;
+				$ktp_no = $employee[0]->ktp_no;
+				$address = $employee[0]->address;
+				$createdon = $this->Xin_model->tgl_indo(substr($eskk[0]->createdon,0,10));
+				// $allow_rent = $eslip[0]->allow_rent;
+				// $allow_comunication = $eslip[0]->allow_comunication;
+
+				$sign_fullname = $eskk[0]->sign_fullname;
+				$sign_jabatan = $eskk[0]->sign_jabatan;
+
+				$monyear =  date('M Y');
+				$tanggalcetak = date("Y-m-d");
+	
+
+					$designation = $this->Xin_model->read_user_xin_designation($employee[0]->designation_id);
+					if(!is_null($designation)){
+						$jabatan = $designation[0]->designation_name;
+					} else {
+						$jabatan = $designation[0]->designation_name;
+					}
+
+					$project = $this->Project_model->read_project_information($employee[0]->project_id);
+					if(!is_null($designation)){
+						if($project[0]->title == 'INHOUSE'){
+
+						$project_name = 'PT. SIPRAMA CACKRAWALA';
+						} else {
+
+						$project_name = $project[0]->title;
+						}
+					} else {
+						$project_name = '-';
+					}
+
+			} else {
+				redirect('admin/');
+			}
+
 		// if($eslip[0]->status_kirim==1){
 			// $bMargin = $this->getBreakMargin();
 			// $bMargi = $this->getBreakMargin();
@@ -387,10 +477,9 @@ class Skk extends MY_Controller {
 			$pdf->SetAuthor('PT Siprama Cakrawala');
 			// $baseurl=base_url();
 
-			$header_namae = 'PT. Siprama Cakrawala';
 			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
 
-			$pdf->SetHeaderData(PDF_HEADER_LOGO, 35, $header_namae, $header_string);
+			$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
 			
 			$pdf->setFooterData(array(0,64,0), array(0,64,128));
 		
@@ -465,51 +554,6 @@ class Skk extends MY_Controller {
 			$pdf->SetFillColor(255, 255, 127);
 			/////////////////////////////////////////////////////////////////////////////////
 
-			if(!is_null($eskk)){
-
-				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
-				$nip = $eskk[0]->nip;
-				$nomor_dokumen = $eskk[0]->nomor_dokumen;
-				$nip = $eskk[0]->nip;
-				$fullname = $employee[0]->first_name;
-				$join_date = $this->Xin_model->tgl_indo($eskk[0]->join_date);
-				$resign_date = $this->Xin_model->tgl_indo($eskk[0]->resign_date);
-				$closing_bpjs = $this->Xin_model->tgl_indo($eskk[0]->bpjs_date);
-				$waktu_kerja = $eskk[0]->waktu_kerja;
-				$qr_code = $eskk[0]->qr_code;
-				$ktp_no = $employee[0]->ktp_no;
-				$address = $employee[0]->address;
-				$createdon = $this->Xin_model->tgl_indo(substr($eskk[0]->createdon,0,10));
-				// $allow_rent = $eslip[0]->allow_rent;
-				// $allow_comunication = $eslip[0]->allow_comunication;
-
-				$monyear =  date('M Y');
-				$tanggalcetak = date("Y-m-d");
-	
-
-					$designation = $this->Xin_model->read_user_xin_designation($employee[0]->designation_id);
-					if(!is_null($designation)){
-						$jabatan = $designation[0]->designation_name;
-					} else {
-						$jabatan = $designation[0]->designation_name;
-					}
-
-					$project = $this->Project_model->read_project_information($employee[0]->project_id);
-					if(!is_null($designation)){
-						if($project[0]->title == 'INHOUSE'){
-
-						$project_name = 'PT. SIPRAMA CACKRAWALA';
-						} else {
-
-						$project_name = $project[0]->title;
-						}
-					} else {
-						$project_name = '-';
-					}
-
-			} else {
-
-			}
 
 
 			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '21300004'){
@@ -532,12 +576,12 @@ class Skk extends MY_Controller {
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>Nama</td>
-						<td colspan="3">: Maitsa Valenska Pristiyanty</td>
+						<td colspan="3">: '.$sign_fullname.'</td>
 					</tr>
 
 					<tr>
 						<td>Jabatan</td>
-						<td colspan="3">: SM HR/GA</td>
+						<td colspan="3">: '.$sign_jabatan.'</td>
 					</tr>
 
 					<tr>
@@ -603,18 +647,18 @@ class Skk extends MY_Controller {
 				<table cellpadding="2" cellspacing="0" border="0">
 
 				<tr>
-					<td style="text-align:center;">PT. SIPRAMA CAKRAWALA</td>
+					<td style="text-align:center;">'.$header_namae.'</td>
 					
 				</tr>
 
 				<tr>
 					<td style="text-align:center;"><br>
-				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
 					
 				</tr>
 
 				<tr>
-					<td style="text-align:center;">SM HR/GA</td>
+					<td style="text-align:center;">'.$sign_jabatan.'</td>
 					
 				</tr>
 
@@ -668,12 +712,12 @@ class Skk extends MY_Controller {
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>Nama</td>
-						<td colspan="3">: Maitsa Valenska Pristiyanty</td>
+						<td colspan="3">: '.$sign_fullname.'</td>
 					</tr>
 
 					<tr>
 						<td>Jabatan</td>
-						<td colspan="3">: SM HR/GA</td>
+						<td colspan="3">: '.$sign_jabatan.'</td>
 					</tr>
 
 				</table>
@@ -722,7 +766,7 @@ class Skk extends MY_Controller {
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_date.' sampai dengan '.$closing_bpjs.'.
+								<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_bpjs.' sampai dengan '.$closing_bpjs.'.
 								</td>
 							</tr>
 				</table>
@@ -748,7 +792,7 @@ class Skk extends MY_Controller {
 
 				<tr>
 					<td></td>
-					<td style="text-align:center;">PT SIPRAMA CAKRAWALA</td>
+					<td style="text-align:center;">'.$header_namae.'</td>
 				</tr>
 
 
@@ -756,12 +800,12 @@ class Skk extends MY_Controller {
 
 					<td><br><br><br><br><br><br><br><b><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					<td style="text-align:center;"><br>
-				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+				<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
 				</tr>
 
 				<tr>
 					<td></td>
-					<td style="text-align:center;">SM HR/GA</td>
+					<td style="text-align:center;">'.$sign_jabatan.'</td>
 				</tr>
 
 				</table>
@@ -813,12 +857,12 @@ class Skk extends MY_Controller {
 					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 						<tr>
 							<td>Nama</td>
-							<td colspan="3">: Maitsa Valenska Pristiyanty</td>
+							<td colspan="3">: '.$sign_fullname.'</td>
 						</tr>
 
 						<tr>
 							<td>Jabatan</td>
-							<td colspan="3">: SM HR/GA</td>
+							<td colspan="3">: '.$sign_jabatan.'</td>
 						</tr>
 
 					</table>
@@ -867,7 +911,7 @@ class Skk extends MY_Controller {
 
 					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 								<tr>
-									<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_date.' sampai dengan '.$resign_date.'.
+									<td>Bahwa benar karyawan kami di atas, telah bekerja di <b>'.$project_name.'</b> dari tanggal '.$join_bpjs.' sampai dengan '.$resign_date.'.
 									</td>
 								</tr>
 					</table>
@@ -901,12 +945,12 @@ class Skk extends MY_Controller {
 
 						<td><br><br><br><br><br><br><br><b><u></u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						<td style="text-align:center;"><br>
-					<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+					<img src="'.base_url().'assets/images/'.$qr_code.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
 					</tr>
 
 					<tr>
 						<td></td>
-						<td style="text-align:center;">SM HR/GA</td>
+						<td style="text-align:center;">'.$sign_jabatan.'</td>
 					</tr>
 
 					</table>

@@ -24,9 +24,7 @@
       ?> 
       
       <div class="form-row">
-      <?php 
-        if ($user_info[0]->user_role_id==1) { 
-      ?>
+
         <div class="col-md mb-3">
           <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
           <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
@@ -40,30 +38,7 @@
             ?>
           </select>
         </div>
-      <?php 
-        } else {
-      ?>
-      <?php $ecompany_id = $user_info[0]->company_id;?>
-        
-        <div class="col-md mb-3">
-          <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
-          <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
-            <option value=""><?php echo $this->lang->line('left_company');?></option>
-            <?php 
-              foreach ($all_companies as $company) {
-            ?>
-              <?php if ($ecompany_id == $company->company_id): ?>
-                <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
-              <?php endif;?>
-            <?php 
-              } 
-            ?>
-          </select>
-        </div>
-      <?php 
-        } 
-      ?>
-      
+
         <div class="col-md mb-3">
           <div class="form-group" id="department_ajax">
             <label class="form-label"><?php echo $this->lang->line('xin_employee_department');?></label>

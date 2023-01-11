@@ -431,7 +431,13 @@ dataSource: [
 		value: "22", 
 		check: "<?php if(isset($_GET['role_id'])) { if(in_array('22',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 	},
-	{ id: "", class: "role-checkbox-modal custom-control-input", text: "<?php echo $this->lang->line('header_my_profile');?>",  add_info: "<?php echo $this->lang->line('header_my_profile');?>", value: "445",check: "<?php if(isset($_GET['role_id'])) { if(in_array('445',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
+	{ 
+		id: "", 
+		class: "role-checkbox-modal custom-control-input", 
+		text: "<?php echo $this->lang->line('header_my_profile');?>",  
+		add_info: "<?php echo $this->lang->line('header_my_profile');?>", 
+		value: "445",
+		check: "<?php if(isset($_GET['role_id'])) { if(in_array('445',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"},
 	{ 
 		id: "", 
 		class: "role-checkbox-modal custom-control-input", 
@@ -1636,6 +1642,16 @@ dataSource: [
 			value: "423",
 			check: "<?php if(isset($_GET['role_id'])) { if(in_array('423',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 		},
+
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('header_my_profile');?>",  
+			add_info: "<?php echo $this->lang->line('xin_add_edit_delete_role_info');?>", 
+			value: "445",
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('445',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+
 		{ 
 			id: "", 
 			class: "role-checkbox-modal custom-control-input", 

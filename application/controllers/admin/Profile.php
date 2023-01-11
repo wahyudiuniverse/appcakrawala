@@ -44,13 +44,47 @@ class Profile extends MY_Controller {
 		exit(json_encode($Return));
 	}
 	
-	  public function index() {
+	 public function index() {
 
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+
 		$result = $this->Employees_model->read_employee_information($session['user_id']);
+
+		// company info
+		$company = $this->Xin_model->read_company_info($result[0]->company_id);
+		if(!is_null($company)){
+		  $company_name = $company[0]->name;
+		} else {
+		  $company_name = '--';
+		}
+
+		$department = $this->Department_model->read_department_information($result[0]->department_id);
+		if(!is_null($department)){
+			$department_name = $department[0]->department_name;
+		} else {
+			$department_name = '--';	
+		}
+
+
+		$projects = $this->Project_model->read_single_project($result[0]->project_id);
+		if(!is_null($projects)){
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';	
+		}
+			
+		$subprojects = $this->Project_model->read_single_subproject($result[0]->sub_project_id);
+		if(!is_null($subprojects)){
+			$nama_subproject = $projects[0]->title;
+		} else {
+			$nama_subproject = '--';	
+		}
+
+
+
 		// get designation
 		$designation = $this->Designation_model->read_designation_information($result[0]->designation_id);
 		if(!is_null($designation)){
@@ -58,32 +92,59 @@ class Profile extends MY_Controller {
 		} else {
 			$edesignation_name = '--';	
 		}
+
 		$data = array(
-			'first_name' => $result[0]->first_name,
-			'last_name' => $result[0]->last_name,
-			'designation' => $edesignation_name,
 			'user_id' => $result[0]->user_id,
-			'employee_id' => $result[0]->employee_id,
 			'username' => $result[0]->username,
-			'email' => $result[0]->email,
-			'department_id' => $result[0]->department_id,
-			'designation_id' => $result[0]->designation_id,
-			'user_role_id' => $result[0]->user_role_id,
+			'employee_id' => $result[0]->employee_id,
+			'first_name' => strtoupper($result[0]->first_name),
+			'tempat_lahir' => $result[0]->tempat_lahir,
 			'date_of_birth' => $result[0]->date_of_birth,
-			'date_of_leaving' => $result[0]->date_of_leaving,
-			'gender' => $result[0]->gender,
-			'marital_status' => $result[0]->marital_status,
+			'ibu_kandung' => $result[0]->ibu_kandung,
 			'contact_no' => $result[0]->contact_no,
+			'ktp_no' => $result[0]->ktp_no,
+			'filename_ktp' => $result[0]->filename_ktp,
+			'kk_no' => $result[0]->kk_no,
+			'filename_kk' => $result[0]->filename_kk,
+			'npwp_no' => $result[0]->npwp_no,
+			'filename_npwp' => $result[0]->filename_npwp,
+			'nomor_rek' => $result[0]->nomor_rek,
+			'filename_rek' => $result[0]->filename_rek,
+			'pemilik_rek' => $result[0]->pemilik_rek,
+			'bank_name' => $result[0]->bank_name,
+			'address' => $result[0]->address,
+			'list_bank' => $this->Xin_model->get_bank_code(),
+			'alamat_ktp' => $result[0]->alamat_ktp,
+			'gender' => $result[0]->gender,
+			'ethnicity_type' => $result[0]->ethnicity_type,
+			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
+			'blood_group' => $result[0]->blood_group,
+			'tinggi_badan' => $result[0]->tinggi_badan,
+			'berat_badan' => $result[0]->berat_badan,
+			'profile_picture' => $result[0]->profile_picture,
+			'email' => $result[0]->email,
+			'designation_id' => $result[0]->designation_id,
+			'designation' => $edesignation_name,
+			'company_name' => $company_name,
+			'department_id' => $result[0]->department_id,
+			'department_name' => $department_name,
+			'project_id' => $result[0]->project_id,
+			'project_name' => $nama_project,
+			'sub_project_id' => $result[0]->sub_project_id,
+			'sub_project_name' => $nama_subproject,
+			'penempatan' => $result[0]->penempatan,
+
+			'user_role_id' => $result[0]->user_role_id,
+			'date_of_leaving' => $result[0]->date_of_leaving,
+			'marital_status' => $result[0]->marital_status,
 			'wages_type' => $result[0]->wages_type,
 			'basic_salary' => $result[0]->basic_salary,
-			'address' => $result[0]->address,
 			'is_active' => $result[0]->is_active,
 			'date_of_joining' => $result[0]->date_of_joining,
 			'all_departments' => $this->Department_model->all_departments(),
 			'all_designations' => $this->Designation_model->all_designations(),
 			'all_user_roles' => $this->Roles_model->all_user_roles(),
 			'title' => $this->lang->line('header_my_profile').' | '.$this->Xin_model->site_title(),
-			'profile_picture' => $result[0]->profile_picture,
 			'facebook_link' => $result[0]->facebook_link,
 			'twitter_link' => $result[0]->twitter_link,
 			'blogger_link' => $result[0]->blogger_link,
@@ -97,6 +158,7 @@ class Profile extends MY_Controller {
 			'last_login_ip' => $result[0]->last_login_ip,
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
+			'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),
 			'all_education_level' => $this->Employees_model->all_education_level(),
 			'all_qualification_language' => $this->Employees_model->all_qualification_language(),
 			'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
@@ -124,61 +186,69 @@ class Profile extends MY_Controller {
 	// Validate and update info in database // basic info
 	public function user_basic_info() {
 	
-		if($this->input->post('type')=='basic_info') {		
+		if($this->input->post('type')=='basic_info') {
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		
-		$first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
-		$last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
-		$date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
-		$contact_no = $this->Xin_model->clean_date_post($this->input->post('contact_no'));
-		$address = $this->Xin_model->clean_date_post($this->input->post('address'));
+		// $first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
+		// $last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
+		// $date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
+		// $contact_no = $this->Xin_model->clean_date_post($this->input->post('contact_no'));
+		// $address = $this->Xin_model->clean_date_post($this->input->post('address'));
 			
 		/* Server side PHP input validation */		
 		if($this->input->post('first_name')==='') {
-        	$Return['error'] = $this->lang->line('xin_employee_error_first_name');
-		} else if($first_name==='') {
-			$Return['error'] = $this->lang->line('xin_hr_special_charactors_not_allowed');
-		} /*else if(!preg_match("/^[a-zA-Z ]*$/",$first_name)) {
-			$Return['error'] = $this->lang->line('xin_hr_string_error');
-		}*/ else if($this->input->post('last_name')==='') {
-			$Return['error'] = $this->lang->line('xin_employee_error_last_name');
-		} else if($last_name==='') {
-			$Return['error'] = $this->lang->line('xin_hr_special_charactors_not_allowed');
-		} /*else if(!preg_match("/^[a-zA-Z ]*$/",$last_name)) {
-			$Return['error'] = $this->lang->line('xin_hr_string_error');
-		}*/ else if($this->input->post('date_of_birth')==='') {
+      $Return['error'] = $this->lang->line('xin_employee_error_first_name');
+		} else if($this->input->post('tempat_lahir')==='') {
+			$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
+		} else if($this->input->post('tanggal_lahir')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_joining_date');
-		} else if($this->Xin_model->validate_date($this->input->post('date_of_birth'),'Y-m-d') == false) {
+		} else if($this->Xin_model->validate_date($this->input->post('tanggal_lahir'),'Y-m-d') == false) {
 			 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
+		} else if($this->input->post('ibu_kandung')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+		} else if($this->input->post('no_kontak')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_contact_number');
 		} else if($this->input->post('email')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_email');
+			 $Return['error'] = $this->lang->line('xin_error_cemail_field');
 		} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
 			$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
-		} else if($this->input->post('date_of_birth')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_date_of_birth');
-		} else if($this->Xin_model->validate_date($this->input->post('date_of_birth'),'Y-m-d') == false) {
-			 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
-		} else if($this->input->post('contact_no')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-		} /*else if(!preg_match('/^([0-9]*)$/', $this->input->post('contact_no'))) {
-			 $Return['error'] = $this->lang->line('xin_hr_numeric_error');
-		}*/
-						
+		} else if($this->input->post('ktp_no')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_ktp');
+		} else if($this->input->post('kk_no')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
+		} else if($this->input->post('address_ktp')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+		} else if($this->input->post('gender')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_jenis_kelamin');
+		} else if($this->input->post('marital_status')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_status_pernikahan');
+		}
+
 		if($Return['error']!=''){
        		$this->output($Return);
     	}
 	
 		$data = array(
-		'first_name' => $first_name,
-		'last_name' => $last_name,
+		'first_name' => $this->input->post('first_name'),
+		'tempat_lahir' => $this->input->post('tempat_lahir'),
+		'date_of_birth' => $this->input->post('tanggal_lahir'),
+		'ibu_kandung' => $this->input->post('ibu_kandung'),
+		'contact_no' => $this->input->post('no_kontak'),
 		'email' => $this->input->post('email'),
-		'date_of_birth' => $date_of_birth,
+		'ktp_no' => $this->input->post('ktp_no'),
+		'kk_no' => $this->input->post('kk_no'),
+		'npwp_no' => $this->input->post('npwp_no'),
+		'alamat_ktp' => $this->input->post('address_ktp'),
+		'address' => $this->input->post('address'),
 		'gender' => $this->input->post('gender'),
+		'ethnicity_type' => $this->input->post('ethnicity'),
 		'marital_status' => $this->input->post('marital_status'),
-		'contact_no' => $contact_no,
-		'address' => $address
+		'blood_group' => $this->input->post('blood_group'),
+		'tinggi_badan' => $this->input->post('tinggi_badan'),
+		'berat_badan' => $this->input->post('berat_badan'),
+
 		);
 		$id = $this->input->post('user_id');
 		$result = $this->Employees_model->basic_info($data,$id);
@@ -192,6 +262,281 @@ class Profile extends MY_Controller {
 		}
 	}
 	
+	// Validate and add info in database // document info
+	public function document_info() {
+	
+		if($this->input->post('type')=='document_info' && $this->input->post('data')=='document_info') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			
+		/* Server side PHP input validation */		
+		if($this->input->post('title')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_document_title');
+		} else if($_FILES['document_file']['size'] == 0) {
+			$fname = $this->input->post('ffoto_ktp');
+			// $fname = '';
+		} else {
+			if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
+				//checking image type
+				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf');
+				$filename = $_FILES['document_file']['name'];
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				
+				if(in_array($ext,$allowed)){
+					$tmp_name = $_FILES["document_file"]["tmp_name"];
+					$documentd = "uploads/document/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["document_file"]["name"]);
+					$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $documentd.$newfilename);
+					$fname = $newfilename;
+				} else {
+					$Return['error'] = 'Jenis File KTP tidak diterima..';
+				}
+			}
+		}
+				
+
+		/* Check if file uploaded..*/
+		if($_FILES['document_file_kk']['size'] == 0) {
+			$fname_kk = $this->input->post('ffoto_kk');
+			// $fname_kk = '';
+		} else {
+			if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
+				//checking image type
+				$allowed_kk =  array('png','jpg','jpeg','pdf','gif','txt','pdf');
+				$filename_kk = $_FILES['document_file_kk']['name'];
+				$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
+				
+				if(in_array($ext_kk,$allowed_kk)){
+					$tmp_name_kk = $_FILES["document_file_kk"]["tmp_name"];
+					$documentd_kk = "uploads/document/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["document_file_kk"]["name"]);
+					$newfilename_kk = 'kk_'.round(microtime(true)).'.'.$ext_kk;
+					move_uploaded_file($tmp_name_kk, $documentd_kk.$newfilename_kk);
+					$fname_kk = $newfilename_kk;
+				} else {
+					$Return['error'] = 'Jenis File KK tidak diterima..';
+				}
+			}
+		}
+
+		/* Check if file uploaded..*/
+		if($_FILES['document_file_npwp']['size'] == 0) {
+			$fname_npwp = $this->input->post('ffoto_npwp');
+			// $fname_kk = '';
+		} else {
+			if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
+				//checking image type
+				$allowed_npwp =  array('png','jpg','jpeg','pdf','gif','txt','pdf');
+				$filename_npwp = $_FILES['document_file_npwp']['name'];
+				$ext_npwp = pathinfo($filename_npwp, PATHINFO_EXTENSION);
+				
+				if(in_array($ext_npwp,$allowed_npwp)){
+					$tmp_name_npwp = $_FILES["document_file_npwp"]["tmp_name"];
+					$documentd_npwp = "uploads/document/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["document_file_npwp"]["name"]);
+					$newfilename_npwp = 'npwp_'.round(microtime(true)).'.'.$ext_npwp;
+					move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
+					$fname_npwp = $newfilename_npwp;
+				} else {
+					$Return['error'] = 'Jenis File KK tidak diterima..';
+				}
+			}
+		}
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+
+		//clean simple fields
+		$title = $this->Xin_model->clean_post($this->input->post('title'));
+		$kk_no = $this->Xin_model->clean_post($this->input->post('kk_no'));
+		$npwp_no = $this->Xin_model->clean_post($this->input->post('npwp_no'));
+		// clean date fields
+		// $date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
+		// $document_type = $this->input->post('document_type_id');
+
+		$data = array(
+
+		'ktp_no' 				=> $title,
+		'filename_ktp' 	=> $fname,
+		'kk_no' 				=> $kk_no,
+		'filename_kk' 	=> $fname_kk,
+		'npwp_no' 			=> $npwp_no,
+		'filename_npwp' => $fname_npwp,
+
+		);
+
+		$id = $this->input->post('user_id');
+		// $result = $this->Employees_model->document_info_add($data);
+		$result = $this->Employees_model->basic_info($data,$id);
+
+		if ($result == TRUE) {
+
+				$Return['result'] = $this->lang->line('xin_employee_d_info_added');
+
+		} else {
+			$Return['error'] = $this->lang->line('xin_error_msg');
+		}
+		$this->output($Return);
+		exit;
+		}
+	}
+	
+	// Validate and add info in database // bank account info
+	public function bank_account_info() {
+			
+			if($this->input->post('type')=='bank_account_info' && $this->input->post('data')=='bank_account_info') {		
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+				/* Server side PHP input validation */		
+				if($this->input->post('no_rek')==='') {
+					 $Return['error'] = $this->lang->line('xin_employee_error_nomor_rek');
+				} else if ($this->input->post('bank_name')===''){
+					 $Return['error'] = $this->lang->line('xin_employee_error_bank_name');
+				} else if ($this->input->post('pemilik_rek')===''){
+					 $Return['error'] = $this->lang->line('xin_employee_error_pemilik_rek');
+				} else if($_FILES['document_file_rek']['size'] == 0) {
+					$fname_rek = $this->input->post('ffoto_rek');
+					// $fname = '';
+				} else {
+					if(is_uploaded_file($_FILES['document_file_rek']['tmp_name'])) {
+						//checking image type
+						$allowed_rek =  array('png','jpg','jpeg','pdf','gif','txt','pdf');
+						$filename_rek = $_FILES['document_file_rek']['name'];
+						$ext_rek = pathinfo($filename_rek, PATHINFO_EXTENSION);
+						
+						if(in_array($ext_rek,$allowed_rek)){
+							$tmp_name_rek = $_FILES["document_file_rek"]["tmp_name"];
+							$documentd_rek = "uploads/document/";
+							// basename() may prevent filesystem traversal attacks;
+							// further validation/sanitation of the filename may be appropriate
+							$name = basename($_FILES["document_file_rek"]["name"]);
+							$newfilename_rek = 'rek_'.round(microtime(true)).'.'.$ext_rek;
+							move_uploaded_file($tmp_name_rek, $documentd_rek.$newfilename_rek);
+							$fname_rek = $newfilename_rek;
+						} else {
+							$Return['error'] = 'Jenis File Foto Rekening tidak diterima..';
+						}
+					}
+				}
+					
+				if($Return['error']!=''){
+		       		$this->output($Return);
+		    	}
+			
+				$data = array(
+				'bank_name' => $this->input->post('bank_name'),
+				'nomor_rek' => $this->input->post('no_rek'),
+				'pemilik_rek' => $this->input->post('pemilik_rek'),
+				'filename_rek' => $fname_rek,
+				);
+
+				$id = $this->input->post('user_id');
+				// $result = $this->Employees_model->bank_account_info_add($data);
+				$result = $this->Employees_model->basic_info($data,$id);
+				if ($result == TRUE) {
+					$Return['result'] = $this->lang->line('xin_employee_error_bank_info_added');
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+				}
+				$this->output($Return);
+				exit;
+			}
+		}
+	
+
+	// Validate and add info in database // e_document info
+	public function e_document_info() {
+	 
+		if($this->input->post('type')=='e_document_info') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			
+		/* Server side PHP input validation */		
+		if($this->input->post('document_type_id')==='') {
+       		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
+		} else if($this->input->post('title')==='') {
+			 $Return['error'] = $this->lang->line('xin_employee_error_document_title');
+		}
+		
+		/* Check if file uploaded..*/
+		else if($_FILES['document_file']['size'] == 0) {
+			$data = array(
+				'document_type_id' => $this->input->post('document_type_id'),
+				'date_of_expiry' => $this->input->post('date_of_expiry'),
+				'title' => $this->input->post('title'),
+				//'notification_email' => $this->input->post('email'),
+				//'is_alert' => $this->input->post('send_mail'),
+				'description' => $this->input->post('description')
+				);
+				$e_field_id = $this->input->post('e_field_id');
+				$result = $this->Employees_model->document_info_update($data,$e_field_id);
+				if ($result == TRUE) {
+					$Return['result'] = $this->lang->line('xin_employee_d_info_updated');
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+				}
+				$this->output($Return);
+				exit;
+		} else {
+			if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
+				//checking image type
+				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+				$filename = $_FILES['document_file']['name'];
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				
+				if(in_array($ext,$allowed)){
+					$tmp_name = $_FILES["document_file"]["tmp_name"];
+					$documentd = "uploads/document/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["document_file"]["name"]);
+					$newfilename = 'document_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $documentd.$newfilename);
+					$fname = $newfilename;
+					$data = array(
+					'document_type_id' => $this->input->post('document_type_id'),
+					'date_of_expiry' => $this->input->post('date_of_expiry'),
+					'document_file' => $fname,
+					'title' => $this->input->post('title'),
+					//'notification_email' => $this->input->post('email'),
+					//'is_alert' => $this->input->post('send_mail'),
+					'description' => $this->input->post('description')
+					);
+					$e_field_id = $this->input->post('e_field_id');
+					$result = $this->Employees_model->document_info_update($data,$e_field_id);
+					if ($result == TRUE) {
+						$Return['result'] = $this->lang->line('xin_employee_d_info_updated');
+					} else {
+						$Return['error'] = $this->lang->line('xin_error_msg');
+					}
+					$this->output($Return);
+					exit;
+				} else {
+					$Return['error'] = $this->lang->line('xin_employee_document_file_type');
+				}
+			}
+		}
+					
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+	
+		
+		}
+	}
+
 	public function dialog_contact() {
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->input->get('field_id');
@@ -294,44 +639,46 @@ class Profile extends MY_Controller {
 		$length = intval($this->input->get("length"));
 		
 		$id = $this->uri->segment(4);
-		$documents = $this->Employees_model->set_employee_documents($id);
+		// $documents = $this->Employees_model->set_employee_documents($id);
 		
 		$data = array();
 
-        foreach($documents->result() as $r) {
+    // foreach($documents->result() as $r) {
 			
-			$d_type = $this->Employees_model->read_document_type_information($r->document_type_id);
-			if(!is_null($d_type)){
-				$document_d = $d_type[0]->document_type;
-			} else {
-				$document_d = '--';
-			}
-			$date_of_expiry = $this->Xin_model->set_date_format($r->date_of_expiry);
-			if($r->document_file!='' && $r->document_file!='no file') {
-			 $functions = '<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'download?type=document&filename='.$r->document_file.'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light"><i class="oi oi-cloud-download"></i></button></a></span>';
-			 } else {
-				 $functions ='';
-			 }
+		// 	$d_type = $this->Employees_model->read_document_type_information($r->document_type_id);
+		// 	if(!is_null($d_type)){
+		// 		$document_d = $d_type[0]->document_type;
+		// 	} else {
+		// 		$document_d = '--';
+		// 	}
+
+		// 	$date_of_expiry = $this->Xin_model->set_date_format($r->date_of_expiry);
+		// 	if($r->document_file!='' && $r->document_file!='no file') {
+		// 	 $functions = '';
+		// 	 } else {
+		// 		 $functions ='';
+		// 	 }
 		
-		$data[] = array(
-			$functions.'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->document_id . '" data-field_type="document"><i class="fas fa-pencil-alt-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-outline-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->document_id . '" data-token_type="document"><i class="fas fa-trash-restore-o"></i></button></span>',
-			$document_d,
-			$r->title,
-			$date_of_expiry,
-			$r->description
-		);
-      }
+			$data[] = array(
+				'-',
+				'-',
+				'-',
+				'-',
+				'-'
+			);
+    // }
 
 	  $output = array(
 		   "draw" => $draw,
-			 "recordsTotal" => $documents->num_rows(),
-			 "recordsFiltered" => $documents->num_rows(),
+			 "recordsTotal" => 0,
+			 "recordsFiltered" => 0,
 			 "data" => $data
 		);
 	  echo json_encode($output);
 	  exit();
      }
 	 
+
 	// employee qualification - listing
 	public function qualification() {
 		//set data
@@ -463,19 +810,19 @@ class Profile extends MY_Controller {
         foreach($bank_account->result() as $r) {			
 		
 		$data[] = array(
-			'<span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn btn-secondary btn-sm m-b-0-0 waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->bankaccount_id . '" data-field_type="bank_account"><i class="fas fa-pencil-alt-square-o"></i></button></span><span data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn btn-outline-danger btn-sm m-b-0-0 waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->bankaccount_id . '" data-token_type="bank_account"><i class="fas fa-trash-restore-o"></i></button></span>',
-			$r->account_title,
-			$r->account_number,
-			$r->bank_name,
-			$r->bank_code,
-			$r->bank_branch
+			'-',
+			'-',
+			'-',
+			'-',
+			'-',
+			'-'
 		);
       }
 
 	  $output = array(
 		   "draw" => $draw,
-			 "recordsTotal" => $bank_account->num_rows(),
-			 "recordsFiltered" => $bank_account->num_rows(),
+			 "recordsTotal" => 0,
+			 "recordsFiltered" => 0,
 			 "data" => $data
 		);
 	  echo json_encode($output);

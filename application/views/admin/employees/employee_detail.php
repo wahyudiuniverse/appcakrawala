@@ -1237,79 +1237,339 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                   </div>
 
 <!-- DOKUMEN -->
-<!-- DOKUMEN -->
-                  <div class="tab-pane fade" id="account-document">
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
-                      <div class="card-body">
-                        <div class="box-datatable table-responsive">
-                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
-                            <thead>
-                              <tr>
-                                <th><?php echo $this->lang->line('xin_action');?></th>
-                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
-                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
-                              </tr>
-                            </thead>
-                          </table>
+                  <div class="tab-pane fade show" id="account-document">
+
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong>  <?php echo $this->lang->line('xin_document_id');?></strong></span> </div>
+
+                    <div class="card-body">
+                      <?php 
+                        $attributes = array(
+                          'name' => 'document_id', 
+                          'id' => 'document_id', 
+                          'autocomplete' => 'off'
+                        );
+                      ?>
+
+                      <?php 
+                        $hidden = array(
+                          'user_id' => $user_id, 
+                          'u_basic_info' => 'UPDATE'
+                        );
+                      ?>
+
+                      <?php echo form_open_multipart('admin/employees/update_employee_docid', $attributes, $hidden);?>
+                      <div class="bg-white">
+                        
+                        <div class="row">
+
+                              <!-- HIDDEN -->
+                              <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
+                              <input name="tanggal_bergabung" type="hidden" value="<?php echo $date_of_joining;?>">
+
+                              <input name="company_id" type="hidden" value="<?php echo $company_id;?>">
+                              <input name="location_id" type="hidden" value="<?php echo $location_id;?>">
+                              <input name="department_id" type="hidden" value="<?php echo $department_id;?>">
+                              <input name="designation_id" type="hidden" value="<?php echo $designation_id;?>">
+                              <input name="role" type="hidden" value="<?php echo $user_role_id;?>">
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="username"><?php echo $this->lang->line('dashboard_empid');?><i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div> 
+                          <!--NIP2-->
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="first_name">: <?php echo $employee_id;?><i class="hrpremium-asterisk"></i></label>
+        
+                            </div>
+                          </div>
+  
+
+                        </div>
+
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_nomor_ktp');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_nomor_ktp');?>" name="no_ktp" type="number" value="<?php echo $ktp_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="ktp_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="ktp_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="VERIFY" <?php if($ktp_status == 'VERIFY'):?> selected="selected"<?php endif;?>>VERIFY</option>
+                                <option value="CONFIRM" <?php if($ktp_status == 'CONFIRM'):?> selected="selected"<?php endif;?>>CONFIRM</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_kk');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_kk');?>" name="no_kk" type="number" value="<?php echo $kk_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="kk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="kk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="VERIFY" <?php if($kk_status == 'VERIFY'):?> selected="selected"<?php endif;?>>VERIFY</option>
+                                <option value="CONFIRM" <?php if($kk_status == 'CONFIRM'):?> selected="selected"<?php endif;?>>CONFIRM</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_npwp');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_npwp');?>" name="no_npwp" type="number" value="<?php echo $npwp_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="npwp_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="npwp_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="VERIFY" <?php if($npwp_status == 'VERIFY'):?> selected="selected"<?php endif;?>>VERIFY</option>
+                                <option value="CONFIRM" <?php if($npwp_status == 'CONFIRM'):?> selected="selected"<?php endif;?>>CONFIRM</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjstk');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="number" value="<?php echo $bpjs_tk_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjstk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="bpjstk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_tk_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_tk_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjsks');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="number" value="<?php echo $bpjs_ks_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjsks_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select  disabled class="form-control" name="bpjsks_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_ks_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_ks_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+     
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => 'btn btn-primary', 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> 
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_document');?> </span> </div>
+
+                      <?php echo form_close(); ?> 
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="account-cpassword">
                     <div class="card-body pb-2">
-                      <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
-                      <?php $hidden = array('u_document_info' => 'UPDATE');?>
-                      <?php echo form_open_multipart('admin/employees/document_info', $attributes, $hidden);?>
+                      <?php $attributes = array('name' => 'e_change_password', 'id' => 'e_change_password', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                      <?php echo form_open('admin/employees/change_password', $attributes, $hidden);?>
                       <?php
-              $data_usr2 = array(
+              $data_usr5 = array(
                 'type'  => 'hidden',
                 'name'  => 'user_id',
                 'value' => $user_id,
              );
-            echo form_input($data_usr2);
+            echo form_input($data_usr5);
             ?>
+                        
+                        <div class="row">
+
+                              <!-- HIDDEN -->
+                              <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
+                              <input name="tanggal_bergabung" type="hidden" value="<?php echo $date_of_joining;?>">
+
+                              <input name="company_id" type="hidden" value="<?php echo $company_id;?>">
+                              <input name="location_id" type="hidden" value="<?php echo $location_id;?>">
+                              <input name="department_id" type="hidden" value="<?php echo $department_id;?>">
+                              <input name="designation_id" type="hidden" value="<?php echo $designation_id;?>">
+                              <input name="role" type="hidden" value="<?php echo $user_role_id;?>">
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="username"><?php echo $this->lang->line('dashboard_empid');?><i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div> 
+                          <!--NIP2-->
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="first_name">: <?php echo $employee_id;?><i class="hrpremium-asterisk"></i></label>
+        
+                            </div>
+                          </div>
+  
+
+                        </div>
 
 
+                        <div class="row">
+                          <!--rule-->
 
-                      <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_nomor_ktp');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_nomor_ktp');?>" name="no_ktp" type="number" value="<?php echo $ktp_no;?>" id="title">
+                            </div>
+                          </div>
 
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="relation"><?php echo $this->lang->line('xin_e_details_dtype');?><i class="hrpremium-asterisk">*</i></label>
-                            <select name="document_type_id" id="document_type_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_choose_dtype');?>">
-                              <option value=""></option>
-                              <?php foreach($all_document_types as $document_type) {?>
-                              <option value="<?php echo $document_type->document_type_id;?>"> <?php echo $document_type->document_type;?></option>
-                              <?php } ?>
-                            </select>
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="ktp_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="ktp_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="VERIFY" <?php if($ktp_status == 'VERIFY'):?> selected="selected"<?php endif;?>>VERIFY</option>
+                                <option value="CONFIRM" <?php if($ktp_status == 'CONFIRM'):?> selected="selected"<?php endif;?>>CONFIRM</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
 
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="title" class="control-label"><?php echo $this->lang->line('xin_employee_document_number');?><i class="hrpremium-asterisk">*</i></label>
-                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_document_number');?>" name="title" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16">
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_kk');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_kk');?>" name="no_kk" type="number" value="<?php echo $kk_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="kk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="kk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="VERIFY" <?php if($kk_status == 'VERIFY'):?> selected="selected"<?php endif;?>>VERIFY</option>
+                                <option value="CONFIRM" <?php if($kk_status == 'CONFIRM'):?> selected="selected"<?php endif;?>>CONFIRM</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_npwp');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_npwp');?>" name="no_npwp" type="number" value="<?php echo $npwp_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="npwp_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="npwp_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="VERIFY" <?php if($npwp_status == 'VERIFY'):?> selected="selected"<?php endif;?>>VERIFY</option>
+                                <option value="CONFIRM" <?php if($npwp_status == 'CONFIRM'):?> selected="selected"<?php endif;?>>CONFIRM</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjstk');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="number" value="<?php echo $bpjs_tk_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjstk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select disabled class="form-control" name="bpjstk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_tk_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_tk_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjsks');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="number" value="<?php echo $bpjs_ks_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjsks_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select  disabled class="form-control" name="bpjsks_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_ks_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_ks_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
                           </div>
                         </div>
 
 
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <label for="logo"><?php echo $this->lang->line('xin_e_details_document_file');?></label>
-                              <input type="file" class="form-control-file" id="document_file" name="document_file">
-                              <small><?php echo $this->lang->line('xin_e_details_d_type_file');?></small>
-                            </fieldset>
-                          </div>
-                        </div>
-<!--                         <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="date_of_expiry" class="control-label"><?php /*echo $this->lang->line('xin_e_details_doe');*/?><i class="hrpremium-asterisk">*</i></label>
-                            <input class="form-control date" readonly placeholder="<?php /*echo $this->lang->line('xin_e_details_doe');*/?>" name="date_of_expiry" type="text">
-                          </div>
-                        </div> -->
 
-                      </div>
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
@@ -1321,7 +1581,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                   </div>
 
 <!-- BANK AKUN -->
-                  <div class="tab-pane fade" id="account-baccount">
+          <div class="tab-pane fade" id="account-baccount">
                     <div class="box">
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
                       <div class="card-body">

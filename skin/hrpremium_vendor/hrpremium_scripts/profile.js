@@ -68,7 +68,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+
 	/* Update profile picture */
 	$("#f_profile_picture").submit(function(e){
 		var fd = new FormData(this);
@@ -204,6 +204,56 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	/* Update profile picture */
+	$("#f_foto_dokumen").submit(function(e){
+		var fd = new FormData(this);
+		$('.icon-spinner3').show();
+		var user_id = $('#user_id').val();
+		var session_id = $('#session_id').val();
+		var obj = $(this), action = obj.attr('name');
+		fd.append("is_ajax", 2);
+		fd.append("type", 'profile_picture');
+		fd.append("data", 'profile_picture');
+		fd.append("form", action);
+		e.preventDefault();
+		$('.save').prop('disabled', true);
+		$.ajax({
+			url: e.target.action,
+			type: "POST",
+			data:  fd,
+			contentType: false,
+			cache: false,
+			processData:false,
+			success: function(JSON)
+			{
+				if (JSON.error != '') {
+					toastr.error(JSON.error);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.icon-spinner3').hide();
+					$('.save').prop('disabled', false);
+				} else {
+					toastr.success(JSON.result);
+					$('#remove_file').show();
+					$('.icon-spinner3').hide();
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$("#remove_profile_picture").attr('checked', false);
+					$('#u_file').attr("src", JSON.img);
+					if(user_id == session_id){
+						$('.user_avatar').attr("src", JSON.img);
+					}
+					$('.save').prop('disabled', false);
+				}
+			},
+			error: function() 
+			{
+				toastr.error(JSON.error);
+				$('.icon-spinner3').hide();
+				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+				$('.save').prop('disabled', false);
+			} 	        
+	   });
+	});
 	
 	$(".nav-tabs-link").click(function(){
 		var profile_id = $(this).data('profile');
@@ -273,7 +323,7 @@ $(document).ready(function(){
 	var xin_table_document = $('#xin_table_document').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"employees/documents/"+$('#user_id').val(),
+            url : site_url+"profile/documents/"+$('#user_id').val(),
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -309,7 +359,7 @@ $(document).ready(function(){
 	var xin_table_bank_account = $('#xin_table_bank_account').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"employees/bank_account/"+$('#user_id').val(),
+            url : site_url+"profile/bank_account/"+$('#user_id').val(),
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -351,7 +401,8 @@ $(document).ready(function(){
 		$('[data-toggle="tooltip"]').tooltip();          
 		}
     });
-			
+		
+
 	/* Add document info */
 	$("#document_info").submit(function(e){
 		var fd = new FormData(this);
@@ -400,6 +451,55 @@ $(document).ready(function(){
 	   });
 	});
 	
+
+	/* Add document info */
+	$("#bank_account_info").submit(function(e){
+		var fd = new FormData(this);
+		$('.icon-spinner3').show();
+		var obj = $(this), action = obj.attr('name');
+		fd.append("is_ajax", 7);
+		fd.append("type", 'bank_account_info');
+		fd.append("data", 'bank_account_info');
+		fd.append("form", action);
+		e.preventDefault();
+		$('.save').prop('disabled', true);
+		$.ajax({
+			url: e.target.action,
+			type: "POST",
+			data:  fd,
+			contentType: false,
+			cache: false,
+			processData:false,
+			success: function(JSON)
+			{
+				if (JSON.error != '') {
+					toastr.error(JSON.error);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.save').prop('disabled', false);
+					$('.icon-spinner3').hide();
+					Ladda.stopAll();
+				} else {
+					xin_table_document.api().ajax.reload(function(){ 
+						toastr.success(JSON.result);
+					}, true);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.icon-spinner3').hide();
+					jQuery('#bank_account_info')[0].reset(); // To reset form fields
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				}
+			},
+			error: function() 
+			{
+				toastr.error(JSON.error);
+				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+				$('.icon-spinner3').hide();
+				$('.save').prop('disabled', false);
+				Ladda.stopAll();
+			} 	        
+	   });
+	});
+
 	$('#modals-slide').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var xfield_id = button.data('xfield_id');
@@ -543,39 +643,6 @@ $(document).ready(function(){
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.icon-spinner3').hide();
 					jQuery('#work_experience_info')[0].reset(); // To reset form fields
-					jQuery('.save').prop('disabled', false);
-					Ladda.stopAll();
-				}
-			}
-		});
-	});
-	
-	/* Add bank account info */
-	jQuery("#bank_account_info").submit(function(e){
-	/*Form Submit*/
-	e.preventDefault();
-		var obj = jQuery(this), action = obj.attr('name');
-		jQuery('.save').prop('disabled', true);
-		$('.icon-spinner3').show();
-		jQuery.ajax({
-			type: "POST",
-			url: e.target.action,
-			data: obj.serialize()+"&is_ajax=16&data=bank_account_info&type=bank_account_info&form="+action,
-			cache: false,
-			success: function (JSON) {
-				if (JSON.error != '') {
-					toastr.error(JSON.error);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('.icon-spinner3').hide();
-					jQuery('.save').prop('disabled', false);
-					Ladda.stopAll();
-				} else {
-					xin_table_bank_account.api().ajax.reload(function(){ 
-						toastr.success(JSON.result);
-					}, true);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('.icon-spinner3').hide();
-					jQuery('#bank_account_info')[0].reset(); // To reset form fields
 					jQuery('.save').prop('disabled', false);
 					Ladda.stopAll();
 				}

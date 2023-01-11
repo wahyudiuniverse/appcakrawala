@@ -265,6 +265,8 @@ class Usermobile extends MY_Controller
 				'usertype_id' => $read_usermobile[0]->usertype_id,
 				'project_id' => $read_usermobile[0]->project_id,
 				'areaid' => $read_usermobile[0]->areaid,
+				'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
+				'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
 				'device_id' => $read_usermobile[0]->device_id_one,
 				'all_usertype' => $all_usertype,
 				'all_projects' => $all_projects,
@@ -318,6 +320,7 @@ class Usermobile extends MY_Controller
 			'project_id' => $this->input->post('project'),
 			'areaid' => $this->input->post('area'),
 			'areaid_extra1' => $this->input->post('area2'),
+			'areaid_extra2' => $this->input->post('area3'),
 			'device_id_one' => $this->input->post('device_id'),
 			// 'device_id_one' => $this->input->post('device_id'),
 			);

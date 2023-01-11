@@ -8,7 +8,7 @@
 <?php if($profile_picture!='' && $profile_picture!='no file') {?>
 <?php $de_file = base_url().'uploads/profile/'.$profile_picture;?>
 <?php } else {?>
-<?php if($gender=='Male') { ?>
+<?php if($gender=='L') { ?>
 <?php $de_file = base_url().'uploads/profile/default_male.jpg';?>
 <?php } else { ?>
 <?php $de_file = base_url().'uploads/profile/default_female.jpg';?>
@@ -54,37 +54,28 @@
             <div class="row no-gutters row-bordered row-border-light">
               <div class="col-md-3 pt-0">
                 <div class="list-group list-group-flush account-settings-links">
-                  <?php if($system[0]->employee_manage_own_profile=='yes'){?>
+
+
                   <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-basic_info"> <i class="lnr lnr-user text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_basic');?></a>
-                  <?php } ?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-salary"> <i class="lnr lnr-highlight text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_salary_title');?></a>
-                  <?php if($system[0]->employee_manage_own_picture=='yes'){?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-profile_picture"> <i class="lnr lnr-picture text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_profile_picture');?></a>
-                  <?php } ?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-immigration"> <i class="lnr lnr-rocket text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_employee_immigration');?></a>
-                  <?php if($system[0]->employee_manage_own_contact=='yes'){?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-contacts"> <i class="lnr lnr-phone-handset text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_employee_emergency_contacts');?></a>
-                  <?php } ?>
-                  <?php if($system[0]->employee_manage_own_social=='yes'){?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_social');?></a>
-                  <?php } ?>
-                  <?php if($system[0]->employee_manage_own_document=='yes'){?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-file-add text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_document');?></a>
-                  <?php } ?>
-                  <?php if($system[0]->employee_manage_own_qualification=='yes'){?>
+
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-grade"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_post');?></a>
+
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_document_id');?></a>
+
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>
+                  
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-qualification"> <i class="lnr lnr-file-empty text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_qualification');?></a>
-                  <?php } ?>
+
+
                   <?php if($system[0]->employee_manage_own_work_experience=='yes'){?>
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-experience"> <i class="lnr lnr-hourglass text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_w_experience');?></a>
-                  <?php } ?>
-                  <?php if($system[0]->employee_manage_own_bank_account=='yes'){?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>
                   <?php } ?>
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-cpassword"> <i class="lnr lnr-lock text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_cpassword');?></a> </div>
               </div>
               <div class="col-md-9">
                 <div class="tab-content">
-                  <?php if($system[0]->employee_manage_own_profile=='yes'){?>
+
+                  <!-- BASIC INFO -->
                   <div class="tab-pane fade show active" id="account-basic_info">
                     <?php $shift_info = $this->Employees_model->read_shift_information($user[0]->office_shift_id); ?>
                     <?php
@@ -94,14 +85,16 @@
                             $shift_name = '--';
                         }
                       ?>
+
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Informasi </strong> Personal </span> </div>
                     <div class="card-body media align-items-center"> <img src="<?php echo $de_file;?>" alt="" class="d-block ui-w-80">
-                      <div class="media-body ml-4"> <a target="_blank" href="<?php echo site_url('admin/employees/download_profile/').$session['user_id'];?>">
-                        <label class="btn btn-outline-primary"> <?php echo $this->lang->line('xin_download_profile_title');?> </label>
-                        </a>
-                        <div class="text-light  mt-1"><?php echo $full_name;?></div>
-                        <div class="text-light  mt-1"><?php echo $this->lang->line('xin_e_details_shift');?> - <?php echo $shift_name;?></div>
+                      <div class="media-body ml-4">
+                        <div class="text-big  mt-1"><label class="form-label"><?php echo $first_name;?></label></div>
+                        <div class="text-big  mt-1"><label class="form-label">NIP: <?php echo $employee_id;?></label></div>
+                        <div class="text-muted  mt-1"><label class="form-label"><?php echo $designation[0]->designation_name;?></label></div>
                       </div>
                     </div>
+
                     <hr class="border-light m-0">
                     <div class="card-body">
                       <?php $attributes = array('name' => 'basic_info', 'id' => 'basic_info', 'autocomplete' => 'off');?>
@@ -119,79 +112,482 @@
                       <div class="box">
                         <div class="box-body">
                           <div class="card-block">
+
+
+                            <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label"><?php echo $this->lang->line('xin_employee_first_name');?></label>
                                   <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_first_name');?>" name="first_name" type="text" value="<?php echo $first_name;?>">
                                 </div>
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-4">
                                 <div class="form-group">
-                                  <label class="control-label form-label"><?php echo $this->lang->line('xin_employee_last_name');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_last_name');?>" name="last_name" type="text" value="<?php echo $last_name;?>">
+                                  <label class="control-label form-label"><?php echo $this->lang->line('xin_profile_tempat_lahir');?></label>
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_profile_tempat_lahir');?>" name="tempat_lahir" type="text" value="<?php echo $tempat_lahir;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label for="tanggal_lahir" class="control-label"><?php echo $this->lang->line('xin_employee_dob');?></label>
+                                  <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('xin_employee_dob');?>" name="tanggal_lahir" type="text" value="<?php echo $date_of_birth;?>">
                                 </div>
                               </div>
                             </div>
+
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Nama Ibu Kandung</label>
+                                  <input class="form-control" placeholder="Nama Ibu Kandung" name="ibu_kandung" type="text" value="<?php echo $ibu_kandung;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Nomor HP/Whatsapp</label>
+                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="no_kontak" type="text" value="<?php echo $contact_no;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">Email*</label>
+                                  <input class="form-control" placeholder="Alamat Email" name="email" type="text" value="<?php echo $email;?>">
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Nomor KTP*</label>
+                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="ktp_no" type="text" value="<?php echo $ktp_no;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">Nomor KK*</label>
+                                  <input class="form-control" placeholder="Nomor Kartu Keluarga" name="kk_no" type="text" value="<?php echo $kk_no;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label">NPWP</label>
+                                  <input class="form-control" placeholder="Nomor Pokok Wajib Pajak" name="npwp_no" type="text" value="<?php echo $npwp_no;?>">
+                                </div>
+                              </div>
+                            </div>
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label class="form-label control-label"><?php echo $this->lang->line('dashboard_email');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('dashboard_email');?>" name="email" type="text" value="<?php echo $email;?>">
+                                  <label class="form-label"><?php echo $this->lang->line('xin_address_1');?></label>
+                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="address_ktp" cols="30" rows="3" ><?php echo $alamat_ktp;?></textarea>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label class="form-label"><?php echo $this->lang->line('xin_employee_dob');?></label>
-                                  <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_employee_dob');?>" name="date_of_birth" type="text" value="<?php echo $date_of_birth;?>">
+                                  <label class="form-label"><?php echo $this->lang->line('xin_address_domisili');?></label>
+                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_address_domisili');?>" name="address" cols="30" rows="3"><?php echo $address;?></textarea>
                                 </div>
                               </div>
                             </div>
+
                             <div class="row">
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_gender');?></label>
                                   <select class="form-control" name="gender" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>">
-                                    <option value="Male" <?php if($gender=='Male'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_gender_male');?></option>
-                                    <option value="Female" <?php if($gender=='Female'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_gender_female');?></option>
+                                    <option value="L" <?php if($gender=='L'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_gender_male');?></option>
+                                    <option value="P" <?php if($gender=='P'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_gender_female');?></option>
                                   </select>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Agama</label>
+
+                                  <select class="form-control" name="ethnicity" data-plugin="select_hrm">
+                                  <option value=""></option>
+                                              <?php foreach($all_ethnicity as $eth):?>
+                                              <option value="<?php echo $eth->ethnicity_type_id;?>" <?php if($ethnicity_type==$eth->ethnicity_type_id):?> selected <?php endif; ?> ><?php echo $eth->type;?></option>
+                                              <?php endforeach;?>
+                                  </select>
+
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_mstatus');?></label>
-                                  <select class="form-control" name="marital_status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_mstatus');?>">
-                                    <option value="Single" <?php if($marital_status=='Single'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_status_single');?></option>
-                                    <option value="Married" <?php if($marital_status=='Married'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_status_married');?></option>
-                                    <option value="Widowed" <?php if($marital_status=='Widowed'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_status_widowed');?></option>
-                                    <option value="Divorced or Separated" <?php if($marital_status=='Divorced or Separated'):?> selected <?php endif; ?>><?php echo $this->lang->line('xin_status_divorced_separated');?></option>
-                                  </select>
+
+                                  <select class="form-control" name="marital_status" data-plugin="select_hrm">
+                                  <option value=""></option>
+                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Belum Menikah</option>
+                                              <option value="K/0" <?php if($marital_status=='K/0'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
+                                              <option value="K/1" <?php if($marital_status=='K/1'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
+                                              <option value="K/2" <?php if($marital_status=='K/2'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
+                                              <option value="K/3" <?php if($marital_status=='K/3'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
+                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Janda/Duda (0 Anak)</option>
+                                              <option value="TK/1" <?php if($marital_status=='TK/1'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
+                                              <option value="TK/2" <?php if($marital_status=='TK/2'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
+                                              <option value="TK/3" <?php if($marital_status=='TK/3'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
+                                              
+                                </select>
+
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Golongan Darah</label>
+                               <select class="form-control" name="blood_group" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_blood_group');?>">
+                                <option value=""></option>
+                                <option value="A+" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>A+</option>
+                                <option value="A-" <?php if($blood_group == 'A-'):?> selected="selected"<?php endif;?>>A-</option>
+                                <option value="B+" <?php if($blood_group == 'B+'):?> selected="selected"<?php endif;?>>B+</option>
+                                <option value="B-" <?php if($blood_group == 'B-'):?> selected="selected"<?php endif;?>>B-</option>
+                                <option value="AB+" <?php if($blood_group == 'AB+'):?> selected="selected"<?php endif;?>>AB+</option>
+                                <option value="AB-" <?php if($blood_group == 'AB-'):?> selected="selected"<?php endif;?>>AB-</option>
+                                <option value="O+" <?php if($blood_group == 'O+'):?> selected="selected"<?php endif;?>>O+</option>
+                                <option value="O-" <?php if($blood_group == 'O-'):?> selected="selected"<?php endif;?>>O-</option>
+                              </select>
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
-                                  <label class="form-label control-label"><?php echo $this->lang->line('xin_contact_number');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_contact_number');?>" name="contact_no" type="text" value="<?php echo $contact_no;?>">
+                                  <label class="form-label">Tinggi Badan</label>
+                                  <input class="form-control" placeholder="0 kg" name="tinggi_badan" type="text" value="<?php echo $tinggi_badan;?>">
                                 </div>
                               </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-md-12">
+                              <div class="col-md-4">
                                 <div class="form-group">
-                                  <label class="form-label"><?php echo $this->lang->line('xin_employee_address');?></label>
-                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_address');?>" name="address" cols="30" rows="3" id="address"><?php echo $address;?></textarea>
+                                  <label class="form-label">Berat Badan</label>
+                                  <input class="form-control" placeholder="0 kg" name="berat_badan" type="text" value="<?php echo $berat_badan;?>">
                                 </div>
                               </div>
                             </div>
+
                             <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
                           </div>
                         </div>
                       </div>
                       <?php echo form_close(); ?> </div>
                   </div>
-                  <?php } ?>
-                  <?php if($system[0]->employee_manage_own_picture=='yes'){?>
-                    
+
+                  <!-- POSISI/JABATAN -->
+                  <div class="tab-pane fade" id="account-grade">
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Posisi </strong> dan Jabatan </span> </div>
+                    <div class="card-body pb-2">
+                      <?php $attributes = array('name' => 'social_networking', 'id' => 'f_social_networking', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                      <?php echo form_open('admin/employees/grade/', $attributes, $hidden);?>
+                      <?php
+                              $data_usr4 = array(
+                                    'type'  => 'hidden',
+                                    'name'  => 'user_id',
+                                    'value' => $session['user_id'],
+                             );
+                            echo form_input($data_usr4);
+                            ?>
+                      <div class="box">
+                        <div class="box-body">
+                          <div class="card-block">
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="pt">Perusahaan / PT</label>
+                                  <input class="form-control" placeholder="" name="facebook_link" type="text" value="<?php echo $company_name;?>" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="department">Department</label>
+                                  <input class="form-control" placeholder="" name="twitter_link" type="text" value="<?php echo $department_name;?>" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="project">Project</label>
+                                  <input class="form-control" placeholder="" name="blogger_link" type="text" value="<?php echo $project_name;?>" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="blogger_profile">Sub Project</label>
+                                  <input class="form-control" placeholder="" name="linkdedin_link" type="text" value="<?php echo $sub_project_name;?>" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="linkdedin_profile">Posisi/Jabatan</label>
+                                  <input class="form-control" placeholder="" name="instagram_link" type="text" value="<?php echo $designation[0]->designation_name;?>" disabled>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="linkdedin_profile">Area/Penempatan</label>
+                                  <input class="form-control" placeholder="" name="instagram_link" type="text" value="<?php echo $penempatan;?>" disabled>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <?php echo form_close(); ?> </div>
+                  </div>
+
+                  <!-- DOKUMEN FOTO-->
+                  <div class="tab-pane fade" id="account-document">
+                    <div class="box" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
+                      <div class="card-body">
+                        <div class="box-datatable table-responsive">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                            <thead>
+                              <tr>
+                                <th><?php echo $this->lang->line('xin_action');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
+                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                      </div>s
+                    </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Dokumen </strong> Pribadi </span> </div>
+                    <div class="card-body pb-2">
+                      <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_document_info' => 'UPDATE');?>
+                      <?php echo form_open_multipart('admin/profile/document_info', $attributes, $hidden);?>
+                      <?php
+                      $data_usr2 = array(
+                        'type'  => 'hidden',
+                        'name'  => 'user_id',
+                        'value' => $user_id,
+                       );
+                      echo form_input($data_usr2);
+                      ?>
+
+                        <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+                        <input name="ffoto_ktp" type="text" value="<?php echo $filename_ktp;?>" hidden>
+                        <input name="ffoto_kk" type="text" value="<?php echo $filename_kk;?>" hidden>
+                        <input name="ffoto_npwp" type="text" value="<?php echo $filename_npwp;?>" hidden>
+
+                      <!-- KTP -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Foto KTP</label>
+                              <input type="file" class="form-control-file" id="document_file" name="document_file">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="title" class="control-label"><?php echo $this->lang->line('xin_ktp');?><i class="hrpremium-asterisk">*</i></label>
+                            <input class="form-control" placeholder="Nomor Kartu Tanda Penduduk" name="title" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $ktp_no;?>">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_ktp;?>" alt="" class="d-block ui-w-80">
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- KK -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Foto KK </label>
+                              <input type="file" class="form-control-file" id="document_file_kk" name="document_file_kk">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="title" class="control-label"><?php echo $this->lang->line('xin_kk');?><i class="hrpremium-asterisk">*</i></label>
+                            <input class="form-control" placeholder="Nomor Kartu Keluarga" name="kk_no" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $kk_no;?>">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_kk;?>" alt="" class="d-block ui-w-80">
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- NPWP -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Foto NPWP </label>
+                              <input type="file" class="form-control-file" id="document_file_npwp" name="document_file_npwp">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="title" class="control-label"><?php echo $this->lang->line('xin_npwp');?><i class="hrpremium-asterisk">*</i></label>
+                            <input class="form-control" placeholder="Nomor Pokok Wajib Pajak" name="npwp_no" type="text" maxlength="25" value="<?php echo $npwp_no;?>">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_npwp;?>" alt="" class="d-block ui-w-80">
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class="form-actions"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                          </div>
+                        </div>
+                      </div>
+                      <?php echo form_close(); ?> </div>
+                  </div>
+
+                  <!-- REKENING -->
+                  <div class="tab-pane fade" id="account-baccount">
+                    <div class="box md-4">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <?php $attributes = array('name' => 'bank_account_info', 'id' => 'bank_account_info', 'autocomplete' => 'off');?>
+                          <?php $hidden = array('u_rekening_info' => 'UPDATE');?>
+                          <?php echo form_open('admin/profile/bank_account_info/', $attributes, $hidden);?>
+                          <?php
+                              $data_usr10 = array(
+                                    'type'  => 'hidden',
+                                    'name'  => 'user_id',
+                                    'value' => $session['user_id'],
+                             );
+                            echo form_input($data_usr10);
+                            ?>
+
+                        <input name="ffoto_rek" type="text" value="<?php echo $filename_rek;?>" hidden>
+
+                      <!-- REKENING -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <label for="no_rek" class="control-label"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk">*</i></label>
+                            <input class="form-control" placeholder="Nomor Rekening Bank" name="no_rek" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $nomor_rek;?>">
+                          </div>
+                        </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Foto Rekening (Buku/E-Banking/Mobile-Banking)</label>
+                              <input type="file" class="form-control-file" id="document_file_rek" name="document_file_rek">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_rek;?>" alt="" class="d-block ui-w-80">
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                          <div class="row">
+                          <div class="col-md-5">
+                            <div class="form-group">
+                              <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk">*</i></label>
+                              <select name="bank_name" id="bank_name" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name');?>">
+                                <option value=""></option>
+                                <?php 
+                                foreach ( $list_bank as $bank ) { 
+                                ?>
+                                  <option value="<?php echo $bank->secid;?>" <?php if($bank_name==$bank->secid):?> selected <?php endif; ?>> <?php echo $bank->bank_name;?></option>
+                                <?php 
+                                } 
+                                ?>                                 
+                              </select>
+                            </div>
+                          </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-5">
+                              <div class="form-group">
+                                <label for="account_title">Nama Pemilik Rekening</label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="pemilik_rek" type="text" value="<?php echo $pemilik_rek;?>" id="account_name">
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                              </div>
+                            </div>
+
+                            <?php echo form_close(); ?> </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="box" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <div class="table-responsive" data-pattern="priority-columns">
+                            <table class="table table-striped table-bordered dataTable" id="xin_table_bank_account" style="width:100%;">
+                              <thead>
+                                <tr>
+                                  <th><?php echo $this->lang->line('xin_action');?></th>
+                                  <th><?php echo $this->lang->line('xin_e_details_acc_title');?></th>
+                                  <th><?php echo $this->lang->line('xin_e_details_acc_number');?></th>
+                                  <th><?php echo $this->lang->line('xin_e_details_bank_name');?></th>
+                                  <th><?php echo $this->lang->line('xin_e_details_bank_code');?></th>
+                                  <th><?php echo $this->lang->line('xin_e_details_bank_branch');?></th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="tab-pane fade" id="account-profile_picture">
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'profile_picture', 'id' => 'f_profile_picture', 'autocomplete' => 'off');?>
@@ -219,6 +615,9 @@
                         <div class="box-body">
                           <div class="card-block">
                             <div class="row">
+
+                            <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+
                               <div class="col-md-12">
                                 <div class='form-group'>
                                   <fieldset class="form-group">
@@ -257,116 +656,7 @@
                       </div>
                       <?php echo form_close(); ?> </div>
                   </div>
-                  <?php } ?>
-                  <div class="tab-pane fade" id="account-immigration">
-                    <div class="box pb-2">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong><?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_employee_immigration');?></span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <?php $attributes = array('name' => 'immigration_info', 'id' => 'immigration_info', 'autocomplete' => 'off');?>
-                          <?php $hidden = array('u_document_info' => 'UPDATE');?>
-                          <?php echo form_open_multipart('admin/employees/immigration_info/', $attributes, $hidden);?>
-                          <?php
-                              $data_usr5 = array(
-                                    'type'  => 'hidden',
-                                    'name'  => 'user_id',
-                                    'value' => $session['user_id'],
-                             );
-                            echo form_input($data_usr5);
-                            ?>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="relation"><?php echo $this->lang->line('xin_e_details_document');?></label>
-                                <select name="document_type_id" id="document_type_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_choose_dtype');?>">
-                                  <option value=""></option>
-                                  <?php foreach($all_document_types as $document_type) {?>
-                                  <option value="<?php echo $document_type->document_type_id;?>"> <?php echo $document_type->document_type;?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="document_number" class="control-label"><?php echo $this->lang->line('xin_employee_document_number');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_document_number');?>" name="document_number" type="text">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-3">
-                              <div class="form-group">
-                                <label for="issue_date" class="control-label"><?php echo $this->lang->line('xin_issue_date');?></label>
-                                <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('xin_issue_date');?>" name="issue_date" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-3">
-                              <div class="form-group">
-                                <label for="expiry_date" class="control-label"><?php echo $this->lang->line('xin_e_details_doe');?></label>
-                                <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('xin_e_details_doe');?>" name="expiry_date" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <fieldset class="form-group">
-                                  <label for="logo"><?php echo $this->lang->line('xin_e_details_document_file');?></label>
-                                  <input type="file" class="form-control-file" id="p_file2" name="document_file">
-                                  <small><?php echo $this->lang->line('xin_e_details_d_type_file');?></small>
-                                </fieldset>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="eligible_review_date" class="control-label"><?php echo $this->lang->line('xin_eligible_review_date');?></label>
-                                <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('xin_eligible_review_date');?>" name="eligible_review_date" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="send_mail"><?php echo $this->lang->line('xin_country');?></label>
-                                <select class="form-control" name="country" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_country');?>">
-                                  <option value=""><?php echo $this->lang->line('xin_select_one');?></option>
-                                  <?php foreach($all_countries as $scountry) {?>
-                                  <option value="<?php echo $scountry->country_id;?>"> <?php echo $scountry->country_name;?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                              </div>
-                            </div>
-                            <?php echo form_close(); ?> </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong><?php echo $this->lang->line('xin_assigned_immigration');?></strong> <?php echo $this->lang->line('xin_records');?></span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_imgdocument" style="width:100%;">
-                              <thead>
-                                <tr>
-                                  <th><?php echo $this->lang->line('xin_action');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_document');?></th>
-                                  <th><?php echo $this->lang->line('xin_issue_date');?></th>
-                                  <th><?php echo $this->lang->line('xin_expiry_date');?></th>
-                                  <th><?php echo $this->lang->line('xin_issued_by');?></th>
-                                  <th><?php echo $this->lang->line('xin_eligible_review_date');?></th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                   <?php if($system[0]->employee_manage_own_contact=='yes'){?>
                   <div class="tab-pane fade" id="account-contacts">
                     <div class="box md-4">
@@ -523,6 +813,7 @@
                     </div>
                   </div>
                   <?php } ?>
+
                   <?php if($system[0]->employee_manage_own_social=='yes'){?>
                   <div class="tab-pane fade" id="account-social">
                     <div class="card-body pb-2">
@@ -605,228 +896,115 @@
                       <?php echo form_close(); ?> </div>
                   </div>
                   <?php } ?>
-                  <?php if($system[0]->employee_manage_own_document=='yes'){?>
-                  <div class="tab-pane fade" id="account-document">
-                    <div class="box md-4">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_document');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
-                          <?php $hidden = array('u_document_info' => 'ADD');?>
-                          <?php echo form_open_multipart('admin/employees/document_info/', $attributes, $hidden);?>
-                          <?php
-                          $data_usr7 = array(
-                                'type'  => 'hidden',
-                                'name'  => 'user_id',
-                                'value' => $session['user_id'],
-                         );
-                        echo form_input($data_usr7);
-                        ?>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="relation"><?php echo $this->lang->line('xin_e_details_dtype');?></label>
-                                <select name="document_type_id" id="document_type_id" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_choose_dtype');?>">
-                                  <option value=""></option>
-                                  <?php foreach($all_document_types as $document_type) {?>
-                                  <option value="<?php echo $document_type->document_type_id;?>"> <?php echo $document_type->document_type;?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="date_of_expiry" class="control-label"><?php echo $this->lang->line('xin_e_details_doe');?></label>
-                                <input class="form-control date" readonly placeholder="<?php echo $this->lang->line('xin_e_details_doe');?>" name="date_of_expiry" type="text">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="title" class="control-label"><?php echo $this->lang->line('xin_e_details_dtitle');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_dtitle');?>" name="title" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="email" class="control-label"><?php echo $this->lang->line('xin_e_details_notifyemail');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_notifyemail');?>" name="email" type="email">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="description" class="control-label"><?php echo $this->lang->line('xin_description');?></label>
-                                <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_description');?>" data-show-counter="1" data-limit="300" name="description" cols="30" rows="3" id="d_description"></textarea>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <fieldset class="form-group">
-                                  <label for="logo"><?php echo $this->lang->line('xin_e_details_document_file');?></label>
-                                  <input type="file" class="form-control-file" id="document_file" name="document_file">
-                                  <small><?php echo $this->lang->line('xin_e_details_d_type_file');?></small>
-                                </fieldset>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="send_mail"><?php echo $this->lang->line('xin_e_details_send_notifyemail');?></label>
-                                <select name="send_mail" id="send_mail" class="form-control" data-plugin="select_hrm">
-                                  <option value="1"><?php echo $this->lang->line('xin_yes');?></option>
-                                  <option value="2"><?php echo $this->lang->line('xin_no');?></option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                              </div>
-                            </div>
-                            <?php echo form_close(); ?> </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
-                              <thead>
-                                <tr>
-                                  <th><?php echo $this->lang->line('xin_action');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
-                                  <th><?php echo $this->lang->line('dashboard_xin_title');?></th>
-                                  <!--<th><?php echo $this->lang->line('xin_e_details_notifyemail');?></th>-->
-                                  <th><?php echo $this->lang->line('xin_e_details_doe');?></th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <?php } ?>
-                  <?php if($system[0]->employee_manage_own_qualification=='yes'){?>
+
+
+
                   <div class="tab-pane fade" id="account-qualification">
-                    <div class="box md-4">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_qualification');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <?php $attributes = array('name' => 'qualification_info', 'id' => 'qualification_info', 'autocomplete' => 'off');?>
-                          <?php $hidden = array('u_basic_info' => 'UPDATE');?>
-                          <?php echo form_open('admin/employees/qualification_info/', $attributes, $hidden);?>
-                          <?php
-                              $data_usr8 = array(
-                                    'type'  => 'hidden',
-                                    'name'  => 'user_id',
-                                    'value' => $session['user_id'],
-                             );
-                            echo form_input($data_usr8);
-                            ?>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="name"><?php echo $this->lang->line('xin_e_details_inst_name');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_inst_name');?>" name="name" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="education_level" class="control-label"><?php echo $this->lang->line('xin_e_details_edu_level');?></label>
-                                <select class="form-control" name="education_level" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_edu_level');?>">
-                                  <?php foreach($all_education_level as $education_level) {?>
-                                  <option value="<?php echo $education_level->education_level_id?>"><?php echo $education_level->name?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="from_year" class="control-label"><?php echo $this->lang->line('xin_e_details_timeperiod');?></label>
-                                <div class="row">
-                                  <div class="col-md-6">
-                                    <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('xin_e_details_from');?>" name="from_year" type="text">
-                                  </div>
-                                  <div class="col-md-6">
-                                    <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('dashboard_to');?>" name="to_year" type="text">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="language" class="control-label"><?php echo $this->lang->line('xin_e_details_language');?></label>
-                                <select class="form-control" name="language" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_language');?>">
-                                  <?php foreach($all_qualification_language as $qualification_language) {?>
-                                  <option value="<?php echo $qualification_language->language_id?>"><?php echo $qualification_language->name?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="skill" class="control-label"><?php echo $this->lang->line('xin_e_details_skill');?></label>
-                                <select class="form-control" name="skill" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_skill');?>">
-                                  <option value=""></option>
-                                  <?php foreach($all_qualification_skill as $qualification_skill) {?>
-                                  <option value="<?php echo $qualification_skill->skill_id?>"><?php echo $qualification_skill->name?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label for="to_year" class="control-label"><?php echo $this->lang->line('xin_description');?></label>
-                                <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_description');?>" data-show-counter="1" data-limit="300" name="description" cols="30" rows="3" id="d_description"></textarea>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                              </div>
-                            </div>
-                            <?php echo form_close(); ?> </div>
-                        </div>
-                      </div>
-                    </div>
                     <div class="box">
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_qualification');?> </span> </div>
                       <div class="card-body">
-                        <div class="card-block">
-                          <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_qualification" style="width:100%;">
-                              <thead>
-                                <tr>
-                                  <th><?php echo $this->lang->line('xin_action');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_inst_name');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_timeperiod');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_edu_level');?></th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
+                        <div class="box-datatable table-responsive">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_qualification" style="width:100%;">
+                            <thead>
+                              <tr>
+                                <th><?php echo $this->lang->line('xin_action');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_inst_name');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_timeperiod');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_edu_level');?></th>
+                              </tr>
+                            </thead>
+                          </table>
                         </div>
                       </div>
                     </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_qualification');?> </span> </div>
+                    <div class="card-body pb-2">
+                      <?php $attributes = array('name' => 'qualification_info', 'id' => 'qualification_info', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                      <?php echo form_open('admin/employees/qualification_info', $attributes, $hidden);?>
+                      <?php
+                      $data_usr3 = array(
+                        'type'  => 'hidden',
+                        'name'  => 'user_id',
+                        'value' => $user_id,
+                       );
+                      echo form_input($data_usr3);
+                      ?>
+
+                      <div class="row">
+                        <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="education_level" class="control-label"><?php echo $this->lang->line('xin_e_details_edu_level');?></label>
+                              <select class="form-control" name="education_level" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_edu_level');?>">
+                                  <?php 
+                                  foreach ( $all_education_level as $education_level) {
+                                  ?>
+                                    <option value="<?php echo $education_level->education_level_id?>"><?php echo $education_level->name?></option>
+                                  <?php 
+                                  } 
+                                  ?>
+                              </select>
+                          </div>
+                        </div>
+
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="name"><?php echo $this->lang->line('xin_e_details_inst_name');?>
+                              <i class="hrpremium-asterisk">*</i>
+                            </label>
+                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_inst_name');?>" name="name" type="text">
+                          </div>
+                        </div>
+                      </div>
+                              
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="from_year" class="control-label"><?php echo $this->lang->line('xin_e_details_timeperiod');?>
+                              <i class="hrpremium-asterisk">*</i>
+                            </label>
+
+                            <div class="row">
+                              <div class="col-md-6">
+
+                            <input class="form-control" placeholder="Tahun Masuk" name="from_year" type="text">
+
+                              </div>
+                              
+                              <div class="col-md-6">
+
+                            <input class="form-control" placeholder="Tahun Lulus" name="to_year" type="text">
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                            
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="description" class="control-label"><?php echo $this->lang->line('xin_jurusan');?></label>
+                              <textarea class="form-control" placeholder="Keterangan" data-show-counter="1" data-limit="300" name="description" cols="30" rows="3" id="d_description"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                                
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> 
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+            
+                      <?php echo form_close(); ?> 
+                    </div>
                   </div>
-                  <?php } ?>
+
+
                   <?php if($system[0]->employee_manage_own_work_experience=='yes'){?>
                   <div class="tab-pane fade" id="account-experience">
                     <div class="box md-4">
@@ -914,84 +1092,8 @@
                     </div>
                   </div>
                   <?php } ?>
-                  <?php if($system[0]->employee_manage_own_bank_account=='yes'){?>
-                  <div class="tab-pane fade" id="account-baccount">
-                    <div class="box md-4">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <?php $attributes = array('name' => 'bank_account_info', 'id' => 'bank_account_info', 'autocomplete' => 'off');?>
-                          <?php $hidden = array('u_basic_info' => 'UPDATE');?>
-                          <?php echo form_open('admin/employees/bank_account_info/', $attributes, $hidden);?>
-                          <?php
-                              $data_usr10 = array(
-                                    'type'  => 'hidden',
-                                    'name'  => 'user_id',
-                                    'value' => $session['user_id'],
-                             );
-                            echo form_input($data_usr10);
-                            ?>
-                          <div class="row">
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="" id="account_name">
-                              </div>
-                              <div class="form-group">
-                                <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="" id="account_number">
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="form-group">
-                                <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="" id="bank_name">
-                              </div>
-                              <div class="form-group">
-                                <label for="bank_code"><?php echo $this->lang->line('xin_e_details_bank_code');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_code');?>" name="bank_code" type="text" value="" id="bank_code">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="bank_branch"><?php echo $this->lang->line('xin_e_details_bank_branch');?></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="" id="bank_branch">
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                              </div>
-                            </div>
-                            <?php echo form_close(); ?> </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_bank_account" style="width:100%;">
-                              <thead>
-                                <tr>
-                                  <th><?php echo $this->lang->line('xin_action');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_acc_title');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_acc_number');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_bank_name');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_bank_code');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_bank_branch');?></th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <?php } ?>
+
+                  <!-- PASSWORD -->
                   <div class="tab-pane fade" id="account-cpassword">
                     <div class="card-body pb-2">
                       <div class="box">
@@ -1043,34 +1145,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="tab-pane fade" id="account-salary">
-                    <div class="card-body pb-2">
-                      <div class="box-body pb-2">
-                        <div class="bg-white">
-                          <div class="row">
-                            <div class="col-md-4">
-                              <div class="form-group">
-                                <label class="form-label"><?php echo $this->lang->line('xin_employee_type_wages');?></label>
-                                <br />
-                                <?php if($wages_type==1):?>
-                                <?php echo $this->lang->line('xin_payroll_basic_salary');?>
-                                <?php endif;?>
-                                <?php if($wages_type==2):?>
-                                <?php echo $this->lang->line('xin_employee_daily_wages');?>
-                                <?php endif;?>
-                              </div>
-                            </div>
-                            <div class="col-md-2">
-                              <div class="form-group">
-                                <label class="form-label"><?php echo $this->lang->line('xin_salary_title');?></label>
-                                <br />
-                                <?php echo $this->Xin_model->currency_sign($basic_salary);?> </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
@@ -2066,3 +2141,22 @@
     </div>
   </div>
 </div>
+
+
+<style type="text/css">
+  
+  input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #26ae61;
+  padding: 10px 20px;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #20c997;
+}
+</style>

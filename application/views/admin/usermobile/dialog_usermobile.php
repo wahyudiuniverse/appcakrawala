@@ -79,7 +79,9 @@ if(isset($_GET['jd']) && isset($_GET['department_id']) && $_GET['data']=='depart
           <select class=" form-control" name="area2" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area_extra1');?>">
             <option value=""></option>
             <?php foreach($all_area as $emp) {?>
-            <option value="<?php echo $emp->id?>"><?php echo ucwords(strtolower($emp->name))?></option>
+
+      			<option value="<?php echo $emp->id?>" <?php if($areaid_extra1==$emp->id):?> selected="selected"<?php endif;?>> <?php echo ucwords(strtolower($emp->name))?></option>
+
             <?php } ?>
           </select>
         </div>
@@ -89,7 +91,8 @@ if(isset($_GET['jd']) && isset($_GET['department_id']) && $_GET['data']=='depart
           <select class=" form-control" name="area3" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area_extra2');?>">
             <option value=""></option>
             <?php foreach($all_area as $emp) {?>
-            <option value="<?php echo $emp->id?>"><?php echo ucwords(strtolower($emp->name))?></option>
+      			<option value="<?php echo $emp->id?>" <?php if($areaid_extra2==$emp->id):?> selected="selected"<?php endif;?>> <?php echo ucwords(strtolower($emp->name))?></option>
+
             <?php } ?>
           </select>
         </div>
