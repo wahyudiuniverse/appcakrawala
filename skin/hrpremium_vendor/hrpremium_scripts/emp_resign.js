@@ -126,8 +126,8 @@ $(document).ready(function() {
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
+						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					}, true);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.add-form').removeClass('show');
 					$('.select2-selection__rendered').html('--Select--');

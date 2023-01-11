@@ -125,10 +125,22 @@ $(document).ready(function() {
 					$('.save').prop('disabled', false);
 					Ladda.stopAll();
 				} else {
+
+
+					// xin_table.api().ajax.reload(function(){ 
+					// 	toastr.success(JSON.result);
+					// 	$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					// }, true);
+					// $('.icon-spinner3').hide();
+					// $('#xin-form')[0].reset(); // To reset form fields
+					// $('.select2-selection__rendered').html('--Select--');
+					// $('.save').prop('disabled', false);
+
+					
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
-					}, true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					}, true);
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.add-form').removeClass('show');
 					$('.select2-selection__rendered').html('--Select--');
