@@ -221,7 +221,6 @@ class Employee_resign extends MY_Controller {
 	}
 
 	public function request_employee_resign() {
-		
 		$session = $this->session->userdata('username');
 		if(empty($session)){
 			redirect('admin/');
@@ -343,7 +342,7 @@ class Employee_resign extends MY_Controller {
 					if ($iresult) {
 							$Return['result'] = $this->lang->line('xin_success_add_employee');
 					} else {
-							$Return['error'] = $this->lang->line('xin_error_msg');
+						$Return['error'] = $this->lang->line('xin_error_msg');
 					}
 		}
 

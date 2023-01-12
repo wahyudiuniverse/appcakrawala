@@ -78,10 +78,14 @@
 
     <!-- profile -->
 
-          <li class="sidenav-item <?php if(!empty($arr_mod['myprofile_active']))echo $arr_mod['myprofile_active'];?>"> 
-            <a class="sidenav-link" href="<?php echo site_url('admin/profile/');?>"> <?php echo $this->lang->line('header_my_profile');?> 
-            </a> 
-          </li>
+        <li class="sidenav-item <?php if(!empty($arr_mod['profile_active']))echo $arr_mod['profile_active'];?>"> 
+          <a href="<?php echo site_url('admin/profile/');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div><?php echo $this->lang->line('header_my_profile');?></div>
+          </a>             
+        </li>
+
 
     <?php 
     if(in_array('13',$role_resources_ids) 

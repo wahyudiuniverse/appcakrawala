@@ -29,23 +29,7 @@
 
 <div class="mb-3 sw-container tab-content">
   <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
-    <ul class="nav nav-tabs step-anchor">
-      <li class="nav-item active"> <a href="#smartwizard-2-step-1" class="mb-3 nav-link"> <span class="sw-done-icon ion lnr lnr-users"></span> <span class="sw-icon lnr lnr-users"></span> <?php echo $this->lang->line('xin_general');?>
-        <div class="text-muted small"><?php echo $this->lang->line('xin_e_details_basic');?></div>
-        </a> </li>
-      <li class="nav-item done"> <a href="#smartwizard-2-step-3" class="mb-3 nav-link"> <span class="sw-done-icon lnr lnr-calendar-full"></span> <span class="sw-icon lnr lnr-calendar-full"></span> <?php echo $this->lang->line('left_leaves');?>
-        <div class="text-muted small"><?php echo $this->lang->line('xin_view_leave_all');?></div>
-        </a> </li>
-      <li class="nav-item done"> <a href="#smartwizard-2-step-4" class="mb-3 nav-link"> <span class="sw-done-icon lnr lnr-earth"></span> <span class="sw-icon lnr lnr-earth"></span> <?php echo $this->lang->line('xin_hr');?>
-        <div class="text-muted small"><?php echo $this->lang->line('xin_view_core_hr_modules');?></div>
-        </a> </li>
-      <li class="nav-item done"> <a href="#smartwizard-2-step-5" class="mb-3 nav-link"> <span class="sw-done-icon lnr lnr-layers"></span> <span class="sw-icon lnr lnr-layers"></span> <?php echo $this->lang->line('xin_hr_m_project_task');?>
-        <div class="text-muted small"><?php echo $this->lang->line('xin_view_all_projects');?></div>
-        </a> </li>
-      <li class="nav-item done"> <a href="#smartwizard-2-step-6" class="mb-3 nav-link"> <span class="sw-done-icon lnr lnr-keyboard"></span> <span class="sw-icon lnr lnr-keyboard"></span> <?php echo $this->lang->line('left_payslips');?>
-        <div class="text-muted small"><?php echo $this->lang->line('xin_view_payslips_all');?></div>
-        </a> </li>
-    </ul>
+
     <hr class="border-light m-0">
     <div class="mb-3 sw-container tab-content">
       <div id="smartwizard-2-step-1" class="card animated fadeIn tab-pane step-content mt-3" style="display: block;">

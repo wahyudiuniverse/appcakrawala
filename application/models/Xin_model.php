@@ -202,10 +202,13 @@ class Xin_model extends CI_Model {
 			$arr['man_employees_active'] = 'active';
 			$arr['man_employees_open'] = 'open';
 			return $arr;
-		}
-		else if($mClass=='employees') {
+		} else if($mClass=='employees') {
 			$arr['hremp_active'] = 'active';
 			$arr['stff_open'] = 'open';
+			return $arr;
+		} else if($mClass=='profile') {
+			$arr['profile_active'] = 'active';
+			$arr['profile_open'] = 'open';
 			return $arr;
 		} else if($mClass=='pkwt' && $mMethod=='expired') {
 			$arr['expired_active'] = 'active';
