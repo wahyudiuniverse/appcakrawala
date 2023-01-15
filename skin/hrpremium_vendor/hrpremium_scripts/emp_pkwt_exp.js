@@ -3,7 +3,7 @@ $(document).ready(function() {
    	"order": [[0, 'desc']],
       "bDestroy": true,
 		"ajax": {
-            url : base_url+"/pkwt_list/",
+            url : base_url+"/pkwt_list_exp/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -80,7 +80,7 @@ $(document).ready(function() {
 			//get project
 	jQuery("#aj_project").change(function(){
 		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_project_employees/"+p_id, function(data, status){
+		jQuery.get(base_url+"/get_project_employees_exp/"+p_id, function(data, status){
 			jQuery('#project_employees_ajax').html(data);			
 		});
 	});

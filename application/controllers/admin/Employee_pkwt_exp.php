@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_pkwt extends MY_Controller {
+class Employee_pkwt_exp extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -49,7 +49,7 @@ class Employee_pkwt extends MY_Controller {
 			// $data['all_projects'] = $this->Project_model->get_all_projects();
 			if(in_array('139',$role_resources_ids)) {
 				$data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
-				$data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
+				$data['all_projects'] = $this->Project_model->get_project_pkwt_exp();
 				// $data['all_projects'] = $this->Project_model->get_project_exist();
 			} else {
 				$data['all_emp_active'] = $this->Employees_model->get_all_employees_project();
@@ -59,21 +59,21 @@ class Employee_pkwt extends MY_Controller {
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['breadcrumbs'] = $this->lang->line('xin_pkwt_digital');
-		$data['path_url'] = 'emp_pkwt';
+		$data['path_url'] = 'emp_pkwt_exp';
 		if(in_array('376',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/pkwt/pkwt_list", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/pkwt/pkwt_list_exp", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
 		}
   }
 
-	public function pkwt_list() {
+	public function pkwt_list_exp() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/pkwt/pkwt_list", $data);
+			$this->load->view("admin/pkwt/pkwt_list_exp", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -152,17 +152,18 @@ class Employee_pkwt extends MY_Controller {
 
 
 	 // get location > departments
-	public function get_project_employees() {
+	public function get_project_employees_exp() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
 		
 		$data = array(
-			'id_project' => $id
+			'id_project' => $id,
+			'waktu_kontrak' => ''
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/get_project_employees", $data);
+			$this->load->view("admin/pkwt/get_project_employees_exp", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -420,7 +421,7 @@ class Employee_pkwt extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
-
+	
 	 // get location > departments
 	public function get_ktp() {
 
@@ -618,6 +619,7 @@ class Employee_pkwt extends MY_Controller {
 
 					if ($iresult) {
 							$Return['result'] = $this->lang->line('xin_success_add_employee');
+
 					} else {
 						$Return['error'] = $this->lang->line('xin_error_msg');
 					}

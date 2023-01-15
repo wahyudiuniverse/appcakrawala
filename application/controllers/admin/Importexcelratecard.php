@@ -133,7 +133,7 @@ class Importexcelratecard extends MY_Controller
 			  
 			  $importid = $r->uploadid;
 			  $periode = $r->periode;
-			  $date_periode = $r->date_periode;
+			  $date_periode = $r->date_periode_start. ' s/d ' .$r->date_periode_end;
 			  $project_id = $r->project_id;
 			  $project = $r->project;
 			  $kota = $r->kota;

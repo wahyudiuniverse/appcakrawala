@@ -1,8 +1,9 @@
 $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
-        "bDestroy": true,
+   	"order": [[0, 'desc']],
+      "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/pkwt_list/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -84,7 +85,39 @@ $(document).ready(function() {
 		// 	jQuery('#ajax_office_shift').html(data);
 		// });
 	});
+				//get project
+	jQuery("#aj_project").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_project_posisi/"+p_id, function(data, status){
+			jQuery('#project_posisi_ajax').html(data);			
+		});
+	});
+				//get project
+	jQuery("#aj_project").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_project_area/"+p_id, function(data, status){
+			jQuery('#project_area_ajax').html(data);			
+		});
+	});
+
+	 			//get project
+	jQuery("#aj_project").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_pkwt_project/"+p_id, function(data, status){
+			jQuery('#pkwt_project_ajax').html(data);			
+		});
+	});
 	
+	 			//get project
+	jQuery("#aj_waktu_kontrak").change(function(){
+		var emp = document.getElementById("aj_ktp").value ;
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_pkwt_waktukontrak/"+p_id+"/"+emp, function(data, status){
+			jQuery('#pkwt_begin_ajax').html(data);			
+		});
+	});
+
+
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e){
 		var fd = new FormData(this);
@@ -96,7 +129,8 @@ $(document).ready(function() {
 		$('.save').prop('disabled', true);
 		
 		$.ajax({
-			url: base_url+'/request_add_employee/',//e.target.action,
+			// url: base_url+'/request_add_employee/',//e.target.action,
+			url: base_url+'/request_employee_pkwt/',//e.target.action,
 			type: "POST",
 			data:  fd,
 			contentType: false,

@@ -4146,9 +4146,11 @@ ORDER BY `expiry_date`");
 
 function count_pkwt(){
 	
-		$sql = "SELECT COUNT(contract_id) FROM xin_employee_contract";
+		$sql = "SELECT COUNT(contract_id) + 1 AS newpkwt FROM xin_employee_contract";
 		$query = $this->db->query($sql);
-		return $query->num_rows();
+		// return $query->num_rows();
+		$res = $query->result();
+		return $res;
 }
 
 function count_nip(){

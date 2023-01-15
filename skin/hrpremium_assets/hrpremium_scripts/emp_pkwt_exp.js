@@ -6,6 +6,8 @@ $(document).ready(function() {
             url : base_url+"/pkwt_list/",
             type : 'GET'
         },
+		dom: 'lBfrtip',
+		"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
 		"fnDrawCallback": function(settings){
 		$('[data-toggle="tooltip"]').tooltip();          
 		}
@@ -29,14 +31,12 @@ $(document).ready(function() {
 				if (JSON.error != '') {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					Ladda.stopAll();
 				} else {
 					$('.delete-modal').modal('toggle');
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);		
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					Ladda.stopAll();					
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);					
 				}
 			}
 		});
@@ -60,7 +60,7 @@ $(document).ready(function() {
 	});
 	
 	// view
-	$('#modals-slide').on('show.bs.modal', function (event) {
+	$('.view-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var company_id = button.data('company_id');
 		var modal = $(this);
@@ -75,12 +75,14 @@ $(document).ready(function() {
 		}
 		});
 	});
+	
 
+	
 
 			//get project
 	jQuery("#aj_project").change(function(){
 		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_project_employees/"+p_id, function(data, status){
+		jQuery.get(base_url+"/get_project_employees_exp/"+p_id, function(data, status){
 			jQuery('#project_employees_ajax').html(data);			
 		});
 	});
@@ -126,7 +128,7 @@ $(document).ready(function() {
 	});
 	
 	/* Add data */ /*Form Submit*/
-	$("#xin-form").submit(function(e) {
+	$("#xin-form").submit(function(e){
 		var fd = new FormData(this);
 		var obj = $(this), action = obj.attr('name');
 		fd.append("is_ajax", 1);
@@ -136,6 +138,7 @@ $(document).ready(function() {
 		$('.save').prop('disabled', true);
 		
 		$.ajax({
+			// url: base_url+'/request_add_employee/',//e.target.action,
 			url: base_url+'/request_employee_pkwt/',//e.target.action,
 			type: "POST",
 			data:  fd,
@@ -148,17 +151,15 @@ $(document).ready(function() {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
-					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('#xin-form')[0].reset(); // To reset form fields
-					$('.add-form').removeClass('show');
+					$('.add-form').removeClass('in');
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
-					Ladda.stopAll();
 				}
 			},
 			error: function() 
@@ -166,10 +167,10 @@ $(document).ready(function() {
 				toastr.error(JSON.error);
 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 				$('.save').prop('disabled', false);
-					Ladda.stopAll();
 			} 	        
 	   });
 	});
+
 });
 	//open the lateral panel
 	$( document ).on( "click", ".cd-btn", function() {

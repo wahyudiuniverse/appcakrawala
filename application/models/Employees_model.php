@@ -38,9 +38,23 @@ class Employees_model extends CI_Model {
 		FROM xin_employees 
 		WHERE is_active = 1 
 		AND status_resign = 1
-		AND employee_id not IN (SELECT 1 AS nip FROM DUAL)
+		AND employee_id not IN (SELECT 1 AS nip FROM DUAL
+			UNION
+			SELECT employee_id AS nip FROM xin_employee_contract WHERE status_pkwt = 1)
 		AND project_id = '$id'
 		ORDER BY date_of_leaving DESC;");
+  	  return $query->result();
+	}
+
+	public function get_all_employees_byposisi($id)
+	{
+	  $query = $this->db->query("SELECT posisi_jabatan FROM xin_employee_ratecard WHERE project_id = '19' AND status_ratecard = '1';");
+  	  return $query->result();
+	}
+
+	public function get_all_employees_byarea($id)
+	{
+	  $query = $this->db->query("SELECT distinct(kota) as area FROM xin_employee_ratecard WHERE project_id = '19' AND status_ratecard = '1';");
   	  return $query->result();
 	}
 
@@ -208,7 +222,6 @@ class Employees_model extends CI_Model {
 		} else {
 			return null;
 		}
-		
 	}
 
 	// get single employee by NIP

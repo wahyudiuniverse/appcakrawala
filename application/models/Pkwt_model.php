@@ -198,11 +198,158 @@ class Pkwt_model extends CI_Model {
 		
 	}
 
+	// get single employee
+	public function read_pkwt_by_nip($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ? ORDER BY contract_id DESC';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+		
+	}
+
+	// get single employee
+	public function read_info_ratecard($proj,$posi,$area) {
+	
+		$sql = 'SELECT * FROM xin_employee_ratecard WHERE project_id = ? AND posisi_jabatan = ? AND kota = ?';
+		$binds = array($proj,$posi,$area);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+ 	// monitoring request
+	public function get_monitoring_pkwt() {
+
+		$sql = 'SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 1
+			AND approve_hrd = 0
+			ORDER BY contract_id DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_pkwt_apnae() {
+
+		$sql = 'SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 1
+			AND approve_nae = 0
+			ORDER BY contract_id DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_pkwt_apnom() {
+
+		$sql = 'SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 1
+			AND approve_nae NOT IN(0)
+			AND approve_nom = 0
+			ORDER BY contract_id DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_pkwt_aphrd() {
+
+		$sql = 'SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 1
+			AND approve_nae NOT IN(0)
+			AND approve_nom NOT IN(0)
+			AND approve_hrd = 0
+			ORDER BY contract_id DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_pkwt_history() {
+
+		$sql = 'SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 1
+			AND approve_nae NOT IN(0)
+			AND approve_nom NOT IN(0)
+			AND approve_hrd NOT IN(0)
+			ORDER BY contract_id DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+
+	public function get_all_employees_byproject_exp($id)
+	{
+	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, project_id, date_of_leaving,month(date_of_leaving) bln_skrng
+		FROM xin_employees 
+		WHERE is_active = 1 
+		AND status_resign = 1
+		AND employee_id IN (
+				SELECT empc.employee_id AS nip 
+				FROM (
+					SELECT contract_id, employee_id, max(to_date) AS to_date FROM xin_employee_contract group by employee_id ORDER BY contract_id DESC
+					) empc
+				WHERE (DATE_SUB(empc.to_date, INTERVAL 1 MONTH)) < CURDATE() 
+				GROUP BY empc.employee_id
+				ORDER BY empc.contract_id DESC
+			)
+		AND project_id = '$id'
+		ORDER BY date_of_leaving DESC");
+  	  return $query->result();
+	}
+
+	// get single pkwt by nosurat
+	public function read_pkwt_info_by_contractid($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE contract_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 
 	// get single pkwt by nosurat
 	public function read_pkwt_info_by_nosurat($id) {
 	
 		$sql = 'SELECT * FROM xin_employee_contract WHERE no_surat = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// get single pkwt by nosurat
+	public function read_pkwt_info_by_docid($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE docid = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -237,6 +384,26 @@ class Pkwt_model extends CI_Model {
 		
 	}
 
+
+		// Function to update record in table
+	public function update_pkwt_apnae($data, $id){
+		$this->db->where('contract_id', $id);
+		if( $this->db->update('xin_employee_contract',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+		// Function to update record in table
+	public function update_pkwt_docid($data, $id){
+		$this->db->where('docid', $id);
+		if( $this->db->update('xin_employee_contract',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
 
 	// Function to update record in table > basic_info
 	public function update_error_temp($data, $id) {

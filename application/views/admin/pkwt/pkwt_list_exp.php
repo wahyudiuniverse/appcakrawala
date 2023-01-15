@@ -16,12 +16,12 @@
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_pkwt/');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Request PKWT
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt/');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Request PKWT
       </a> </li>
     <?php } ?>  
     
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_exp/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_exp/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Expired PKWT <?php echo '('.$count_appnae.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_pkwt_exp/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_exp/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Expired PKWT <?php echo '('.$count_appnae.')';?>
       </a> </li>
     <?php } ?>
 
@@ -55,7 +55,7 @@
 
 <div class="card mb-4">
   <!-- <div id="accordion"> -->
-    <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>REQUEST</strong> PKWT</span>
+    <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>REQUEST</strong> PKWT EXPIRED</span>
       <div class="card-header-elements ml-md-auto"> </div>
     </div>
     <div id="add_form" class="add-form <?php echo $get_animate;?>">
@@ -254,6 +254,20 @@
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="projects">Berakhir PKWT</label>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="projects">: -</label>
+                  </div>
+                </div>
+              </div>
+
           </div>
 
           <div class="col-md-6">

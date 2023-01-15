@@ -1,5 +1,5 @@
 
-<?php $result = $this->Employees_model->get_all_employees_byproject($id_project);
+<?php $result = $this->Pkwt_model->get_all_employees_byproject_exp($id_project);
 ?>
 
                   <div class="form-group">

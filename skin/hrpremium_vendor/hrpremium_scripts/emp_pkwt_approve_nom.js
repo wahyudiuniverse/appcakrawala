@@ -1,9 +1,8 @@
 $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
-   	"order": [[0, 'desc']],
-      "bDestroy": true,
+        "bDestroy": true,
 		"ajax": {
-            url : base_url+"/pkwt_list/",
+            url : base_url+"/pkwt_list_appnom/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -75,58 +74,20 @@ $(document).ready(function() {
 		}
 		});
 	});
+	
 
-
-			//get project
 	jQuery("#aj_project").change(function(){
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_project_employees/"+p_id, function(data, status){
-			jQuery('#project_employees_ajax').html(data);			
+		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
+			jQuery('#project_sub_project').html(data);
 		});
-	});
-
-			//get project
-	jQuery("#aj_project").change(function(){
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_project_posisi/"+p_id, function(data, status){
-			jQuery('#project_posisi_ajax').html(data);			
-		});
-	});
-
-	 			//get project
-	jQuery("#aj_project").change(function(){
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_pkwt_project/"+p_id, function(data, status){
-			jQuery('#pkwt_project_ajax').html(data);			
-		});
-	});
-
-			//get project
-	jQuery("#aj_ktp").change(function(){
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_ktp/"+p_id, function(data, status){
-			jQuery('#ktp_ajax').html(data);			
-		});
+		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
+		// 	jQuery('#ajax_office_shift').html(data);
+		// });
 	});
 	
-			//get departments
-	jQuery("#aj_ktp").change(function(){
-		jQuery.get(base_url+"/get_info/"+jQuery(this).val(), function(data, status){
-			jQuery('#info_ajax').html(data);
-		});
-	});
-	
-	 			//get project
-	jQuery("#aj_waktu_kontrak").change(function(){
-		var emp = document.getElementById("aj_ktp").value ;
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_pkwt_waktukontrak/"+p_id+"/"+emp, function(data, status){
-			jQuery('#pkwt_begin_ajax').html(data);			
-		});
-	});
 	
 	/* Add data */ /*Form Submit*/
-	$("#xin-form").submit(function(e) {
+	$("#xin-form").submit(function(e){
 		var fd = new FormData(this);
 		var obj = $(this), action = obj.attr('name');
 		fd.append("is_ajax", 1);
@@ -136,7 +97,7 @@ $(document).ready(function() {
 		$('.save').prop('disabled', true);
 		
 		$.ajax({
-			url: base_url+'/request_employee_pkwt/',//e.target.action,
+			url: base_url+'/request_add_employee/',//e.target.action,
 			type: "POST",
 			data:  fd,
 			contentType: false,
