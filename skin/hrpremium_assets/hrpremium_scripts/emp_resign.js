@@ -95,11 +95,19 @@ $(document).ready(function() {
 
 	// get departments
 	jQuery("#aj_ktp").change(function(){
-		jQuery.get(base_url+"/get_info/"+jQuery(this).val(), function(data, status){
+		jQuery.get(base_url+"/get_info/"+jQuery(this).val()+"/"+proj, function(data, status){
 			jQuery('#info_ajax').html(data);
 		});
 	});
 	
+	// get departments
+	jQuery("#aj_dokumen").change(function(){
+		var proj = document.getElementById("aj_project").value ;
+		jQuery.get(base_url+"/get_dokumen_resign/"+jQuery(this).val()+"/"+proj, function(data, status){
+			jQuery('#dokumen_ajax').html(data);
+		});
+	});
+
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);
@@ -125,18 +133,7 @@ $(document).ready(function() {
 					$('.save').prop('disabled', false);
 					Ladda.stopAll();
 				} else {
-
-
-					// xin_table.api().ajax.reload(function(){ 
-					// 	toastr.success(JSON.result);
-					// 	$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					// }, true);
-					// $('.icon-spinner3').hide();
-					// $('#xin-form')[0].reset(); // To reset form fields
-					// $('.select2-selection__rendered').html('--Select--');
-					// $('.save').prop('disabled', false);
-
-					
+		
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);

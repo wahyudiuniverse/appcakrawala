@@ -88,10 +88,7 @@
                   <div class="form-group" id="project_employees_ajax">
                    <label for="employee_id"><?php echo $this->lang->line('xin_karyawan');?><i class="hrpremium-asterisk">*</i></label>
                     <select class="form-control" name="employee_id" id="aj_ktp" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
-                      <option value=""></option>
-                      <?php foreach($all_emp_active as $empactive) {?>
-                      <option value="<?php echo $empactive->employee_id;?>"><?php echo $empactive->fullname?></option>
-                      <?php } ?>
+                      <option value="0">--</option>
                     </select>
                   </div>
                 </div>
@@ -111,11 +108,11 @@
                 <div class="col-md-4">
                   <div class="form-group">
                    <label for="employee_id">Status Resign<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="status_resign" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
+                    <select class="form-control" name="status_resign" id="aj_dokumen" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
                       <option value=""></option>
                       <option value="2">RESIGN</option>
                       <option value="4">END CONTRACT</option>
-                      <option value="3">BLACKLIST</option>
+                      <option value="3">BAD ATITUDE</option>
 
                     </select>
                   </div>
@@ -132,47 +129,60 @@
               </div>
 
               <div class="row">
-                <!--NO KP-->
-                <div class="col-md-8">
-                  <br>
-                  <div class="form-group">
-                  <label for="date_of_birth">Upload Exit Clearance<i class="hrpremium-asterisk">*</i></label>
-                  <br>
-                  <p class="form-row"> &nbsp;&nbsp;
-                    <input type="file" id="dok_exitc" name="dok_exitc" />
-                  </p>
+                <!-- KETERANGAN RESIGN -->
+                <div class="col-md-12">
+                  <div class="form-group" id="ktp_ajax">
+                    <label for="ket_resign" class="control-label">Keterangan Resign<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="Keterangan Resign/Bad Atitude" name="ket_resign" type="text" value="">
+                  </div>
+                </div>
+
+
+
+              </div>
+              <div id="dokumen_ajax">
+                <div class="row" hidden>
+                  <!--NO KP-->
+                  <div class="col-md-8">
+                    <br>
+                    <div class="form-group">
+                    <label for="date_of_birth">Upload Exit Clearance<i class="hrpremium-asterisk">*</i></label>
+                    <br>
+                    <p class="form-row"> &nbsp;&nbsp;
+                      <input type="file" id="dok_exitc" name="dok_exitc" />
+                    </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" hidden>
+                  <!--NO KP-->
+                  <div class="col-md-8">
+                    <br>
+                    <div class="form-group">
+                    <label for="date_of_birth">Upload Surat Resign<i class="hrpremium-asterisk">*</i></label>
+                    <br>
+                    <p class="form-row"> &nbsp;&nbsp;
+                      <input type="file" id="dok_sresign" name="dok_sresign" />
+                    </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row" hidden>
+                  <!--NO KP-->
+                  <div class="col-md-8">
+                    <br>
+                    <div class="form-group">
+                    <label for="date_of_birth">Upload Surat Hand Over<i class="hrpremium-asterisk"></i></label>
+                    <br>
+                    <p class="form-row"> &nbsp;&nbsp;
+                      <input type="file" id="dok_sover" name="dok_sover" />
+                    </p>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div class="row">
-                <!--NO KP-->
-                <div class="col-md-8">
-                  <br>
-                  <div class="form-group">
-                  <label for="date_of_birth">Upload Surat Resign<i class="hrpremium-asterisk">*</i></label>
-                  <br>
-                  <p class="form-row"> &nbsp;&nbsp;
-                    <input type="file" id="dok_sresign" name="dok_sresign" />
-                  </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <!--NO KP-->
-                <div class="col-md-8">
-                  <br>
-                  <div class="form-group">
-                  <label for="date_of_birth">Upload Surat Hand Over<i class="hrpremium-asterisk"></i></label>
-                  <br>
-                  <p class="form-row"> &nbsp;&nbsp;
-                    <input type="file" id="dok_sover" name="dok_sover" />
-                  </p>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
             <div class="col-md-6" id="info_ajax">

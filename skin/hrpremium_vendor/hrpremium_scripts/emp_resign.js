@@ -99,6 +99,14 @@ $(document).ready(function() {
 		});
 	});
 	
+	// get departments
+	jQuery("#aj_dokumen").change(function(){
+		var proj = document.getElementById("aj_project").value ;
+		jQuery.get(base_url+"/get_dokumen_resign/"+jQuery(this).val()+"/"+proj, function(data, status){
+			jQuery('#dokumen_ajax').html(data);
+		});
+	});
+	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);

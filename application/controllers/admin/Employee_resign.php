@@ -220,6 +220,30 @@ class Employee_resign extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	}
 
+
+	 // get location > departments
+	public function get_dokumen_resign() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		$project = $this->uri->segment(5);
+		
+		$data = array(
+			'status' => $id,
+			'project' => $project
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_dokumen_resign", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
 	public function request_employee_resign() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){
