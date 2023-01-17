@@ -131,8 +131,8 @@
               <div class="row">
                 <!-- KETERANGAN RESIGN -->
                 <div class="col-md-12">
-                  <div class="form-group" id="ktp_ajax">
-                    <label for="ket_resign" class="control-label">Keterangan Resign<i class="hrpremium-asterisk">*</i></label>
+                  <div class="form-group">
+                    <label for="ket_resign" class="control-label">Keterangan Resign<i class="hrpremium-asterisk"></i></label>
                     <input class="form-control" placeholder="Keterangan Resign/Bad Atitude" name="ket_resign" type="text" value="">
                   </div>
                 </div>

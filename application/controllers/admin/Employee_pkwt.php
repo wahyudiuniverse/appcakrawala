@@ -163,7 +163,7 @@ class Employee_pkwt extends MY_Controller {
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/get_project_employees", $data);
+			$this->load->view("admin/pkwt/get_project_employees_pkwt", $data);
 		} else {
 			redirect('admin/');
 		}

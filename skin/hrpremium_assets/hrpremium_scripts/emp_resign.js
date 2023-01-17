@@ -95,7 +95,7 @@ $(document).ready(function() {
 
 	// get departments
 	jQuery("#aj_ktp").change(function(){
-		jQuery.get(base_url+"/get_info/"+jQuery(this).val()+"/"+proj, function(data, status){
+		jQuery.get(base_url+"/get_info/"+jQuery(this).val(), function(data, status){
 			jQuery('#info_ajax').html(data);
 		});
 	});

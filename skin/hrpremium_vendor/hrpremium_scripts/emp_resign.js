@@ -106,7 +106,7 @@ $(document).ready(function() {
 			jQuery('#dokumen_ajax').html(data);
 		});
 	});
-	
+
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);
