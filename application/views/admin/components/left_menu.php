@@ -411,7 +411,7 @@
     <?php 
     if (in_array('327',$role_resources_ids) || in_array('470',$role_resources_ids) || in_array('490',$role_resources_ids)) {
     ?>
-      <li class="<?php if(!empty($arr_mod['dokumen_open']))echo $arr_mod['dokumen_open'];?> sidenav-item"> 
+      <li class="<?php if(!empty($arr_mod['emp_request_open']))echo $arr_mod['emp_request_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
           <div><?php echo $this->lang->line('xin_manage_employees');?></div>
@@ -435,7 +435,7 @@
 
           <?php 
           if (in_array('327',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_active']))echo $arr_mod['pkwt_request_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_pkwt/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
@@ -448,11 +448,11 @@
 
           <?php 
           if (in_array('490',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_request_active']))echo $arr_mod['resign_request_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_resign/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div><?php echo $this->lang->line('left_resignations');?></div>
+                <div>Request Resign</div>
               </a> 
             </li>
           <?php 

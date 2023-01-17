@@ -365,7 +365,7 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} else if($mClass=='reports' && $mMethod=='manage_employees') {
 			$arr['man_employees_active'] = 'active';
-			$arr['man_employees_open'] = 'open';
+			$arr['emp_request_open'] = 'open';
 			return $arr;
 		} else if($mClass=='reports' && $mMethod=='bpjs_employees') {
 			$arr['bpjs_employees_active'] = 'active';
@@ -704,7 +704,18 @@ class Xin_model extends CI_Model {
 			$arr['emp_request_active'] = 'active';
 			$arr['emp_request_open'] = 'open';
 			return $arr;
+		} else if($mClass=='employee_pkwt') {
+			$arr['pkwt_request_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
 		}
+
+		else if($mClass=='employee_resign') {
+			$arr['resign_request_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
+		}
+
 		else if($mClass=='callplan') {
 			$arr['callplan_report_active'] = 'active';
 			$arr['reports_open'] = 'open';

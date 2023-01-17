@@ -54,6 +54,7 @@ class Employee_pkwt extends MY_Controller {
 			} else {
 				$data['all_emp_active'] = $this->Employees_model->get_all_employees_project();
 				// $data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
+				$data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
 			}
 
 			$data['all_departments'] = $this->Department_model->all_departments();
