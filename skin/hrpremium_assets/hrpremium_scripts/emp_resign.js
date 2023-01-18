@@ -102,9 +102,9 @@ $(document).ready(function() {
 	
 	// get departments
 	jQuery("#aj_dokumen").change(function(){
-		// var proj = document.getElementById("aj_project").value ;
-		// var proj = "22" ;
-		jQuery.get(base_url+"/get_dokumen_resign/"+jQuery(this).val(), function(data, status){
+		var s_id = jQuery(this).val();
+		var p_id = document.getElementById("aj_ktp").value;
+		jQuery.get(base_url+"/get_dokumen_resign/"+s_id, function(data, status){
 			jQuery('#dokumen_ajax').html(data);
 		});
 	});
