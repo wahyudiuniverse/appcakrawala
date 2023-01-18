@@ -188,8 +188,23 @@
                 </div>
                 <?php
         }
-
 ?>
+
+                <div class="row">
+                  <!--NO KP-->
+                  <div class="col-md-8">
+                    <br>
+                    <div class="form-group">
+                    <label for="date_of_birth">Upload Exit Clearance<i class="hrpremium-asterisk">*</i></label>
+                    <br>
+                    <p class="form-row"> &nbsp;&nbsp;
+                      <input type="file" id="dok_exitc" name="dok_exitc" />
+                    </p>
+                    </div>
+                  </div>
+                </div>
+
+<!-- ?> -->
 
 
 <script type="text/javascript">

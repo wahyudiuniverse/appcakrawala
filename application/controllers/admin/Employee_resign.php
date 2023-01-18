@@ -226,7 +226,7 @@ class Employee_resign extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		$project = $this->uri->segment(5);
+		$project = $this->uri->segment(4);
 		
 		$data = array(
 			'status' => $id,
