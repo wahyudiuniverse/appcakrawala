@@ -447,6 +447,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_kasir = $user[0]->allow_kasir;
 				$allow_trans_meal = $user[0]->allow_trans_meal;
 				$allow_vitamin = $user[0]->allow_vitamin;
+				$allow_operation = $user[0]->allow_operation;
 
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
@@ -456,6 +457,7 @@ class ImportExcelEslip extends MY_Controller
 				$overtime_rapel = $user[0]->overtime_rapel;
 				$kompensasi = $user[0]->kompensasi;
 				$bonus = $user[0]->bonus;
+				$uuck = $user[0]->uuck;
 				$thr = $user[0]->thr;
 
 				$mix_oplos = $user[0]->mix_oplos;
@@ -477,6 +479,7 @@ class ImportExcelEslip extends MY_Controller
 				$biaya_admin_bank = $user[0]->biaya_admin_bank;
 
 				$adjustment = $user[0]->adjustment;
+				$adjustment_dlk = $user[0]->adjustment_dlk;
 				$total = $user[0]->total;
 				$createdby = $user[0]->createdby;
 
@@ -503,6 +506,7 @@ class ImportExcelEslip extends MY_Controller
 					'allow_kasir' => $allow_kasir,
 					'allow_trans_meal' => $allow_trans_meal,
 					'allow_vitamin' => $allow_vitamin,
+					'allow_operation' => $allow_operation,
 
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
@@ -512,6 +516,7 @@ class ImportExcelEslip extends MY_Controller
 					'overtime_rapel' => $overtime_rapel,
 					'kompensasi' => $kompensasi,
 					'bonus' => $bonus,
+					'uuck' => $uuck,
 					'thr' => $thr,
 
 					'bpjs_tk_deduction' => $bpjs_tk_deduction,
@@ -532,6 +537,7 @@ class ImportExcelEslip extends MY_Controller
 					'pembayaran_pinjaman' => $pembayaran_pinjaman,
 					'biaya_admin_bank' => $biaya_admin_bank,
 					'adjustment' => $adjustment,
+					'adjustment_dlk' => $adjustment_dlk,
 					'total' => $total,
 					'createdby' => $createdby,
 				);
@@ -609,6 +615,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_kasir = $user[0]->allow_kasir;
 				$allow_trans_meal = $user[0]->allow_trans_meal;
 				$allow_vitamin = $user[0]->allow_vitamin;
+				$allow_operation = $user[0]->allow_operation;
 
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
@@ -618,6 +625,7 @@ class ImportExcelEslip extends MY_Controller
 				$overtime_rapel = $user[0]->overtime_rapel;
 				$kompensasi = $user[0]->kompensasi;
 				$bonus = $user[0]->bonus;
+				$uuck = $user[0]->uuck;
 				$thr = $user[0]->thr;
 
 				$bpjs_tk_deduction = $user[0]->bpjs_tk_deduction;
@@ -638,6 +646,7 @@ class ImportExcelEslip extends MY_Controller
 				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
 				$biaya_admin_bank = $user[0]->biaya_admin_bank;
 				$adjustment = $user[0]->adjustment;
+				$adjustment_dlk = $user[0]->adjustment_dlk;
 				$total = $user[0]->total;
 				$createdby = $user[0]->createdby;
 
@@ -665,6 +674,7 @@ class ImportExcelEslip extends MY_Controller
 					'allow_kasir' => $allow_kasir,
 					'allow_trans_meal' => $allow_trans_meal,
 					'allow_vitamin' => $allow_vitamin,
+					'allow_operation' => $allow_operation,
 
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
@@ -674,8 +684,9 @@ class ImportExcelEslip extends MY_Controller
 					'overtime_rapel' => $overtime_rapel,
 					'kompensasi' => $kompensasi,
 					'bonus' => $bonus,
-
+					'uuck' => $uuck,
 					'thr' => $thr,
+
 					'bpjs_tk_deduction' => $bpjs_tk_deduction,
 					'bpjs_ks_deduction' => $bpjs_ks_deduction,
 					'jaminan_pensiun_deduction' => $jaminan_pensiun_deduction,
@@ -694,6 +705,7 @@ class ImportExcelEslip extends MY_Controller
 					'pembayaran_pinjaman' => $pembayaran_pinjaman,
 					'biaya_admin_bank' => $biaya_admin_bank,
 					'adjustment' => $adjustment,
+					'adjustment_dlk' => $adjustment_dlk,
 					'total' => $total,	
 					'createdby' => $createdby,
 				);
@@ -1877,6 +1889,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_vitamin = $eslip[0]->allow_vitamin;
+				$allow_opration = $eslip[0]->allow_opration;
 
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
@@ -1886,6 +1899,7 @@ class ImportExcelEslip extends MY_Controller
 				$overtime_rapel = $eslip[0]->overtime_rapel;
 				$kompensasi = $eslip[0]->kompensasi;
 				$bonus = $eslip[0]->bonus;
+				$uuck = $eslip[0]->uuck;
 				$thr = $eslip[0]->thr;
 
 				$bpjs_tk_deduction = $eslip[0]->bpjs_tk_deduction;
@@ -1906,6 +1920,7 @@ class ImportExcelEslip extends MY_Controller
 				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
 				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
 				$adjustment = $eslip[0]->adjustment;
+				$adjustment_dlk = $eslip[0]->adjustment_dlk;
 				$total = $eslip[0]->total;
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
@@ -2253,6 +2268,22 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 			}
 
+
+			if($allow_operation!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Operational</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($penyesuaian_umk!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2373,6 +2404,20 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 			}
 
+			if($uuck!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">UUCK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
 
 			if($thr!=0){	
 			$tbl_2 .= '
@@ -2639,13 +2684,14 @@ class ImportExcelEslip extends MY_Controller
 
 			</table>';
 
-			if($adjustment!=0){
 			$tbl_2 .= '
-
 			<br>
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
-			<br>
+			<br>';
+
+			if($adjustment!=0){
+			$tbl_2 .= '
 
 			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 				<tr>
@@ -2661,6 +2707,25 @@ class ImportExcelEslip extends MY_Controller
 				</tr>
 			</table>';
 			}
+
+			if($adjustment_dlk!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment DLK</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
 			$tbl_2 .= '
 			<br><br>
 
@@ -2856,6 +2921,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_vitamin = $eslip[0]->allow_vitamin;
+				$allow_operation = $eslip[0]->allow_operation;
 
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
@@ -2865,6 +2931,7 @@ class ImportExcelEslip extends MY_Controller
 				$overtime_rapel = $eslip[0]->overtime_rapel;
 				$kompensasi = $eslip[0]->kompensasi;
 				$bonus = $eslip[0]->bonus;
+				$uuck = $eslip[0]->uuck;
 				$thr = $eslip[0]->thr;
 
 				$bpjs_tk_deduction = $eslip[0]->bpjs_tk_deduction;
@@ -2885,6 +2952,7 @@ class ImportExcelEslip extends MY_Controller
 				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
 				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
 				$adjustment = $eslip[0]->adjustment;
+				$adjustment_dlk = $eslip[0]->adjustment_dlk;
 				$total = $eslip[0]->total;
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
@@ -3228,6 +3296,21 @@ class ImportExcelEslip extends MY_Controller
 				</tr>';
 			}
 
+			if($allow_operation!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Operational</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($penyesuaian_umk!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -3342,6 +3425,21 @@ class ImportExcelEslip extends MY_Controller
 								<td colspan="4">Bonus</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bonus).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($uuck!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">UUCK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -3614,13 +3712,14 @@ class ImportExcelEslip extends MY_Controller
 
 			</table>';
 
-			if($adjustment!=0){
 			$tbl_2 .= '
-
 			<br>
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
-			<br>
+			<br>';
+
+			if($adjustment!=0){
+			$tbl_2 .= '
 
 			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 				<tr>
@@ -3636,6 +3735,25 @@ class ImportExcelEslip extends MY_Controller
 				</tr>
 			</table>';
 			}
+
+			if($adjustment_dlk!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment DLK</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
 			$tbl_2 .= '
 			<br><br>
 
