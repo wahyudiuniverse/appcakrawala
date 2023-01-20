@@ -129,6 +129,9 @@
                 <th style="width: 150px;">BPJS-TK</th>
                 <th style="width: 150px;">BPJS-KS</th>
                 <th style="width: 150px;">Nama Ibu Kandung</th>
+                <th style="width: 100px;">Nama Bank</th>
+                <th style="width: 100px;">No. Rekening</th>
+                <th style="width: 100px;">Nama Pemilik Rek.</th>
               </tr>
             </thead>
           </table>

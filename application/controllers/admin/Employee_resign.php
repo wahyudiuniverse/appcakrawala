@@ -326,13 +326,13 @@ class Employee_resign extends MY_Controller {
 										//checking image type
 										$allowed_ov =  array('png','jpg','jpeg','gif');
 										$filename_ov = $_FILES['dok_sover']['name'];
-										$ext_kk = pathinfo($filename_ov, PATHINFO_EXTENSION);
+										$ext_over = pathinfo($filename_ov, PATHINFO_EXTENSION);
 
-										if(in_array($ext_kk,$allowed_ov)){
+										if(in_array($ext_over,$allowed_ov)){
 											$tmp_name_ov = $_FILES["dok_sover"]["tmp_name"];
 											$bill_copy_ov = "uploads/resign/";
 											$name_ov = basename($_FILES["dok_sover"]["name"]);
-											$newfilename_ov = 'doc_surat_resign'.round(microtime(true)).'.'.$ext_kk;
+											$newfilename_ov = 'doc_surat_hover'.round(microtime(true)).'.'.$ext_over;
 											move_uploaded_file($tmp_name_ov, $bill_copy_ov.$newfilename_ov);
 											$fname_ov = $newfilename_ov;
 

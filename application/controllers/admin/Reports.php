@@ -771,6 +771,10 @@ class Reports extends MY_Controller
 				$pin = '******';
 			}
 
+			$bank_name = $r->bank_name;
+			$nomor_rek = $r->nomor_rek;
+			$pemilik_rek = $r->bank_name;
+
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
@@ -821,7 +825,10 @@ class Reports extends MY_Controller
 				$npwp,
 				$bpjstk,
 				$bpjsks,
-				$ibu
+				$ibu,
+				$bank_name,
+				$nomor_rek,
+				$pemilik_rek
 				// $pin
 			);
       
