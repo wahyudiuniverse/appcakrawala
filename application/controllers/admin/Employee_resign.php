@@ -226,7 +226,7 @@ class Employee_resign extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		$project = $this->uri->segment(4);
+		$project = $this->uri->segment(5);
 		
 		$data = array(
 			'status' => $id,
@@ -251,10 +251,10 @@ class Employee_resign extends MY_Controller {
 		}
 
 		if($this->input->post('add_type')=='company') {
+
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 			$system = $this->Xin_model->read_setting_info(1);
-
 
 				if($this->input->post('project_id')=='') {
 					$Return['error'] = $this->lang->line('xin_employee_error_project');
@@ -266,11 +266,11 @@ class Employee_resign extends MY_Controller {
 					$Return['error'] = $this->lang->line('xin_employee_error_resign_status');
 				} else if ($this->input->post('date_of_leave')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_dol');
-				} else if($_FILES['dok_exitc']['size'] == 0){
-					$Return['error'] = $this->lang->line('xin_employee_error_exitc');
-				} else if($_FILES['dok_sresign']['size'] == 0){
-					$Return['error'] = $this->lang->line('xin_employee_error_sresign');
-				} else {
+				}
+
+				if($Return['error']!=''){
+						$this->output($Return);
+			  }
 
 
 			   	$idproject = $this->input->post('project_id');
@@ -278,100 +278,155 @@ class Employee_resign extends MY_Controller {
 			   	$nomor_ktp = $this->input->post('nomor_ktp');
 			   	$status_resign	= $this->input->post('status_resign');
 					$date_of_leave = $this->input->post('date_of_leave');
+					$ket_resign = $this->input->post('ket_resign');
 
-					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
-						//checking image type
-						$allowed =  array('png','jpg','jpeg','gif');
-						$filename = $_FILES['dok_exitc']['name'];
-						$ext = pathinfo($filename, PATHINFO_EXTENSION);
+									if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
+										//checking image type
+										$allowed =  array('png','jpg','jpeg','gif');
+										$filename = $_FILES['dok_exitc']['name'];
+										$ext = pathinfo($filename, PATHINFO_EXTENSION);
 
-						if(in_array($ext,$allowed)){
-							$tmp_name = $_FILES["dok_exitc"]["tmp_name"];
-							$bill_copy = "uploads/resign/";
-							$name = basename($_FILES["dok_exitc"]["name"]);
-							$newfilename = 'doc_exit_clearance'.round(microtime(true)).'.'.$ext;
-							move_uploaded_file($tmp_name, $bill_copy.$newfilename);
-							$fnameExit = $newfilename;
+										if(in_array($ext,$allowed)){
+											$tmp_name = $_FILES["dok_exitc"]["tmp_name"];
+											$bill_copy = "uploads/resign/";
+											$name = basename($_FILES["dok_exitc"]["name"]);
+											$newfilename = 'doc_exit_clearance'.round(microtime(true)).'.'.$ext;
+											move_uploaded_file($tmp_name, $bill_copy.$newfilename);
+											$fnameExit = $newfilename;
+
+										} else {
+											$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+										}
+									} else {
+										$fnameExit = null;
+									}
+
+									if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
+										//checking image type
+										$allowed_kk =  array('png','jpg','jpeg','gif');
+										$filename_kk = $_FILES['dok_sresign']['name'];
+										$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
+
+										if(in_array($ext_kk,$allowed_kk)){
+											$tmp_name_kk = $_FILES["dok_sresign"]["tmp_name"];
+											$bill_copy_kk = "uploads/resign/";
+											$name_kk = basename($_FILES["dok_sresign"]["name"]);
+											$newfilename_kk = 'doc_surat_resign'.round(microtime(true)).'.'.$ext_kk;
+											move_uploaded_file($tmp_name_kk, $bill_copy_kk.$newfilename_kk);
+											$fname_sresign = $newfilename_kk;
+
+										} else {
+											$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+										}
+									} else {
+										$fname_sresign = null;
+									}
+
+									if(is_uploaded_file($_FILES['dok_sover']['tmp_name'])) {
+										//checking image type
+										$allowed_ov =  array('png','jpg','jpeg','gif');
+										$filename_ov = $_FILES['dok_sover']['name'];
+										$ext_kk = pathinfo($filename_ov, PATHINFO_EXTENSION);
+
+										if(in_array($ext_kk,$allowed_ov)){
+											$tmp_name_ov = $_FILES["dok_sover"]["tmp_name"];
+											$bill_copy_ov = "uploads/resign/";
+											$name_ov = basename($_FILES["dok_sover"]["name"]);
+											$newfilename_ov = 'doc_surat_resign'.round(microtime(true)).'.'.$ext_kk;
+											move_uploaded_file($tmp_name_ov, $bill_copy_ov.$newfilename_ov);
+											$fname_ov = $newfilename_ov;
+
+										} else {
+											$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+										}
+									} else {
+										$fname_ov = null;
+									}
+
+
+									$data = array(
+									'request_resign_by' => $session['user_id'],
+									'request_resign_date' => date('Y-m-d h:i:s'),
+									'approve_resignnae' => $session['user_id'],
+									'approve_resignnae_on' => date('Y-m-d h:i:s'),
+									'ktp_no' => $nomor_ktp,
+									'status_resign' => $status_resign,
+									'description_resign' => $ket_resign,
+									'date_of_leaving' => $date_of_leave,
+									'dok_exit_clearance' => $fnameExit,
+									'dok_resign_letter' => $fname_sresign,
+									'dok_over_hand' => $fname_ov,
+									'date_resign_request' => date('Y-m-d h:i:s')
+									);
+
+					if($this->input->post('status_resign') == "2") { //RESIGN
+
+						if($this->input->post('project_id') == "22") {
+
+							if ($fnameExit==null){
+									$Return['error'] = "Dokumen Exit Clearance kosong...!";
+							} else if ($fname_sresign==null){
+									$Return['error'] = "Dokumen Surat Resign kosong...!";
+							} else if ($fname_ov==null){
+									$Return['error'] = "Dokumen Over Hand kosong...!";
+							} else {
+								$result = $this->Employees_model->request_resign($data,$id);
+								if ($result) {
+									$Return['result'] = $this->lang->line('xin_success_add_employee_resign');
+								} else {
+									$Return['error'] = $this->lang->line('xin_error_msg');
+								}
+							}
 
 						} else {
-							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+
+							if ($fnameExit==null){
+									$Return['error'] = "Dokumen Exit Clearance kosong...!";
+							} else if ($fname_sresign==null){
+									$Return['error'] = "Dokumen Surat Resign kosong...!";
+							} else {
+								$result = $this->Employees_model->request_resign($data,$id);
+								if ($result) {
+									$Return['result'] = $this->lang->line('xin_success_add_employee_resign');
+								} else {
+									$Return['error'] = $this->lang->line('xin_error_msg');
+								}
+							}
+
 						}
-					} else {
-						$fname = "";
+
+					} else if ($this->input->post('status_resign') == "3") { //BALCKLIST
+
+							// $Return['error'] = "BLACK LIST";
+								$result = $this->Employees_model->request_resign($data,$id);
+								if ($result) {
+									$Return['result'] = $this->lang->line('xin_success_add_employee_resign');
+								} else {
+									$Return['error'] = $this->lang->line('xin_error_msg');
+								}
+							
+					} else if ($this->input->post('status_resign') == "4") { //ENDCONTRACT
+
+							// $Return['error'] = "END CONTRACT";
+
+							if ($fnameExit==null){
+									$Return['error'] = "Dokumen Exit Clearance kosong...!";
+							} else {
+								$result = $this->Employees_model->request_resign($data,$id);
+								if ($result) {
+									$Return['result'] = $this->lang->line('xin_success_add_employee_resign');
+								} else {
+									$Return['error'] = $this->lang->line('xin_error_msg');
+								}
+							}
+					
 					}
 
-					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
-						//checking image type
-						$allowed_kk =  array('png','jpg','jpeg','gif');
-						$filename_kk = $_FILES['dok_sresign']['name'];
-						$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
-
-						if(in_array($ext_kk,$allowed_kk)){
-							$tmp_name_kk = $_FILES["dok_sresign"]["tmp_name"];
-							$bill_copy_kk = "uploads/resign/";
-							$name_kk = basename($_FILES["dok_sresign"]["name"]);
-							$newfilename_kk = 'doc_surat_resign'.round(microtime(true)).'.'.$ext_kk;
-							move_uploaded_file($tmp_name_kk, $bill_copy_kk.$newfilename_kk);
-							$fname_kk = $newfilename_kk;
-
-						} else {
-							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
-						}
-					} else {
-						$fname_kk = "";
-					}
-
-					if($idproject == 22){
-						$data = array(
-							'request_resign_by' => $session['user_id'],
-							'request_resign_date' => date('Y-m-d h:i:s'),
-							'approve_resignnae' => $session['user_id'],
-							'approve_resignnae_on' => date('Y-m-d h:i:s'),
-							'ktp_no' => $nomor_ktp,																																																								
-							'status_resign' => $status_resign,
-							'date_of_leaving' => $date_of_leave,
-							'dok_exit_clearance' => $fnameExit,
-							'date_resign_request' => date('Y-m-d h:i:s')
-
-							// 'pincode' => $this->input->post('pin_code'),
-							// 'createdon' => date('Y-m-d h:i:s'),
-							// 'createdby' => $session['user_id']
-							// 'modifiedon' => date('Y-m-d h:i:s')
-						);
-					} else {
-						$data = array(
-							'request_resign_by' => $session['user_id'],
-							'request_resign_date' => date('Y-m-d h:i:s'),
-							'ktp_no' => $nomor_ktp,																																																								
-							'status_resign' => $status_resign,
-							'date_of_leaving' => $date_of_leave,
-							'dok_exit_clearance' => $fnameExit,
-							'date_resign_request' => date('Y-m-d h:i:s')
-
-							// 'pincode' => $this->input->post('pin_code'),
-							// 'createdon' => date('Y-m-d h:i:s'),
-							// 'createdby' => $session['user_id']
-							// 'modifiedon' => date('Y-m-d h:i:s')
-						);
-					}
-
-
-					$iresult = $this->Employees_model->request_resign($data,$id);
-
-				}
-					if($Return['error']!=''){
-						$this->output($Return);
-			    }
-
-					if ($iresult) {
-							$Return['result'] = $this->lang->line('xin_success_add_employee');
-					} else {
-						$Return['error'] = $this->lang->line('xin_error_msg');
-					}
-		}
 
 			$this->output($Return);
 			exit;
+		}
+
 	}
 
 	public function read() {

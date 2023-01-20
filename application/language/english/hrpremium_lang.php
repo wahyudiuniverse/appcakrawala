@@ -455,6 +455,7 @@ $lang['xin_employee_error_expiry_date'] = "The date of expiry field is required.
 $lang['xin_employee_error_dol'] = "Tanggal Berhenti Masih Kosong.";
 $lang['xin_employee_error_exitc'] = "Dokumen Exit Clearance Masih Kosong.";
 $lang['xin_employee_error_sresign'] = "Dokumen Surat Resign Masih Kosong.";
+$lang['xin_employee_error_shover'] = "Dokumen Hand Over Masih Kosong.";
 $lang['xin_employee_error_document_title'] = "The document title is required.";
 $lang['xin_employee_select_d_file'] = "Select document file.";
 $lang['xin_employee_document_file_type'] = "The attachment must be a file of type: png, jpg, jpeg, gif, txt, pdf, xls, xlsx, doc, docx";
