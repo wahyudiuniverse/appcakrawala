@@ -43,8 +43,6 @@
 </div>
 
 <hr class="border-light m-0 mb-3">
-<?php $employee_id = $this->Xin_model->generate_random_employeeid();?>
-<?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
 
 <?php if(in_array('491',$role_resources_ids)) {?>
 
@@ -63,7 +61,6 @@
           <div class="row">
             <div class="col-md-6">
               <div class="row">
-                <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
 
                 <!--PROJECT-->
                 <div class="col-md-6">

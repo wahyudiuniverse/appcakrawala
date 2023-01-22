@@ -108,6 +108,7 @@ $(document).ready(function() {
 		});
 	});
 
+
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);

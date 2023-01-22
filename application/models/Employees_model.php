@@ -99,9 +99,9 @@ class Employees_model extends CI_Model {
 
 		$sql = 'SELECT *
 		FROM xin_employees
-		WHERE request_resign_by NOT IN ("NULL","0")
-		AND approve_resignnae IN ("NULL","0")
-		AND approve_resignnom IN ("NULL","0")
+		WHERE request_resign_by NOT IN ("NULL","0")		
+		AND approve_resignnae IS NULL
+		AND approve_resignnom IS NULL
 		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -115,7 +115,7 @@ class Employees_model extends CI_Model {
 		FROM xin_employees
 		WHERE request_resign_by NOT IN ("NULL","0")
 		AND approve_resignnae NOT IN ("NULL","0")
-		AND approve_resignnom IN ("NULL","0")
+		AND approve_resignnom IS NULL
 		AND project_id NOT IN (22)
 		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);
@@ -131,8 +131,8 @@ class Employees_model extends CI_Model {
 		FROM xin_employees
 		WHERE request_resign_by NOT IN ("NULL","0")
 		AND approve_resignnae NOT IN ("NULL","0")
-		AND approve_resignnom IN ("NULL","0")
-		AND project_id = 22
+		AND approve_resignnom IS NULL
+		-- AND project_id = 22
 		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

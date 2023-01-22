@@ -8,10 +8,11 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 
-<?php $count_appnae = $this->Xin_model->count_approve_nae();?>
-<?php $count_appnom = $this->Xin_model->count_approve_nom();?>
-<?php $count_apphrd = $this->Xin_model->count_approve_hrd();?>
-<?php $count_emp_request = $this->Xin_model->count_emp_request();?>
+<?php $count_appnae = $this->Xin_model->count_approve_pkwt_exp();?>
+<?php $count_appnae = $this->Xin_model->count_approve_pkwt_nae();?>
+<?php $count_appnom = $this->Xin_model->count_approve_pkwt_nom();?>
+<?php $count_apphrd = $this->Xin_model->count_approve_pkwt_hrd();?>
+<?php $count_emp_request = $this->Xin_model->count_request_pkwt();?>
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">

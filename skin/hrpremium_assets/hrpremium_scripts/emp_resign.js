@@ -109,6 +109,7 @@ $(document).ready(function() {
 		});
 	});
 
+
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);
@@ -134,10 +135,9 @@ $(document).ready(function() {
 					$('.save').prop('disabled', false);
 					Ladda.stopAll();
 				} else {
-		
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					}, true);
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.add-form').removeClass('show');

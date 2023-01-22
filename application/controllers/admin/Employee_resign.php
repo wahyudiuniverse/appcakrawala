@@ -15,6 +15,12 @@ class Employee_resign extends MY_Controller {
 	 public function __construct() {
         parent::__construct();
 		//load the models
+    $this->load->library('session');
+		$this->load->helper('form');
+		$this->load->helper('url');
+		$this->load->helper('html');
+		$this->load->database();
+		$this->load->library('form_validation');
 		$this->load->model("Company_model");
 		$this->load->model("Xin_model");
 		$this->load->model("Esign_model");
@@ -254,7 +260,7 @@ class Employee_resign extends MY_Controller {
 
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			$system = $this->Xin_model->read_setting_info(1);
+			// $system = $this->Xin_model->read_setting_info(1);
 
 				if($this->input->post('project_id')=='') {
 					$Return['error'] = $this->lang->line('xin_employee_error_project');
@@ -266,19 +272,29 @@ class Employee_resign extends MY_Controller {
 					$Return['error'] = $this->lang->line('xin_employee_error_resign_status');
 				} else if ($this->input->post('date_of_leave')==''){
 					$Return['error'] = $this->lang->line('xin_employee_error_dol');
-				}
+				} else if ($_FILES['dok_exitc']['size'] == 0){
+					$Return['error'] = "Dokumen Exit Clearance kosong...!";
+				} else if ($_FILES['dok_sresign']['size'] == 0){
+					$Return['error'] = $this->lang->line('xin_employee_error_sresign');
+				} else if ($_FILES['dok_sover']['size'] == 0){
+					$Return['error'] = "Dokumen Over Hand kosong...!";
+				} 
+				// else {
 
-				if($Return['error']!=''){
-						$this->output($Return);
-			  }
+
+				// }
 
 
-			   	$idproject = $this->input->post('project_id');
-			   	$id = $this->input->post('employee_id');
-			   	$nomor_ktp = $this->input->post('nomor_ktp');
-			   	$status_resign	= $this->input->post('status_resign');
-					$date_of_leave = $this->input->post('date_of_leave');
-					$ket_resign = $this->input->post('ket_resign');
+						if($Return['error']!=''){
+							$this->output($Return);
+				  	}
+
+				   	$idproject 			= $this->input->post('project_id');
+				   	$id 						= $this->input->post('employee_id');
+				   	$nomor_ktp 			= $this->input->post('nomor_ktp');
+				   	$status_resign	= $this->input->post('status_resign');
+						$date_of_leave 	= $this->input->post('date_of_leave');
+						$ket_resign 		= $this->input->post('ket_resign');
 
 									if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 										//checking image type
@@ -295,7 +311,8 @@ class Employee_resign extends MY_Controller {
 											$fnameExit = $newfilename;
 
 										} else {
-											$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+											$fnameExit = null;
+											// $Return['error'] = $this->lang->line('xin_error_attatchment_type');
 										}
 									} else {
 										$fnameExit = null;
@@ -316,7 +333,9 @@ class Employee_resign extends MY_Controller {
 											$fname_sresign = $newfilename_kk;
 
 										} else {
-											$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+
+											$fname_sresign = null;
+											// $Return['error'] = $this->lang->line('xin_error_attatchment_type');
 										}
 									} else {
 										$fname_sresign = null;
@@ -337,7 +356,8 @@ class Employee_resign extends MY_Controller {
 											$fname_ov = $newfilename_ov;
 
 										} else {
-											$Return['error'] = $this->lang->line('xin_error_attatchment_type');
+											$fname_ov = null;
+											// $Return['error'] = $this->lang->line('xin_error_attatchment_type');
 										}
 									} else {
 										$fname_ov = null;
@@ -359,6 +379,19 @@ class Employee_resign extends MY_Controller {
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 
+									$resultx = $this->Employees_model->request_resign($data,$id);
+									if ($resultx) {
+										$Return['result'] = "BERHASIL";
+									} else {
+										// $Return['error'] = $this->lang->line('xin_error_msg');
+										$Return['error'] = "ERROR";
+									}
+
+				$this->output($Return);
+				exit;
+			
+
+/*
 					if($this->input->post('status_resign') == "2") { //RESIGN
 
 						if($this->input->post('project_id') == "22") {
@@ -366,7 +399,7 @@ class Employee_resign extends MY_Controller {
 							if ($fnameExit==null){
 									$Return['error'] = "Dokumen Exit Clearance kosong...!";
 							} else if ($fname_sresign==null){
-									$Return['error'] = "Dokumen Surat Resign kosong...!";
+									$Return['error'] = $this->lang->line('xin_employee_error_sresign');
 							} else if ($fname_ov==null){
 									$Return['error'] = "Dokumen Over Hand kosong...!";
 							} else {
@@ -421,10 +454,8 @@ class Employee_resign extends MY_Controller {
 							}
 					
 					}
-
-
-			$this->output($Return);
-			exit;
+*/
+					
 		}
 
 	}
