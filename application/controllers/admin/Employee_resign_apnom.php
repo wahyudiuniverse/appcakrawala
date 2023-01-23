@@ -100,6 +100,23 @@ class Employee_resign_apnom extends MY_Controller {
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NOM</button>';
 				}
 
+				if($r->status_resign==2){
+					$status_name = 'RESIGN';
+				} else if ($r->status_resign==3){
+					$status_name = 'BAD ATITUDE';
+				} else if ($r->status_resign==4){
+					$status_name = 'END CONTRACT';
+				} else {
+					$status_name = 'Undefined';
+				}
+
+
+				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
+
+				$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
+
+				$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
+
 
 				$projects = $this->Project_model->read_single_project($r->project_id);
 				if(!is_null($projects)){
@@ -122,6 +139,8 @@ class Employee_resign_apnom extends MY_Controller {
 					$designation_name = '--';	
 				}
 
+				$dok_p = $vexc.' '.$vsrs.' '.$vhov;
+
 			$data[] = array(
 				$status_migrasi,
 				$nip,
@@ -131,6 +150,8 @@ class Employee_resign_apnom extends MY_Controller {
 				$date_of_leaving,
 				$penempatan,
 				$ktp_no,
+				$status_name,
+				$dok_p,
 			);
           }
 

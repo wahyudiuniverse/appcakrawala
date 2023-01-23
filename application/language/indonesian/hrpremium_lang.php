@@ -2891,5 +2891,6 @@ $lang['xin_hrpremium_dashboard_2light'] = 'Dasbor 2 Versi Ringan';
 $lang['xin_hrpremium_dashboard_2dark'] = 'Dasbor 2 Versi Gelap';
 /////////////////////////////////////////////////// akhir hrpremium v2.0.1
 
+$lang['xin_success_add_employee_resign'] = 'Permintaan Karyawan Resign sudah dibuat...';
 /* End of file hrpremium_lang.php */
 /* Location: ./system/language/indonesian/hrpremium_lang.php */

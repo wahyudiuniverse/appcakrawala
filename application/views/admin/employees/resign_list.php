@@ -256,6 +256,7 @@
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
           <tr>
+            <th>No.</th>
             <th><?php echo $this->lang->line('xin_request_employee_status');?></th>
             <th>NIP</th>
             <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name');?></th>
@@ -264,6 +265,8 @@
             <th>Tanggal Resign</th>
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th>No KTP</th>
+            <th>Status</th>
+            <th>Dokumen</th>
           </tr>
         </thead>
       </table>

@@ -87,7 +87,7 @@ class Employees_model extends CI_Model {
 
 		$sql = 'SELECT *
 		FROM xin_employees
-		WHERE request_resign_by NOT IN ("NULL","0")
+		WHERE request_resign_by is not null
 		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
