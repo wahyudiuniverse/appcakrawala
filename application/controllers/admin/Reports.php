@@ -657,8 +657,14 @@ class Reports extends MY_Controller
 				$agama = '--';
 			}
 
+			$banklist = $this->Xin_model->read_document_ktp($r->bank_name);
+			if(!is_null($banklist)){
+				$bank_name = $banklist[0]->bank_name;
+			} else {
+				$bank_name = '--';
+			}
 
-			$docktp = $this->Xin_model->read_document_ktp($r->user_id);
+			$docktp = $this->Xin_model->read_bank_info($r->user_id);
 			if(!is_null($docktp)){
 				$ktp = $docktp[0]->title;
 			} else {
@@ -671,6 +677,13 @@ class Reports extends MY_Controller
 				$kk = $dockk[0]->title;
 			} else {
 				$kk = '--';
+			}
+
+			$docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
+			if(!is_null($docnpwp)){
+				$npwp = $docnpwp[0]->title;
+			} else {
+				$npwp = '--';
 			}
 
 			$docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
@@ -771,9 +784,8 @@ class Reports extends MY_Controller
 				$pin = '******';
 			}
 
-			$bank_name = $r->bank_name;
 			$nomor_rek = $r->nomor_rek;
-			$pemilik_rek = $r->bank_name;
+			$pemilik_rek = $r->pemilik_rek;
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
 				if($r->status_resign==2){

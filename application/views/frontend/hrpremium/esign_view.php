@@ -24,11 +24,11 @@
 
         <tr>
             <td>NAMA LENGKAP&ensp;&ensp;&ensp;</td>
-            <td><b> : MAITSA PRISTIYANTY </b></td>
+            <td><b> : <?php echo $sign_fullname;?></b></td>
         </tr>
         <tr>
             <td>NIP&ensp;&ensp;&ensp;</td>
-            <td><b> : 21300023 </b></td>
+            <td><b> : <?php echo $sign_nip;?></b></td>
         </tr>
         <tr>
             <td>JABATAN&ensp;&ensp;&ensp;</td>
@@ -36,7 +36,7 @@
         </tr>
         <tr>
             <td>PERUSAHAAN&ensp;&ensp;&ensp;</td>
-            <td><b> : PT. SIPRAMA CAKRAWALA</b></td>
+            <td><b> : <?php echo $sign_company[0]->name;?></b></td>
         </tr>
         <tr>
             <td>LOKASI&ensp;&ensp;&ensp;</td>

@@ -1085,6 +1085,20 @@ class Xin_model extends CI_Model {
 		}
 	}
 
+	// get single company
+	public function read_bank_info($id) {
+	
+		$sql = 'SELECT * FROM mt_bank WHERE secid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);		
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 
 	// get single company
 	public function read_document_kk($id) {

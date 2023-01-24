@@ -48,7 +48,7 @@ class Employee_resign_apnae extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
 		$data['path_url'] = 'emp_resign_approve_nae';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('374',$role_resources_ids)) {
+		if(in_array('492',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/employees/resign_list_appnae", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {

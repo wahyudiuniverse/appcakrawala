@@ -87,6 +87,9 @@ class Esign extends MY_Controller {
 		$data['all_designation'] = $this->Xin_model->get_designations();
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['nodoc']= $srcdoc[0]->nomor_dokumen;
+		$data['sign_fullname']= $srcdoc[0]->sign_fullname;
+		$data['sign_nip'] = $srcdoc[0]->sign_nip;
+		$data['sign_company'] = $this->Company_model->read_company_information($srcdoc[0]->sign_company);
 		$data['release_date']= $this->Xin_model->tgl_indo(substr($srcdoc[0]->createdon,0,10));
 		$data['path_url'] = 'job_create_user';
 		$data['subview'] = $this->load->view("frontend/hrpremium/esign_view", $data, TRUE);
