@@ -182,6 +182,20 @@ class Project_model extends CI_Model {
 		}
 	}
 	
+	// get single record > company | employees
+	 public function ajax_company_department($id) {
+	
+		$sql = "SELECT project_id, title FROM xin_projects WHERE company_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	
 	// Function to add record in table
 	public function add($data){
@@ -413,6 +427,21 @@ class Project_model extends CI_Model {
 	 public function ajax_company_projects($id) {
 	
 		$sql = 'SELECT * FROM xin_projects WHERE company_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+	
+
+	// get single record > company | employees
+	 public function ajax_sub_project($id) {
+	
+		$sql = "SELECT * FROM xin_projects_sub WHERE id_project = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

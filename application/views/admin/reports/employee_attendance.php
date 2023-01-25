@@ -65,32 +65,36 @@
             } 
           ?>
 
-          <div class="col-md mb-3">
+          <div class="col-md mb-3" id="project_ajax">
             <label class="form-label"><?php echo $this->lang->line('left_projects');?></label>
-            <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
-              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
-              <?php 
-                foreach ($all_projects as $projects) {
-              ?>
-                  <option value="<?php echo $projects->project_id?>"><?php echo $projects->title?></option>
-              <?php 
-                } 
-              ?>
+            <select class="form-control" name="project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+              <option value="0">--</option>
+            </select>
+          </div>
+
+          <div class="col-md mb-3" id="subproject_ajax">
+            <label class="form-label">Sub Projects</label>
+            <select class="form-control" name="sub_project_id" data-plugin="select_hrm" data-placeholder="Sub Project">
+              <option value="0">--</option>
             </select>
           </div>
 
           <div class="col-md mb-3">
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
-            </div>
+          </div>
+            
             <div class="col-md mb-3">
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>
+
             <div class="col-md col-xl-2 mb-4">
               <label class="form-label d-none d-md-block">&nbsp;</label>
               <button type="submit" class="btn btn-secondary btn-block"><?php echo $this->lang->line('xin_get');?></button>
             </div>
+
+
           </div>
           <?php echo form_close(); ?>
         </div>

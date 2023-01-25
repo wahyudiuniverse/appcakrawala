@@ -58,6 +58,8 @@ $(document).ready(function() {
 			}
 		});
 		toastr.success('Request Submit.');
-		xin_table2.api().ajax.reload(function(){ }, true);
+		// xin_table2.api().ajax.reload(function(){ }, true);
+		
+		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
 	});
 });

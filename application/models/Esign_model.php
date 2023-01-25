@@ -77,7 +77,7 @@ class Esign_model extends CI_Model {
 		FROM xin_employees emp
 		LEFT JOIN xin_projects proj ON proj.project_id=emp.project_id
 		WHERE emp.is_active = 1 
-		AND  emp.status_resign = 2
+		AND  emp.status_resign in (2,3,4)
 		AND emp.employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
 		UNION
 		SELECT 1 AS nip FROM DUAL)
@@ -102,7 +102,7 @@ class Esign_model extends CI_Model {
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,project_id,month(date_of_leaving) bln_skrng
 		FROM xin_employees 
 		WHERE is_active = 1 
-		AND  status_resign = 2
+		AND  status_resign in (2,3,4)
 		AND employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
 		UNION
 		SELECT 1 AS nip FROM DUAL)

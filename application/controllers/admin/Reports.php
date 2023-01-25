@@ -657,41 +657,41 @@ class Reports extends MY_Controller
 				$agama = '--';
 			}
 
-			$banklist = $this->Xin_model->read_document_ktp($r->bank_name);
-			if(!is_null($banklist)){
-				$bank_name = $banklist[0]->bank_name;
-			} else {
-				$bank_name = '--';
-			}
+			// $banklist = $this->Xin_model->read_document_ktp($r->bank_name);
+			// if(!is_null($banklist)){
+			// 	$bank_name = $banklist[0]->bank_name;
+			// } else {
+			// 	$bank_name = '--';
+			// }
 
-			$docktp = $this->Xin_model->read_bank_info($r->user_id);
-			if(!is_null($docktp)){
-				$ktp = $docktp[0]->title;
-			} else {
-				$ktp = '--';
-			}
+			// $docktp = $this->Xin_model->read_bank_info($r->user_id);
+			// if(!is_null($docktp)){
+			// 	$ktp = $docktp[0]->title;
+			// } else {
+			// 	$ktp = '--';
+			// }
 
 
-			$dockk = $this->Xin_model->read_document_kk($r->user_id);
-			if(!is_null($dockk)){
-				$kk = $dockk[0]->title;
-			} else {
-				$kk = '--';
-			}
+			// $dockk = $this->Xin_model->read_document_kk($r->user_id);
+			// if(!is_null($dockk)){
+			// 	$kk = $dockk[0]->title;
+			// } else {
+			// 	$kk = '--';
+			// }
 
-			$docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
-			if(!is_null($docnpwp)){
-				$npwp = $docnpwp[0]->title;
-			} else {
-				$npwp = '--';
-			}
+			// $docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
+			// if(!is_null($docnpwp)){
+			// 	$npwp = $docnpwp[0]->title;
+			// } else {
+			// 	$npwp = '--';
+			// }
 
-			$docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
-			if(!is_null($docnpwp)){
-				$npwp = $docnpwp[0]->title;
-			} else {
-				$npwp = '--';
-			}
+			// $docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
+			// if(!is_null($docnpwp)){
+			// 	$npwp = $docnpwp[0]->title;
+			// } else {
+			// 	$npwp = '--';
+			// }
 
 			if(!is_null($r->gender)){
 				$gender = $r->gender;
@@ -784,7 +784,11 @@ class Reports extends MY_Controller
 				$pin = '******';
 			}
 
+			$ktp = $r->ktp_no;
+			$kk = $r->kk_no;
+			$npwp = $r->npwp_no;
 			$nomor_rek = $r->nomor_rek;
+			$bank_name = $r->bank_name;
 			$pemilik_rek = $r->pemilik_rek;
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
@@ -1267,13 +1271,14 @@ class Reports extends MY_Controller
 		
 		$company_id = $this->uri->segment(4);
 		$project_id = $this->uri->segment(5);
-		$start_date = $this->uri->segment(6);
-		$end_date = $this->uri->segment(7);
+		$sub_id = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
 
 		if($company_id==0 || is_null($company_id)){
 			$employee = $this->Reports_model->filter_report_emp_att_null();
 		} else {
-			$employee = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$start_date,$end_date);
+			$employee = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$sub_id,$start_date,$end_date);
 		}
 
 		// $employee = $this->Employees_model->get_employees();
@@ -1304,6 +1309,12 @@ class Reports extends MY_Controller
 				$nama_toko = '--';	
 			}
 
+			if(!is_null($r->date_phone)){
+
+			} else {
+
+			}
+
 			$data[] = array (
 				$r->employee_id,
 				$fullname,
@@ -1329,6 +1340,49 @@ class Reports extends MY_Controller
     }
 
 	
+	 // get location > departments
+	public function get_company_project() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'id_company' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/get_company_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	 // get location > departments
+	public function get_sub_project() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'id_project' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/get_sub_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+
 	// reports > employee training
 	public function employee_training() {
 	

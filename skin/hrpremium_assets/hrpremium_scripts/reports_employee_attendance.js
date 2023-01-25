@@ -15,15 +15,9 @@ $(document).ready(function() {
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' });
 
-	// jQuery("#aj_company").change(function(){
-	// 	jQuery.get(base_url+"/get_employees_att/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#employee_ajax').html(data);
-	// 	});
-	// });
-
-	jQuery("#aj_project").change(function(){
-		jQuery.get(base_url+"/get_employees_att/"+jQuery(this).val(), function(data, status){
-			jQuery('#employee_ajax').html(data);
+	jQuery("#aj_company").change(function(){
+		jQuery.get(base_url+"/get_company_project/"+jQuery(this).val(), function(data, status){
+			jQuery('#project_ajax').html(data);
 		});
 	});
 
@@ -55,19 +49,27 @@ $(document).ready(function() {
 		}
 		});
 	});
-	
+		
 	/* attendance datewise report */
 	$("#attendance_datewise_report").submit(function(e){
 		/*Form Submit*/
 		e.preventDefault();
-		var company_id = $('#aj_company').val();
-		var project_id = $('#aj_project').val();
-		var start_date = $('#start_date').val();
-		var end_date = $('#end_date').val();
-		var xin_table2 = $('#xin_table').dataTable({
+
+		var company_id = document.getElementById("aj_company").value;
+		var project_id = document.getElementById("aj_project").value;
+		var subproject_id = document.getElementById("aj_subproject").value;
+		var start_date = document.getElementById("start_date").value;
+		var end_date = document.getElementById("end_date").value;
+		
+		// var company_id = $('#aj_company').val();
+		// var project_id = $('#aj_project').val();
+		// var subproject_id = $('#aj_subproject').val();
+		// var start_date = $('#start_date').val();
+		// var end_date = $('#end_date').val();
+		// var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+start_date+"/"+end_date+"/",
+				url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+subproject_id+"/"+start_date+"/"+end_date+"/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',
@@ -77,7 +79,8 @@ $(document).ready(function() {
 			}
 		});
 		toastr.success('Request Submit.');
-		xin_table2.api().ajax.reload(function(){ }, true);
+		// xin_table2.api().ajax.reload(function(){ }, true);
+		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
 	});
 
 });
