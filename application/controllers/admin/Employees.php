@@ -1191,7 +1191,7 @@ class Employees extends MY_Controller {
 		} else {
 			$edesignation_name = '--';	
 		}
-		
+
 		$data = array(
 
 			'breadcrumbs' => $this->lang->line('xin_manage_employees'),
@@ -1567,6 +1567,88 @@ class Employees extends MY_Controller {
 
 		}
 	}
+
+	/*  add and update employee details info */	
+	// Validate and update info in database // basic info
+	public function grade() {
+	
+		if($this->input->post('type')=='grade_info') {
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		
+		// $first_name = $this->Xin_model->clean_post($this->input->post('first_name'));
+		// $last_name = $this->Xin_model->clean_post($this->input->post('last_name'));
+		// $date_of_birth = $this->Xin_model->clean_date_post($this->input->post('date_of_birth'));
+		// $contact_no = $this->Xin_model->clean_date_post($this->input->post('contact_no'));
+		// $address = $this->Xin_model->clean_date_post($this->input->post('address'));
+			
+		/* Server side PHP input validation */		
+		if($this->input->post('penempatan')==='') {
+      $Return['error'] = $this->lang->line('xin_employee_error_first_name');
+		} 
+		// else if($this->input->post('tempat_lahir')==='') {
+		// 	$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
+		// } else if($this->input->post('tanggal_lahir')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_joining_date');
+		// } else if($this->Xin_model->validate_date($this->input->post('tanggal_lahir'),'Y-m-d') == false) {
+		// 	 $Return['error'] = $this->lang->line('xin_hr_date_format_error');
+		// } else if($this->input->post('ibu_kandung')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+		// } else if($this->input->post('no_kontak')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_contact_number');
+		// } else if($this->input->post('email')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_error_cemail_field');
+		// } else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
+		// 	$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
+		// } else if($this->input->post('ktp_no')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_ktp');
+		// } else if($this->input->post('kk_no')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
+		// } else if($this->input->post('address_ktp')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+		// } else if($this->input->post('gender')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_jenis_kelamin');
+		// } else if($this->input->post('marital_status')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_status_pernikahan');
+		// }
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+	
+		$data = array(
+		'penempatan' => $this->input->post('penempatan'),
+		// 'tempat_lahir' => $this->input->post('tempat_lahir'),
+		// 'date_of_birth' => $this->input->post('tanggal_lahir'),
+		// 'ibu_kandung' => $this->input->post('ibu_kandung'),
+		// 'contact_no' => $this->input->post('no_kontak'),
+		// 'email' => $this->input->post('email'),
+		// 'ktp_no' => $this->input->post('ktp_no'),
+		// 'kk_no' => $this->input->post('kk_no'),
+		// 'npwp_no' => $this->input->post('npwp_no'),
+		// 'alamat_ktp' => $this->input->post('address_ktp'),
+		// 'address' => $this->input->post('address'),
+		// 'gender' => $this->input->post('gender'),
+		// 'ethnicity_type' => $this->input->post('ethnicity'),
+		// 'marital_status' => $this->input->post('marital_status'),
+		// 'blood_group' => $this->input->post('blood_group'),
+		// 'tinggi_badan' => $this->input->post('tinggi_badan'),
+		// 'berat_badan' => $this->input->post('berat_badan'),
+
+		);
+		$id = $this->input->post('user_id');
+		$result = $this->Employees_model->basic_info($data,$id);
+		if ($result == TRUE) {
+			$Return['result'] = 'Berhasil Diubah';
+		} else {
+			$Return['error'] = $this->lang->line('xin_error_msg');
+		}
+		$this->output($Return);
+		exit;
+		}
+	}
+
 
 	public function basic_info_emp() {
 	

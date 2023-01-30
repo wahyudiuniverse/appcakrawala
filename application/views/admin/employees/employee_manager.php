@@ -264,7 +264,7 @@
                   <div class="tab-pane fade" id="account-grade">
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Posisi </strong> dan Jabatan </span> </div>
                     <div class="card-body pb-2">
-                      <?php $attributes = array('name' => 'social_networking', 'id' => 'f_social_networking', 'autocomplete' => 'off');?>
+                      <?php $attributes = array('name' => 'grade_info', 'id' => 'grade_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_basic_info' => 'UPDATE');?>
                       <?php echo form_open('admin/employees/grade/', $attributes, $hidden);?>
                       <?php
@@ -278,14 +278,18 @@
                       <div class="box">
                         <div class="box-body">
                           <div class="card-block">
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="pt">Perusahaan / PT</label>
-                                  <input class="form-control" placeholder="" name="facebook_link" type="text" value="<?php echo $company_name;?>" disabled>
+                                  <input class="form-control" placeholder="" name="company_id" type="text" value="<?php echo $company_name;?>" disabled>
                                 </div>
                               </div>
                             </div>
+
+
+                                  <input class="form-control" placeholder="" name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
 
                             <div class="row">
                               <div class="col-md-6">
@@ -327,10 +331,12 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="linkdedin_profile">Area/Penempatan</label>
-                                  <input class="form-control" placeholder="" name="instagram_link" type="text" value="<?php echo $penempatan;?>" disabled>
+                                  <input class="form-control" placeholder="" name="penempatan" type="text" value="<?php echo $penempatan;?>">
                                 </div>
                               </div>
                             </div>
+
+                            <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
                           </div>
                         </div>
                       </div>

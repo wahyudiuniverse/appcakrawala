@@ -117,6 +117,36 @@ $(document).ready(function(){
  });  
 
 	/* Update basic info */
+	$("#grade_info").submit(function(e){
+	/*Form Submit*/
+	e.preventDefault();
+		var obj = $(this), action = obj.attr('name');
+		$('.save').prop('disabled', true);
+		$('.icon-spinner3').show();
+		$.ajax({
+			type: "POST",
+			url: e.target.action,
+			data: obj.serialize()+"&is_ajax=1&data=grade_info&type=grade_info&form="+action,
+			cache: false,
+			success: function (JSON) {
+				if (JSON.error != '') {
+					toastr.error(JSON.error);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.icon-spinner3').hide();
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				} else {
+					toastr.success(JSON.result);
+					$('.icon-spinner3').hide();
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				}
+			}
+		});
+	});
+	
+	/* Update basic info */
 	$("#document_id").submit(function(e){
 	var fd = new FormData(this);
 	var obj = $(this), action = obj.attr('name');
