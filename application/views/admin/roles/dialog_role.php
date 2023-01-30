@@ -921,10 +921,18 @@ dataSource: [
 				{ 
 					id: "", 
 					class: "role-checkbox-modal custom-control-input", 
-					text: "<?php echo $this->lang->line('xin_manage_employees_resign');?>",  
-					add_info: "<?php echo $this->lang->line('xin_manage_employees_resign');?>", 
+					text: "<?php echo $this->lang->line('xin_e_details_edit_profile');?>",  
+					add_info: "<?php echo $this->lang->line('xin_e_details_edit_profile');?>", 
 					value: "471", 
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('471',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+				},
+				{ 
+					id: "", 
+					class: "role-checkbox-modal custom-control-input", 
+					text: "<?php echo $this->lang->line('xin_e_details_edit_grade');?>",  
+					add_info: "<?php echo $this->lang->line('xin_e_details_edit_grade');?>", 
+					value: "473", 
+					check: "<?php if(isset($_GET['role_id'])) { if(in_array('473',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				},
 				{ 
 					id: "", 
@@ -933,14 +941,6 @@ dataSource: [
 					add_info: "<?php echo $this->lang->line('xin_manage_employees_bpjs');?>", 
 					value: "472", 
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('472',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
-				},
-				{ 
-					id: "", 
-					class: "role-checkbox-modal custom-control-input", 
-					text: "<?php echo $this->lang->line('xin_manage_employees_document');?>",  
-					add_info: "<?php echo $this->lang->line('xin_manage_employees_document');?>", 
-					value: "473", 
-					check: "<?php if(isset($_GET['role_id'])) { if(in_array('473',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				},
 				{ 
 					id: "", 

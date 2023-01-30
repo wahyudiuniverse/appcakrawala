@@ -809,7 +809,7 @@ class Reports extends MY_Controller
 
 			$role_resources_ids = $this->Xin_model->user_role_resource();
 
-			if(in_array('472',$role_resources_ids)) {
+			if(in_array('471',$role_resources_ids) || in_array('472',$role_resources_ids) || in_array('473',$role_resources_ids)) {
 				$edits = $edit.' '.$stat;
 			} else {
 				$edits = $stat;
