@@ -372,18 +372,18 @@ WHERE employee_id = '99'");
 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
 				FROM xin_trx_cio
 				WHERE c_io = 1
-				AND project_id = '62'
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-01-10' AND '2023-01-10'
+				AND project_id = '$project_id'
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
 				ORDER BY createdon DESC) attdin
 			LEFT JOIN (
 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
 				FROM xin_trx_cio
 				WHERE c_io = 2 
-				AND project_id = '62'
-                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-01-10' AND '2023-01-10'
+				AND project_id = '$project_id'
+                AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
-WHERE emp.sub_project_id = '124'");
+WHERE emp.sub_project_id = '$sub_id'");
 
 
 

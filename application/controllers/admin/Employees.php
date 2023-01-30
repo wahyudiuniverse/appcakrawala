@@ -1151,59 +1151,102 @@ class Employees extends MY_Controller {
 		//$data['breadcrumbs'] = $this->lang->line('xin_employee_details');
 		//$data['path_url'] = 'employees_detail';	
 
+
+		// company info
+		$company = $this->Xin_model->read_company_info($result[0]->company_id);
+		if(!is_null($company)){
+		  $company_name = $company[0]->name;
+		} else {
+		  $company_name = '--';
+		}
+
+		$department = $this->Department_model->read_department_information($result[0]->department_id);
+		if(!is_null($department)){
+			$department_name = $department[0]->department_name;
+		} else {
+			$department_name = '--';	
+		}
+
+
+		$projects = $this->Project_model->read_single_project($result[0]->project_id);
+		if(!is_null($projects)){
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';	
+		}
+			
+		$subprojects = $this->Project_model->read_single_subproject($result[0]->sub_project_id);
+		if(!is_null($subprojects)){
+			$nama_subproject = $projects[0]->title;
+		} else {
+			$nama_subproject = '--';	
+		}
+
+
+
+		// get designation
+		$designation = $this->Designation_model->read_designation_information($result[0]->designation_id);
+		if(!is_null($designation)){
+			$edesignation_name = $designation[0]->designation_name;
+		} else {
+			$edesignation_name = '--';	
+		}
+		
 		$data = array(
+
 			'breadcrumbs' => $this->lang->line('xin_manage_employees'),
 			'path_url' => 'emp_manager',
-			'first_name' => $result[0]->first_name,
-			'last_name' => $result[0]->last_name,
-			'ibu_kandung' => $result[0]->ibu_kandung,
 			'user_id' => $result[0]->user_id,
-			'employee_id' => $result[0]->employee_id,
-			'company_id' => $result[0]->company_id,
-			'location_id' => $result[0]->location_id,
-			'office_shift_id' => $result[0]->office_shift_id,
-			'ereports_to' => $result[0]->reports_to,
 			'username' => $result[0]->username,
-			'email' => $result[0]->email,
-			'department_id' => $result[0]->department_id,
-			'sub_department_id' => $result[0]->sub_department_id,
-			'designation_id' => $result[0]->designation_id,
-			'user_role_id' => $result[0]->user_role_id,
+			'employee_id' => $result[0]->employee_id,
+			'first_name' => strtoupper($result[0]->first_name),
+			'tempat_lahir' => $result[0]->tempat_lahir,
 			'date_of_birth' => $result[0]->date_of_birth,
-			'date_of_leaving' => $result[0]->date_of_leaving,
-			'gender' => $result[0]->gender,
-			'marital_status' => $result[0]->marital_status,
+			'ibu_kandung' => $result[0]->ibu_kandung,
 			'contact_no' => $result[0]->contact_no,
-			'state' => $result[0]->state,
-			'city' => $result[0]->city,
-			'zipcode' => $result[0]->zipcode,
-			'blood_group' => $result[0]->blood_group,
-			'citizenship_id' => $result[0]->citizenship_id,
-			'nationality_id' => $result[0]->nationality_id,
-			'iethnicity_type' => $result[0]->ethnicity_type,
+			'ktp_no' => $result[0]->ktp_no,
+			'filename_ktp' => $result[0]->filename_ktp,
+			'kk_no' => $result[0]->kk_no,
+			'filename_kk' => $result[0]->filename_kk,
+			'npwp_no' => $result[0]->npwp_no,
+			'filename_npwp' => $result[0]->filename_npwp,
+			'nomor_rek' => $result[0]->nomor_rek,
+			'filename_rek' => $result[0]->filename_rek,
+			'pemilik_rek' => $result[0]->pemilik_rek,
+			'bank_name' => $result[0]->bank_name,
 			'address' => $result[0]->address,
+			'list_bank' => $this->Xin_model->get_bank_code(),
+			'alamat_ktp' => $result[0]->alamat_ktp,
+			'gender' => $result[0]->gender,
+			'ethnicity_type' => $result[0]->ethnicity_type,
+			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
+			'blood_group' => $result[0]->blood_group,
+			'tinggi_badan' => $result[0]->tinggi_badan,
+			'berat_badan' => $result[0]->berat_badan,
+			'profile_picture' => $result[0]->profile_picture,
+			'email' => $result[0]->email,
+			'designation_id' => $result[0]->designation_id,
+			'designation' => $edesignation_name,
+			'company_name' => $company_name,
+			'department_id' => $result[0]->department_id,
+			'department_name' => $department_name,
+			'project_id' => $result[0]->project_id,
+			'project_name' => $nama_project,
+			'sub_project_id' => $result[0]->sub_project_id,
+			'sub_project_name' => $nama_subproject,
+			'penempatan' => $result[0]->penempatan,
+
+			'user_role_id' => $result[0]->user_role_id,
+			'date_of_leaving' => $result[0]->date_of_leaving,
+			'marital_status' => $result[0]->marital_status,
 			'wages_type' => $result[0]->wages_type,
 			'basic_salary' => $result[0]->basic_salary,
 			'is_active' => $result[0]->is_active,
-			'status_resign' => $result[0]->status_resign,
 			'date_of_joining' => $result[0]->date_of_joining,
-			'date_of_leaving' => $result[0]->date_of_leaving,
-			'description_resign' => $result[0]->description_resign,
-			'ktp_no' => $result[0]->ktp_no,
-			'kk_no' => $result[0]->kk_no,
-			'npwp_no' => $result[0]->npwp_no,
-			'bpjs_tk_no' => $result[0]->bpjs_tk_no,
-			'bpjs_ks_no' => $result[0]->bpjs_ks_no,
-			'ktp_status' => $result[0]->ktp_status,
-			'kk_status' => $result[0]->kk_status,
-			'npwp_status' => $result[0]->npwp_status,
-			'bpjs_tk_status' => $result[0]->bpjs_tk_status,
-			'bpjs_ks_status' => $result[0]->bpjs_ks_status,
 			'all_departments' => $this->Department_model->all_departments(),
 			'all_designations' => $this->Designation_model->all_designations(),
 			'all_user_roles' => $this->Roles_model->all_user_roles(),
-			'title' => $this->lang->line('xin_employee_detail').' | '.$this->Xin_model->site_title(),
-			'profile_picture' => $result[0]->profile_picture,
+			'title' => $this->lang->line('header_my_profile').' | '.$this->Xin_model->site_title(),
 			'facebook_link' => $result[0]->facebook_link,
 			'twitter_link' => $result[0]->twitter_link,
 			'blogger_link' => $result[0]->blogger_link,
@@ -1212,20 +1255,93 @@ class Employees extends MY_Controller {
 			'instagram_link' => $result[0]->instagram_link,
 			'pinterest_link' => $result[0]->pinterest_link,
 			'youtube_link' => $result[0]->youtube_link,
-			'leave_categories' => $result[0]->leave_categories,
-			'view_companies_id' => $result[0]->view_companies_id,
+			'last_login_date' => $result[0]->last_login_date,
+			'last_login_date' => $result[0]->last_login_date,
+			'last_login_ip' => $result[0]->last_login_ip,
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
+			'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),
 			'all_education_level' => $this->Employees_model->all_education_level(),
 			'all_qualification_language' => $this->Employees_model->all_qualification_language(),
 			'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
 			'all_contract_types' => $this->Employees_model->all_contract_types(),
 			'all_contracts' => $this->Employees_model->all_contracts(),
 			'all_office_shifts' => $this->Employees_model->all_office_shifts(),
-			'get_all_companies' => $this->Xin_model->get_companies(),
 			'all_office_locations' => $this->Location_model->all_office_locations(),
-			'all_leave_types' => $this->Timesheet_model->all_leave_types(),
-			'all_countries' => $this->Xin_model->get_countries()
+			'all_leave_types' => $this->Timesheet_model->all_leave_types()
+
+			// 'first_name' => $result[0]->first_name,
+			// 'last_name' => $result[0]->last_name,
+			// 'ibu_kandung' => $result[0]->ibu_kandung,
+			// 'user_id' => $result[0]->user_id,
+			// 'employee_id' => $result[0]->employee_id,
+			// 'company_id' => $result[0]->company_id,
+			// 'location_id' => $result[0]->location_id,
+			// 'office_shift_id' => $result[0]->office_shift_id,
+			// 'ereports_to' => $result[0]->reports_to,
+			// 'username' => $result[0]->username,
+			// 'email' => $result[0]->email,
+			// 'department_id' => $result[0]->department_id,
+			// 'sub_department_id' => $result[0]->sub_department_id,
+			// 'designation_id' => $result[0]->designation_id,
+			// 'user_role_id' => $result[0]->user_role_id,
+			// 'date_of_birth' => $result[0]->date_of_birth,
+			// 'date_of_leaving' => $result[0]->date_of_leaving,
+			// 'gender' => $result[0]->gender,
+			// 'marital_status' => $result[0]->marital_status,
+			// 'contact_no' => $result[0]->contact_no,
+			// 'state' => $result[0]->state,
+			// 'city' => $result[0]->city,
+			// 'zipcode' => $result[0]->zipcode,
+			// 'blood_group' => $result[0]->blood_group,
+			// 'citizenship_id' => $result[0]->citizenship_id,
+			// 'nationality_id' => $result[0]->nationality_id,
+			// 'iethnicity_type' => $result[0]->ethnicity_type,
+			// 'address' => $result[0]->address,
+			// 'wages_type' => $result[0]->wages_type,
+			// 'basic_salary' => $result[0]->basic_salary,
+			// 'is_active' => $result[0]->is_active,
+			// 'status_resign' => $result[0]->status_resign,
+			// 'date_of_joining' => $result[0]->date_of_joining,
+			// 'date_of_leaving' => $result[0]->date_of_leaving,
+			// 'description_resign' => $result[0]->description_resign,
+			// 'ktp_no' => $result[0]->ktp_no,
+			// 'kk_no' => $result[0]->kk_no,
+			// 'npwp_no' => $result[0]->npwp_no,
+			// 'bpjs_tk_no' => $result[0]->bpjs_tk_no,
+			// 'bpjs_ks_no' => $result[0]->bpjs_ks_no,
+			// 'ktp_status' => $result[0]->ktp_status,
+			// 'kk_status' => $result[0]->kk_status,
+			// 'npwp_status' => $result[0]->npwp_status,
+			// 'bpjs_tk_status' => $result[0]->bpjs_tk_status,
+			// 'bpjs_ks_status' => $result[0]->bpjs_ks_status,
+			// 'all_departments' => $this->Department_model->all_departments(),
+			// 'all_designations' => $this->Designation_model->all_designations(),
+			// 'all_user_roles' => $this->Roles_model->all_user_roles(),
+			// 'title' => $this->lang->line('xin_employee_detail').' | '.$this->Xin_model->site_title(),
+			// 'profile_picture' => $result[0]->profile_picture,
+			// 'facebook_link' => $result[0]->facebook_link,
+			// 'twitter_link' => $result[0]->twitter_link,
+			// 'blogger_link' => $result[0]->blogger_link,
+			// 'linkdedin_link' => $result[0]->linkdedin_link,
+			// 'google_plus_link' => $result[0]->google_plus_link,
+			// 'instagram_link' => $result[0]->instagram_link,
+			// 'pinterest_link' => $result[0]->pinterest_link,
+			// 'youtube_link' => $result[0]->youtube_link,
+			// 'leave_categories' => $result[0]->leave_categories,
+			// 'view_companies_id' => $result[0]->view_companies_id,
+			// 'all_countries' => $this->Xin_model->get_countries(),
+			// 'all_document_types' => $this->Employees_model->all_document_types(),
+			// 'all_education_level' => $this->Employees_model->all_education_level(),
+			// 'all_qualification_language' => $this->Employees_model->all_qualification_language(),
+			// 'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
+			// 'all_contract_types' => $this->Employees_model->all_contract_types(),
+			// 'all_contracts' => $this->Employees_model->all_contracts(),
+			// 'all_office_shifts' => $this->Employees_model->all_office_shifts(),
+			// 'get_all_companies' => $this->Xin_model->get_companies(),
+			// 'all_office_locations' => $this->Location_model->all_office_locations(),
+			// 'all_leave_types' => $this->Timesheet_model->all_leave_types(),
+			// 'all_countries' => $this->Xin_model->get_countries()
 			);
 		
 		// if($check_role[0]->user_role_id==1 || $check_role[0]->user_role_id==3 || $check_role[0]->user_role_id==4) {
