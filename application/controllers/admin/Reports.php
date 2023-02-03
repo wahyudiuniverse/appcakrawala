@@ -657,12 +657,12 @@ class Reports extends MY_Controller
 				$agama = '--';
 			}
 
-			// $banklist = $this->Xin_model->read_document_ktp($r->bank_name);
-			// if(!is_null($banklist)){
-			// 	$bank_name = $banklist[0]->bank_name;
-			// } else {
-			// 	$bank_name = '--';
-			// }
+			$banklist = $this->Xin_model->read_bank_info($r->bank_name);
+			if(!is_null($banklist)){
+				$bank_name = $banklist[0]->bank_name;
+			} else {
+				$bank_name = '--';
+			}
 
 			// $docktp = $this->Xin_model->read_bank_info($r->user_id);
 			// if(!is_null($docktp)){
@@ -788,7 +788,7 @@ class Reports extends MY_Controller
 			$kk = $r->kk_no;
 			$npwp = $r->npwp_no;
 			$nomor_rek = $r->nomor_rek;
-			$bank_name = $r->bank_name;
+			// $bank_name = $r->bank_name;
 			$pemilik_rek = $r->pemilik_rek;
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';

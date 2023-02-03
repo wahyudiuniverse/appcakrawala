@@ -10,9 +10,41 @@
     }
  
 	public function get_users_mobile() {
-	  return $this->db->get("xin_user_mobile");
+	  // return $this->db->get("xin_user_mobile");
+		$this->db->order_by("createdon");
+		$this->db->limit(5);
+		$query = $this->db->get('xin_user_mobile');
+
+		return $query->result();
+
 	}
 		
+
+	// get employees list> reports
+	public function user_mobile_limit() {
+		return $query = $this->db->query("SELECT * FROM xin_user_mobile ORDER BY createdon DESC LIMIT 10");
+	}
+
+	// get employees list> reports
+	public function user_mobile_limit_fillter($company_id, $project_id, $subproject) {
+
+		if($subproject == "0"){
+			return $query = $this->db->query("SELECT userm.*, emp.sub_project_id
+			FROM xin_user_mobile userm
+			LEFT JOIN xin_employees emp ON emp.employee_id = userm.employee_id
+			WHERE userm.project_id = '$project_id'");
+
+		} else {
+
+			return $query = $this->db->query("SELECT userm.*, emp.sub_project_id
+			FROM xin_user_mobile userm
+			LEFT JOIN xin_employees emp ON emp.employee_id = userm.employee_id
+			WHERE userm.project_id = '$project_id'
+			AND emp.sub_project_id = '$subproject'");
+		}
+	}
+
+
 	public function get_usertype()
 	{
 	  return $this->db->get("xin_user_mobile_type");

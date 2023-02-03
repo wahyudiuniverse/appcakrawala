@@ -321,8 +321,13 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="linkdedin_profile">Posisi/Jabatan</label>
-                                  <input class="form-control" placeholder="" name="instagram_link" type="text" value="<?php echo $designation[0]->designation_name;?>" disabled>
+                              <label for="designation"><?php echo $this->lang->line('xin_designation');?><i class="hrpremium-asterisk"></i></label>
+                              <select class="form-control" name="designation_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_designation');?>">
+                                <option value=""></option>
+                                <?php foreach($all_designations as $designation) {?>
+                                <option value="<?php echo $designation->designation_id?>" <?php if($designation_id==$designation->designation_id):?> selected <?php endif;?>><?php echo $designation->designation_name?></option>
+                                <?php } ?>
+                              </select>
                                 </div>
                               </div>
                             </div>
@@ -335,6 +340,16 @@
                                 </div>
                               </div>
                             </div>
+
+                            <div class="row">
+                              <div class="col-md-6">
+                                <div class="form-group">
+                                  <label for="tanggal_bergabung" class="control-label"><?php echo $this->lang->line('xin_employee_doj');?></label>
+                                  <input class="form-control date" readonly="readonly" placeholder="<?php echo $this->lang->line('xin_employee_doj');?>" name="tanggal_bergabung" type="text" value="<?php echo $date_of_joining;?>">
+                                </div>
+                              </div>
+                            </div>
+
 
                             <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
                           </div>

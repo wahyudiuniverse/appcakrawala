@@ -81,6 +81,14 @@ class Project_model extends CI_Model {
 		}
 	}
 
+
+
+	public function get_project_bycompany($id)
+	{
+	  $query = $this->db->query("SELECT * FROM xin_projects WHERE company_id = '$id' ORDER BY title ASC;");
+  	  return $query->result();
+	}
+
 	// get single project by id
 	public function read_single_subproject($id) {
 	

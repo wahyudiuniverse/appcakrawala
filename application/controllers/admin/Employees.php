@@ -1234,6 +1234,7 @@ class Employees extends MY_Controller {
 			'project_name' => $nama_project,
 			'sub_project_id' => $result[0]->sub_project_id,
 			'sub_project_name' => $nama_subproject,
+			'date_of_joining' => $result[0]->date_of_joining,
 			'penempatan' => $result[0]->penempatan,
 
 			'user_role_id' => $result[0]->user_role_id,
@@ -1619,8 +1620,8 @@ class Employees extends MY_Controller {
 	
 		$data = array(
 		'penempatan' => $this->input->post('penempatan'),
-		// 'tempat_lahir' => $this->input->post('tempat_lahir'),
-		// 'date_of_birth' => $this->input->post('tanggal_lahir'),
+		'date_of_joining' => $this->input->post('tanggal_bergabung'),
+		'designation_id' => $this->input->post('designation_id'),
 		// 'ibu_kandung' => $this->input->post('ibu_kandung'),
 		// 'contact_no' => $this->input->post('no_kontak'),
 		// 'email' => $this->input->post('email'),

@@ -55,10 +55,10 @@ class Usermobile extends MY_Controller
 
 		$data['all_employees'] = $this->Xin_model->all_employees();
 		$data['all_usermobile_type'] = $this->Xin_model->get_usermobile_type();
-		$data['all_project'] = $this->Xin_model->get_projects();
+		$data['all_projects'] = $this->Xin_model->get_projects();
 		$data['all_area'] = $this->Xin_model->get_area();
 		$data['all_posisi'] = $this->Xin_model->get_designations();
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
+		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['path_url'] = 'usermobile';
 		$session = $this->session->userdata('username');
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -76,6 +76,48 @@ class Usermobile extends MY_Controller
 	}
 
 
+	// get company > departments
+	public function get_comp_project() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'company_id' => $id
+			);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/usermobile/get_comp_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	} 
+
+	// get company > departments
+	public function get_subprojects() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'project_id' => $id
+			);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/report_get_subprojects", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	} 
+
 	public function usermobile_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
@@ -90,10 +132,22 @@ class Usermobile extends MY_Controller
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 		
+		$company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(5);
+		$subproject_id = $this->uri->segment(6);
+
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 
-		$usermobile = $this->Usersmobile_model->get_users_mobile();
+
+		if($company_id==0 || is_null($company_id)){
+			$usermobile = $this->Usersmobile_model->user_mobile_limit();
+		}else{
+			$usermobile = $this->Usersmobile_model->user_mobile_limit_fillter($company_id, $project_id, $subproject_id);
+		}
+		
+
 
 		$data = array();
 

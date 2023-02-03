@@ -40,6 +40,18 @@ $(document).ready(function() {
 		});
 	});
 	
+	jQuery("#aj_company").change(function(){
+		jQuery.get(base_url+"/get_comp_project/"+jQuery(this).val(), function(data, status){
+			jQuery('#project_ajax').html(data);
+		});
+	});
+
+	jQuery("#aj_project").change(function(){
+		jQuery.get(base_url+"/get_subprojects/"+jQuery(this).val(), function(data, status){
+			jQuery('#subproject_ajax').html(data);
+		});
+	});
+
 	// edit
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
@@ -57,16 +69,35 @@ $(document).ready(function() {
 		});
 	});
 	
-	jQuery("#aj_company").change(function(){
-		jQuery.get(base_url+"/get_employees/"+jQuery(this).val(), function(data, status){
-			jQuery('#employee_ajax').html(data);
+	/* projects report */
+	$("#employee_mobile").submit(function(e){
+		/*Form Submit*/
+		e.preventDefault();
+		var company_id = $('#aj_company').val();
+		var project_id = $('#aj_project').val();
+		var subproject_id = $('#aj_subproject').val();
+
+		var xin_table2 = $('#xin_table').dataTable({
+			"bDestroy": true,
+			"ajax": {
+				url : site_url+"usermobile/usermobile_list/"+company_id+"/"+project_id+"/"+subproject_id+"/",
+				type : 'GET'
+			},
+			dom: 'lBfrtip',
+			"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+			"fnDrawCallback": function(settings){
+			$('[data-toggle="tooltip"]').tooltip();          
+			}
 		});
+		toastr.success('Request Submit.');
+		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
 	});
-	jQuery("#aj_company").change(function(){
-		jQuery.get(base_url+"/get_company_locations/"+jQuery(this).val(), function(data, status){
-			jQuery('#location_ajax').html(data);
-		});
-	});
+
+	// jQuery("#aj_company").change(function(){
+	// 	jQuery.get(base_url+"/get_company_locations/"+jQuery(this).val(), function(data, status){
+	// 		jQuery('#location_ajax').html(data);
+	// 	});
+	// });
 	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e){
