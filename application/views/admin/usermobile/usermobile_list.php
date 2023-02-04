@@ -46,7 +46,7 @@
           <label for="first_name"><?php echo $this->lang->line('xin_project');?></label>
           <select class=" form-control" name="project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_project');?>">
             <option value=""></option>
-            <?php foreach($all_project as $emp) {?>
+            <?php foreach($all_projects as $emp) {?>
             <option value="<?php echo $emp->project_id?>"><?php echo $emp->title?></option>
             <?php } ?>
           </select>

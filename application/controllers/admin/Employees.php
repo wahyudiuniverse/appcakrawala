@@ -581,6 +581,7 @@ class Employees extends MY_Controller {
 		
 				// user full name 
 				$full_name = $r->first_name.' '.$r->last_name;
+				$area = $r->penempatan;
 
 				// get company
 				$company = $this->Xin_model->read_company_info($r->company_id);
@@ -700,6 +701,7 @@ class Employees extends MY_Controller {
 				$ename,
 				$nama_project,
 				$designation_name,
+				$area,
 				$contact_info,
 				$tgllahir,
 				$role_name,

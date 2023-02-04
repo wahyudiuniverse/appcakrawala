@@ -141,7 +141,7 @@ class Usermobile extends MY_Controller
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 
 
-		if($company_id==0 || is_null($company_id)){
+		if($project_id=="0" || is_null($project_id)){
 			$usermobile = $this->Usersmobile_model->user_mobile_limit();
 		}else{
 			$usermobile = $this->Usersmobile_model->user_mobile_limit_fillter($company_id, $project_id, $subproject_id);

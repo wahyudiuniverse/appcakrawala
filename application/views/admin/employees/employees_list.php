@@ -486,11 +486,12 @@ if($user_info[0]->user_role_id==1 ||
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
           <tr>
-            <th><?php echo $this->lang->line('xin_employees_id');?></th>
+            <th>NIP</th>
             <th>KTP</th>
             <th width="200"><i class="fa fa-user"></i> NAMA LENGKAP</th>
             <th>PROJECT</th>
             <th>POSISI/JABATAN</th>
+            <th>AREA</th>
             <th><?php echo $this->lang->line('dashboard_contact');?></th>
             <th><?php echo $this->lang->line('xin_employee_dob');?></th>
             <th><?php echo $this->lang->line('xin_employee_role');?></th>
