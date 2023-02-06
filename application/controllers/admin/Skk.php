@@ -456,7 +456,7 @@ class Skk extends MY_Controller {
 					if(!is_null($designation)){
 						if($project[0]->title == 'INHOUSE'){
 
-						$project_name = 'PT. SIPRAMA CACKRAWALA';
+						$project_name = 'PT. SIPRAMA CAKRAWALA';
 						} else {
 
 						$project_name = $project[0]->title;

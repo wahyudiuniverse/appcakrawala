@@ -366,6 +366,7 @@ class Employees extends MY_Controller {
 				'doj' => $date_of_join,
 				'contact_no' => $contact_no,
 				'address' => $alamat_ktp,
+				'alamat_ktp' => $alamat_ktp,
 				'penempatan' => $penempatan,
 				// 'createdon' => date('Y-m-d h:i:s'),
 				'createdby' => $session['user_id']
