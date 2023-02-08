@@ -127,11 +127,20 @@ class Employee_resign extends MY_Controller {
 				} else {
 					$status_name = 'Undefined';
 				}
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
 
-				$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
+				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
 
-				$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
+				if(is_null($r->dok_resign_letter)){
+					$vsrs = '';
+				} else {
+					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				}
+
+				if(is_null($r->dok_over_hand)){
+					$vhov = '';
+				} else {
+					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				}
 
 				$projects = $this->Project_model->read_single_project($r->project_id);
 				if(!is_null($projects)){
@@ -153,6 +162,7 @@ class Employee_resign extends MY_Controller {
 				} else {
 					$designation_name = '--';	
 				}
+
 				$dok_p = $vexc.' '.$vsrs.' '.$vhov;
 
 			$data[] = array(
@@ -436,7 +446,7 @@ class Employee_resign extends MY_Controller {
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
-							$newfilenamea = 'document_'.round(microtime(true)).'.'.$exta;
+							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
 							$fnameExit = $newfilenamea;
 						} else {
@@ -459,7 +469,7 @@ class Employee_resign extends MY_Controller {
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_sresign"]["name"]);
-							$newfilenameb = 'document_'.round(microtime(true)).'.'.$extb;
+							$newfilenameb = 'document_srs_'.round(microtime(true)).'.'.$extb;
 							move_uploaded_file($tmp_nameb, $documentdb.$newfilenameb);
 							$fname_sresign = $newfilenameb;
 						} else {
@@ -532,7 +542,7 @@ class Employee_resign extends MY_Controller {
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
-							$newfilenamea = 'document_'.round(microtime(true)).'.'.$exta;
+							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
 							$fnameExit = $newfilenamea;
 						} else {
@@ -603,7 +613,7 @@ class Employee_resign extends MY_Controller {
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
-							$newfilenamea = 'document_'.round(microtime(true)).'.'.$exta;
+							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
 							$fnameExit = $newfilenamea;
 						} else {

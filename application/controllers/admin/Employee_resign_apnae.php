@@ -106,11 +106,26 @@ class Employee_resign_apnae extends MY_Controller {
 					$status_name = 'Undefined';
 				}
 
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
 
-				$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
+				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
 
-				$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
+				if(is_null($r->dok_resign_letter)){
+					$vsrs = '';
+				} else {
+					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				}
+
+				if(is_null($r->dok_over_hand)){
+					$vhov = '';
+				} else {
+					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				}
+				
+				// $vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
+
+				// $vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
+
+				// $vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
 
 
 				$projects = $this->Project_model->read_single_project($r->project_id);

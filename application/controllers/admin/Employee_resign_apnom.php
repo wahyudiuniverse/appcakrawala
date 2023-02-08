@@ -48,7 +48,7 @@ class Employee_resign_apnom extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
 		$data['path_url'] = 'emp_resign_approve_nom';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('374',$role_resources_ids)) {
+		if(in_array('493',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/employees/resign_list_appnom", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -110,12 +110,26 @@ class Employee_resign_apnom extends MY_Controller {
 					$status_name = 'Undefined';
 				}
 
+				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
 
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
+				if(is_null($r->dok_resign_letter)){
+					$vsrs = '';
+				} else {
+					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				}
 
-				$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
+				if(is_null($r->dok_over_hand)){
+					$vhov = '';
+				} else {
+					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				}
+				
 
-				$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
+				// $vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
+
+				// $vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
+
+				// $vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
 
 
 				$projects = $this->Project_model->read_single_project($r->project_id);
