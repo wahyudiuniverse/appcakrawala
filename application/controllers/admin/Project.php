@@ -245,12 +245,12 @@ class Project extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	 }
 	// Validate and add info in database
-	public function add_designation() {
+	public function add_project() {
 	
 		if($this->input->post('add_type')=='designation') {
 		// Check validation for user input
-		$this->form_validation->set_rules('department_id', 'Department', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('designation_name', 'Designation', 'trim|required|xss_clean');
+		// $this->form_validation->set_rules('department_id', 'Department', 'trim|required|xss_clean');
+		// $this->form_validation->set_rules('designation_name', 'Designation', 'trim|required|xss_clean');
 		
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -259,34 +259,31 @@ class Project extends MY_Controller {
 		/* Server side PHP input validation */
 		if($this->input->post('company_id')==='') {
         	$Return['error'] = $this->lang->line('error_company_field');
-		} else if($this->input->post('department_id')==='') {
+		} else if($this->input->post('title')==='') {
         	$Return['error'] = $this->lang->line('error_department_field');
-		} else if($this->input->post('subdepartment_id')==='') {
+		} else if($this->input->post('alias')==='') {
         	$Return['error'] = $this->lang->line('xin_hr_sub_department_field_error');
-		} else if($this->input->post('designation_name')==='') {
-			$Return['error'] = $this->lang->line('error_designation_field');
-		} else if($this->input->post('description')==='') {
-			$Return['error'] = $this->lang->line('xin_error_task_file_description');
 		}
 				
 		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
+      $this->output($Return);
+    }
 		$data = array(
-		'department_id' => $this->input->post('department_id'),
-		'sub_department_id' => $this->input->post('subdepartment_id'),
+		'title' => $this->input->post('title'),
+		'client_id' => 1,
 		'company_id' => $this->input->post('company_id'),
-		'designation_name' => $this->input->post('designation_name'),
-		'description' => $this->input->post('description'),
+		'priority' => $this->input->post('alias'),
 		'added_by' => $this->input->post('user_id'),
-		'created_at' => date('d-m-Y'),
+		'created_at' => date('d-m-Y')
 		);
-		$result = $this->Designation_model->add($data);
+		$result = $this->Project_model->add($data);
+
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_add_designation');
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
+
 		$this->output($Return);
 		exit;
 		}

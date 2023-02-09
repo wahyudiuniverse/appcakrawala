@@ -72,7 +72,7 @@ $(document).ready(function() {
 		$('.icon-spinner3').show();
 		$.ajax({
 			type: "POST",
-			url: base_url+'/add_designation/',
+			url: base_url+'/add_project/',
 			data: obj.serialize()+"&is_ajax=1&add_type=designation&form="+action,
 			cache: false,
 			success: function (JSON) {
@@ -81,6 +81,7 @@ $(document).ready(function() {
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
 					$('.icon-spinner3').hide();
+					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
@@ -90,6 +91,7 @@ $(document).ready(function() {
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				}
 			}
 		});

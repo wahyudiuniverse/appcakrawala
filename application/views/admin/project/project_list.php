@@ -29,7 +29,7 @@
 
         <div class="form-group">
           <label for="first_name">Alias Project</label>
-          <input type="text" class="form-control" placeholder="Nama Alias" name="title"/>
+          <input type="text" class="form-control" placeholder="Nama Alias" name="alias"/>
         </div>
 
         <div class="form-group">

@@ -158,7 +158,7 @@ class Project_model extends CI_Model {
 	public function project_list() {
 
 
-			return $query = $this->db->query("SELECT * FROM xin_projects");
+			return $query = $this->db->query("SELECT * FROM xin_projects ORDER BY project_id DESC");
 		
 	}
 
