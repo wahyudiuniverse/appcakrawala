@@ -836,14 +836,14 @@ class Reports extends MY_Controller
 				$email,
 				$kontak,
 				$alamat,
-				$kk,
-				$ktp,
+				"'".$kk,
+				"'".$ktp,
 				$npwp,
 				$bpjstk,
 				$bpjsks,
 				$ibu,
 				$bank_name,
-				$nomor_rek,
+				"'".$nomor_rek,
 				$pemilik_rek
 				// $pin
 			);

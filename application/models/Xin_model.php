@@ -140,6 +140,10 @@ class Xin_model extends CI_Model {
 			$arr['des_active'] = 'active';
 			$arr['adm_open'] = 'open';
 			return $arr;
+		} else if($mClass=='project') {
+			$arr['project_active'] = 'active';
+			$arr['adm_open'] = 'open';
+			return $arr;
 		} else if($mClass=='akses_project') {
 			$arr['akses_project_active'] = 'active';
 			$arr['adm_open'] = 'open';
@@ -525,10 +529,6 @@ class Xin_model extends CI_Model {
 			return $arr;
 		} else if($mMethod=='task_categories' && $mClass=='project') {
 			$arr['task_cat_active'] = 'active';
-			$arr['project_open'] = 'open';
-			return $arr;
-		}  else if($mClass=='project') {
-			$arr['project_active'] = 'active';
 			$arr['project_open'] = 'open';
 			return $arr;
 		} else if($mClass=='projects') {

@@ -824,7 +824,8 @@
       || in_array('5',$role_resources_ids) 
       || in_array('6',$role_resources_ids) 
       || in_array('11',$role_resources_ids) 
-      || in_array('9',$role_resources_ids)) {
+      || in_array('9',$role_resources_ids)
+      || in_array('119',$role_resources_ids)) {
     ?>
       <li class="<?php if(!empty($arr_mod['adm_open']))echo $arr_mod['adm_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
@@ -871,6 +872,27 @@
             <?php 
             } 
             ?>
+
+            <?php 
+            if (in_array('44',$role_resources_ids)) { 
+            ?>
+              <li class="sidenav-item <?php if(!empty($arr_mod['project_active']))echo $arr_mod['project_active'];?>"> 
+                <a class="sidenav-link" href="<?php echo site_url('admin/project/');?>" > <?php echo $this->lang->line('left_projects');?> </a> 
+              </li>
+            <?php 
+            } 
+            ?>
+
+            <?php 
+            if (in_array('130',$role_resources_ids)) { 
+            ?>
+              <li class="sidenav-item <?php if(!empty($arr_mod['sub_project_active']))echo $arr_mod['sub_project_active'];?>"> 
+                <a class="sidenav-link" href="<?php echo site_url('admin/subproject/');?>" > <?php echo $this->lang->line('xin_pkwt_sub_project');?> </a> 
+              </li>
+            <?php 
+            } 
+            ?>
+
 
             <?php 
             if (in_array('207',$role_resources_ids)) { 
@@ -1326,96 +1348,6 @@
           <i class="sidenav-icon fas fa-calendar-alt"></i>
           <div><?php echo $this->lang->line('xin_leave_status');?></div>
         </a> 
-      </li>
-    <?php 
-    } 
-    ?>
-
-<!-- projects manager -->
-    <?php 
-    if (in_array('44',$role_resources_ids) 
-        || in_array('312',$role_resources_ids) 
-        || in_array('119',$role_resources_ids) 
-        || in_array('94',$role_resources_ids) 
-        || in_array('424',$role_resources_ids) 
-        || in_array('425',$role_resources_ids)) {
-    ?>
-      <li class="<?php if(!empty($arr_mod['project_open']))echo $arr_mod['project_open'];?> sidenav-item"> 
-        <a href="#" class="sidenav-link sidenav-toggle"> 
-          <i class="sidenav-icon ion ion-logo-buffer"></i>
-          <div><?php echo $this->lang->line('xin_projects_manager_title');?></div>
-        </a>
-          <ul class="sidenav-menu">
-            <?php 
-            if (in_array('312',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['projects_dashboard_active']))echo $arr_mod['projects_dashboard_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/project/projects_dashboard/');?>" > <?php echo $this->lang->line('dashboard_title');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if (in_array('119',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['clients_active']))echo $arr_mod['clients_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/clients/');?>" > <?php echo $this->lang->line('xin_project_clients');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if (in_array('44',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['project_active']))echo $arr_mod['project_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/project/');?>" > <?php echo $this->lang->line('left_projects');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if (in_array('130',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['sub_project_active']))echo $arr_mod['sub_project_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/subproject/');?>" > <?php echo $this->lang->line('xin_pkwt_sub_project');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if (in_array('94',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['project_timelogs_active']))echo $arr_mod['project_timelogs_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/project/timelogs/');?>" > <?php echo $this->lang->line('xin_project_timelogs');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if (in_array('424',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['projects_calendar_active']))echo $arr_mod['projects_calendar_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/project/projects_calendar/');?>" > <?php echo $this->lang->line('xin_acc_calendar');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-      
-            <?php 
-            if (in_array('425',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['projects_scrum_board_active']))echo $arr_mod['projects_scrum_board_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/project/projects_scrum_board/');?>" > <?php echo $this->lang->line('xin_projects_scrm_board');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-          </ul>
       </li>
     <?php 
     } 

@@ -154,6 +154,38 @@ class Project_model extends CI_Model {
   	  return $query->result();
 	}
 
+	// get employees list> reports
+	public function project_list() {
+
+
+			return $query = $this->db->query("SELECT * FROM xin_projects");
+		
+	}
+
+	// get single employee by NIP
+	public function read_project_by_id($id) {
+	
+		$sql = 'SELECT * FROM xin_projects WHERE project_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// Function to update record in table
+	public function project_record($data, $id){
+		$this->db->where('project_id', $id);
+		if( $this->db->update('xin_projects',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 
 	// get task categories
 	public function get_task_categories() {

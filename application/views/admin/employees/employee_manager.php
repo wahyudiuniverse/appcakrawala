@@ -44,6 +44,9 @@
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-grade"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_post');?></a>
 
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-bpjs"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_manage_employees_bpjs');?></a>
+
+
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_document_id');?></a>
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>
@@ -472,6 +475,51 @@
                           </div>
                         </div>
                       </div>
+
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjstk');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="number" value="<?php echo $bpjs_tk_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjstk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select class="form-control" name="bpjstk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_tk_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_tk_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjsks');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="number" value="<?php echo $bpjs_ks_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjsks_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select class="form-control" name="bpjsks_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_ks_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_ks_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
 
                       <div class="row">
                         <div class="col-md-12">

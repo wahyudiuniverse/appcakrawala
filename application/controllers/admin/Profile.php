@@ -359,6 +359,10 @@ class Profile extends MY_Controller {
 		$title = $this->Xin_model->clean_post($this->input->post('title'));
 		$kk_no = $this->Xin_model->clean_post($this->input->post('kk_no'));
 		$npwp_no = $this->Xin_model->clean_post($this->input->post('npwp_no'));
+		$no_bpjstk = $this->Xin_model->clean_post($this->input->post('no_bpjstk'));
+		$bpjstk_confirm = $this->Xin_model->clean_post($this->input->post('bpjstk_confirm'));
+		$no_bpjsks = $this->Xin_model->clean_post($this->input->post('no_bpjsks'));
+		$bpjsks_confirm = $this->Xin_model->clean_post($this->input->post('bpjsks_confirm'));
 		// clean date fields
 		// $date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
 		// $document_type = $this->input->post('document_type_id');
@@ -371,6 +375,10 @@ class Profile extends MY_Controller {
 		'filename_kk' 	=> $fname_kk,
 		'npwp_no' 			=> $npwp_no,
 		'filename_npwp' => $fname_npwp,
+		'bpjs_tk_no' => $no_bpjstk,
+		'bpjs_tk_status' => $bpjstk_confirm,
+		'bpjs_ks_no' => $no_bpjsks,
+		'bpjs_ks_status' => $bpjsks_confirm,
 
 		);
 
