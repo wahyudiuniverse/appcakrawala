@@ -103,7 +103,14 @@ class Subproject extends MY_Controller
 
     	$sid = $r->secid;
     	$subproject_name = $r->sub_project_name;
+    	$project_name = $r->id_project;
 
+				$projects = $this->Project_model->read_single_project($r->id_project);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
 			
 			if(in_array('134',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-subproject_id="'. $r->secid . '"><span class="fas fa-pencil-alt"></span></button></span>';
@@ -123,6 +130,7 @@ class Subproject extends MY_Controller
 				$combhr,
 				$sid,
 				$subproject_name,
+				$nama_project,
 		   );
 
           }

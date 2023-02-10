@@ -64,6 +64,7 @@
                 <th width="10px"><?php echo $this->lang->line('xin_action');?></th>
                 <th><?php echo $this->lang->line('xin_sub_project_id');?></th>
                 <th><?php echo $this->lang->line('xin_sub_project_name');?></th>
+                <th>Nama Project</th>
               </tr>
             </thead>
           </table>

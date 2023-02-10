@@ -32,7 +32,7 @@ class Project extends MY_Controller {
 	}
 	
 	public function index()
-    {
+  {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -50,7 +50,7 @@ class Project extends MY_Controller {
 		} else {
 			redirect('admin/dashboard');
 		}
-     }
+  }
  
   public function project_list()
     {

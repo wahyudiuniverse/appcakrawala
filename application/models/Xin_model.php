@@ -144,6 +144,10 @@ class Xin_model extends CI_Model {
 			$arr['project_active'] = 'active';
 			$arr['adm_open'] = 'open';
 			return $arr;
+		} else if($mClass=='subproject') {
+			$arr['sub_project_active'] = 'active';
+			$arr['adm_open'] = 'open';
+			return $arr;
 		} else if($mClass=='akses_project') {
 			$arr['akses_project_active'] = 'active';
 			$arr['adm_open'] = 'open';
