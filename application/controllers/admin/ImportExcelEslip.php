@@ -460,7 +460,6 @@ class ImportExcelEslip extends MY_Controller
 				$uuck = $user[0]->uuck;
 				$thr = $user[0]->thr;
 
-				$mix_oplos = $user[0]->mix_oplos;
 				$bpjs_ks_deduction = $user[0]->bpjs_ks_deduction;
 				$jaminan_pensiun_deduction = $user[0]->jaminan_pensiun_deduction;
 				$pendapatan = $user[0]->pendapatan;
@@ -471,7 +470,9 @@ class ImportExcelEslip extends MY_Controller
 				$pph = $user[0]->pph;
 				$penalty_late = $user[0]->penalty_late;
 				$penalty_attend = $user[0]->penalty_attend;
-				$penalty_attend = $user[0]->penalty_attend;
+				$mix_oplos = $user[0]->mix_oplos;
+				$pot_trip_malang = $user[0]->pot_trip_malang;
+				$pot_device = $user[0]->pot_device;
 				$deduction = $user[0]->deduction;
 				$simpanan_pokok = $user[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
@@ -531,6 +532,8 @@ class ImportExcelEslip extends MY_Controller
 					'penalty_late' => $penalty_late,
 					'penalty_attend' => $penalty_attend,
 					'mix_oplos' => $mix_oplos,
+					'pot_trip_malang' => $pot_trip_malang,
+					'pot_device' => $pot_device,
 					'deduction' => $deduction,
 					'simpanan_pokok' => $simpanan_pokok,
 					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
@@ -640,6 +643,8 @@ class ImportExcelEslip extends MY_Controller
 				$penalty_late = $user[0]->penalty_late;
 				$penalty_attend = $user[0]->penalty_attend;
 				$mix_oplos = $user[0]->mix_oplos;
+				$pot_trip_malang = $user[0]->pot_trip_malang;
+				$pot_device = $user[0]->pot_device;
 				$deduction = $user[0]->deduction;
 				$simpanan_pokok = $user[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
@@ -699,6 +704,8 @@ class ImportExcelEslip extends MY_Controller
 					'penalty_late' => $penalty_late,
 					'penalty_attend' => $penalty_attend,
 					'mix_oplos' => $mix_oplos,
+					'pot_trip_malang' => $pot_trip_malang,
+					'pot_device' => $pot_device,
 					'deduction' => $deduction,
 					'simpanan_pokok' => $simpanan_pokok,
 					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
@@ -942,6 +949,8 @@ class ImportExcelEslip extends MY_Controller
 				$penalty_late = $eslip[0]->penalty_late;
 				$penalty_attend = $eslip[0]->penalty_attend;
 				$mix_oplos = $eslip[0]->mix_oplos;
+				$pot_trip_malang = $eslip[0]->pot_trip_malang;
+				$pot_device = $eslip[0]->pot_device;
 				$deduction = $eslip[0]->deduction;
 				$simpanan_pokok = $eslip[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
@@ -1650,6 +1659,38 @@ class ImportExcelEslip extends MY_Controller
 					</tr>';
 				}
 
+
+
+				if($pot_trip_malang!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Potongan Trip Malang</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+				if($pot_device!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Potongan Laptop/HP</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
 				$tbl_2 .= '<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">
@@ -1974,6 +2015,8 @@ class ImportExcelEslip extends MY_Controller
 				$penalty_late = $eslip[0]->penalty_late;
 				$penalty_attend = $eslip[0]->penalty_attend;
 				$mix_oplos = $eslip[0]->mix_oplos;
+				$pot_trip_malang = $eslip[0]->pot_trip_malang;
+				$pot_device = $eslip[0]->pot_device;
 				$deduction = $eslip[0]->deduction;
 				$simpanan_pokok = $eslip[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
@@ -2672,6 +2715,36 @@ class ImportExcelEslip extends MY_Controller
 									<td colspan="4">Mix Oplos</td>
 									<td colspan="2">: Rp.</td>
 									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+				if($pot_trip_malang!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Potongan Trip Malang</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+				if($pot_device!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Potongan Laptop/HP</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
 								</tr>
 							</table>
 						</td>

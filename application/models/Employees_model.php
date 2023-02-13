@@ -448,6 +448,20 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+
+	 public function read_employee_nae($id) {
+	
+		$sql = "SELECT * FROM xin_employees WHERE sub_project_id = '1' AND user_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get single employee by NIP
 	public function read_employee_jabatan($id) {
 	

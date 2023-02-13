@@ -315,7 +315,7 @@ class Employee_resign extends MY_Controller {
 				
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$alloweda =  array('png','jpg','jpeg','pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
@@ -338,7 +338,7 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
 						//checking image type
-						$allowedb =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$allowedb =  array('png','jpg','jpeg','pdf');
 						$filenameb = $_FILES['dok_sresign']['name'];
 						$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
 						
@@ -361,7 +361,7 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sover']['tmp_name'])) {
 						//checking image type
-						$allowedc =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$allowedc =  array('png','jpg','jpeg','pdf');
 						$filenamec = $_FILES['dok_sover']['name'];
 						$extc = pathinfo($filenamec, PATHINFO_EXTENSION);
 						
@@ -393,6 +393,28 @@ class Employee_resign extends MY_Controller {
 						$date_of_leave 	= $this->input->post('date_of_leave');
 						$ket_resign 		= $this->input->post('ket_resign');
 
+
+
+						$isnae = $this->Employees_model->read_employee_nae($session['user_id']);
+						if(!is_null($isnae)){
+
+									$data = array(
+									'request_resign_by' => $session['user_id'],
+									'request_resign_date' => date('Y-m-d h:i:s'),
+									'approve_resignnae' => $session['user_id'],
+									'approve_resignnae_on' => date('Y-m-d h:i:s'),
+									'ktp_no' => $nomor_ktp,
+									'status_resign' => $status_resign,
+									'description_resign' => $ket_resign,
+									'date_of_leaving' => $date_of_leave,
+									'dok_exit_clearance' => $fnameExit,
+									'dok_resign_letter' => $fname_sresign,
+									'dok_over_hand' => $fname_ov,
+									'date_resign_request' => date('Y-m-d h:i:s')
+									);
+
+						} else {
+
 									$data = array(
 									'request_resign_by' => $session['user_id'],
 									'request_resign_date' => date('Y-m-d h:i:s'),
@@ -407,6 +429,9 @@ class Employee_resign extends MY_Controller {
 									'dok_over_hand' => $fname_ov,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
+
+						}
+
 
 						$result = $this->Employees_model->request_resign($data,$id);
 						if ($result == TRUE) {
@@ -491,6 +516,27 @@ class Employee_resign extends MY_Controller {
 						$date_of_leave 	= $this->input->post('date_of_leave');
 						$ket_resign 		= $this->input->post('ket_resign');
 
+
+						$isnae = $this->Employees_model->read_employee_nae($session['user_id']);
+						if(!is_null($isnae)){
+
+									$data = array(
+									'request_resign_by' => $session['user_id'],
+									'request_resign_date' => date('Y-m-d h:i:s'),
+									'approve_resignnae' => $session['user_id'],
+									'approve_resignnae_on' => date('Y-m-d h:i:s'),
+									'ktp_no' => $nomor_ktp,
+									'status_resign' => $status_resign,
+									'description_resign' => $ket_resign,
+									'date_of_leaving' => $date_of_leave,
+									'dok_exit_clearance' => $fnameExit,
+									'dok_resign_letter' => $fname_sresign,
+									'dok_over_hand' => null,
+									'date_resign_request' => date('Y-m-d h:i:s')
+									);
+
+						} else {
+
 									$data = array(
 									'request_resign_by' => $session['user_id'],
 									'request_resign_date' => date('Y-m-d h:i:s'),
@@ -505,6 +551,8 @@ class Employee_resign extends MY_Controller {
 									'dok_over_hand' => null,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
+
+						}
 
 						$result = $this->Employees_model->request_resign($data,$id);
 						if ($result == TRUE) {
@@ -563,6 +611,26 @@ class Employee_resign extends MY_Controller {
 						$date_of_leave 	= $this->input->post('date_of_leave');
 						$ket_resign 		= $this->input->post('ket_resign');
 
+
+						$isnae = $this->Employees_model->read_employee_nae($session['user_id']);
+						if(!is_null($isnae)){
+
+									$data = array(
+									'request_resign_by' => $session['user_id'],
+									'request_resign_date' => date('Y-m-d h:i:s'),
+									'approve_resignnae' => $session['user_id'],
+									'approve_resignnae_on' => date('Y-m-d h:i:s'),
+									'ktp_no' => $nomor_ktp,
+									'status_resign' => $status_resign,
+									'description_resign' => $ket_resign,
+									'date_of_leaving' => $date_of_leave,
+									'dok_exit_clearance' => $fnameExit,
+									'dok_resign_letter' => null,
+									'dok_over_hand' => null,
+									'date_resign_request' => date('Y-m-d h:i:s')
+									);
+						} else {
+
 									$data = array(
 									'request_resign_by' => $session['user_id'],
 									'request_resign_date' => date('Y-m-d h:i:s'),
@@ -577,6 +645,8 @@ class Employee_resign extends MY_Controller {
 									'dok_over_hand' => null,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
+
+						}
 
 						$result = $this->Employees_model->request_resign($data,$id);
 						if ($result == TRUE) {
@@ -635,6 +705,26 @@ class Employee_resign extends MY_Controller {
 						$date_of_leave 	= $this->input->post('date_of_leave');
 						$ket_resign 		= $this->input->post('ket_resign');
 
+
+						$isnae = $this->Employees_model->read_employee_nae($session['user_id']);
+						if(!is_null($isnae)){
+							
+									$data = array(
+									'request_resign_by' => $session['user_id'],
+									'request_resign_date' => date('Y-m-d h:i:s'),
+									'approve_resignnae' => $session['user_id'],
+									'approve_resignnae_on' => date('Y-m-d h:i:s'),
+									'ktp_no' => $nomor_ktp,
+									'status_resign' => $status_resign,
+									'description_resign' => $ket_resign,
+									'date_of_leaving' => $date_of_leave,
+									'dok_exit_clearance' => $fnameExit,
+									'dok_resign_letter' => null,
+									'dok_over_hand' => null,
+									'date_resign_request' => date('Y-m-d h:i:s')
+									);
+						} else {
+
 									$data = array(
 									'request_resign_by' => $session['user_id'],
 									'request_resign_date' => date('Y-m-d h:i:s'),
@@ -649,6 +739,7 @@ class Employee_resign extends MY_Controller {
 									'dok_over_hand' => null,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
+						}
 
 						$result = $this->Employees_model->request_resign($data,$id);
 						if ($result == TRUE) {
