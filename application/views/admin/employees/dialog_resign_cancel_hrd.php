@@ -41,13 +41,13 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> REQUEST EMPLOYEE RESIGN</h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> CANCEL EMPLOYEE RESIGN</h4>
   </div>
 
 
   <?php $attributes = array('name' => 'edit_company', 'id' => 'edit_company', 'autocomplete' => 'off', 'class'=>'m-b-1');?>
   <?php $hidden = array('_method' => 'EDIT', '_token' => $_GET['company_id'], 'ext_name' => $idrequest);?>
-  <?php echo form_open_multipart('admin/Employee_resign_aphrd/update/'.$idrequest.'/NO', $attributes, $hidden);?>
+  <?php echo form_open_multipart('admin/Employee_resign_aphrd/update/'.$idrequest.'/YES', $attributes, $hidden);?>
 
  <hr style="height:1px;border-width:0;color:gray;background-color:gray; margin: auto;">
 
@@ -259,7 +259,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
     <?php if(in_array('494',$role_resources_ids)) { ?>
-    <button type="submit" class="btn btn-primary save">APPROVE RESIGN</button>
+    <button type="submit" class="btn btn-warning save">CANCEL REQUEST</button>
     <?php } ?>
     
   </div>

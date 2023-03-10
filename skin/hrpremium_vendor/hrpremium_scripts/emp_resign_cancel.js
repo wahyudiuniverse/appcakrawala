@@ -2,11 +2,9 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/resign_list_cancel/",
             type : 'GET'
         },
-		dom: 'lBfrtip',
-		"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
 		"fnDrawCallback": function(settings){
 		$('[data-toggle="tooltip"]').tooltip();          
 		}
@@ -30,34 +28,19 @@ $(document).ready(function() {
 				if (JSON.error != '') {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					Ladda.stopAll();
 				} else {
 					$('.delete-modal').modal('toggle');
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);		
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);					
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					Ladda.stopAll();					
 				}
 			}
 		});
 	});
 	
-	// edit
-	// $('.edit-modal-data').on('show.bs.modal', function (event) {
-	// 	var button = $(event.relatedTarget);
-	// 	var company_id = button.data('company_id');
-	// 	var modal = $(this);
-	// $.ajax({
-	// 	url : base_url+"/read/",
-	// 	type: "GET",
-	// 	data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
-	// 	success: function (response) {
-	// 		if(response) {
-	// 			$("#ajax_modal").html(response);
-	// 		}
-	// 	}
-	// 	});
-	// });
-
 	// edit
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
@@ -75,32 +58,15 @@ $(document).ready(function() {
 		});
 	});
 	
-		// edit
-	// $('.edit2-modal-data').on('show.bs.modal', function (event) {
-	// 	var button = $(event.relatedTarget);
-	// 	var company_id = button.data('company_id');
-	// 	var modal = $(this);
-	// $.ajax({
-	// 	url : base_url+"/read/",
-	// 	type: "GET",
-	// 	data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
-	// 	success: function (response) {
-	// 		if(response) {
-	// 			$("#ajax_modal").html(response);
-	// 		}
-	// 	}
-	// 	});
-	// });
-
 	// view
-	$('.view-modal-data').on('show.bs.modal', function (event) {
+	$('#modals-slide').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var company_id = button.data('company_id');
 		var modal = $(this);
 	$.ajax({
 		url : base_url+"/read/",
 		type: "GET",
-		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+		data: 'jd=1&is_ajax=1&mode=modal&data=view_company&company_id='+company_id,
 		success: function (response) {
 			if(response) {
 				$("#ajax_modal_view").html(response);
@@ -118,6 +84,7 @@ $(document).ready(function() {
 		// 	jQuery('#ajax_office_shift').html(data);
 		// });
 	});
+	
 	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e){
@@ -142,15 +109,17 @@ $(document).ready(function() {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('#xin-form')[0].reset(); // To reset form fields
-					$('.add-form').removeClass('in');
+					$('.add-form').removeClass('show');
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				}
 			},
 			error: function() 
@@ -158,6 +127,7 @@ $(document).ready(function() {
 				toastr.error(JSON.error);
 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 				$('.save').prop('disabled', false);
+					Ladda.stopAll();
 			} 	        
 	   });
 	});

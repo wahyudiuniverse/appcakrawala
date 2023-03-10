@@ -86,6 +86,16 @@
           </a>             
         </li>
 
+    <!-- profile -->
+
+        <li class="sidenav-item <?php if(!empty($arr_mod['hotspot_active']))echo $arr_mod['hotspot_active'];?>"> 
+          <a href="<?php echo site_url('admin/hotspot/');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div>Access Hotspot</div>
+          </a>             
+        </li>
+
 
     <?php 
     if(in_array('13',$role_resources_ids) 
@@ -1242,6 +1252,17 @@
           } 
           ?>
 
+          <?php 
+          if (in_array('112',$role_resources_ids)) { 
+          ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['remployees_active']))echo $arr_mod['remployees_active'];?>"> 
+              <a class="sidenav-link" href="<?php echo site_url('admin/reports/report_order/');?>" > <?php echo $this->lang->line('xin_order_report');?> 
+              </a>
+            </li>
+          <?php 
+          } 
+          ?>
+          
           <?php 
           if (in_array('105',$role_resources_ids)) { 
           ?>

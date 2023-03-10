@@ -7,6 +7,7 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
+
 <?php $count_cancel = $this->Xin_model->count_resign_cancel();?>
 <?php $count_appnae = $this->Xin_model->count_approve_nae();?>
 <?php $count_appnom = $this->Xin_model->count_approve_nom();?>
@@ -21,7 +22,7 @@
     <?php } ?> 
 
     <?php if(in_array('492',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_cancelled/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancelled <?php echo '('.$count_cancel.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_resign_cancelled/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancelled <?php echo '('.$count_cancel.')';?>
       </a> </li>
     <?php } ?>
     
@@ -41,9 +42,10 @@
     <?php } ?>
     
     <?php if(in_array('491',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_resign_history/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_history/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> History Resign
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_history/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_history/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> History Resign
       </a> </li>
     <?php } ?>
+
   </ul>
 </div>
 
@@ -52,7 +54,7 @@
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
 
 <div class="card">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>REQUEST</strong> EMPLOYEE RESIGN</span> </div>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>CANCEL </strong>REQUEST RESIGN</span> </div>
   <div class="card-body">
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
@@ -66,6 +68,8 @@
             <th>Tanggal Resign</th>
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th>No KTP</th>
+            <th>Status</th>
+            <th>Dokumen</th>
           </tr>
         </thead>
       </table>

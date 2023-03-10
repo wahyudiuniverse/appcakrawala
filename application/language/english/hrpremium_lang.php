@@ -3106,6 +3106,7 @@ $lang['xin_request_employee_approvedby'] = 'Approved By';
 $lang['xin_request_employee_approvenae'] = 'Approved Level 1';
 $lang['xin_request_employee_approvenom'] = 'Approved Level 2';
 $lang['xin_request_employee_approvehrd'] = 'Approved HRD';
+$lang['xin_request_resign_cancelled'] = 'Cancelled';
 $lang['xin_request'] = 'Request';
 $lang['xin_verify'] = 'Verify';
 $lang['xin_approve'] = 'Approve';
@@ -3140,6 +3141,9 @@ $lang['xin_paklaring'] = 'Paklaring';
 $lang['xin_preview_eslip'] = 'Preview ESLIP';
 $lang['xin_sk_report'] = 'SK Kerja Report';
 $lang['xin_profile_tempat_lahir'] = 'Tempat Lahir';
+$lang['xin_resign_cancel'] = 'Cancel';
+$lang['xin_order_report'] = 'Report Order';
+$lang['xin_order_resume'] = 'Resume Order';
 
 ///////////////////////////////////////////////// end hrpremium v2.0.1
 /* End of file hrpremium_lang.php */

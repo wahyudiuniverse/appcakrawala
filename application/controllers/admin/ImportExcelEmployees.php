@@ -240,6 +240,7 @@ class ImportExcelEmployees extends MY_Controller
 				$bank_name					= $user[0]->bank_name;
 				$nomor_rek					= $user[0]->nomor_rek;
 				$pemilik_rek				= $user[0]->pemilik_rek;
+				$basic_salary				= $user[0]->basic_salary;
 				$private_code 			= rand(100000,999999);
 				$options 						= array('cost' => 12);
 				$password_hash 			= password_hash($private_code, PASSWORD_BCRYPT, $options);
@@ -275,6 +276,7 @@ class ImportExcelEmployees extends MY_Controller
 					'bank_name'				=> $bank_name,
 					'nomor_rek'				=> $nomor_rek,
 					'pemilik_rek'			=> $pemilik_rek,
+					'basic_salary'		=> $basic_salary,
 					'is_active' 			=> 1,
 					'private_code' 		=> $private_code,
 					'created_by' 			=> $session['user_id'],
@@ -359,6 +361,7 @@ class ImportExcelEmployees extends MY_Controller
 						$bank_name					= $user[0]->bank_name;
 						$nomor_rek					= $user[0]->nomor_rek;
 						$pemilik_rek				= $user[0]->pemilik_rek;
+						$basic_salary				= $user[0]->basic_salary;
 						$private_code = rand(100000,999999);
 						$options = array('cost' => 12);
 						$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
@@ -394,6 +397,7 @@ class ImportExcelEmployees extends MY_Controller
 							'bank_name'				=> $bank_name,
 							'nomor_rek'				=> $nomor_rek,
 							'pemilik_rek'			=> $pemilik_rek,
+							'basic_salary'		=> $basic_salary,
 							'is_active' 			=> 1,
 							'private_code' 		=> $private_code,
 							'created_by' 			=> $session['user_id'],

@@ -402,6 +402,12 @@ class Reports_model extends CI_Model {
 
 
 	// get employees list> reports
+	public function filter_employees_hotspot($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
+		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
+	}
+
+
+	// get employees list> reports
 	public function filter_esign_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
 		
 		// 0-0-0-0-0
@@ -436,6 +442,26 @@ class Reports_model extends CI_Model {
 		return $query = $this->db->query("SELECT employee_id, customer_id, datetime_phone as date_phone, datetime_phone as time_in, datetime_phone as time_out, datetime_phone as timestay
 FROM xin_trx_cio
 WHERE employee_id = '99'");
+
+
+		// return $query = $this->db->query("SELECT attdin.employee_id, attdin.project_id, emp.sub_project_id,attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+		// 	FROM (
+		// 		SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+		// 		FROM xin_trx_cio
+		// 		WHERE c_io = 1
+		// 		AND project_id = '62'
+		// 		AND employee_id in (22505731,22505713)
+        //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-02-01' AND '2023-02-28'
+		// 		ORDER BY createdon DESC) attdin
+		// 	LEFT JOIN (
+		// 		SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+		// 		FROM xin_trx_cio
+		// 		WHERE c_io = 2 
+		// 		AND project_id = '62'
+		// 		AND employee_id in (22505731,22505713)
+        //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-02-01' AND '2023-02-28'
+		// 	) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
+		// 	LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id");
 
 	}
 
@@ -497,6 +523,124 @@ WHERE emp.sub_project_id = '$sub_id'");
 
 
 			
+	}
+
+
+		// get employees att reports
+	public function report_order() {
+
+		return $query = $this->db->query("
+			SELECT morder.secid, 
+			morder.customer_id,cust.customer_name, cust.address, city.name as city, kec.name as kec, desa.name as desa,
+			morder.employee_id,emp.first_name, morder.material_id, sku.nama_material, 
+		morder.order_date, morder.qty, morder.price, morder.total
+		FROM xin_mobile_order morder
+		LEFT JOIN xin_sku_material sku ON sku.kode_sku = morder.material_id
+		LEFT JOIN xin_employees emp ON emp.employee_id = morder.employee_id
+		LEFT JOIN xin_customer cust ON cust.customer_id = morder.customer_id
+		LEFT JOIN mt_regencies city ON city.id = cust.city_id
+		LEFT JOIN mt_districts kec ON kec.id = cust.district_id
+		LEFT JOIN mt_villages desa ON desa.id = cust.village_id
+
+		WHERE DATE_FORMAT(morder.order_date, '%Y-%m-%d') = CURDATE() 
+		-- AND morder.customer_id = '123456789'
+		-- AND morder.employee_id = '21300043'
+		");
+	}
+
+		// get employees order
+	public function report_order_filter($company_id,$project_id,$sub_id,$start_date,$end_date) {
+
+		return $query = $this->db->query("
+			SELECT morder.secid, 
+			morder.customer_id,cust.customer_name, cust.address, city.name as city, kec.name as kec, desa.name as desa,
+			morder.employee_id,emp.first_name, morder.material_id, sku.nama_material, 
+		morder.order_date, morder.qty, morder.price, morder.total
+		FROM xin_mobile_order morder
+		LEFT JOIN xin_sku_material sku ON sku.kode_sku = morder.material_id
+		LEFT JOIN xin_employees emp ON emp.employee_id = morder.employee_id
+		LEFT JOIN xin_customer cust ON cust.customer_id = morder.customer_id
+		LEFT JOIN mt_regencies city ON city.id = cust.city_id
+		LEFT JOIN mt_districts kec ON kec.id = cust.district_id
+		LEFT JOIN mt_villages desa ON desa.id = cust.village_id
+
+		WHERE DATE_FORMAT(morder.order_date, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+		AND emp.project_id = '$project_id'
+		-- AND morder.customer_id = '123456789'
+		-- AND morder.employee_id = '21300043'
+		");
+
+	}
+
+		// get employees att reports
+	public function report_order_resume() {
+
+		return $query = $this->db->query("
+
+			SELECT distinct(cio.employee_id) AS emp_id, COUNT(cio.customer_id) count_call, morder.count_ec, morder.qty_renceng, morder.total
+FROM xin_trx_cio cio
+LEFT JOIN xin_employees emp ON emp.employee_id = cio.employee_id
+LEFT JOIN (SELECT DISTINCT(employee_id) emp_order, COUNT(customer_id) count_ec, SUM(qty) AS qty_renceng, SUM(total) AS total
+	FROM xin_mobile_order 
+	WHERE DATE_FORMAT(order_date, '%Y-%m-%d') BETWEEN '2023-03-10' AND '2023-03-10'
+    GROUP BY employee_id) morder ON morder.emp_order = cio.employee_id
+WHERE cio.project_id = 25
+AND emp.sub_project_id = 151
+AND cio.c_io = 1
+AND DATE_FORMAT(cio_date, '%Y-%m-%d') BETWEEN '2023-03-10' AND '2023-03-10'
+GROUP BY cio.employee_id
+
+		-- 	SELECT morder.secid, 
+		-- 	morder.customer_id,cust.customer_name, cust.address, city.name as city, kec.name as kec, desa.name as desa,
+		-- 	morder.employee_id,emp.first_name, morder.material_id, sku.nama_material, 
+		-- morder.order_date, morder.qty, morder.price, morder.total
+		-- FROM xin_mobile_order morder
+		-- LEFT JOIN xin_sku_material sku ON sku.kode_sku = morder.material_id
+		-- LEFT JOIN xin_employees emp ON emp.employee_id = morder.employee_id
+		-- LEFT JOIN xin_customer cust ON cust.customer_id = morder.customer_id
+		-- LEFT JOIN mt_regencies city ON city.id = cust.city_id
+		-- LEFT JOIN mt_districts kec ON kec.id = cust.district_id
+		-- LEFT JOIN mt_villages desa ON desa.id = cust.village_id
+		-- WHERE DATE_FORMAT(morder.order_date, '%Y-%m-%d') = CURDATE() 
+		-- AND morder.customer_id = '123456789'
+		-- AND morder.employee_id = '21300043'
+		");
+	}
+
+
+		// get employees att reports
+	public function report_order_resume_filter($company_id,$project_id,$sub_id,$start_date,$end_date) {
+
+		return $query = $this->db->query("
+
+			SELECT distinct(cio.employee_id) AS emp_id, COUNT(cio.customer_id) count_call, morder.count_ec, morder.qty_renceng, morder.total
+FROM xin_trx_cio cio
+LEFT JOIN xin_employees emp ON emp.employee_id = cio.employee_id
+LEFT JOIN (SELECT DISTINCT(employee_id) emp_order, COUNT(customer_id) count_ec, SUM(qty) AS qty_renceng, SUM(total) AS total
+	FROM xin_mobile_order 
+	WHERE DATE_FORMAT(order_date, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+    GROUP BY employee_id) morder ON morder.emp_order = cio.employee_id
+WHERE cio.project_id = '$project_id'
+AND emp.sub_project_id = '$sub_id'
+AND cio.c_io = 1
+AND DATE_FORMAT(cio_date, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+GROUP BY cio.employee_id
+
+		-- 	SELECT morder.secid, 
+		-- 	morder.customer_id,cust.customer_name, cust.address, city.name as city, kec.name as kec, desa.name as desa,
+		-- 	morder.employee_id,emp.first_name, morder.material_id, sku.nama_material, 
+		-- morder.order_date, morder.qty, morder.price, morder.total
+		-- FROM xin_mobile_order morder
+		-- LEFT JOIN xin_sku_material sku ON sku.kode_sku = morder.material_id
+		-- LEFT JOIN xin_employees emp ON emp.employee_id = morder.employee_id
+		-- LEFT JOIN xin_customer cust ON cust.customer_id = morder.customer_id
+		-- LEFT JOIN mt_regencies city ON city.id = cust.city_id
+		-- LEFT JOIN mt_districts kec ON kec.id = cust.district_id
+		-- LEFT JOIN mt_villages desa ON desa.id = cust.village_id
+		-- WHERE DATE_FORMAT(morder.order_date, '%Y-%m-%d') = CURDATE() 
+		-- AND morder.customer_id = '123456789'
+		-- AND morder.employee_id = '21300043'
+		");
 	}
 
 }

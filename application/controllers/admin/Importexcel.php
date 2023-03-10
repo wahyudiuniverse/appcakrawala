@@ -161,7 +161,8 @@ class ImportExcel extends MY_Controller
 						'ibu_kandung' 		=> $line[23],
 						'bank_name' 			=> $line[24],
 						'nomor_rek' 			=> $line[25],
-						'pemilik_rek' 		=> $line[26]
+						'pemilik_rek' 		=> $line[26],
+						'basic_salary' 		=> $line[27]
 						);
 					$result = $this->Employees_model->addtemp($data);
 

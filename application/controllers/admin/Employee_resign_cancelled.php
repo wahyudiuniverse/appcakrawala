@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_resign_aphrd extends MY_Controller {
+class Employee_resign_cancelled extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -37,7 +37,7 @@ class Employee_resign_aphrd extends MY_Controller {
 	
 	public function index() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){
+		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_resignin_employee').' | '.$this->Xin_model->site_title();
@@ -46,22 +46,22 @@ class Employee_resign_aphrd extends MY_Controller {
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
-		$data['path_url'] = 'emp_resign_approve_hrd';
+		$data['path_url'] = 'emp_resign_cancel';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('494',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/resign_list_apphrd", $data, TRUE);
+		if(in_array('492',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/employees/resign_list_cancelled", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
 		}
   }
 
-	public function request_list() {
+	public function resign_list_cancel() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/resign_list_apphrd", $data);
+			$this->load->view("admin/employees/resign_list_cancelled", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -72,7 +72,8 @@ class Employee_resign_aphrd extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_monitoring_rsign_hrd();
+		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
+		$employee = $this->Employees_model->get_monitoring_rsign_cancel();
 
 		$data = array();
 
@@ -86,23 +87,14 @@ class Employee_resign_aphrd extends MY_Controller {
 				$ktp_no = $r->ktp_no;
 				$penempatan = $r->penempatan;
 				$approve_resignnae = $r->approve_resignnae;
-				$approve_resignnom = $r->approve_resignnom;
-				$approve_resignhrd = $r->approve_resignhrd;
 
 				if(is_null($approve_resignnae) || $approve_resignnae=='0'){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->user_id . '">Need Approval NAE</button>';
-				} else if(is_null($approve_resignnom) || $approve_resignnom=='0') {
-					
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->user_id . '">Need Approval NOM</button>';
-				} else if(is_null($approve_resignhrd) || $approve_resignhrd=='0') {
-
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->user_id . '">Need Approval HRD</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Revisi</button>';
 				} else {
-
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal">Resigned</button>';
+					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Revisi</button>';
 				}
-
 
 				if($r->status_resign==2){
 					$status_name = 'RESIGN';
@@ -143,9 +135,6 @@ class Employee_resign_aphrd extends MY_Controller {
 					$nama_project = '--';	
 				}
 			
-
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->user_id . '">CANCEL</button>';
-
 				// $department = $this->Department_model->read_department_information($r->department);
 				// if(!is_null($department)){
 				// 	$department_name = $department[0]->department_name;
@@ -163,7 +152,7 @@ class Employee_resign_aphrd extends MY_Controller {
 				$dok_p = $vexc.' '.$vsrs.' '.$vhov;
 
 			$data[] = array(
-				$status_migrasi.' '.$cancel,
+				$status_migrasi,
 				$nip,
 				$fullname,
 				$nama_project,
@@ -207,7 +196,6 @@ class Employee_resign_aphrd extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
-	
 
 	// Validate and add info in database
 	public function request_add_employee() {
@@ -286,28 +274,23 @@ class Employee_resign_aphrd extends MY_Controller {
 			exit;
 	}
 
-	public function read() { 
-
-
+	public function read() {
 		$session = $this->session->userdata('username');
-		if(empty($session)) { 
+		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-
-		$idsubmit = substr($this->input->get('company_id'),0,1);
-		$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
-
+		$id = $this->input->get('company_id');
        // $data['all_countries'] = $this->xin_model->get_countries();
 		// $result = $this->Company_model->read_company_information('2');
 		$result = $this->Employees_model->read_employee_info($id);
-
 		$data = array(
 				'idrequest' => $result[0]->user_id,
 				'nip' => $result[0]->employee_id,
 				'nik_ktp' => $result[0]->ktp_no,
 				'fullname' => $result[0]->first_name,
-				// 'location_id' => $this->Location_model->read_location_information($result[0]->location_id),
+				'dok_exit_clearance' => $result[0]->dok_exit_clearance,
+				'dok_resign_letter' => $result[0]->dok_resign_letter,
 				'project' => $this->Project_model->read_project_information($result[0]->project_id),
 				// 'sub_project' => $this->Project_model->read_single_subproject($result[0]->sub_project),
 				// 'department' => $this->Department_model->read_department_information($result[0]->department),
@@ -330,12 +313,7 @@ class Employee_resign_aphrd extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		if($idsubmit=='$'){
-			$this->load->view('admin/employees/dialog_resign_approve_hrd', $data);
-		} else {
-			$this->load->view('admin/employees/dialog_resign_cancel_hrd', $data);
-		}
-
+		$this->load->view('admin/employees/dialog_resign_cancel', $data);
 	}
 
 	public function read_document() {
@@ -411,52 +389,112 @@ class Employee_resign_aphrd extends MY_Controller {
 
 		if($this->input->post('edit_type')=='company') {
 		$id = $this->uri->segment(4);
-		$cancel = $this->uri->segment(5);
 				
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-			if($cancel=='YES'){
+		// 			if ($_FILES['dok_exitc']['size'] == 0){
+		// 			 	$Return['error'] = "Dokumen Exit Clearance kosong...!";
+		// 			} else if ($_FILES['dok_sresign']['size'] == 0){
+		// 			 	$Return['error'] = $this->lang->line('xin_employee_error_sresign');
+		// 			}
 
-				$data_up = array(
-					// 'migrasi' => '1',
-					'cancel_resign_stat' =>  1,
-					'cancel_date' => date("Y-m-d h:i:s"),
-					'cancel_ket' => 'REVISI DOKUMEN PENDUKUNG',
-					'status_employee' => 0, //0 = resign, 1 = aktif
-					'user_role_id' => 2,
+		if ($_FILES['dok_exitc']['size'] != 0) {
 
-				);
-			} else {
-				$data_up = array(
-					// 'migrasi' => '1',
-					'approve_resignhrd' =>  $session['user_id'],
-					'approve_resignhrd_on' => date("Y-m-d h:i:s"),
-					'status_employee' => 0, //0 = resign, 1 = aktif
-					'user_role_id' => 9,
+					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
+						//checking image type
+						$alloweda =  array('png','jpg','jpeg','pdf');
+						$filenamea = $_FILES['dok_exitc']['name'];
+						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
+						
+						if(in_array($exta,$alloweda)){
+							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
+							$documentda = "uploads/document/";
+							// basename() may prevent filesystem traversal attacks;
+							// further validation/sanitation of the filename may be appropriate
+							$name = basename($_FILES["dok_exitc"]["name"]);
+							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
+							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
+							$fnameExit = $newfilenamea;
+						} else {
+							$fnameExit = null;
+							// $Return['error'] = $this->lang->line('xin_employee_document_file_type');
+						}
+					} else {
+					$fnameExit = null;
+					// $Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
+					}
 
-				);
-			}
-
+			$data_up = array(
+									'dok_exit_clearance' => $fnameExit,
+									'cancel_resign_stat' =>  0
+			);
 
 			$result = $this->Employees_model->update_resign_apnae($data_up,$id);
 
-		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
-		
-		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_success_update_company');
-		} else {
-			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+			if($Return['error']!='') {
+	       		$this->output($Return);
+	    	}
+			
+			if ($result == TRUE) {
+						$Return['result'] = "Revisi Karyawan Resign sudah dibuat.";
+			} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+			}
 		}
 
-		$this->output($Return);
-		exit;
+
+		if ($_FILES['dok_sresign']['size'] != 0) {
+
+							if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
+								//checking image type
+								$allowedb =  array('png','jpg','jpeg','pdf');
+								$filenameb = $_FILES['dok_sresign']['name'];
+								$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
+								
+								if(in_array($extb,$allowedb)){
+									$tmp_nameb = $_FILES["dok_sresign"]["tmp_name"];
+									$documentdb = "uploads/document/";
+									// basename() may prevent filesystem traversal attacks;
+									// further validation/sanitation of the filename may be appropriate
+									$name = basename($_FILES["dok_sresign"]["name"]);
+									$newfilenameb = 'document_srs_'.round(microtime(true)).'.'.$extb;
+									move_uploaded_file($tmp_nameb, $documentdb.$newfilenameb);
+									$fname_sresign = $newfilenameb;
+								} else {
+									$fname_sresign = null;
+									// $Return['error'] = $this->lang->line('xin_employee_document_file_type');
+								}
+							} else {
+							$fname_sresign = null;
+							// $Return['error'] = "ERROR Dokumen Resign Kosong";
+							}
+							
+					$data_up = array(
+											'dok_resign_letter' => $fname_sresign,
+											'cancel_resign_stat' =>  0
+					);
+
+					$result = $this->Employees_model->update_resign_apnae($data_up,$id);
+
+				if($Return['error']!='') {
+		       		$this->output($Return);
+		    	}
+				
+				if ($result == TRUE) {
+						$Return['result'] = "Revisi Karyawan Resign sudah dibuat.";
+				} else {
+						$Return['error'] = $this->lang->line('xin_error_msg');
+				}
+		}
+
+
+						$this->output($Return);
+						exit;
+
 		}
 	}
-
 	
 	public function delete() {
 		
@@ -478,6 +516,7 @@ class Employee_resign_aphrd extends MY_Controller {
 			$this->output($Return);
 		}
 	}
+
 	public function delete_document() {
 		
 		if($this->input->post('is_ajax')==2) {

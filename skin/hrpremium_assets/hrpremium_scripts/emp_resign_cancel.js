@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/resign_list_cancel/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -42,23 +42,6 @@ $(document).ready(function() {
 	});
 	
 	// edit
-	// $('.edit-modal-data').on('show.bs.modal', function (event) {
-	// 	var button = $(event.relatedTarget);
-	// 	var company_id = button.data('company_id');
-	// 	var modal = $(this);
-	// $.ajax({
-	// 	url : base_url+"/read/",
-	// 	type: "GET",
-	// 	data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
-	// 	success: function (response) {
-	// 		if(response) {
-	// 			$("#ajax_modal").html(response);
-	// 		}
-	// 	}
-	// 	});
-	// });
-
-	// edit
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var company_id = button.data('company_id');
@@ -75,23 +58,6 @@ $(document).ready(function() {
 		});
 	});
 	
-		// edit
-	// $('.edit2-modal-data').on('show.bs.modal', function (event) {
-	// 	var button = $(event.relatedTarget);
-	// 	var company_id = button.data('company_id');
-	// 	var modal = $(this);
-	// $.ajax({
-	// 	url : base_url+"/read/",
-	// 	type: "GET",
-	// 	data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
-	// 	success: function (response) {
-	// 		if(response) {
-	// 			$("#ajax_modal").html(response);
-	// 		}
-	// 	}
-	// 	});
-	// });
-
 	// view
 	$('.view-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
@@ -100,7 +66,7 @@ $(document).ready(function() {
 	$.ajax({
 		url : base_url+"/read/",
 		type: "GET",
-		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+		data: 'jd=1&is_ajax=1&mode=modal&data=view_company&company_id='+company_id,
 		success: function (response) {
 			if(response) {
 				$("#ajax_modal_view").html(response);

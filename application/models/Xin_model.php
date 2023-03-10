@@ -1577,6 +1577,18 @@ class Xin_model extends CI_Model {
   	  return $query->num_rows();
 	}
 
+	public function count_resign_cancel()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ('NULL','0')
+		AND approve_resignnae NOT IN ('NULL','0')
+		AND approve_resignnom NOT IN ('NULL','0')
+		AND approve_resignhrd IS NULL
+	  	AND cancel_resign_stat = 1");
+  	  return $query->num_rows();
+	}
+
 	public function count_approve_nae()
 	{
 	  $query = $this->db->query("SELECT *
@@ -1606,7 +1618,8 @@ class Xin_model extends CI_Model {
 		WHERE request_resign_by NOT IN ('NULL','0')
 		AND approve_resignnae NOT IN ('NULL','0')
 		AND approve_resignnom NOT IN ('NULL','0')
-		AND approve_resignhrd IS NULL");
+		AND approve_resignhrd IS NULL
+	  	AND cancel_resign_stat = 0");
   	  return $query->num_rows();
 	}
 

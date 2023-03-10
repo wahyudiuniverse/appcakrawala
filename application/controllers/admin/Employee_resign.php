@@ -315,7 +315,7 @@ class Employee_resign extends MY_Controller {
 				
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('png','jpg','jpeg','pdf');
+						$alloweda =  array('pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
@@ -338,7 +338,7 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
 						//checking image type
-						$allowedb =  array('png','jpg','jpeg','pdf');
+						$allowedb =  array('pdf');
 						$filenameb = $_FILES['dok_sresign']['name'];
 						$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
 						
@@ -361,7 +361,7 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sover']['tmp_name'])) {
 						//checking image type
-						$allowedc =  array('png','jpg','jpeg','pdf');
+						$allowedc =  array('pdf');
 						$filenamec = $_FILES['dok_sover']['name'];
 						$extc = pathinfo($filenamec, PATHINFO_EXTENSION);
 						
@@ -461,7 +461,7 @@ class Employee_resign extends MY_Controller {
 				
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$alloweda =  array('pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
@@ -484,7 +484,7 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
 						//checking image type
-						$allowedb =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$allowedb =  array('pdf');
 						$filenameb = $_FILES['dok_sresign']['name'];
 						$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
 						
@@ -580,7 +580,7 @@ class Employee_resign extends MY_Controller {
 				
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$alloweda =  array('pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
@@ -673,7 +673,7 @@ class Employee_resign extends MY_Controller {
 				
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+						$alloweda =  array('pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						

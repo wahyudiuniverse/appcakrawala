@@ -95,6 +95,22 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
+	public function get_monitoring_rsign_cancel() {
+
+		$sql = 'SELECT *
+		FROM xin_employees
+		WHERE request_resign_by NOT IN ("NULL","0")	
+		AND approve_resignnae NOT IN ("NULL","0")
+		AND approve_resignnom NOT IN ("NULL","0")
+		AND approve_resignhrd IS NULL
+		AND cancel_resign_stat = 1
+		ORDER BY request_resign_date DESC;';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
 	public function get_monitoring_rsign_nae() {
 
 		$sql = 'SELECT *
@@ -148,6 +164,7 @@ class Employees_model extends CI_Model {
 		AND approve_resignnae NOT IN ("NULL","0")
 		AND approve_resignnom NOT IN ("NULL","0")
 		AND approve_resignhrd IS NULL
+		AND cancel_resign_stat = 0
 		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

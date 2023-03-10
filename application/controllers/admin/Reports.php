@@ -531,10 +531,10 @@ class Reports extends MY_Controller
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
 				} else if ($r->status_resign==3) {
-
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+				} else if($r->status_resign==4) {
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
 				} else {
-
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
 				}
 
@@ -795,10 +795,10 @@ class Reports extends MY_Controller
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
 				} else if ($r->status_resign==3) {
-
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+				} else if($r->status_resign==4) {
+					$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
 				} else {
-
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
 				}
 
@@ -1251,6 +1251,59 @@ class Reports extends MY_Controller
 		}
 	}
 
+	// reports > employee attendance
+	public function report_order() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_order_report').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_order_report');
+		$data['path_url'] = 'reports_order';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		if(in_array('139',$role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+		if(in_array('114',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employee_order", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// reports > employee attendance
+	public function report_resume() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_order_resume').' | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_order_resume');
+		$data['path_url'] = 'reports_order_resume';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		if(in_array('139',$role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+		if(in_array('114',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employee_order_resume", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 
 	// daily attendance list > timesheet
     public function empdtwise_attendance_list()
@@ -1340,6 +1393,184 @@ class Reports extends MY_Controller
     }
 
 	
+	// daily attendance list > timesheet
+    public function empdtwise_order()
+    {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/employee_order", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		
+		$company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(5);
+		$sub_id = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
+
+		if($company_id==0 || is_null($company_id)){
+			$employee = $this->Reports_model->report_order();
+		} else {
+			$employee = $this->Reports_model->report_order_filter($company_id,$project_id,$sub_id,$start_date,$end_date);
+		}
+
+		// $employee = $this->Employees_model->get_employees();
+
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+ 		foreach($employee->result() as $r) {
+
+			$emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			if(!is_null($emp)){
+				$fullname = $emp[0]->first_name;
+			} else {
+				$fullname = '--';	
+			}
+
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
+
+			$cust = $this->Customers_model->read_single_customer($r->customer_id);
+			if(!is_null($cust)){
+				$nama_toko = $cust[0]->customer_name;
+			} else {
+				$nama_toko = '--';	
+			}
+
+			// if(!is_null($r->date_phone)){
+
+			// } else {
+
+			// }
+
+			$data[] = array (
+				$r->employee_id,
+				$fullname,
+				$nama_toko,
+				$r->address,
+				$r->city,
+				$r->kec,
+				$r->desa,
+				$r->material_id,
+				$r->nama_material,
+				$r->order_date,
+				$r->qty,
+				$r->price,
+				$r->total
+			);
+		}
+
+
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $employee->num_rows(),
+			 "recordsFiltered" => $employee->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+
+    }
+
+	// daily attendance list > timesheet
+    public function empdtwise_order_resume()
+    {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/employee_order_resume", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		
+		$company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(5);
+		$sub_id = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
+
+		if($company_id==0 || is_null($company_id)){
+			$employee = $this->Reports_model->report_order_resume();
+		} else {
+			$employee = $this->Reports_model->report_order_resume_filter($company_id,$project_id,$sub_id,$start_date,$end_date);
+		}
+
+		// $employee = $this->Employees_model->get_employees();
+
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+ 		foreach($employee->result() as $r) {
+
+			// $emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			// if(!is_null($emp)){
+			// 	$fullname = $emp[0]->first_name;
+			// } else {
+			// 	$fullname = '--';	
+			// }
+
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
+
+			// $cust = $this->Customers_model->read_single_customer($r->customer_id);
+			// if(!is_null($cust)){
+			// 	$nama_toko = $cust[0]->customer_name;
+			// } else {
+			// 	$nama_toko = '--';	
+			// }
+
+			// if(!is_null($r->date_phone)){
+
+			// } else {
+
+			// }
+
+			$data[] = array (
+				$r->emp_id,
+				'Fullname',
+				$r->count_call,
+				$r->count_ec,
+				$r->qty_renceng,
+				'Rp. 10.000;',
+				$r->total
+			);
+		}
+
+
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $employee->num_rows(),
+			 "recordsFiltered" => $employee->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+
+    }
+
 	 // get location > departments
 	public function get_company_project() {
 
@@ -1383,25 +1614,6 @@ class Reports extends MY_Controller
 	}
 
 
-	// reports > employee training
-	public function employee_training() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_hr_reports_training').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_training');
-		$data['path_url'] = 'reports_employee_training';
-		$data['get_all_companies'] = $this->Xin_model->get_companies();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('113',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/employee_training", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
 	
 	// Validate and add info in database
 	public function payslip_report() {
@@ -1506,82 +1718,7 @@ class Reports extends MY_Controller
 	  exit();
      }
 	 
-	public function task_list()
-     {
 
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/reports/tasks", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-		
-		$taskId = $this->uri->segment(4);
-		$taskStatus = $this->uri->segment(5);
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		if($user_info[0]->user_role_id==1){
-			$tasks = $this->Reports_model->get_task_list($taskId,$taskStatus);
-		} else {
-			$tasks = $this->Timesheet_model->get_employee_tasks($session['user_id']);
-		}		
-		$data = array();
-
-        foreach($tasks->result() as $r) {
-			 			  
-		// get start date
-		$start_date = $this->Xin_model->set_date_format($r->start_date);
-		// get end date
-		$end_date = $this->Xin_model->set_date_format($r->end_date);
-						
-		//status
-		if($r->task_status == 0) {
-			$status = $this->lang->line('xin_not_started');
-		} else if($r->task_status ==1){
-			$status = $this->lang->line('xin_in_progress');
-		} else if($r->task_status ==2){
-			$status = $this->lang->line('xin_completed');
-		} else {
-			$status = $this->lang->line('xin_deffered');
-		}
-		
-		//assigned user
-		if($r->assigned_to == '') {
-			$ol = $this->lang->line('xin_not_assigned');
-		} else {
-			$ol = '<ol class="nl">';
-			foreach(explode(',',$r->assigned_to) as $desig_id) {
-				$assigned_to = $this->Xin_model->read_user_info($desig_id);
-				if(!is_null($assigned_to)){
-					
-				$assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
-				 $ol .= '<li>'.$assigned_name.'</li>';
-			 }
-		}
-		$ol .= '</ol>';
-		}
-		// task category
-		$task_catname = $r->task_name;
-		$data[] = array(
-			$task_catname,$start_date,$end_date,$ol,$status,
-		);
-      }
-
-	  $output = array(
-		   "draw" => $draw,
-			 "recordsTotal" => $tasks->num_rows(),
-			 "recordsFiltered" => $tasks->num_rows(),
-			 "data" => $data
-		);
-	  echo json_encode($output);
-	  exit();
-     }
-	 
-	 
 	public function project_list() {
 
 		$data['title'] = $this->Xin_model->site_title();

@@ -422,7 +422,7 @@ class Skk extends MY_Controller {
 				}
 
 				if($eskk[0]->sign_company==2){
-					$logo_cover = 'tcpdf_logo.jpg';
+					$logo_cover = 'tcpdf_logo_sc.png';
 					$header_namae = 'PT. Siprama Cakrawala';
 				} else {
 					$logo_cover = 'tcpdf_logo_kac.png';

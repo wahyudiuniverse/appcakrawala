@@ -10,7 +10,7 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Customerservices extends MY_Controller
+class Hotspot extends MY_Controller
 {
 
    /*Function to set JSON output*/
@@ -53,9 +53,9 @@ class Customerservices extends MY_Controller
 		}
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data['title'] = $this->lang->line('xin_whatsapp_blast').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_whatsapp_blast');
-		$data['path_url'] = 'cs_karyawan';
+		$data['title'] = 'Hotspot | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Hotspot';
+		$data['path_url'] = 'access_hotspot';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
 		if(in_array('139',$role_resources_ids)) {
@@ -66,7 +66,7 @@ class Customerservices extends MY_Controller
 
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('479',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/cs_karyawan", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/reports/access_hotspot", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -277,7 +277,7 @@ class Customerservices extends MY_Controller
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/reports/cs_karyawan", $data);
+			$this->load->view("admin/reports/access_hotspot", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -293,17 +293,17 @@ class Customerservices extends MY_Controller
 		$status_resign = $this->uri->segment(8);
 	
 
-		if($company_id==0 || is_null($company_id)){
-			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
-		}else{
-			$employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
-		}
+		// if($company_id==0 || is_null($company_id)){
+			$employee = $this->Reports_model->filter_employees_hotspot($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+		// }else{
+		// 	$employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+		// }
 		
 		$data = array();
 
         foreach($employee->result() as $r) {		  
 
-			$full_name = $r->first_name;
+			$full_name = $r->first_name.' '.$r->last_name;
 			$company = $this->Xin_model->read_company_info($r->company_id);
 			if(!is_null($company)){
 				$comp_name = $company[0]->name;
@@ -434,8 +434,7 @@ class Customerservices extends MY_Controller
 				$designation_name,
 				$project_name,
 				$subproject_name,
-				$this->Xin_model->tgl_indo($dob),
-				$pin
+				$this->Xin_model->tgl_indo($dob)
 			);
       
 	  }

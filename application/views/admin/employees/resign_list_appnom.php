@@ -7,6 +7,7 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
+<?php $count_cancel = $this->Xin_model->count_resign_cancel();?>
 <?php $count_appnae = $this->Xin_model->count_approve_nae();?>
 <?php $count_appnom = $this->Xin_model->count_approve_nom();?>
 <?php $count_apphrd = $this->Xin_model->count_approve_hrd();?>
@@ -19,6 +20,11 @@
       </a> </li>
     <?php } ?> 
 
+    <?php if(in_array('492',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_cancelled/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancelled <?php echo '('.$count_cancel.')';?>
+      </a> </li>
+    <?php } ?>
+    
     <?php if(in_array('492',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_resign_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_appnae.')';?>
       </a> </li>
