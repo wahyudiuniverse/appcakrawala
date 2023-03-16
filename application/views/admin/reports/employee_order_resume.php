@@ -72,12 +72,12 @@
           </div>
 
           <div class="col-md mb-3">
-              <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
+              <label class="form-label">Start Date</label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
           </div>
             
             <div class="col-md mb-3">
-              <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
+              <label class="form-label">End Date</label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>
 
@@ -108,6 +108,8 @@
               <tr>
                 <th style="width:50px;">NIP</th>
                 <th style="width:100px;">FULLNAME</th>
+                <th style="width:100px;">START DATE</th>
+                <th style="width:100px;">END DATE</th>
                 <th style="width:100px;">CALL</th>
                 <th style="width:100px;">EC</th>
                 <th style="width:100px;">QTY (Renceng)</th>

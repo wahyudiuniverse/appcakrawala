@@ -433,7 +433,7 @@ class Skk extends MY_Controller {
 				$waktu_kerja = $eskk[0]->waktu_kerja;
 				$qr_code = $eskk[0]->qr_code;
 				$ktp_no = $employee[0]->ktp_no;
-				$address = $employee[0]->address;
+				$address = $employee[0]->alamat_ktp;
 				$createdon = $this->Xin_model->tgl_indo(substr($eskk[0]->createdon,0,10));
 				// $allow_rent = $eslip[0]->allow_rent;
 				// $allow_comunication = $eslip[0]->allow_comunication;

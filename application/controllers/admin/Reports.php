@@ -736,12 +736,18 @@ class Reports extends MY_Controller
 				$kontak = '--';	
 			}
 
+			if(!is_null($r->alamat_ktp)){
+				$alamat_ktp = $r->alamat_ktp;
+			} else {
+				$alamat_ktp = '--';	
+			}
+
 			if(!is_null($r->address)){
 				$alamat = $r->address;
 			} else {
 				$alamat = '--';	
 			}
-
+			
 			if(!is_null($r->bpjs_tk_no)){
 				$bpjstk = $r->bpjs_tk_no;
 			} else {
@@ -826,6 +832,7 @@ class Reports extends MY_Controller
 				$project_name,
 				$subproject_name,
 				$penempatan, // AREA
+				$r->region,
 				$tempat_lahir, // TEMPAT LAHIR
 				$dob,
 				$doj,
@@ -835,6 +842,7 @@ class Reports extends MY_Controller
 				$agama, // agama
 				$email,
 				$kontak,
+				$alamat_ktp,
 				$alamat,
 				"'".$kk,
 				"'".$ktp,
@@ -1464,6 +1472,10 @@ class Reports extends MY_Controller
 				$r->city,
 				$r->kec,
 				$r->desa,
+
+				$r->owner_name,
+				$r->no_contact,
+
 				$r->material_id,
 				$r->nama_material,
 				$r->order_date,
@@ -1521,12 +1533,12 @@ class Reports extends MY_Controller
 		// for($i=0 ; $i < count($attend); $i++) {
  		foreach($employee->result() as $r) {
 
-			// $emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
-			// if(!is_null($emp)){
-			// 	$fullname = $emp[0]->first_name;
-			// } else {
-			// 	$fullname = '--';	
-			// }
+			$emp = $this->Employees_model->read_employee_info_by_nik($r->emp_id);
+			if(!is_null($emp)){
+				$fullname = $emp[0]->first_name;
+			} else {
+				$fullname = '--';	
+			}
 
 			// $project = $this->Project_model->read_single_project($r->project_id);
 			// if(!is_null($project)){
@@ -1550,7 +1562,9 @@ class Reports extends MY_Controller
 
 			$data[] = array (
 				$r->emp_id,
-				'Fullname',
+				$fullname,
+				$r->sdate,
+				$r->ndate,
 				$r->count_call,
 				$r->count_ec,
 				$r->qty_renceng,

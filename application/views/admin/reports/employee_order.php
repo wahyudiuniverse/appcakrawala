@@ -113,6 +113,8 @@
                 <th style="width:100px;">Kota/Kab</th>
                 <th style="width:100px;">Kecamatan</th>
                 <th style="width:100px;">Desa/Kel</th>
+                <th style="width:100px;">Pemilik Toko</th>
+                <th style="width:100px;">Telp. Toko</th>
                 <th style="width:40px;">Material ID</th>
                 <th style="width:40px;">SKU</th>
                 <th style="width:40px;">Tanggal Order</th>

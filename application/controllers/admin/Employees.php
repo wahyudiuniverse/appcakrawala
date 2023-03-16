@@ -581,7 +581,7 @@ class Employees extends MY_Controller {
 			foreach($employee->result() as $r) {
 		
 				// user full name 
-				$full_name = $r->first_name.' '.$r->last_name;
+				$full_name = $r->first_name;
 				$area = $r->penempatan;
 
 				// get company
@@ -608,12 +608,12 @@ class Employees extends MY_Controller {
 				}
 
 			// user role
-			$role = $this->Xin_model->read_user_role_info($r->user_role_id);
-			if(!is_null($role)){
-				$role_name = $role[0]->role_name;
-			} else {
-				$role_name = '--';	
-			}
+			// $role = $this->Xin_model->read_user_role_info($r->user_role_id);
+			// if(!is_null($role)){
+			// 	$role_name = $role[0]->role_name;
+			// } else {
+			// 	$role_name = '--';	
+			// }
 
 			$tgllahir = $this->Xin_model->tgl_indo($r->date_of_birth);
 
@@ -691,11 +691,11 @@ class Employees extends MY_Controller {
 			// 	  <div class="text-muted small text-truncate">'.$this->lang->line('xin_location').': </div>
 			// 	  <div class="text-muted small text-truncate">'.$this->lang->line('left_department').': '.$department_name.'</div>
 			// 	</div>
-			//   </div>';			
+			//   </div>';
 			$contact_info = '<div class="text-muted" data-state="primary" data-toggle="tooltip" data-placement="top" title="'.$this->lang->line('xin_contact_number').'"></div> '.$r->contact_no;
 			
 			
-			$role_status = $role_name;
+			// $role_status = $role_name;
 			$data[] = array(
 				$r->employee_id,
 				$r->ktp_no,
@@ -705,7 +705,7 @@ class Employees extends MY_Controller {
 				$area,
 				$contact_info,
 				$tgllahir,
-				$role_name,
+				$r->user_role_id,
 			);
       
 	  }

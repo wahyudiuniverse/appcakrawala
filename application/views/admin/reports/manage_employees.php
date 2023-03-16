@@ -39,7 +39,7 @@
           </select>
         </div>
 
-        <div class="col-md mb-3">
+        <div class="col-md mb-3" hidden>
           <div class="form-group">
             <label class="form-label"><?php echo $this->lang->line('xin_employee_department');?></label>
             <select disabled="disabled" class="form-control" name="department_id" id="aj_department" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_department');?>">
@@ -112,7 +112,8 @@
                 <th style="width: 200px;"><?php echo $this->lang->line('left_designation');?></th>
                 <th style="width: 120px;"><?php echo $this->lang->line('left_projects');?></th>
                 <th style="width: 120px;"><?php echo $this->lang->line('left_sub_projects');?></th>                
-                <th style="width: 80px;">Area</th>
+                <th style="width: 80px;">Area</th>               
+                <th style="width: 80px;">Region</th>
                 <th style="width: 120px;">Tempat Lahir</th>                
                 <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_dob');?></th>                
                 <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_doj');?></th>                
@@ -122,7 +123,8 @@
                 <th style="width: 50px;">Agama</th>                
                 <th style="width: 160px;"><?php echo $this->lang->line('dashboard_email');?></th>
                 <th style="width: 100px;"><?php echo $this->lang->line('xin_contact_number');?></th>
-                <th style="width: 400px;"><?php echo $this->lang->line('xin_address');?></th>                
+                <th style="width: 400px;"><?php echo $this->lang->line('xin_address');?></th>    
+                <th style="width: 400px;">Alamat Domisili</th>                
                 <th style="width: 110px;"><?php echo $this->lang->line('xin_kk');?></th>
                 <th style="width: 110px;"><?php echo $this->lang->line('xin_ktp');?></th>
                 <th style="width: 150px;"><?php echo $this->lang->line('xin_npwp');?></th>
