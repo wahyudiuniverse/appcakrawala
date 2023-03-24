@@ -208,8 +208,8 @@ dataSource: [
 	{ 
 		id: "", 
 		class: "role-checkbox-modal custom-control-input", 
-		text: "<?php echo $this->lang->line('xin_hrpremium_custom_fields');?>",  
-		add_info: "<?php echo $this->lang->line('xin_add_edit_view_delete_role_info');?>", 
+		text: "<?php echo $this->lang->line('xin_hotspot');?>",  
+		add_info: "<?php echo $this->lang->line('xin_hotspot');?>", 
 		value: "393",  
 		items: [
 		{ 
@@ -227,22 +227,6 @@ dataSource: [
 			add_info: "<?php echo $this->lang->line('xin_role_add');?>", 
 			value: "394",
 			check: "<?php if(isset($_GET['role_id'])) { if(in_array('394',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
-		},
-		{ 
-			id: "", 
-			class: "role-checkbox-modal custom-control-input", 
-			text: "<?php echo $this->lang->line('xin_role_edit');?>",  
-			add_info: "<?php echo $this->lang->line('xin_role_edit');?>", 
-			value: "395",
-			check: "<?php if(isset($_GET['role_id'])) { if(in_array('395',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
-		},
-		{ 
-			id: "", 
-			class: "role-checkbox-modal custom-control-input", 
-			text: "<?php echo $this->lang->line('xin_role_delete');?>",  
-			add_info: "<?php echo $this->lang->line('xin_role_delete');?>", 
-			value: "396",
-			check: "<?php if(isset($_GET['role_id'])) { if(in_array('396',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 		}
 		]
 	},

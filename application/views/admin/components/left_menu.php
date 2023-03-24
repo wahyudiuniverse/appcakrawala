@@ -86,8 +86,10 @@
           </a>             
         </li>
 
-    <!-- profile -->
-
+    <!-- hotspot -->
+    <?php 
+    if (in_array('393',$role_resources_ids)) {
+    ?>
         <li class="sidenav-item <?php if(!empty($arr_mod['hotspot_active']))echo $arr_mod['hotspot_active'];?>"> 
           <a href="<?php echo site_url('admin/hotspot/');?>" class="sidenav-link"> 
             <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -95,6 +97,11 @@
             <div>Access Hotspot</div>
           </a>             
         </li>
+    <?php 
+    } 
+    ?>
+
+
 
 
     <?php 

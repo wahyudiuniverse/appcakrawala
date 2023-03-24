@@ -3145,6 +3145,8 @@ $lang['xin_resign_cancel'] = 'Cancel';
 $lang['xin_order_report'] = 'Report Order';
 $lang['xin_order_resume'] = 'Resume Order';
 
+$lang['xin_hotspot'] = 'Access Hotspot';
+
 ///////////////////////////////////////////////// end hrpremium v2.0.1
 /* End of file hrpremium_lang.php */
 /* Location: ./system/language/english/hrpremium_lang.php */
