@@ -48,7 +48,7 @@ class Employee_resign_cancelled extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
 		$data['path_url'] = 'emp_resign_cancel';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('492',$role_resources_ids)) {
+		if(in_array('506',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/employees/resign_list_cancelled", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -299,7 +299,7 @@ class Employee_resign_cancelled extends MY_Controller {
 				'contact_no' => $result[0]->contact_no,
 				// 'email' => $result[0]->migrasi,
 				// 'logo' => $result[0]->tgl_migrasi,
-				'address' => $result[0]->address,
+				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->request_resign_by),
 				'request_resign_date' => $result[0]->request_resign_date,

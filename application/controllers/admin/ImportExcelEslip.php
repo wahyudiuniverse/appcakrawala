@@ -815,15 +815,22 @@ class ImportExcelEslip extends MY_Controller
 			// $bMargi = $this->getBreakMargin();
 
 
+				if($employee[0]->company_id == '2'){
+					$company_name = 'PT. SIPRAMA CAKRAWALA';
+					$logohead			= 'tcpdf_logo_sc.png';
+				} else {
+					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
+					$logohead			= 'tcpdf_logo_kac.png';
+				}
 			// set document information
 			$pdf->SetCreator('PT Siprama Cakrawala');
 			$pdf->SetAuthor('PT Siprama Cakrawala');
 			// $baseurl=base_url();
 
-			$header_namae = 'PT. Siprama Cakrawala';
+			$header_namae = $company_name;
 			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
 
-			$pdf->SetHeaderData(PDF_HEADER_LOGO, 35, $header_namae, $header_string);
+			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
 			
 			$pdf->setFooterData(array(0,64,0), array(0,64,128));
 		
@@ -1883,16 +1890,22 @@ class ImportExcelEslip extends MY_Controller
 			// $bMargin = $this->getBreakMargin();
 			// $bMargi = $this->getBreakMargin();
 
-
+				if($employee[0]->company_id == '2'){
+					$company_name = 'PT. SIPRAMA CAKRAWALA';
+					$logohead			= 'tcpdf_logo_sc.png';
+				} else {
+					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
+					$logohead			= 'tcpdf_logo_kac.png';
+				}
 			// set document information
 			$pdf->SetCreator('PT Siprama Cakrawala');
 			$pdf->SetAuthor('PT Siprama Cakrawala');
 			// $baseurl=base_url();
 
-			$header_namae = 'PT. Siprama Cakrawala';
+			$header_namae = $company_name;
 			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
 
-			$pdf->SetHeaderData(PDF_HEADER_LOGO, 35, $header_namae, $header_string);
+			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
 			
 			$pdf->setFooterData(array(0,64,0), array(0,64,128));
 		

@@ -579,10 +579,10 @@ WHERE emp.sub_project_id = '$sub_id'");
 
 		return $query = $this->db->query("
 
-			SELECT distinct(cio.employee_id) AS emp_id, CURDATE() AS sdate, CURDATE() AS ndate, COUNT(cio.customer_id) count_call, morder.count_ec, morder.qty_renceng, morder.total
+SELECT distinct(cio.employee_id) AS emp_id, emp.penempatan, CURDATE() AS sdate, CURDATE() AS ndate, COUNT(cio.customer_id) count_call, morder.count_ec, morder.qty_renceng, morder.total
 FROM xin_trx_cio cio
 LEFT JOIN xin_employees emp ON emp.employee_id = cio.employee_id
-LEFT JOIN (SELECT DISTINCT(employee_id) emp_order, COUNT(customer_id) count_ec, SUM(qty) AS qty_renceng, SUM(total) AS total
+LEFT JOIN (SELECT DISTINCT(employee_id) emp_order, COUNT(DISTINCT customer_id) count_ec, SUM(qty) AS qty_renceng, SUM(total) AS total
 	FROM xin_mobile_order 
 	WHERE DATE_FORMAT(order_date, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
     GROUP BY employee_id) morder ON morder.emp_order = cio.employee_id
@@ -591,6 +591,7 @@ AND emp.sub_project_id = 151
 AND cio.c_io = 1
 AND DATE_FORMAT(cio_date, '%Y-%m-%d') BETWEEN CURDATE() AND CURDATE()
 GROUP BY cio.employee_id
+
 
 		-- 	SELECT morder.secid, 
 		-- 	morder.customer_id,cust.customer_name, cust.address, city.name as city, kec.name as kec, desa.name as desa,
@@ -615,10 +616,10 @@ GROUP BY cio.employee_id
 
 		return $query = $this->db->query("
 
-			SELECT distinct(cio.employee_id) AS emp_id, '$start_date' AS sdate, '$end_date' AS ndate, COUNT(cio.customer_id) count_call, morder.count_ec, morder.qty_renceng, morder.total
+SELECT distinct(cio.employee_id) AS emp_id, emp.penempatan, '$start_date' AS sdate, '$end_date' AS ndate, COUNT(cio.customer_id) count_call, morder.count_ec, morder.qty_renceng, morder.total
 FROM xin_trx_cio cio
 LEFT JOIN xin_employees emp ON emp.employee_id = cio.employee_id
-LEFT JOIN (SELECT DISTINCT(employee_id) emp_order, COUNT(customer_id) count_ec, SUM(qty) AS qty_renceng, SUM(total) AS total
+LEFT JOIN (SELECT DISTINCT(employee_id) emp_order, COUNT(DISTINCT customer_id) count_ec, SUM(qty) AS qty_renceng, SUM(total) AS total
 	FROM xin_mobile_order 
 	WHERE DATE_FORMAT(order_date, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
     GROUP BY employee_id) morder ON morder.emp_order = cio.employee_id

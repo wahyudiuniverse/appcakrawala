@@ -228,7 +228,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$address;?></label>
+          <label for="plant"><?php echo ': '.$alamat_ktp;?></label>
         </div>
       </div>
     </div>

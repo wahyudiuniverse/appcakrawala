@@ -33,16 +33,6 @@
         </div>
 
         <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_mobile_type');?></label>
-          <select class=" form-control" name="usertype" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_mobile_type');?>">
-            <option value=""></option>
-            <?php foreach($all_usermobile_type as $emp) {?>
-            <option value="<?php echo $emp->secid?>"><?php echo $emp->user_type_name?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="form-group">
           <label for="first_name"><?php echo $this->lang->line('xin_project');?></label>
           <select class=" form-control" name="project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_project');?>">
             <option value=""></option>
@@ -86,7 +76,7 @@
 
         <div class="form-group">
           <label for="first_name"><?php echo $this->lang->line('xin_deviceid');?></label>
-          <input type="text" class="form-control" placeholder="Device ID" name="device_id"/>
+          <input type="text" class="form-control" placeholder="default is 0" value="0" name="device_id"/>
         </div>
 
 

@@ -299,7 +299,7 @@ class Employee_resign_apnae extends MY_Controller {
 				'contact_no' => $result[0]->contact_no,
 				// 'email' => $result[0]->migrasi,
 				// 'logo' => $result[0]->tgl_migrasi,
-				'address' => $result[0]->address,
+				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->request_resign_by),
 				'request_resign_date' => $result[0]->request_resign_date,

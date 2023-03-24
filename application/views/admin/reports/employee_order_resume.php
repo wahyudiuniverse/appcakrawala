@@ -107,7 +107,8 @@
               </tr>
               <tr>
                 <th style="width:50px;">NIP</th>
-                <th style="width:100px;">FULLNAME</th>
+                <th style="width:200px;">FULLNAME</th>
+                <th style="width:100px;">AREA</th>
                 <th style="width:100px;">START DATE</th>
                 <th style="width:100px;">END DATE</th>
                 <th style="width:100px;">CALL</th>

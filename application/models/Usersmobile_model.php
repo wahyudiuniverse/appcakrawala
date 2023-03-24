@@ -154,7 +154,7 @@
 		
 	// Function to Delete selected record from table
 	public function delete_record($id){
-		$this->db->where('employee_id', $id);
+		$this->db->where('user_id', $id);
 		$this->db->delete('xin_user_mobile');
 		
 	}

@@ -742,12 +742,12 @@ class Reports extends MY_Controller
 				$alamat_ktp = '--';	
 			}
 
-			if(!is_null($r->address)){
-				$alamat = $r->address;
+			if(!is_null($r->alamat_domisili)){
+				$alamat_domisili = $r->alamat_domisili;
 			} else {
-				$alamat = '--';	
+				$alamat_domisili = '--';	
 			}
-			
+
 			if(!is_null($r->bpjs_tk_no)){
 				$bpjstk = $r->bpjs_tk_no;
 			} else {
@@ -843,7 +843,7 @@ class Reports extends MY_Controller
 				$email,
 				$kontak,
 				$alamat_ktp,
-				$alamat,
+				$alamat_domisili,
 				"'".$kk,
 				"'".$ktp,
 				$npwp,
@@ -1563,6 +1563,7 @@ class Reports extends MY_Controller
 			$data[] = array (
 				$r->emp_id,
 				$fullname,
+				$r->penempatan,
 				$r->sdate,
 				$r->ndate,
 				$r->count_call,

@@ -897,6 +897,14 @@ dataSource: [
 					add_info: "#", 
 					value: "494",
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('494',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+				},
+				{ 
+					id: "", 
+					class: "role-checkbox-modal custom-control-input", 
+					text: "<?php echo $this->lang->line('xin_request_resign_cancelled');?>",  
+					add_info: "#", 
+					value: "506",
+					check: "<?php if(isset($_GET['role_id'])) { if(in_array('506',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				}
 				]
 			},

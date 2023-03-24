@@ -229,7 +229,7 @@ class ImportExcelEmployees extends MY_Controller
 				$date_of_joining 		= $user[0]->date_of_joining;
 				$marital_status 		= $user[0]->marital_status;
 				$address 						= $user[0]->address;
-				$alamat_ktp					= $user[0]->alamat_ktp;
+				$alamat_domisili		= $user[0]->alamat_domisili;
 				$contact_no 				= $user[0]->contact_no;
 				$ktp_no 						= $user[0]->ktp_no;
 				$kk_no 							= $user[0]->kk_no; 
@@ -264,7 +264,7 @@ class ImportExcelEmployees extends MY_Controller
 					'date_of_joining' => $date_of_joining,
 					'marital_status' 	=> $marital_status,
 					'address' 				=> $address,
-					'alamat_ktp'			=> $alamat_ktp,
+					'alamat_domisili'	=> $alamat_domisili,
 					'contact_no' 			=> $contact_no,
 					'email' 					=> $email,
 					'kk_no' 					=> $kk_no,
@@ -350,7 +350,7 @@ class ImportExcelEmployees extends MY_Controller
 						$date_of_joining 		= $user[0]->date_of_joining;
 						$marital_status 		= $user[0]->marital_status;
 						$address 						= $user[0]->address;
-						$alamat_ktp					= $user[0]->alamat_ktp;
+						$alamat_domisili		= $user[0]->alamat_domisili;
 						$contact_no 				= $user[0]->contact_no;
 						$ktp_no 						= $user[0]->ktp_no;
 						$kk_no 							= $user[0]->kk_no; 
@@ -385,7 +385,7 @@ class ImportExcelEmployees extends MY_Controller
 							'date_of_joining' => $date_of_joining,
 							'marital_status' 	=> $marital_status,
 							'address' 				=> $address,
-							'alamat_ktp'			=> $alamat_ktp,
+							'alamat_domisili'	=> $alamat_domisili,
 							'contact_no' 			=> $contact_no,
 							'email' 					=> $email,
 							'kk_no' 					=> $kk_no,

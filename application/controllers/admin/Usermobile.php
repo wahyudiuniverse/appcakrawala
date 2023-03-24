@@ -54,7 +54,7 @@ class Usermobile extends MY_Controller
 		$data['breadcrumbs'] = $this->lang->line('xin_user_mobile');
 
 		$data['all_employees'] = $this->Xin_model->all_employees();
-		$data['all_usermobile_type'] = $this->Xin_model->get_usermobile_type();
+		// $data['all_usermobile_type'] = $this->Xin_model->get_usermobile_type();
 		$data['all_projects'] = $this->Xin_model->get_projects();
 		$data['all_area'] = $this->Xin_model->get_area();
 		$data['all_posisi'] = $this->Xin_model->get_designations();
@@ -198,7 +198,7 @@ class Usermobile extends MY_Controller
 				$edit = '';
 			}
 			if(in_array('242',$role_resources_ids)) { // delete
-				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->employee_id . '"><span class="fas fa-trash-restore"></span></button></span>';
+				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fas fa-trash-restore"></span></button></span>';
 			} else {
 				$delete = '';
 			}
@@ -234,31 +234,28 @@ class Usermobile extends MY_Controller
 		// Check validation for user input
 		$session = $this->session->userdata('username');
 		
-		// $this->form_validation->set_rules('department_name', 'Department Name', 'trim|required|xss_clean');
-		// $this->form_validation->set_rules('company_id', 'Company', 'trim|required|xss_clean');
-		/* Define return | here result is used to return user data and error for error message */
+
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		//if($this->form_validation->run() == FALSE) {
-				//$Return['error'] = 'validation error.';
-		//}
+
+
 		/* Server side PHP input validation */
-		// if($this->input->post('department_name')==='') {
-  	//       	$Return['error'] = $this->lang->line('error_department_field');
-		// } else if($this->input->post('company_id')==='') {
-		// 	$Return['error'] = $this->lang->line('error_company_field');
-		// } else if($this->input->post('location_id')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_location_field_error');
-		// } 
-		// if($Return['error']!=''){
-			
-  	//      		$this->output($Return);
-  	//   	}
+		if($this->input->post('employees')==='') {
+  	  $Return['error'] = 'Employee Kosong..!';
+		} else if($this->input->post('project')==='') {
+			$Return['error'] = 'Project Kosong..!';
+		} else if($this->input->post('area')==='') {
+			$Return['error'] = 'Area/Penempatan Kosong..!';
+		} 
+
+		if($Return['error']!='') {
+  	 	$this->output($Return);
+  	}
 	
 		$data = array(
 		'employee_id' => $this->input->post('employees'),
 		'project_id' => $this->input->post('project'),
-		'usertype_id' => $this->input->post('usertype'),
+		'usertype_id' => 1,
 		'areaid' => $this->input->post('area'),
 		'areaid_extra1' => $this->input->post('area2'),
 		'areaid_extra2' => $this->input->post('area3'),

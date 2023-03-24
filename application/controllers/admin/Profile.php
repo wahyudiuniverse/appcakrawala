@@ -112,9 +112,9 @@ class Profile extends MY_Controller {
 			'filename_rek' => $result[0]->filename_rek,
 			'pemilik_rek' => $result[0]->pemilik_rek,
 			'bank_name' => $result[0]->bank_name,
-			'address' => $result[0]->address,
-			'list_bank' => $this->Xin_model->get_bank_code(),
 			'alamat_ktp' => $result[0]->alamat_ktp,
+			'list_bank' => $this->Xin_model->get_bank_code(),
+			'alamat_domisili' => $result[0]->alamat_domisili,
 			'gender' => $result[0]->gender,
 			'ethnicity_type' => $result[0]->ethnicity_type,
 			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
@@ -218,7 +218,7 @@ class Profile extends MY_Controller {
 			 $Return['error'] = $this->lang->line('xin_employee_error_ktp');
 		} else if($this->input->post('kk_no')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
-		} else if($this->input->post('address_ktp')==='') {
+		} else if($this->input->post('alamat_ktp')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
 		} else if($this->input->post('gender')==='') {
 			 $Return['error'] = $this->lang->line('xin_employee_error_jenis_kelamin');
@@ -240,8 +240,8 @@ class Profile extends MY_Controller {
 		'ktp_no' => $this->input->post('ktp_no'),
 		'kk_no' => $this->input->post('kk_no'),
 		'npwp_no' => $this->input->post('npwp_no'),
-		'alamat_ktp' => $this->input->post('address_ktp'),
-		'address' => $this->input->post('address'),
+		'alamat_ktp' => $this->input->post('alamat_ktp'),
+		'alamat_domisili' => $this->input->post('alamat_domisili'),
 		'gender' => $this->input->post('gender'),
 		'ethnicity_type' => $this->input->post('ethnicity'),
 		'marital_status' => $this->input->post('marital_status'),
@@ -615,7 +615,7 @@ class Profile extends MY_Controller {
 		// } else if($this->input->post('kk_no')==='') {
 		// 	 $Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
 		// } else if($this->input->post('address_ktp')==='') {
-		// 	 $Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_alamat_domisili');
 		// } else if($this->input->post('gender')==='') {
 		// 	 $Return['error'] = $this->lang->line('xin_employee_error_jenis_kelamin');
 		// } else if($this->input->post('marital_status')==='') {
@@ -636,7 +636,7 @@ class Profile extends MY_Controller {
 		// 'ktp_no' => $this->input->post('ktp_no'),
 		// 'kk_no' => $this->input->post('kk_no'),
 		// 'npwp_no' => $this->input->post('npwp_no'),
-		// 'alamat_ktp' => $this->input->post('address_ktp'),
+		// 'address_domisili' => $this->input->post('address_domisili'),
 		// 'address' => $this->input->post('address'),
 		// 'gender' => $this->input->post('gender'),
 		// 'ethnicity_type' => $this->input->post('ethnicity'),

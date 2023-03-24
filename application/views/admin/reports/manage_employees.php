@@ -76,10 +76,10 @@
           <div class="form-group">
             <label class="form-label"><?php echo $this->lang->line('dashboard_xin_status');?></label>
             <select class="form-control" name="status_resign" id="aj_status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
-              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
               <option value="1">AKTIF</option>
               <option value="2">RESIGN</option>
               <option value="3">BLACKLIST</option>
+              <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
             </select>
           </div>   
         </div>

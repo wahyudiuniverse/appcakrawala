@@ -167,13 +167,13 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label class="form-label"><?php echo $this->lang->line('xin_address_1');?></label>
-                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="address_ktp" cols="30" rows="3" ><?php echo $alamat_ktp;?></textarea>
+                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_ktp" cols="30" rows="3" ><?php echo $alamat_ktp;?></textarea>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label class="form-label"><?php echo $this->lang->line('xin_address_domisili');?></label>
-                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_address_domisili');?>" name="address" cols="30" rows="3"><?php echo $address;?></textarea>
+                                  <textarea class="form-control" placeholder="<?php echo $this->lang->line('xin_address_domisili');?>" name="alamat_domisili" cols="30" rows="3"><?php echo $alamat_domisili;?></textarea>
                                 </div>
                               </div>
                             </div>

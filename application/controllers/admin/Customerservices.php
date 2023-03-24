@@ -377,11 +377,11 @@ class Customerservices extends MY_Controller
 				$kontak = '--';	
 			}
 
-			if(!is_null($r->address)){
-				$alamat = $r->address;
-			} else {
-				$alamat = '--';	
-			}
+			// if(!is_null($r->alamat_ktp)){
+			// 	$alamat = $r->alamat_ktp;
+			// } else {
+			// 	$alamat = '--';	
+			// }
 
 
 			if(!is_null($r->kk_no)){

@@ -206,9 +206,6 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
 					} 
 
-					// else if ($this->input->post('alamat_ktp')==''){
-					// 	$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
-					// } 
 
 					// else if ($this->input->post('nomor_kk')==''){
 					// 	$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
@@ -269,7 +266,7 @@ class Employee_request extends MY_Controller {
 								'tanggal_lahir' => $tanggal_lahir,
 								'contact_no' => $contact_no,
 								'nik_ktp' => $ktp_no,
-								'address' => $alamat_ktp,
+								'alamat_ktp' => $alamat_ktp,
 								'no_kk' => $nomor_kk,
 								'npwp' => $npwp,
 								'email' => $email,
@@ -330,7 +327,7 @@ class Employee_request extends MY_Controller {
 				'email' => $result[0]->migrasi,
 				'logo' => $result[0]->tgl_migrasi,
 				'contact_number' => $result[0]->nip,
-				'address' => $result[0]->address,
+				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
 				'idrequest' => $result[0]->secid,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->createdby),

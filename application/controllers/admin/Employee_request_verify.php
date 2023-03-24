@@ -267,7 +267,7 @@ class Employee_request_verify extends MY_Controller {
 				'email' => $result[0]->migrasi,
 				'logo' => $result[0]->tgl_migrasi,
 				'contact_number' => $result[0]->nip,
-				'address' => $result[0]->address,
+				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
 				'idrequest' => $result[0]->secid,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->createdby),
@@ -373,7 +373,7 @@ class Employee_request_verify extends MY_Controller {
 					$tanggal_lahir = $employee_request[0]->tanggal_lahir;
 					$contact_no = $employee_request[0]->contact_no;
 					$nik_ktp = $employee_request[0]->nik_ktp;
-					$address = $employee_request[0]->address;
+					$alamat_ktp = $employee_request[0]->alamat_ktp;
 					$no_kk = $employee_request[0]->no_kk;
 					$npwp = $employee_request[0]->npwp;
 					$email = $employee_request[0]->email;
@@ -406,7 +406,7 @@ class Employee_request_verify extends MY_Controller {
 						'designation_id' => $posisi,
 						'date_of_joining' => $doj,
 						'contact_no' => $contact_no,
-						'address' => $address,
+						'alamat_ktp' => $alamat_ktp,
 						'ktp_no' => $nik_ktp,
 						'kk_no' => $no_kk,
 						'npwp_no' => $npwp,

@@ -417,7 +417,7 @@ $leave_user = $this->Xin_model->read_user_info($eid);
                           <div class="col-md-8">
                             <div class="form-group">
                               <label for="address"><?php echo $this->lang->line('xin_employee_address');?></label>
-                              <input type="text" class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_address');?>" name="address" value="<?php echo $address;?>" />
+                              <input type="text" class="form-control" placeholder="<?php echo $this->lang->line('xin_employee_address');?>" name="address" value="<?php echo $alamat_ktp;?>" />
                             </div>
                           </div>
 
