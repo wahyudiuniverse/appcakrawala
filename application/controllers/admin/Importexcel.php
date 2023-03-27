@@ -151,7 +151,7 @@ class ImportExcel extends MY_Controller
 						'date_of_joining' => $line[13],
 						'contact_no' 			=> $line[14],
 						'email' 					=> $line[15],
-						'address' 				=> $line[16],
+						'alamat_ktp' 			=> $line[16],
 						'alamat_domisili' => $line[17],
 						'kk_no' 					=> $line[18],
 						'ktp_no' 					=> $line[19],

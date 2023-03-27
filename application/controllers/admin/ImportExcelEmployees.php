@@ -108,7 +108,7 @@ class ImportExcelEmployees extends MY_Controller
 			  $date_of_birth = $r->date_of_birth;
 			  $date_of_joining = $r->date_of_joining;
 			  $contact_no = $r->contact_no;
-			  $address = $r->address;
+			  $alamat_ktp = $r->alamat_ktp;
 			  $kk_no = $r->kk_no;
 			  $ktp_no = $r->ktp_no;
 			  $npwp_no = $r->npwp_no;
@@ -170,7 +170,7 @@ class ImportExcelEmployees extends MY_Controller
 				$date_of_birth,
 				$date_of_joining,
 				$contact_no,
-				$address,
+				$alamat_ktp,
 				$kk_no,
 				$ktp_no,
 				$npwp_no,
@@ -228,7 +228,7 @@ class ImportExcelEmployees extends MY_Controller
 				$penempatan 				= $user[0]->penempatan;
 				$date_of_joining 		= $user[0]->date_of_joining;
 				$marital_status 		= $user[0]->marital_status;
-				$address 						= $user[0]->address;
+				$alamat_ktp 				= $user[0]->alamat_ktp;
 				$alamat_domisili		= $user[0]->alamat_domisili;
 				$contact_no 				= $user[0]->contact_no;
 				$ktp_no 						= $user[0]->ktp_no;
@@ -263,7 +263,7 @@ class ImportExcelEmployees extends MY_Controller
 					'date_of_birth' 	=> $date_of_birth,
 					'date_of_joining' => $date_of_joining,
 					'marital_status' 	=> $marital_status,
-					'address' 				=> $address,
+					'alamat_ktp' 			=> $alamat_ktp,
 					'alamat_domisili'	=> $alamat_domisili,
 					'contact_no' 			=> $contact_no,
 					'email' 					=> $email,
@@ -349,7 +349,7 @@ class ImportExcelEmployees extends MY_Controller
 						$penempatan 				= $user[0]->penempatan;
 						$date_of_joining 		= $user[0]->date_of_joining;
 						$marital_status 		= $user[0]->marital_status;
-						$address 						= $user[0]->address;
+						$alamat_ktp 						= $user[0]->alamat_ktp;
 						$alamat_domisili		= $user[0]->alamat_domisili;
 						$contact_no 				= $user[0]->contact_no;
 						$ktp_no 						= $user[0]->ktp_no;
@@ -384,7 +384,7 @@ class ImportExcelEmployees extends MY_Controller
 							'date_of_birth' 	=> $date_of_birth,
 							'date_of_joining' => $date_of_joining,
 							'marital_status' 	=> $marital_status,
-							'address' 				=> $address,
+							'alamat_ktp' 			=> $alamat_ktp,
 							'alamat_domisili'	=> $alamat_domisili,
 							'contact_no' 			=> $contact_no,
 							'email' 					=> $email,
