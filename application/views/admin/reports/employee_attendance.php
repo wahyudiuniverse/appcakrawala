@@ -88,14 +88,15 @@
                 <th colspan="9"><?php echo $this->lang->line('xin_attendance_report');?></th>
               </tr>
               <tr>
-                <th style="width:50px;">NIP</th>
-                <th style="width:200px;">Nama Lengkap</th>
-                <th style="width:200px;">Project</th>
-                <th style="width:200px;">Toko/Office</th>
-                <th style="width:40px;">Tanggal</th>
-                <th style="width:40px;"><?php echo $this->lang->line('dashboard_clock_in');?></th>
-                <th style="width:40px;"><?php echo $this->lang->line('dashboard_clock_out');?></th>
-                <th style="width:40px;">Total Jam Kerja</th>
+                <th>NIP</th>
+                <th>Nama Lengkap</th>
+                <th>Project</th>
+                <th>Sub Project</th>
+                <th>Toko/Office</th>
+                <th>Tanggal</th>
+                <th><?php echo $this->lang->line('dashboard_clock_in');?></th>
+                <th><?php echo $this->lang->line('dashboard_clock_out');?></th>
+                <th>Total Jam Kerja</th>
               </tr>
             </thead>
           </table>

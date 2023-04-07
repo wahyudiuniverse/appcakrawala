@@ -855,7 +855,7 @@ class ImportExcelEslip extends MY_Controller
 
 			$pdf->SetAuthor('HRCakrawala');
 			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-			$pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
+			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
 
 			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
 			$pdf->SetSubject($this->lang->line('xin_eslip'));

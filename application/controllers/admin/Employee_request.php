@@ -46,6 +46,8 @@ class Employee_request extends MY_Controller {
 			$data['all_projects_sub'] = $this->Project_model->get_all_projects();
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
+			$data['list_bank'] = $this->Xin_model->get_bank_code();
+
 		$data['breadcrumbs'] = $this->lang->line('xin_request_employee');
 		$data['path_url'] = 'emp_request';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -78,7 +80,7 @@ class Employee_request extends MY_Controller {
 		$data = array();
 
           foreach($employee->result() as $r) {
-			  
+			  $no = $r->secid;
 				$fullname = $r->fullname;
 				$location_id = $r->location_id;
 				$project = $r->project;
@@ -89,7 +91,7 @@ class Employee_request extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
-				$approved_by = $r->approved_by;
+				$approved_by = $r->request_empby;
 			  
 
 				if($approved_by==null){
@@ -130,6 +132,7 @@ class Employee_request extends MY_Controller {
 				}
 
 			$data[] = array(
+				$no,
 				$status_migrasi,
 				$nik_ktp,
 				$fullname,
@@ -189,70 +192,119 @@ class Employee_request extends MY_Controller {
 				// $system = $this->Xin_model->read_setting_info(1);
 
 					if($this->input->post('fullname')=='') {
-						$Return['error'] = $this->lang->line('xin_employee_error_first_name');
+						$Return['error'] = 'Nama Lengkap Kosong..!';
 					} else if ($this->input->post('nama_ibu')=='') {
-						$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+						$Return['error'] = 'Nama Ibu Kandung Kosong..!';
+					} else if ($this->input->post('tempat_lahir')=='') {
+						$Return['error'] = 'Tempat Lahir Kosong..!';
+					} else if ($this->input->post('date_of_birth')==''){
+						$Return['error'] = 'Tanggal Lahir Kosong..!';
 					} 
-
-					// else if ($this->input->post('tempat_lahir')=='') {
-					// 	$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
-					// } 
-
-					else if ($this->input->post('date_of_birth')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_tanggal_lahir');
-					} else if ($this->input->post('nomor_hp')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-					} else if ($this->input->post('nomor_ktp')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-					} 
-
-
-					// else if ($this->input->post('nomor_kk')==''){
-					// 	$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
-					// } 
-
-					// else if ($this->input->post('email')==''){
-					// 	$Return['error'] = $this->lang->line('xin_employee_error_email');
-					// } 
 
 					else if ($this->input->post('company_id')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_company_name');
+						$Return['error'] = 'Company Kosong..!';
 					} else if ($this->input->post('office_lokasi')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_location_office');
+						$Return['error'] = 'Office Location Kosong..!';
 					} else if ($this->input->post('project_id')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_project');
+						$Return['error'] = 'Project Kosong..!';
 					} else if ($this->input->post('sub_project_id')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_sub_project');
+						$Return['error'] = 'Sub Project Kosong..!';
 					} else if ($this->input->post('department_id')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_department');
+						$Return['error'] = 'Departement Kosong..!';
 					} else if ($this->input->post('posisi')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_designation');
-					} else if ($this->input->post('date_of_join')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_joining_date');
+						$Return['error'] = 'Posisi Jabatan Kosong..!';
+					}
+
+					else if ($this->input->post('date_of_join')==''){
+						$Return['error'] = 'Join Date Kosong..!';
+					} else if ($this->input->post('join_date_pkwt')==''){
+						$Return['error'] = 'Join Date PKWT Kosong..!';
+					} else if ($this->input->post('pkwt_end_date')==''){
+						$Return['error'] = 'End Date PKWT Kosong..!';
+					} else if ($this->input->post('waktu_kontrak')==''){
+						$Return['error'] = 'Periode Kontrak Kosong..!';
+					}
+
+					else if ($this->input->post('nomor_hp')==''){
+						$Return['error'] = 'Nomor Hp Kosong..!';
+					} else if ($this->input->post('nomor_ktp')==''){
+						$Return['error'] = 'KTP Kosong..!';
+					} else if ($this->input->post('alamat_ktp')==''){
+						$Return['error'] = 'Alamat KTP Kosong..!';
+					} else if ($this->input->post('alamat_domisili')==''){
+						$Return['error'] = 'Alamat Domisili Kosong..!';
+					} else if ($this->input->post('nomor_kk')==''){
+						$Return['error'] = 'KK Kosong..!';
+					} else if ($this->input->post('email')==''){
+						$Return['error'] = 'Email Kosong..!';
 					} else if ($this->input->post('penempatan')==''){
-						$Return['error'] = $this->lang->line('xin_employee_error_penempatan');
-					} else {
+						$Return['error'] = 'Penempatan Kosong..!';
+					} else if ($this->input->post('hari_kerja')==''){
+						$Return['error'] = 'Hari Kerja Kosong..!';
+					} 
 
+					else if ($this->input->post('gaji_pokok')==''){
+						$Return['error'] = 'Gaji Pokok Kosong..!';
+					} 
+					// else if ($this->input->post('tunjangan_jabatan')==''){
+					// 	$Return['error'] = 'Tunjangan Jabatan Kosong..!';
+					// } else if ($this->input->post('tunjangan_area')==''){
+					// 	$Return['error'] = 'Tunjangan Area Kosong..!';
+					// } else if ($this->input->post('tunjangan_masakerja')==''){
+					// 	$Return['error'] = 'Tunjangan Masa Kerja Kosong..!';
+					// } else if ($this->input->post('tunjangan_makan_trans')==''){
+					// 	$Return['error'] = 'Tunjangan Makan & Transport Kosong..!';
+					// } else if ($this->input->post('tunjangan_makan')==''){
+					// 	$Return['error'] = 'Tunjangan Masa Kerja Kosong..!';
+					// } else if ($this->input->post('tunjangan_transport')==''){
+					// 	$Return['error'] = 'Tunjangan Masa Kerja Kosong..!';
+					// } 
 
-					   	$fullname = $this->input->post('fullname');
-					   	$nama_ibu	= $this->input->post('nama_ibu');
-							$tempat_lahir = $this->input->post('tempat_lahir');
-							$tanggal_lahir = $this->input->post('date_of_birth');
-							$contact_no = $this->input->post('nomor_hp');
-							$ktp_no = $this->input->post('nomor_ktp');
-							$alamat_ktp = $this->input->post('alamat_ktp');
-					   	$nomor_kk	= $this->input->post('nomor_kk');
-					   	$npwp	= $this->input->post('npwp');
-					   	$email	= $this->input->post('email');
-					   	$company_id	= $this->input->post('company_id');
-							$office_lokasi = $this->input->post('office_lokasi');
-							$project_id = $this->input->post('project_id');
-							$sub_project_id = $this->input->post('sub_project_id');
-							$department_id = $this->input->post('department_id');
-							$posisi = $this->input->post('posisi');
-							$date_of_join = $this->input->post('date_of_join');
-							$penempatan = $this->input->post('penempatan');
+					else {
 
+					   	$fullname 					= str_replace("'"," ",$this->input->post('fullname'));
+					   	$nama_ibu						= $this->input->post('nama_ibu');
+							$tempat_lahir 			= $this->input->post('tempat_lahir');
+							$tanggal_lahir 			= $this->input->post('date_of_birth');
+
+					   	$company_id					= $this->input->post('company_id');
+							$office_lokasi 			= $this->input->post('office_lokasi');
+							$project_id 				= $this->input->post('project_id');
+							$sub_project_id 		= $this->input->post('sub_project_id');
+							$department_id 			= $this->input->post('department_id');
+							$posisi 						= $this->input->post('posisi');
+
+							$date_of_join 			= $this->input->post('date_of_join');
+							$join_date_pkwt 		= $this->input->post('join_date_pkwt');
+							$pkwt_end_date 			= $this->input->post('pkwt_end_date');
+							$waktu_kontrak 			= $this->input->post('waktu_kontrak');
+
+							$contact_no 				= $this->input->post('nomor_hp');
+							$ktp_no 						= $this->input->post('nomor_ktp');
+							$alamat_ktp 				= $this->input->post('alamat_ktp');
+							$alamat_domisili 		= $this->input->post('alamat_domisili');
+					   	$nomor_kk						= $this->input->post('nomor_kk');
+					   	$npwp								= $this->input->post('npwp');
+					   	$email							= $this->input->post('email');
+							$penempatan 				= $this->input->post('penempatan');
+							$hari_kerja 				= $this->input->post('hari_kerja');
+
+							$gaji_pokok 					= $this->input->post('gaji_pokok');
+							$allow_jabatan 				= $this->input->post('tunjangan_jabatan');
+							$allow_area 					= $this->input->post('tunjangan_area');
+							$allow_masakerja			= $this->input->post('tunjangan_masakerja');
+							$allow_trans_meal 		= $this->input->post('tunjangan_makan_trans');
+							$allow_konsumsi 			= $this->input->post('tunjangan_makan');
+							$allow_transport			= $this->input->post('tunjangan_transport');
+							$allow_comunication 	= $this->input->post('tunjangan_komunikasi');
+							$allow_device					= $this->input->post('tunjangan_device');
+							$allow_residence_cost	= $this->input->post('tunjangan_tempat_tinggal');
+							$allow_rental					= $this->input->post('tunjangan_rental');
+							$allow_parking				= $this->input->post('tunjangan_parkir');
+							$allow_medichine			= $this->input->post('tunjangan_kesehatan');
+							$allow_akomodsasi			= $this->input->post('tunjangan_akomodasi');
+							$allow_kasir 					= $this->input->post('tunjangan_kasir');
+							$allow_operational		= $this->input->post('tunjangan_operational');
 						
 							// $options = array('cost' => 12);
 							// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
@@ -260,31 +312,55 @@ class Employee_request extends MY_Controller {
 							// $cat_ids = implode(',',$this->input->post('leave_categories'));
 
 							$data = array(
-								'fullname' => $fullname,
-								'nama_ibu' =>$nama_ibu,
-								'tempat_lahir' => $tempat_lahir,
-								'tanggal_lahir' => $tanggal_lahir,
-								'contact_no' => $contact_no,
-								'nik_ktp' => $ktp_no,
-								'alamat_ktp' => $alamat_ktp,
-								'no_kk' => $nomor_kk,
-								'npwp' => $npwp,
-								'email' => $email,
-								'company_id' => $company_id,
-								'location_id' => $office_lokasi,
-								'project' => $project_id,
-								'sub_project' => $sub_project_id,
-								'department' => $department_id,
-								'posisi' => $posisi,
-								'doj' => $date_of_join,
-								'penempatan' => $penempatan,
+								'fullname' 						=> $fullname,
+								'nama_ibu' 						=> $nama_ibu,
+								'tempat_lahir' 				=> $tempat_lahir,
+								'tanggal_lahir' 			=> $tanggal_lahir,
 
-								'verified_by' =>  1,
-								'verified_date' => date("Y-m-d h:i:s"),
+								'company_id' 					=> $company_id,
+								'location_id' 				=> $office_lokasi,
+								'project' 						=> $project_id,
+								'sub_project' 				=> $sub_project_id,
+								'department' 					=> $department_id,
+								'posisi' 							=> $posisi,
+
+								'doj' 								=> $date_of_join,
+								'contract_start' 			=> $date_of_join,
+								'contract_end' 				=> $date_of_join,
+								'contract_periode' 		=> $waktu_kontrak,
+								'contact_no' 					=> $contact_no,
+								'nik_ktp' 						=> $ktp_no,
+								'alamat_ktp' 					=> $alamat_ktp,
+								'alamat_domisili' 		=> $alamat_domisili,
+								'no_kk' 							=> $nomor_kk,
+								'npwp' 								=> $npwp,
+								'email' 							=> $email,
+								'penempatan' 					=> $penempatan,
+								'hari_kerja' 					=> $hari_kerja,
+
+								'gaji_pokok' 						=> $gaji_pokok,
+								'allow_jabatan' 				=> $allow_jabatan,
+								'allow_area' 						=> $allow_area,
+								'allow_masakerja' 			=> $allow_masakerja,
+								'allow_trans_meal'			=> $allow_trans_meal,
+								'allow_konsumsi'				=> $allow_konsumsi,
+								'allow_transport'				=> $allow_transport,
+								'allow_comunication'		=> $allow_comunication,
+								'allow_device'					=> $allow_device,
+								'allow_residence_cost'	=> $allow_residence_cost,
+								'allow_rent'						=> $allow_rental,
+								'allow_parking'					=> $allow_parking,
+								'allow_medichine'				=> $allow_medichine,
+								'allow_akomodsasi'			=> $allow_akomodsasi,
+								'allow_kasir'						=> $allow_kasir,
+								'allow_operational'			=> $allow_operational,
+
+								// 'verified_by' =>  1,
+								// 'verified_date' => date("Y-m-d h:i:s"),
 
 								// 'pincode' => $this->input->post('pin_code'),
-								'createdon' => date('Y-m-d h:i:s'),
-								'createdby' => $session['user_id']
+								// 'createdon' => date('Y-m-d h:i:s'),
+								// 'createdby' => $session['user_id']
 								// 'modifiedon' => date('Y-m-d h:i:s')
 							);
 						$iresult = $this->Employees_model->addrequest($data);
@@ -344,68 +420,6 @@ class Employee_request extends MY_Controller {
 		$this->load->view('admin/employees/dialog_company', $data);
 	}
 
-	public function read_document() {
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->Xin_model->site_title();
-		$id = $this->input->get('document_id');
-       // $data['all_countries'] = $this->xin_model->get_countries();
-		$result = $this->Company_model->read_company_document_info($id);
-		$data = array(
-				'document_id' => $result[0]->document_id,
-				'license_name' => $result[0]->license_name,
-				'document_type_id' => $result[0]->document_type_id,
-				'company_id' => $result[0]->company_id,
-				'expiry_date' => $result[0]->expiry_date,
-				'license_number' => $result[0]->license_number,
-				'license_notification' => $result[0]->license_notification,
-				'document' => $result[0]->document,
-				'all_countries' => $this->Xin_model->get_countries(),
-				'get_all_companies' => $this->Xin_model->get_companies(),
-				'all_document_types' => $this->Employees_model->all_document_types(),
-				'get_company_types' => $this->Company_model->get_company_types()
-				);
-		$this->load->view('admin/company/dialog_official_document', $data);
-	}
-
-	public function read_info()
-	{
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		$data['title'] = $this->Xin_model->site_title();
-		$id = $this->input->get('company_id');
-       // $data['all_countries'] = $this->xin_model->get_countries();
-		$result = $this->Company_model->read_company_information($id);
-		$data = array(
-				'company_id' => $result[0]->company_id,
-				'name' => $result[0]->name,
-				'username' => $result[0]->username,
-				'password' => $result[0]->password,
-				'type_id' => $result[0]->type_id,
-				'government_tax' => $result[0]->government_tax,
-				'trading_name' => $result[0]->trading_name,
-				'registration_no' => $result[0]->registration_no,
-				'email' => $result[0]->email,
-				'logo' => $result[0]->logo,
-				'contact_number' => $result[0]->contact_number,
-				'website_url' => $result[0]->website_url,
-				'address_1' => $result[0]->address_1,
-				'address_2' => $result[0]->address_2,
-				'city' => $result[0]->city,
-				'state' => $result[0]->state,
-				'zipcode' => $result[0]->zipcode,
-				'countryid' => $result[0]->country,
-				'idefault_currency' => $result[0]->default_currency,
-				'idefault_timezone' => $result[0]->default_timezone,
-				'all_countries' => $this->Xin_model->get_countries(),
-				'get_company_types' => $this->Company_model->get_company_types()
-				);
-		$this->load->view('admin/company/view_company.php', $data);
-	}
 	
 	// Validate and update info in database
 	public function update() {

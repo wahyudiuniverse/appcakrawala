@@ -288,116 +288,116 @@ class Reports_model extends CI_Model {
 
 	// get employees list> reports
 	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
-		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
-// 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (
+		// return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
+		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (
+21402887,
+21500057,
+21402888,
+21500070,
+21300040,
+21602889,
+21202890,
+21500053,
+21500048,
+21600037,
+21502891,
+21500006,
+21300046,
+21600019,
+21600009,
+21300038,
+21500017,
+21300024,
+21300004,
+21500071,
+21500068,
+21500049,
+21500014,
+21300044,
+21500034,
+21600032,
+21500027,
+21500051,
+21500064,
+21500016,
+21500052,
+21500007,
+21500060,
+21300033,
+21502912,
+21502909,
+21500058,
+21500056,
+21300018,
+21502907,
+21502906,
+21502905,
+21502904,
+21500077,
+21300086,
+21502892,
+21302893,
+21500086,
+21502897,
+21502898,
+21502899,
+21502900,
+21302902,
+21302916,
+21502915,
+21300094,
+21300089,
+21300095,
+21300090,
+21504636,
+21300091,
+21500088,
+21300093,
+21305730,
+21305732,
+21205736,
+21505790,
+21505934,
+21509427,
+21505942,
+22505713,
+21209428,
+21209528,
+21502903,
+21309636,
+21309639,
+21402913,
+21402888,
+21500063,
+21300023,
+21500066,
+21500062,
+21500065,
+21500072,
+21500047,
+21300026,
+21500055,
+21300001,
+21600035,
+21300028,
+21300043,
+21300020,
+21502914,
+21300002,
+21300083,
+21300012,
+21600013,
+21300031,
+21300088,
+21300087,
+21500078,
+21300084,
+21500075,
+21500081,
+21300082,
+21300837
 
-// '21402887',
-// '21500057',
-// '21402888',
-// '21500070',
-// '21300040',
-// '21602889',
-// '21202890',
-// '21500053',
-// '21500059',
-// '21500048',
-// '21600037',
-// '21502891',
-// '21500006',
-// '21300046',
-// '21600019',
-// '21600009',
-// '21300038',
-// '21500017',
-// '21300024',
-// '21300004',
-// '21500071',
-// '21500068',
-// '21500049',
-// '21500014',
-// '21300044',
-// '21500034',
-// '21600032',
-// '21500027',
-// '21500051',
-// '21500064',
-// '21500016',
-// '21500052',
-// '21500007',
-// '21500060',
-// '21300033',
-// '21502912',
-// '21502909',
-// '21500058',
-// '21500056',
-// '21300018',
-// '21502907',
-// '21502906',
-// '21502905',
-// '21502904',
-// '21500077',
-// '21300086',
-// '21502892',
-// '21302893',
-// '21500086',
-// '21502897',
-// '21502898',
-// '21502899',
-// '21502845',
-// '21502900',
-// '21302902',
-// '21302916',
-// '21502915',
-// '21300094',
-// '21300089',
-// '21300095',
-// '21300090',
-// '21504636',
-// '21300092',
-// '21300091',
-// '21500088',
-// '21300093',
-// '21305730',
-// '21305732',
-// '21205736',
-// '21505790',
-// '21505934',
-// '21506049',
-// '21505942',
-// '22505713',
-// '21402913',
-// '21402888',
-// '21500063',
-// '21300023',
-// '21500066',
-// '21500062',
-// '21500065',
-// '21500072',
-// '21500047',
-// '21300026',
-// '21500055',
-// '21300001',
-// '21600035',
-// '21300028',
-// '21300043',
-// '21600022',
-// '21300020',
-// '21502914',
-// '21300002',
-// '21300083',
-// '21300012',
-// '21600013',
-// '21300031',
-// '21300088',
-// '21300087',
-// '21500078',
-// '21300084',
-// '21500075',
-// '21500081',
-// '21300082',
-// '21300837'
-
-// 	)");
+ 	)");
 	}
 
 
@@ -501,23 +501,51 @@ WHERE employee_id = '99'");
         //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
 		// 	) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
 
-		return $query = $this->db->query("SELECT attdin.employee_id, attdin.project_id, emp.sub_project_id,attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+		return $query = $this->db->query("
+
+
+			SELECT attdin.employee_id, emp.first_name AS fullname, attdin.project_id, proj.title, emp.sub_project_id, projs.sub_project_name, attdin.customer_id, attdin.date_phone, 
+attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay, attdin.foto_in, cout.foto_out
 			FROM (
-				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in, foto AS foto_in
 				FROM xin_trx_cio
 				WHERE c_io = 1
-				AND project_id = '$project_id'
+                AND project_id = '$project_id'
                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
 				ORDER BY createdon DESC) attdin
 			LEFT JOIN (
-				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out,foto AS foto_out
 				FROM xin_trx_cio
-				WHERE c_io = 2 
-				AND project_id = '$project_id'
+				WHERE c_io = 2
+                AND project_id = '$project_id'
                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
-WHERE emp.sub_project_id = '$sub_id'");
+			LEFT JOIN xin_projects proj ON proj.project_id = attdin.project_id
+			LEFT JOIN xin_projects_sub projs ON projs.secid = emp.sub_project_id
+WHERE emp.sub_project_id = '$sub_id'
+
+
+
+-- SELECT attdin.employee_id, attdin.project_id, emp.sub_project_id,attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
+-- 			FROM (
+-- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
+-- 				FROM xin_trx_cio
+-- 				WHERE c_io = 1
+-- 				AND project_id = '$project_id'
+--                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+-- 				ORDER BY createdon DESC) attdin
+-- 			LEFT JOIN (
+-- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
+-- 				FROM xin_trx_cio
+-- 				WHERE c_io = 2 
+-- 				AND project_id = '$project_id'
+--                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
+-- 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
+-- 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
+-- WHERE emp.sub_project_id = '$sub_id'
+
+");
 
 
 

@@ -769,18 +769,26 @@ dataSource: [
 				{ 
 					id: "", 
 					class: "role-checkbox-modal custom-control-input", 
-					text: "<?php echo $this->lang->line('xin_verify');?>",  
-					add_info: "<?php echo $this->lang->line('xin_verify');?>", 
+					text: "Approve Level #1",  
+					add_info: "", 
 					value: "374",
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('374',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				},
 				{ 
 					id: "", 
 					class: "role-checkbox-modal custom-control-input", 
-					text: "<?php echo $this->lang->line('xin_approve');?>",  
-					add_info: "<?php echo $this->lang->line('xin_approve');?>", 
+					text: "Approve Level #2",  
+					add_info: "", 
 					value: "375",
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('375',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+				},
+				{ 
+					id: "", 
+					class: "role-checkbox-modal custom-control-input", 
+					text: "Approve HRD",  
+					add_info: "", 
+					value: "378",
+					check: "<?php if(isset($_GET['role_id'])) { if(in_array('378',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				}
 				]
 			},

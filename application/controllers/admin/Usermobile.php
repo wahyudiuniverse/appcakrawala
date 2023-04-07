@@ -377,7 +377,7 @@ class Usermobile extends MY_Controller
 			);
 
 			// $data = $this->security->xss_clean($data);
-			$result = $this->Usersmobile_model->update_record($data,$emp);		
+			$result = $this->Usersmobile_model->update_record($data,$emp);
 
 			if ($result == TRUE) {
 				$Return['result'] = $this->lang->line('xin_success_update_department');

@@ -7,22 +7,38 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
-<?php $count_emp_request = $this->Xin_model->count_emp_request();?>
+<?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae();?>
+<?php //$list_bank = $this->Xin_model->get_bank_code();?>
+<!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
-    <?php if(in_array('327',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Monitoring Request
+
+    <?php if(in_array('337',$role_resources_ids)) { ?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Monitoring
       </a> </li>
     <?php } ?>  
+
     <?php if(in_array('374',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_verify/');?>" data-link-data="<?php echo site_url('admin/employee_request_verify/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Request <?php echo '('.$count_emp_request.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_nae/');?>" data-link-data="<?php echo site_url('admin/employee_request_nae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE/Admin <?php echo '('.$count_emp_request_nae.')';?>
       </a> </li>
     <?php } ?>
+
+    <?php if(in_array('375',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_verify/');?>" data-link-data="<?php echo site_url('admin/employee_request_sm/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nae.')';?>
+      </a> </li>
+    <?php } ?>
+
+    <?php if(in_array('378',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_verify/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD <?php echo '('.$count_emp_request_nae.')';?>
+      </a> </li>
+    <?php } ?>
+
     <?php if(in_array('375',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> History Approval
       </a> </li>
     <?php } ?>
+
   </ul>
 </div>
 
@@ -83,13 +99,6 @@
                   </div>
                 </div>
 
-                <!--NO HP-->
-                <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="">
-                  </div>
-                </div>
 
               </div>
 
@@ -122,11 +131,31 @@
                   </div>
                 </div>
 
+                <!--ALAMAT DOMISILI-->
+                <div class="col-md-8">
+                  <div class="form-group">
+                    <label for="alamat_domisili">Alamat Domisili</i></label>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_domisili" type="text" value="">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
                 <!--NPWP-->
                 <div class="col-md-4">
                   <div class="form-group">
                   <label for="npwp">NPWP<i class="hrpremium-asterisk"></i></label>
                   <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="">
+                  </div>
+                </div>
+
+                <!--NO HP-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="">
                   </div>
                 </div>
 
@@ -141,7 +170,40 @@
               </div>
 
 
+              <div class="row">
 
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk">*</i></label>
+                              <select name="bank_name" id="bank_name" class="form-control" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name');?>">
+                                <option value=""></option>
+                                <?php 
+                                foreach ( $list_bank as $bank ) { 
+                                ?>
+                                  <option value="<?php echo $bank->secid;?>"> <?php echo $bank->bank_name;?></option>
+                                <?php 
+                                } 
+                                ?>                                 
+                              </select>
+                            </div>
+                          </div>
+
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <label for="no_rek" class="control-label"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk">*</i></label>
+                            <input class="form-control" placeholder="Nomor Rekening Bank" name="no_rek" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="">
+                          </div>
+                        </div>
+
+                <!--PEMILIK REKENING-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="email" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="Nama Pemilik Rekening" name="pemilik_rekening" type="text" value="">
+                  </div>
+                </div>
+
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -265,13 +327,213 @@
                 </div>
 
               </div>
+            <!-- end row -->
+            </div>
+          </div>
+<!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+
+                <!--GAJI POKOK-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="gaji_pokok">Gaji Pokok<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN JABATAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_jabatan" class="control-label">Tunjangan Jabatan<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_jabatan" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN AREA-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_area" class="control-label">Tunjangan Area<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_area" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN MASA KERJA-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_masakerja">Tunjangan Masa Kerja<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_masakerja" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+              </div>
+
+
+              <div class="row">
+
+
+                <!--TUNJANGAN MAKAN TRANSPORT-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_makan_trans" class="control-label">Tunjangan Makan & Transport<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN MAKAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_makan" class="control-label">Tunjangan Makan<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_makan" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN TRANSPORT-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_transport" class="control-label">Tunjangan Transport<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_transport" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN KOMUNIKASI-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_komunikasi" class="control-label">Tunjangan Komunikasi<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_komunikasi" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+
+                <!--TUNJANGAN DEVICE-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_device" class="control-label">Tunjangan Laptop/HP<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_device" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN TEMPAT TINGGAL-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_tempat_tinggal">Tunjangan Tempat Tinggal<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN RENTAL-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_rental">Tunjangan Rental<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_rental" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN PARKIR-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_parkir" class="control-label">Tunjangan Parkir<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_parkir" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+
+                <!--TUNJANGAN KESEHATAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_kesehatan" class="control-label">Tunjangan Kesehatan<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+
+                <!--TUNJANGAN AKOMODASI-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_akomodasi">Tunjangan Akomodasi<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_akomodasi" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN KASIR-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_kasir" class="control-label">Tunjangan Kasir<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_kasir" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN OPERATIONAL-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_operational" class="control-label">Tunjangan Operational<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="" style="text-align: right;">
+                  </div>
+                </div>
+
+              </div>
+              
+
+            </div>
+
+            <div class="col-md-4">
+              <div class="row">
+                <!--PERUSAHAAN-->
+
+
+                <!--TANGGAL MULAI KONTRAK-->
+                <div class="col-md-6">
+                  <div class="form-group">
+                  <label for="pkwt_join_date">Tanggal Mulai Kontrak<i class="hrpremium-asterisk">*</i></label>
+                  <input class="form-control date" readonly placeholder="YYYY-MM-DD" name="join_date_pkwt" type="text" value="">
+                  </div>
+                </div>
+
+                <!--TANGGAL AKHIR KONTRAK-->
+                <div class="col-md-6">
+                  <div class="form-group">
+                  <label for="pkwt_end_date">Tanggal Akhir Kontrak<i class="hrpremium-asterisk">*</i></label>
+                  <input class="form-control date" readonly placeholder="YYYY-MM-DD" name="pkwt_end_date" type="text" value="">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <!--PERIODE KONTRAK-->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="waktu_kontrak">Waktu Kontrak<i class="hrpremium-asterisk">*</i></label>
+                    <select class="form-control" name="waktu_kontrak" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
+                      <option value="1">1 (Bulan)</option>
+                      <option value="3" selected>3 (Bulan)</option>
+                      <option value="6">6 (Bulan)</option>
+                      <option value="12">12 (Bulan)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- HK -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="hari_kerja">Hari Kerja<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="hari_kerja" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                  </div>
+                </div>
+              </div>
 
             <!-- end row -->
             </div>
-
-
-
-
+          </div>
           </div>
 
         </div>
@@ -292,6 +554,7 @@
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
           <tr>
+            <th>No.</th>
             <th><?php echo $this->lang->line('xin_request_employee_status');?></th>
             <th>NIK-KTP</th>
             <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name');?></th>

@@ -1349,19 +1349,19 @@ class Reports extends MY_Controller
 		// for($i=0 ; $i < count($attend); $i++) {
  		foreach($employee->result() as $r) {
 
-			$emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
-			if(!is_null($emp)){
-				$fullname = $emp[0]->first_name;
-			} else {
-				$fullname = '--';	
-			}
+			// $emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			// if(!is_null($emp)){
+			// 	$fullname = $emp[0]->first_name;
+			// } else {
+			// 	$fullname = '--';
+			// }
 
-			$project = $this->Project_model->read_single_project($r->project_id);
-			if(!is_null($project)){
-				$project_name = $project[0]->title;
-			} else {
-				$project_name = '--';	
-			}
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
 
 			$cust = $this->Customers_model->read_single_customer($r->customer_id);
 			if(!is_null($cust)){
@@ -1370,16 +1370,17 @@ class Reports extends MY_Controller
 				$nama_toko = '--';	
 			}
 
-			if(!is_null($r->date_phone)){
+			// if(!is_null($r->date_phone)){
 
-			} else {
+			// } else {
 
-			}
+			// }
 
 			$data[] = array (
 				$r->employee_id,
-				$fullname,
-				$project_name,
+				$r->fullname,
+				$r->title,
+				$r->sub_project_name,
 				$nama_toko,
 				$r->date_phone,
 				$r->time_in,
