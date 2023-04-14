@@ -33,7 +33,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 
   <?php $attributes = array('name' => 'edit_company', 'id' => 'edit_company', 'autocomplete' => 'off', 'class'=>'m-b-1');?>
   <?php $hidden = array('_method' => 'EDIT', '_token' => $_GET['company_id'], 'ext_name' => $idrequest);?>
-  <?php echo form_open_multipart('admin/employee_request/update/'.$idrequest, $attributes, $hidden);?>
+  <?php echo form_open_multipart('admin/employee_request_nae/update/'.$idrequest, $attributes, $hidden);?>
 
  <hr style="height:1px;border-width:0;color:gray;background-color:gray; margin: auto;">
 
@@ -260,9 +260,11 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
+
     <?php if(in_array('374',$role_resources_ids)) { ?>
-    <!-- <button type="submit" class="btn btn-primary save">VERIFY</button> -->
+    <button type="submit" class="btn btn-primary save">APPROVE NAE/ADMIN</button>
     <?php } ?>
+
   </div>
 
 <?php echo form_close(); ?>
@@ -308,7 +310,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
                var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
     "ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/request_list_nae/",
             type : 'GET'
         },
     dom: 'lBfrtip',

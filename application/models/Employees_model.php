@@ -83,6 +83,44 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
+	public function get_request_nae() {
+
+		$sql = 'SELECT * FROM xin_employee_request 
+		WHERE request_empby is not null 
+		AND approved_naeby is null
+		AND approved_nomby is null';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_request_nom() {
+
+		$sql = 'SELECT * FROM xin_employee_request 
+		WHERE request_empby is not null 
+		AND approved_naeby is not null
+		AND approved_nomby is null
+		AND approved_hrdby is null';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_request_hrd() {
+
+		$sql = 'SELECT * FROM xin_employee_request 
+		WHERE request_empby is not null 
+		AND approved_naeby is not null
+		AND approved_nomby is not null
+		AND approved_hrdby is null';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
 	public function get_monitoring_rsign() {
 
 		$sql = 'SELECT *

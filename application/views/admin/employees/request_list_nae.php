@@ -15,12 +15,12 @@
   <ul class="nav nav-tabs step-anchor">
 
     <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Monitoring
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Monitoring
       </a> </li>
     <?php } ?>  
 
     <?php if(in_array('374',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_nae/');?>" data-link-data="<?php echo site_url('admin/employee_request_nae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE/Admin <?php echo '('.$count_emp_request_nae.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request_nae/');?>" data-link-data="<?php echo site_url('admin/employee_request_nae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE/Admin <?php echo '('.$count_emp_request_nae.')';?>
       </a> </li>
     <?php } ?>
 
@@ -30,7 +30,7 @@
     <?php } ?>
 
     <?php if(in_array('378',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_hrd/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD <?php echo '('.$count_emp_request_nae.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_verify/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD <?php echo '('.$count_emp_request_nae.')';?>
       </a> </li>
     <?php } ?>
 

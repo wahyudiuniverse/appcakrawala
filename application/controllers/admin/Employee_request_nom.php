@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_request extends MY_Controller {
+class Employee_request_nom extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -49,22 +49,22 @@ class Employee_request extends MY_Controller {
 			$data['list_bank'] = $this->Xin_model->get_bank_code();
 
 		$data['breadcrumbs'] = $this->lang->line('xin_request_employee');
-		$data['path_url'] = 'emp_request';
+		$data['path_url'] = 'emp_request_nom';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('327',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/request_list", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/employees/request_list_nom", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
 		}
   }
 
-	public function request_list() {
+	public function request_list_nom() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/employees/request_list", $data);
+		if(!empty($session)){
+			$this->load->view("admin/employees/request_list_nom", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -75,7 +75,7 @@ class Employee_request extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_monitoring_request();
+		$employee = $this->Employees_model->get_request_nom();
 
 		$data = array();
 
@@ -91,19 +91,14 @@ class Employee_request extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
-				$approved_naeby = $r->approved_naeby;
 				$approved_nomby = $r->approved_nomby;
 			  
 
-				if($approved_naeby==null){
+				if($approved_nomby==null){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NAE</button>';
-				} else if ($approved_nomby==null) {
-					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NOM</button>';
-
 				} else {
-
+					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Approved</button>';
 				}
 
@@ -368,8 +363,10 @@ class Employee_request extends MY_Controller {
 								'allow_kasir'						=> $allow_kasir,
 								'allow_operational'			=> $allow_operational,
 
-								'request_empby' =>  $session['user_id'],
-								'request_empon' => date("Y-m-d h:i:s"),
+								'request_empby' 				=> $session['user_id'],
+								'request_empon' 				=> date("Y-m-d h:i:s"),
+								'approved_naeby' 				=> $session['user_id'],
+								'approved_naeon'				=> date("Y-m-d h:i:s"),
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),
@@ -425,7 +422,8 @@ class Employee_request extends MY_Controller {
 				'approved_naeon' => $result[0]->approved_naeon,
 				'approved_nomby' => $this->Employees_model->read_employee_info($result[0]->approved_nomby),
 				'approved_nomon' => $result[0]->approved_nomon,
-				// 'idefault_timezone' => $result[0]->default_timezone,
+				'approved_hrdby' => $this->Employees_model->read_employee_info($result[0]->approved_hrdby),
+				'approved_hrdon' => $result[0]->approved_hrdon,
 
 				// 'createdon' => $result[0]->createdon,
 				// 'modifiedon' => $result[0]->modifiedon,
@@ -433,10 +431,10 @@ class Employee_request extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		$this->load->view('admin/employees/dialog_company', $data);
+		$this->load->view('admin/employees/dialog_emp_nom', $data);
 	}
 
-	
+
 	// Validate and update info in database
 	public function update() {
 		
@@ -444,60 +442,17 @@ class Employee_request extends MY_Controller {
 		if(empty($session)){
 			redirect('admin/');
 		}
+
 		if($this->input->post('edit_type')=='company') {
 		$id = $this->uri->segment(4);
-		// Check validation for user input
-		// $this->form_validation->set_rules('name', 'Name', 'trim|required|xss_clean');
-		// $this->form_validation->set_rules('website', 'Website', 'trim|required|xss_clean');
-		// $this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
-		// $name = $this->input->post('name');
-		// $trading_name = $this->input->post('trading_name');
-		// $registration_no = $this->input->post('registration_no');
-		// $email = $this->input->post('email');
-		// $contact_number = $this->input->post('contact_number');
-		// $website = $this->input->post('website');
-		// $address_1 = $this->input->post('address_1');
-		// $address_2 = $this->input->post('address_2');
-		// $city = $this->input->post('city');
-		// $state = $this->input->post('state');
-		// $zipcode = $this->input->post('zipcode');
-		// $country = $this->input->post('country');
-		// $user_id = $this->input->post('user_id');
-		// $file = $_FILES['logo']['tmp_name'];
-				
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */
-		// if($name==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_name_field');
-		// } else if( $this->input->post('company_type')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_ctype_field');
-		// } else if($contact_number==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_contact_field');
-		// } else if($email==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_cemail_field');
-		// } else if($website==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_website_field');
-		// } else if($city==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_city_field');
-		// } else if($zipcode==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_zipcode_field');
-		// } else if($country==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_country_field');
-		// } else if($this->input->post('username')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_employee_error_username');
-		// } else if($this->input->post('default_currency')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_default_currency_field_error');
-		// } else if($this->input->post('default_timezone')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_default_timezone_field_error');
-		// }
-	
-
+		
 			$data_up = array(
-				'verified_by' =>  $session['user_id'],
-				'verified_date' => date("Y-m-d"),
+				'approved_nomby' =>  $session['user_id'],
+				'approved_nomon' => date("Y-m-d"),
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 

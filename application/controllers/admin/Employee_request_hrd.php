@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_request extends MY_Controller {
+class Employee_request_hrd extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -49,22 +49,22 @@ class Employee_request extends MY_Controller {
 			$data['list_bank'] = $this->Xin_model->get_bank_code();
 
 		$data['breadcrumbs'] = $this->lang->line('xin_request_employee');
-		$data['path_url'] = 'emp_request';
+		$data['path_url'] = 'emp_request_hrd';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('327',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/request_list", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/employees/request_list_hrd", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
 		}
   }
 
-	public function request_list() {
+	public function request_list_hrd() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/employees/request_list", $data);
+		if(!empty($session)){
+			$this->load->view("admin/employees/request_list_hrd", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -75,7 +75,7 @@ class Employee_request extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_monitoring_request();
+		$employee = $this->Employees_model->get_request_hrd();
 
 		$data = array();
 
@@ -91,19 +91,14 @@ class Employee_request extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
-				$approved_naeby = $r->approved_naeby;
-				$approved_nomby = $r->approved_nomby;
+				$approved_hrdby = $r->approved_hrdby;
 			  
 
-				if($approved_naeby==null){
+				if($approved_hrdby==null){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NAE</button>';
-				} else if ($approved_nomby==null) {
-					
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NOM</button>';
-
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval HRD</button>';
 				} else {
-
+					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Approved</button>';
 				}
 
@@ -368,8 +363,10 @@ class Employee_request extends MY_Controller {
 								'allow_kasir'						=> $allow_kasir,
 								'allow_operational'			=> $allow_operational,
 
-								'request_empby' =>  $session['user_id'],
-								'request_empon' => date("Y-m-d h:i:s"),
+								'request_empby' 				=> $session['user_id'],
+								'request_empon' 				=> date("Y-m-d h:i:s"),
+								'approved_naeby' 				=> $session['user_id'],
+								'approved_naeon'				=> date("Y-m-d h:i:s"),
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),
@@ -425,7 +422,8 @@ class Employee_request extends MY_Controller {
 				'approved_naeon' => $result[0]->approved_naeon,
 				'approved_nomby' => $this->Employees_model->read_employee_info($result[0]->approved_nomby),
 				'approved_nomon' => $result[0]->approved_nomon,
-				// 'idefault_timezone' => $result[0]->default_timezone,
+				'approved_hrdby' => $this->Employees_model->read_employee_info($result[0]->approved_hrdby),
+				'approved_hrdon' => $result[0]->approved_hrdon,
 
 				// 'createdon' => $result[0]->createdon,
 				// 'modifiedon' => $result[0]->modifiedon,
@@ -433,10 +431,10 @@ class Employee_request extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		$this->load->view('admin/employees/dialog_company', $data);
+		$this->load->view('admin/employees/dialog_emp_hrd', $data);
 	}
 
-	
+
 	// Validate and update info in database
 	public function update() {
 		
@@ -444,60 +442,141 @@ class Employee_request extends MY_Controller {
 		if(empty($session)){
 			redirect('admin/');
 		}
+
 		if($this->input->post('edit_type')=='company') {
 		$id = $this->uri->segment(4);
-		// Check validation for user input
-		// $this->form_validation->set_rules('name', 'Name', 'trim|required|xss_clean');
-		// $this->form_validation->set_rules('website', 'Website', 'trim|required|xss_clean');
-		// $this->form_validation->set_rules('city', 'City', 'trim|required|xss_clean');
-		// $name = $this->input->post('name');
-		// $trading_name = $this->input->post('trading_name');
-		// $registration_no = $this->input->post('registration_no');
-		// $email = $this->input->post('email');
-		// $contact_number = $this->input->post('contact_number');
-		// $website = $this->input->post('website');
-		// $address_1 = $this->input->post('address_1');
-		// $address_2 = $this->input->post('address_2');
-		// $city = $this->input->post('city');
-		// $state = $this->input->post('state');
-		// $zipcode = $this->input->post('zipcode');
-		// $country = $this->input->post('country');
-		// $user_id = $this->input->post('user_id');
-		// $file = $_FILES['logo']['tmp_name'];
-				
+
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */
-		// if($name==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_name_field');
-		// } else if( $this->input->post('company_type')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_ctype_field');
-		// } else if($contact_number==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_contact_field');
-		// } else if($email==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_cemail_field');
-		// } else if($website==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_website_field');
-		// } else if($city==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_city_field');
-		// } else if($zipcode==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_zipcode_field');
-		// } else if($country==='') {
-		// 	$Return['error'] = $this->lang->line('xin_error_country_field');
-		// } else if($this->input->post('username')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_employee_error_username');
-		// } else if($this->input->post('default_currency')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_default_currency_field_error');
-		// } else if($this->input->post('default_timezone')==='') {
-		// 	$Return['error'] = $this->lang->line('xin_default_timezone_field_error');
-		// }
-	
+		
+					$count_nip = $this->Xin_model->count_nip();
+					$employee_request = $this->Employees_model->read_employee_request($id);
+
+					$fullname 					= $employee_request[0]->fullname;
+					$nama_ibu 					= $employee_request[0]->nama_ibu;
+					$tempat_lahir 			= $employee_request[0]->tempat_lahir;
+					$tanggal_lahir 			= $employee_request[0]->tanggal_lahir;
+					$contact_no 				= $employee_request[0]->contact_no;
+					$nik_ktp 						= $employee_request[0]->nik_ktp;
+					$alamat_ktp 				= $employee_request[0]->alamat_ktp;
+					$alamat_domisili		= $employee_request[0]->alamat_domisili;
+					$no_kk 							= $employee_request[0]->no_kk;
+					$npwp 							= $employee_request[0]->npwp;
+					$email 							= $employee_request[0]->email;
+					$company_id 				= $employee_request[0]->company_id;
+					$location_id 				= $employee_request[0]->location_id;
+					$project 						= $employee_request[0]->project;
+					$sub_project 				= $employee_request[0]->sub_project;
+					$department 				= $employee_request[0]->department;
+					$posisi 						= $employee_request[0]->posisi;
+					$doj 								= $employee_request[0]->doj;
+					$contract_start			= $employee_request[0]->contract_start;
+					$contract_end				= $employee_request[0]->contract_end;
+					$contract_periode		= $employee_request[0]->contract_periode;
+					$penempatan 				= $employee_request[0]->penempatan;
+					$hari_kerja					= $employee_request[0]->hari_kerja;
+					$bank_id						= $employee_request[0]->bank_id;
+					$no_rek							= $employee_request[0]->no_rek;
+					$pemilik_rekening		= $employee_request[0]->pemilik_rekening;
+
+					$gaji_pokok					= $employee_request[0]->gaji_pokok;
+					$allow_jabatan			= $employee_request[0]->allow_jabatan;
+					$allow_area					= $employee_request[0]->allow_area;
+					$allow_masakerja		= $employee_request[0]->allow_masakerja;
+					$allow_trans_meal		= $employee_request[0]->allow_trans_meal;
+					$allow_konsumsi			= $employee_request[0]->allow_konsumsi;
+					$allow_transport		= $employee_request[0]->allow_transport;
+					$allow_comunication		= $employee_request[0]->allow_comunication;
+					$allow_device					= $employee_request[0]->allow_device;
+					$allow_residence_cost	= $employee_request[0]->allow_residence_cost;
+					$allow_rent						= $employee_request[0]->allow_rent;
+					$allow_parking				= $employee_request[0]->allow_parking;
+					$allow_medichine			= $employee_request[0]->allow_medichine;
+					$allow_akomodsasi			= $employee_request[0]->allow_akomodsasi;
+					$allow_kasir					= $employee_request[0]->allow_kasir;
+					$allow_operational		= $employee_request[0]->allow_operational;
+
+					$createdby 						= $employee_request[0]->request_empby;
+
+					// $employee_id = '2'.$employee_request[0]->location_id.$employee_request[0]->department.$count_nip;
+					$employee_id = '2'.$employee_request[0]->location_id.$employee_request[0]->department.sprintf("%05d", $count_nip[0]->newcount);
+					$private_code = rand(100000,999999);
+					$options = array('cost' => 12);
+					$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
+
+					$data_migrate = array(
+
+								'employee_id' 					=> $employee_id,
+								'username' 							=> $employee_id,
+
+								'first_name' 						=> $fullname,
+								'ibu_kandung' 					=> $nama_ibu,
+								'tempat_lahir' 					=> $tempat_lahir,
+								'date_of_birth' 				=> $tanggal_lahir,
+
+								'company_id' 					=> $company_id,
+								'location_id' 				=> $location_id,
+								'project_id' 					=> $project,
+								'sub_project_id' 			=> $sub_project,
+								'department_id' 			=> $department,
+								'designation_id' 			=> $posisi,
+
+								'date_of_joining' 		=> $doj,
+								'contract_start' 			=> $contract_start,
+								'contract_end' 				=> $contract_end,
+								'contract_periode' 		=> $contract_periode,
+								'contact_no' 					=> $contact_no,
+								'ktp_no' 							=> $nik_ktp,
+								'alamat_ktp' 					=> $alamat_ktp,
+								'alamat_domisili' 		=> $alamat_domisili,
+								'kk_no' 							=> $no_kk,
+								'npwp_no' 						=> $npwp,
+								'email' 							=> $email,
+								'penempatan' 					=> $penempatan,
+								'hari_kerja' 					=> $hari_kerja,
+								'bank_name' 					=> $bank_id,
+								'nomor_rek' 					=> $no_rek,
+								'pemilik_rek' 				=> $pemilik_rekening,
+
+								'basic_salary' 				=> $gaji_pokok,
+								'allow_jabatan' 				=> $allow_jabatan,
+								'allow_area' 						=> $allow_area,
+								'allow_masakerja' 			=> $allow_masakerja,
+								'allow_trans_meal'			=> $allow_trans_meal,
+								'allow_konsumsi'				=> $allow_konsumsi,
+								'allow_transport'				=> $allow_transport,
+								'allow_comunication'		=> $allow_comunication,
+								'allow_device'					=> $allow_device,
+								'allow_residence_cost'	=> $allow_residence_cost,
+								'allow_rent'						=> $allow_rent,
+								'allow_parking'					=> $allow_parking,
+								'allow_medichine'				=> $allow_medichine,
+								'allow_akomodsasi'			=> $allow_akomodsasi,
+								'allow_kasir'						=> $allow_kasir,
+								'allow_operational'			=> $allow_operational,
+
+								// 'request_empby' 				=> $session['user_id'],
+								// 'request_empon' 				=> date("Y-m-d h:i:s"),
+								// 'approved_naeby' 				=> $session['user_id'],
+								// 'approved_naeon'				=> date("Y-m-d h:i:s"),
+
+								'user_role_id' => '2',
+								'is_active' => '1',
+								'password' => $password_hash,
+								'private_code' => $private_code,
+								// 'created_by' => date('Y-m-d h:i:s'),
+								'created_by' => $createdby
+							);
+
+					
+
+			$iresult = $this->Employees_model->add($data_migrate);
+
 
 			$data_up = array(
-				'verified_by' =>  $session['user_id'],
-				'verified_date' => date("Y-m-d"),
+				'approved_hrdby' =>  $session['user_id'],
+				'approved_hrdon' => date("Y-m-d"),
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 
