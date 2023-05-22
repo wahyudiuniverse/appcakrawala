@@ -1266,8 +1266,10 @@ class Employees extends MY_Controller {
 			'allow_kasir' => $result[0]->allow_kasir,
 			'allow_operational' => $result[0]->allow_operational,
 			
-
-
+			'status_employee' => $result[0]->status_employee,
+			'deactive_by' => $result[0]->deactive_by,
+			'deactive_date' => $result[0]->deactive_date,
+			'deactive_reason' => $result[0]->deactive_reason,
 
 
 			
@@ -2053,6 +2055,43 @@ class Employees extends MY_Controller {
 			$this->output($Return);
 			exit;
 
+		} 
+	}
+
+
+	/*  add and update employee details info */	
+	// Validate and update info in database // basic info
+	public function deactive_info() {
+	
+		if($this->input->post('type')=='deactive_info') {
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		
+		if($Return['error']!='') {
+       		$this->output($Return);
+    	}
+	
+		$data = array(
+		'status_employee' => $this->input->post('status_employee'),
+		'status_resign' => 5,
+		'deactive_reason' => $this->input->post('keterangan_deactive'),
+		'deactive_date' => date('Y-m-d h:i:s'),
+		'deactive_by' => $this->input->post('session_by'),
+		'user_role_id' => 9,
+
+		// 'company_id' => $this->input->post('company_id'),
+
+		);
+		$id = $this->input->post('user_id');
+		$result = $this->Employees_model->basic_info($data,$id);
+		if ($result == TRUE) {
+			$Return['result'] = 'Berhasil Diubah';
+		} else {
+			$Return['error'] = $this->lang->line('xin_error_msg');
+		}
+		$this->output($Return);
+		exit;
 		}
 	}
 

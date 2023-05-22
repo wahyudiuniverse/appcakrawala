@@ -1576,7 +1576,12 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT * FROM xin_employee_request WHERE request_empby IS NOT null AND approved_naeby IS null");
   	  return $query->num_rows();
 	}
-
+	public function count_emp_request()
+	{
+	  $query = $this->db->query("SELECT * FROM xin_employee_request WHERE verified_by IS NOT null AND approved_by IS null");
+  	  return $query->num_rows();
+	}
+	
 	public function count_resign_cancel()
 	{
 	  $query = $this->db->query("SELECT *

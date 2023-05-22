@@ -534,6 +534,8 @@ class Reports extends MY_Controller
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
 				} else if($r->status_resign==4) {
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
+				} else if($r->status_resign==5){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">NON ACTIVE</button>';
 				} else {
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
 				}
@@ -798,12 +800,15 @@ class Reports extends MY_Controller
 			$pemilik_rek = $r->pemilik_rek;
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+		
 				if($r->status_resign==2){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
 				} else if ($r->status_resign==3) {
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
 				} else if($r->status_resign==4) {
-					$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
+				} else if($r->status_resign==5){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
 				} else {
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
 				}

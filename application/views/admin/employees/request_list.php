@@ -531,6 +531,34 @@
                 </div>
               </div>
 
+              <div class="row">
+                <!--PERIODE KONTRAK-->
+                <div class="col-md-4">
+                  <div class="form-group">                                  
+                    <label class="form-label control-label">Tanggal CUT-START</label>
+                                  <input class="form-control" placeholder="0" name="cut_start" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                
+                  </div>
+                </div>
+
+                <!-- HK -->
+                <div class="col-md-4">                                
+                  <div class="form-group">
+                                  <label class="form-label control-label">Tanggal CUT-OFF</label>                    
+                                  <input class="form-control" placeholder="0" name="cut_off" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                </div>
+
+                <!-- HK -->
+                <div class="col-md-4">                                
+                  <div class="form-group">
+                                  <label class="form-label">Tanggal Penggajian</label><input class="form-control" placeholder="0" name="date_payment" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                </div>
+
+              </div>
+
+
             <!-- end row -->
             </div>
           </div>

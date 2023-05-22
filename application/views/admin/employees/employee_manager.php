@@ -30,6 +30,21 @@
       $nama_subproject = '--';  
     }
 
+    if($status_employee==1){
+      $status_deactive = 'ACTIVE';
+    }else {
+      $status_deactive = 'DEACTIVE';
+    }
+
+    $emp_deactive = $this->Employees_model->read_employee_info($deactive_by);
+    if(!is_null($emp_deactive)){
+      $name_by_deactive = $emp_deactive[0]->first_name;
+    } else {
+      $name_by_deactive = '--';  
+    }
+
+// deactive_by
+
   
   $leave_user = $this->Xin_model->read_user_info($session['user_id']);
 ?>
@@ -62,8 +77,9 @@
                   
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-salary"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_paket_salary');?></a>
                   
-
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-cpassword"> <i class="lnr lnr-file-empty text-lightest"></i> &nbsp; Ubah PIN</a>
+
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-deactive"> <i class="lnr lnr-file-empty text-lightest"></i> &nbsp; Deactive</a>
 
                   <?php if($system[0]->employee_manage_own_work_experience=='yes'){?>
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-experience"> <i class="lnr lnr-hourglass text-lightest"></i> &nbsp; Ubah PIN</a>
@@ -84,7 +100,7 @@
                         }
                       ?>
 
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Informasi </strong> Personal </span> </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DATA </strong> DIRI </span> </div>
                     <div class="card-body media align-items-center"> <img src="<?php echo $de_file;?>" alt="" class="d-block ui-w-80">
                       <div class="media-body ml-4">
                         <div class="text-big  mt-1"><label class="form-label"><?php echo $first_name;?></label></div>
@@ -277,7 +293,7 @@
 
                   <!-- POSISI/JABATAN -->
                   <div class="tab-pane fade" id="account-grade">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Posisi </strong> dan Jabatan </span> </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> POSISI </strong> DAN JABATAN </span> </div>
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'grade_info', 'id' => 'grade_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_basic_info' => 'UPDATE');?>
@@ -387,7 +403,7 @@
                   <!-- BPJS-->
                   <div class="tab-pane fade" id="account-bpjs">
                     <div class="box" hidden>
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> BPJS </strong> TK & KS </span> </div>
                       <div class="card-body">
                         <div class="box-datatable table-responsive">
                           <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
@@ -402,7 +418,7 @@
                         </div>
                       </div>s
                     </div>
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Dokumen </strong> BPJS </span> </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> BPJS </strong> TK & KS </span> </div>
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'bpjs_info', 'id' => 'bpjs_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_basic_info' => 'UPDATE');?>
@@ -473,7 +489,7 @@
                   <!-- DOKUMEN FOTO-->
                   <div class="tab-pane fade" id="account-document">
                     <div class="box" hidden>
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong>DOKUMEN </strong> PRIBADI </span> </div>
                       <div class="card-body">
                         <div class="box-datatable table-responsive">
                           <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
@@ -488,7 +504,7 @@
                         </div>
                       </div>s
                     </div>
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Dokumen </strong> Pribadi </span> </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN </strong> PRIBADI </span> </div>
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_document_info' => 'UPDATE');?>
@@ -598,7 +614,7 @@
                   <!-- REKENING -->
                   <div class="tab-pane fade" id="account-baccount">
                     <div class="box md-4">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong>REKENING</strong>  BANK</span> </div>
                       <div class="card-body">
                         <div class="card-block">
                           <?php $attributes = array('name' => 'bank_account_info', 'id' => 'bank_account_info', 'autocomplete' => 'off');?>
@@ -706,7 +722,7 @@
                     </div>
                   </div>
 
-                  <!-- PK GAJI BPJS-->
+                  <!-- PK GAJI -->
                   <div class="tab-pane fade" id="account-salary">
                     <div class="box" hidden>
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
@@ -724,7 +740,7 @@
                         </div>
                       </div>s
                     </div>
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Dokumen </strong> BPJS </span> </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> PAKET </strong> GAJI </span> </div>
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'salary_info', 'id' => 'salary_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_basic_info' => 'UPDATE');?>
@@ -1107,6 +1123,8 @@
 
                   <!-- PASSWORD -->
                   <div class="tab-pane fade" id="account-cpassword">
+
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> UBAH </strong> PIN </span> </div>
                     <div class="card-body pb-2">
                       <div class="box">
                         <div class="box-body">
@@ -1158,6 +1176,175 @@
                     </div>
                   </div>
 
+                  <!-- DEACTIVE-->
+                  <div class="tab-pane fade" id="account-deactive">
+                    <div class="box" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> ACTIVE / </strong> DEACTIVE</span> </div>
+                      <div class="card-body">
+                        <div class="box-datatable table-responsive">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                            <thead>
+                              <tr>
+                                <th><?php echo $this->lang->line('xin_action');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
+                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                      </div>s
+                    </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> ACTIVE / </strong> DEACTIVE </span> </div>
+                    <div class="card-body pb-2">
+                      <?php $attributes = array('name' => 'deactive_info', 'id' => 'deactive_info', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                      <?php echo form_open_multipart('admin/employees/deactive_info', $attributes, $hidden);?>
+                      <?php
+                      $data_usr2 = array(
+                        'type'  => 'hidden',
+                        'name'  => 'user_id',
+                        'value' => $user_id,
+                       );
+                      echo form_input($data_usr2);
+                      ?>
+
+
+                        <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+                        <input name="session_by" type="text" value="<?php echo $session['user_id'];?>" hidden>
+
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="title">NIP <i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">: <?php echo $employee_id;?></label>
+                            </div>
+                          </div>
+
+                        </div>
+
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="title">Nama Lengkap</label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">: <?php echo $first_name;?></label>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="title">Status Karyawan <i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">: <?php echo $status_deactive;?><i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="title">Deactive By <i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">: <?php echo $name_by_deactive;?><i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="title">Deactive Date <i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">: <?php echo $deactive_date;?><i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-2">
+                            <div class="form-group">
+                              <label for="title">Deactive Reason <i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">: <?php echo $deactive_reason;?><i class="hrpremium-asterisk"></i></label>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <br><br>
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjstk_confirm">Status</label>
+                              <select class="form-control" name="status_employee" data-plugin="select_hrm" data-placeholder="active or deactive">
+                                <option value=""></option>
+                                <option value="1" <?php if($status_employee == 1):?> selected="selected"<?php endif;?>>ACTIVE</option>
+                                <option value="0" <?php if($status_employee == 0):?> selected="selected"<?php endif;?>>DEACTIVE</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title">Keterangan Deactive<i class="hrpremium-asterisk">*</i></label>
+                              <textarea class="form-control" placeholder="isi alasan/keterangan deactive" name="keterangan_deactive" type="textarea" value="<?php echo $bpjs_ks_no;?>" id="title"></textarea>
+                            </div>
+                          </div>
+
+
+                        </div>
+
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class="form-actions"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                          </div>
+                        </div>
+                      </div>
+                      <?php echo form_close(); ?> </div>
+                  </div>
                 <!-- end row -->
 
                 </div>

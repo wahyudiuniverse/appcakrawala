@@ -265,6 +265,36 @@ $(document).ready(function(){
 	   	});
  	});
 	
+	/* Update basic info */
+	$("#deactive_info").submit(function(e){
+	/*Form Submit*/
+	e.preventDefault();
+		var obj = $(this), action = obj.attr('name');
+		$('.save').prop('disabled', true);
+		$('.icon-spinner3').show();
+		$.ajax({
+			type: "POST",
+			url: e.target.action,
+			data: obj.serialize()+"&is_ajax=1&data=deactive_info&type=deactive_info&form="+action,
+			cache: false,
+			success: function (JSON) {
+				if (JSON.error != '') {
+					toastr.error(JSON.error);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.icon-spinner3').hide();
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				} else {
+					toastr.success(JSON.result);
+					$('.icon-spinner3').hide();
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				}
+			}
+		});
+	});
+
 	// get current val
 	$(".basic_salary").keyup(function(e){
 		var to_currency_rate = $('#to_currency_rate').val();
