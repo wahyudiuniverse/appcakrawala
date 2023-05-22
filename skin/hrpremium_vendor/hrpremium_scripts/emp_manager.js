@@ -146,6 +146,67 @@ $(document).ready(function(){
 		});
 	});
 	
+
+	/* Update basic info */
+	$("#bpjs_info").submit(function(e){
+	/*Form Submit*/
+	e.preventDefault();
+		var obj = $(this), action = obj.attr('name');
+		$('.save').prop('disabled', true);
+		$('.icon-spinner3').show();
+		$.ajax({
+			type: "POST",
+			url: e.target.action,
+			data: obj.serialize()+"&is_ajax=1&data=bpjs_info&type=bpjs_info&form="+action,
+			cache: false,
+			success: function (JSON) {
+				if (JSON.error != '') {
+					toastr.error(JSON.error);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.icon-spinner3').hide();
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				} else {
+					toastr.success(JSON.result);
+					$('.icon-spinner3').hide();
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				}
+			}
+		});
+	});
+
+	/* Update basic info */
+	$("#salary_info").submit(function(e){
+	/*Form Submit*/
+	e.preventDefault();
+		var obj = $(this), action = obj.attr('name');
+		$('.save').prop('disabled', true);
+		$('.icon-spinner3').show();
+		$.ajax({
+			type: "POST",
+			url: e.target.action,
+			data: obj.serialize()+"&is_ajax=1&data=salary_info&type=salary_info&form="+action,
+			cache: false,
+			success: function (JSON) {
+				if (JSON.error != '') {
+					toastr.error(JSON.error);
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.icon-spinner3').hide();
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				} else {
+					toastr.success(JSON.result);
+					$('.icon-spinner3').hide();
+					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					$('.save').prop('disabled', false);
+					Ladda.stopAll();
+				}
+			}
+		});
+	});
+
 	/* Update basic info */
 	$("#document_id").submit(function(e){
 	var fd = new FormData(this);
@@ -307,42 +368,23 @@ $(document).ready(function(){
 		});
 	});
 
+
+	jQuery("#aj_project").change(function(){
+		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
+			jQuery('#project_sub_project').html(data);
+		});
+		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
+		// 	jQuery('#ajax_office_shift').html(data);
+		// });
+	});
+
 	// get departments
 	/*jQuery("#aj_company").change(function(){
 		jQuery.get(base_url+"/get_departments/"+jQuery(this).val(), function(data, status){
 			jQuery('#department_ajax').html(data);
 		});
 	});*/
-	jQuery("#aj_company").change(function(){
-		jQuery.get(base_url+"/get_company_elocations/"+jQuery(this).val(), function(data, status){
-			jQuery('#location_ajax').html(data);
-		});
-		jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
-			jQuery('#ajax_office_shift').html(data);
-		});
-	});
-	jQuery("#location_id").change(function(){
-		jQuery.get(base_url+"/get_location_departments/"+jQuery(this).val(), function(data, status){
-			jQuery('#department_ajax').html(data);
-		});
-	});
-	// get sub departments
-	jQuery("#aj_subdepartments").change(function(){
-		jQuery.get(base_url+"/get_sub_departments/"+jQuery(this).val(), function(data, status){
-			jQuery('#subdepartment_ajax').html(data);
-		});
-	});
-	// get designations
-	jQuery("#aj_subdepartment").change(function(){
-		jQuery.get(base_url+"/designation/"+jQuery(this).val(), function(data, status){
-			jQuery('#designation_ajax').html(data);
-		});
-	});
-	jQuery("#is_aj_subdepartments").change(function(){
-		jQuery.get(base_url+"/is_designation/"+jQuery(this).val(), function(data, status){
-			jQuery('#designation_ajax').html(data);
-		});
-	});
+	// jQues
 	
 	$(".nav-tabs-link").click(function(){
 		var profile_id = $(this).data('profile');
@@ -671,7 +713,7 @@ $(document).ready(function(){
 						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					}, true);
 					$('.icon-spinner3').hide();
-					jQuery('#document_info')[0].reset(); // To reset form fields
+					// jQuery('#document_info')[0].reset(); // To reset form fields
 					$('.save').prop('disabled', false);
 				}
 			},
@@ -843,39 +885,120 @@ $(document).ready(function(){
 		});
 	});
 	
-	/* Add bank account info */
-	jQuery("#bank_account_info").submit(function(e){
-	/*Form Submit*/
-	e.preventDefault();
-		var obj = jQuery(this), action = obj.attr('name');
-		jQuery('.save').prop('disabled', true);
+
+	/* Add document info */
+	$("#bank_account_info").submit(function(e){
+		var fd = new FormData(this);
+		var obj = $(this), action = obj.attr('name');
+		fd.append("is_ajax", 7);
+		fd.append("type", 'bank_account_info');
+		fd.append("data", 'bank_account_info');
+		fd.append("form", action);
+		e.preventDefault();
 		$('.icon-spinner3').show();
+		$('.save').prop('disabled', true);
 		
-		jQuery.ajax({
-			type: "POST",
+		$.ajax({
 			url: e.target.action,
-			data: obj.serialize()+"&is_ajax=16&data=bank_account_info&type=bank_account_info&form="+action,
+			type: "POST",
+			data:  fd,
+			contentType: false,
 			cache: false,
-			success: function (JSON) {
+			processData:false,
+			success: function(JSON)
+			{
 				if (JSON.error != '') {
 					Ladda.stopAll();
 					toastr.error(JSON.error);
-					$('.icon-spinner3').hide();
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					jQuery('.save').prop('disabled', false);
+					$('.save').prop('disabled', false);
+					$('.icon-spinner3').hide();
 				} else {
-					xin_table_bank_account.api().ajax.reload(function(){ 
+					xin_table_document.api().ajax.reload(function(){ 
 						Ladda.stopAll();
 						toastr.success(JSON.result);
 						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					}, true);
 					$('.icon-spinner3').hide();
-					jQuery('#bank_account_info')[0].reset(); // To reset form fields
-					jQuery('.save').prop('disabled', false);
+					// jQuery('#bank_account_info')[0].reset(); // To reset form fields
+					$('.save').prop('disabled', false);
 				}
-			}
-		});
+			},
+			error: function() 
+			{
+				Ladda.stopAll();
+				toastr.error(JSON.error);
+				$('.save').prop('disabled', false);
+			} 	        
+	   });
 	});
+
+
+	/* Update basic info */
+	// $("#bank_account_info").submit(function(e){
+	// /*Form Submit*/
+	// e.preventDefault();
+	// 	var obj = $(this), action = obj.attr('name');
+	// 	$('.save').prop('disabled', true);
+	// 	$('.icon-spinner3').show();
+	// 	$.ajax({
+	// 		type: "POST",
+	// 		url: e.target.action,
+	// 		data: obj.serialize()+"&is_ajax=1&data=bank_account_info&type=bank_account_info&form="+action,
+	// 		cache: false,
+	// 		success: function (JSON) {
+	// 			if (JSON.error != '') {
+	// 				toastr.error(JSON.error);
+	// 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+	// 				$('.icon-spinner3').hide();
+	// 				$('.save').prop('disabled', false);
+	// 				Ladda.stopAll();
+	// 			} else {
+	// 				toastr.success(JSON.result);
+	// 				$('.icon-spinner3').hide();
+	// 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+	// 				$('.save').prop('disabled', false);
+	// 				Ladda.stopAll();
+	// 			}
+	// 		}
+	// 	});
+	// });
+
+	/* Add bank account info */
+	// jQuery("#bank_account_info").submit(function(e){
+	// /*Form Submit*/
+	// e.preventDefault();
+	// 	var obj = jQuery(this), action = obj.attr('name');
+	// 	jQuery('.save').prop('disabled', true);
+	// 	$('.icon-spinner3').show();
+		
+	// 	jQuery.ajax({
+	// 		type: "POST",
+	// 		url: e.target.action,
+	// 		data: obj.serialize()+"&is_ajax=16&data=bank_account_info&type=bank_account_info&form="+action,
+	// 		cache: false,
+	// 		success: function (JSON) {
+	// 			if (JSON.error != '') {
+	// 				Ladda.stopAll();
+	// 				toastr.error(JSON.error);
+	// 				$('.icon-spinner3').hide();
+	// 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+	// 				jQuery('.save').prop('disabled', false);
+	// 			} else {
+	// 				xin_table_bank_account.api().ajax.reload(function(){ 
+	// 					Ladda.stopAll();
+	// 					toastr.success(JSON.result);
+	// 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+	// 				}, true);
+	// 				$('.icon-spinner3').hide();
+	// 				jQuery('#bank_account_info')[0].reset(); // To reset form fields
+	// 				jQuery('.save').prop('disabled', false);
+	// 			}
+	// 		}
+	// 	});
+	// });
+
+
 	jQuery("#security_level_info").submit(function(e){
 	/*Form Submit*/
 	e.preventDefault();

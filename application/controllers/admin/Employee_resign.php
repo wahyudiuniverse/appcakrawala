@@ -190,7 +190,6 @@ class Employee_resign extends MY_Controller {
           exit();
   }
 
-
 	 // get location > departments
 	public function get_project_employees() {
 
@@ -253,7 +252,6 @@ class Employee_resign extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
-
 
 	 // get location > departments
 	public function get_dokumen_resign() {
@@ -754,7 +752,6 @@ class Employee_resign extends MY_Controller {
 						exit;
 					
 		}
-
 	}
 
 	public function read() {
@@ -803,7 +800,6 @@ class Employee_resign extends MY_Controller {
 		$this->load->view('admin/employees/dialog_resign_req', $data);
 	}
 
-	
 	// Validate and update info in database
 	public function update() {
 		

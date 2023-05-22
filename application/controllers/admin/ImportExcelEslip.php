@@ -97,7 +97,7 @@ class ImportExcelEslip extends MY_Controller
 		$session = $this->session->userdata('username');
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 				
-		if(in_array('127',$role_resources_ids)) {
+		if(in_array('469',$role_resources_ids)) {
 			if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/import_excel/preview_eslip", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -449,6 +449,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_vitamin = $user[0]->allow_vitamin;
 				$allow_operation = $user[0]->allow_operation;
 
+				$over_salary = $user[0]->over_salary;
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
 				$overtime = $user[0]->overtime;
@@ -509,6 +510,7 @@ class ImportExcelEslip extends MY_Controller
 					'allow_vitamin' => $allow_vitamin,
 					'allow_operation' => $allow_operation,
 
+					'over_salary' => $over_salary,
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
 					'overtime' => $overtime,
@@ -620,6 +622,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_vitamin = $user[0]->allow_vitamin;
 				$allow_operation = $user[0]->allow_operation;
 
+				$over_salary = $user[0]->over_salary;
 				$penyesuaian_umk = $user[0]->penyesuaian_umk;
 				$insentive = $user[0]->insentive; 
 				$overtime = $user[0]->overtime;
@@ -681,6 +684,7 @@ class ImportExcelEslip extends MY_Controller
 					'allow_vitamin' => $allow_vitamin,
 					'allow_operation' => $allow_operation,
 
+					'over_salary' => $over_salary,
 					'penyesuaian_umk' => $penyesuaian_umk,
 					'insentive' => $insentive,
 					'overtime' => $overtime,
@@ -933,6 +937,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_vitamin = $eslip[0]->allow_vitamin;
 				$allow_operation = $eslip[0]->allow_operation;
 
+				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
 				$overtime = $eslip[0]->overtime;
@@ -1534,9 +1539,28 @@ class ImportExcelEslip extends MY_Controller
 					</td>
 				</tr>
 
-			</table>
+			</table>';
 
 
+			if($over_salary!=0) {
+				$tbl_2 .= '
+				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Kelebihan Gaji</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>';
+			}
+
+
+			$tbl_2 .= '
 			<br>
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
@@ -1668,7 +1692,7 @@ class ImportExcelEslip extends MY_Controller
 
 
 
-				if($pot_trip_malang!=0){	
+				if($pot_trip_malang!=0){
 				$tbl_2 .= '
 					<tr>
 						<td>
@@ -1683,7 +1707,7 @@ class ImportExcelEslip extends MY_Controller
 					</tr>';
 				}
 
-				if($pot_device!=0){	
+				if($pot_device!=0){
 				$tbl_2 .= '
 					<tr>
 						<td>
@@ -2005,6 +2029,7 @@ class ImportExcelEslip extends MY_Controller
 				$allow_vitamin = $eslip[0]->allow_vitamin;
 				$allow_operation = $eslip[0]->allow_operation;
 
+				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
 				$overtime = $eslip[0]->overtime;
@@ -2602,9 +2627,27 @@ class ImportExcelEslip extends MY_Controller
 					</td>
 				</tr>
 
-			</table>
+			</table>';
 
 
+			if($over_salary!=0) {
+				$tbl_2 .= '
+				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Kelebihan Gaji</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>';
+			}
+
+			$tbl_2 .= '
 			<br>
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>

@@ -285,7 +285,6 @@ class Reports_model extends CI_Model {
 	}
 
 
-
 	// get employees list> reports
 	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
@@ -335,11 +334,8 @@ class Reports_model extends CI_Model {
 // 21502904,
 // 21500077,
 // 21300086,
-// 21502892,
 // 21302893,
 // 21500086,
-// 21502897,
-// 21502898,
 // 21502899,
 // 21502900,
 // 21302902,
@@ -363,9 +359,10 @@ class Reports_model extends CI_Model {
 // 22505713,
 // 21209428,
 // 21209528,
+// 22509743,
 // 21502903,
-// 21309636,
-// 21309639,
+// 21309784,
+// 21509785,
 // 21402913,
 // 21402888,
 // 21500063,
@@ -396,7 +393,6 @@ class Reports_model extends CI_Model {
 // 21500081,
 // 21300082,
 // 21300837
-
 //  	)");
 	}
 

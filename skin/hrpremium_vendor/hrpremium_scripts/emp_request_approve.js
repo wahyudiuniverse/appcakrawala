@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/request_approve_list/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -87,7 +87,7 @@ $(document).ready(function() {
 	
 	
 	/* Add data */ /*Form Submit*/
-	$("#xin-form").submit(function(e){
+	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);
 		var obj = $(this), action = obj.attr('name');
 		fd.append("is_ajax", 1);

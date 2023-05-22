@@ -22,6 +22,15 @@
   } else {
     $designation_name = '--'; 
   }
+
+    $subprojects = $this->Project_model->read_single_subproject($sub_project_id);
+    if(!is_null($subprojects)){
+      $nama_subproject = $subprojects[0]->sub_project_name;
+    } else {
+      $nama_subproject = '--';  
+    }
+
+  
   $leave_user = $this->Xin_model->read_user_info($session['user_id']);
 ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
@@ -51,10 +60,13 @@
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>
                   
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-qualification"> <i class="lnr lnr-file-empty text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_qualification');?></a>
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-salary"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_paket_salary');?></a>
+                  
+
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-cpassword"> <i class="lnr lnr-file-empty text-lightest"></i> &nbsp; Ubah PIN</a>
 
                   <?php if($system[0]->employee_manage_own_work_experience=='yes'){?>
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-experience"> <i class="lnr lnr-hourglass text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_w_experience');?></a>
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-experience"> <i class="lnr lnr-hourglass text-lightest"></i> &nbsp; Ubah PIN</a>
                   <?php } ?>
                 </div>
               </div>
@@ -282,15 +294,20 @@
                         <div class="box-body">
                           <div class="card-block">
 
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="pt">Perusahaan / PT</label>
-                                  <input class="form-control" placeholder="" name="company_id" type="text" value="<?php echo $company_name;?>" disabled>
+                              <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_companies');?>">
+                                <option value=""></option>
+                                <?php foreach($all_companies as $company) {?>
+                                <option value="<?php echo $company->company_id?>" <?php if($company_id==$company->company_id):?> selected <?php endif;?>><?php echo $company->name?></option>
+                                <?php } ?>
+                              </select>
                                 </div>
                               </div>
                             </div>
-
 
                                   <input class="form-control" placeholder="" name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
 
@@ -306,17 +323,23 @@
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="project">Project</label>
-                                  <input class="form-control" placeholder="" name="blogger_link" type="text" value="<?php echo $project_name;?>" disabled>
+                              <label for="projects"><?php echo $this->lang->line('xin_projects');?><i class="hrpremium-asterisk"></i></label>
+                              <select class="form-control" id="aj_project" name="project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                                <option value=""></option>
+                                <?php foreach($all_projects as $projects) {?>
+                                <option value="<?php echo $projects->project_id?>" <?php if($project_id==$projects->project_id):?> selected <?php endif;?>><?php echo $projects->title?></option>
+                                <?php } ?>
+                              </select>
                                 </div>
                               </div>
                             </div>
 
+
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-6" id="project_sub_project">
                                 <div class="form-group">
                                   <label for="blogger_profile">Sub Project</label>
-                                  <input class="form-control" placeholder="" name="linkdedin_link" type="text" value="<?php echo $sub_project_name;?>" disabled>
+                                  <input class="form-control" placeholder="" name="sub_project_id" type="text" value="<?php echo $nama_subproject;?>" disabled>
                                 </div>
                               </div>
                             </div>
@@ -361,6 +384,92 @@
                       <?php echo form_close(); ?> </div>
                   </div>
 
+                  <!-- BPJS-->
+                  <div class="tab-pane fade" id="account-bpjs">
+                    <div class="box" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
+                      <div class="card-body">
+                        <div class="box-datatable table-responsive">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                            <thead>
+                              <tr>
+                                <th><?php echo $this->lang->line('xin_action');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
+                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                      </div>s
+                    </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Dokumen </strong> BPJS </span> </div>
+                    <div class="card-body pb-2">
+                      <?php $attributes = array('name' => 'bpjs_info', 'id' => 'bpjs_info', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                      <?php echo form_open_multipart('admin/employees/bpjs_info', $attributes, $hidden);?>
+                      <?php
+                      $data_usr2 = array(
+                        'type'  => 'hidden',
+                        'name'  => 'user_id',
+                        'value' => $user_id,
+                       );
+                      echo form_input($data_usr2);
+                      ?>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjstk');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="number" value="<?php echo $bpjs_tk_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjstk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select class="form-control" name="bpjstk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_tk_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_tk_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label for="title"><?php echo $this->lang->line('xin_bpjsks');?><i class="hrpremium-asterisk">*</i></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="number" value="<?php echo $bpjs_ks_no;?>" id="title">
+                            </div>
+                          </div>
+
+                          <div class="col-md-3">
+                            <div class="form-group">
+                              <label for="bpjsks_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
+                              <select class="form-control" name="bpjsks_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
+                                <option value=""></option>
+                                <option value="AKTIF" <?php if($bpjs_ks_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
+                                <option value="TIDAK AKTIF" <?php if($bpjs_ks_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class="form-actions"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                          </div>
+                        </div>
+                      </div>
+                      <?php echo form_close(); ?> </div>
+                  </div>
+
                   <!-- DOKUMEN FOTO-->
                   <div class="tab-pane fade" id="account-document">
                     <div class="box" hidden>
@@ -383,7 +492,7 @@
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_document_info' => 'UPDATE');?>
-                      <?php echo form_open_multipart('admin/profile/document_info', $attributes, $hidden);?>
+                      <?php echo form_open_multipart('admin/employees/document_info', $attributes, $hidden);?>
                       <?php
                       $data_usr2 = array(
                         'type'  => 'hidden',
@@ -476,51 +585,6 @@
                         </div>
                       </div>
 
-
-                        <div class="row">
-                          <!--rule-->
-
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="title"><?php echo $this->lang->line('xin_bpjstk');?><i class="hrpremium-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="number" value="<?php echo $bpjs_tk_no;?>" id="title">
-                            </div>
-                          </div>
-
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="bpjstk_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
-                              <select class="form-control" name="bpjstk_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
-                                <option value=""></option>
-                                <option value="AKTIF" <?php if($bpjs_tk_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
-                                <option value="TIDAK AKTIF" <?php if($bpjs_tk_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div class="row">
-                          <!--rule-->
-
-                          <div class="col-md-4">
-                            <div class="form-group">
-                              <label for="title"><?php echo $this->lang->line('xin_bpjsks');?><i class="hrpremium-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="number" value="<?php echo $bpjs_ks_no;?>" id="title">
-                            </div>
-                          </div>
-
-                          <div class="col-md-3">
-                            <div class="form-group">
-                              <label for="bpjsks_confirm"><?php echo $this->lang->line('xin_document_status');?></label>
-                              <select class="form-control" name="bpjsks_confirm" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_document_status');?>">
-                                <option value=""></option>
-                                <option value="AKTIF" <?php if($bpjs_ks_status == 'AKTIF'):?> selected="selected"<?php endif;?>>AKTIF</option>
-                                <option value="TIDAK AKTIF" <?php if($bpjs_ks_status == 'TIDAK AKTIF'):?> selected="selected"<?php endif;?>>TIDAK AKTIF</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
@@ -539,7 +603,7 @@
                         <div class="card-block">
                           <?php $attributes = array('name' => 'bank_account_info', 'id' => 'bank_account_info', 'autocomplete' => 'off');?>
                           <?php $hidden = array('u_rekening_info' => 'UPDATE');?>
-                          <?php echo form_open('admin/profile/bank_account_info/', $attributes, $hidden);?>
+                          <?php echo form_open('admin/employees/bank_account_info/', $attributes, $hidden);?>
                           <?php
                               $data_usr10 = array(
                                     'type'  => 'hidden',
@@ -549,6 +613,7 @@
                             echo form_input($data_usr10);
                             ?>
 
+                        <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
                         <input name="ffoto_rek" type="text" value="<?php echo $filename_rek;?>" hidden>
 
                       <!-- REKENING -->
@@ -562,9 +627,10 @@
 
                         <div class="col-md-4">
                           <div class="form-group">
+
                             <fieldset class="form-group">
                               <label for="logo">Foto Rekening (Buku/E-Banking/Mobile-Banking)</label>
-                              <input type="file" class="form-control-file" id="document_file_rek" name="document_file_rek">
+                              <input type="file" class="form-control-file" id="docfile_rek" name="docfile_rek">
                               <small>Jenis Photo/File: png, jpg, dan jpeg</small>
                             </fieldset>
                           </div>
@@ -601,7 +667,7 @@
                             <div class="col-md-5">
                               <div class="form-group">
                                 <label for="account_title">Nama Pemilik Rekening</label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="pemilik_rek" type="text" value="<?php echo $pemilik_rek;?>" id="account_name">
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="pemilik_rek" type="text" value="<?php echo $pemilik_rek;?>">
                               </div>
                             </div>
                           </div>
@@ -640,231 +706,233 @@
                     </div>
                   </div>
 
-                  <div class="tab-pane fade" id="account-profile_picture">
+                  <!-- PK GAJI BPJS-->
+                  <div class="tab-pane fade" id="account-salary">
+                    <div class="box" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
+                      <div class="card-body">
+                        <div class="box-datatable table-responsive">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                            <thead>
+                              <tr>
+                                <th><?php echo $this->lang->line('xin_action');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
+                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                      </div>s
+                    </div>
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> Dokumen </strong> BPJS </span> </div>
                     <div class="card-body pb-2">
-                      <?php $attributes = array('name' => 'profile_picture', 'id' => 'f_profile_picture', 'autocomplete' => 'off');?>
-                      <?php $hidden = array('u_profile_picture' => 'UPDATE');?>
-                      <?php echo form_open_multipart('admin/employees/profile_picture/', $attributes, $hidden);?>
+                      <?php $attributes = array('name' => 'salary_info', 'id' => 'salary_info', 'autocomplete' => 'off');?>
+                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                      <?php echo form_open_multipart('admin/employees/salary_info', $attributes, $hidden);?>
                       <?php
-                              $data_usr2 = array(
-                                    'type'  => 'hidden',
-                                    'name'  => 'user_id',
-                                    'id'  => 'user_id',
-                                    'value' => $session['user_id'],
-                             );
-                            echo form_input($data_usr2);
-                            ?>
-                      <?php
-                            $data_usr3 = array(
-                                    'type'  => 'hidden',
-                                    'name'  => 'session_id',
-                                    'id'  => 'session_id',
-                                    'value' => $session['user_id'],
-                             );
-                            echo form_input($data_usr3);
-                            ?>
-                      <div class="box">
-                        <div class="box-body">
-                          <div class="card-block">
-                            <div class="row">
+                      $data_usr2 = array(
+                        'type'  => 'hidden',
+                        'name'  => 'user_id',
+                        'value' => $user_id,
+                       );
+                      echo form_input($data_usr2);
+                      ?>
+
 
                             <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+                            <!-- ROW 1 -->
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Gaji Pokok</label>
+                                  <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="<?php echo $basic_salary;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Jabatan</label>
+                                  <input class="form-control" placeholder="0" name="allow_jabatan" type="text" value="<?php echo $allow_jabatan;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Area</label>
+                                  <input class="form-control" placeholder="0" name="allow_area" type="text" value="<?php echo $allow_area;?>">
+                                </div>
+                              </div>
 
-                              <div class="col-md-12">
-                                <div class='form-group'>
-                                  <fieldset class="form-group">
-                                    <label for="logo"><?php echo $this->lang->line('xin_browse');?></label>
-                                    <input type="file" class="form-control-file" id="p_file" name="p_file">
-                                    <small><?php echo $this->lang->line('xin_e_details_picture_type');?></small>
-                                  </fieldset>
-                                  <?php if($profile_picture!='' && $profile_picture!='no file') {?>
-                                  <img src="<?php echo site_url().'uploads/profile/'.$profile_picture;?>" width="50px" style="margin-left:20px;" id="u_file">
-                                  <?php } else {?>
-                                  <?php if($gender=='Male') { ?>
-                                  <?php $de_file = site_url().'uploads/profile/default_male.jpg';?>
-                                  <?php } else { ?>
-                                  <?php $de_file = site_url().'uploads/profile/default_female.jpg';?>
-                                  <?php } ?>
-                                  <img src="<?php echo $de_file;?>" width="50px" style="margin-left:20px;" id="u_file">
-                                  <?php } ?>
-                                  <?php if($profile_picture!='' && $profile_picture!='no file') {?>
-                                  <br />
-                                  <label>
-                                    <input type="checkbox" class="minimal" value="1" id="remove_profile_picture" name="remove_profile_picture">
-                                    <?php echo $this->lang->line('xin_e_details_remove_pic');?></span> </label>
-                                  <?php } else {?>
-                                  <div id="remove_file" style="display:none;">
-                                    <label>
-                                      <input type="checkbox" class="minimal" value="1" id="remove_profile_picture" name="remove_profile_picture">
-                                      <?php echo $this->lang->line('xin_e_details_remove_pic');?></span> </label>
-                                  </div>
-                                  <?php } ?>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Masa Kerja</label>
+                                  <input class="form-control" placeholder="0" name="allow_masa_kerja" type="text" value="<?php echo $allow_masakerja;?>">
                                 </div>
                               </div>
                             </div>
-                            <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+
+                            <!-- ROW 2 -->
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Makan & Transport</label>
+                                  <input class="form-control" placeholder="0" name="allow_trans_meal" type="text" value="<?php echo $allow_trans_meal;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Makan</label>
+                                  <input class="form-control" placeholder="0" name="allow_meal" type="text" value="<?php echo $allow_konsumsi;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Transport</label>
+                                  <input class="form-control" placeholder="0" name="allow_trans" type="text" value="<?php echo $allow_transport;?>">
+                                </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Komunikasi</label>
+                                  <input class="form-control" placeholder="0" name="allow_comunication" type="text" value="<?php echo $allow_comunication;?>">
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- ROW 3 -->
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Laptop/HP</label>
+                                  <input class="form-control" placeholder="0" name="allow_device" type="text" value="<?php echo $allow_device;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Tempat Tinggal</label>
+                                  <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="<?php echo $allow_residence_cost;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Rental</label>
+                                  <input class="form-control" placeholder="0" name="allow_rent" type="text" value="<?php echo $allow_rent;?>">
+                                </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Parkir</label>
+                                  <input class="form-control" placeholder="0" name="allow_parking" type="text" value="<?php echo $allow_parking;?>">
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- ROW 4 -->
+                            <div class="row">
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Kesehatan</label>
+                                  <input class="form-control" placeholder="0" name="allow_medicine" type="text" value="<?php echo $allow_medichine;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tunjangan Akomodasi</label>
+                                  <input class="form-control" placeholder="0" name="allow_akomodasi" type="text" value="<?php echo $allow_akomodsasi;?>">
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Kasir</label>
+                                  <input class="form-control" placeholder="0" name="allow_kasir" type="text" value="<?php echo $allow_kasir;?>">
+                                </div>
+                              </div>
+
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label class="form-label">Tunjangan Operational</label>
+                                  <input class="form-control" placeholder="0" name="allow_operation" type="text" value="<?php echo $allow_operational;?>">
+                                </div>
+                              </div>
+                            </div>
+
+
+                            <div class="row">
+                              <!--PERUSAHAAN-->
+
+
+                              <!--TANGGAL MULAI KONTRAK-->
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                <label for="pkwt_join_date">Tanggal Mulai Kontrak<i class="hrpremium-asterisk">*</i></label>
+                                <input class="form-control date" readonly placeholder="YYYY-MM-DD" name="join_date_pkwt" type="text" value="<?php echo $contract_start;?>">
+                                </div>
+                              </div>
+
+                              <!--TANGGAL AKHIR KONTRAK-->
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                <label for="pkwt_end_date">Tanggal Akhir Kontrak<i class="hrpremium-asterisk">*</i></label>
+                                <input class="form-control date" readonly placeholder="YYYY-MM-DD" name="pkwt_end_date" type="text" value="<?php echo $contract_end;?>">
+                                </div>
+                              </div>
+                            </div>
+
+
+                          <div class="row">
+                            <!--PERIODE KONTRAK-->
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label for="waktu_kontrak">Waktu Kontrak<i class="hrpremium-asterisk">*</i></label>
+                                <select class="form-control" name="waktu_kontrak" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
+                                  <option value="1" <?php if($contract_periode=='1'):?> selected <?php endif; ?>>1 (Bulan)</option>
+                                  <option value="3" <?php if($contract_periode=='3'):?> selected <?php endif; ?>>3 (Bulan)</option>
+                                  <option value="6" <?php if($contract_periode=='6'):?> selected <?php endif; ?>>6 (Bulan)</option>
+                                  <option value="12" <?php if($contract_periode=='12'):?> selected <?php endif; ?>>12 (Bulan)</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <!-- HK -->
+                            <div class="col-md-3">
+                              <div class="form-group">
+                                <label for="hari_kerja">Hari Kerja<i class="hrpremium-asterisk">*</i></label>
+                                <input class="form-control" placeholder="0" name="hari_kerja" type="text" value="<?php echo $hari_kerja;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                              </div>
+                            </div>
+                          </div>
+
+                            <!-- ROW 7 -->
+                            <div class="row">
+                              <div class="col-md-2">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tanggal CUT-START</label>
+                                  <input class="form-control" placeholder="0" name="cut_start" type="text" value="<?php echo $cut_start;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-group">
+                                  <label class="form-label control-label">Tanggal CUT-OFF</label>                    
+                                  <input class="form-control" placeholder="0" name="cut_off" type="text" value="<?php echo $cut_off;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                              </div>
+                              <div class="col-md-2">
+                                <div class="form-group">
+                                  <label class="form-label">Tanggal Penggajian</label><input class="form-control" placeholder="0" name="date_payment" type="text" value="<?php echo $date_payment;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                              </div>
+
+                            </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <div class="form-actions"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
                           </div>
                         </div>
                       </div>
                       <?php echo form_close(); ?> </div>
                   </div>
-
-                  <?php if($system[0]->employee_manage_own_contact=='yes'){?>
-                  <div class="tab-pane fade" id="account-contacts">
-                    <div class="box md-4">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_contact');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <?php $attributes = array('name' => 'contact_info', 'id' => 'contact_info', 'autocomplete' => 'off');?>
-                          <?php $hidden = array('u_basic_info' => 'ADD');?>
-                          <?php echo form_open('admin/employees/contact_info/', $attributes, $hidden);?>
-                          <?php
-                          $data_usr6 = array(
-                                'type'  => 'hidden',
-                                'name'  => 'user_id',
-                                'value' => $session['user_id'],
-                         );
-                        echo form_input($data_usr6);
-                        ?>
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                <label for="relation"><?php echo $this->lang->line('xin_e_details_relation');?></label>
-                                <select class="form-control" name="relation" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_select_one');?>">
-                                  <option value=""><?php echo $this->lang->line('xin_select_one');?></option>
-                                  <option value="Self"><?php echo $this->lang->line('xin_self');?></option>
-                                  <option value="Parent"><?php echo $this->lang->line('xin_parent');?></option>
-                                  <option value="Spouse"><?php echo $this->lang->line('xin_spouse');?></option>
-                                  <option value="Child"><?php echo $this->lang->line('xin_child');?></option>
-                                  <option value="Sibling"><?php echo $this->lang->line('xin_sibling');?></option>
-                                  <option value="In Laws"><?php echo $this->lang->line('xin_in_laws');?></option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="col-md-7">
-                              <div class="form-group">
-                                <label for="work_email" class="control-label"><?php echo $this->lang->line('dashboard_email');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_work');?>" name="work_email" type="text">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                <label>
-                                  <input type="checkbox" class="minimal" value="1" id="is_primary" name="is_primary">
-                                  <?php echo $this->lang->line('xin_e_details_pcontact');?></span> </label>
-                                &nbsp;
-                                <label>
-                                  <input type="checkbox" class="minimal" value="1" id="is_dependent" name="is_dependent">
-                                  <?php echo $this->lang->line('xin_e_details_dependent');?></span> </label>
-                              </div>
-                            </div>
-                            <div class="col-md-7">
-                              <div class="form-group">
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_dependent');?>" name="personal_email" type="text">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                <label for="name" class="control-label"><?php echo $this->lang->line('xin_name');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_name');?>" name="contact_name" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-7">
-                              <div class="form-group" id="designation_ajax">
-                                <label for="address_1" class="control-label"><?php echo $this->lang->line('xin_address');?></label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="address_1" type="text">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                <label for="work_phone"><?php echo $this->lang->line('xin_phone');?></label>
-                                <div class="row">
-                                  <div class="col-md-8">
-                                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_work');?>" name="work_phone" type="text">
-                                  </div>
-                                  <div class="col-md-4">
-                                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_phone_ext');?>" name="work_phone_extension" type="text">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-7">
-                              <div class="form-group">
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_2');?>" name="address_2" type="text">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_mobile');?>" name="mobile_phone" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-7">
-                              <div class="form-group">
-                                <div class="row">
-                                  <div class="col-md-5">
-                                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_city');?>" name="city" type="text">
-                                  </div>
-                                  <div class="col-md-4">
-                                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_state');?>" name="state" type="text">
-                                  </div>
-                                  <div class="col-md-3">
-                                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_zipcode');?>" name="zipcode" type="text">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_home');?>" name="home_phone" type="text">
-                              </div>
-                            </div>
-                            <div class="col-md-7">
-                              <div class="form-group">
-                                <select name="country" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_country');?>">
-                                  <option value=""></option>
-                                  <?php foreach($all_countries as $country) {?>
-                                  <option value="<?php echo $country->country_id;?>"> <?php echo $country->country_name;?></option>
-                                  <?php } ?>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
-                          <?php echo form_close(); ?> </div>
-                      </div>
-                    </div>
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_contacts');?> </span> </div>
-                      <div class="card-body">
-                        <div class="card-block">
-                          <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_contact" style="width:100%;">
-                              <thead>
-                                <tr>
-                                  <th><?php echo $this->lang->line('xin_action');?></th>
-                                  <th><?php echo $this->lang->line('xin_employees_full_name');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_relation');?></th>
-                                  <th><?php echo $this->lang->line('dashboard_email');?></th>
-                                  <th><?php echo $this->lang->line('xin_e_details_mobile');?></th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <?php } ?>
 
                   <?php if($system[0]->employee_manage_own_social=='yes'){?>
                   <div class="tab-pane fade" id="account-social">
@@ -948,114 +1016,6 @@
                       <?php echo form_close(); ?> </div>
                   </div>
                   <?php } ?>
-
-
-
-                  <div class="tab-pane fade" id="account-qualification">
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_qualification');?> </span> </div>
-                      <div class="card-body">
-                        <div class="box-datatable table-responsive">
-                          <table class="table table-striped table-bordered dataTable" id="xin_table_qualification" style="width:100%;">
-                            <thead>
-                              <tr>
-                                <th><?php echo $this->lang->line('xin_action');?></th>
-                                <th><?php echo $this->lang->line('xin_e_details_inst_name');?></th>
-                                <th><?php echo $this->lang->line('xin_e_details_timeperiod');?></th>
-                                <th><?php echo $this->lang->line('xin_e_details_edu_level');?></th>
-                              </tr>
-                            </thead>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_qualification');?> </span> </div>
-                    <div class="card-body pb-2">
-                      <?php $attributes = array('name' => 'qualification_info', 'id' => 'qualification_info', 'autocomplete' => 'off');?>
-                      <?php $hidden = array('u_basic_info' => 'UPDATE');?>
-                      <?php echo form_open('admin/employees/qualification_info', $attributes, $hidden);?>
-                      <?php
-                      $data_usr3 = array(
-                        'type'  => 'hidden',
-                        'name'  => 'user_id',
-                        'value' => $user_id,
-                       );
-                      echo form_input($data_usr3);
-                      ?>
-
-                      <div class="row">
-                        <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="education_level" class="control-label"><?php echo $this->lang->line('xin_e_details_edu_level');?></label>
-                              <select class="form-control" name="education_level" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_edu_level');?>">
-                                  <?php 
-                                  foreach ( $all_education_level as $education_level) {
-                                  ?>
-                                    <option value="<?php echo $education_level->education_level_id?>"><?php echo $education_level->name?></option>
-                                  <?php 
-                                  } 
-                                  ?>
-                              </select>
-                          </div>
-                        </div>
-
-                        <div class="col-md-6">
-                          <div class="form-group">
-                            <label for="name"><?php echo $this->lang->line('xin_e_details_inst_name');?>
-                              <i class="hrpremium-asterisk">*</i>
-                            </label>
-                            <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_inst_name');?>" name="name" type="text">
-                          </div>
-                        </div>
-                      </div>
-                              
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="from_year" class="control-label"><?php echo $this->lang->line('xin_e_details_timeperiod');?>
-                              <i class="hrpremium-asterisk">*</i>
-                            </label>
-
-                            <div class="row">
-                              <div class="col-md-6">
-
-                            <input class="form-control" placeholder="Tahun Masuk" name="from_year" type="text">
-
-                              </div>
-                              
-                              <div class="col-md-6">
-
-                            <input class="form-control" placeholder="Tahun Lulus" name="to_year" type="text">
-
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                            
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label for="description" class="control-label"><?php echo $this->lang->line('xin_jurusan');?></label>
-                              <textarea class="form-control" placeholder="Keterangan" data-show-counter="1" data-limit="300" name="description" cols="30" rows="3" id="d_description"></textarea>
-                          </div>
-                        </div>
-                      </div>
-                                
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> 
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-            
-                      <?php echo form_close(); ?> 
-                    </div>
-                  </div>
-
 
                   <?php if($system[0]->employee_manage_own_work_experience=='yes'){?>
                   <div class="tab-pane fade" id="account-experience">
@@ -1198,998 +1158,24 @@
                     </div>
                   </div>
 
+                <!-- end row -->
+
+                </div>
+              <!-- </div> -->
+            <!-- </div> -->
+          <!-- </div> -->
+
+
+ 
+
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="smartwizard-2-step-3" class="animated fadeIn tab-pane step-content mt-3" style="display: none;">
-        <div class="overflow-hidden">
-          <div class="col-md-12">
-            <div class="tab-content">
-              <div class="row">
-                <?php $leave_categories_ids = explode(',',$leave_user[0]->leave_categories); ?>
-                <?php foreach($all_leave_types as $type) {
-                            if(in_array($type->leave_type_id,$leave_categories_ids)){?>
-                <?php
-                            $hlfcount =0;
-                            //$count_l =0;
-                            $leave_halfday_cal = employee_leave_halfday_cal($type->leave_type_id,$session['user_id']);
-                            foreach($leave_halfday_cal as $lhalfday):
-                                $hlfcount += 0.5;
-                            endforeach;
-                            
-                            $count_l = count_leaves_info($type->leave_type_id,$session['user_id']);
-                            $count_l = $count_l - $hlfcount;
-                        ?>
-                <?php
-                            $edays_per_year = $type->days_per_year;
-                            
-                            if($count_l == 0){
-                                $progress_class = '';
-                                $count_data = 0;
-                            } else {
-                                if($edays_per_year > 0){
-                                    $count_data = $count_l / $edays_per_year * 100;
-                                } else {
-                                    $count_data = 0;
-                                }
-                                // progress
-                                if($count_data <= 20) {
-                                    $progress_class = 'progress-success';
-                                } else if($count_data > 20 && $count_data <= 50){
-                                    $progress_class = 'progress-info';
-                                } else if($count_data > 50 && $count_data <= 75){
-                                    $progress_class = 'progress-warning';
-                                } else {
-                                    $progress_class = 'progress-danger';
-                                }
-                            }
-                        ?>
-                        <div class="col-md-3">
-                          <div class="card mb-4">
-                            <div class="card-body">
-                              <div class="d-flex align-items-center">
-                                <div class="fas fa-calendar-alt display-4 text-success"></div>
-                                <div class="ml-3">
-                                  <div class="text-muted small"><?php echo $type->type_name;?> (<?php echo $count_l;?>/<?php echo $edays_per_year;?>)</div>
-                                  <div class="text-large">
-                                    <div class="progress" style="height: 6px;">
-                                      <div class="progress-bar" style="width: <?php echo $count_data;?>%;"></div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <?php
-                        } }
-                        ?>
-              </div>
-              <?php $leave = $this->Timesheet_model->get_employee_leaves($session['user_id']); ?>
-              <div class="card">
-                <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong><?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_leave');?></span> </div>
-                <div class="card-body">
-                  <div class="box-datatable table-responsive">
-                    <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table" id="xin_hr_table">
-                      <thead>
-                        <tr>
-                          <th><?php echo $this->lang->line('xin_view');?></th>
-                          <th width="250"><?php echo $this->lang->line('xin_leave_type');?></th>
-                          <th><?php echo $this->lang->line('left_department');?></th>
-                          <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_leave_duration');?></th>
-                          <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_applied_on');?></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php foreach($leave->result() as $r) { ?>
-                        <?php
-                            // get start date and end date
-                            $user = $this->Xin_model->read_user_info($r->employee_id);
-                            if(!is_null($user)){
-                                $full_name = $user[0]->first_name. ' '.$user[0]->last_name;
-                                // department
-                                $department = $this->Department_model->read_department_information($user[0]->department_id);
-                                if(!is_null($department)){
-                                    $department_name = $department[0]->department_name;
-                                } else {
-                                    $department_name = '--';  
-                                }
-                            } else {
-                                $full_name = '--';  
-                                $department_name = '--';
-                            }
-                             
-                             // get leave type
-                             $leave_type = $this->Timesheet_model->read_leave_type_information($r->leave_type_id);
-                             if(!is_null($leave_type)){
-                                $type_name = $leave_type[0]->type_name;
-                            } else {
-                                $type_name = '--';  
-                            }
-                            
-                            // get company
-                            $company = $this->Xin_model->read_company_info($r->company_id);
-                            if(!is_null($company)){
-                                $comp_name = $company[0]->name;
-                            } else {
-                                $comp_name = '--';  
-                            }
-                             
-                            $datetime1 = new DateTime($r->from_date);
-                            $datetime2 = new DateTime($r->to_date);
-                            $interval = $datetime1->diff($datetime2);
-                            if(strtotime($r->from_date) == strtotime($r->to_date)){
-                                $no_of_days =1;
-                            } else {
-                                $no_of_days = $interval->format('%a') + 1;
-                            }
-                            $applied_on = $this->Xin_model->set_date_format($r->applied_on);
-                            if($r->is_half_day == 1){
-                            $duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrpremium_total_days').': '.$this->lang->line('xin_hr_leave_half_day');
-                            } else {
-                                $duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date).'<br>'.$this->lang->line('xin_hrpremium_total_days').': '.$no_of_days;
-                            }             
-                             
-                            if($r->status==1): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
-                            elseif($r->status==2): $status = '<span class="badge bg-green">'.$this->lang->line('xin_approved').'</span>';
-                            elseif($r->status==4): $status = '<span class="badge bg-green">'.$this->lang->line('xin_role_first_level_approved').'</span>';
-                            else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-                            
-                            if(in_array('290',$role_resources_ids)) { //view
-                                $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/timesheet/leave_details/id/'.$r->leave_id.'/" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-                            } else {
-                                $view = '';
-                            }
-                            $combhr = $view;
-                            $itype_name = $type_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_reason').': '.$r->reason.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('left_company').': '.$comp_name.'<i></i></i></small>';
-                            ?>
-                        <tr>
-                          <td><?php echo $combhr;?></td>
-                          <td><?php echo $itype_name;?></td>
-                          <td><?php echo $department_name;?></td>
-                          <td><i class="fa fa-calendar"></i> <?php echo $duration;?></td>
-                          <td><i class="fa fa-calendar"></i> <?php echo $applied_on;?></td>
-                        </tr>
-                        <?php } ?>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="smartwizard-2-step-4" class="animated fadeIn tab-pane step-content mt-3" style="display: none;">
-        <div class="cards-body">
-          <div class="card overflow-hidden">
-            <div class="row no-gutters row-bordered row-border-light">
-              <div class="col-md-3 pt-0">
-                <div class="list-group list-group-flush account-settings-links"> <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-awards"> <i class="lnr lnr-strikethrough text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_awards');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-travels"> <i class="lnr lnr-car text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_travels');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-training"> <i class="lnr lnr-graduation-hat text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_training');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-tickets"> <i class="lnr lnr-location text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_tickets');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-transfers"> <i class="lnr lnr-store text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_transfers');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-promotions"> <i class="lnr lnr-tag text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_promotions');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-complaints"> <i class="lnr lnr-file-add text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_complaints');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-warnings"> <i class="lnr lnr-paw text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_warnings');?></a> </div>
-              </div>
-              <div class="col-md-9">
-                <div class="tab-content">
-                  <div class="tab-pane fade show active" id="account-awards">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_awards');?> </span> </div>
-                    <?php $award = $this->Awards_model->get_employee_awards($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table" id="xin_hr_table">
-                          <thead>
-                            <tr>
-                              <th style="width:100px;"><?php echo $this->lang->line('xin_view');?></th>
-                              <th width="300"><i class="fa fa-trophy"></i> <?php echo $this->lang->line('xin_award_name');?></th>
-                              <th><i class="fa fa-gift"></i> <?php echo $this->lang->line('xin_gift');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_award_month_year');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($award->result() as $r) { ?>
-                            <?php
-                            // get user > added by
-                            $user = $this->Xin_model->read_user_info($r->employee_id);
-                            // user full name
-                            if(!is_null($user)){
-                                $full_name = $user[0]->first_name.' '.$user[0]->last_name;
-                            } else {
-                                $full_name = '--';  
-                            }
-                            // get award type
-                            $award_type = $this->Awards_model->read_award_type_information($r->award_type_id);
-                            if(!is_null($award_type)){
-                                $award_type = $award_type[0]->award_type;
-                            } else {
-                                $award_type = '--'; 
-                            }
-                            
-                            $d = explode('-',$r->award_month_year);
-                            $get_month = date('F', mktime(0, 0, 0, $d[1], 10));
-                            $award_date = $get_month.', '.$d[0];
-                            // get currency
-                            if($r->cash_price == '') {
-                                $currency = $this->Xin_model->currency_sign(0);
-                            } else {
-                                $currency = $this->Xin_model->currency_sign($r->cash_price);
-                            }   
-                            // get company
-                            $company = $this->Xin_model->read_company_info($r->company_id);
-                            if(!is_null($company)){
-                                $comp_name = $company[0]->name;
-                            } else {
-                                $comp_name = '--';  
-                            }
-                            
-                            $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target="#modals-slide" data-xfield_id="'. $r->award_id . '" data-field_type="awards"><span class="fa fa-eye"></span></button></span>';
-                            
-                            $award_info = $award_type.'<br><small class="text-muted"><i>'.$r->description.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('xin_cash_price').': '.$currency.'<i></i></i></small>';
-                            $combhr = $view;
-                            ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $award_info;?></td>
-                              <td><?php echo $r->gift_item;?></td>
-                              <td><?php echo $award_date;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-travels">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_travel');?> </span> </div>
-                    <?php $travel = $this->Travel_model->get_employee_travel($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('xin_summary');?></th>
-                              <th><?php echo $this->lang->line('xin_visit_place');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_start_date');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_end_date');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($travel->result() as $r) { ?>
-                            <?php
-                                // get start date
-                                $start_date = $this->Xin_model->set_date_format($r->start_date);
-                                // get end date
-                                $end_date = $this->Xin_model->set_date_format($r->end_date);
-                                // get company
-                                $company = $this->Xin_model->read_company_info($r->company_id);
-                                if(!is_null($company)){
-                                    $comp_name = $company[0]->name;
-                                } else {
-                                    $comp_name = '--';  
-                                }
-                                // status
-                                //if($r->status==0): $status = $this->lang->line('xin_pending');
-                                //elseif($r->status==1): $status = $this->lang->line('xin_accepted'); else: $status = $this->lang->line('xin_rejected'); endif;
-                                if($r->status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
-                                    elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>';else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected'); endif;
-                                
-                                $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target="#modals-slide" data-xfield_id="'. $r->travel_id . '" data-field_type="travel"><span class="fa fa-eye"></span></button></span>';
-                                
-                                $combhr = $view;
-                                $expected_budget = $this->Xin_model->currency_sign($r->expected_budget);
-                                $actual_budget = $this->Xin_model->currency_sign($r->actual_budget);
-                                $iemployee_name = $r->visit_purpose.'<br><small class="text-muted"><i>'.$this->lang->line('xin_expected_travel_budget').': '.$expected_budget.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('xin_actual_travel_budget').': '.$actual_budget.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $iemployee_name;?></td>
-                              <td><?php echo $r->visit_place;?></td>
-                              <td><?php echo $start_date;?></td>
-                              <td><?php echo $end_date;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-training">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_training');?> </span> </div>
-                    <?php $training = $this->Training_model->get_employee_training($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('left_training_type');?></th>
-                              <th><?php echo $this->lang->line('xin_trainer');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_training_duration');?></th>
-                              <th><i class="fa fa-dollar"></i> <?php echo $this->lang->line('xin_cost');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($training->result() as $r) { ?>
-                            <?php
-                                $aim = explode(',',$r->employee_id);
-                                // get training type
-                                $type = $this->Training_model->read_training_type_information($r->training_type_id);
-                                if(!is_null($type)){
-                                    $itype = $type[0]->type;
-                                } else {
-                                    $itype = '--';  
-                                }
-                                // get trainer
-                                $trainer = $this->Trainers_model->read_trainer_information($r->trainer_id);
-                                // trainer full name
-                                if(!is_null($trainer)){
-                                    $trainer_name = $trainer[0]->first_name.' '.$trainer[0]->last_name;
-                                } else {
-                                    $trainer_name = '--'; 
-                                }
-                                // get start date
-                                $start_date = $this->Xin_model->set_date_format($r->start_date);
-                                // get end date
-                                $finish_date = $this->Xin_model->set_date_format($r->finish_date);
-                                // training date
-                                $training_date = $start_date.' '.$this->lang->line('dashboard_to').' '.$finish_date;
-                                // set currency
-                                $training_cost = $this->Xin_model->currency_sign($r->training_cost);
-                                /* get Employee info*/
-                                if($r->employee_id == '') {
-                                    $ol = '--';
-                                } else {
-                                    $ol = '<ol class="nl">';
-                                    foreach(explode(',',$r->employee_id) as $uid) {
-                                        $user = $this->Xin_model->read_user_info($uid);
-                                        if(!is_null($user)){
-                                            $ol .= '<li>'.$user[0]->first_name.' '.$user[0]->last_name.'</li>';
-                                        } else {
-                                            $ol .= '--';
-                                        }
-                                     }
-                                     $ol .= '</ol>';
-                                }
-                                // status
-                                //if($r->training_status==0): $status = $this->lang->line('xin_pending');
-                                //elseif($r->training_status==1): $status = $this->lang->line('xin_started'); elseif($r->training_status==2): $status = $this->lang->line('xin_completed');
-                                //else: $status = $this->lang->line('xin_terminated'); endif;
-                                if($r->training_status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
-                                elseif($r->training_status==1): $status = '<span class="badge bg-teal">'.$this->lang->line('xin_started').'</span>'; elseif($r->training_status==2): $status = '<span class="badge bg-green">'.$this->lang->line('xin_completed').'</span>';
-                                else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_terminated').'</span>'; endif;
-                                // get company
-                                $company = $this->Xin_model->read_company_info($r->company_id);
-                                if(!is_null($company)){
-                                $comp_name = $company[0]->name;
-                                } else {
-                                  $comp_name = '--';  
-                                }
-    
-                                $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/training/details/'.$r->training_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-                                $combhr = $view;
-                                $iitype = $itype.'<br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $iitype;?></td>
-                              <td><?php echo $trainer_name;?></td>
-                              <td><?php echo $training_date;?></td>
-                              <td><?php echo $training_cost;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-tickets">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_tickets');?> </span> </div>
-                    <?php $ticket = $this->Tickets_model->get_employees_tickets($session['user_id']);?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr class="xin-bg-dark">
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('xin_ticket_code');?></th>
-                              <th><?php echo $this->lang->line('xin_subject');?></th>
-                              <th><?php echo $this->lang->line('xin_p_priority');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_e_details_date');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($ticket->result() as $r) { ?>
-                            <?php   
-                                // priority
-                                if($r->ticket_priority==1): $priority = $this->lang->line('xin_low'); elseif($r->ticket_priority==2): $priority = $this->lang->line('xin_medium'); elseif($r->ticket_priority==3): $priority = $this->lang->line('xin_high'); elseif($r->ticket_priority==4): $priority = $this->lang->line('xin_critical');  endif;
-                                 
-                                 // status
-                                 //if($r->ticket_status==1): $status = $this->lang->line('xin_open'); elseif($r->ticket_status==2): $status = $this->lang->line('xin_closed'); endif;
-                                 if($r->ticket_status==1): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_open').'</span>';
-                                    else: $status = '<span class="badge bg-green">'.$this->lang->line('xin_closed').'</span>';endif;
-                                 // ticket date and time
-                                 $created_at = date('h:i A', strtotime($r->created_at));
-                                 $_date = explode(' ',$r->created_at);
-                                 $edate = $this->Xin_model->set_date_format($_date[0]);
-                                 $_created_at = $edate. ' '. $created_at;
-                                
-                                $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/tickets/details/'.$r->ticket_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-                                $combhr = $view;
-                                $iticket_code = $r->ticket_code.'<br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $iticket_code;?></td>
-                              <td><?php echo $r->subject;?></td>
-                              <td><?php echo $priority;?></td>
-                              <td><?php echo $_created_at;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-transfers">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_transfers');?> </span> </div>
-                    <?php $transfer = $this->Transfers_model->get_employee_transfers($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('xin_summary');?></th>
-                              <th><?php echo $this->lang->line('left_company');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_transfer_date');?></th>
-                              <th><?php echo $this->lang->line('dashboard_xin_status');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($transfer->result() as $r) { ?>
-                            <?php
-                            // get date
-                            $transfer_date = $this->Xin_model->set_date_format($r->transfer_date);
-                            // get department by id
-                            $department = $this->Department_model->read_department_information($r->transfer_department);
-                            if(!is_null($department)){
-                                $department_name = $department[0]->department_name;
-                            } else {
-                                $department_name = '--';  
-                            }
-                            // get location by id
-                            $location = $this->Location_model->read_location_information($r->transfer_location);
-                            if(!is_null($location)){
-                                $location_name = $location[0]->location_name;
-                            } else {
-                                $location_name = '--';  
-                            }
-                            // get status
-                            if($r->status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
-                            elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>';else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-                            
-                            // get company
-                            $company = $this->Xin_model->read_company_info($r->company_id);
-                            if(!is_null($company)){
-                                $comp_name = $company[0]->name;
-                            } else {
-                                $comp_name = '--';  
-                            }
-                            
-                            $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target="#modals-slide" data-xfield_id="'. $r->transfer_id . '" data-field_type="transfers"><span class="fa fa-eye"></span></button></span>';
-                        $combhr = $view;
-                        $xinfo = $this->lang->line('xin_transfer_to_department').': '.$department_name.'<i></i></i></small><br><small class="text-muted"><i>'.$this->lang->line('xin_transfer_to_location').': '.$location_name.'<i></i></i></small>';
-                            ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $xinfo;?></td>
-                              <td><?php echo $comp_name;?></td>
-                              <td><?php echo $transfer_date;?></td>
-                              <td><?php echo $status;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-promotions">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_promotions');?> </span> </div>
-                    <?php $promotion = $this->Promotion_model->get_employee_promotions($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('xin_promotion_title');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_e_details_date');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($promotion->result() as $r) { ?>
-                            <?php
-                                // get company
-                                $company = $this->Xin_model->read_company_info($r->company_id);
-                                if(!is_null($company)){
-                                    $comp_name = $company[0]->name;
-                                } else {
-                                    $comp_name = '--';  
-                                }
-                                // get promotion date
-                                $promotion_date = $this->Xin_model->set_date_format($r->promotion_date);
-                                    $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target="#modals-slide" data-xfield_id="'. $r->promotion_id . '" data-field_type="promotion"><span class="fa fa-eye"></span></button></span>';
-                                $combhr = $view;
-                                $pro_desc = $r->title.'<br><small class="text-muted"><i>'.$this->lang->line('xin_description').': '.$r->description.'<i></i></i></small>';
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $pro_desc;?></td>
-                              <td><?php echo $promotion_date;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-complaints">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_complaints');?> </span> </div>
-                    <?php $complaint = $this->Complaints_model->get_employee_complaints($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th width="200"><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_complaint_from');?></th>
-                              <th><i class="fa fa-users"></i> <?php echo $this->lang->line('xin_complaint_against');?></th>
-                              <th><?php echo $this->lang->line('xin_complaint_title');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_complaint_date');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($complaint->result() as $r) { ?>
-                            <?php
-                                // get user > added by
-                                $user = $this->Xin_model->read_user_info($r->complaint_from);
-                                // user full name
-                                if(!is_null($user)){
-                                    $complaint_from = $user[0]->first_name.' '.$user[0]->last_name;
-                                } else {
-                                    $complaint_from = '--'; 
-                                }
-                                
-                                if($r->complaint_against == '') {
-                                    $ol = '--';
-                                } else {
-                                    $ol = '<ol class="nl">';
-                                    foreach(explode(',',$r->complaint_against) as $desig_id) {
-                                        $_comp_name = $this->Xin_model->read_user_info($desig_id);
-                                        if(!is_null($_comp_name)){
-                                            $ol .= '<li>'.$_comp_name[0]->first_name.' '.$_comp_name[0]->last_name.'</li>';
-                                        } else {
-                                            $ol .= '';
-                                        }
-                                        
-                                     }
-                                     $ol .= '</ol>';
-                                }
-                                // get complaint date
-                                $complaint_date = $this->Xin_model->set_date_format($r->complaint_date);
-                            
-                                $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target="#modals-slide" data-xfield_id="'. $r->complaint_id . '" data-field_type="complaints"><span class="fa fa-eye"></span></button></span>';
-                                // get company
-                                $company = $this->Xin_model->read_company_info($r->company_id);
-                                if(!is_null($company)){
-                                    $comp_name = $company[0]->name;
-                                } else {
-                                    $comp_name = '--';  
-                                }
-                                // get status
-                                if($r->status==0): $status = '<span class="badge bg-red">'.$this->lang->line('xin_pending').'</span>';
-                                elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>'; else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>';endif;
-                                // info
-                                $icomplaint_from = $complaint_from.'<br><small class="text-muted"><i>'.$this->lang->line('xin_description').': '.$r->description.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
-                                $combhr = $view;
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $icomplaint_from;?></td>
-                              <td><?php echo $ol;?></td>
-                              <td><?php echo $r->title;?></td>
-                              <td><?php echo $complaint_date;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-warnings">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_warnings');?> </span> </div>
-                    <?php $warning = $this->Warning_model->get_employee_warning($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('xin_subject');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_warning_date');?></th>
-                              <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_warning_by');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($warning->result() as $r) { ?>
-                            <?php
-                                // get user > warning to
-                                $user = $this->Xin_model->read_user_info($r->warning_to);
-                                // user full name
-                                if(!is_null($user)){
-                                    $warning_to = $user[0]->first_name.' '.$user[0]->last_name;
-                                } else {
-                                    $warning_to = '--'; 
-                                }
-                                // get user > warning by
-                                $user_by = $this->Xin_model->read_user_info($r->warning_by);
-                                // user full name
-                                if(!is_null($user_by)){
-                                    $warning_by = $user_by[0]->first_name.' '.$user_by[0]->last_name;
-                                } else {
-                                    $warning_by = '--'; 
-                                }
-                                // get warning date
-                                $warning_date = $this->Xin_model->set_date_format($r->warning_date);
-                                        
-                                // get status
-                                if($r->status==0): $status = $this->lang->line('xin_pending');
-                                elseif($r->status==1): $status = $this->lang->line('xin_accepted'); else: $status = $this->lang->line('xin_rejected'); endif;
-                                // get warning type
-                                $warning_type = $this->Warning_model->read_warning_type_information($r->warning_type_id);
-                                if(!is_null($warning_type)){
-                                    $wtype = $warning_type[0]->type;
-                                } else {
-                                    $wtype = '--';  
-                                }
-                                // get company
-                                $company = $this->Xin_model->read_company_info($r->company_id);
-                                if(!is_null($company)){
-                                    $comp_name = $company[0]->name;
-                                } else {
-                                    $comp_name = '--';  
-                                }
-                                
-                                $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target="#modals-slide" data-xfield_id="'. $r->warning_id . '" data-field_type="warning"><span class="fa fa-eye"></span></button></span>';
-                                
-                                if($r->status==0): $status = '<span class="badge bg-orange">'.$this->lang->line('xin_pending').'</span>';
-                                elseif($r->status==1): $status = '<span class="badge bg-green">'.$this->lang->line('xin_accepted').'</span>';else: $status = '<span class="badge bg-red">'.$this->lang->line('xin_rejected').'</span>'; endif;
-                                
-                                $combhr = $view;
-                                
-                                $iwarning_to = $warning_to.'<br><small class="text-muted"><i>'.$wtype.'<i></i></i></small><br><small class="text-muted"><i>'.$status.'<i></i></i></small>';
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $r->subject;?></td>
-                              <td><?php echo $warning_date;?></td>
-                              <td><?php echo $warning_by;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="smartwizard-2-step-5" class="animated fadeIn tab-pane step-content mt-3" style="display: none;">
-        <div class="cards-body">
-          <div class="card overflow-hidden">
-            <div class="row no-gutters row-bordered row-border-light">
-              <div class="col-md-3 pt-0">
-                <div class="list-group list-group-flush account-settings-links"> <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-projects"> <i class="lnr lnr-layers text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_projects');?></a> <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-tasks"> <i class="lnr lnr-dice text-lightest"></i> &nbsp; <?php echo $this->lang->line('left_tasks');?></a> </div>
-              </div>
-              <div class="col-md-9">
-                <div class="tab-content">
-                  <div class="tab-pane fade show active" id="account-projects">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_projects');?> </span> </div>
-                    <?php $project = $this->Project_model->get_employee_projects($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table" id="xin_hr_table">
-                          <thead>
-                            <tr>
-                              <th width="230"><?php echo $this->lang->line('xin_project_summary');?></th>
-                              <th><?php echo $this->lang->line('xin_p_priority');?></th>
-                              <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_project_users');?></th>
-                              <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_p_enddate');?></th>
-                              <th><?php echo $this->lang->line('dashboard_xin_progress');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($project->result() as $r) { ?>
-                            <?php
-                            $aim = explode(',',$r->assigned_to);
-                            // get user > added by
-                            $user = $this->Xin_model->read_user_info($r->added_by);
-                            // user full name
-                            if(!is_null($user)){
-                                $full_name = $user[0]->first_name.' '.$user[0]->last_name;
-                            } else {
-                                $full_name = '--';  
-                            }
-                            // get date
-                            $pdate = '<i class="fa fa-calendar position-left"></i> '.$this->Xin_model->set_date_format($r->end_date);
-                            
-                            //project_progress
-                            if($r->project_progress <= 20) {
-                                $progress_class = 'progress-danger';
-                            } else if($r->project_progress > 20 && $r->project_progress <= 50){
-                                $progress_class = 'progress-warning';
-                            } else if($r->project_progress > 50 && $r->project_progress <= 75){
-                                $progress_class = 'progress-info';
-                            } else {
-                                $progress_class = 'progress-success';
-                            }
-                            
-                            // progress
-                            $pbar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->project_progress.'%</span></p><progress class="progress '.$progress_class.' progress-sm" value="'.$r->project_progress.'" max="100">'.$r->project_progress.'%</progress>';
-                                    
-                            //status
-                            if($r->status == 0) {
-                                $status = $this->lang->line('xin_not_started');
-                            } else if($r->status ==1){
-                                $status = $this->lang->line('xin_in_progress');
-                            } else if($r->status ==2){
-                                $status = $this->lang->line('xin_completed');
-                            } else {
-                                $status = $this->lang->line('xin_deffered');
-                            }
-                            
-                            // priority
-                            if($r->priority == 1) {
-                                $priority = '<span class="label label-danger">'.$this->lang->line('xin_highest').'</span>';
-                            } else if($r->priority ==2){
-                                $priority = '<span class="label label-danger">'.$this->lang->line('xin_high').'</span>';
-                            } else if($r->priority ==3){
-                                $priority = '<span class="label label-primary">'.$this->lang->line('xin_normal').'</span>';
-                            } else {
-                                $priority = '<span class="label label-success">'.$this->lang->line('xin_low').'</span>';
-                            }
-                            
-                            //assigned user
-                            if($r->assigned_to == '') {
-                                $ol = $this->lang->line('xin_not_assigned');
-                            } else {
-                                $ol = '';
-                                foreach(explode(',',$r->assigned_to) as $desig_id) {
-                                    $assigned_to = $this->Xin_model->read_user_info($desig_id);
-                                    if(!is_null($assigned_to)){
-                                        
-                                      $assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
-                                     if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
-                                        $ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="ui-w-30 rounded-circle" alt=""></span></a>';
-                                        } else {
-                                        if($assigned_to[0]->gender=='Male') { 
-                                            $de_file = base_url().'uploads/profile/default_male.jpg';
-                                         } else {
-                                            $de_file = base_url().'uploads/profile/default_female.jpg';
-                                         }
-                                        $ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.$de_file.'" class="ui-w-30 rounded-circle" alt=""></span></a>';
-                                        }
-                                    } ////
-                                    else {
-                                        $ol .= '';
-                                    }
-                                 }
-                                 $ol .= '';
-                            }
-                            
-                            $project_summary = '<div class="text-semibold"><a href="'.site_url().'admin/project/detail/'.$r->project_id . '" target="_blank">'.$r->title.'</a></div><div class="text-muted">'.$r->summary.'</div>';
-                            ?>
-                            <tr>
-                              <td><?php echo $project_summary;?></td>
-                              <td><?php echo $priority;?></td>
-                              <td><?php echo $ol;?></td>
-                              <td><?php echo $pdate;?></td>
-                              <td><?php echo $pbar;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="account-tasks">
-                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_tasks');?> </span> </div>
-                    <?php $task = $this->Timesheet_model->get_employee_tasks($session['user_id']); ?>
-                    <div class="card-body">
-                      <div class="box-datatable table-responsive">
-                        <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table">
-                          <thead>
-                            <tr>
-                              <th><?php echo $this->lang->line('xin_view');?></th>
-                              <th><?php echo $this->lang->line('dashboard_xin_title');?></th>
-                              <th><?php echo $this->lang->line('xin_end_date');?></th>
-                              <th><?php echo $this->lang->line('dashboard_xin_status');?></th>
-                              <th><?php echo $this->lang->line('xin_assigned_to');?></th>
-                              <th><?php echo $this->lang->line('dashboard_xin_progress');?></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <?php foreach($task->result() as $r) { ?>
-                            <?php
-                                $aim = explode(',',$r->assigned_to);
-                      
-                                if($r->assigned_to == '' || $r->assigned_to == 'None') {
-                                    $ol = 'None';
-                                } else {
-                                    $ol = '<ol class="nl">';
-                                    foreach(explode(',',$r->assigned_to) as $uid) {
-                                        //$user = $this->Xin_model->read_user_info($uid);
-                                        $assigned_to = $this->Xin_model->read_user_info($uid);
-                                        if(!is_null($assigned_to)){
-                                            
-                                        $assigned_name = $assigned_to[0]->first_name.' '.$assigned_to[0]->last_name;
-                                         if($assigned_to[0]->profile_picture!='' && $assigned_to[0]->profile_picture!='no file') {
-                                            $ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.base_url().'uploads/profile/'.$assigned_to[0]->profile_picture.'" class="ui-w-30 rounded-circle" alt=""></span></a>';
-                                            } else {
-                                            if($assigned_to[0]->gender=='Male') { 
-                                                $de_file = base_url().'uploads/profile/default_male.jpg';
-                                             } else {
-                                                $de_file = base_url().'uploads/profile/default_female.jpg';
-                                             }
-                                            $ol .= '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$assigned_name.'"><span class="avatar box-32"><img src="'.$de_file.'" class="ui-w-30 rounded-circle" alt=""></span></a>';
-                                            }
-                                        }
-                                     }
-                                 $ol .= '</ol>';
-                                }             
-                                // task project
-                                $prj_task = $this->Project_model->read_project_information($r->project_id);
-                                if(!is_null($prj_task)){
-                                    $prj_name = $prj_task[0]->title;
-                                } else {
-                                    $prj_name = '--';
-                                }
-                                
-                                /// set task progress
-                                if($r->task_progress=='' || $r->task_progress==0): $progress = 0; else: $progress = $r->task_progress; endif;       
-                                // task progress
-                                if($r->task_progress <= 20) {
-                                $progress_class = 'progress-danger';
-                                } else if($r->task_progress > 20 && $r->task_progress <= 50){
-                                $progress_class = 'progress-warning';
-                                } else if($r->task_progress > 50 && $r->task_progress <= 75){
-                                $progress_class = 'progress-info';
-                                } else {
-                                $progress_class = 'progress-success';
-                                }
-                                
-                                $progress_bar = '<p class="m-b-0-5">'.$this->lang->line('xin_completed').' <span class="pull-xs-right">'.$r->task_progress.'%</span></p><progress class="progress '.$progress_class.' progress-sm" value="'.$r->task_progress.'" max="100">'.$r->task_progress.'%</progress>';
-                                // task end date
-                                $tdate = $this->Xin_model->set_date_format($r->end_date);             
-                                // task status
-                                if($r->task_status == 0) {
-                                    $status = $this->lang->line('xin_not_started');
-                                } else if($r->task_status ==1){
-                                    $status = $this->lang->line('xin_in_progress');
-                                } else if($r->task_status ==2){
-                                    $status = $this->lang->line('xin_completed');
-                                } else {
-                                    $status = $this->lang->line('xin_deffered');
-                                }
-                                // task end date
-                                if(in_array('322',$role_resources_ids)) { //view
-                                    $view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view_details').'"><a href="'.site_url().'admin/timesheet/task_details/id/'.$r->task_id.'/" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-                                } else {
-                                    $view = '';
-                                }
-                                $combhr = $view;
-                                $task_name = $r->task_name.'<br>'.$this->lang->line('xin_project').': <a href="'.site_url().'admin/project/detail/'.$r->project_id.'" target="_blank">'.$prj_name.'</a>';
-                                ?>
-                            <tr>
-                              <td><?php echo $combhr;?></td>
-                              <td><?php echo $task_name;?></td>
-                              <td><?php echo $tdate;?></td>
-                              <td><?php echo $status;?></td>
-                              <td><?php echo $ol;?></td>
-                              <td><?php echo $progress_bar;?></td>
-                            </tr>
-                            <?php } ?>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="smartwizard-2-step-6" class="card animated fadeIn tab-pane step-content mt-3" style="display: none;">
-        <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('left_payment_history');?> </span> </div>
-        <?php $history = $this->Payroll_model->get_payroll_slip($session['user_id']); ?>
-        <div class="card-body">
-          <div class="box-datatable table-responsive">
-            <table class="datatables-demo table table-striped table-bordered xin_hrpremium_table" id="xin_hr_table">
-              <thead>
-                <tr>
-                  <th><?php echo $this->lang->line('xin_action');?></th>
-                  <th><?php echo $this->lang->line('xin_payroll_net_payable');?></th>
-                  <th><?php echo $this->lang->line('xin_salary_month');?></th>
-                  <th><i class="fa fa-calendar"></i> <?php echo $this->lang->line('xin_payroll_date_title');?></th>
-                  <th><?php echo $this->lang->line('dashboard_xin_status');?></th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach($history->result() as $r) { ?>
-                <?php
-                    // get addd by > template
-                    $user = $this->Xin_model->read_user_info($r->employee_id);
-                    // user full name
-                    if(!is_null($user)){
-                    $full_name = $user[0]->first_name.' '.$user[0]->last_name;
-                    $emp_link = $user[0]->employee_id;              
-                    $month_payment = date("F, Y", strtotime($r->salary_month));
-                    
-                    $p_amount = $this->Xin_model->currency_sign($r->net_salary);
-                    
-                    // get date > created at > and format
-                    $created_at = $this->Xin_model->set_date_format($r->created_at);
-                    // get designation
-                    $designation = $this->Designation_model->read_designation_information($user[0]->designation_id);
-                    if(!is_null($designation)){
-                        $designation_name = $designation[0]->designation_name;
-                    } else {
-                        $designation_name = '--'; 
-                    }
-                    // department
-                    $department = $this->Department_model->read_department_information($user[0]->department_id);
-                    if(!is_null($department)){
-                    $department_name = $department[0]->department_name;
-                    } else {
-                    $department_name = '--';  
-                    }
-                    $department_designation = $designation_name.' ('.$department_name.')';
-                    // get company
-                    $company = $this->Xin_model->read_company_info($user[0]->company_id);
-                    if(!is_null($company)){
-                        $comp_name = $company[0]->name;
-                    } else {
-                        $comp_name = '--';  
-                    }
-                    // bank account
-                    $bank_account = $this->Employees_model->get_employee_bank_account_last($user[0]->user_id);
-                    if(!is_null($bank_account)){
-                        $account_number = $bank_account[0]->account_number;
-                    } else {
-                        $account_number = '--'; 
-                    }
-                    $payslip = '<span data-toggle="tooltip" data-placement="top" data-state="primary" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/payroll/payslip/id/'.$r->payslip_key.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fa fa-arrow-circle-right"></span></button></a></span><span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_download').'"><a href="'.site_url().'admin/payroll/pdf_create/p/'.$r->payslip_key.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="oi oi-cloud-download"></span></button></a></span>';
-                    
-                $ifull_name = nl2br ($full_name."\r\n <small class='text-muted'><i>".$this->lang->line('xin_employees_id').': '.$emp_link."<i></i></i></small>\r\n <small class='text-muted'><i>".$department_designation.'<i></i></i></small>');
-                    ?>
-                <tr>
-                  <td><?php echo $payslip;?></td>
-                  <td><?php echo $p_amount;?></td>
-                  <td><?php echo $month_payment;?></td>
-                  <td><?php echo $created_at;?></td>
-                  <td><?php echo $this->lang->line('xin_payroll_paid');?></td>
-                </tr>
-                <?php } } ?>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+
+
     </div>
   </div>
 </div>

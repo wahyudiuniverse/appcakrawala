@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Profile extends MY_Controller {
+class Profile_emp extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -51,7 +51,11 @@ class Profile extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$result = $this->Employees_model->read_employee_information($session['user_id']);
+		// $company_id = $this->uri->segment(4);
+		$ids = $_GET['id'];
+		// $department_id = $this->uri->segment(5);
+
+		$result = $this->Employees_model->read_employee_information($ids);
 
 		// company info
 		$company = $this->Xin_model->read_company_info($result[0]->company_id);
@@ -168,10 +172,10 @@ class Profile extends MY_Controller {
 			'all_office_locations' => $this->Location_model->all_office_locations(),
 			'all_leave_types' => $this->Timesheet_model->all_leave_types()
 			);
-		$data['breadcrumbs'] = $this->lang->line('header_my_profile');
+		$data['breadcrumbs'] = 'Profile Karyawan';
 		$data['path_url'] = 'profile';
 		if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/employees/profile", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/employees/profile_emp", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('hr/');
@@ -359,10 +363,10 @@ class Profile extends MY_Controller {
 		$title = $this->Xin_model->clean_post($this->input->post('title'));
 		$kk_no = $this->Xin_model->clean_post($this->input->post('kk_no'));
 		$npwp_no = $this->Xin_model->clean_post($this->input->post('npwp_no'));
-		// $no_bpjstk = $this->Xin_model->clean_post($this->input->post('no_bpjstk'));
-		// $bpjstk_confirm = $this->Xin_model->clean_post($this->input->post('bpjstk_confirm'));
-		// $no_bpjsks = $this->Xin_model->clean_post($this->input->post('no_bpjsks'));
-		// $bpjsks_confirm = $this->Xin_model->clean_post($this->input->post('bpjsks_confirm'));
+		$no_bpjstk = $this->Xin_model->clean_post($this->input->post('no_bpjstk'));
+		$bpjstk_confirm = $this->Xin_model->clean_post($this->input->post('bpjstk_confirm'));
+		$no_bpjsks = $this->Xin_model->clean_post($this->input->post('no_bpjsks'));
+		$bpjsks_confirm = $this->Xin_model->clean_post($this->input->post('bpjsks_confirm'));
 		// clean date fields
 		// $date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
 		// $document_type = $this->input->post('document_type_id');
@@ -375,10 +379,10 @@ class Profile extends MY_Controller {
 		'filename_kk' 	=> $fname_kk,
 		'npwp_no' 			=> $npwp_no,
 		'filename_npwp' => $fname_npwp,
-		// 'bpjs_tk_no' => $no_bpjstk,
-		// 'bpjs_tk_status' => $bpjstk_confirm,
-		// 'bpjs_ks_no' => $no_bpjsks,
-		// 'bpjs_ks_status' => $bpjsks_confirm,
+		'bpjs_tk_no' => $no_bpjstk,
+		'bpjs_tk_status' => $bpjstk_confirm,
+		'bpjs_ks_no' => $no_bpjsks,
+		'bpjs_ks_status' => $bpjsks_confirm,
 
 		);
 
@@ -398,8 +402,70 @@ class Profile extends MY_Controller {
 		}
 	}
 	
+	// Validate and add info in database // bank account info
+	public function bank_account_info() {
+			
+			if($this->input->post('type')=='bank_account_info' && $this->input->post('data')=='bank_account_info') {		
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
+				/* Server side PHP input validation */		
+				if($this->input->post('no_rek')==='') {
+					 $Return['error'] = $this->lang->line('xin_employee_error_nomor_rek');
+				} else if ($this->input->post('bank_name')===''){
+					 $Return['error'] = $this->lang->line('xin_employee_error_bank_name');
+				} else if ($this->input->post('pemilik_rek')===''){
+					 $Return['error'] = $this->lang->line('xin_employee_error_pemilik_rek');
+				} else if($_FILES['document_file_rek']['size'] == 0) {
+					$fname_rek = $this->input->post('ffoto_rek');
+					// $fname = '';
+				} else {
+					if(is_uploaded_file($_FILES['document_file_rek']['tmp_name'])) {
+						//checking image type
+						$allowed_rek =  array('png','jpg','jpeg','pdf','gif','txt','pdf');
+						$filename_rek = $_FILES['document_file_rek']['name'];
+						$ext_rek = pathinfo($filename_rek, PATHINFO_EXTENSION);
+						
+						if(in_array($ext_rek,$allowed_rek)){
+							$tmp_name_rek = $_FILES["document_file_rek"]["tmp_name"];
+							$documentd_rek = "uploads/document/";
+							// basename() may prevent filesystem traversal attacks;
+							// further validation/sanitation of the filename may be appropriate
+							$name = basename($_FILES["document_file_rek"]["name"]);
+							$newfilename_rek = 'rek_'.round(microtime(true)).'.'.$ext_rek;
+							move_uploaded_file($tmp_name_rek, $documentd_rek.$newfilename_rek);
+							$fname_rek = $newfilename_rek;
+						} else {
+							$Return['error'] = 'Jenis File Foto Rekening tidak diterima..';
+						}
+					}
+				}
+					
+				if($Return['error']!=''){
+		       		$this->output($Return);
+		    	}
+			
+				$data = array(
+				'bank_name' => $this->input->post('bank_name'),
+				'nomor_rek' => $this->input->post('no_rek'),
+				'pemilik_rek' => $this->input->post('pemilik_rek'),
+				'filename_rek' => $fname_rek,
+				);
 
+				$id = $this->input->post('user_id');
+				// $result = $this->Employees_model->bank_account_info_add($data);
+				$result = $this->Employees_model->basic_info($data,$id);
+				if ($result == TRUE) {
+					$Return['result'] = $this->lang->line('xin_employee_error_bank_info_added');
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+				}
+				$this->output($Return);
+				exit;
+			}
+		}
+	
 	// Validate and add info in database // e_document info
 	public function e_document_info() {
 	 
@@ -704,7 +770,6 @@ class Profile extends MY_Controller {
 	  exit();
      }
 	 
-
 	// employee qualification - listing
 	public function qualification() {
 		//set data

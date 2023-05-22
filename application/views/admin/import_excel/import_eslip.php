@@ -26,7 +26,7 @@
       <div class="card-body">
 
           <h6>
-            <a href="<?php echo base_url();?>uploads/csv/TEMPLATE E-SLIP CIS (13022023).csv" class="btn btn-primary"> 
+            <a href="<?php echo base_url();?>uploads/csv/TEMPLATE E-SLIP CIS (15052023).xlsx" class="btn btn-primary"> 
               <i class="fa fa-download"></i> 
               <?php echo $this->lang->line('xin_employee_import_download_sample');?> 
             </a>

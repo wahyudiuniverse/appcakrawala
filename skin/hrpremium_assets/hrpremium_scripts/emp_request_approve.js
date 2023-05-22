@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/request_approve_list/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -127,6 +127,7 @@ $(document).ready(function() {
 			} 	        
 	   });
 	});
+
 });
 	//open the lateral panel
 	$( document ).on( "click", ".cd-btn", function() {
