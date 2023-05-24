@@ -288,7 +288,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+
 	// get current val
 	$(".basic_salary").keyup(function(e){
 		var to_currency_rate = $('#to_currency_rate').val();
@@ -709,6 +709,7 @@ $(document).ready(function(){
 		});
 	});
 	
+	
 	/* Add document info */
 	$("#document_info").submit(function(e){
 		var fd = new FormData(this);
@@ -756,7 +757,6 @@ $(document).ready(function(){
 	   });
 	});
 	
-
 	/* Add document info */
 	$("#document_pkwt").submit(function(e){
 		var fd = new FormData(this);

@@ -378,7 +378,7 @@ class Employee_request extends MY_Controller {
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),
-								// 'createdby' => $session['user_id']
+								'createdby' => $session['user_id']
 								// 'modifiedon' => date('Y-m-d h:i:s')
 							);
 						$iresult = $this->Employees_model->addrequest($data);

@@ -8,6 +8,8 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae();?>
+<?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom();?>
+<?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd();?>
 <?php //$list_bank = $this->Xin_model->get_bank_code();?>
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
@@ -25,12 +27,12 @@
     <?php } ?>
 
     <?php if(in_array('375',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nae.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nom.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('378',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_verify/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD <?php echo '('.$count_emp_request_nae.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_verify/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD <?php echo '('.$count_emp_request_hrd.')';?>
       </a> </li>
     <?php } ?>
 
@@ -530,6 +532,34 @@
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <!--PERIODE KONTRAK-->
+                <div class="col-md-4">
+                  <div class="form-group">                                  
+                    <label class="form-label control-label">Tanggal CUT-START</label>
+                                  <input class="form-control" placeholder="0" name="cut_start" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                
+                  </div>
+                </div>
+
+                <!-- HK -->
+                <div class="col-md-4">                                
+                  <div class="form-group">
+                                  <label class="form-label control-label">Tanggal CUT-OFF</label>                    
+                                  <input class="form-control" placeholder="0" name="cut_off" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                </div>
+
+                <!-- HK -->
+                <div class="col-md-4">                                
+                  <div class="form-group">
+                                  <label class="form-label">Tanggal Penggajian</label><input class="form-control" placeholder="0" name="date_payment" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="2">
+                                </div>
+                </div>
+
+              </div>
+
 
             <!-- end row -->
             </div>

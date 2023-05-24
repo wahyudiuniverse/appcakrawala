@@ -1239,7 +1239,6 @@ class Employees extends MY_Controller {
 			'marital_status' => $result[0]->marital_status,
 			'wages_type' => $result[0]->wages_type,
 			'is_active' => $result[0]->is_active,
-			'date_of_joining' => $result[0]->date_of_joining,
 
 			'contract_start' => $result[0]->contract_start,
 			'contract_end' => $result[0]->contract_end,
@@ -2068,17 +2067,38 @@ class Employees extends MY_Controller {
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		
+
+			/* Server side PHP input validation */	
+			if($this->input->post('head_reason')==='') {
+				$Return['error'] = 'Kategori Resign masih kosong..!';
+			} else if ($this->input->post('tanggal_resign')===''){
+				$Return['error'] = 'Kategori Deactive masih kosong..!';
+			} else if ($this->input->post('keterangan_deactive')===''){
+				$Return['error'] = 'Keterangan Deactive masih kosong..!';
+			}
+
+			
+
 		if($Return['error']!='') {
        		$this->output($Return);
     	}
 	
+		if($this->input->post('status_employee')=='1'){
+			$stResign = '1';
+			$userRole = '2';
+		} else {
+			$stResign = '5';
+			$userRole = '9';
+		}
+
+		$reasonDeactive = $this->input->post('head_reason').' '.$this->input->post('tanggal_resign').' '.$this->input->post('keterangan_deactive');
 		$data = array(
 		'status_employee' => $this->input->post('status_employee'),
-		'status_resign' => 5,
-		'deactive_reason' => $this->input->post('keterangan_deactive'),
+		'status_resign' => $stResign,
+		'deactive_reason' => $reasonDeactive,
 		'deactive_date' => date('Y-m-d h:i:s'),
 		'deactive_by' => $this->input->post('session_by'),
-		'user_role_id' => 9,
+		'user_role_id' => $userRole,
 
 		// 'company_id' => $this->input->post('company_id'),
 

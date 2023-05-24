@@ -439,7 +439,7 @@ class Employee_request_hrd extends MY_Controller {
 	public function update() {
 		
 		$session = $this->session->userdata('username');
-		if(empty($session)){
+		if(empty($session)) {
 			redirect('admin/');
 		}
 
@@ -529,17 +529,17 @@ class Employee_request_hrd extends MY_Controller {
 								'contact_no' 					=> $contact_no,
 								'ktp_no' 							=> $nik_ktp,
 								'alamat_ktp' 					=> $alamat_ktp,
-								'alamat_domisili' 		=> $alamat_domisili,
-								'kk_no' 							=> $no_kk,
-								'npwp_no' 						=> $npwp,
-								'email' 							=> $email,
-								'penempatan' 					=> $penempatan,
-								'hari_kerja' 					=> $hari_kerja,
-								'bank_name' 					=> $bank_id,
-								'nomor_rek' 					=> $no_rek,
-								'pemilik_rek' 				=> $pemilik_rekening,
+								'alamat_domisili' 			=> $alamat_domisili,
+								'kk_no' 								=> $no_kk,
+								'npwp_no' 							=> $npwp,
+								'email' 								=> $email,
+								'penempatan' 						=> $penempatan,
+								'hari_kerja' 						=> $hari_kerja,
+								'bank_name' 						=> $bank_id,
+								'nomor_rek' 						=> $no_rek,
+								'pemilik_rek' 					=> $pemilik_rekening,
 
-								'basic_salary' 				=> $gaji_pokok,
+								'basic_salary' 					=> $gaji_pokok,
 								'allow_jabatan' 				=> $allow_jabatan,
 								'allow_area' 						=> $allow_area,
 								'allow_masakerja' 			=> $allow_masakerja,
@@ -565,7 +565,6 @@ class Employee_request_hrd extends MY_Controller {
 								'is_active' => '1',
 								'password' => $password_hash,
 								'private_code' => $private_code,
-								// 'created_by' => date('Y-m-d h:i:s'),
 								'created_by' => $createdby
 							);
 
@@ -576,7 +575,7 @@ class Employee_request_hrd extends MY_Controller {
 
 			$data_up = array(
 				'approved_hrdby' =>  $session['user_id'],
-				'approved_hrdon' => date("Y-m-d"),
+				'approved_hrdon' => date('Y-m-d h:i:s'),
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 

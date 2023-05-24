@@ -242,24 +242,21 @@ class Employee_request_nae extends MY_Controller {
 					} else if ($this->input->post('hari_kerja')==''){
 						$Return['error'] = 'Hari Kerja Kosong..!';
 					} 
-
 					else if ($this->input->post('gaji_pokok')==''){
 						$Return['error'] = 'Gaji Pokok Kosong..!';
-					} 
-					else if ($this->input->post('bank_name')==''){
+					} else if ($this->input->post('bank_name')==''){
 						$Return['error'] = 'Nama Bank Kosong..!';
 					} else if ($this->input->post('no_rek')==''){
 						$Return['error'] = 'Nomor Rekening Kosong..!';
 					} else if ($this->input->post('pemilik_rekening')==''){
 						$Return['error'] = 'Pemilik Rekening Kosong..!';
+					} else if ($this->input->post('cut_start')==''){
+						$Return['error'] = 'Tanggal Cut START Kosong..!';
+					} else if ($this->input->post('cut_off')==''){
+						$Return['error'] = 'Tanggal Cut OFF Kosong..!';
+					} else if ($this->input->post('date_payment')==''){
+						$Return['error'] = 'Tanggal Penggajian Kosong..!';
 					} 
-					// else if ($this->input->post('tunjangan_makan_trans')==''){
-					// 	$Return['error'] = 'Tunjangan Makan & Transport Kosong..!';
-					// } else if ($this->input->post('tunjangan_makan')==''){
-					// 	$Return['error'] = 'Tunjangan Masa Kerja Kosong..!';
-					// } else if ($this->input->post('tunjangan_transport')==''){
-					// 	$Return['error'] = 'Tunjangan Masa Kerja Kosong..!';
-					// } 
 
 					else {
 
@@ -311,6 +308,10 @@ class Employee_request_nae extends MY_Controller {
 							$allow_kasir 					= $this->input->post('tunjangan_kasir');
 							$allow_operational		= $this->input->post('tunjangan_operational');
 						
+							$cut_start						= $this->input->post('cut_start');
+							$cut_off 							= $this->input->post('cut_off');
+							$date_payment					= $this->input->post('date_payment');
+
 							// $options = array('cost' => 12);
 							// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
 							// $leave_categories = array($this->input->post('leave_categories'));
@@ -363,6 +364,11 @@ class Employee_request_nae extends MY_Controller {
 								'allow_kasir'						=> $allow_kasir,
 								'allow_operational'			=> $allow_operational,
 
+
+								'cut_start'							=> $cut_start,
+								'cut_off'								=> $cut_off,
+								'date_payment'					=> $date_payment,
+
 								'request_empby' 				=> $session['user_id'],
 								'request_empon' 				=> date("Y-m-d h:i:s"),
 								'approved_naeby' 				=> $session['user_id'],
@@ -370,7 +376,7 @@ class Employee_request_nae extends MY_Controller {
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),
-								// 'createdby' => $session['user_id']
+								'createdby' => $session['user_id']
 								// 'modifiedon' => date('Y-m-d h:i:s')
 							);
 						$iresult = $this->Employees_model->addrequest($data);
@@ -451,7 +457,7 @@ class Employee_request_nae extends MY_Controller {
 		
 			$data_up = array(
 				'approved_naeby' =>  $session['user_id'],
-				'approved_naeon' => date("Y-m-d"),
+				'approved_naeon' => date('Y-m-d h:i:s'),
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 

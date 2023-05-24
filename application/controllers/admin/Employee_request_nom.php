@@ -452,7 +452,7 @@ class Employee_request_nom extends MY_Controller {
 		
 			$data_up = array(
 				'approved_nomby' =>  $session['user_id'],
-				'approved_nomon' => date("Y-m-d"),
+				'approved_nomon' => date('Y-m-d h:i:s'),
 			);
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 

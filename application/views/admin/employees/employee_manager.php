@@ -406,7 +406,7 @@
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> BPJS </strong> TK & KS </span> </div>
                       <div class="card-body">
                         <div class="box-datatable table-responsive">
-                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_bpjs" style="width:100%;">
                             <thead>
                               <tr>
                                 <th><?php echo $this->lang->line('xin_action');?></th>
@@ -488,22 +488,7 @@
 
                   <!-- DOKUMEN FOTO-->
                   <div class="tab-pane fade" id="account-document">
-                    <div class="box" hidden>
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong>DOKUMEN </strong> PRIBADI </span> </div>
-                      <div class="card-body">
-                        <div class="box-datatable table-responsive">
-                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
-                            <thead>
-                              <tr>
-                                <th><?php echo $this->lang->line('xin_action');?></th>
-                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
-                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
-                              </tr>
-                            </thead>
-                          </table>
-                        </div>
-                      </div>s
-                    </div>
+ 
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN </strong> PRIBADI </span> </div>
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
@@ -704,7 +689,7 @@
                       <div class="card-body">
                         <div class="card-block">
                           <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_bank_account" style="width:100%;">
+                            <table class="table table-striped table-bordered dataTable" id="xin_table_baccount" style="width:100%;">
                               <thead>
                                 <tr>
                                   <th><?php echo $this->lang->line('xin_action');?></th>
@@ -728,7 +713,7 @@
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
                       <div class="card-body">
                         <div class="box-datatable table-responsive">
-                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_gaji" style="width:100%;">
                             <thead>
                               <tr>
                                 <th><?php echo $this->lang->line('xin_action');?></th>
@@ -1182,7 +1167,7 @@
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> ACTIVE / </strong> DEACTIVE</span> </div>
                       <div class="card-body">
                         <div class="box-datatable table-responsive">
-                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_deactive" style="width:100%;">
                             <thead>
                               <tr>
                                 <th><?php echo $this->lang->line('xin_action');?></th>
@@ -1327,6 +1312,30 @@
 
                           <div class="col-md-4">
                             <div class="form-group">
+                              <label for="bpjstk_confirm">Kategori</label>
+                              <select class="form-control" name="head_reason" data-plugin="select_hrm" data-placeholder="Kategori">
+                                <option value=""></option>
+                                <option value="[RESIGN]">RESIGN</option>
+                                <option value="[END CONTRACT]">END CONTRACT</option>
+                                <option value="[BLACKLIST]">BLACKLIST</option>
+                              </select>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row">
+                          <!--rule-->
+
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <label for="tanggal_bergabung" class="control-label">Tanggal Resign</label>
+                                  <input class="form-control date" readonly="readonly" placeholder="Date of Resign" name="tanggal_resign" type="text" value="<?php echo $date_of_leaving;?>">
+                                </div>
+                              </div>
+                            
+                          <div class="col-md-4">
+                            <div class="form-group">
                               <label for="title">Keterangan Deactive<i class="hrpremium-asterisk">*</i></label>
                               <textarea class="form-control" placeholder="isi alasan/keterangan deactive" name="keterangan_deactive" type="textarea" value="<?php echo $bpjs_ks_no;?>" id="title"></textarea>
                             </div>
@@ -1334,7 +1343,6 @@
 
 
                         </div>
-
 
                       <div class="row">
                         <div class="col-md-12">

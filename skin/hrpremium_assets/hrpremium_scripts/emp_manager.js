@@ -772,8 +772,7 @@ $(document).ready(function(){
 		e.preventDefault();
 		$('.icon-spinner3').show();
 		$('.save').prop('disabled', true);
-		//$('#hrload-img').show();
-//toastr.info(processing_request);
+		
 		$.ajax({
 			url: e.target.action,
 			type: "POST",
@@ -784,16 +783,14 @@ $(document).ready(function(){
 			success: function(JSON)
 			{
 				if (JSON.error != '') {
-					//toastr.clear();
-//$('#hrload-img').hide();
+					Ladda.stopAll();
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
 					$('.icon-spinner3').hide();
 				} else {
 					xin_table_document.api().ajax.reload(function(){ 
-						//toastr.clear();
-//$('#hrload-img').hide();
+						Ladda.stopAll();
 						toastr.success(JSON.result);
 						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					}, true);
@@ -804,8 +801,7 @@ $(document).ready(function(){
 			},
 			error: function() 
 			{
-				//toastr.clear();
-//$('#hrload-img').hide();
+				Ladda.stopAll();
 				toastr.error(JSON.error);
 				$('.save').prop('disabled', false);
 			} 	        
