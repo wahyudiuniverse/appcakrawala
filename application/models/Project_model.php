@@ -154,6 +154,16 @@ class Project_model extends CI_Model {
   	  return $query->result();
 	}
 
+
+	public function get_project_maping($empID) {
+	  $query = $this->db->query("SELECT pros.project_id, CONCAT('[',pro.priority,']', ' ', pro.title) AS title
+FROM xin_projects_akses pros
+LEFT JOIN xin_projects pro ON pro.project_id = pros.project_id
+WHERE pros.nip = '$empID'
+GROUP BY pros.project_id");
+  	  return $query->result();
+	}
+
 	// get employees list> reports
 	public function project_list() {
 
