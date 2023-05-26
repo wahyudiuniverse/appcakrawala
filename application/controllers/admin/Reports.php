@@ -1376,11 +1376,17 @@ class Reports extends MY_Controller
 				$nama_toko = '--';	
 			}
 
-			// if(!is_null($r->date_phone)){
+			if(!is_null($r->foto_in)){
+				$fotovIn = 'https://api.apps-cakrawala.com/'.$r->foto_in;
+			} else {
+				$fotovIn = '-';
+			}
 
-			// } else {
-
-			// }
+			if(!is_null($r->foto_out)){
+				$fotovOut = 'https://api.apps-cakrawala.com/'.$r->foto_out;
+			} else {
+				$fotovOut = '-';
+			}
 
 			$data[] = array (
 				$r->employee_id,
@@ -1393,8 +1399,8 @@ class Reports extends MY_Controller
 				$r->time_out,
 				$r->latitude.', '.$r->longitude,
 				$r->timestay,
-				$r->foto_in,
-				$r->foto_out
+				$fotovIn,
+				$fotovOut
 			);
 		}
 
