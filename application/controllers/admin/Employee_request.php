@@ -42,7 +42,8 @@ class Employee_request extends MY_Controller {
 		$data['title'] = $this->lang->line('xin_request_employee').' | '.$this->Xin_model->site_title();
 
 			$data['all_companies'] = $this->Xin_model->get_companies();
-			$data['all_projects'] = $this->Project_model->get_all_projects();
+			// $data['all_projects'] = $this->Project_model->get_all_projects();
+			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 			$data['all_projects_sub'] = $this->Project_model->get_all_projects();
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();

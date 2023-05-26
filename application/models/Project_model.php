@@ -167,7 +167,6 @@ GROUP BY pros.project_id");
 	// get employees list> reports
 	public function project_list() {
 
-
 			return $query = $this->db->query("SELECT * FROM xin_projects ORDER BY project_id DESC");
 		
 	}

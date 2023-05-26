@@ -196,14 +196,7 @@ class Reports extends MY_Controller
 		$data['path_url'] = 'reports_man_employees';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
-		if(in_array('13',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
-			// $data['all_projects'] = $this->Project_model->get_project_exist();
-			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		}
-
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('470',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/manage_employees", $data, TRUE);

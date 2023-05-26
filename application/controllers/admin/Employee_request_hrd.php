@@ -568,12 +568,10 @@ class Employee_request_hrd extends MY_Controller {
 								'created_by' => $createdby
 							);
 
-					
-
 			$iresult = $this->Employees_model->add($data_migrate);
 
-
 			$data_up = array(
+				'nip' => $employee_id,
 				'approved_hrdby' =>  $session['user_id'],
 				'approved_hrdon' => date('Y-m-d h:i:s'),
 			);

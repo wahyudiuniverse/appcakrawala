@@ -301,7 +301,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
 
-    <?php if(in_array('374',$role_resources_ids)) { ?>
+    <?php if(in_array('375',$role_resources_ids)) { ?>
     <button type="submit" class="btn btn-primary save">APPROVE NOM/SM</button>
     <?php } ?>
 

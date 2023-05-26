@@ -10,6 +10,9 @@
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae();?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom();?>
 <?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd();?>
+
+
+
 <?php //$list_bank = $this->Xin_model->get_bank_code();?>
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
@@ -109,7 +112,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="">
+                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="" maxlength="16">
                   </div>
                 </div>
 
@@ -129,7 +132,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="">
+                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="" maxlength="16">
                   </div>
                 </div>
 
