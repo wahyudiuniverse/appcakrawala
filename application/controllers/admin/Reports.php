@@ -1391,7 +1391,10 @@ class Reports extends MY_Controller
 				$r->date_phone,
 				$r->time_in,
 				$r->time_out,
-				$r->timestay
+				$r->latitude.', '.$r->longitude,
+				$r->timestay,
+				$r->foto_in,
+				$r->foto_out
 			);
 		}
 

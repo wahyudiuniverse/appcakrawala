@@ -25,7 +25,7 @@
       
       <div class="form-row">
 
-        <div class="col-md mb-3">
+        <div class="col-md mb-2">
           <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
           <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
             <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
@@ -39,7 +39,7 @@
           </select>
         </div>
 
-        <div class="col-md mb-3" hidden>
+        <div class="col-md mb-2" hidden>
           <div class="form-group">
             <label class="form-label"><?php echo $this->lang->line('xin_employee_department');?></label>
             <select disabled="disabled" class="form-control" name="department_id" id="aj_department" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_employee_department');?>">
@@ -48,7 +48,7 @@
           </div>   
         </div>
              
-        <div class="col-md mb-3">
+        <div class="col-md mb-2">
           <label class="form-label"><?php echo $this->lang->line('left_projects');?></label>
           <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
             <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
@@ -63,7 +63,7 @@
         </div>
 
 
-        <div class="col-md mb-3" >
+        <div class="col-md mb-2" >
           <div class="form-group" id="subproject_ajax">
             <label class="form-label"><?php echo $this->lang->line('left_sub_projects');?></label>
             <select disabled="disabled" class="form-control" name="subproject_id" id="aj_subproject" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_sub_projects');?>">
@@ -77,7 +77,9 @@
             <label class="form-label"><?php echo $this->lang->line('dashboard_xin_status');?></label>
             <select class="form-control" name="status_resign" id="aj_status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status');?>">
               <option value="1">AKTIF</option>
+              <option value="5">DEACTIVE</option>
               <option value="2">RESIGN</option>
+              <option value="4">END CONTRACT</option>
               <option value="3">BLACKLIST</option>
               <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
             </select>

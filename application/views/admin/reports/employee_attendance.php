@@ -96,7 +96,10 @@
                 <th>Tanggal</th>
                 <th><?php echo $this->lang->line('dashboard_clock_in');?></th>
                 <th><?php echo $this->lang->line('dashboard_clock_out');?></th>
+                <th>Koordinat</th>
                 <th>Total Jam Kerja</th>
+                <th>Foto IN</th>
+                <th>Foto OUT</th>
               </tr>
             </thead>
           </table>
