@@ -50,14 +50,9 @@ class Employee_resign extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 			$data['title'] = $this->lang->line('xin_resignin_employee').' | '.$this->Xin_model->site_title();
 			$data['all_companies'] = $this->Xin_model->get_companies();
-			$data['all_projects'] = $this->Project_model->get_all_projects();
-			if(in_array('139',$role_resources_ids)) {
+
 				$data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
-				$data['all_projects'] = $this->Project_model->get_project_exist_all();
-			} else {
-				$data['all_emp_active'] = $this->Employees_model->get_all_employees_project();
-				$data['all_projects'] = $this->Project_model->get_project_exist();
-			}
+				$data['all_projects'] = $this->Project_model->get_project_exist_deactive();
 
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
@@ -201,7 +196,7 @@ class Employee_resign extends MY_Controller {
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/get_project_employees", $data);
+			$this->load->view("admin/employees/get_project_empdeactive", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -231,6 +226,49 @@ class Employee_resign extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 	}
+
+	 // get location > departments
+	public function get_ket() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'employee_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_ket", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	 // get location > departments
+	public function get_rdate() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'employee_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_rdate", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
 
 	 // get location > departments
 	public function get_info() {
@@ -313,7 +351,7 @@ class Employee_resign extends MY_Controller {
 				
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('pdf');
+						$alloweda =  array('pdf','PDF');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						

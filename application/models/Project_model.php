@@ -113,6 +113,17 @@ class Project_model extends CI_Model {
   	  return $query->result();
 	}
 
+	public function get_project_exist_deactive() {
+	  $query = $this->db->query("SELECT distinct(emp.project_id) AS project_id, proj.title 
+		FROM xin_employees emp
+		LEFT JOIN xin_projects proj ON proj.project_id=emp.project_id
+		WHERE emp.project_id NOT IN (0)
+		AND emp.status_resign = 5
+		ORDER BY proj.title");
+  	  return $query->result();
+	}
+
+
 	public function get_project_ratecard_all_() {
 	  $query = $this->db->query("SELECT distinct(emp.project_id) AS project_id, proj.title 
 		FROM xin_employees emp

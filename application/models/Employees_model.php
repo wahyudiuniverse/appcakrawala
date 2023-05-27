@@ -59,6 +59,21 @@ class Employees_model extends CI_Model {
   	  return $query->result();
 	}
 
+
+	public function get_empdeactive_byproject($id)
+	{
+	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, project_id, date_of_leaving,month(date_of_leaving) bln_skrng
+		FROM xin_employees 
+		WHERE is_active = 1 
+		AND status_resign = 5
+		AND employee_id not IN (SELECT 1 AS nip FROM DUAL
+			UNION
+			SELECT employee_id AS nip FROM xin_employee_contract WHERE status_pkwt = 1)
+		AND project_id = '$id'
+		ORDER BY date_of_leaving DESC;");
+  	  return $query->result();
+	}
+
 	public function get_all_employees_byposisi($id)
 	{
 	  $query = $this->db->query("SELECT posisi_jabatan FROM xin_employee_ratecard WHERE project_id = '19' AND status_ratecard = '1';");

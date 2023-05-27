@@ -100,6 +100,22 @@ $(document).ready(function() {
 		});
 	});
 	
+			//get project
+	jQuery("#aj_ktp").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_ket/"+p_id, function(data, status){
+			jQuery('#ket_ajax').html(data);			
+		});
+	});
+
+					//get project
+	jQuery("#aj_ktp").change(function(){
+		var p_id = jQuery(this).val();
+		jQuery.get(base_url+"/get_rdate/"+p_id, function(data, status){
+			jQuery('#rdate_ajax').html(data);			
+		});
+	});
+	
 	// get departments
 	jQuery("#aj_dokumen").change(function(){
 		var s_id = jQuery(this).val();

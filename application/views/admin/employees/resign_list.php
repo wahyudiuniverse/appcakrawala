@@ -107,6 +107,14 @@
                   </div>
                 </div>
 
+                <!--TANGGAL RESIGN-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                  <label for="date_of_birth">Tanggal Berakhir<i class="hrpremium-asterisk">*</i></label>
+                  <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
+                  </div>
+                </div>
+
                 <!--STATUS RESIGN-->
                 <div class="col-md-4">
                   <div class="form-group">
@@ -121,20 +129,13 @@
                   </div>
                 </div>
 
-                <!--TANGGAL RESIGN-->
-                <div class="col-md-4">
-                  <div class="form-group">
-                  <label for="date_of_birth">Tanggal Berakhir<i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
-                  </div>
-                </div>
 
               </div>
 
               <div class="row">
                 <!-- KETERANGAN RESIGN -->
                 <div class="col-md-12">
-                  <div class="form-group">
+                  <div class="form-group" id="ket_ajax">
                     <label for="ket_resign" class="control-label">Keterangan Resign<i class="hrpremium-asterisk"></i></label>
                     <input class="form-control" placeholder="Keterangan Resign/Bad Atitude" name="ket_resign" type="text" value="">
                   </div>
