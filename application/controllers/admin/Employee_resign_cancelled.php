@@ -394,104 +394,83 @@ class Employee_resign_cancelled extends MY_Controller {
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		// 			if ($_FILES['dok_exitc']['size'] == 0){
-		// 			 	$Return['error'] = "Dokumen Exit Clearance kosong...!";
-		// 			} else if ($_FILES['dok_sresign']['size'] == 0){
-		// 			 	$Return['error'] = $this->lang->line('xin_employee_error_sresign');
-		// 			}
 
-		if ($_FILES['dok_exitc']['size'] != 0) {
 
-					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
-						//checking image type
-						$alloweda =  array('png','jpg','jpeg','pdf');
-						$filenamea = $_FILES['dok_exitc']['name'];
-						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
-						
-						if(in_array($exta,$alloweda)){
-							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
-							$documentda = "uploads/document/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["dok_exitc"]["name"]);
-							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
-							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
-							$fnameExit = $newfilenamea;
-						} else {
-							$fnameExit = null;
-							// $Return['error'] = $this->lang->line('xin_employee_document_file_type');
-						}
-					} else {
-					$fnameExit = null;
-					// $Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
-					}
+		/* Server side PHP input validation */		
+		// if($this->input->post('title')==='') {
+		// 	 $Return['error'] = $this->lang->line('xin_employee_error_document_title');
+		// } else 
+		if($_FILES['dok_exitc']['size'] == 0) {
+			$fnameExit = $this->input->post('dexitc');
+		} else {
+			if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
+				//checking image type
+				$allowed =  array('pdf','PDF');
+				$filename = $_FILES['dok_exitc']['name'];
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				
+				if(in_array($ext,$allowed)){
+					$tmp_name = $_FILES["dok_exitc"]["tmp_name"];
+					$documentd = "uploads/document/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["dok_exitc"]["name"]);
+					$newfilename = 'document_exc_'.round(microtime(true)).'.'.$ext;
+					move_uploaded_file($tmp_name, $documentd.$newfilename);
+					$fnameExit = $newfilename;
+				} else {
+					$Return['error'] = 'Jenis File Exit Clearance tidak diterima..';
+				}
+			}
+		}
+	
+
+		/* Check if file uploaded..*/
+		if($_FILES['dok_sresign']['size'] == 0) {
+			$fname_sresign = $this->input->post('ffoto_kk');
+		} else {
+			if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
+				//checking image type
+				$allowed_kk =  array('pdf','PDF');
+				$filename_kk = $_FILES['dok_sresign']['name'];
+				$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
+				
+				if(in_array($ext_kk,$allowed_kk)){
+					$tmp_name_kk = $_FILES["dok_sresign"]["tmp_name"];
+					$documentd_kk = "uploads/document/";
+					// basename() may prevent filesystem traversal attacks;
+					// further validation/sanitation of the filename may be appropriate
+					$name = basename($_FILES["dok_sresign"]["name"]);
+					$newfilename_kk = 'kk_'.round(microtime(true)).'.'.$ext_kk;
+					move_uploaded_file($tmp_name_kk, $documentd_kk.$newfilename_kk);
+					$fname_sresign = $newfilename_kk;
+				} else {
+					$Return['error'] = 'Jenis File SURAT RESIGN tidak diterima..';
+				}
+			}
+		}
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
 
 			$data_up = array(
 									'dok_exit_clearance' => $fnameExit,
+									'dok_resign_letter' => $fname_sresign,
 									'cancel_resign_stat' =>  0
 			);
 
+
 			$result = $this->Employees_model->update_resign_apnae($data_up,$id);
 
-			if($Return['error']!='') {
-	       		$this->output($Return);
-	    	}
-			
 			if ($result == TRUE) {
 						$Return['result'] = "Revisi Karyawan Resign sudah dibuat.";
 			} else {
 					$Return['error'] = $this->lang->line('xin_error_msg');
 			}
-		}
 
-
-		if ($_FILES['dok_sresign']['size'] != 0) {
-
-							if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
-								//checking image type
-								$allowedb =  array('png','jpg','jpeg','pdf');
-								$filenameb = $_FILES['dok_sresign']['name'];
-								$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
-								
-								if(in_array($extb,$allowedb)){
-									$tmp_nameb = $_FILES["dok_sresign"]["tmp_name"];
-									$documentdb = "uploads/document/";
-									// basename() may prevent filesystem traversal attacks;
-									// further validation/sanitation of the filename may be appropriate
-									$name = basename($_FILES["dok_sresign"]["name"]);
-									$newfilenameb = 'document_srs_'.round(microtime(true)).'.'.$extb;
-									move_uploaded_file($tmp_nameb, $documentdb.$newfilenameb);
-									$fname_sresign = $newfilenameb;
-								} else {
-									$fname_sresign = null;
-									// $Return['error'] = $this->lang->line('xin_employee_document_file_type');
-								}
-							} else {
-							$fname_sresign = null;
-							// $Return['error'] = "ERROR Dokumen Resign Kosong";
-							}
-							
-					$data_up = array(
-											'dok_resign_letter' => $fname_sresign,
-											'cancel_resign_stat' =>  0
-					);
-
-					$result = $this->Employees_model->update_resign_apnae($data_up,$id);
-
-				if($Return['error']!='') {
-		       		$this->output($Return);
-		    	}
-				
-				if ($result == TRUE) {
-						$Return['result'] = "Revisi Karyawan Resign sudah dibuat.";
-				} else {
-						$Return['error'] = $this->lang->line('xin_error_msg');
-				}
-		}
-
-
-						$this->output($Return);
-						exit;
+		$this->output($Return);
+		exit;
 
 		}
 	}

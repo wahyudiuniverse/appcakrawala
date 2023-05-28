@@ -90,10 +90,10 @@ class Employee_resign_apnae extends MY_Controller {
 
 				if(is_null($approve_resignnae) || $approve_resignnae=='0'){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NAE</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'.$r->user_id . '">Need Approval NAE</button>';
 				} else {
 					
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NOM</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'.$r->user_id . '">Need Approval NOM</button>';
 				}
 
 				if($r->status_resign==2){
@@ -135,12 +135,9 @@ class Employee_resign_apnae extends MY_Controller {
 					$nama_project = '--';	
 				}
 			
-				// $department = $this->Department_model->read_department_information($r->department);
-				// if(!is_null($department)){
-				// 	$department_name = $department[0]->department_name;
-				// } else {
-				// 	$department_name = '--';	
-				// }
+
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->user_id . '">CANCEL</button>';
+
 
 				$designation = $this->Designation_model->read_designation_information($r->designation_id);
 				if(!is_null($designation)){
@@ -152,7 +149,7 @@ class Employee_resign_apnae extends MY_Controller {
 				$dok_p = $vexc.' '.$vsrs.' '.$vhov;
 
 			$data[] = array(
-				$status_migrasi,
+				$status_migrasi.' '.$cancel,
 				$nip,
 				$fullname,
 				$nama_project,
@@ -281,7 +278,11 @@ class Employee_resign_apnae extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-		$id = $this->input->get('company_id');
+
+		$idsubmit = substr($this->input->get('company_id'),0,1);
+		$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
+
+		// $id = $this->input->get('company_id');
        // $data['all_countries'] = $this->xin_model->get_countries();
 		// $result = $this->Company_model->read_company_information('2');
 		$result = $this->Employees_model->read_employee_info($id);
@@ -313,7 +314,12 @@ class Employee_resign_apnae extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		$this->load->view('admin/employees/dialog_resign_approve_nae', $data);
+		if($idsubmit=='$'){
+			$this->load->view('admin/employees/dialog_resign_approve_nae', $data);
+		} else {
+			$this->load->view('admin/employees/dialog_resign_cancel_nae', $data);
+		}
+		// $this->load->view('admin/employees/dialog_resign_approve_nae', $data);
 	}
 
 	public function read_document() {
@@ -389,15 +395,34 @@ class Employee_resign_apnae extends MY_Controller {
 
 		if($this->input->post('edit_type')=='company') {
 		$id = $this->uri->segment(4);
+		$cancel = $this->uri->segment(5);
 				
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-			$data_up = array(
-				'approve_resignnae' =>  $session['user_id'],
-				'approve_resignnae_on' => date("Y-m-d h:i:s")
-			);
+			if($cancel=='YES'){
+
+				$data_up = array(
+					// 'migrasi' => '1',
+					'cancel_resign_stat' =>  1,
+					'cancel_date' => date("Y-m-d h:i:s"),
+					'cancel_ket' => 'REVISI DOKUMEN PENDUKUNG'
+
+				);
+			} else {
+				$data_up = array(
+					// 'migrasi' => '1',
+					'approve_resignnae' =>  $session['user_id'],
+					'approve_resignnae_on' => date("Y-m-d h:i:s")
+
+				);
+			}
+
+			// $data_up = array(
+			// 	'approve_resignnae' =>  $session['user_id'],
+			// 	'approve_resignnae_on' => date("Y-m-d h:i:s")
+			// );
 
 			$result = $this->Employees_model->update_resign_apnae($data_up,$id);
 

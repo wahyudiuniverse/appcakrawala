@@ -1620,8 +1620,6 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT *
 		FROM xin_employees
 		WHERE request_resign_by NOT IN ('NULL','0')
-		AND approve_resignnae NOT IN ('NULL','0')
-		AND approve_resignnom NOT IN ('NULL','0')
 		AND approve_resignhrd IS NULL
 	  	AND cancel_resign_stat = 1");
   	  return $query->num_rows();
@@ -1633,7 +1631,8 @@ class Xin_model extends CI_Model {
 		FROM xin_employees
 		WHERE request_resign_by NOT IN ('NULL','0')
 		AND approve_resignnae IS NULL
-		AND approve_resignnom IS NULL");
+		AND approve_resignnom IS NULL
+		AND cancel_resign_stat = 0");
   	  return $query->num_rows();
 	}
 

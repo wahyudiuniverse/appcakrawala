@@ -41,13 +41,13 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> REVISI EMPLOYEE RESIGN</h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> CANCEL EMPLOYEE RESIGN</h4>
   </div>
 
 
   <?php $attributes = array('name' => 'edit_company', 'id' => 'edit_company', 'autocomplete' => 'off', 'class'=>'m-b-1');?>
   <?php $hidden = array('_method' => 'EDIT', '_token' => $_GET['company_id'], 'ext_name' => $idrequest);?>
-  <?php echo form_open_multipart('admin/Employee_resign_cancelled/update/'.$idrequest.'/YES', $attributes, $hidden);?>
+  <?php echo form_open_multipart('admin/Employee_resign_apnae/update/'.$idrequest.'/YES', $attributes, $hidden);?>
 
  <hr style="height:1px;border-width:0;color:gray;background-color:gray; margin: auto;">
 
@@ -187,68 +187,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
     </div>
   </div>
-
-
-
-<!-- EXIT CLEARANCE -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" <?php if(is_null($dok_exit_clearance)){?> hidden <?php } ?>>
-    <div class="row">
-      <!-- PENEMPATAN -->
-
-      <input name="dexitc" type="text" value="<?php echo $dok_exit_clearance;?>" hidden>
-
-      <div class="col-sm-4">
-        <div>
-          <label for="penempatan">Exit Clearance</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="dok_exitc" name="dok_exitc">
-                              <small>Jenis File: .pdf</small>
-                            </fieldset>
-                          </div>
-        </div>
-      </div>
-
-                          <?php 
-                                  echo '<a href="'.base_url().'uploads/document/'.$dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-                          ?>
-    </div>
-  </div>
-
-
-<!-- SURAT RESIGN -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" <?php if(is_null($dok_resign_letter)){?> hidden <?php } ?>>
-    <div class="row">
-      <!-- PENEMPATAN -->
-      <div class="col-sm-4">
-        <div>
-          <label for="penempatan">Surat Resign</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="dok_sresign" name="dok_sresign">
-                              <small>Jenis File: .pdf</small>
-                            </fieldset>
-                          </div>
-        </div>
-      </div>
-                          <?php 
-                                  echo '<a href="'.base_url().'uploads/document/'.$dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-                          ?>
-    </div>
-  </div>
-
-
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -320,28 +258,11 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
-    <?php if(in_array('490',$role_resources_ids)) { ?>
-    <button type="submit" class="btn btn-success save">SAVE REVISI</button>
+    <?php if(in_array('494',$role_resources_ids)) { ?>
+    <button type="submit" class="btn btn-warning save">CANCEL REQUEST</button>
     <?php } ?>
     
   </div>
-<style type="text/css">
-  
-  input[type=file]::file-selector-button {
-  margin-right: 20px;
-  border: none;
-  background: #26ae61;
-  padding: 10px 20px;
-  border-radius: 2px;
-  color: #fff;
-  cursor: pointer;
-  transition: background .2s ease-in-out;
-}
-
-input[type=file]::file-selector-button:hover {
-  background: #20c997;
-}
-</style>
 
 <?php echo form_close(); ?>
 <script type="text/javascript">
@@ -386,7 +307,7 @@ input[type=file]::file-selector-button:hover {
                var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
     "ajax": {
-            url : base_url+"/resign_list_cancel/",
+            url : base_url+"/resign_list/",
             type : 'GET'
         },
     dom: 'lBfrtip',
@@ -416,6 +337,5 @@ input[type=file]::file-selector-button:hover {
 		});
 	});	
   </script>
-
 <?php } ?>
 
