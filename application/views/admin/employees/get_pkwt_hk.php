@@ -1,4 +1,5 @@
-<?php $result = $this->Pkwt_model->read_info_ratecard($proj,str_replace("%20"," ",$posi),$area);
+
+<?php $result = $this->Employees_model->read_employee_info_by_nik(str_replace("%20"," ",$id_project));
 
   
         // get company
@@ -33,8 +34,11 @@
 
 ?>
 
-                    <label for="harikerja">: <?php echo $hk;?></label>
-                    <input name="harikerja" type="text" value="<?php echo $hk;?>" hidden>
+                    <label for="harikerja">: <?php echo $result[0]->hari_kerja.' / CutOff : '.$result[0]->cut_start.'-'.$result[0]->cut_off.' / Payment : '.$result[0]->date_payment;?></label>
+                    <input name="harikerja" type="text" value="<?php echo $result[0]->hari_kerja;?>" hidden>
+                    <input name="cutoff" type="text" value="<?php echo $result[0]->cut_off;?>" hidden>
+                    <input name="penggajian" type="text" value="<?php echo $result[0]->date_payment;?>" hidden>
+                    
 
 
 <script type="text/javascript">

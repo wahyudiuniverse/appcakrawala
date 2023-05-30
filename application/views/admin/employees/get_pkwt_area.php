@@ -1,4 +1,4 @@
-<?php //$result = $this->Employees_model->read_employee_info_by_nik($id_project);
+<?php $result = $this->Employees_model->read_employee_info_by_nik(str_replace("%20"," ",$id_project));
 
   
         // // get company
@@ -33,10 +33,8 @@
 
 ?>
 
-                    <label for="area">: <?php echo str_replace("%20","",$area);?></label>
-                    <input name="area" type="text" value="<?php echo str_replace("%20","",$area);?>" hidden>
-                    <input name="posi" type="text" value="<?php echo str_replace("%20","",$posi);?>" hidden>
-                    <input name="proj" type="text" value="<?php echo str_replace("%20","",$proj);?>" hidden>
+                    <label for="area">: <?php echo $result[0]->penempatan;?></label>
+                    <input name="area" type="text" value="<?php echo $result[0]->penempatan;?>" hidden>
 
 
 

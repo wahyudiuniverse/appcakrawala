@@ -94,6 +94,7 @@ class Employee_request extends MY_Controller {
 				$nik_ktp = $r->nik_ktp;
 				$approved_naeby = $r->approved_naeby;
 				$approved_nomby = $r->approved_nomby;
+				$approved_hrdby = $r->approved_hrdby;
 			  
 
 				if($approved_naeby==null){
@@ -102,6 +103,10 @@ class Employee_request extends MY_Controller {
 				} else if ($approved_nomby==null) {
 					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NOM</button>';
+
+				} else if ($approved_hrdby==null) {
+					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval HRD</button>';
 
 				} else {
 

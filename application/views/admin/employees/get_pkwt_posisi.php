@@ -1,4 +1,4 @@
-<?php //$result = $this->Employees_model->read_employee_info_by_nik($id_project);
+<?php $result = $this->Employees_model->read_employee_info_by_nik(str_replace("%20"," ",$id_project));
 
   
         // // get company
@@ -24,17 +24,17 @@
         //   $nama_project = '--'; 
         // }
 
-        // $designation = $this->Designation_model->read_designation_information($result[0]->designation_id);
-        // if(!is_null($designation)){
-        //   $designation_name = $designation[0]->designation_name;
-        // } else {
-        //   $designation_name = '--'; 
-        // }
+        $designation = $this->Designation_model->read_designation_information($result[0]->designation_id);
+        if(!is_null($designation)){
+          $designation_name = $designation[0]->designation_name;
+        } else {
+          $designation_name = '--'; 
+        }
 
 ?>
 
-                    <label for="jabatan">: <?php echo str_replace("%20","",$id_project);?></label>
-                    <input name="jabatan" type="text" value="<?php echo str_replace("%20"," ",$id_project);?>" hidden>
+                    <label for="jabatan">: <?php echo $designation_name;?></label>
+                    <input name="jabatan" type="text" value="<?php echo $result[0]->designation_id;?>" hidden>
 
 
 

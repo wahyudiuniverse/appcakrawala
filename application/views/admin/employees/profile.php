@@ -131,7 +131,7 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label control-label">Nomor HP/Whatsapp</label>
-                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="no_kontak" type="text" value="<?php echo $contact_no;?>">
+                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="no_kontak" type="text" value="<?php echo $contact_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-4">
@@ -146,13 +146,13 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label control-label">Nomor KTP*</label>
-                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="ktp_no" type="text" value="<?php echo $ktp_no;?>">
+                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="ktp_no" type="text" value="<?php echo $ktp_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16">
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label">Nomor KK*</label>
-                                  <input class="form-control" placeholder="Nomor Kartu Keluarga" name="kk_no" type="text" value="<?php echo $kk_no;?>">
+                                  <input class="form-control" placeholder="Nomor Kartu Keluarga" name="kk_no" type="text" value="<?php echo $kk_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16">
                                 </div>
                               </div>
                               <div class="col-md-4">
@@ -881,8 +881,6 @@
                   </div>
                   <?php } ?>
 
-
-
                   <div class="tab-pane fade" id="account-qualification">
                     <div class="box">
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_qualification');?> </span> </div>
@@ -987,7 +985,6 @@
                       <?php echo form_close(); ?> 
                     </div>
                   </div>
-
 
                   <?php if($system[0]->employee_manage_own_work_experience=='yes'){?>
                   <div class="tab-pane fade" id="account-experience">

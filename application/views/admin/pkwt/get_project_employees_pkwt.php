@@ -21,6 +21,35 @@ $(document).ready(function(){
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' });
 
+
+	// get departments
+	jQuery("#aj_ktp").change(function(){
+		jQuery.get(base_url+"/get_pkwt_hk/"+jQuery(this).val(), function(data, status){
+			jQuery('#pkwt_hk_ajax').html(data);
+		});
+	});
+
+	// get departments
+	jQuery("#aj_ktp").change(function(){
+		jQuery.get(base_url+"/get_pkwt_gaji/"+jQuery(this).val(), function(data, status){
+			jQuery('#pkwt_gaji_ajax').html(data);
+		});
+	});
+
+	// get departments
+	jQuery("#aj_ktp").change(function(){
+		jQuery.get(base_url+"/get_pkwt_area/"+jQuery(this).val(), function(data, status){
+			jQuery('#pkwt_area_ajax').html(data);
+		});
+	});
+
+	// get departments
+	jQuery("#aj_ktp").change(function(){
+		jQuery.get(base_url+"/get_pkwt_posisi/"+jQuery(this).val(), function(data, status){
+			jQuery('#pkwt_posisi_ajax').html(data);
+		});
+	});
+
 	// get departments
 	jQuery("#aj_ktp").change(function(){
 		jQuery.get(base_url+"/get_pkwt_kontrak/"+jQuery(this).val(), function(data, status){

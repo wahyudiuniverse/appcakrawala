@@ -27,7 +27,7 @@
         } else {
           // $end_date = '--'; 
 
-                $begin = $result[0]->date_of_joining;
+                $begin = $result[0]->contract_start;
                 // $tgl1 = "2018-01-23";// pendefinisian tanggal awal
                 if(!is_null($waktu_kontrak)){
                   if($waktu_kontrak=='1'){

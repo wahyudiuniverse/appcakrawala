@@ -100,12 +100,15 @@
                   </div>
                 </div>
 
-                <!-- POSISI -->
+                <!-- WAKTU KONTRAK -->
                 <div class="col-md-4">
-                  <div class="form-group" id="project_posisi_ajax">
-                    <label for="posisi">Posisi/Jabatan<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="posisi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
-                      <option value="0">--</option>
+                  <div class="form-group">
+                    <label for="waktu_kontrak">Waktu Kontrak<i class="hrpremium-asterisk">*</i></label>
+                    <select class="form-control" name="waktu_kontrak" id="aj_waktu_kontrak" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
+                      <option value="1">1 (Bulan)</option>
+                      <option value="3" selected>3 (Bulan)</option>
+                      <option value="6">6 (Bulan)</option>
+                      <option value="12">12 (Bulan)</option>
                     </select>
                   </div>
                 </div>
@@ -120,21 +123,18 @@
                 <div class="col-md-4">
                   <div class="form-group" id="project_area_ajax">
                     <label for="area">Area/Penempatan<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="area" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
+                    <select class="form-control" name="area" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>" disabled>
                       <option value="0">--</option>
                     </select>
                   </div>
                 </div>
 
-                <!-- WAKTU KONTRAK -->
+                <!-- POSISI -->
                 <div class="col-md-4">
-                  <div class="form-group">
-                    <label for="waktu_kontrak">Waktu Kontrak<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="waktu_kontrak" id="aj_waktu_kontrak" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
-                      <option value="1">1 (Bulan)</option>
-                      <option value="3" selected>3 (Bulan)</option>
-                      <option value="6">6 (Bulan)</option>
-                      <option value="12">12 (Bulan)</option>
+                  <div class="form-group" id="x">
+                    <label for="posisi">Posisi/Jabatan<i class="hrpremium-asterisk">*</i></label>
+                    <select class="form-control" name="posisi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>" disabled>
+                      <option value="0">--</option>
                     </select>
                   </div>
                 </div>
@@ -338,21 +338,6 @@
                 </div>
               </div>
 
-              <div class="row">
-                <!--PROJECT-->
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="projects">Gaji Pokok</label>
-                  </div>
-                </div>
-
-                <!--PROJECT-->
-                <div class="col-md-8">
-                  <div class="form-group" id="pkwt_gaji_ajax">
-                    <label for="projects">: -</label>
-                  </div>
-                </div>
-              </div>
 
               <div class="row">
                 <!--PROJECT-->
@@ -370,19 +355,23 @@
                 </div>
               </div>
 
-              <div class="row">
-                <!--PROJECT-->
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="projects">Tunjangan</label>
+              <div id="pkwt_gaji_ajax">
+                <div class="row">
+                  <!--PROJECT-->
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="projects">Gaji Pokok</label>
+                    </div>
                   </div>
-                </div>
 
-                <!--PROJECT-->
-                <div class="col-md-8">
-                  <div class="form-group" id="pkwt_allow_ajax">
-                    <label for="projects">: -</label>
+                  <!--PROJECT-->
+                  <div class="col-md-8">
+                    <div class="form-group" >
+                      <label for="projects">: -</label>
+                    </div>
                   </div>
+                  
+
                 </div>
               </div>
           </div>

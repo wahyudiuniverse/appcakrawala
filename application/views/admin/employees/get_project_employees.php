@@ -35,6 +35,7 @@ $(document).ready(function(){
 			jQuery('#info_ajax').html(data);
 		});
 	});
+
 	// // get departments
 	// jQuery("#aj_ktp").change(function(){
 	// 	jQuery.get(base_url+"/get_pkwt_kontrak/"+jQuery(this).val(), function(data, status){

@@ -17,12 +17,14 @@
         // $department_name = '--';  
         // }
 
-        // $projects = $this->Project_model->read_single_project($result[0]->project_id);
-        // if(!is_null($projects)){
-        //   $nama_project = $projects[0]->title;
-        // } else {
-        //   $nama_project = '--'; 
-        // }
+        $projects = $this->Project_model->read_single_project($id_project);
+        if(!is_null($projects)){
+          $nama_project = $projects[0]->title;
+          $idproject = $projects[0]->project_id;
+        } else {
+          $nama_project = '--'; 
+          $idproject = $projects[0]->project_id;
+        }
 
         // $designation = $this->Designation_model->read_designation_information($result[0]->designation_id);
         // if(!is_null($designation)){
@@ -33,7 +35,8 @@
 
 ?>
 
-                    <label for="projects">: <?php echo $id_project;?></label>
+                    <label for="projects">: <?php echo $nama_project;?></label>
+                    <input name="allow" type="text" value="<?php echo $idproject;?>" hidden>
 
 
 

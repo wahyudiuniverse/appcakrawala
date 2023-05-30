@@ -161,7 +161,7 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label control-label">Nomor HP/Whatsapp</label>
-                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="no_kontak" type="text" value="<?php echo $contact_no;?>">
+                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="no_kontak" type="text" value="<?php echo $contact_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-4">
@@ -176,13 +176,13 @@
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label control-label">Nomor KTP*</label>
-                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="ktp_no" type="text" value="<?php echo $ktp_no;?>">
+                                  <input class="form-control" placeholder="Nomor HP/Whatsapp" name="ktp_no" type="text" value="<?php echo $ktp_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16">
                                 </div>
                               </div>
                               <div class="col-md-4">
                                 <div class="form-group">
                                   <label class="form-label">Nomor KK*</label>
-                                  <input class="form-control" placeholder="Nomor Kartu Keluarga" name="kk_no" type="text" value="<?php echo $kk_no;?>">
+                                  <input class="form-control" placeholder="Nomor Kartu Keluarga" name="kk_no" type="text" value="<?php echo $kk_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16">
                                 </div>
                               </div>
                               <div class="col-md-4">
@@ -488,7 +488,23 @@
 
                   <!-- DOKUMEN FOTO-->
                   <div class="tab-pane fade" id="account-document">
- 
+                   <div class="box" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_documents');?> </span> </div>
+                      <div class="card-body">
+                        <div class="box-datatable table-responsive">
+                          <table class="table table-striped table-bordered dataTable" id="xin_table_document" style="width:100%;">
+                            <thead>
+                              <tr>
+                                <th><?php echo $this->lang->line('xin_action');?></th>
+                                <th><?php echo $this->lang->line('xin_e_details_dtype');?></th>
+                                <th><?php echo $this->lang->line('xin_employee_document_number');?></th>
+                              </tr>
+                            </thead>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN </strong> PRIBADI </span> </div>
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'document_info', 'id' => 'document_info', 'autocomplete' => 'off');?>
@@ -507,6 +523,10 @@
                         <input name="ffoto_ktp" type="text" value="<?php echo $filename_ktp;?>" hidden>
                         <input name="ffoto_kk" type="text" value="<?php echo $filename_kk;?>" hidden>
                         <input name="ffoto_npwp" type="text" value="<?php echo $filename_npwp;?>" hidden>
+                        <input name="ffile_cv" type="text" value="<?php echo $filename_cv;?>" hidden>
+                        <input name="ffile_skck" type="text" value="<?php echo $filename_skck;?>" hidden>
+                        <input name="ffile_pkwt" type="text" value="<?php echo $filename_pkwt;?>" hidden>
+                        <input name="ffile_isd" type="text" value="<?php echo $filename_isd;?>" hidden>
 
                       <!-- KTP -->
                       <div class="row">
@@ -521,8 +541,8 @@
                         </div>
                         <div class="col-md-4">
                           <div class="form-group">
-                            <label for="title" class="control-label"><?php echo $this->lang->line('xin_ktp');?><i class="hrpremium-asterisk">*</i></label>
-                            <input class="form-control" placeholder="Nomor Kartu Tanda Penduduk" name="title" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $ktp_no;?>">
+                            <label for="nomor_ktp" class="control-label"><?php echo $this->lang->line('xin_ktp');?><i class="hrpremium-asterisk">*</i></label>
+                            <input class="form-control" placeholder="Nomor Kartu Tanda Penduduk" name="nomor_ktp" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $ktp_no;?>">
                           </div>
                         </div>
                         <div class="col-md-3">
@@ -586,6 +606,118 @@
                         </div>
                       </div>
 
+                      <!-- CV -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">CV / Riwayat Hidup</label>
+                              <input type="file" class="form-control-file" id="document_file_cv" name="document_file_cv">
+                              <small>Jenis Photo/File: pdf</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+          
+                          <div class="form-group">
+                            <div class="card-body media align-items-center" 
+                            <?php if(is_null($filename_cv)) { ?>
+                                    hidden
+                            <?php } ?>> 
+                                
+                                <a href="<?php echo base_url().'uploads/document/cv/'.$filename_cv;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                      </div>
+
+                      <!-- SKCK -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">SKCK POLRI</label>
+                              <input type="file" class="form-control-file" id="document_file_skck" name="document_file_skck">
+                              <small>Jenis Photo/File: pdf</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+          
+                          <div class="form-group">
+                            <div class="card-body media align-items-center" 
+                            <?php if(is_null($filename_skck)) { ?>
+                                    hidden
+                            <?php } ?>> 
+                                
+                                <a href="<?php echo base_url().'uploads/document/skck/'.$filename_skck;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                      </div>
+
+                      <!-- PKWT -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">PKWT FILE</label>
+                              <input type="file" class="form-control-file" id="document_file_pkwt" name="document_file_pkwt">
+                              <small>Jenis Photo/File: pdf</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+          
+                          <div class="form-group">
+                            <div class="card-body media align-items-center" 
+                            <?php if(is_null($filename_pkwt)) { ?>
+                                    hidden
+                            <?php } ?>> 
+                                
+                                <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                      </div>
+
+                      <!-- IJAZAH SD -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">IJAZAH TERAKHIR</label>
+                              <input type="file" class="form-control-file" id="document_file_isd" name="document_file_isd">
+                              <small>Jenis Photo/File: pdf</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+          
+                          <div class="form-group">
+                            <div class="card-body media align-items-center" 
+                            <?php if(is_null($filename_isd)) { ?>
+                                    hidden
+                            <?php } ?>> 
+                                
+                                <a href="<?php echo base_url().'uploads/document/ijazah/'.$filename_isd;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                      </div>
+
                       <div class="row">
                         <div class="col-md-12">
                           <div class="form-group">
@@ -594,6 +726,7 @@
                         </div>
                       </div>
                       <?php echo form_close(); ?> </div>
+
                   </div>
 
                   <!-- REKENING -->
@@ -746,26 +879,26 @@
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Gaji Pokok</label>
-                                  <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="<?php echo $basic_salary;?>">
+                                  <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="<?php echo $basic_salary;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Jabatan</label>
-                                  <input class="form-control" placeholder="0" name="allow_jabatan" type="text" value="<?php echo $allow_jabatan;?>">
+                                  <input class="form-control" placeholder="0" name="allow_jabatan" type="text" value="<?php echo $allow_jabatan;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Area</label>
-                                  <input class="form-control" placeholder="0" name="allow_area" type="text" value="<?php echo $allow_area;?>">
+                                  <input class="form-control" placeholder="0" name="allow_area" type="text" value="<?php echo $allow_area;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
 
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Masa Kerja</label>
-                                  <input class="form-control" placeholder="0" name="allow_masa_kerja" type="text" value="<?php echo $allow_masakerja;?>">
+                                  <input class="form-control" placeholder="0" name="allow_masa_kerja" type="text" value="<?php echo $allow_masakerja;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                             </div>
@@ -775,26 +908,26 @@
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Makan & Transport</label>
-                                  <input class="form-control" placeholder="0" name="allow_trans_meal" type="text" value="<?php echo $allow_trans_meal;?>">
+                                  <input class="form-control" placeholder="0" name="allow_trans_meal" type="text" value="<?php echo $allow_trans_meal;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Makan</label>
-                                  <input class="form-control" placeholder="0" name="allow_meal" type="text" value="<?php echo $allow_konsumsi;?>">
+                                  <input class="form-control" placeholder="0" name="allow_meal" type="text" value="<?php echo $allow_konsumsi;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Transport</label>
-                                  <input class="form-control" placeholder="0" name="allow_trans" type="text" value="<?php echo $allow_transport;?>">
+                                  <input class="form-control" placeholder="0" name="allow_trans" type="text" value="<?php echo $allow_transport;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
 
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Komunikasi</label>
-                                  <input class="form-control" placeholder="0" name="allow_comunication" type="text" value="<?php echo $allow_comunication;?>">
+                                  <input class="form-control" placeholder="0" name="allow_comunication" type="text" value="<?php echo $allow_comunication;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                             </div>
@@ -804,26 +937,26 @@
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Laptop/HP</label>
-                                  <input class="form-control" placeholder="0" name="allow_device" type="text" value="<?php echo $allow_device;?>">
+                                  <input class="form-control" placeholder="0" name="allow_device" type="text" value="<?php echo $allow_device;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Tempat Tinggal</label>
-                                  <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="<?php echo $allow_residence_cost;?>">
+                                  <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="<?php echo $allow_residence_cost;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Rental</label>
-                                  <input class="form-control" placeholder="0" name="allow_rent" type="text" value="<?php echo $allow_rent;?>">
+                                  <input class="form-control" placeholder="0" name="allow_rent" type="text" value="<?php echo $allow_rent;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
 
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Parkir</label>
-                                  <input class="form-control" placeholder="0" name="allow_parking" type="text" value="<?php echo $allow_parking;?>">
+                                  <input class="form-control" placeholder="0" name="allow_parking" type="text" value="<?php echo $allow_parking;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                             </div>
@@ -833,26 +966,26 @@
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Kesehatan</label>
-                                  <input class="form-control" placeholder="0" name="allow_medicine" type="text" value="<?php echo $allow_medichine;?>">
+                                  <input class="form-control" placeholder="0" name="allow_medicine" type="text" value="<?php echo $allow_medichine;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label control-label">Tunjangan Akomodasi</label>
-                                  <input class="form-control" placeholder="0" name="allow_akomodasi" type="text" value="<?php echo $allow_akomodsasi;?>">
+                                  <input class="form-control" placeholder="0" name="allow_akomodasi" type="text" value="<?php echo $allow_akomodsasi;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Kasir</label>
-                                  <input class="form-control" placeholder="0" name="allow_kasir" type="text" value="<?php echo $allow_kasir;?>">
+                                  <input class="form-control" placeholder="0" name="allow_kasir" type="text" value="<?php echo $allow_kasir;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
 
                               <div class="col-md-3">
                                 <div class="form-group">
                                   <label class="form-label">Tunjangan Operational</label>
-                                  <input class="form-control" placeholder="0" name="allow_operation" type="text" value="<?php echo $allow_operational;?>">
+                                  <input class="form-control" placeholder="0" name="allow_operation" type="text" value="<?php echo $allow_operational;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                                 </div>
                               </div>
                             </div>

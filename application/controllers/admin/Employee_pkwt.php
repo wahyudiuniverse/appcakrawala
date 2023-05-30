@@ -46,18 +46,15 @@ class Employee_pkwt extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 			$data['title'] = $this->lang->line('xin_pkwt_digital').' | '.$this->Xin_model->site_title();
 			$data['all_companies'] = $this->Xin_model->get_companies();
-			// $data['all_projects'] = $this->Project_model->get_all_projects();
-			if(in_array('139',$role_resources_ids)) {
-				$data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
-				$data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
-				// $data['all_projects'] = $this->Project_model->get_project_exist();
-			} else {
-				$data['all_emp_active'] = $this->Employees_model->get_all_employees_project();
-				// $data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
-				$data['all_projects'] = $this->Project_model->get_project_ratecard_all_();
-			}
 
-			$data['all_departments'] = $this->Department_model->all_departments();
+			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+			$data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
+			// if(in_array('139',$role_resources_ids)) {
+			// } else {
+			// 	$data['all_emp_active'] = $this->Employees_model->get_all_employees_project();
+			// }
+
+			// $data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['breadcrumbs'] = $this->lang->line('xin_pkwt_digital');
 		$data['path_url'] = 'emp_pkwt';
@@ -127,11 +124,14 @@ class Employee_pkwt extends MY_Controller {
 				} else {
 					$nama_project = '--';	
 				}
-			
+
+
+
+			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/93/23500524" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 			$data[] = array(
 				$no,
-				$status_pkwt,
+				$status_pkwt.' '.$view_pkwt,
 				$nip,
 				$fullname,
 				$nama_project,
@@ -262,13 +262,11 @@ class Employee_pkwt extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		$posi = $this->uri->segment(5);
-		$proj = $this->uri->segment(6);
+		// $posi = $this->uri->segment(5);
+		// $proj = $this->uri->segment(6);
 		
 		$data = array(
-			'area' => $id,
-			'posi' => $posi,
-			'proj' => $proj
+			'id_project' => $id
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -287,16 +285,14 @@ class Employee_pkwt extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		$posi = $this->uri->segment(5);
-		$proj = $this->uri->segment(6);
+		// $posi = $this->uri->segment(5);
+		// $proj = $this->uri->segment(6);
 		
 		$data = array(
-			'area' => $id,
-			'posi' => $posi,
-			'proj' => $proj
+			'id_project' => $id
 		);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/employees/get_pkwt_gaji", $data);
 		} else {
 			redirect('admin/');
@@ -312,13 +308,13 @@ class Employee_pkwt extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		$posi = $this->uri->segment(5);
-		$proj = $this->uri->segment(6);
+		// $posi = $this->uri->segment(5);
+		// $proj = $this->uri->segment(6);
 		
 		$data = array(
-			'area' => $id,
-			'posi' => $posi,
-			'proj' => $proj
+			'id_project' => $id,
+			// 'posi' => $posi,
+			// 'proj' => $proj
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -337,13 +333,9 @@ class Employee_pkwt extends MY_Controller {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
-		$posi = $this->uri->segment(5);
-		$proj = $this->uri->segment(6);
 		
 		$data = array(
-			'area' => $id,
-			'posi' => $posi,
-			'proj' => $proj
+			'id_project' => $id
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -487,22 +479,27 @@ class Employee_pkwt extends MY_Controller {
 			$this->ciqrcode->initialize($config);
 
 				if($this->input->post('project_id')=='') {
-					$Return['error'] = $this->lang->line('xin_employee_error_project');
+					$Return['error'] = 'Project Tidak ditemukan..!';
 				} else if($this->input->post('employee_id')=='') {
-					$Return['error'] = $this->lang->line('xin_employee_error_first_name');
+					$Return['error'] = 'NIP Karyawan Tidak ditemukan..!';
+				} else if ($this->input->post('begin')=='') {
+					$Return['error'] = 'Tanggal PKWT Kosong..!';
+				} else if ($this->input->post('waktu_kontrak')=='') {
+					$Return['error'] = 'Periode Kontrak kosong..!';
+				} else if ($this->input->post('jabatan')==''){
+					$Return['error'] = 'Posisi/Jabatan tidak ditemukan..!';
+				} else if ($this->input->post('area')==''){
+					$Return['error'] = 'Penempatan kosong..!';
+				} else if ($this->input->post('harikerja')==''){
+					$Return['error'] = 'Jumlah HK Kosong..!';
+				} else if ($this->input->post('cutoff')==''){
+					$Return['error'] = 'Tanggal CUTOFF Kosong..!';
+				} else if ($this->input->post('penggajian')==''){
+					$Return['error'] = 'Tanggal PENGGAJIAN Kosong..!';
+				} else if ($this->input->post('gaji')==''){
+					$Return['error'] = 'GAJI POKOK Kosong..!';
 				} 
-				// else if ($this->input->post('begin')=='') {
-				// 	$Return['error'] = $this->lang->line('xin_employee_error_ktp');
-				// } 
-					// else if ($this->input->post('status_resign')=='') {
-				// 	$Return['error'] = $this->lang->line('xin_employee_error_resign_status');
-				// } else if ($this->input->post('date_of_leave')==''){
-				// 	$Return['error'] = $this->lang->line('xin_employee_error_dol');
-				// } else if($_FILES['dok_exitc']['size'] == 0){
-				// 	$Return['error'] = $this->lang->line('xin_employee_error_exitc');
-				// } else if($_FILES['dok_sresign']['size'] == 0){
-				// 	$Return['error'] = $this->lang->line('xin_employee_error_sresign');
-				// } 
+
 				else {
 
 					if(strtoupper($this->input->post('company'))=='PT SIPRAMA CAKRAWALA'){
@@ -525,33 +522,39 @@ class Employee_pkwt extends MY_Controller {
 					$jabatan = strtoupper($this->input->post('jabatan'));
 					$area = strtoupper($this->input->post('area'));
 					$harikerja = strtoupper($this->input->post('harikerja'));
+					$cutoff = strtoupper($this->input->post('cutoff'));
+					$penggajian = strtoupper($this->input->post('penggajian'));
 					$gaji = strtoupper($this->input->post('gaji'));
-					$dm_grade = strtoupper($this->input->post('dm_grade'));
+					// $dm_grade = strtoupper($this->input->post('dm_grade'));
 					$allow_grade = strtoupper($this->input->post('allow_grade'));
-					$dm_masa_kerja = strtoupper($this->input->post('dm_masa_kerja'));
-					$allow_masa_kerja = strtoupper($this->input->post('allow_masa_kerja'));
-
-					$dm_konsumsi = strtoupper($this->input->post('dm_konsumsi'));
-					$allow_konsumsi = strtoupper($this->input->post('allow_konsumsi'));
-					$dm_transport = strtoupper($this->input->post('dm_transport'));
-					$allow_transport = strtoupper($this->input->post('allow_transport'));
-					$dm_rent = strtoupper($this->input->post('dm_rent'));
-					$allow_rent = strtoupper($this->input->post('allow_rent'));
-					$dm_comunication = strtoupper($this->input->post('dm_comunication'));
-					$allow_comunication = strtoupper($this->input->post('allow_comunication'));
-					$dm_parking = strtoupper($this->input->post('dm_parking'));
-					$allow_parking = strtoupper($this->input->post('allow_parking'));
-
-					$dm_residance = strtoupper($this->input->post('dm_residance'));
-					$allow_residance = strtoupper($this->input->post('allow_residance'));
-					$dm_device = strtoupper($this->input->post('dm_device'));
-					$allow_device = strtoupper($this->input->post('allow_device'));
-					$dm_kasir = strtoupper($this->input->post('dm_kasir'));
-					$allow_kasir = strtoupper($this->input->post('allow_kasir'));
-					$dm_trans_meal = strtoupper($this->input->post('dm_trans_meal'));
+					// $dm_area = strtoupper($this->input->post('dm_area'));
+					$allow_area = strtoupper($this->input->post('allow_area'));
+					// $dm_masakerja = strtoupper($this->input->post('dm_masakerja'));
+					$allow_masakerja = strtoupper($this->input->post('allow_masakerja'));
+					// $dm_trans_meal = strtoupper($this->input->post('dm_trans_meal'));
 					$allow_trans_meal = strtoupper($this->input->post('allow_trans_meal'));
-					$dm_medicine = strtoupper($this->input->post('dm_medicine'));
-					$allow_medicine = strtoupper($this->input->post('allow_medicine'));
+					// $dm_konsumsi = strtoupper($this->input->post('dm_konsumsi'));
+					$allow_konsumsi = strtoupper($this->input->post('allow_konsumsi'));
+					// $dm_transport = strtoupper($this->input->post('dm_transport'));
+					$allow_transport = strtoupper($this->input->post('allow_transport'));
+					// $dm_comunication = strtoupper($this->input->post('dm_comunication'));
+					$allow_comunication = strtoupper($this->input->post('allow_comunication'));
+					// $dm_device = strtoupper($this->input->post('dm_device'));
+					$allow_device = strtoupper($this->input->post('allow_device'));
+					// $dm_residance = strtoupper($this->input->post('dm_residance'));
+					$allow_residance = strtoupper($this->input->post('allow_residance'));
+					// $dm_rent = strtoupper($this->input->post('dm_rent'));
+					$allow_rent = strtoupper($this->input->post('allow_rent'));
+					// $dm_parking = strtoupper($this->input->post('dm_parking'));
+					$allow_parking = strtoupper($this->input->post('allow_parking'));
+					// $dm_medicine = strtoupper($this->input->post('dm_medicine'));
+					$allow_medichine = strtoupper($this->input->post('allow_medichine'));
+					// $dm_akomodsasi = strtoupper($this->input->post('dm_akomodsasi'));
+					$allow_akomodsasi = strtoupper($this->input->post('allow_akomodsasi'));
+					// $dm_kasir = strtoupper($this->input->post('dm_kasir'));
+					$allow_kasir = strtoupper($this->input->post('allow_kasir'));
+					// $dm_operational = strtoupper($this->input->post('dm_operational'));
+					$allow_operational = strtoupper($this->input->post('allow_operational'));
 
 					$docid = date('ymdHisv');
 					$image_name='esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
@@ -576,34 +579,45 @@ class Employee_pkwt extends MY_Controller {
 							'jabatan' 							=> $jabatan,
 							'penempatan' 						=> $area,
 							'hari_kerja' 						=> $harikerja,
+							'tgl_payment'						=> $penggajian,
+							'end_period_payment'		=> $cutoff,
 							'basic_pay' 						=> $gaji,
-							'dm_allow_grade' 				=> $dm_grade,
+							'dm_allow_grade' 				=> 'Month',
 							'allowance_grade'				=> $allow_grade,
-							'dm_allow_masakerja' 		=> $dm_masa_kerja,
-							'allowance_masakerja' 	=> $allow_masa_kerja,
-							'dm_allow_meal' 				=> $dm_konsumsi,
-							'allowance_meal' 				=> $allow_konsumsi,
-							'dm_allow_transport' 		=> $dm_transport,
-							'allowance_transport' 	=> $allow_transport,
-							'dm_allow_rent' 				=> $dm_rent,
-							'allowance_rent' 				=> $allow_rent,
-							'dm_allow_komunikasi' 	=> $dm_comunication,
-							'allowance_komunikasi' 	=> $allow_comunication,
-							'dm_allow_park' 				=> $dm_parking,
-							'allowance_park' 				=> $allow_parking,
-							'dm_allow_residance' 		=> $dm_residance,
-							'allowance_residance' 	=> $allow_residance,
-							'dm_allow_laptop' 			=> $dm_device,
-							'allowance_laptop' 			=> $allow_device,
-							'dm_allow_kasir' 				=> $dm_kasir,
-							'allowance_kasir' 			=> $allow_kasir,
-							'dm_allow_transmeal' 		=> $dm_trans_meal,
+							'dm_allow_area' 				=> 'Month',
+							'allowance_area'				=> $allow_area,
+							'dm_allow_masakerja' 		=> 'Month',
+							'allowance_masakerja' 	=> $allow_masakerja,
+							'dm_allow_transmeal' 		=> 'Month',
 							'allowance_transmeal' 	=> $allow_trans_meal,
-							'dm_allow_medicine' 		=> $dm_medicine,
-							'allowance_medicine' 		=> $allow_medicine,
-							'img_esign'							=> $image_name,
+							'dm_allow_meal' 				=> 'Month',
+							'allowance_meal' 				=> $allow_konsumsi,
+							'dm_allow_transport' 		=> 'Month',
+							'allowance_transport' 	=> $allow_transport,
+							'dm_allow_komunikasi' 	=> 'Month',
+							'allowance_komunikasi' 	=> $allow_comunication,
+							'dm_allow_laptop' 			=> 'Month',
+							'allowance_laptop' 			=> $allow_device,
+							'dm_allow_residance' 		=> 'Month',
+							'allowance_residance' 	=> $allow_residance,
+							'dm_allow_rent' 				=> 'Month',
+							'allowance_rent' 				=> $allow_rent,
+							'dm_allow_park' 				=> 'Month',
+							'allowance_park' 				=> $allow_parking,
+							'dm_allow_medicine' 		=> 'Month',
+							'allowance_medicine' 		=> $allow_medichine,
+							'dm_allow_akomodasi' 		=> 'Month',
+							'allowance_akomodasi' 	=> $allow_akomodsasi,
+							'dm_allow_kasir' 				=> 'Month',
+							'allowance_kasir' 			=> $allow_kasir,
+							'dm_allow_operation' 		=> 'Month',
+							'allowance_operation' 	=> $allow_operational,
+							// 'img_esign'					=> $image_name,
 
-							'status_pkwt' => 1,
+							'sign_nip'							=> '21500006',
+							'sign_fullname'					=> 'ASTI PRASTISTA',
+							'sign_jabatan'					=> 'SM HR & GA',
+							'status_pkwt' => 0,
 							'createdon' => date('Y-m-d h:i:s'),
 							'createdby' => $session['user_id']
 							// 'modifiedon' => date('Y-m-d h:i:s')
