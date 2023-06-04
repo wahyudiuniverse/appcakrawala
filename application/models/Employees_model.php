@@ -104,7 +104,7 @@ class Employees_model extends CI_Model {
 		$sql = 'SELECT *
 				FROM xin_employee_request
 				WHERE datediff(current_date(),DATE_FORMAT(createdon, "%Y-%m-%d")) <=30
-				ORDER BY createdon DESC';
+				ORDER BY secid DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -116,7 +116,8 @@ class Employees_model extends CI_Model {
 		$sql = 'SELECT * FROM xin_employee_request 
 		WHERE request_empby is not null 
 		AND approved_naeby is null
-		AND approved_nomby is null';
+		AND approved_nomby is null
+		ORDER BY secid DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

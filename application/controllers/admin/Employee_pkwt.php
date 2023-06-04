@@ -127,7 +127,7 @@ class Employee_pkwt extends MY_Controller {
 
 
 
-			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/93/23500524" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/23500524/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 			$data[] = array(
 				$no,
@@ -510,6 +510,7 @@ class Employee_pkwt extends MY_Controller {
 
 					$count_pkwt = $this->Xin_model->count_pkwt();
 					$romawi = $this->Xin_model->tgl_pkwt();
+					$unicode = $this->Xin_model->getUniqueCode(20);
 					$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
 					$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
 
@@ -564,9 +565,10 @@ class Employee_pkwt extends MY_Controller {
 					$params['size'] = 10;
 					$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 					$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
-
+					
 
 						$data = array(
+							'uniqueid' 							=> $unicode,
 							'employee_id' 					=> $employee_id,
 							'docid'									=> $docid,
 							'project' 							=> $idproject,

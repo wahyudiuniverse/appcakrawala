@@ -182,10 +182,10 @@ class Pkwt_all extends MY_Controller
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$contract_id = $this->uri->segment(4);
-		$employee_id = $this->uri->segment(5);
+		$employee_id = $this->uri->segment(4);
+		$uniqueid = $this->uri->segment(5);
 
-		$pkwt = $this->Pkwt_model->read_pkwt_info($contract_id);
+		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
 

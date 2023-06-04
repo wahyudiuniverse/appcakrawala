@@ -257,9 +257,98 @@ class Employee_request_nae extends MY_Controller {
 						$Return['error'] = 'Tanggal Cut OFF Kosong..!';
 					} else if ($this->input->post('date_payment')==''){
 						$Return['error'] = 'Tanggal Penggajian Kosong..!';
-					} 
+					} else if($_FILES['document_file']['size'] == 0) {
+						$Return['error'] = 'KTP Kosong..!';
+					} else if($_FILES['document_kk']['size'] == 0) {
+						$Return['error'] = 'KK Kosong..!';
+					}
 
 					else {
+
+
+							if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
+								//checking image type
+								$allowed =  array('png','jpg','jpeg');
+								$filename = $_FILES['document_file']['name'];
+								$ext = pathinfo($filename, PATHINFO_EXTENSION);
+								
+								if(in_array($ext,$allowed)){
+									$tmp_name = $_FILES["document_file"]["tmp_name"];
+									$documentd = "uploads/document/ktp/";
+									// basename() may prevent filesystem traversal attacks;
+									// further validation/sanitation of the filename may be appropriate
+									$name = basename($_FILES["document_file"]["name"]);
+									$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
+									move_uploaded_file($tmp_name, $documentd.$newfilename);
+									$fname = $newfilename;
+								} else {
+									$Return['error'] = 'Jenis File KTP tidak diterima..';
+								}
+							}
+
+							if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
+								//checking image type
+								$allowedkk =  array('png','jpg','jpeg');
+								$filenamekk = $_FILES['document_kk']['name'];
+								$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
+								
+								if(in_array($extkk,$allowedkk)){
+									$tmp_namekk = $_FILES["document_kk"]["tmp_name"];
+									$documentdkk = "uploads/document/kk/";
+									// basename() may prevent filesystem traversal attacks;
+									// further validation/sanitation of the filename may be appropriate
+									$name = basename($_FILES["document_kk"]["name"]);
+									$newfilenamekk = 'kk_'.round(microtime(true)).'.'.$extkk;
+									move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
+									$fnamekk = $newfilenamekk;
+								} else {
+									$Return['error'] = 'Jenis File KK tidak diterima..';
+								}
+							}
+
+							if($_FILES['document_skck']['size'] == 0) {$fnameskck=null;} else {
+								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
+									//checking image type
+									$allowedskck =  array('png','jpg','jpeg');
+									$filenameskck = $_FILES['document_skck']['name'];
+									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+									
+									if(in_array($extskck,$allowedskck)){
+										$tmp_nameskck = $_FILES["document_skck"]["tmp_name"];
+										$documentdskck = "uploads/document/skck/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_skck"]["name"]);
+										$newfilenameskck = 'skck_'.round(microtime(true)).'.'.$extskck;
+										move_uploaded_file($tmp_nameskck, $documentdskck.$newfilenameskck);
+										$fnameskck = $newfilenameskck;
+									} else {
+										$Return['error'] = 'Jenis File KK tidak diterima..';
+									}
+								}
+							}
+
+							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=null;} else {
+								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
+									//checking image type
+									$allowedijz =  array('png','jpg','jpeg');
+									$filenameijz = $_FILES['document_ijz']['name'];
+									$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
+									
+									if(in_array($extijz,$allowedijz)){
+										$tmp_nameijz = $_FILES["document_ijz"]["tmp_name"];
+										$documentdijz = "uploads/document/ijazah/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_ijz"]["name"]);
+										$newfilenameijz = 'ijazah_'.round(microtime(true)).'.'.$extijz;
+										move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
+										$fnameijz = $newfilenameijz;
+									} else {
+										$Return['error'] = 'Jenis File IJAZAH tidak diterima..';
+									}
+								}
+							}
 
 					   	$fullname 					= str_replace("'"," ",$this->input->post('fullname'));
 					   	$nama_ibu						= $this->input->post('nama_ibu');
@@ -369,6 +458,10 @@ class Employee_request_nae extends MY_Controller {
 								'cut_start'							=> $cut_start,
 								'cut_off'								=> $cut_off,
 								'date_payment'					=> $date_payment,
+								'ktp'										=> $fname,
+								'kk'										=> $fnamekk,
+								'skck'									=> $fnameskck,
+								'ijazah'								=> $fnameijz,
 
 								'request_empby' 				=> $session['user_id'],
 								'request_empon' 				=> date("Y-m-d h:i:s"),

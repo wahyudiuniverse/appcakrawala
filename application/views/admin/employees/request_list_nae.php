@@ -17,7 +17,7 @@
   <ul class="nav nav-tabs step-anchor">
 
     <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Monitoring
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Area Manager Request
       </a> </li>
     <?php } ?>  
 
@@ -37,7 +37,7 @@
     <?php } ?>
 
     <?php if(in_array('375',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> History Approval
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Monitoring Approval
       </a> </li>
     <?php } ?>
 
@@ -109,7 +109,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="">
+                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -129,7 +129,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="">
+                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -157,7 +157,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="">
+                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -332,6 +332,53 @@
             <!-- end row -->
             </div>
           </div>
+
+<!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
+
+                      <!-- KTP -->
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Foto KTP<strong>*</strong></label>
+                              <input type="file" class="form-control-file" id="document_file" name="document_file">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Foto KK<strong>*</strong></label>
+                              <input type="file" class="form-control-file" id="document_kk" name="document_kk">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">SKCK</label>
+                              <input type="file" class="form-control-file" id="document_skck" name="document_skck">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">IJAZAH Terakhir</label>
+                              <input type="file" class="form-control-file" id="document_ijz" name="document_ijz">
+                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                      </div>
+
 <!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
           <div class="row">
             <div class="col-md-8">
@@ -341,7 +388,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="gaji_pokok">Gaji Pokok<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -349,7 +396,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_jabatan" class="control-label">Tunjangan Jabatan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_jabatan" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_jabatan" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -357,7 +404,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_area" class="control-label">Tunjangan Area<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_area" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_area" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"> 
                   </div>
                 </div>
 
@@ -365,7 +412,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_masakerja">Tunjangan Masa Kerja<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_masakerja" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_masakerja" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -379,7 +426,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_makan_trans" class="control-label">Tunjangan Makan & Transport<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -387,7 +434,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_makan" class="control-label">Tunjangan Makan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_makan" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_makan" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -395,7 +442,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_transport" class="control-label">Tunjangan Transport<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_transport" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_transport" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -403,7 +450,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_komunikasi" class="control-label">Tunjangan Komunikasi<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_komunikasi" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_komunikasi" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -416,7 +463,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_device" class="control-label">Tunjangan Laptop/HP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_device" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_device" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -424,7 +471,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_tempat_tinggal">Tunjangan Tempat Tinggal<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -432,7 +479,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_rental">Tunjangan Rental<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_rental" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_rental" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -440,7 +487,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_parkir" class="control-label">Tunjangan Parkir<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_parkir" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_parkir" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -453,7 +500,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_kesehatan" class="control-label">Tunjangan Kesehatan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -462,7 +509,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_akomodasi">Tunjangan Akomodasi<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_akomodasi" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_akomodasi" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -470,7 +517,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_kasir" class="control-label">Tunjangan Kasir<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_kasir" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_kasir" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -478,7 +525,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_operational" class="control-label">Tunjangan Operational<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="" style="text-align: right;">
+                    <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -496,7 +543,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                   <label for="pkwt_join_date">Tanggal Mulai Kontrak<i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="YYYY-MM-DD" name="join_date_pkwt" type="text" value="">
+                  <input class="form-control date" readonly placeholder="YYYY-MM-DD" name="join_date_pkwt" type="text" value="" >
                   </div>
                 </div>
 
@@ -601,3 +648,21 @@
     </div>
   </div>
 </div>
+
+<style type="text/css">
+  
+  input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #26ae61;
+  padding: 10px 20px;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #20c997;
+}
+</style>

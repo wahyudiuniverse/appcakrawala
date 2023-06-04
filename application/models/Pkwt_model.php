@@ -199,6 +199,21 @@ class Pkwt_model extends CI_Model {
 	}
 
 	// get single employee
+	public function read_pkwt_info_byuniq($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE uniqueid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+		
+	}
+
+	// get single employee
 	public function read_pkwt_by_nip($id) {
 	
 		$sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ? ORDER BY contract_id DESC';
@@ -232,8 +247,7 @@ class Pkwt_model extends CI_Model {
 
 		$sql = 'SELECT *
 			FROM xin_employee_contract
-			WHERE status_pkwt = 1
-			AND approve_hrd = 0
+			WHERE approve_hrd = 0
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

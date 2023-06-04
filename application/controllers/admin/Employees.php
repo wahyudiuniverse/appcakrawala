@@ -7529,7 +7529,7 @@ class Employees extends MY_Controller {
 			'employee_id' => $result[0]->employee_id,
 			'company_asset_code' => $result[0]->company_asset_code,
 			'name' => $result[0]->name,
-			'purchase_date' => $result[0]->purchase_date,
+			'purchase_date' => $result[0]->purchase_date, 	
 			'invoice_number' => $result[0]->invoice_number,
 			'manufacturer' => $result[0]->manufacturer,
 			'serial_number' => $result[0]->serial_number,
