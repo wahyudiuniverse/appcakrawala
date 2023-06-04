@@ -94,7 +94,7 @@ class Pkwt_all extends MY_Controller
 				// $baseurl=base_url();
 
 				$header_namae = 'PT. Siprama Cakrawala';
-				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
+				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData(PDF_HEADER_LOGO, 35, $header_namae, $header_string);
 				
@@ -169,13 +169,13 @@ class Pkwt_all extends MY_Controller
 
 
 
-				$date_of_joining = $this->Xin_model->set_date_format($user[0]->date_of_joining);
-				$date_of_birth = $this->Xin_model->set_date_format($user[0]->date_of_birth);
-				$set_ethnicity = $this->Xin_model->read_user_xin_ethnicity($user[0]->ethnicity_type);
-				$set_marital = $this->Xin_model->read_user_xin_marital($user[0]->marital_status);
-				$set_location_office = $this->Xin_model->read_user_xin_office_location($user[0]->location_id);
-				$set_department = $this->Xin_model->read_user_xin_department($user[0]->department_id);
-				$set_designation = $this->Xin_model->read_user_xin_designation($user[0]->designation_id);
+				// $date_of_joining = $this->Xin_model->set_date_format($user[0]->date_of_joining);
+				// $date_of_birth = $this->Xin_model->set_date_format($user[0]->date_of_birth);
+				// $set_ethnicity = $this->Xin_model->read_user_xin_ethnicity($user[0]->ethnicity_type);
+				// $set_marital = $this->Xin_model->read_user_xin_marital($user[0]->marital_status);
+				// $set_location_office = $this->Xin_model->read_user_xin_office_location($user[0]->location_id);
+				// $set_department = $this->Xin_model->read_user_xin_department($user[0]->department_id);
+				// $set_designation = $this->Xin_model->read_user_xin_designation($user[0]->designation_id);
 				//----------------------------------------------------------------------------------------
 			
 				// set cell padding
@@ -190,23 +190,28 @@ class Pkwt_all extends MY_Controller
 
 				if(!is_null($pkwt)){
 
-					$nomorsurat = $pkwt[0]->no_surat;
-					$nomorspb = $pkwt[0]->no_spb;
-					$tanggalcetak = date("Y-m-d");
-					$namalengkap = $user[0]->first_name;
-					// $tempattgllahir = $user[0]->city.', '.$this->Xin_model->tgl_indo($user[0]->date_of_birth);
-					$tempattgllahir = $this->Xin_model->tgl_indo($user[0]->date_of_birth);
+					$nomorsurat 							= $pkwt[0]->no_surat;
+					$nomorspb 								= $pkwt[0]->no_spb;
+					$sign_nip 								= $pkwt[0]->sign_nip;
+					$sign_fullname 						= $pkwt[0]->sign_fullname;
+					$sign_jabatan 						= $pkwt[0]->sign_jabatan;
+					$sign_qrcode 							= $pkwt[0]->img_esign;
 
-					$designation = $this->Xin_model->read_user_xin_designation($pkwt[0]->posisi);
+					$tanggalcetak 						= date("Y-m-d");
+					$namalengkap 							= $user[0]->first_name;
+					$tempattgllahir 					= $user[0]->tempat_lahir.', '.$this->Xin_model->tgl_indo($user[0]->date_of_birth);
+
+					$designation = $this->Xin_model->read_user_xin_designation($pkwt[0]->jabatan);
 					if(!is_null($designation)){
 						$jabatan = $designation[0]->designation_name;
 					} else {
 						$jabatan = $designation[0]->designation_name;
 					}
 
-					$alamatlengkap = $user[0]->address;
-					$nomorkontak = $user[0]->contact_no;
-					$ktp = $user[0]->ktp_no;
+					$alamatlengkap 					= $user[0]->alamat_ktp;
+					$nomorkontak 						= $user[0]->contact_no;
+					$ktp 										= $user[0]->ktp_no;
+
 					$penempatan = $pkwt[0]->penempatan;
 					$kota = $penempatan;
 					$waktukontrak = $pkwt[0]->waktu_kontrak;
@@ -237,8 +242,9 @@ class Pkwt_all extends MY_Controller
 					$allow_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
 					$allow_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 
-					$tgl_mulaiperiode_payment = substr($pkwt[0]->start_period_payment,8);
-					$tgl_akhirperiode_payment = substr($pkwt[0]->end_period_payment,8);
+					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
+					$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
+					$tgl_payment = $pkwt[0]->tgl_payment;
 
 				} else {
 
@@ -263,17 +269,17 @@ class Pkwt_all extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>Nama</td>
-						<td colspan="3">: Maitsa Valenska Pristiyanty</td>
+						<td colspan="3">: '.$sign_fullname.'</td>
 					</tr>
 
 					<tr>
 						<td>Jabatan</td>
-						<td colspan="3">: SM HR/GA</td>
+						<td colspan="3">: '.$sign_jabatan.'</td>
 					</tr>
 
 					<tr>
 						<td>Alamat Kantor</td>
-						<td colspan="3">: Gedung Graha Krista Aulia Cakrawala Lt.2 Jl. Andara No. 20 Pangkalan Jati Baru Cinere Depok 16513</td>
+						<td colspan="3">: Gedung Graha Krista Aulia Cakrawala Lt.2 Jl. Andara No. 20 Pangkalan Jati Baru Cinere Depok 16514</td>
 					</tr>
 				</table>
 				<br>
@@ -811,7 +817,7 @@ class Pkwt_all extends MY_Controller
 
 				<tr>
 					<td><br>
-				<img src="https://blogger.googleusercontent.com/img/a/AVvXsEiF5sdS35sA6gGSDaXKKzGFYxma7Zmwm8JtE_VJwEGqXOoHz7Wq1IqXXv2XgQMdcIL1YUstYUbj2ocFsH5EwN1LppQ-MYMCrLhZsmPkjcFHd47Ik8m--kwrQkv9P-fyH_yn36f66OVLeOwlP6bi4vDDKUJ5NFBNxzBwkmwU_tumi4wr0wyKWs9JwmgN" alt="Trulli" width="167" height="95"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+					<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
 					<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 				</tr>
 
@@ -1036,19 +1042,21 @@ class Pkwt_all extends MY_Controller
 
 					<tr>
 						<td><br>
-					<img src="https://blogger.googleusercontent.com/img/a/AVvXsEiF5sdS35sA6gGSDaXKKzGFYxma7Zmwm8JtE_VJwEGqXOoHz7Wq1IqXXv2XgQMdcIL1YUstYUbj2ocFsH5EwN1LppQ-MYMCrLhZsmPkjcFHd47Ik8m--kwrQkv9P-fyH_yn36f66OVLeOwlP6bi4vDDKUJ5NFBNxzBwkmwU_tumi4wr0wyKWs9JwmgN" alt="Trulli" width="167" height="95"><br><b><u>Maitsa Valenska Pristiyanty</u></b></td>
+					<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
 						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 
 					<tr>
-						<td>SM HR/GA</td>
+						<td>'.$sign_jabatan.'</td>
 						<td>Karyawan</td>
 					</tr>
 
 				</table>';
 				$pdf->writeHTML($tbl_ttd2, true, false, false, false, '');
-
-
+				
+				//<img src="'.base_url().'assets/images/pkwt/esign_pkwt230604162602000.png" alt="Trulli" width="90" height="90">
+				//<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90">
+				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
@@ -1140,7 +1148,7 @@ class Pkwt_all extends MY_Controller
 				</tr>
 				<tr>
 					<td>Waktu Pembayaran</td>
-					<td colspan="5">Tanggal # setiap Bulan</td>
+					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
 				</tr>
 				<tr>
 					<td>Periode Perhitungan</td>

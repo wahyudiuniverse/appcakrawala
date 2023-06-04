@@ -614,7 +614,7 @@ class Employee_pkwt extends MY_Controller {
 							'allowance_kasir' 			=> $allow_kasir,
 							'dm_allow_operation' 		=> 'Month',
 							'allowance_operation' 	=> $allow_operational,
-							// 'img_esign'					=> $image_name,
+							'img_esign'							=> $image_name,
 
 							'sign_nip'							=> '21500006',
 							'sign_fullname'					=> 'ASTI PRASTISTA',
