@@ -69,123 +69,19 @@ class Pkwt_all extends MY_Controller
 	}
 
 
-	public function pkwt_list() {
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/pkwt/pkwt_list", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-		
-		$client = $this->Pkwt_model->get_pkwt_employee();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data = array();
-
-    foreach($client->result() as $r) {
-			  
-
-    	$project = $this->Project_model->read_single_project($r->project);
-
-
-			$no_surat = $r->no_surat;
-			$no_spb = $r->no_spb;
-			$join = $r->from_date;
-			$end = $r->to_date;
-			$nik = $r->username;
-			$fullname = $r->first_name.' '.$r->last_name;
-
-			$now = new DateTime(date("Y-m-d"));
-			$expiredate = new DateTime($r->to_date);
-			if($now > $expiredate){
-					$d = '<span class="fas fa fa-window-close" style="color:#d9534f"></span>';
-			}else{
-
-					$d = $now->diff($expiredate)->days;
-					if($d<='7'){
-						$d = $d.' '.'<span class="fas fa fa-exclamation-triangle" style="color:#FF7150"></span>';
-					}else if ($d<='30'){
-						$d = $d.' '.'<span class="fas fa fa-exclamation-triangle" style="color:#FFD350"></span>';
-					} else {
-						$d = $d.' '.'<span class="fas fa fa-exclamation-triangle" style="color:#02BC77"></span>';
-					}
-			}
-
-			if($r->status_approve == 0){
-			  	$statuspkwt = 'Need Approval';
-
-			  	$statuspkwt = '<button type="button" class="btn btn-xs btn-warning">Need Approval</button>';
-
-			} else {
-			  	if($r->status_pkwt == 0){
-			  		$statuspkwt = '<button type="button" class="btn btn-xs btn-danger">In-Active</button>';
-			  	} else {
-			  		$statuspkwt = '<button type="button" class="btn btn-xs btn-success">Active</button>';
-			  	}
-			}
-
-
-			if(!is_null($project)){
-				$projectname = $project[0]->title;
-			} else {
-				$projectname = '--';	
-			}
-
-				// $employee = $this->Xin_model->read_user_info($empid)
-
-			if(in_array('38',$role_resources_ids)) { //edit
-				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/pkwt/edit/'.$r->contract_id.'/'.$r->employee_id.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
-			} else {
-				$edit = '';
-			}
-
-			if(in_array('34',$role_resources_ids)) { //view
-				$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="'.site_url().'admin/pkwt/view/'.$r->contract_id.'/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-			} else {
-				$view = '';
-			}
-
-			$combhr = $edit.$view;
-
-		   $data[] = array(
-				$no_surat,
-				$nik,
-				$fullname,
-				$this->Xin_model->tgl_indo($join),
-				$this->Xin_model->tgl_indo($end),
-				$projectname,
-				$d,
-				$statuspkwt,
-				$combhr,
-		   );
-          }
-
-          $output = array(
-               "draw" => $draw,
-                 "recordsTotal" => $client->num_rows(),
-                 "recordsFiltered" => $client->num_rows(),
-                 "data" => $data
-            );
-          echo json_encode($output);
-          exit();
-  }
-	
-
-
 	public function view() {
 		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$employee_id = $this->uri->segment(4);
-		$uniqueid = $this->uri->segment(5);
+		$uniqueid = $this->uri->segment(4);
+		// $uniqueid = $this->uri->segment(5);
 
 		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
+		if(is_null($pkwt)){
+			redirect('admin/');
+		}
+		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
 

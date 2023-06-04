@@ -1660,6 +1660,37 @@ class Xin_model extends CI_Model {
   	  return $query->num_rows();
 	}
 
+
+	public function count_approve_nae_pkwt()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employee_contract
+		WHERE request_pkwt != 0
+		AND approve_nae = 0");
+  	  return $query->num_rows();
+	}
+
+	public function count_approve_nom_pkwt()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employee_contract
+		WHERE request_pkwt != 0
+		AND approve_nae != 0
+		AND approve_nom = 0");
+  	  return $query->num_rows();
+	}
+
+	public function count_approve_hrd_pkwt()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employee_contract
+		WHERE request_pkwt != 0
+		AND approve_nae != 0
+		AND approve_nom != 0
+		AND approve_hrd = 0");
+  	  return $query->num_rows();
+	}
+
 	// notifications
 	public function count_user_notify_leave_applications($user_id)
 	{

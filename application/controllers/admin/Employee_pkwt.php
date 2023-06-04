@@ -127,7 +127,7 @@ class Employee_pkwt extends MY_Controller {
 
 
 
-			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/23500524/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 			$data[] = array(
 				$no,

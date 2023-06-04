@@ -259,7 +259,7 @@ class Pkwt_model extends CI_Model {
 
 		$sql = 'SELECT *
 			FROM xin_employee_contract
-			WHERE status_pkwt = 1
+			WHERE status_pkwt = 0
 			AND approve_nae = 0
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
@@ -272,8 +272,8 @@ class Pkwt_model extends CI_Model {
 
 		$sql = 'SELECT *
 			FROM xin_employee_contract
-			WHERE status_pkwt = 1
-			AND approve_nae NOT IN(0)
+			WHERE status_pkwt = 0
+			AND approve_nae != 0
 			AND approve_nom = 0
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
@@ -286,9 +286,9 @@ class Pkwt_model extends CI_Model {
 
 		$sql = 'SELECT *
 			FROM xin_employee_contract
-			WHERE status_pkwt = 1
-			AND approve_nae NOT IN(0)
-			AND approve_nom NOT IN(0)
+			WHERE status_pkwt = 0
+			AND approve_nae != 0
+			AND approve_nom !=0
 			AND approve_hrd = 0
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
@@ -302,9 +302,6 @@ class Pkwt_model extends CI_Model {
 		$sql = 'SELECT *
 			FROM xin_employee_contract
 			WHERE status_pkwt = 1
-			AND approve_nae NOT IN(0)
-			AND approve_nom NOT IN(0)
-			AND approve_hrd NOT IN(0)
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

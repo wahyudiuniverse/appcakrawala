@@ -82,6 +82,7 @@ class Employee_pkwt_history extends MY_Controller {
 
           foreach($employee->result() as $r) {
 			  
+				$no = $r->contract_id;
 				$nip = $r->employee_id;
 				$project = $r->project;
 				$jabatan = $r->jabatan;
@@ -121,8 +122,12 @@ class Employee_pkwt_history extends MY_Controller {
 				// 	$designation_name = '--';	
 				// }
 
+			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+
+
 			$data[] = array(
-				$status_migrasi,
+				$no,
+				$status_migrasi.' '.$view_pkwt,
 				$nip,
 				$fullname,
 				$nama_project,
