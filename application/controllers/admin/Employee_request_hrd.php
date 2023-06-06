@@ -689,7 +689,7 @@ class Employee_request_hrd extends MY_Controller {
 							'sign_nip'							=> '21500006',
 							'sign_fullname'					=> 'ASTI PRASTISTA',
 							'sign_jabatan'					=> 'SM HR & GA',
-							'status_pkwt' => 0,
+							'status_pkwt' => 1,
 							'createdon' => date('Y-m-d h:i:s'),
 							'createdby' => $session['user_id']
 							// 'modifiedon' => date('Y-m-d h:i:s')

@@ -70,7 +70,6 @@
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-bpjs"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_manage_employees_bpjs');?></a>
 
-
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_document_id');?></a>
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>

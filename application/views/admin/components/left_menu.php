@@ -469,7 +469,7 @@
               <a href="<?php echo site_url('admin/employee_resign/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>Request Resign</div>
+                <div>Request Paklaring</div>
               </a> 
             </li>
           <?php 

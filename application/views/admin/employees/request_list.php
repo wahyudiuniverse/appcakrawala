@@ -311,9 +311,7 @@
 
               </div>
 
-
               <div class="row">
-
 
                 <!--TANGGAL JOIN-->
                 <div class="col-md-6">
@@ -335,7 +333,6 @@
             <!-- end row -->
             </div>
           </div>
-
 
 
 <!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
@@ -365,7 +362,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">SKCK</label>
+                              <label for="logo">SKCK<strong>*</strong></label>
                               <input type="file" class="form-control-file" id="document_skck" name="document_skck">
                               <small>Jenis Photo/File: png, jpg, dan jpeg</small>
                             </fieldset>
@@ -383,6 +380,7 @@
                         </div>
 
                       </div>
+
 
 <!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
           <div class="row">

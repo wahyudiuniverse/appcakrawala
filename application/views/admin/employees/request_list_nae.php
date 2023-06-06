@@ -360,7 +360,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">SKCK</label>
+                              <label for="logo">SKCK<strong>*</strong></label>
                               <input type="file" class="form-control-file" id="document_skck" name="document_skck">
                               <small>Jenis Photo/File: png, jpg, dan jpeg</small>
                             </fieldset>

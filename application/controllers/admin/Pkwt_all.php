@@ -87,6 +87,13 @@ class Pkwt_all extends MY_Controller
 
 		if($pkwt[0]->approve_hrd==1 || $pkwt[0]->approve_hrd==0){
 
+				if($pkwt[0]->company==2){
+					$logo_cover = 'tcpdf_logo_sc.png';
+					$header_namae = 'PT. Siprama Cakrawala';
+				} else {
+					$logo_cover = 'tcpdf_logo_kac.png';
+					$header_namae = 'PT. Krista Aulia Cakrawala';
+				}
 
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
@@ -96,13 +103,13 @@ class Pkwt_all extends MY_Controller
 				$header_namae = 'PT. Siprama Cakrawala';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
-				$pdf->SetHeaderData(PDF_HEADER_LOGO, 35, $header_namae, $header_string);
+				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
 				
 				$pdf->setFooterData(array(0,64,0), array(0,64,128));
 			
 				// set header and footer fonts
-				// $pdf->setHeaderFont(Array('helvetica', '', 20));
-				// $pdf->setFooterFont(Array('helvetica', '', 9));
+				// $pdf->setHeaderFont(Array('helvetica', ', 20));
+				// $pdf->setFooterFont(Array('helvetica', ', 9));
 			
 				// set default monospaced font
 				$pdf->SetDefaultMonospacedFont('courier');
@@ -164,7 +171,7 @@ class Pkwt_all extends MY_Controller
 					</tr>
 				</table>
 				';
-				$pdf->writeHTML($tbl, true, false, false, false, '');*/
+				$pdf->writeHTML($tbl, true, false, false, false, ');*/
 				// -----------------------------------------------------------------------------
 
 
@@ -190,12 +197,14 @@ class Pkwt_all extends MY_Controller
 
 				if(!is_null($pkwt)){
 
+
+
 					$nomorsurat 							= $pkwt[0]->no_surat;
-					$nomorspb 								= $pkwt[0]->no_spb;
-					$sign_nip 								= $pkwt[0]->sign_nip;
+					// $nomorspb 								= $pkwt[0]->no_spb;
+					// $sign_nip 								= $pkwt[0]->sign_nip;
 					$sign_fullname 						= $pkwt[0]->sign_fullname;
 					$sign_jabatan 						= $pkwt[0]->sign_jabatan;
-					$sign_qrcode 							= $pkwt[0]->img_esign;
+					// $sign_qrcode 							= $pkwt[0]->img_esign;
 
 					$tanggalcetak 						= date("Y-m-d");
 					$namalengkap 							= $user[0]->first_name;
@@ -205,19 +214,18 @@ class Pkwt_all extends MY_Controller
 					if(!is_null($designation)){
 						$jabatan = $designation[0]->designation_name;
 					} else {
-						$jabatan = $designation[0]->designation_name;
+						$jabatan = '-';
 					}
 
 					$alamatlengkap 					= $user[0]->alamat_ktp;
 					$nomorkontak 						= $user[0]->contact_no;
 					$ktp 										= $user[0]->ktp_no;
 
-					$penempatan = $pkwt[0]->penempatan;
-					$kota = $penempatan;
-					$waktukontrak = $pkwt[0]->waktu_kontrak;
-					$tglmulaipkwt = $pkwt[0]->from_date;
-					$tglakhirpkwt = $pkwt[0]->to_date;
-					$waktukerja = $pkwt[0]->hari_kerja;
+					$penempatan 						= $pkwt[0]->penempatan;
+					$waktukontrak 					= $pkwt[0]->waktu_kontrak;
+					$tglmulaipkwt 					= $pkwt[0]->from_date;
+					$tglakhirpkwt 					= $pkwt[0]->to_date;
+					$waktukerja 						= $pkwt[0]->hari_kerja;
 
 					$project = $this->Xin_model->read_user_xin_project($pkwt[0]->project);
 					if(!is_null($project)){
@@ -226,25 +234,18 @@ class Pkwt_all extends MY_Controller
 						$client = $project[0]->title;
 					}
 
-					// $city = $this->City_model->read_city($pkwt[0]->penempatan);
-					// if(!is_null($city)){
-					// 	$kota = $city[0]->city_name;
-					// } else {
-					// 	$kota = $city[0]->city_name;
-					// }
-
 					$basicpay =	$this->Xin_model->rupiah($pkwt[0]->basic_pay);
-					$allow_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
-					$allow_trans =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
-					$allow_bbm =	$this->Xin_model->rupiah($pkwt[0]->allowance_bbm);
-					$allow_pulsa =	$this->Xin_model->rupiah($pkwt[0]->allowance_pulsa);
-					$allow_rental =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
-					$allow_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
-					$allow_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
+					// $allow_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
+					// $allow_trans =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
+					// $allow_bbm =	$this->Xin_model->rupiah($pkwt[0]->allowance_bbm);
+					// $allow_pulsa =	$this->Xin_model->rupiah($pkwt[0]->allowance_pulsa);
+					// $allow_rental =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
+					// $allow_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
+					// $allow_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 
-					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
-					$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
-					$tgl_payment = $pkwt[0]->tgl_payment;
+					// $tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
+					// $tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
+					// $tgl_payment = $pkwt[0]->tgl_payment;
 
 				} else {
 
@@ -403,9 +404,9 @@ class Pkwt_all extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>2.1</td>
-								<td colspan="18">PKWT ini berlangsung/berlaku selama '.$waktukontrak.' Bulan terhitung sejak '.
-					$this->Xin_model->tgl_indo($tglmulaipkwt).' sampai dengan '.
-					$this->Xin_model->tgl_indo($tglakhirpkwt).' Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.</td>
+								<td colspan="18">PKWT ini berlangsung/berlaku selama '.$waktukontrak.' Bulan terhitung sejak 
+													'.$this->Xin_model->tgl_indo($tglmulaipkwt).' sampai dengan 
+																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).' Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.</td>
 							</tr>
 				<br>
 							<tr>
@@ -848,7 +849,7 @@ class Pkwt_all extends MY_Controller
 				<br>			<br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
-					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
+					<b><u>SURAT PERJANJIAN BERSAMA<br>$nomorspb</u></b>
 				</div>
 				<br>
 				<br>
@@ -1055,7 +1056,7 @@ class Pkwt_all extends MY_Controller
 				$pdf->writeHTML($tbl_ttd2, true, false, false, false, '');
 				
 				//<img src="'.base_url().'assets/images/pkwt/esign_pkwt230604162602000.png" alt="Trulli" width="90" height="90">
-				//<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90">
+				//<img src="'.base_url().'assets/images/pkwt/$sign_qrcode" alt="Trulli" width="90" height="90">
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
@@ -1096,7 +1097,7 @@ class Pkwt_all extends MY_Controller
 				</tr>
 				<tr>
 					<td>Lokasi Penempatan</td>
-					<td colspan="5">'.$kota.'</td>
+					<td colspan="5">'.$penempatan.'</td>
 				</tr>
 				<tr>
 					<td>Periode Perjanjian <br><br>- Mulai<br>- Berakhir</td>
@@ -1116,31 +1117,31 @@ class Pkwt_all extends MY_Controller
 						</tr>
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allow_meal.',- Per Hari</td>
+							<td colspan="3"> : $allow_meal,- Per Hari</td>
 						</tr>
 						<tr>
 							<td>Tunjangan Transportasi</td>
-							<td colspan="3"> : '.$allow_trans.',- Per Hari</td>
+							<td colspan="3"> :$allow_trans,- Per Hari</td>
 						</tr>
 						<tr>
 							<td>Tunjangan BBM</td>
-							<td colspan="3"> : '.$allow_bbm.',- Per Hari</td>
+							<td colspan="3"> : $allow_bbm,- Per Hari</td>
 						</tr>
 						<tr>
 							<td>Tunjangan Pulsa</td>
-							<td colspan="3"> : '.$allow_pulsa.',- Per Hari</td>
+							<td colspan="3"> : $allow_pulsa,- Per Hari</td>
 						</tr>
 						<tr>
 							<td>Tunjangan Sewa Kendaraan</td>
-							<td colspan="3"> : '.$allow_rental.',- Per Bulan</td>
+							<td colspan="3"> : $allow_rental,- Per Bulan</td>
 						</tr>
 						<tr>
 							<td>Tunjangan Jabatan</td>
-							<td colspan="3"> : '.$allow_grade.',- Per Bulan</td>
+							<td colspan="3"> : $allow_grade,- Per Bulan</td>
 						</tr>
 						<tr>
 							<td>Tunjangan Laptop</td>
-							<td colspan="3"> : '.$allow_laptop.',- Per Bulan</td>
+							<td colspan="3"> : $allow_laptop,- Per Bulan</td>
 						</tr>
 					</table>
 
@@ -1148,11 +1149,11 @@ class Pkwt_all extends MY_Controller
 				</tr>
 				<tr>
 					<td>Waktu Pembayaran</td>
-					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
+					<td colspan="5">Tanggal $tgl_payment setiap Bulan</td>
 				</tr>
 				<tr>
 					<td>Periode Perhitungan</td>
-					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan</td>
+					<td colspan="5">Periode perhitungan upah adalah tanggal $tgl_mulaiperiode_payment ke $tgl_akhirperiode_payment bulan berjalan</td>
 				</tr>
 				<tr>
 					<td>Tunjangan Lain</td>
