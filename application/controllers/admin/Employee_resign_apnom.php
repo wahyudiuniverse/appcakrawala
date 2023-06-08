@@ -72,11 +72,8 @@ class Employee_resign_apnom extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		if(in_array('139',$role_resources_ids)) {
-			$employee = $this->Employees_model->get_monitoring_rsign_ho();
-		} else {
 			$employee = $this->Employees_model->get_monitoring_rsign_nom();
-		}
+		
 
 
 		$data = array();

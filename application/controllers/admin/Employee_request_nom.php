@@ -112,7 +112,7 @@ class Employee_request_nom extends MY_Controller {
 			
 				$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
 				if(!is_null($subprojects)){
-					$nama_subproject = $projects[0]->title;
+					$nama_subproject = $subprojects[0]->sub_project_name;
 				} else {
 					$nama_subproject = '--';	
 				}
@@ -415,6 +415,12 @@ class Employee_request_nom extends MY_Controller {
 				'contact_number' => $result[0]->nip,
 				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
+
+				'ktp' => $result[0]->ktp,
+				'kk' => $result[0]->kk,
+				'skck' => $result[0]->skck,
+				'ijazah' => $result[0]->ijazah,
+
 				'idrequest' => $result[0]->secid,
 				'request_empby' => $this->Employees_model->read_employee_info($result[0]->request_empby),
 				'request_empon' => $result[0]->request_empon,

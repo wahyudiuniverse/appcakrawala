@@ -67,6 +67,7 @@ $(document).ready(function(){
 		});
 	});
 	
+	
 		/* Update basic info */
 	$("#grade_info").submit(function(e){
 	/*Form Submit*/

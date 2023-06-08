@@ -92,6 +92,7 @@
                 <th>Nama Lengkap</th>
                 <th>Project</th>
                 <th>Sub Project</th>
+                <th>ID Toko/Office</th>
                 <th>Toko/Office</th>
                 <th>Tanggal</th>
                 <th><?php echo $this->lang->line('dashboard_clock_in');?></th>

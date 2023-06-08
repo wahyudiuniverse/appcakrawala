@@ -483,6 +483,79 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 <?php } ?>
 
+
+<!-- FOTO KTP -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">KTP</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/ktp/'.$ktp.'" target="_blank"> '.$ktp.'</a>';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- FOTO KK -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">KK</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/kk/'.$kk.'" target="_blank"> '.$kk.'</a>';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- FOTO SKCK -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">SKCK</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/skck/'.$skck.'" target="_blank"> '.$skck.'</a>';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- FOTO IJAZAH -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">IJAZAH</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/ijazah/'.$ijazah.'" target="_blank"> '.$ijazah.'</a>';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <!-- APPROVAL -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">

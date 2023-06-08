@@ -546,7 +546,8 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_ktp;?>" alt="" class="d-block ui-w-80">
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/ktp/'.$filename_ktp;?>" target="_blank"><?php echo $filename_ktp; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -572,7 +573,8 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_kk;?>" alt="" class="d-block ui-w-80">
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/kk/'.$filename_kk;?>" target="_blank"><?php echo $filename_kk; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -598,7 +600,8 @@
                         </div>
                         <div class="col-md-3">
                           <div class="form-group">
-                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_npwp;?>" alt="" class="d-block ui-w-80">
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/npwp/'.$filename_npwp;?>" target="_blank"><?php echo $filename_npwp; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -619,12 +622,8 @@
                         <div class="col-md-4">
           
                           <div class="form-group">
-                            <div class="card-body media align-items-center" 
-                            <?php if(is_null($filename_cv)) { ?>
-                                    hidden
-                            <?php } ?>> 
-                                
-                                <a href="<?php echo base_url().'uploads/document/cv/'.$filename_cv;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/cv/'.$filename_cv;?>" target="_blank"><?php echo $filename_cv; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -647,12 +646,8 @@
                         <div class="col-md-4">
           
                           <div class="form-group">
-                            <div class="card-body media align-items-center" 
-                            <?php if(is_null($filename_skck)) { ?>
-                                    hidden
-                            <?php } ?>> 
-                                
-                                <a href="<?php echo base_url().'uploads/document/skck/'.$filename_skck;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/skck/'.$filename_skck;?>" target="_blank"><?php echo $filename_skck; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -673,14 +668,9 @@
                           </div>
                         </div>
                         <div class="col-md-4">
-          
                           <div class="form-group">
-                            <div class="card-body media align-items-center" 
-                            <?php if(is_null($filename_pkwt)) { ?>
-                                    hidden
-                            <?php } ?>> 
-                                
-                                <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"><?php echo $filename_pkwt; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -701,14 +691,10 @@
                           </div>
                         </div>
                         <div class="col-md-4">
-          
+        
                           <div class="form-group">
-                            <div class="card-body media align-items-center" 
-                            <?php if(is_null($filename_isd)) { ?>
-                                    hidden
-                            <?php } ?>> 
-                                
-                                <a href="<?php echo base_url().'uploads/document/ijazah/'.$filename_isd;?>" target="_blank"> <img id="myImg" style="width: 30px;" src="<?php echo base_url().'uploads/logo/icon_document.png';?>"></a>
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/ijazah/'.$filename_isd;?>" target="_blank"><?php echo $filename_isd; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>

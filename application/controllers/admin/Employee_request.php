@@ -316,7 +316,7 @@ class Employee_request extends MY_Controller {
 								}
 							}
 
-							if($_FILES['document_skck']['size'] == 0) {$fnameskck=null;} else {
+							if($_FILES['document_skck']['size'] == 0) {$fnameskck=0;} else {
 								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 									//checking image type
 									$allowedskck =  array('png','jpg','jpeg');
@@ -338,7 +338,7 @@ class Employee_request extends MY_Controller {
 								}
 							}
 
-							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=null;} else {
+							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=0;} else {
 								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
 									//checking image type
 									$allowedijz =  array('png','jpg','jpeg');

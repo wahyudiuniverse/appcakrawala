@@ -258,7 +258,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
-    <?php if(in_array('494',$role_resources_ids)) { ?>
+    <?php if(in_array('492',$role_resources_ids)) { ?>
     <button type="submit" class="btn btn-warning save">CANCEL REQUEST</button>
     <?php } ?>
     

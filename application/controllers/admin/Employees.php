@@ -1128,7 +1128,7 @@ class Employees extends MY_Controller {
 	}
 
 
-	public function emp_edit() {
+	public function emp_edit() { 
 
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1140,6 +1140,7 @@ class Employees extends MY_Controller {
 		if(is_null($result)){
 			redirect('admin/employees');
 		}
+
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 		// if(!in_array('202',$role_resources_ids)) {
@@ -1555,7 +1556,7 @@ class Employees extends MY_Controller {
 			
 		/* Server side PHP input validation */		
 		if($this->input->post('penempatan')==='') {
-      $Return['error'] = $this->lang->line('xin_employee_error_first_name');
+      $Return['error'] = 'Penempatan Kosong..!';
 		} else if($this->input->post('project_id')==='') {
 			$Return['error'] = 'PROJECT masih kosong...';
 		} else if($this->input->post('company_id')==='') {
@@ -4142,7 +4143,7 @@ class Employees extends MY_Controller {
 				
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["document_file"]["tmp_name"];
-					$documentd = "uploads/document/";
+					$documentd = "uploads/document/ktp/";
 					// basename() may prevent filesystem traversal attacks;
 					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["document_file"]["name"]);
@@ -4167,7 +4168,7 @@ class Employees extends MY_Controller {
 				
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["document_file"]["tmp_name"];
-					$documentd = "uploads/document/";
+					$documentd = "uploads/document/ktp/";
 					// basename() may prevent filesystem traversal attacks;
 					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["document_file"]["name"]);
@@ -4192,7 +4193,7 @@ class Employees extends MY_Controller {
 				
 				if(in_array($ext_kk,$allowed_kk)){
 					$tmp_name_kk = $_FILES["document_file_kk"]["tmp_name"];
-					$documentd_kk = "uploads/document/";
+					$documentd_kk = "uploads/document/kk/";
 					// basename() may prevent filesystem traversal attacks;
 					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["document_file_kk"]["name"]);
@@ -4217,7 +4218,7 @@ class Employees extends MY_Controller {
 				
 				if(in_array($ext_npwp,$allowed_npwp)){
 					$tmp_name_npwp = $_FILES["document_file_npwp"]["tmp_name"];
-					$documentd_npwp = "uploads/document/";
+					$documentd_npwp = "uploads/document/npwp/";
 					// basename() may prevent filesystem traversal attacks;
 					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["document_file_npwp"]["name"]);

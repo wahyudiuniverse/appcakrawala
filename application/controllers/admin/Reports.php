@@ -1386,6 +1386,7 @@ class Reports extends MY_Controller
 				$r->fullname,
 				$r->title,
 				$r->sub_project_name,
+				$r->customer_id,
 				$nama_toko,
 				$r->date_phone,
 				$r->time_in,

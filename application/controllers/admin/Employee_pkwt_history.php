@@ -97,8 +97,10 @@ class Employee_pkwt_history extends MY_Controller {
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
 					$fullname = $emp[0]->first_name;
+					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
 				} else {
 					$fullname = '--';	
+					$sub_project = '0';
 				}
 
 				$projects = $this->Project_model->read_single_project($project);
@@ -122,7 +124,7 @@ class Employee_pkwt_history extends MY_Controller {
 				// 	$designation_name = '--';	
 				// }
 
-			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 
 			$data[] = array(
@@ -181,8 +183,23 @@ class Employee_pkwt_history extends MY_Controller {
 		$id = $this->input->get('company_id');
        // $data['all_countries'] = $this->xin_model->get_countries();
 		// $result = $this->Company_model->read_company_information('2');
-		// $result = $this->Employees_model->read_employee_info($id);
 		$result = $this->Pkwt_model->read_pkwt_info_by_contractid($id);
+
+
+				$emp = $this->Employees_model->read_employee_info_by_nik($result[0]->employee_id);
+				if(!is_null($emp)){
+					$filename_ktp 		= $emp[0]->filename_ktp;
+					$filename_kk 			= $emp[0]->filename_kk;
+					$filename_skck 		= $emp[0]->filename_skck;
+					$filename_isd 		= $emp[0]->filename_isd;
+				} else {
+					$filename_ktp 		= '0';	
+					$filename_kk 			= '0';	
+					$filename_skck 		= '0';	
+					$filename_isd 		= '0';	
+				}
+
+
 		$data = array(
 				'contract_id' => $result[0]->contract_id,
 				'no_surat' => $result[0]->no_surat,
@@ -193,6 +210,12 @@ class Employee_pkwt_history extends MY_Controller {
 				'jabatan' => $result[0]->jabatan,
 				'project' => $this->Project_model->read_project_information($result[0]->project),
 				'penempatan' => $result[0]->penempatan,
+
+				'ktp' => $filename_ktp,
+				'kk' => $filename_kk,
+				'skck' => $filename_skck,
+				'ijazah' => $filename_isd,
+				
 				'waktu_kontrak' => $result[0]->waktu_kontrak.' (Bulan)',
 				'begin' => $result[0]->from_date . ' s/d '. $result[0]->to_date,
 				'hari_kerja' => $result[0]->hari_kerja,
