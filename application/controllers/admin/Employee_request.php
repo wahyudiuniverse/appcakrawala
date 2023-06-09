@@ -99,7 +99,7 @@ class Employee_request extends MY_Controller {
 
 				if($approved_naeby==null){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NAE</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id='. $r->secid . '">Need Approval NAE</button>';
 				} else if ($approved_nomby==null) {
 					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NOM</button>';
@@ -502,7 +502,11 @@ class Employee_request extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-		$id = $this->input->get('company_id');
+		// $id = $this->input->get('company_id');
+
+			$idsubmit = substr($this->input->get('company_id'),0,1);
+			$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
+
        // $data['all_countries'] = $this->xin_model->get_countries();
 		// $result = $this->Company_model->read_company_information('2');
 		$result = $this->Employees_model->read_employee_request($id);

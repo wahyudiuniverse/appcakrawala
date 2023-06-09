@@ -1603,7 +1603,8 @@ class Xin_model extends CI_Model {
 	  $query = $this->db->query("SELECT * FROM xin_employee_request 
 				WHERE request_empby IS NOT null 
 				AND approved_naeby IS NOT null
-				AND approved_nomby is null");
+				AND approved_nomby is null
+				AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
@@ -1613,7 +1614,8 @@ class Xin_model extends CI_Model {
 				WHERE request_empby IS NOT null 
 				AND approved_naeby IS NOT null
 				AND approved_nomby is NOT null
-				AND approved_hrdby is null");
+				AND approved_hrdby is null
+				AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
@@ -1669,12 +1671,22 @@ class Xin_model extends CI_Model {
 	}
 
 
+	public function count_approve_pkwt_cancel()
+	{
+	  $query = $this->db->query("SELECT *
+		FROM xin_employee_contract
+		WHERE status_pkwt = 0
+		AND cancel_stat = 1");
+  	  return $query->num_rows();
+	}
+
 	public function count_approve_nae_pkwt()
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
 		WHERE request_pkwt != 0
-		AND approve_nae = 0");
+		AND approve_nae = 0
+		AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
@@ -1684,7 +1696,8 @@ class Xin_model extends CI_Model {
 		FROM xin_employee_contract
 		WHERE request_pkwt != 0
 		AND approve_nae != 0
-		AND approve_nom = 0");
+		AND approve_nom = 0
+		AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
@@ -1695,7 +1708,8 @@ class Xin_model extends CI_Model {
 		WHERE request_pkwt != 0
 		AND approve_nae != 0
 		AND approve_nom != 0
-		AND approve_hrd = 0");
+		AND approve_hrd = 0
+		AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
