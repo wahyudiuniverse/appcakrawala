@@ -58,6 +58,20 @@ class Esign_model extends CI_Model {
 		}
 	}
 
+	// get single employee
+	public function read_pkwt_by_doc($id) {
+	
+		$sql = 'SELECT * FROM xin_employee_contract WHERE docid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	public function get_all_employees_resign()
 	{
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,month(date_of_leaving) bln_skrng

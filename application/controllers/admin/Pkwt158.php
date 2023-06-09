@@ -1293,42 +1293,36 @@ class Pkwt158 extends MY_Controller
 						<tr>
 							<td>Gaji Pokok</td>
 							<td colspan="3"> : '.$basicpay.',- Per Bulan</td>
-						</tr>
-
-
-						<tr>
-							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 						
 
 
-				if($allowance_grade!="0"){
-				$lampiran .= '
+				// if($allowance_grade!="0"){
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Grade</td>
-							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Grade</td>
+				// 			<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_area!="0"){
-				$lampiran .= '
+				// if($allowance_area!="0"){
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Area</td>
-							<td colspan="3"> : '.$allowance_area.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Area</td>
+				// 			<td colspan="3"> : '.$allowance_area.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_masakerja!="0"){
-				$lampiran .= '
+				// if($allowance_masakerja!="0"){
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Masa Kerja</td>
-							<td colspan="3"> : '.$allowance_masakerja.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Masa Kerja</td>
+				// 			<td colspan="3"> : '.$allowance_masakerja.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
 				if($allowance_transport!="0"){	
 				$lampiran .= '
@@ -1339,98 +1333,98 @@ class Pkwt158 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_rent!="0"){	
-				$lampiran .= '
+				// if($allowance_rent!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Rental</td>
+				// 			<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_komunikasi!="0"){	
-				$lampiran .= '
+				// if($allowance_komunikasi!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Komunikasi</td>
+				// 			<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_park!="0"){	
-				$lampiran .= '
+				// if($allowance_park!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Parkir</td>
-							<td colspan="3"> : '.$allowance_park.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Parkir</td>
+				// 			<td colspan="3"> : '.$allowance_park.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_residance!="0"){	
-				$lampiran .= '
+				// if($allowance_residance!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Tempat Tinggal</td>
-							<td colspan="3"> : '.$allowance_residance.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Tempat Tinggal</td>
+				// 			<td colspan="3"> : '.$allowance_residance.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_laptop!="0"){	
-				$lampiran .= '
+				// if($allowance_laptop!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Laptop</td>
-							<td colspan="3"> : '.$allowance_laptop.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Laptop</td>
+				// 			<td colspan="3"> : '.$allowance_laptop.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
 
-				if($allowance_kasir!="0"){	
-				$lampiran .= '
+				// if($allowance_kasir!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Kasir</td>
-							<td colspan="3"> : '.$allowance_kasir.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Kasir</td>
+				// 			<td colspan="3"> : '.$allowance_kasir.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_transmeal!="0"){	
-				$lampiran .= '
+				// if($allowance_transmeal!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Makan-Transport</td>
+				// 			<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
-				if($allowance_medicine!="0"){	
-				$lampiran .= '
+				// if($allowance_medicine!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Kesehatan</td>
-							<td colspan="3"> : '.$allowance_medicine.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Kesehatan</td>
+				// 			<td colspan="3"> : '.$allowance_medicine.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
 
-				if($allowance_akomodasi!="0"){	
-				$lampiran .= '
+				// if($allowance_akomodasi!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Akomodasi</td>
-							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Akomodasi</td>
+				// 			<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
 
-				if($allowance_operation!="0"){	
-				$lampiran .= '
+				// if($allowance_operation!="0"){	
+				// $lampiran .= '
 					
-						<tr>
-							<td>Tunjangan Operasional</td>
-							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
-						</tr>';
-				}
+				// 		<tr>
+				// 			<td>Tunjangan Operasional</td>
+				// 			<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+				// 		</tr>';
+				// }
 
 				$lampiran .= '	
 					</table>
