@@ -11,14 +11,12 @@
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae();?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom();?>
 <?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd();?>
-<?php //$list_bank = $this->Xin_model->get_bank_code();?>
-<!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
 
     <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Monitoring
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Area Manager Request
       </a> </li>
     <?php } ?>  
 
@@ -28,12 +26,13 @@
     <?php } ?>
 
     <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_cancelled/');?>" data-link-data="<?php echo site_url('admin/Employee_request_cancelled/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel Request <?php echo '('.$count_emp_request_cancel.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_request_cancelled/');?>" data-link-data="<?php echo site_url('admin/Employee_request_cancelled/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel Request <?php echo '('.$count_emp_request_cancel.')';?>
       </a> </li>
     <?php } ?>
-    
+
+
     <?php if(in_array('375',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nom.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nom.')';?>
       </a> </li>
     <?php } ?>
 
@@ -43,7 +42,7 @@
     <?php } ?>
 
     <?php if(in_array('375',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> History Approval
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Monitoring Approval
       </a> </li>
     <?php } ?>
 
@@ -53,7 +52,6 @@
 <hr class="border-light m-0 mb-3">
 <?php $employee_id = $this->Xin_model->generate_random_employeeid();?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
-
 
 <div class="card">
   <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_companies');?></span> </div>
@@ -79,3 +77,21 @@
     </div>
   </div>
 </div>
+
+<style type="text/css">
+  
+  input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #26ae61;
+  padding: 10px 20px;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #20c997;
+}
+</style>

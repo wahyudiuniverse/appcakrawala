@@ -7,6 +7,7 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
+<?php $count_emp_request_cancel = $this->Xin_model->count_emp_request_cancel();?>
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae();?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom();?>
 <?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd();?>
@@ -28,6 +29,12 @@
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_nae/');?>" data-link-data="<?php echo site_url('admin/employee_request_nae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE/Admin <?php echo '('.$count_emp_request_nae.')';?>
       </a> </li>
     <?php } ?>
+
+    <?php if(in_array('337',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_cancelled/');?>" data-link-data="<?php echo site_url('admin/Employee_request_cancelled/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel Request <?php echo '('.$count_emp_request_cancel.')';?>
+      </a> </li>
+    <?php } ?>
+
 
     <?php if(in_array('375',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nom.')';?>

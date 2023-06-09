@@ -111,12 +111,23 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
+	public function get_request_cancel() {
+
+		$sql = 'SELECT * FROM xin_employee_request 
+		WHERE cancel_stat = 1';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
 	public function get_request_nae() {
 
 		$sql = 'SELECT * FROM xin_employee_request 
 		WHERE request_empby is not null 
 		AND approved_naeby is null
 		AND approved_nomby is null
+		AND cancel_stat = 0
 		ORDER BY secid DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -130,7 +141,8 @@ class Employees_model extends CI_Model {
 		WHERE request_empby is not null 
 		AND approved_naeby is not null
 		AND approved_nomby is null
-		AND approved_hrdby is null';
+		AND approved_hrdby is null
+		AND cancel_stat = 0';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -143,7 +155,8 @@ class Employees_model extends CI_Model {
 		WHERE request_empby is not null 
 		AND approved_naeby is not null
 		AND approved_nomby is not null
-		AND approved_hrdby is null';
+		AND approved_hrdby is null
+		AND cancel_stat = 0';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

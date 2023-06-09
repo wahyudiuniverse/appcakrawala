@@ -132,9 +132,12 @@ class Employee_request_nae extends MY_Controller {
 					$designation_name = '--';	
 				}
 
+
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
+
 			$data[] = array(
 				$no,
-				$status_migrasi,
+				$status_migrasi.' '.$cancel,
 				$nik_ktp,
 				$fullname,
 				$nama_project,
@@ -496,7 +499,12 @@ class Employee_request_nae extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-		$id = $this->input->get('company_id');
+
+			$idsubmit = substr($this->input->get('company_id'),0,1);
+			$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
+
+
+		// $id = $this->input->get('company_id');
        // $data['all_countries'] = $this->xin_model->get_countries();
 		// $result = $this->Company_model->read_company_information('2');
 		$result = $this->Employees_model->read_employee_request($id);
@@ -528,6 +536,7 @@ class Employee_request_nae extends MY_Controller {
 				'approved_naeon' => $result[0]->approved_naeon,
 				'approved_nomby' => $this->Employees_model->read_employee_info($result[0]->approved_nomby),
 				'approved_nomon' => $result[0]->approved_nomon,
+				
 				// 'idefault_timezone' => $result[0]->default_timezone,
 
 				// 'createdon' => $result[0]->createdon,
@@ -536,7 +545,13 @@ class Employee_request_nae extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		$this->load->view('admin/employees/dialog_emp_nae', $data);
+				if($idsubmit=='$'){
+			$this->load->view('admin/employees/dialog_emp_nae', $data);
+		} else {
+			$this->load->view('admin/employees/dialog_emp_cancel_nae', $data);
+		}
+
+		// $this->load->view('admin/employees/dialog_emp_nae', $data);
 	}
 
 
@@ -550,15 +565,34 @@ class Employee_request_nae extends MY_Controller {
 
 		if($this->input->post('edit_type')=='company') {
 		$id = $this->uri->segment(4);
+		$cancel = $this->uri->segment(5);
+
+		// $id = $this->uri->segment(4);
 
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 		
-			$data_up = array(
-				'approved_naeby' =>  $session['user_id'],
-				'approved_naeon' => date('Y-m-d h:i:s'),
-			);
+
+			if($cancel=='YES'){
+
+				$data_up = array(
+
+					'cancel_stat' =>  1,
+					'cancel_on' => date("Y-m-d h:i:s"),
+					'cancel_by' => $session['user_id'],
+					'cancel_ket' => 'REVISI DOKUMEN PENDUKUNG'
+
+				);
+			} else {
+				$data_up = array(
+					// 'migrasi' => '1',
+					'approved_naeby' =>  $session['user_id'],
+					'approved_naeon' => date("Y-m-d h:i:s")
+
+				);
+			}
+
 			$result = $this->Employees_model->update_request_employee($data_up,$id);
 
 		if($Return['error']!=''){

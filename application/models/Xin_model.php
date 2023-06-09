@@ -1581,12 +1581,20 @@ class Xin_model extends CI_Model {
 	}
 
 
+	public function count_emp_request_cancel()
+	{
+	  $query = $this->db->query("SELECT * FROM xin_employee_request 
+				WHERE cancel_stat = 1");
+  	  return $query->num_rows();
+	}
+
 	public function count_emp_request_nae()
 	{
 	  $query = $this->db->query("SELECT * FROM xin_employee_request 
 				WHERE request_empby IS NOT null 
 				AND approved_naeby IS null
-				AND approved_nomby is null");
+				AND approved_nomby is null
+				AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
