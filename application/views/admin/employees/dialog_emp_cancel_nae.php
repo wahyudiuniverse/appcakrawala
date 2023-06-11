@@ -601,6 +601,43 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
+<!-- CV -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">CV</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/cv/'.$cv.'" target="_blank"> '.$cv.'</a>';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<!-- PAKLARING -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Paklaring</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/paklaring/'.$paklaring.'" target="_blank"> '.$paklaring.'</a>';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">

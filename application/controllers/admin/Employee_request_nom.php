@@ -455,6 +455,8 @@ class Employee_request_nom extends MY_Controller {
 				'kk' => $result[0]->kk,
 				'skck' => $result[0]->skck,
 				'ijazah' => $result[0]->ijazah,
+				'cv' => $result[0]->civi,
+				'paklaring' => $result[0]->paklaring,
 
 				'idrequest' => $result[0]->secid,
 				'request_empby' => $this->Employees_model->read_employee_info($result[0]->request_empby),

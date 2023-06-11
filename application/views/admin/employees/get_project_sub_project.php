@@ -1,5 +1,7 @@
 
 <?php $result = $this->Employees_model->ajax_project_sub($id_project);?>
+<?php $projcomp = $this->Project_model->read_single_project($id_project);?>
+
 
 <div class="form-group">
   <label class="form-label"><?php echo $this->lang->line('left_sub_projects');?><i class="hrpremium-asterisk">*</i></label>
@@ -9,6 +11,8 @@
     <option value="<?php echo $subproject->secid?>"><?php echo $subproject->sub_project_name;?></option>
     <?php } ?>
   </select>
+
+  <input type="text" name="company_id" value="<?php echo $projcomp[0]->company_id?>" hidden>
 </div>
 <?php
 //}

@@ -48,6 +48,7 @@ class Employee_request extends MY_Controller {
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
 			$data['list_bank'] = $this->Xin_model->get_bank_code();
+			$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type_result();
 
 		$data['breadcrumbs'] = $this->lang->line('xin_request_employee');
 		$data['path_url'] = 'emp_request';
@@ -212,11 +213,12 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = 'Tanggal Lahir Kosong..!';
 					} 
 
-					else if ($this->input->post('company_id')==''){
-						$Return['error'] = 'Company Kosong..!';
-					} else if ($this->input->post('office_lokasi')==''){
-						$Return['error'] = 'Office Location Kosong..!';
-					} else if ($this->input->post('project_id')==''){
+					// else if ($this->input->post('company_id')==''){
+					// 	$Return['error'] = 'Company Kosong..!';
+					// } else if ($this->input->post('office_lokasi')==''){
+					// 	$Return['error'] = 'Office Location Kosong..!';
+					// } 
+					else if ($this->input->post('project_id')==''){
 						$Return['error'] = 'Project Kosong..!';
 					} else if ($this->input->post('sub_project_id')==''){
 						$Return['error'] = 'Sub Project Kosong..!';
@@ -224,6 +226,12 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = 'Departement Kosong..!';
 					} else if ($this->input->post('posisi')==''){
 						$Return['error'] = 'Posisi Jabatan Kosong..!';
+					} else if ($this->input->post('gender')==''){
+						$Return['error'] = 'Jenis Kelamin Kosong..!';
+					} else if ($this->input->post('ethnicity')==''){
+						$Return['error'] = 'Agama/Kepercayaan Kosong..!';
+					} else if ($this->input->post('marital_status')==''){
+						$Return['error'] = 'Status Perkawinan Kosong..!';
 					}
 
 					else if ($this->input->post('date_of_join')==''){
@@ -271,6 +279,8 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = 'KTP Kosong..!';
 					} else if($_FILES['document_kk']['size'] == 0) {
 						$Return['error'] = 'KK Kosong..!';
+					} else if($_FILES['document_cv']['size'] == 0) {
+						$Return['error'] = 'Riwayat Hidup (CV) Kosong..!';
 					}
 
 					else {
@@ -278,7 +288,7 @@ class Employee_request extends MY_Controller {
 
 							if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
 								//checking image type
-								$allowed =  array('png','jpg','jpeg');
+								$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
 								$filename = $_FILES['document_file']['name'];
 								$ext = pathinfo($filename, PATHINFO_EXTENSION);
 								
@@ -298,7 +308,7 @@ class Employee_request extends MY_Controller {
 
 							if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
 								//checking image type
-								$allowedkk =  array('png','jpg','jpeg');
+								$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
 								$filenamekk = $_FILES['document_kk']['name'];
 								$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
 								
@@ -316,10 +326,11 @@ class Employee_request extends MY_Controller {
 								}
 							}
 
+
 							if($_FILES['document_skck']['size'] == 0) {$fnameskck=0;} else {
 								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 									//checking image type
-									$allowedskck =  array('png','jpg','jpeg');
+									$allowedskck =  array('png','jpg','jpeg','PNG','JPG','JPEG');
 									$filenameskck = $_FILES['document_skck']['name'];
 									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
 									
@@ -338,10 +349,30 @@ class Employee_request extends MY_Controller {
 								}
 							}
 
+							if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
+								//checking image type
+								$allowedcv =  array('pdf','PDF');
+								$filenamecv = $_FILES['document_cv']['name'];
+								$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+								
+								if(in_array($extcv,$allowedcv)){
+									$tmp_namecv = $_FILES["document_cv"]["tmp_name"];
+									$documentdcv = "uploads/document/cv/";
+									// basename() may prevent filesystem traversal attacks;
+									// further validation/sanitation of the filename may be appropriate
+									$name = basename($_FILES["document_cv"]["name"]);
+									$newfilenamecv = 'cv_'.round(microtime(true)).'.'.$extcv;
+									move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
+									$fnamecv = $newfilenamecv;
+								} else {
+									$Return['error'] = 'Jenis File CV tidak diterima..';
+								}
+							}
+
 							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=0;} else {
 								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
 									//checking image type
-									$allowedijz =  array('png','jpg','jpeg');
+									$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
 									$filenameijz = $_FILES['document_ijz']['name'];
 									$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
 									
@@ -355,7 +386,30 @@ class Employee_request extends MY_Controller {
 										move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
 										$fnameijz = $newfilenameijz;
 									} else {
-										$Return['error'] = 'Jenis File KK tidak diterima..';
+										$Return['error'] = 'Jenis File Ijazah tidak diterima..';
+									}
+								}
+							}
+
+
+							if($_FILES['document_pkl']['size'] == 0) {$fnamepkl=0;} else {
+								if(is_uploaded_file($_FILES['document_pkl']['tmp_name'])) {
+									//checking image type
+								$allowedpkl =  array('pdf','PDF');
+									$filenamepkl = $_FILES['document_pkl']['name'];
+									$extpkl = pathinfo($filenamepkl, PATHINFO_EXTENSION);
+									
+									if(in_array($extpkl,$allowedpkl)){
+										$tmp_namepkl = $_FILES["document_pkl"]["tmp_name"];
+										$documentdpkl = "uploads/document/paklaring/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_pkl"]["name"]);
+										$newfilenamepkl = 'paklaring_'.round(microtime(true)).'.'.$extpkl;
+										move_uploaded_file($tmp_namepkl, $documentdpkl.$newfilenamepkl);
+										$fnamepkl = $newfilenamepkl;
+									} else {
+										$Return['error'] = 'Jenis File Paklaring tidak diterima..';
 									}
 								}
 							}
@@ -371,6 +425,9 @@ class Employee_request extends MY_Controller {
 							$sub_project_id 		= $this->input->post('sub_project_id');
 							$department_id 			= $this->input->post('department_id');
 							$posisi 						= $this->input->post('posisi');
+							$jenis_kelamin 			= $this->input->post('gender');
+							$agama 							= $this->input->post('ethnicity');
+							$status_kawin 			= $this->input->post('marital_status');
 
 							$date_of_join 			= $this->input->post('date_of_join');
 							$join_date_pkwt 		= $this->input->post('join_date_pkwt');
@@ -411,7 +468,7 @@ class Employee_request extends MY_Controller {
 							$cut_start			= $this->input->post('cut_start');
 							$cut_off 					= $this->input->post('cut_off');
 							$date_payment		= $this->input->post('date_payment');
-						
+
 							// $options = array('cost' => 12);
 							// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
 							// $leave_categories = array($this->input->post('leave_categories'));
@@ -424,11 +481,14 @@ class Employee_request extends MY_Controller {
 								'tanggal_lahir' 			=> $tanggal_lahir,
 
 								'company_id' 					=> $company_id,
-								'location_id' 				=> $office_lokasi,
+								'location_id' 				=> '1',
 								'project' 						=> $project_id,
 								'sub_project' 				=> $sub_project_id,
 								'department' 					=> $department_id,
 								'posisi' 							=> $posisi,
+								'gender' 							=> $jenis_kelamin,
+								'agama' 							=> $agama,
+								'status_kawin' 				=> $status_kawin,
 
 								'doj' 								=> $date_of_join,
 								'contract_start' 			=> $join_date_pkwt,
@@ -471,8 +531,10 @@ class Employee_request extends MY_Controller {
 								'kk'										=> $fnamekk,
 								'skck'									=> $fnameskck,
 								'ijazah'								=> $fnameijz,
-								'request_empby' =>  $session['user_id'],
-								'request_empon' => date("Y-m-d h:i:s"),
+								'civi'									=> $fnamecv,
+								'paklaring'							=> $fnamepkl,
+								'request_empby' 				=> $session['user_id'],
+								'request_empon' 				=> date("Y-m-d h:i:s"),
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),
@@ -525,6 +587,49 @@ class Employee_request extends MY_Controller {
 				'contact_number' => $result[0]->nip,
 				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
+
+				'waktu_kontrak' => $result[0]->contract_periode.' (Bulan)',
+				'begin' => $result[0]->contract_start . ' s/d '. $result[0]->contract_end,
+				'hari_kerja' => $result[0]->hari_kerja,
+				'basic_pay' => $result[0]->gaji_pokok,
+				'dm_allow_grade' => $result[0]->dm_allow_jabatan,
+				'allowance_grade' => $result[0]->allow_jabatan,
+				'dm_allow_area' => $result[0]->dm_allow_area,
+				'allowance_area' => $result[0]->allow_area,
+				'dm_allow_masakerja' => $result[0]->dm_allow_masakerja,
+				'allowance_masakerja' => $result[0]->allow_masakerja,
+				'dm_allow_transmeal' => $result[0]->dm_allow_transmeal,
+				'allowance_transmeal' => $result[0]->allow_trans_meal,
+				'dm_allow_meal' => $result[0]->dm_allow_konsumsi,
+				'allowance_meal' => $result[0]->allow_konsumsi,
+				'dm_allow_transport' => $result[0]->dm_allow_transport,
+				'allowance_transport' => $result[0]->allow_transport,
+				'dm_allow_komunikasi' => $result[0]->dm_allow_comunication,
+				'allowance_komunikasi' => $result[0]->allow_comunication,
+				'dm_allow_laptop' => $result[0]->dm_allow_device,
+				'allowance_laptop' => $result[0]->allow_device,
+				'dm_allow_residance' => $result[0]->dm_allow_residance,
+				'allowance_residance' => $result[0]->allow_residence_cost,
+				'dm_allow_rent' => $result[0]->dm_allow_rent,
+				'allowance_rent' => $result[0]->allow_rent,
+				'dm_allow_park' => $result[0]->dm_allow_park,
+				'allowance_park' => $result[0]->allow_parking,
+				'dm_allow_medicine' => $result[0]->dm_allow_medicine,
+				'allowance_medicine' => $result[0]->allow_medichine,
+				'dm_allow_akomodasi' => $result[0]->dm_allow_akomodasi,
+				'allow_akomodsasi' => $result[0]->allow_akomodsasi,
+				'dm_allow_kasir' => $result[0]->dm_allow_kasir,
+				'allowance_kasir' => $result[0]->allow_kasir,
+				'dm_allow_operational' => $result[0]->dm_allow_operational,
+				'allow_operational' => $result[0]->allow_operational,
+				
+				'ktp' => $result[0]->ktp,
+				'kk' => $result[0]->kk,
+				'skck' => $result[0]->skck,
+				'ijazah' => $result[0]->ijazah,
+				'cv' => $result[0]->civi,
+				'paklaring' => $result[0]->paklaring,
+
 				'idrequest' => $result[0]->secid,
 				'request_empby' => $this->Employees_model->read_employee_info($result[0]->request_empby),
 				'request_empon' => $result[0]->request_empon,

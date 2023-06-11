@@ -115,6 +115,57 @@
               </div>
 
               <div class="row">
+
+                <!--JENIS KELAMIN-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                                  <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_gender');?>*</label>
+                                  <select class="form-control" name="gender" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>">
+                                    <option value="">Jenis Kelamin</option>
+                                    <option value="L"><?php echo $this->lang->line('xin_gender_male');?></option>
+                                    <option value="P"><?php echo $this->lang->line('xin_gender_female');?></option>
+                                  </select>
+                  </div>
+                </div>
+
+                <!--AGAMA-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                                  <label class="form-label control-label">Agama/Kepercayaan*</label>
+
+                                  <select class="form-control" name="ethnicity" data-plugin="xin_select" data-placeholder="Agama/Kepercayaan">
+                                  <option value="">Agama/Kepercayaan</option>
+                                              <?php foreach($all_ethnicity as $eth):?>
+                                              <option value="<?php echo $eth->ethnicity_type_id;?>"><?php echo $eth->type;?></option>
+                                              <?php endforeach;?>
+                                  </select>
+                  </div>
+                </div>
+
+                <!--STATUS PERKAWINAN-->
+                <div class="col-md-4">
+                  <div class="form-group">
+                                  <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_mstatus');?>*</label>
+
+                                  <select class="form-control" name="marital_status" data-plugin="xin_select" data-placeholder="Status Perkawinan">
+                                  <option value="">Status Perkawinan</option>
+                                              <option value="TK/0">Belum Menikah</option>
+                                              <option value="K/0">Menikah (0 Anak)</option>
+                                              <option value="K/1">Menikah (1 Anak)</option>
+                                              <option value="K/2">Menikah (2 Anak)</option>
+                                              <option value="K/3">Menikah (3 Anak)</option>
+                                              <option value="TK/0">Janda/Duda (0 Anak)</option>
+                                              <option value="TK/1">Janda/Duda (1 Anak)</option>
+                                              <option value="TK/2">Janda/Duda (2 Anak)</option>
+                                              <option value="TK/3">Janda/Duda (3 Anak)</option>
+                                              
+                                </select>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
                 <!--NO KP-->
                 <div class="col-md-4">
                   <div class="form-group">
@@ -219,33 +270,6 @@
             </div>
 
             <div class="col-md-6">
-              <div class="row">
-                <!--PERUSAHAAN-->
-
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="first_name"><?php echo $this->lang->line('left_company');?><i class="hrpremium-asterisk"></i></label>
-                    <select class="form-control" name="company_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_company');?>">
-                      <option value=""></option>
-                      <?php foreach($all_companies as $company) {?>
-                      <option value="<?php echo $company->company_id;?>"><?php echo $company->name?></option>
-                      <?php } ?>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="office_lokasi">Office/Project<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="office_lokasi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
-                      <option value="1">IN-HOUSE</option>
-                      <option value="2">PROJECT</option>
-                    </select>
-                  </div>
-                </div>
-
-              </div>
-
 
               <div class="row">
                 <!--PROJECT-->
@@ -342,7 +366,7 @@
           </div>
 
 
-<!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
+<!--  --> <br><span class="card-header-title mr-2"><strong>UPLOAD </strong>DOKUMEN & FOTO</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
 
                       <!-- KTP -->
                       <div class="row">
@@ -350,8 +374,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">Foto KTP<strong>*</strong></label>
-                              <input type="file" class="form-control-file" id="document_file" name="document_file">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_file" name="document_file" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -360,8 +384,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">Foto KK<strong>*</strong></label>
-                              <input type="file" class="form-control-file" id="document_kk" name="document_kk">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_kk" name="document_kk" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -370,8 +394,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">SKCK<strong>*</strong></label>
-                              <input type="file" class="form-control-file" id="document_skck" name="document_skck">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_skck" name="document_skck" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -380,14 +404,36 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">IJAZAH Terakhir</label>
-                              <input type="file" class="form-control-file" id="document_ijz" name="document_ijz">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_ijz" name="document_ijz" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                      </div>
+<br>
+                      <!-- CV -->
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Riwayat Hidup (CV)<strong>*</strong></label>
+                              <input type="file" class="form-control-file" id="document_cv" name="document_cv" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">Surat Keterangan Kerja (PAKLARING)<strong>*</strong></label>
+                              <input type="file" class="form-control-file" id="document_pkl" name="document_pkl" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
 
                       </div>
-
 
 <!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
           <div class="row">

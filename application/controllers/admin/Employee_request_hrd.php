@@ -463,6 +463,8 @@ class Employee_request_hrd extends MY_Controller {
 				'kk' => $result[0]->kk,
 				'skck' => $result[0]->skck,
 				'ijazah' => $result[0]->ijazah,
+				'cv' => $result[0]->civi,
+				'paklaring' => $result[0]->paklaring,
 				
 				'idrequest' => $result[0]->secid,
 				'request_empby' => $this->Employees_model->read_employee_info($result[0]->request_empby),
@@ -574,6 +576,8 @@ class Employee_request_hrd extends MY_Controller {
 					$kk										= $employee_request[0]->kk;
 					$skck									= $employee_request[0]->skck;
 					$ijazah								= $employee_request[0]->ijazah;
+					$civi								= $employee_request[0]->civi;
+					$paklaring								= $employee_request[0]->paklaring;
 
 					$createdby 						= $employee_request[0]->request_empby;
 					$createdon 						= $employee_request[0]->request_empon;
@@ -674,6 +678,8 @@ class Employee_request_hrd extends MY_Controller {
 								'filename_kk'						=> $kk,
 								'filename_skck'					=> $skck,
 								'filename_isd'					=> $ijazah,
+								'filename_cv'						=> $civi,
+								'filename_paklaring'		=> $paklaring,
 
 								// 'request_empby' 				=> $session['user_id'],
 								// 'request_empon' 				=> date("Y-m-d h:i:s"),
