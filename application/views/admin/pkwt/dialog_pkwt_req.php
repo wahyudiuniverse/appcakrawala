@@ -286,7 +286,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$allowance_masakerja. ' ('.$dm_allow_masakerja.')';?></label>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_masakerja). ' ('.$dm_allow_masakerja.')';?></label>
         </div>
       </div>
     </div>
