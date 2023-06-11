@@ -437,7 +437,7 @@ class Employee_request_approve extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		$this->load->view('admin/employees/dialog_emp_hrd', $data);
+		$this->load->view('admin/employees/dialog_emp_approved', $data);
 	}
 
 

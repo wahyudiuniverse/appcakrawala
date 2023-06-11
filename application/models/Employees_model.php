@@ -775,6 +775,17 @@ class Employees_model extends CI_Model {
 			return false;
 		}		
 	}
+
+	// Function to update record in table
+	public function update_record_bynip($data, $id){
+		$this->db->where('employee_id', $id);
+		if( $this->db->update('xin_employees',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 	
 	// Function to update record in table > basic_info
 	public function basic_info($data, $id){

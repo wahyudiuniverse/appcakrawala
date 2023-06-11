@@ -1684,7 +1684,7 @@ class Xin_model extends CI_Model {
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
-		WHERE request_pkwt != 0
+		WHERE status_pkwt = 0
 		AND approve_nae = 0
 		AND cancel_stat = 0");
   	  return $query->num_rows();
@@ -1694,7 +1694,7 @@ class Xin_model extends CI_Model {
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
-		WHERE request_pkwt != 0
+		WHERE status_pkwt = 0
 		AND approve_nae != 0
 		AND approve_nom = 0
 		AND cancel_stat = 0");
@@ -1705,7 +1705,7 @@ class Xin_model extends CI_Model {
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
-		WHERE request_pkwt != 0
+		WHERE status_pkwt = 0
 		AND approve_nae != 0
 		AND approve_nom != 0
 		AND approve_hrd = 0

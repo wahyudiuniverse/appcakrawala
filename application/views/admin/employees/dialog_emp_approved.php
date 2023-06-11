@@ -5,63 +5,42 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
   <?php 
-    if(!is_null($verified_by)){
-      $verified_name = $verified_by[0]->first_name;
+
+    if(!is_null($request_empby)){
+      $requets_name = $request_empby[0]->first_name;
     } else {
-      $verified_name = '--'; 
+      $requets_name = '--'; 
     }
-    if(!is_null($approved_by)){
-      $approved_name = $approved_by[0]->first_name;
+
+    if(!is_null($approved_naeby)){
+      $approve_nae_name = $approved_naeby[0]->first_name;
     } else {
-      $approved_name = '--'; 
+      $approve_nae_name = '--'; 
+    }
+    if(!is_null($approved_nomby)){
+      $approved_nom_name = $approved_nomby[0]->first_name;
+    } else {
+      $approved_nom_name = '--'; 
     }
         
-    $cfullname = $check_employee[0]->first_name;
-    $cnip = $check_employee[0]->employee_id;
-    $cpin = $check_employee[0]->private_code;
+    // if(!is_null($approved_hrdby)){
+    //   $approved_hrd_name = $approved_hrdby[0]->first_name;
+    // } else {
+    //   $approved_hrd_name = '--'; 
+    // }
 
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> <?php echo $this->lang->line('xin_request_employee_approved');?></h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> <?php echo $this->lang->line('xin_request_employee');?></h4>
   </div>
 
 
   <?php $attributes = array('name' => 'edit_company', 'id' => 'edit_company', 'autocomplete' => 'off', 'class'=>'m-b-1');?>
   <?php $hidden = array('_method' => 'EDIT', '_token' => $_GET['company_id'], 'ext_name' => $idrequest);?>
-  <?php echo form_open_multipart('admin/Employee_request_verify/update/'.$idrequest, $attributes, $hidden);?>
+  <?php echo form_open_multipart('admin/employee_request_hrd/update/'.$idrequest.'/YES', $attributes, $hidden);?>
 
  <hr style="height:1px;border-width:0;color:gray;background-color:gray; margin: auto;">
-
-<input type="text" value="<?php echo $cfullname; ?>" id="myInputA" hidden>
-<input type="text" value="<?php echo $cnip; ?>" id="myInputB" hidden>
-<input type="text" value="<?php echo $cpin; ?>" id="myInputC" hidden>
-
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- NIP -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">NIP & PIN</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"> : 
-            <button type="button" class="btn btn-xs btn-outline-success" onclick="myFunctionA()">
-              <?php echo $cfullname; ?>
-            </button>
-            <button type="button" class="btn btn-xs btn-outline-success" onclick="myFunctionB()">
-              <?php echo $cnip; ?></button> 
-            <button type="button" class="btn btn-xs btn-outline-success" onclick="myFunctionC()">
-              <?php echo $cpin; ?></button>
-          </label>
-        </div>
-      </div>
-    </div>
-  </div>
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
 
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -250,7 +229,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
     </div>
   </div>
-  
 
 <!-- FOTO KTP -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
@@ -323,7 +301,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
     </div>
   </div>
-  
+
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -335,7 +313,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$request_by[0]->first_name. ' ('.$createdon.')';?></label>
+          <label for="plant"><?php echo ': '.$requets_name. ' ('.$request_empon.')';?></label>
         </div>
       </div>
     </div>
@@ -347,64 +325,107 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- APPROVED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('xin_request_employee_approvedby');?></label>
+          <label for="no_transaksi">Approve NAE/Admin</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$approved_name. ' ('.$modifiedon.')';?></label>
+          <label for="plant"><?php echo ': '.$approve_nae_name. ' ('.$approved_naeon.')';?></label>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal-footer">
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Approve NOM/SM</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$approved_nom_name. ' ('.$approved_nomon.')';?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" hidden>
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Info Revisi</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <textarea name="ket_revisi" rows="2" cols="50" maxlength="250"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal-footer" hidden>
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
+
+    <?php if(in_array('492',$role_resources_ids)) { ?>
+    <button type="submit" class="btn btn-warning save">CANCEL REQUEST</button>
+    <?php } ?>
+    
   </div>
 
 <?php echo form_close(); ?>
 <script type="text/javascript">
 
  $(document).ready(function(){
-							
-		$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
-		$('[data-plugin="select_hrm"]').select2({ width:'100%' });	
-		$('.d_date').bootstrapMaterialDatePicker({
-			weekStart: 0,
-			time: false,
-			clearButton: false,
-			format: 'YYYY-MM-DD'
-		}); 
-		
-		Ladda.bind('button[type=submit]');
-		/* Edit data */
-		$("#edit_company").submit(function(e){
-			var fd = new FormData(this);
-			var obj = $(this), action = obj.attr('name');
-			fd.append("is_ajax", 2);
-			fd.append("edit_type", 'company');
-			fd.append("form", action);
-			e.preventDefault();
-			$('.save').prop('disabled', true);
-			$.ajax({
-				url: e.target.action,
-				type: "POST",
-				data:  fd,
-				contentType: false,
-				cache: false,
-				processData:false,
-				success: function(JSON)
-				{
-					if (JSON.error != '') {
-						toastr.error(JSON.error);
-						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-						$('.save').prop('disabled', false);
-						Ladda.stopAll();
-					} else {
-						// On page load: datatable
+              
+    $('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
+    $('[data-plugin="select_hrm"]').select2({ width:'100%' });  
+    $('.d_date').bootstrapMaterialDatePicker({
+      weekStart: 0,
+      time: false,
+      clearButton: false,
+      format: 'YYYY-MM-DD'
+    }); 
+    
+    Ladda.bind('button[type=submit]');
+    /* Edit data */
+    $("#edit_company").submit(function(e){
+      var fd = new FormData(this);
+      var obj = $(this), action = obj.attr('name');
+      fd.append("is_ajax", 2);
+      fd.append("edit_type", 'company');
+      fd.append("form", action);
+      e.preventDefault();
+      $('.save').prop('disabled', true);
+      $.ajax({
+        url: e.target.action,
+        type: "POST",
+        data:  fd,
+        contentType: false,
+        cache: false,
+        processData:false,
+        success: function(JSON)
+        {
+          if (JSON.error != '') {
+            toastr.error(JSON.error);
+            $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+            $('.save').prop('disabled', false);
+            Ladda.stopAll();
+          } else {
+            // On page load: datatable
                var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
     "ajax": {
-            url : base_url+"/request_list/",
+            url : base_url+"/request_approve_list/",
             type : 'GET'
         },
     dom: 'lBfrtip',
@@ -414,74 +435,25 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     }
     });
 
-						xin_table.api().ajax.reload(function(){ 
-							toastr.success(JSON.result);
-						}, true);
-						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-						$('.edit-modal-data').modal('toggle');
-						$('.save').prop('disabled', false);
-						Ladda.stopAll();
-					}
-				},
-				error: function() 
-				{
-					toastr.error(JSON.error);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('.save').prop('disabled', false);
-					Ladda.stopAll();
-				} 	        
-		   });
-		});
-	});	
-
+            xin_table.api().ajax.reload(function(){ 
+              toastr.success(JSON.result);
+            }, true);
+            $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+            $('.edit-modal-data').modal('toggle');
+            $('.save').prop('disabled', false);
+            Ladda.stopAll();
+          }
+        },
+        error: function() 
+        {
+          toastr.error(JSON.error);
+          $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+          $('.save').prop('disabled', false);
+          Ladda.stopAll();
+        }           
+       });
+    });
+  }); 
   </script>
-  <script>
-function myFunctionA() {
-  // Get the text field
-  var copyText = document.getElementById("myInputA");
-
-  // Select the text field
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); // For mobile devices
-
-  // Copy the text inside the text field
-  navigator.clipboard.writeText(copyText.value);
-  
-  // Alert the copied text
-  alert("Copied the text: " + copyText.value);
-}
-</script>
-<script>
-function myFunctionB() {
-  // Get the text field
-  var copyText = document.getElementById("myInputB");
-
-  // Select the text field
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); // For mobile devices
-
-  // Copy the text inside the text field
-  navigator.clipboard.writeText(copyText.value);
-  
-  // Alert the copied text
-  alert("Copied the text: " + copyText.value);
-}
-</script>
-<script>
-function myFunctionC() {
-  // Get the text field
-  var copyText = document.getElementById("myInputC");
-
-  // Select the text field
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); // For mobile devices
-
-  // Copy the text inside the text field
-  navigator.clipboard.writeText(copyText.value);
-  
-  // Alert the copied text
-  alert("Copied the text: " + copyText.value);
-}
-</script>
 <?php } ?>
 

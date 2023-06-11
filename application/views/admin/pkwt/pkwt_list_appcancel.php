@@ -19,6 +19,7 @@
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt/');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Request PKWT
       </a> </li>
     <?php } ?>  
+    
 
     <?php if(in_array('503',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_appnae.')';?>
@@ -26,12 +27,12 @@
     <?php } ?>
 
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel PKWT <?php echo '('.$count_pkwtcancel.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel PKWT <?php echo '('.$count_pkwtcancel.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('504',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_appnom.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_appnom.')';?>
       </a> </li>
     <?php } ?>
 

@@ -554,17 +554,22 @@ class Employee_request_hrd extends MY_Controller {
 					$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
 
 					//PKWT ATTRIBUTE
-					// if($company_id=='2'){
-						$pkwt_hr = 'PKWT-JKTSC-HR/';
-					// } else {
-					// 	$pkwt_hr = 'PKWT-JKTKAC-HR/';
-					// }
+					if ($company_id=='2'){
+						$pkwt_hr = 'E-PKWT-JKTSC-HR/';
+						$spb_hr = 'E-SPB-JKTSC-HR/';
+					} else if($company_id=='3') {
+						$pkwt_hr = 'E-PKWT-JKTKAC-HR/';
+						$spb_hr = 'E-SPB-JKTKAC-HR/';
+					} else {
+						$pkwt_hr = 'E-PKWT-JKTMATA-HR/';
+						$spb_hr = 'E-SPB-JKTMATA-HR/';
+					}
 
 					$count_pkwt = $this->Xin_model->count_pkwt();
 					$romawi = $this->Xin_model->tgl_pkwt();
 					$unicode = $this->Xin_model->getUniqueCode(20);
 					$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-					$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+					$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
 
 
 					$docid = date('ymdHisv');

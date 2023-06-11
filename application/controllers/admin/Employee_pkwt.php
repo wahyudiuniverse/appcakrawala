@@ -502,17 +502,23 @@ class Employee_pkwt extends MY_Controller {
 
 				else {
 
-					if(strtoupper($this->input->post('company'))=='PT SIPRAMA CAKRAWALA'){
-						$pkwt_hr = 'PKWT-JKTSC-HR/';
+					if(strtoupper($this->input->post('company'))=='PT. SIPRAMA CAKRAWALA'){
+						$pkwt_hr = 'E-PKWT-JKTSC-HR/';
+						$spb_hr = 'E-SPB-JKTSC-HR/';
+					}else if (strtoupper($this->input->post('company'))=='PT. KRISTA AULIA CAKRAWALA'){
+						$pkwt_hr = 'E-PKWT-JKTKAC-HR/';
+						$spb_hr = 'E-SPB-JKTKAC-HR/';
 					} else {
-						$pkwt_hr = 'PKWT-JKTKAC-HR/';
+						$pkwt_hr = 'E-PKWT-JKTMATA-HR/';
+						$spb_hr = 'E-SPB-JKTMATA-HR/';
 					}
+
 
 					$count_pkwt = $this->Xin_model->count_pkwt();
 					$romawi = $this->Xin_model->tgl_pkwt();
 					$unicode = $this->Xin_model->getUniqueCode(20);
 					$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-					$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+					$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
 
 			   	$idproject = $this->input->post('project_id');
 			   	$employee_id = $this->input->post('employee_id');
@@ -620,9 +626,8 @@ class Employee_pkwt extends MY_Controller {
 							'sign_fullname'					=> 'ASTI PRASTISTA',
 							'sign_jabatan'					=> 'SM HR & GA',
 							'status_pkwt' => 0,
-							'createdon' => date('Y-m-d h:i:s'),
-							'createdby' => $session['user_id']
-							// 'modifiedon' => date('Y-m-d h:i:s')
+							'request_pkwt' => $session['user_id'],
+							'request_date' => date('Y-m-d h:i:s')
 						);
 
 
@@ -678,7 +683,7 @@ class Employee_pkwt extends MY_Controller {
 				'nip' => $result[0]->employee_id,
 				'employee' => $this->Employees_model->read_employee_info_by_nik($result[0]->employee_id),
 				'company' => $result[0]->company,
-				'jabatan' => $result[0]->jabatan,
+				'posisi' => $this->Designation_model->read_designation_information($result[0]->jabatan),
 				'project' => $this->Project_model->read_project_information($result[0]->project),
 				'penempatan' => $result[0]->penempatan,
 

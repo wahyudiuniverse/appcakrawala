@@ -44,13 +44,13 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> REQUEST PKWT</h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> CANCEL PKWT</h4>
   </div>
 
 
   <?php $attributes = array('name' => 'edit_company', 'id' => 'edit_company', 'autocomplete' => 'off', 'class'=>'m-b-1');?>
   <?php $hidden = array('_method' => 'EDIT', '_token' => $_GET['company_id'], 'ext_name' => $contract_id);?>
-  <?php echo form_open_multipart('admin/Employee_pkwt_apnom/update/'.$contract_id, $attributes, $hidden);?>
+  <?php echo form_open_multipart('admin/Employee_pkwt_cancel/update/'.$contract_id, $attributes, $hidden);?>
 
 
  <hr style="height:1px;border-width:0;color:gray;background-color:gray; margin: auto;">
@@ -103,6 +103,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
+          <input type="" name="employeeID" value="<?php echo $nip;?>" hidden>
           <label for="plant"><?php echo ': '.$nip;?></label>
         </div>
       </div>
@@ -475,77 +476,114 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 <?php } ?>
 
 
-<!-- FOTO KTP -->
+<!-- REVISI FOTO KTP -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
-      <!-- APPROVED -->
+      <input name="fktp_name" type="text" value="<?php echo $ktp;?>" hidden>
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">KTP</label>
+          <label for="penempatan">Foto KTP</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/ktp/'.$ktp.'" target="_blank"> '.$ktp.'</a>';?></label>
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="document_ktp" name="document_ktp">
+                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                            </fieldset>
+                          </div>
         </div>
-      </div>
-    </div>
+      </div><?php echo '<a href="'.base_url().'uploads/document/ktp/'.$ktp.'" target="_blank"> '.$ktp.'</a>';?></div>
   </div>
 
-<!-- FOTO KK -->
+<!-- REVISI FOTO KK -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
-      <!-- APPROVED -->
+      <input name="fkk_name" type="text" value="<?php echo $kk;?>" hidden>
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">KK</label>
+          <label for="penempatan">Foto KK</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/kk/'.$kk.'" target="_blank"> '.$kk.'</a>';?></label>
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="document_kk" name="document_kk">
+                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                            </fieldset>
+                          </div>
         </div>
-      </div>
-    </div>
+      </div><?php echo '<a href="'.base_url().'uploads/document/kk/'.$kk.'" target="_blank"> '.$kk.'</a>';?></div>
   </div>
 
-<!-- FOTO SKCK -->
+
+<!-- REVISI FOTO SKCK -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
-      <!-- APPROVED -->
+      <input name="fskck_name" type="text" value="<?php echo $skck;?>" hidden>
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">SKCK</label>
+          <label for="penempatan">Foto SKCK</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/skck/'.$skck.'" target="_blank"> '.$skck.'</a>';?></label>
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="document_skck" name="document_skck">
+                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                            </fieldset>
+                          </div>
         </div>
-      </div>
-    </div>
+      </div><?php echo '<a href="'.base_url().'uploads/document/skck/'.$skck.'" target="_blank"> '.$skck.'</a>';?></div>
   </div>
 
-<!-- FOTO IJAZAH -->
+
+<!-- REVISI FOTO IJAZAH -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
-      <!-- APPROVED -->
+      <input name="fijz_name" type="text" value="<?php echo $ktp;?>" hidden>
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">IJAZAH</label>
+          <label for="penempatan">Foto IJAZAH</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/ijazah/'.$ijazah.'" target="_blank"> '.$ijazah.'</a>';?></label>
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="document_ijazah" name="document_ijazah">
+                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                            </fieldset>
+                          </div>
+        </div>
+      </div><?php echo '<a href="'.base_url().'uploads/document/ijazah/'.$ijazah.'" target="_blank"> '.$ijazah.'</a>';?></div>
+  </div>
+
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" >
+    <div class="row" style="background-color: #ff4f4f;">
+      <!-- REQUESTED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi" style="color: white;">Info Revisi</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant" style="color: white;"><?php echo ': '.$info_revisi;?></label>
         </div>
       </div>
     </div>
   </div>
+  
   
 <!-- APPROVAL -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
@@ -602,55 +640,73 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
-    <?php if(in_array('503',$role_resources_ids)) { ?>
-    <button type="submit" class="btn btn-primary save">APPROVE NOM</button>
+    <?php if(in_array('490',$role_resources_ids)) { ?>
+    <button type="submit" class="btn btn-success save">SAVE REVISI</button>
     <?php } ?>
+    
   </div>
+<style type="text/css">
+  
+  input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #26ae61;
+  padding: 10px 20px;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #20c997;
+}
+</style>
 
 <?php echo form_close(); ?>
 <script type="text/javascript">
 
  $(document).ready(function(){
-							
-		$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
-		$('[data-plugin="select_hrm"]').select2({ width:'100%' });	
-		$('.d_date').bootstrapMaterialDatePicker({
-			weekStart: 0,
-			time: false,
-			clearButton: false,
-			format: 'YYYY-MM-DD'
-		}); 
-		
-		Ladda.bind('button[type=submit]');
-		/* Edit data */
-		$("#edit_company").submit(function(e){
-			var fd = new FormData(this);
-			var obj = $(this), action = obj.attr('name');
-			fd.append("is_ajax", 2);
-			fd.append("edit_type", 'company');
-			fd.append("form", action);
-			e.preventDefault();
-			$('.save').prop('disabled', true);
-			$.ajax({
-				url: e.target.action,
-				type: "POST",
-				data:  fd,
-				contentType: false,
-				cache: false,
-				processData:false,
-				success: function(JSON)
-				{
-					if (JSON.error != '') {
-						toastr.error(JSON.error);
-						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-						$('.save').prop('disabled', false);
-						Ladda.stopAll();
-					} else {
-						// On page load: datatable
+              
+    $('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
+    $('[data-plugin="select_hrm"]').select2({ width:'100%' });  
+    $('.d_date').bootstrapMaterialDatePicker({
+      weekStart: 0,
+      time: false,
+      clearButton: false,
+      format: 'YYYY-MM-DD'
+    }); 
+    
+    Ladda.bind('button[type=submit]');
+    /* Edit data */
+    $("#edit_company").submit(function(e){
+      var fd = new FormData(this);
+      var obj = $(this), action = obj.attr('name');
+      fd.append("is_ajax", 2);
+      fd.append("edit_type", 'company');
+      fd.append("form", action);
+      e.preventDefault();
+      $('.save').prop('disabled', true);
+      $.ajax({
+        url: e.target.action,
+        type: "POST",
+        data:  fd,
+        contentType: false,
+        cache: false,
+        processData:false,
+        success: function(JSON)
+        {
+          if (JSON.error != '') {
+            toastr.error(JSON.error);
+            $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+            $('.save').prop('disabled', false);
+            Ladda.stopAll();
+          } else {
+            // On page load: datatable
                var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
     "ajax": {
-            url : base_url+"/pkwt_list_appnom/",
+            url : base_url+"/pkwt_list_appcancel/",
             type : 'GET'
         },
     dom: 'lBfrtip',
@@ -660,25 +716,26 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     }
     });
 
-						xin_table.api().ajax.reload(function(){ 
-							toastr.success(JSON.result);
-						}, true);
-						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-						$('.edit-modal-data').modal('toggle');
-						$('.save').prop('disabled', false);
-						Ladda.stopAll();
-					}
-				},
-				error: function() 
-				{
-					toastr.error(JSON.error);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('.save').prop('disabled', false);
-					Ladda.stopAll();
-				} 	        
-		   });
-		});
-	});	
+            xin_table.api().ajax.reload(function(){ 
+              toastr.success(JSON.result);
+            }, true);
+            $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+            $('.edit-modal-data').modal('toggle');
+            $('.save').prop('disabled', false);
+            Ladda.stopAll();
+          }
+        },
+        error: function() 
+        {
+          toastr.error(JSON.error);
+          $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+          $('.save').prop('disabled', false);
+          Ladda.stopAll();
+        }           
+       });
+    });
+  }); 
   </script>
+
 <?php } ?>
 

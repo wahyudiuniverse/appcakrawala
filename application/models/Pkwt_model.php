@@ -261,6 +261,20 @@ class Pkwt_model extends CI_Model {
 			FROM xin_employee_contract
 			WHERE status_pkwt = 0
 			AND approve_nae = 0
+			AND cancel_stat = 0
+			ORDER BY contract_id DESC';
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_pkwt_cancel() {
+
+		$sql = 'SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 0
+			AND cancel_stat = 1
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -290,6 +304,7 @@ class Pkwt_model extends CI_Model {
 			AND approve_nae != 0
 			AND approve_nom !=0
 			AND approve_hrd = 0
+			AND cancel_stat = 0
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -301,7 +316,8 @@ class Pkwt_model extends CI_Model {
 
 		$sql = 'SELECT *
 			FROM xin_employee_contract
-			WHERE status_pkwt = 1
+			WHERE approve_nom !=0
+			AND status_pkwt = 1
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

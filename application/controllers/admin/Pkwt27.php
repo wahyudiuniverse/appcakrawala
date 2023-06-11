@@ -85,7 +85,7 @@ class Pkwt27 extends MY_Controller
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
 
-		if($pkwt[0]->approve_hrd==1 || $pkwt[0]->approve_hrd==0){
+		if($pkwt[0]->approve_hrd != null){
 
 				if($pkwt[0]->company==2){
 					$logo_cover = 'tcpdf_logo_sc.png';
@@ -1325,7 +1325,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 
 
-				if($allowance_grade!="0"){
+				if($allowance_grade!="Rp 0"){
 				$lampiran .= '
 					
 						<tr>
@@ -1334,7 +1334,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_area!="0"){
+				if($allowance_area!="Rp 0"){
 				$lampiran .= '
 					
 						<tr>
@@ -1343,7 +1343,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_masakerja!="0"){
+				if($allowance_masakerja!="Rp 0"){
 				$lampiran .= '
 					
 						<tr>
@@ -1352,7 +1352,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_transport!="0"){	
+				if($allowance_transport!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1361,7 +1361,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_rent!="0"){	
+				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1370,7 +1370,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_komunikasi!="0"){	
+				if($allowance_komunikasi!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1379,7 +1379,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_park!="0"){	
+				if($allowance_park!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1388,7 +1388,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_residance!="0"){	
+				if($allowance_residance!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1397,7 +1397,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_laptop!="0"){	
+				if($allowance_laptop!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1407,7 +1407,7 @@ class Pkwt27 extends MY_Controller
 				}
 
 
-				if($allowance_kasir!="0"){	
+				if($allowance_kasir!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1416,7 +1416,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_transmeal!="0"){	
+				if($allowance_transmeal!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1425,7 +1425,7 @@ class Pkwt27 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_medicine!="0"){	
+				if($allowance_medicine!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1435,7 +1435,7 @@ class Pkwt27 extends MY_Controller
 				}
 
 
-				if($allowance_akomodasi!="0"){	
+				if($allowance_akomodasi!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1445,7 +1445,7 @@ class Pkwt27 extends MY_Controller
 				}
 
 
-				if($allowance_operation!="0"){	
+				if($allowance_operation!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>

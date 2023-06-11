@@ -281,6 +281,7 @@ class Employee_pkwt_apnom extends MY_Controller {
 				'employee' => $this->Employees_model->read_employee_info_by_nik($result[0]->employee_id),
 				'company' => $result[0]->company,
 				'jabatan' => $result[0]->jabatan,
+				'posisi' => $this->Designation_model->read_designation_information($result[0]->jabatan),
 				'project' => $this->Project_model->read_project_information($result[0]->project),
 				'penempatan' => $result[0]->penempatan,
 

@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_pkwt_aphrd extends MY_Controller {
+class Employee_pkwt_cancel extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -47,22 +47,22 @@ class Employee_pkwt_aphrd extends MY_Controller {
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['breadcrumbs'] = $this->lang->line('xin_pkwt_digital');
-		$data['path_url'] = 'emp_pkwt_approve_hrd';
+		$data['path_url'] = 'emp_pkwt_cancel';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('505',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/pkwt/pkwt_list_apphrd", $data, TRUE);
+		if(in_array('504',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/pkwt/pkwt_list_appcancel", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
 		}
   }
 
-	public function pkwt_list_apphrd() {
+	public function pkwt_list_appcancel() {
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/pkwt/pkwt_list_apphrd", $data);
+			$this->load->view("admin/pkwt/pkwt_list_appcancel", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -75,7 +75,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 		// $employee = $this->Employees_model->get_employees_request_verify();
 		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
-		$employee = $this->Pkwt_model->get_monitoring_pkwt_aphrd();
+		$employee = $this->Pkwt_model->get_monitoring_pkwt_cancel();
 
 		$data = array();
 
@@ -87,14 +87,14 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				$penempatan = $r->penempatan;
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
 				$basic_pay = $r->basic_pay;
-				$approve_hrd = $r->approve_hrd;
+				$approve_nom = $r->approve_nom;
 
-				if($approve_hrd=='0'){
+				if($approve_nom=='0'){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Need Approval HRD</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval NOM</button>';
 				} else {
 					
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Approved</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval HRD</button>';
 				}
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
@@ -125,10 +125,8 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				// 	$designation_name = '--';	
 				// }
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">CANCEL</button>';
-
 			$data[] = array(
-				$status_migrasi.' '.$cancel,
+				$status_migrasi,
 				$nip,
 				$fullname,
 				$nama_project,
@@ -255,10 +253,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-
-			$idsubmit = substr($this->input->get('company_id'),0,1);
-			$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
-		// $id = $this->input->get('company_id');
+		$id = $this->input->get('company_id');
        // $data['all_countries'] = $this->xin_model->get_countries();
 		// $result = $this->Company_model->read_company_information('2');
 		// $result = $this->Employees_model->read_employee_info($id);
@@ -290,6 +285,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'project' => $this->Project_model->read_project_information($result[0]->project),
 				'penempatan' => $result[0]->penempatan,
 
+				'info_revisi' => $result[0]->cancel_ket,
 				'ktp' => $filename_ktp,
 				'kk' => $filename_kk,
 				'skck' => $filename_skck,
@@ -323,7 +319,6 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'allowance_transmeal' => $result[0]->allowance_transmeal,
 				'dm_allow_medicine' => $result[0]->dm_allow_medicine,
 				'allowance_medicine' => $result[0]->allowance_medicine,
-
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->request_pkwt),
 				'request_date' => $result[0]->request_date,
 				'approve_nae' => $this->Employees_model->read_employee_info($result[0]->approve_nae),
@@ -334,14 +329,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-
-		if($idsubmit=='$'){
-			$this->load->view('admin/pkwt/dialog_pkwt_approve_hrd', $data);
-		} else {
-			$this->load->view('admin/pkwt/dialog_pkwt_cancel_hrd', $data);
-		}
-
-		// $this->load->view('admin/pkwt/dialog_pkwt_approve_hrd', $data);
+		$this->load->view('admin/pkwt/dialog_pkwt_cancel', $data);
 	}
 	
 	// Validate and update info in database
@@ -353,37 +341,119 @@ class Employee_pkwt_aphrd extends MY_Controller {
 		}
 
 		if($this->input->post('edit_type')=='company') {
-
 		$id = $this->uri->segment(4);
-		$cancel = $this->uri->segment(5);
-
-		// $id = $this->uri->segment(4);
 				
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
+		$employeeID = $this->input->post('employeeID');
 
-			if($cancel=='YES'){
 
-				$data_up = array(
+							if($_FILES['document_ktp']['size'] == 0) {$fnamektp=$this->input->post('fktp_name');} else {
+								if(is_uploaded_file($_FILES['document_ktp']['tmp_name'])) {
+									//checking image type
+									$allowedktp =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$filenamektp = $_FILES['document_ktp']['name'];
+									$extktp = pathinfo($filenamektp, PATHINFO_EXTENSION);
+									
+									if(in_array($extktp,$allowedktp)){
+										$tmp_namektp = $_FILES["document_ktp"]["tmp_name"];
+										$documentdktp = "uploads/document/ktp/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_ktp"]["name"]);
+										$newfilenamektp = 'ktp_'.round(microtime(true)).'.'.$extktp;
+										move_uploaded_file($tmp_namektp, $documentdktp.$newfilenamektp);
+										$fnamektp = $newfilenamektp;
+									} else {
+										$Return['error'] = 'Jenis File KTP tidak diterima..';
+									}
+								}
+							}
 
-					'cancel_stat' =>  1,
-					'cancel_on' => date("Y-m-d h:i:s"),
-					'cancel_by' => $session['user_id'],
-					'cancel_ket' 	=> $this->input->post('ket_revisi')
 
-				);
-			} else {
-				$data_up = array(
+							if($_FILES['document_kk']['size'] == 0) {$fnamekk=$this->input->post('fkk_name');} else {
+								if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
+									//checking image type
+									$allowedkk =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$filenamekk = $_FILES['document_kk']['name'];
+									$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
+									
+									if(in_array($extkk,$allowedkk)){
+										$tmp_namekk = $_FILES["document_kk"]["tmp_name"];
+										$documentdkk = "uploads/document/kk/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_kk"]["name"]);
+										$newfilenamekk = 'kk_'.round(microtime(true)).'.'.$extkk;
+										move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
+										$fnamekk = $newfilenamekk;
+									} else {
+										$Return['error'] = 'Jenis File KK tidak diterima..';
+									}
+								}
+							}
 
-				'status_pkwt	' => 1,
-				'approve_hrd' =>  $session['user_id'],
-				'approve_hrd_date' => date("Y-m-d h:i:s")
+							if($_FILES['document_skck']['size'] == 0) {$fnameskck=$this->input->post('fskck_name');} else {
+								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
+									//checking image type
+									$allowedskck =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$filenameskck = $_FILES['document_skck']['name'];
+									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+									
+									if(in_array($extskck,$allowedskck)){
+										$tmp_nameskck = $_FILES["document_skck"]["tmp_name"];
+										$documentdskck = "uploads/document/skck/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_skck"]["name"]);
+										$newfilenameskck = 'skck_'.round(microtime(true)).'.'.$extskck;
+										move_uploaded_file($tmp_nameskck, $documentdskck.$newfilenameskck);
+										$fnameskck = $newfilenameskck;
+									} else {
+										$Return['error'] = 'Jenis File SKCK tidak diterima..';
+									}
+								}
+							}
 
-				);
-			}
+							if($_FILES['document_ijazah']['size'] == 0) {$fnameijazah=$this->input->post('fijz_name');} else {
+								if(is_uploaded_file($_FILES['document_ijazah']['tmp_name'])) {
+									//checking image type
+									$allowedijazah =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$filenameijazah = $_FILES['document_ijazah']['name'];
+									$extijazah = pathinfo($filenameijazah, PATHINFO_EXTENSION);
+									
+									if(in_array($extijazah,$allowedijazah)){
+										$tmp_nameijazah = $_FILES["document_ijazah"]["tmp_name"];
+										$documentdijazah = "uploads/document/ijazah/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_ijazah"]["name"]);
+										$newfilenameijazah = 'skck_'.round(microtime(true)).'.'.$extijazah;
+										move_uploaded_file($tmp_nameijazah, $documentdijazah.$newfilenameijazah);
+										$fnameijazah = $newfilenameijazah;
+									} else {
+										$Return['error'] = 'Jenis File IJAZAH tidak diterima..';
+									}
+								}
+							}
 
+
+			$data_emp = array(
+				'filename_ktp'				=> $fnamektp,
+				'filename_kk' 				=> $fnamekk,
+				'filename_skck' 			=> $fnameskck,
+				'filename_isd'				=> $fnameijazah
+			);
+
+			$result = $this->Employees_model->update_record_bynip($data_emp,$employeeID);
+
+			$data_up = array(
+				'cancel_stat'			=> 0,
+				'modifiedby' 			=>  $session['user_id'],
+				'modifiedon' 			=> date('Y-m-d h:i:s')
+			);
 
 			$result = $this->Pkwt_model->update_pkwt_apnae($data_up,$id);
 
