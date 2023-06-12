@@ -50,7 +50,7 @@
 	public function get_all_eslip() {
 
 		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_eslip
-GROUP BY uploadid ORDER BY uploadid DESC";
+GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

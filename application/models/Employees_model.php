@@ -410,7 +410,7 @@ class Employees_model extends CI_Model {
 	// get single employee by NIP
 	public function read_eslip_by_nip($id) {
 	
-		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ?';
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? ORDER BY secid DESC LIMIT 6';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

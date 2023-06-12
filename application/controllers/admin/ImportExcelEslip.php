@@ -431,6 +431,7 @@ class ImportExcelEslip extends MY_Controller
 				$project = $user[0]->project;
 				$project_sub = $user[0]->project_sub;
 				$area = $user[0]->area;
+				$status_emp = $user[0]->status_emp;
 				$hari_kerja = $user[0]->hari_kerja;
 				$gaji_pokok = $user[0]->gaji_pokok;
 
@@ -493,6 +494,7 @@ class ImportExcelEslip extends MY_Controller
 					'project' => $project,
 					'project_sub' => $project_sub,
 					'area' => $area,
+					'status_emp' => $status_emp,
 					'hari_kerja' => $hari_kerja,
 					'gaji_pokok' => $gaji_pokok,
 					'allow_jabatan' => $allow_jabatan,
@@ -604,6 +606,7 @@ class ImportExcelEslip extends MY_Controller
 				$project = $user[0]->project;
 				$project_sub = $user[0]->project_sub;
 				$area = $user[0]->area;
+				$status_emp = $user[0]->status_emp;
 				$hari_kerja = $user[0]->hari_kerja;
 				$gaji_pokok = $user[0]->gaji_pokok;
 
@@ -666,6 +669,7 @@ class ImportExcelEslip extends MY_Controller
 					'project' => $project,
 					'project_sub' => $project_sub,
 					'area' => $area,
+					'status_emp' => $status_emp,
 					'hari_kerja' => $hari_kerja,
 					'gaji_pokok' => $gaji_pokok,
 
@@ -1542,6 +1546,8 @@ class ImportExcelEslip extends MY_Controller
 			</table>';
 
 
+
+
 			if($over_salary!=0) {
 				$tbl_2 .= '
 				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1560,8 +1566,45 @@ class ImportExcelEslip extends MY_Controller
 			}
 
 
+			if($adjustment!=0){
 			$tbl_2 .= '
-			<br>
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			if($adjustment_dlk!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment DLK</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+
+			$tbl_2 .= '
+			<br><br>
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
 			<br>
@@ -1789,42 +1832,6 @@ class ImportExcelEslip extends MY_Controller
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
 			<br>';
-
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
 
 			$tbl_2 .= '
 			<br><br>
@@ -2630,6 +2637,7 @@ class ImportExcelEslip extends MY_Controller
 			</table>';
 
 
+
 			if($over_salary!=0) {
 				$tbl_2 .= '
 				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -2647,8 +2655,44 @@ class ImportExcelEslip extends MY_Controller
 				</table>';
 			}
 
+			if($adjustment!=0){
 			$tbl_2 .= '
-			<br>
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			if($adjustment_dlk!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment DLK</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			$tbl_2 .= '
+			<br><br>
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
 			<br>
@@ -2875,41 +2919,6 @@ class ImportExcelEslip extends MY_Controller
 			</table>
 			<br>';
 
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
 
 			$tbl_2 .= '
 			<br><br>
