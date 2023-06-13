@@ -267,7 +267,7 @@ class Reports extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
-	
+
 	// employees report
 	public function pkwt() {
 	
@@ -2130,7 +2130,7 @@ class Reports extends MY_Controller
 		}
 
 		$uploadID = $this->input->get('upid', TRUE);
-		// $uploadID = '20221227095351152';
+		// $uploadID = '20230612142717943';
 
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
@@ -2181,8 +2181,13 @@ class Reports extends MY_Controller
 			// }
 
 			$data[] = array (
+				$r->status_emp,
 				$r->nip,
-				$r->fullname
+				$r->fullname,
+
+				$this->Xin_model->rupiah_titik($r->gaji_pokok),
+				$this->Xin_model->rupiah_titik($r->bpjs_tk_deduction + $r->bpjs_tk),
+				$this->Xin_model->rupiah_titik($r->bpjs_ks_deduction + $r->bpjs_ks)
 			);
 		}
 

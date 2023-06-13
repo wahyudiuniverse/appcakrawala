@@ -22,8 +22,13 @@
           <table class="datatables-demo table table-striped table-bordered" id="xin_table" style="width:100%;table-layout: fixed;">
             <thead>
               <tr>
-                <th style="width: 100px;">Status</th>
-                <th style="width: 60px;"><?php echo $this->lang->line('xin_nip');?></th>
+                <th>Status</th>
+                <th>NIP</th>
+                <th>Nama Lengkap</th>
+
+                <th>Gapok UMK</th>
+                <th>BPJS Ketenagakerjaan</th>
+                <th>BPJS Kesehatan</th>
               </tr>
             </thead>
           </table>

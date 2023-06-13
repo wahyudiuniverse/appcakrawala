@@ -55,6 +55,18 @@ GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
 		$query = $this->db->query($sql);
 	    return $query;
 	}
+
+	 	// get all employes
+	public function get_eslip_project() {
+
+		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_eslip
+		WHERE createdby != 1
+GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
  	// get all employes
 	public function get_all_ratecard() {
 
