@@ -13,6 +13,9 @@
 <div class="row m-b-1 <?php echo $get_animate;?>">
   <div class="col-md-12">
     <div class="card">
+
+    <input readonly id="uploadid" name="uploadid" type="hidden" value="<?php echo $uploadid;?>">
+    
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_hr_report_employees');?></strong></span> </div>
       <div class="card-body">
         <div class="box-datatable table-responsive">

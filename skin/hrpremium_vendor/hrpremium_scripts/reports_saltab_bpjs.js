@@ -2,8 +2,9 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"reports/saltab_bpjs_list/?upid="+$('#uploadid').val(),
-            // url : base_url+"/view_import_excel_employees/?upid="+$('#uploadid').val(),
+            // url : site_url+"reports/saltab_bpjs_list/?upid="+$('#uploadid').val(),
+            url : base_url+"/saltab_bpjs_list/?upid="+$('#uploadid').val(),
+            // url : site_url+"reports/saltab_bpjs_list/"+$('#uploadid').val()+"/",
             type : 'GET'
         },
 		dom: 'lBfrtip',

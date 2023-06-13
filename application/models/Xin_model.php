@@ -385,7 +385,11 @@ class Xin_model extends CI_Model {
 			$arr['man_employees_active'] = 'active';
 			$arr['emp_request_open'] = 'open';
 			return $arr;
-		} else if($mClass=='reports' && $mMethod=='bpjs_employees') {
+		} else if($mClass=='importexcel' && $mMethod=='bpjs') {
+			$arr['bpjs_employees_active'] = 'active';
+			$arr['bpjs_employees_open'] = 'open';
+			return $arr;
+		} else if($mClass=='reports' && $mMethod=='saltab_bpjs') {
 			$arr['bpjs_employees_active'] = 'active';
 			$arr['bpjs_employees_open'] = 'open';
 			return $arr;

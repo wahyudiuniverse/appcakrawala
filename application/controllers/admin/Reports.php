@@ -26,8 +26,22 @@ class Reports extends MY_Controller
      {
           parent::__construct();
           //load the login model
+          //load the login model
 		  $this->load->model('Xin_model');
 		  $this->load->model("Employees_model");
+		  $this->load->model('Customers_model');
+          $this->load->model('Company_model');
+		  $this->load->model('Exin_model');
+		  $this->load->model('Department_model');
+		  $this->load->model('Payroll_model');
+		  $this->load->model('Reports_model');
+		  $this->load->model('Timesheet_model');
+		  $this->load->model('Training_model');
+		  $this->load->model('Trainers_model');
+		  $this->load->model("Project_model");
+		  $this->load->model("Roles_model");
+		  $this->load->model("Designation_model");
+		  $this->load->model("Pkwt_model");
 		  $this->load->model("Bpjs_model");
      }
 	 
@@ -253,6 +267,7 @@ class Reports extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+	
 	// employees report
 	public function pkwt() {
 	
@@ -2088,8 +2103,8 @@ class Reports extends MY_Controller
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['title'] = 'Saltab to BPJS | '.$this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->input->get('upid', TRUE);
-		$data['path_url'] = 'reports_saltab_bpjs';
 		$data['uploadid'] = $this->input->get('upid', TRUE);
+		$data['path_url'] = 'reports_saltab_bpjs';
 		// $data['all_companies'] = $this->Xin_model->get_companies();
 		// $data['all_departments'] = $this->Department_model->all_departments();
 		// $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
@@ -2108,25 +2123,19 @@ class Reports extends MY_Controller
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
+		if(!empty($session)){
 			$this->load->view("admin/reports/saltab_bpjs", $data);
 		} else {
 			redirect('admin/');
 		}
 
 		$uploadID = $this->input->get('upid', TRUE);
+		// $uploadID = '20221227095351152';
 
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-
-		
-		// $company_id = $this->uri->segment(4);
-		// $project_id = $this->uri->segment(5);
-		// $sub_id = $this->uri->segment(6);
-		$kya = 'A';
-		$kyb = 'B';
 
 			$employee = $this->Bpjs_model->saltab_bpjs_list($uploadID);
 
@@ -2172,7 +2181,7 @@ class Reports extends MY_Controller
 			// }
 
 			$data[] = array (
-				'r->employee_id',
+				$r->nip,
 				$r->fullname
 			);
 		}

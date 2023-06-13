@@ -1119,25 +1119,100 @@ class ImportExcel extends MY_Controller
 
 
 	// expired page
-	// public function preview() {
+	public function bpjs() {
 	
-	// 	$session = $this->session->userdata('username');
-	// 	if(empty($session)){ 
-	// 		redirect('admin/');
-	// 	}
-	// 	$data['title'] = $this->lang->line('xin_import_excl_eslip').' | '.$this->Xin_model->site_title();
-	// 	$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip');
-	// 	$data['all_projects'] = $this->Project_model->get_projects();
-	// 	$data['path_url'] = 'hrpremium_import_eslip';
-	// 	$role_resources_ids = $this->Xin_model->user_role_resource();
-	// 	if(in_array('469',$role_resources_ids)) {
-	// 		// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-	// 		$data['subview'] = $this->load->view("admin/import_excel/import_eslip", $data, TRUE);
-	// 		$this->load->view('admin/layout/layout_main', $data); //page load
-	// 	} else {
-	// 		redirect('admin/dashboard');
-	// 	}
-	// }
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = 'E-Slip To BPJS | '.$this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'E-Slip to BPJS';
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_eslip_bpjs';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if(in_array('469',$role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/bpjs/eslip_bpjs_list", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+  public function history_upload_eslip_bpjs() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/bpjs/eslip_bpjs_list", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_eslip();
+
+		$data = array();
+
+          foreach($history_eslip->result() as $r) {
+          	$uploadid = $r->uploadid;
+          	$up_date = $r->up_date;
+				  	$periode = $r->periode;
+				  	$project = $r->project;
+				  	$project_sub = $this->Xin_model->clean_post($r->project_sub);
+				  	$total_mp = $r->total_mp;
+				  	$createdby = $r->createdby;
+
+				  	$preiode_param = str_replace(" ","",$r->periode);
+				  	$project_param = str_replace(" ","",$r->project);
+				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->project_sub)));
+
+			  // get created
+			  $empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			  if(!is_null($empname)){
+			  	$fullname = $empname[0]->first_name;
+			  } else {
+				  $fullname = '--';	
+			  }
+
+			  			$view_data = '<a href="'.site_url().'admin/reports/saltab_bpjs/?upid='.$uploadid.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+
+
+
+     	$data[] = array(
+			  $view_data,
+			  $up_date,
+       	$periode,
+				$project,
+        $project_sub,
+       	$total_mp,
+				$fullname,
+      );
+    }
+
+          $output = array(
+               "draw" => $draw,
+                 "recordsTotal" => $history_eslip->num_rows(),
+                 "recordsFiltered" => $history_eslip->num_rows(),
+                 "data" => $data
+            );
+          echo json_encode($output);
+          exit();
+  }
+
 
 } 
 ?>

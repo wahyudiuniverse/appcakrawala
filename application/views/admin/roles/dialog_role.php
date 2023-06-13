@@ -974,7 +974,7 @@ dataSource: [
 	},
 
 
-//KARYAWAN BPJS
+//KARYAWAN BPJS EMPLOYEE
 	{ 
 		id: "", 
 		class: "role-checkbox-modal custom-control-input", 
@@ -996,11 +996,12 @@ dataSource: [
 		{ 
 			id: "", 
 			class: "role-checkbox-modal custom-control-input", 
-			text: "<?php echo $this->lang->line('xin_role_view_menu');?>",  
-			add_info: "<?php echo $this->lang->line('xin_role_view_menu');?>", 
+			text: "Saltab",  
+			add_info: "saltab", 
 			value: "477", 
 			check: "<?php if(isset($_GET['role_id'])) { if(in_array('477',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 		}
+		
 		]
 	},
 
