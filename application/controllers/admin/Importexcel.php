@@ -1130,7 +1130,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Project_model->get_projects();
 		$data['path_url'] = 'hrpremium_eslip_bpjs';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('469',$role_resources_ids)) {
+		if(in_array('477',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/bpjs/eslip_bpjs_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -1188,7 +1188,7 @@ class ImportExcel extends MY_Controller
 				  $fullname = '--';	
 			  }
 
-			  			$view_data = '<a href="'.site_url().'admin/reports/saltab_bpjs/?upid='.$uploadid.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			  			$view_data = '<a href="'.site_url().'admin/reports/saltab_bpjs/?upid='.$uploadid.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
 
 
 

@@ -437,14 +437,15 @@ $(document).ready(function(){
 	/* Add document info */
 	$("#document_info").submit(function(e){
 		var fd = new FormData(this);
-		$('.icon-spinner3').show();
 		var obj = $(this), action = obj.attr('name');
 		fd.append("is_ajax", 7);
 		fd.append("type", 'document_info');
 		fd.append("data", 'document_info');
 		fd.append("form", action);
 		e.preventDefault();
+		$('.icon-spinner3').show();
 		$('.save').prop('disabled', true);
+
 		$.ajax({
 			url: e.target.action,
 			type: "POST",
@@ -455,29 +456,27 @@ $(document).ready(function(){
 			success: function(JSON)
 			{
 				if (JSON.error != '') {
+					Ladda.stopAll();
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
 					$('.icon-spinner3').hide();
-					Ladda.stopAll();
 				} else {
 					xin_table_document.api().ajax.reload(function(){ 
+						Ladda.stopAll();
 						toastr.success(JSON.result);
+						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					}, true);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.icon-spinner3').hide();
-					jQuery('#document_info')[0].reset(); // To reset form fields
+					// jQuery('#document_info')[0].reset(); // To reset form fields
 					$('.save').prop('disabled', false);
-					Ladda.stopAll();
 				}
 			},
 			error: function() 
 			{
-				toastr.error(JSON.error);
-				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-				$('.icon-spinner3').hide();
-				$('.save').prop('disabled', false);
 				Ladda.stopAll();
+				toastr.error(JSON.error);
+				$('.save').prop('disabled', false);
 			} 	        
 	   });
 	});

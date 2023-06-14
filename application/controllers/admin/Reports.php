@@ -2180,14 +2180,16 @@ class Reports extends MY_Controller
 			// 	$fotovOut = '-';
 			// }
 
+				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->nip.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+
 			$data[] = array (
 				$r->status_emp,
-				$r->nip,
+				$edit.' '.$r->nip,
 				$r->fullname,
 
-				$this->Xin_model->rupiah_titik($r->gaji_pokok),
-				$this->Xin_model->rupiah_titik($r->bpjs_tk_deduction + $r->bpjs_tk),
-				$this->Xin_model->rupiah_titik($r->bpjs_ks_deduction + $r->bpjs_ks)
+				$r->gaji_pokok,
+				$r->bpjs_tk_deduction + $r->bpjs_tk,
+				$r->bpjs_ks_deduction + $r->bpjs_ks
 			);
 		}
 

@@ -510,6 +510,8 @@
                         <input name="ffile_skck" type="text" value="<?php echo $filename_skck;?>" hidden>
                         <input name="ffile_pkwt" type="text" value="<?php echo $filename_pkwt;?>" hidden>
                         <input name="ffile_isd" type="text" value="<?php echo $filename_isd;?>" hidden>
+                        <input name="ffile_pak" type="text" value="<?php echo $filename_paklaring;?>" hidden>
+
 
                       <!-- KTP -->
                       <div class="row">
@@ -517,8 +519,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">Foto KTP</label>
-                              <input type="file" class="form-control-file" id="document_file" name="document_file">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_file" name="document_file" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -544,8 +546,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">Foto KK </label>
-                              <input type="file" class="form-control-file" id="document_file_kk" name="document_file_kk">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_file_kk" name="document_file_kk" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -571,8 +573,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">Foto NPWP </label>
-                              <input type="file" class="form-control-file" id="document_file_npwp" name="document_file_npwp">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="document_file_npwp" name="document_file_npwp" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -598,8 +600,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">CV / Riwayat Hidup</label>
-                              <input type="file" class="form-control-file" id="document_file_cv" name="document_file_cv">
-                              <small>Jenis Photo/File: pdf</small>
+                              <input type="file" class="form-control-file" id="document_file_cv" name="document_file_cv" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -622,8 +624,8 @@
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">SKCK POLRI</label>
-                              <input type="file" class="form-control-file" id="document_file_skck" name="document_file_skck">
-                              <small>Jenis Photo/File: pdf</small>
+                              <input type="file" class="form-control-file" id="document_file_skck" name="document_file_skck" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -640,37 +642,14 @@
                         </div>
                       </div>
 
-                      <!-- PKWT -->
-                      <div class="row">
-                        <div class="col-md-5">
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <label for="logo">PKWT FILE</label>
-                              <input type="file" class="form-control-file" id="document_file_pkwt" name="document_file_pkwt">
-                              <small>Jenis Photo/File: pdf</small>
-                            </fieldset>
-                          </div>
-                        </div>
-                        <div class="col-md-4">
-                          <div class="form-group">
-                            <div class="card-body media align-items-center"> 
-                                <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"><?php echo $filename_pkwt; ?></a>
-                              <div class="media-body ml-4"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                        </div>
-                      </div>
-
                       <!-- IJAZAH SD -->
                       <div class="row">
                         <div class="col-md-5">
                           <div class="form-group">
                             <fieldset class="form-group">
                               <label for="logo">IJAZAH TERAKHIR</label>
-                              <input type="file" class="form-control-file" id="document_file_isd" name="document_file_isd">
-                              <small>Jenis Photo/File: pdf</small>
+                              <input type="file" class="form-control-file" id="document_file_isd" name="document_file_isd" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
@@ -686,6 +665,55 @@
                         <div class="col-md-3">
                         </div>
                       </div>
+                      
+                      <!-- PAKLARING -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">PAKLARING</label>
+                              <input type="file" class="form-control-file" id="document_file_pak" name="document_file_pak" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+        
+                          <div class="form-group">
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/paklaring/'.$filename_paklaring;?>" target="_blank"><?php echo $filename_paklaring; ?></a>
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                      </div>
+                      
+                      <!-- PKWT -->
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">PKWT FILE</label>
+                              <input type="file" class="form-control-file" id="document_file_pkwt" name="document_file_pkwt" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <div class="card-body media align-items-center"> 
+                                <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"><?php echo $filename_pkwt; ?></a>
+                              <div class="media-body ml-4"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                      </div>
+
+
 
                       <div class="row">
                         <div class="col-md-12">

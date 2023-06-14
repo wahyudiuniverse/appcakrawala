@@ -117,6 +117,7 @@ class Profile extends MY_Controller {
 			'filename_skck' => $result[0]->filename_skck,
 			'filename_pkwt' => $result[0]->filename_pkwt,
 			'filename_isd' => $result[0]->filename_isd,
+			'filename_paklaring' => $result[0]->filename_paklaring,
 			'bpjs_tk_no' => $result[0]->bpjs_tk_no,
 			'bpjs_tk_status' => $result[0]->bpjs_tk_status,
 			'bpjs_ks_no' => $result[0]->bpjs_ks_no,
