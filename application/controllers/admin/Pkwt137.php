@@ -239,6 +239,7 @@ class Pkwt137 extends MY_Controller
 					$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
 					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
 					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
+					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
 					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
 					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
 					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
@@ -1315,6 +1316,15 @@ class Pkwt137 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_meal!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Makan</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+						</tr>';
+				}
+				
 				if($allowance_transport!="Rp 0"){	
 				$lampiran .= '
 					

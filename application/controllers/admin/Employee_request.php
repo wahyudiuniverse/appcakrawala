@@ -36,7 +36,7 @@ class Employee_request extends MY_Controller {
 	
 	public function index() {
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)){
 			redirect('admin/');
 		}
 		$data['title'] = $this->lang->line('xin_request_employee').' | '.$this->Xin_model->site_title();
@@ -326,11 +326,33 @@ class Employee_request extends MY_Controller {
 								}
 							}
 
+							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=0;} else {
+								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
+									//checking image type
+									$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+									$filenameijz = $_FILES['document_ijz']['name'];
+									$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
+									
+									if(in_array($extijz,$allowedijz)){
+										$tmp_nameijz = $_FILES["document_ijz"]["tmp_name"];
+										$documentdijz = "uploads/document/ijazah/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_ijz"]["name"]);
+										$newfilenameijz = 'ijazah_'.round(microtime(true)).'.'.$extijz;
+										move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
+										$fnameijz = $newfilenameijz;
+									} else {
+										$Return['error'] = 'Jenis File Ijazah tidak diterima..';
+									}
+								}
+							}
+
 
 							if($_FILES['document_skck']['size'] == 0) {$fnameskck=0;} else {
 								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 									//checking image type
-									$allowedskck =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+									$allowedskck =  array('pdf','PDF');
 									$filenameskck = $_FILES['document_skck']['name'];
 									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
 									
@@ -369,33 +391,12 @@ class Employee_request extends MY_Controller {
 								}
 							}
 
-							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=0;} else {
-								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
-									//checking image type
-									$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-									$filenameijz = $_FILES['document_ijz']['name'];
-									$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
-									
-									if(in_array($extijz,$allowedijz)){
-										$tmp_nameijz = $_FILES["document_ijz"]["tmp_name"];
-										$documentdijz = "uploads/document/ijazah/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["document_ijz"]["name"]);
-										$newfilenameijz = 'ijazah_'.round(microtime(true)).'.'.$extijz;
-										move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
-										$fnameijz = $newfilenameijz;
-									} else {
-										$Return['error'] = 'Jenis File Ijazah tidak diterima..';
-									}
-								}
-							}
 
 
 							if($_FILES['document_pkl']['size'] == 0) {$fnamepkl=0;} else {
 								if(is_uploaded_file($_FILES['document_pkl']['tmp_name'])) {
 									//checking image type
-								$allowedpkl =  array('pdf','PDF');
+									$allowedpkl =  array('pdf','PDF');
 									$filenamepkl = $_FILES['document_pkl']['name'];
 									$extpkl = pathinfo($filenamepkl, PATHINFO_EXTENSION);
 									

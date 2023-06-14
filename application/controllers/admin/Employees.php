@@ -4233,21 +4233,21 @@ class Employees extends MY_Controller {
 			}
 
 			/* upload SKCK*/
-			if($_FILES['document_file_skck']['size'] == 0) {
+			if($_FILES['document_skck']['size'] == 0) {
 				$fname_skck = $this->input->post('ffile_skck');
 			} else {
-				if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
+				if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 					//checking image type
 					$allowed_skck =  array('pdf','PDF');
-					$filename_skck = $_FILES['document_file_skck']['name'];
+					$filename_skck = $_FILES['document_skck']['name'];
 					$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
 					
 					if(in_array($ext_skck,$allowed_skck)){
-						$tmp_name_skck = $_FILES["document_file_skck"]["tmp_name"];
+						$tmp_name_skck = $_FILES["document_skck"]["tmp_name"];
 						$documentd_skck = "uploads/document/skck/";
 						// basename() may prevent filesystem traversal attacks;
 						// further validation/sanitation of the filename may be appropriate
-						$name = basename($_FILES["document_file_skck"]["name"]);
+						$name = basename($_FILES["document_skck"]["name"]);
 						$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
 						move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
 						$fname_skck = $newfilename_skck;

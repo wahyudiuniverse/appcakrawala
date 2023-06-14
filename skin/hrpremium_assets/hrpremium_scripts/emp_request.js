@@ -108,15 +108,17 @@ $(document).ready(function() {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('#xin-form')[0].reset(); // To reset form fields
-					$('.add-form').removeClass('in');
+					$('.add-form').removeClass('show');
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				}
 			},
 			error: function() 
@@ -124,6 +126,7 @@ $(document).ready(function() {
 				toastr.error(JSON.error);
 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 				$('.save').prop('disabled', false);
+				Ladda.stopAll();
 			} 	        
 	   });
 	});
