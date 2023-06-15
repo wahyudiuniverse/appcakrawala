@@ -111,11 +111,14 @@ class Employee_pkwt extends MY_Controller {
 			  	$status_pkwt = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal">Contact IT Care</button>';
 				}
 
+
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
 					$fullname = $emp[0]->first_name;
+					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
 				} else {
 					$fullname = '--';	
+					$sub_project = '0';
 				}
 
 				$projects = $this->Project_model->read_single_project($r->project);
@@ -126,8 +129,7 @@ class Employee_pkwt extends MY_Controller {
 				}
 
 
-
-			$view_pkwt = '<a href="'.site_url().'admin/pkwt_all/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 			$data[] = array(
 				$no,
@@ -377,7 +379,7 @@ class Employee_pkwt extends MY_Controller {
 		
 		$data = array(
 			'id_project' => $id,
-			'waktu_kontrak' => ''
+			// 'waktu_kontrak' => ''
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
@@ -399,8 +401,8 @@ class Employee_pkwt extends MY_Controller {
 		$emp = $this->uri->segment(5);
 		
 		$data = array(
-			'id_project' => $emp,
-			'waktu_kontrak' => $id
+			'id_project' => $emp
+			// 'waktu_kontrak' => $id
 		);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 

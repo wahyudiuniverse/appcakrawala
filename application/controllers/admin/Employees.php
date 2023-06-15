@@ -4233,21 +4233,21 @@ class Employees extends MY_Controller {
 			}
 
 			/* upload SKCK*/
-			if($_FILES['document_skck']['size'] == 0) {
+			if($_FILES['document_file_skck']['size'] == 0) {
 				$fname_skck = $this->input->post('ffile_skck');
 			} else {
-				if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
+				if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
 					//checking image type
 					$allowed_skck =  array('pdf','PDF');
-					$filename_skck = $_FILES['document_skck']['name'];
+					$filename_skck = $_FILES['document_file_skck']['name'];
 					$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
 					
 					if(in_array($ext_skck,$allowed_skck)){
-						$tmp_name_skck = $_FILES["document_skck"]["tmp_name"];
+						$tmp_name_skck = $_FILES["document_file_skck"]["tmp_name"];
 						$documentd_skck = "uploads/document/skck/";
 						// basename() may prevent filesystem traversal attacks;
 						// further validation/sanitation of the filename may be appropriate
-						$name = basename($_FILES["document_skck"]["name"]);
+						$name = basename($_FILES["document_file_skck"]["name"]);
 						$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
 						move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
 						$fname_skck = $newfilename_skck;
@@ -4281,6 +4281,7 @@ class Employees extends MY_Controller {
 					}
 				}
 			}
+
 						/* upload PAKLARING*/
 			if($_FILES['document_file_pak']['size'] == 0) {
 				$fname_pak = $this->input->post('ffile_pak');
@@ -4334,7 +4335,7 @@ class Employees extends MY_Controller {
 		}
 
 		if($Return['error']!=''){
-       		$this->output($Return);
+				$this->output($Return);
     	}
 
 		//clean simple fields
@@ -4352,16 +4353,17 @@ class Employees extends MY_Controller {
 		$data = array(
 
 		'ktp_no' 				=> $nomor_ktp,
-		'filename_ktp' 	=> $fname,
 		'kk_no' 				=> $kk_no,
-		'filename_kk' 	=> $fname_kk,
 		'npwp_no' 			=> $npwp_no,
+
+		'filename_ktp' 	=> $fname,
+		'filename_kk' 	=> $fname_kk,
 		'filename_npwp' => $fname_npwp,
 		'filename_cv' 	=> $fname_cv,
 		'filename_skck' => $fname_skck,
 		'filename_isd' 	=> $fname_isd,
-		'filename_pkwt' => $fname_pkwt,
-		'filename_paklaring' => $fname_pak
+		'filename_paklaring' => $fname_pak,
+		'filename_pkwt' => $fname_pkwt
 
 		);
 

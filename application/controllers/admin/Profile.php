@@ -367,180 +367,180 @@ class Profile extends MY_Controller {
 			}
 		}
 		
-		if($_FILES['document_file']['size'] == 0) {
-			$fname = $this->input->post('ffoto_ktp');
-			// $fname = '';
-		} else {
-			if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
-				//checking image type
-				$allowed =  array('png','jpg','jpeg');
-				$filename = $_FILES['document_file']['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+		// if($_FILES['document_file']['size'] == 0) {
+		// 	$fname = $this->input->post('ffoto_ktp');
+		// 	// $fname = '';
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed =  array('png','jpg','jpeg');
+		// 		$filename = $_FILES['document_file']['name'];
+		// 		$ext = pathinfo($filename, PATHINFO_EXTENSION);
 				
-				if(in_array($ext,$allowed)){
-					$tmp_name = $_FILES["document_file"]["tmp_name"];
-					$documentd = "uploads/document/ktp/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file"]["name"]);
-					$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
-					move_uploaded_file($tmp_name, $documentd.$newfilename);
-					$fname = $newfilename;
-				} else {
-					$Return['error'] = 'Jenis File KTP tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext,$allowed)){
+		// 			$tmp_name = $_FILES["document_file"]["tmp_name"];
+		// 			$documentd = "uploads/document/ktp/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file"]["name"]);
+		// 			$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
+		// 			move_uploaded_file($tmp_name, $documentd.$newfilename);
+		// 			$fname = $newfilename;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File KTP tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		/* Check if file uploaded..*/
-		if($_FILES['document_file_kk']['size'] == 0) {
-			$fname_kk = $this->input->post('ffoto_kk');
-		} else {
-			if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
-				//checking image type
-				$allowed_kk =  array('png','jpg','jpeg');
-				$filename_kk = $_FILES['document_file_kk']['name'];
-				$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
+		// if($_FILES['document_file_kk']['size'] == 0) {
+		// 	$fname_kk = $this->input->post('ffoto_kk');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed_kk =  array('png','jpg','jpeg');
+		// 		$filename_kk = $_FILES['document_file_kk']['name'];
+		// 		$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_kk,$allowed_kk)){
-					$tmp_name_kk = $_FILES["document_file_kk"]["tmp_name"];
-					$documentd_kk = "uploads/document/kk/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file_kk"]["name"]);
-					$newfilename_kk = 'kk_'.round(microtime(true)).'.'.$ext_kk;
-					move_uploaded_file($tmp_name_kk, $documentd_kk.$newfilename_kk);
-					$fname_kk = $newfilename_kk;
-				} else {
-					$Return['error'] = 'Jenis File KK tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext_kk,$allowed_kk)){
+		// 			$tmp_name_kk = $_FILES["document_file_kk"]["tmp_name"];
+		// 			$documentd_kk = "uploads/document/kk/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file_kk"]["name"]);
+		// 			$newfilename_kk = 'kk_'.round(microtime(true)).'.'.$ext_kk;
+		// 			move_uploaded_file($tmp_name_kk, $documentd_kk.$newfilename_kk);
+		// 			$fname_kk = $newfilename_kk;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File KK tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		// /* Check if file uploaded..*/
-		if($_FILES['document_file_npwp']['size'] == 0) {
-			$fname_npwp = $this->input->post('ffoto_npwp');
-		} else {
-			if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
-				//checking image type
-				$allowed_npwp =  array('png','jpg','jpeg');
-				$filename_npwp = $_FILES['document_file_npwp']['name'];
-				$ext_npwp = pathinfo($filename_npwp, PATHINFO_EXTENSION);
+		// if($_FILES['document_file_npwp']['size'] == 0) {
+		// 	$fname_npwp = $this->input->post('ffoto_npwp');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed_npwp =  array('png','jpg','jpeg');
+		// 		$filename_npwp = $_FILES['document_file_npwp']['name'];
+		// 		$ext_npwp = pathinfo($filename_npwp, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_npwp,$allowed_npwp)){
-					$tmp_name_npwp = $_FILES["document_file_npwp"]["tmp_name"];
-					$documentd_npwp = "uploads/document/npwp/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file_npwp"]["name"]);
-					$newfilename_npwp = 'npwp_'.round(microtime(true)).'.'.$ext_npwp;
-					move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
-					$fname_npwp = $newfilename_npwp;
-				} else {
-					$Return['error'] = 'Jenis File KK tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext_npwp,$allowed_npwp)){
+		// 			$tmp_name_npwp = $_FILES["document_file_npwp"]["tmp_name"];
+		// 			$documentd_npwp = "uploads/document/npwp/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file_npwp"]["name"]);
+		// 			$newfilename_npwp = 'npwp_'.round(microtime(true)).'.'.$ext_npwp;
+		// 			move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
+		// 			$fname_npwp = $newfilename_npwp;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File KK tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		/* upload CV*/
-		if($_FILES['document_file_cv']['size'] == 0) {
-			$fname_cv = $this->input->post('ffile_cv');
-		} else {
-			if(is_uploaded_file($_FILES['document_file_cv']['tmp_name'])) {
-				//checking image type
-				$allowed_cv =  array('pdf','PDF');
-				$filename_cv = $_FILES['document_file_cv']['name'];
-				$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
+		// if($_FILES['document_file_cv']['size'] == 0) {
+		// 	$fname_cv = $this->input->post('ffile_cv');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file_cv']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed_cv =  array('pdf','PDF');
+		// 		$filename_cv = $_FILES['document_file_cv']['name'];
+		// 		$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_cv,$allowed_cv)){
-					$tmp_name_cv = $_FILES["document_file_cv"]["tmp_name"];
-					$documentd_cv = "uploads/document/cv/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file_cv"]["name"]);
-					$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
-					move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
-					$fname_cv = $newfilename_cv;
-				} else {
-					$Return['error'] = 'Jenis File CV tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext_cv,$allowed_cv)){
+		// 			$tmp_name_cv = $_FILES["document_file_cv"]["tmp_name"];
+		// 			$documentd_cv = "uploads/document/cv/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file_cv"]["name"]);
+		// 			$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
+		// 			move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
+		// 			$fname_cv = $newfilename_cv;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File CV tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		/* upload SKCK*/
-		if($_FILES['document_file_skck']['size'] == 0) {
-			$fname_skck = $this->input->post('ffile_skck');
-		} else {
-			if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
-				//checking image type
-				$allowed_skck =  array('pdf','PDF');
-				$filename_skck = $_FILES['document_file_skck']['name'];
-				$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
+		// if($_FILES['document_file_skck']['size'] == 0) {
+		// 	$fname_skck = $this->input->post('ffile_skck');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed_skck =  array('pdf','PDF');
+		// 		$filename_skck = $_FILES['document_file_skck']['name'];
+		// 		$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_skck,$allowed_skck)){
-					$tmp_name_skck = $_FILES["document_file_skck"]["tmp_name"];
-					$documentd_skck = "uploads/document/skck/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file_skck"]["name"]);
-					$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
-					move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
-					$fname_skck = $newfilename_skck;
-				} else {
-					$Return['error'] = 'Jenis File SKCK tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext_skck,$allowed_skck)){
+		// 			$tmp_name_skck = $_FILES["document_file_skck"]["tmp_name"];
+		// 			$documentd_skck = "uploads/document/skck/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file_skck"]["name"]);
+		// 			$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
+		// 			move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
+		// 			$fname_skck = $newfilename_skck;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File SKCK tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		/* upload PKWT*/
-		if($_FILES['document_file_pkwt']['size'] == 0) {
-			$fname_pkwt = $this->input->post('ffile_pkwt');
-		} else {
-			if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
-				//checking image type
-				$allowed_pkwt =  array('pdf','PDF');
-				$filename_pkwt = $_FILES['document_file_pkwt']['name'];
-				$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
+		// if($_FILES['document_file_pkwt']['size'] == 0) {
+		// 	$fname_pkwt = $this->input->post('ffile_pkwt');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed_pkwt =  array('pdf','PDF');
+		// 		$filename_pkwt = $_FILES['document_file_pkwt']['name'];
+		// 		$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_pkwt,$allowed_pkwt)){
-					$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
-					$documentd_pkwt = "uploads/document/pkwt/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file_pkwt"]["name"]);
-					$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
-					move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
-					$fname_pkwt = $newfilename_pkwt;
-				} else {
-					$Return['error'] = 'Jenis File PKWT tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext_pkwt,$allowed_pkwt)){
+		// 			$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
+		// 			$documentd_pkwt = "uploads/document/pkwt/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file_pkwt"]["name"]);
+		// 			$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
+		// 			move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
+		// 			$fname_pkwt = $newfilename_pkwt;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File PKWT tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		/* upload IJAZAH SD*/
-		if($_FILES['document_file_isd']['size'] == 0) {
-			$fname_isd = $this->input->post('ffile_isd');
-		} else {
-			if(is_uploaded_file($_FILES['document_file_isd']['tmp_name'])) {
-				//checking image type
-				$allowed_isd =  array('pdf','PDF');
-				$filename_isd = $_FILES['document_file_isd']['name'];
-				$ext_isd = pathinfo($filename_isd, PATHINFO_EXTENSION);
+		// if($_FILES['document_file_isd']['size'] == 0) {
+		// 	$fname_isd = $this->input->post('ffile_isd');
+		// } else {
+		// 	if(is_uploaded_file($_FILES['document_file_isd']['tmp_name'])) {
+		// 		//checking image type
+		// 		$allowed_isd =  array('pdf','PDF');
+		// 		$filename_isd = $_FILES['document_file_isd']['name'];
+		// 		$ext_isd = pathinfo($filename_isd, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_isd,$allowed_isd)){
-					$tmp_name_isd = $_FILES["document_file_isd"]["tmp_name"];
-					$documentd_isd = "uploads/document/ijazah/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file_isd"]["name"]);
-					$newfilename_isd = 'isd_'.round(microtime(true)).'.'.$ext_isd;
-					move_uploaded_file($tmp_name_isd, $documentd_isd.$newfilename_isd);
-					$fname_isd = $newfilename_isd;
-				} else {
-					$Return['error'] = 'Jenis File IJAZAH SD tidak diterima..';
-				}
-			}
-		}
+		// 		if(in_array($ext_isd,$allowed_isd)){
+		// 			$tmp_name_isd = $_FILES["document_file_isd"]["tmp_name"];
+		// 			$documentd_isd = "uploads/document/ijazah/";
+		// 			// basename() may prevent filesystem traversal attacks;
+		// 			// further validation/sanitation of the filename may be appropriate
+		// 			$name = basename($_FILES["document_file_isd"]["name"]);
+		// 			$newfilename_isd = 'isd_'.round(microtime(true)).'.'.$ext_isd;
+		// 			move_uploaded_file($tmp_name_isd, $documentd_isd.$newfilename_isd);
+		// 			$fname_isd = $newfilename_isd;
+		// 		} else {
+		// 			$Return['error'] = 'Jenis File IJAZAH SD tidak diterima..';
+		// 		}
+		// 	}
+		// }
 
 		if($Return['error']!=''){
        		$this->output($Return);
@@ -562,14 +562,12 @@ class Profile extends MY_Controller {
 
 		// 'ktp_no' 				=> $nomor_ktp,
 		'filename_ktp' 	=> $fname,
-		// 'kk_no' 				=> $kk_no,
-		'filename_kk' 	=> $fname_kk,
-		// 'npwp_no' 			=> $npwp_no,
-		'filename_npwp' => $fname_npwp,
-		'filename_cv' 	=> $fname_cv,
-		'filename_skck' => $fname_skck,
-		'filename_pkwt' => $fname_pkwt,
-		'filename_isd' 	=> $fname_isd,
+		// 'filename_kk' 	=> $fname_kk,
+		// 'filename_npwp' => $fname_npwp,
+		// 'filename_cv' 	=> $fname_cv,
+		// 'filename_skck' => $fname_skck,
+		// 'filename_isd' 	=> $fname_isd,
+		// 'filename_pkwt' => $fname_pkwt,
 
 		);
 

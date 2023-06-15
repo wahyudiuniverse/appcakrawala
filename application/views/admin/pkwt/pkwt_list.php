@@ -107,8 +107,12 @@
                     <label for="waktu_kontrak">Waktu Kontrak<i class="hrpremium-asterisk">*</i></label>
                     <select class="form-control" name="waktu_kontrak" id="aj_waktu_kontrak" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
                       <option value="1">1 (Bulan)</option>
+                      <option value="2" selected>2 (Bulan)</option>
                       <option value="3" selected>3 (Bulan)</option>
+                      <option value="4" selected>4 (Bulan)</option>
+                      <option value="5" selected>5 (Bulan)</option>
                       <option value="6">6 (Bulan)</option>
+                      <option value="7" selected>7 (Bulan)</option>
                       <option value="12">12 (Bulan)</option>
                     </select>
                   </div>

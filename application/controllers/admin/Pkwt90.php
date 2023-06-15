@@ -87,13 +87,9 @@ class Pkwt90 extends MY_Controller
 
 		if($pkwt[0]->approve_hrd != null){
 
-				if($pkwt[0]->company==2){
 					$logo_cover = 'tcpdf_logo_sc.png';
 					$header_namae = 'PT. Siprama Cakrawala';
-				} else {
-					$logo_cover = 'tcpdf_logo_kac.png';
-					$header_namae = 'PT. Krista Aulia Cakrawala';
-				}
+
 
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
@@ -594,7 +590,7 @@ class Pkwt90 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
-								<td >4.5</td>
+								<td >4.6</td>
 								<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
 								<td colspan="0"></td>
 							</tr>

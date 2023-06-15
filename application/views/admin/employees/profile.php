@@ -503,14 +503,19 @@
                       ?>
 
                         <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+
+                        <input name="nomor_ktp" type="text" value="<?php echo $ktp_no;?>" hidden>
+                        <input name="kk_no" type="text" value="<?php echo $kk_no;?>" hidden>
+                        <input name="npwp_no" type="text" value="<?php echo $npwp_no;?>" hidden>
+                        
                         <input name="ffoto_ktp" type="text" value="<?php echo $filename_ktp;?>" hidden>
                         <input name="ffoto_kk" type="text" value="<?php echo $filename_kk;?>" hidden>
                         <input name="ffoto_npwp" type="text" value="<?php echo $filename_npwp;?>" hidden>
                         <input name="ffile_cv" type="text" value="<?php echo $filename_cv;?>" hidden>
                         <input name="ffile_skck" type="text" value="<?php echo $filename_skck;?>" hidden>
-                        <input name="ffile_pkwt" type="text" value="<?php echo $filename_pkwt;?>" hidden>
                         <input name="ffile_isd" type="text" value="<?php echo $filename_isd;?>" hidden>
                         <input name="ffile_pak" type="text" value="<?php echo $filename_paklaring;?>" hidden>
+                        <input name="ffile_pkwt" type="text" value="<?php echo $filename_pkwt;?>" hidden>
 
 
                       <!-- KTP -->

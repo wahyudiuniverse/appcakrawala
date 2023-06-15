@@ -519,6 +519,8 @@
                       ?>
 
                         <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
+
+                        
                         <input name="ffoto_ktp" type="text" value="<?php echo $filename_ktp;?>" hidden>
                         <input name="ffoto_kk" type="text" value="<?php echo $filename_kk;?>" hidden>
                         <input name="ffoto_npwp" type="text" value="<?php echo $filename_npwp;?>" hidden>
