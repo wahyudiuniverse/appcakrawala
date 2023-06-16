@@ -25,7 +25,7 @@
       </a> </li>
     <?php } ?>
 
-    <?php if(in_array('377',$role_resources_ids)) { ?>
+    <?php if(in_array('379',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel PKWT <?php echo '('.$count_pkwtcancel.')';?>
       </a> </li>
     <?php } ?>

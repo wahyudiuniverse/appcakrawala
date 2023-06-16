@@ -28,7 +28,7 @@
       </a> </li>
     <?php } ?>
 
-    <?php if(in_array('375',$role_resources_ids)) { ?>
+    <?php if(in_array('338',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_emp_request_nom.')';?>
       </a> </li>
     <?php } ?>

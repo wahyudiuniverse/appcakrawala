@@ -1463,6 +1463,7 @@
                                 <option value="[RESIGN]">RESIGN</option>
                                 <option value="[END CONTRACT]">END CONTRACT</option>
                                 <option value="[BLACKLIST]">BLACKLIST</option>
+                                <option value="[RE-ACTIVE]">RE-ACTIVE</option>
                               </select>
                             </div>
                           </div>

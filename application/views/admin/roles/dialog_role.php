@@ -771,8 +771,8 @@ dataSource: [
 					class: "role-checkbox-modal custom-control-input", 
 					text: "Cancel REQ",
 					add_info: "<?php echo $this->lang->line('xin_request');?>",
-					value: "337",
-					check: "<?php if(isset($_GET['role_id'])) { if(in_array('337',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+					value: "338",
+					check: "<?php if(isset($_GET['role_id'])) { if(in_array('338',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				},
 				{ 
 					id: "", 
@@ -815,6 +815,14 @@ dataSource: [
 					add_info: "<?php echo $this->lang->line('xin_role_enable');?>", 
 					value: "376",
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('376',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+				},
+				{ 
+					id: "", 
+					class: "role-checkbox-modal custom-control-input", 
+					text: "<?php echo $this->lang->line('xin_request');?>",  
+					add_info: "<?php echo $this->lang->line('xin_request');?>", 
+					value: "379",
+					check: "<?php if(isset($_GET['role_id'])) { if(in_array('379',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				},
 				{ 
 					id: "", 
