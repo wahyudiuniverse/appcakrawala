@@ -49,7 +49,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 		$data['breadcrumbs'] = $this->lang->line('xin_pkwt_digital');
 		$data['path_url'] = 'emp_pkwt_cancel';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('504',$role_resources_ids)) {
+		if(in_array('379',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/pkwt/pkwt_list_appcancel", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
