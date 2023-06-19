@@ -279,132 +279,178 @@ class Employee_request_nae extends MY_Controller {
 					else {
 
 
-							if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
-								//checking image type
-								$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-								$filename = $_FILES['document_file']['name'];
-								$ext = pathinfo($filename, PATHINFO_EXTENSION);
-								
-								if(in_array($ext,$allowed)){
-									$tmp_name = $_FILES["document_file"]["tmp_name"];
-									$documentd = "uploads/document/ktp/";
-									// basename() may prevent filesystem traversal attacks;
-									// further validation/sanitation of the filename may be appropriate
-									$name = basename($_FILES["document_file"]["name"]);
-									$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
-									move_uploaded_file($tmp_name, $documentd.$newfilename);
-									$fname = $newfilename;
-								} else {
-									$Return['error'] = 'Jenis File KTP tidak diterima..';
-								}
-							}
-
-							if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
-								//checking image type
-								$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-								$filenamekk = $_FILES['document_kk']['name'];
-								$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
-								
-								if(in_array($extkk,$allowedkk)){
-									$tmp_namekk = $_FILES["document_kk"]["tmp_name"];
-									$documentdkk = "uploads/document/kk/";
-									// basename() may prevent filesystem traversal attacks;
-									// further validation/sanitation of the filename may be appropriate
-									$name = basename($_FILES["document_kk"]["name"]);
-									$newfilenamekk = 'kk_'.round(microtime(true)).'.'.$extkk;
-									move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
-									$fnamekk = $newfilenamekk;
-								} else {
-									$Return['error'] = 'Jenis File KK tidak diterima..';
-								}
-							}
-
-
-							if($_FILES['document_skck']['size'] == 0) {$fnameskck=0;} else {
-								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
+						if($_FILES['document_file']['size'] == 0){
+							$Return['error'] = 'KTP Kosong..!';
+						} else {
+							if($_FILES['document_file']['size'] > 2000000){
+								$Return['error'] = 'File KTP Lebih dari 2MB	..';
+							} else {
+								if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
 									//checking image type
-									$allowedskck =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-									$filenameskck = $_FILES['document_skck']['name'];
-									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+									$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+									$filename = $_FILES['document_file']['name'];
+									$ext = pathinfo($filename, PATHINFO_EXTENSION);
 									
-									if(in_array($extskck,$allowedskck)){
-										$tmp_nameskck = $_FILES["document_skck"]["tmp_name"];
-										$documentdskck = "uploads/document/skck/";
+									if(in_array($ext,$allowed)){
+										$tmp_name = $_FILES["document_file"]["tmp_name"];
+										$documentd = "uploads/document/ktp/";
 										// basename() may prevent filesystem traversal attacks;
 										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["document_skck"]["name"]);
-										$newfilenameskck = 'skck_'.round(microtime(true)).'.'.$extskck;
-										move_uploaded_file($tmp_nameskck, $documentdskck.$newfilenameskck);
-										$fnameskck = $newfilenameskck;
+										$name = basename($_FILES["document_file"]["name"]);
+										$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
+										move_uploaded_file($tmp_name, $documentd.$newfilename);
+										$fname = $newfilename;
+									} else {
+										$Return['error'] = 'Jenis File KTP tidak diterima..';
+									}
+								}
+							}
+						}
+
+						if($_FILES['document_kk']['size'] == 0){
+							$Return['error'] = 'KK Kosong..!';
+						} else {
+							if($_FILES['document_kk']['size'] > 2000000){
+								$Return['error'] = 'File KK Lebih dari 2MB	..';
+							} else {
+								if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
+									//checking image type
+									$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+									$filenamekk = $_FILES['document_kk']['name'];
+									$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
+									
+									if(in_array($extkk,$allowedkk)){
+										$tmp_namekk = $_FILES["document_kk"]["tmp_name"];
+										$documentdkk = "uploads/document/kk/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["document_kk"]["name"]);
+										$newfilenamekk = 'kk_'.round(microtime(true)).'.'.$extkk;
+										move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
+										$fnamekk = $newfilenamekk;
 									} else {
 										$Return['error'] = 'Jenis File KK tidak diterima..';
 									}
 								}
 							}
 
-							if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
-								//checking image type
-								$allowedcv =  array('pdf','PDF');
-								$filenamecv = $_FILES['document_cv']['name'];
-								$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
-								
-								if(in_array($extcv,$allowedcv)){
-									$tmp_namecv = $_FILES["document_cv"]["tmp_name"];
-									$documentdcv = "uploads/document/cv/";
-									// basename() may prevent filesystem traversal attacks;
-									// further validation/sanitation of the filename may be appropriate
-									$name = basename($_FILES["document_cv"]["name"]);
-									$newfilenamecv = 'cv_'.round(microtime(true)).'.'.$extcv;
-									move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
-									$fnamecv = $newfilenamecv;
+						}
+
+
+							if($_FILES['document_ijz']['size'] == 0) {
+								$fnameijz=0;
+							} else {
+								if($_FILES['document_ijz']['size'] > 2000000){
+									$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
 								} else {
-									$Return['error'] = 'Jenis File CV tidak diterima..';
-								}
-							}
-
-							if($_FILES['document_ijz']['size'] == 0) {$fnameijz=0;} else {
-								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
-									//checking image type
-									$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-									$filenameijz = $_FILES['document_ijz']['name'];
-									$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
-									
-									if(in_array($extijz,$allowedijz)){
-										$tmp_nameijz = $_FILES["document_ijz"]["tmp_name"];
-										$documentdijz = "uploads/document/ijazah/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["document_ijz"]["name"]);
-										$newfilenameijz = 'ijazah_'.round(microtime(true)).'.'.$extijz;
-										move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
-										$fnameijz = $newfilenameijz;
-									} else {
-										$Return['error'] = 'Jenis File Ijazah tidak diterima..';
+									if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
+										//checking image type
+										$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$filenameijz = $_FILES['document_ijz']['name'];
+										$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
+										
+										if(in_array($extijz,$allowedijz)){
+											$tmp_nameijz = $_FILES["document_ijz"]["tmp_name"];
+											$documentdijz = "uploads/document/ijazah/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_ijz"]["name"]);
+											$newfilenameijz = 'ijazah_'.round(microtime(true)).'.'.$extijz;
+											move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
+											$fnameijz = $newfilenameijz;
+										} else {
+											$Return['error'] = 'Jenis File Ijazah tidak diterima..';
+										}
 									}
 								}
 							}
 
 
-							if($_FILES['document_pkl']['size'] == 0) {$fnamepkl=0;} else {
-								if(is_uploaded_file($_FILES['document_pkl']['tmp_name'])) {
-									//checking image type
-									$allowedpkl =  array('pdf','PDF');
-									$filenamepkl = $_FILES['document_pkl']['name'];
-									$extpkl = pathinfo($filenamepkl, PATHINFO_EXTENSION);
-									
-									if(in_array($extpkl,$allowedpkl)){
-										$tmp_namepkl = $_FILES["document_pkl"]["tmp_name"];
-										$documentdpkl = "uploads/document/paklaring/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["document_pkl"]["name"]);
-										$newfilenamepkl = 'paklaring_'.round(microtime(true)).'.'.$extpkl;
-										move_uploaded_file($tmp_namepkl, $documentdpkl.$newfilenamepkl);
-										$fnamepkl = $newfilenamepkl;
-									} else {
-										$Return['error'] = 'Jenis File Paklaring tidak diterima..';
+							if($_FILES['document_skck']['size'] == 0) {
+								$fnameskck=0;
+							} else {
+								if($_FILES['document_skck']['size'] > 2000000){
+									$Return['error'] = 'File SKCK Lebih dari 2MB	..';
+								} else {
+									if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
+										//checking image type
+										$allowedskck =  array('pdf','PDF');
+										$filenameskck = $_FILES['document_skck']['name'];
+										$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+										
+										if(in_array($extskck,$allowedskck)){
+											$tmp_nameskck = $_FILES["document_skck"]["tmp_name"];
+											$documentdskck = "uploads/document/skck/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_skck"]["name"]);
+											$newfilenameskck = 'skck_'.round(microtime(true)).'.'.$extskck;
+											move_uploaded_file($tmp_nameskck, $documentdskck.$newfilenameskck);
+											$fnameskck = $newfilenameskck;
+										} else {
+											$Return['error'] = 'Jenis File KK tidak diterima..';
+										}
 									}
 								}
+							}
+
+
+							if($_FILES['document_cv']['size'] == 0) {
+								$fnamecv=0;
+							} else {
+								if($_FILES['document_cv']['size'] > 2000000){
+									$Return['error'] = 'File CV Lebih dari 2MB	..';
+								} else {
+									if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
+										//checking image type
+										$allowedcv =  array('pdf','PDF');
+										$filenamecv = $_FILES['document_cv']['name'];
+										$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+										
+										if(in_array($extcv,$allowedcv)){
+											$tmp_namecv = $_FILES["document_cv"]["tmp_name"];
+											$documentdcv = "uploads/document/cv/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_cv"]["name"]);
+											$newfilenamecv = 'cv_'.round(microtime(true)).'.'.$extcv;
+											move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
+											$fnamecv = $newfilenamecv;
+										} else {
+											$Return['error'] = 'Jenis File CV tidak diterima..';
+										}
+									}
+								}
+							}
+
+
+							if($_FILES['document_pkl']['size'] == 0) {
+								$fnamepkl=0;
+							} else {
+								if($_FILES['document_pkl']['size'] > 2000000){
+									$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
+								} else {
+									if(is_uploaded_file($_FILES['document_pkl']['tmp_name'])) {
+										//checking image type
+										$allowedpkl =  array('pdf','PDF');
+										$filenamepkl = $_FILES['document_pkl']['name'];
+										$extpkl = pathinfo($filenamepkl, PATHINFO_EXTENSION);
+										
+										if(in_array($extpkl,$allowedpkl)){
+											$tmp_namepkl = $_FILES["document_pkl"]["tmp_name"];
+											$documentdpkl = "uploads/document/paklaring/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_pkl"]["name"]);
+											$newfilenamepkl = 'paklaring_'.round(microtime(true)).'.'.$extpkl;
+											move_uploaded_file($tmp_namepkl, $documentdpkl.$newfilenamepkl);
+											$fnamepkl = $newfilenamepkl;
+										} else {
+											$Return['error'] = 'Jenis File Paklaring tidak diterima..';
+										}
+									}
+								}
+
 							}
 
 					   	$fullname 					= str_replace("'"," ",$this->input->post('fullname'));

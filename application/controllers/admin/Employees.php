@@ -4138,7 +4138,7 @@ class Employees extends MY_Controller {
 			} else {
 
 				if($_FILES['document_file']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File KTP Lebih dari 2MB	..';
 				} else {
 
 					if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
@@ -4169,7 +4169,7 @@ class Employees extends MY_Controller {
 				$fname_kk = $this->input->post('ffoto_kk');
 			} else {
 				if($_FILES['document_file_kk']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File KK Lebih dari 2MB	..';
 				} else {
 
 					if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
@@ -4200,7 +4200,7 @@ class Employees extends MY_Controller {
 				$fname_npwp = $this->input->post('ffoto_npwp');
 			} else {
 				if($_FILES['document_file_npwp']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File NPWP Lebih dari 2MB	..';
 				} else {
 					if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
 						//checking image type
@@ -4230,7 +4230,7 @@ class Employees extends MY_Controller {
 				$fname_cv = $this->input->post('ffile_cv');
 			} else {
 				if($_FILES['document_file_cv']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File CV Lebih dari 2MB	..';
 				} else {
 
 					if(is_uploaded_file($_FILES['document_file_cv']['tmp_name'])) {
@@ -4261,7 +4261,7 @@ class Employees extends MY_Controller {
 				$fname_skck = $this->input->post('ffile_skck');
 			} else {
 				if($_FILES['document_file_skck']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File SKCK Lebih dari 2MB	..';
 				} 
 					if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
 						//checking image type
@@ -4289,7 +4289,7 @@ class Employees extends MY_Controller {
 				$fname_isd = $this->input->post('ffile_isd');
 			} else {
 				if($_FILES['document_file_isd']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
 				} else {
 					if(is_uploaded_file($_FILES['document_file_isd']['tmp_name'])) {
 						//checking image type
@@ -4319,7 +4319,7 @@ class Employees extends MY_Controller {
 				$fname_pak = $this->input->post('ffile_pak');
 			} else {
 				if($_FILES['document_file_pak']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
 				} else {
 					if(is_uploaded_file($_FILES['document_file_pak']['tmp_name'])) {
 						//checking image type
@@ -4349,7 +4349,7 @@ class Employees extends MY_Controller {
 				$fname_pkwt = $this->input->post('ffile_pkwt');
 			} else {
 				if($_FILES['document_file_pkwt']['size'] > 2000000){
-					$Return['error'] = 'File Lebih dari 2MB	..';
+					$Return['error'] = 'File PKWT Lebih dari 2MB	..';
 				} else {
 					if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
 						//checking image type

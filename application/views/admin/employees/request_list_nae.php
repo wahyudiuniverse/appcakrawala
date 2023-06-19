@@ -391,16 +391,6 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">SKCK<strong></strong></label>
-                              <input type="file" class="form-control-file" id="document_skck" name="document_skck" accept="image/png,image/jpg, image/jpeg">
-                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
-                            </fieldset>
-                          </div>
-                        </div>
-
-                        <div class="col-md-3">
-                          <div class="form-group">
-                            <fieldset class="form-group">
                               <label for="logo">IJAZAH Terakhir</label>
                               <input type="file" class="form-control-file" id="document_ijz" name="document_ijz" accept="image/png,image/jpg, image/jpeg">
                               <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
@@ -416,6 +406,16 @@
                             <fieldset class="form-group">
                               <label for="logo">Riwayat Hidup (CV)<strong>*</strong></label>
                               <input type="file" class="form-control-file" id="document_cv" name="document_cv" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <label for="logo">SKCK<strong></strong></label>
+                              <input type="file" class="form-control-file" id="document_skck" name="document_skck" accept="application/pdf">
                               <small>Jenis File: PDF | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
