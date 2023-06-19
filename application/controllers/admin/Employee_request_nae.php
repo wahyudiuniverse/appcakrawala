@@ -484,8 +484,8 @@ class Employee_request_nae extends MY_Controller {
 								'status_kawin' 				=> $status_kawin,
 
 								'doj' 								=> $date_of_join,
-								'contract_start' 			=> $date_of_join,
-								'contract_end' 				=> $date_of_join,
+								'contract_start' 			=> $join_date_pkwt,
+								'contract_end' 				=> $pkwt_end_date,
 								'contract_periode' 		=> $waktu_kontrak,
 								'contact_no' 					=> $contact_no,
 								'nik_ktp' 						=> $ktp_no,
