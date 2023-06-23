@@ -248,6 +248,9 @@ class Employee_request_cancelled extends MY_Controller {
 				'kk' => $result[0]->kk,
 				'skck' => $result[0]->skck,
 				'ijazah' => $result[0]->ijazah,
+				'cv' => $result[0]->civi,
+				'paklaring' => $result[0]->paklaring,
+
 				'info_revisi' => $result[0]->cancel_ket,
 				'idrequest' => $result[0]->secid,
 				'request_empby' => $this->Employees_model->read_employee_info($result[0]->request_empby),
@@ -286,24 +289,30 @@ class Employee_request_cancelled extends MY_Controller {
 		
 
 
-							if($_FILES['document_ktp']['size'] == 0) {$fnamektp=$this->input->post('fktp_name');} else {
-								if(is_uploaded_file($_FILES['document_ktp']['tmp_name'])) {
-									//checking image type
-									$allowedktp =  array('png','jpg','PNG','JPG','jpeg','JPEG');
-									$filenamektp = $_FILES['document_ktp']['name'];
-									$extktp = pathinfo($filenamektp, PATHINFO_EXTENSION);
-									
-									if(in_array($extktp,$allowedktp)){
-										$tmp_namektp = $_FILES["document_ktp"]["tmp_name"];
-										$documentdktp = "uploads/document/ktp/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["document_ktp"]["name"]);
-										$newfilenamektp = 'ktp_'.round(microtime(true)).'.'.$extktp;
-										move_uploaded_file($tmp_namektp, $documentdktp.$newfilenamektp);
-										$fnamektp = $newfilenamektp;
-									} else {
-										$Return['error'] = 'Jenis File KTP tidak diterima..';
+							if($_FILES['document_ktp']['size'] == 0) {
+								$fnamektp=$this->input->post('fktp_name');
+							} else {
+								if($_FILES['document_file']['size'] > 2000000){
+
+								} else {
+									if(is_uploaded_file($_FILES['document_ktp']['tmp_name'])) {
+										//checking image type
+										$allowedktp =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+										$filenamektp = $_FILES['document_ktp']['name'];
+										$extktp = pathinfo($filenamektp, PATHINFO_EXTENSION);
+										
+										if(in_array($extktp,$allowedktp)){
+											$tmp_namektp = $_FILES["document_ktp"]["tmp_name"];
+											$documentdktp = "uploads/document/ktp/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_ktp"]["name"]);
+											$newfilenamektp = 'ktp_'.round(microtime(true)).'.'.$extktp;
+											move_uploaded_file($tmp_namektp, $documentdktp.$newfilenamektp);
+											$fnamektp = $newfilenamektp;
+										} else {
+											$Return['error'] = 'Jenis File KTP tidak diterima..';
+										}
 									}
 								}
 							}

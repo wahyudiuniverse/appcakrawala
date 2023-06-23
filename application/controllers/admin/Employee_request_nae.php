@@ -268,23 +268,42 @@ class Employee_request_nae extends MY_Controller {
 						$Return['error'] = 'Tanggal Cut OFF Kosong..!';
 					} else if ($this->input->post('date_payment')==''){
 						$Return['error'] = 'Tanggal Penggajian Kosong..!';
-					} else if($_FILES['document_file']['size'] == 0) {
-						$Return['error'] = 'KTP Kosong..!';
-					} else if($_FILES['document_kk']['size'] == 0) {
-						$Return['error'] = 'KK Kosong..!';
-					} else if($_FILES['document_cv']['size'] == 0) {
+					} 
+
+
+					else if($_FILES['document_file']['size'] == 0) {
+						$Return['error'] = 'KTP Kosongx..!';
+					} else if ($_FILES['document_file']['size'] > 2000000){
+						$Return['error'] = 'File KTP Lebih dari 2MB	..';
+					}
+
+					else if($_FILES['document_kk']['size'] == 0) {
+						$Return['error'] = 'KK KosongA..!';
+					} else if ($_FILES['document_kk']['size'] > 2000000){
+						$Return['error'] = 'File KK Lebih dari 2MB	..';
+					}
+
+
+					else if($_FILES['document_cv']['size'] == 0) {
 						$Return['error'] = 'Riwayat Hidup (CV) Kosong..!';
+					} else if ($_FILES['document_cv']['size'] > 2000000){
+						$Return['error'] = 'File CV Lebih dari 2MB	..';
+					}
+
+					else if($_FILES['document_skck']['size'] > 2000000){
+						$Return['error'] = 'File SKCK Lebih dari 2MB	..';
+					}
+
+					else if ($_FILES['document_ijz']['size'] > 2000000){
+						$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
+					}
+
+					else if ($_FILES['document_pkl']['size'] > 2000000){
+						$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
 					}
 
 					else {
 
-
-						if($_FILES['document_file']['size'] == 0){
-							$Return['error'] = 'KTP Kosong..!';
-						} else {
-							if($_FILES['document_file']['size'] > 2000000){
-								$Return['error'] = 'File KTP Lebih dari 2MB	..';
-							} else {
 								if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
 									//checking image type
 									$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
@@ -304,15 +323,7 @@ class Employee_request_nae extends MY_Controller {
 										$Return['error'] = 'Jenis File KTP tidak diterima..';
 									}
 								}
-							}
-						}
 
-						if($_FILES['document_kk']['size'] == 0){
-							$Return['error'] = 'KK Kosong..!';
-						} else {
-							if($_FILES['document_kk']['size'] > 2000000){
-								$Return['error'] = 'File KK Lebih dari 2MB	..';
-							} else {
 								if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
 									//checking image type
 									$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
@@ -332,17 +343,30 @@ class Employee_request_nae extends MY_Controller {
 										$Return['error'] = 'Jenis File KK tidak diterima..';
 									}
 								}
-							}
 
-						}
-
+								if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
+										//checking image type
+										$allowedcv =  array('pdf','PDF');
+										$filenamecv = $_FILES['document_cv']['name'];
+										$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+										
+										if(in_array($extcv,$allowedcv)){
+											$tmp_namecv = $_FILES["document_cv"]["tmp_name"];
+											$documentdcv = "uploads/document/cv/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_cv"]["name"]);
+											$newfilenamecv = 'cv_'.round(microtime(true)).'.'.$extcv;
+											move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
+											$fnamecv = $newfilenamecv;
+										} else {
+											$Return['error'] = 'Jenis File CV tidak diterima..';
+										}
+								}
 
 							if($_FILES['document_ijz']['size'] == 0) {
 								$fnameijz=0;
 							} else {
-								if($_FILES['document_ijz']['size'] > 2000000){
-									$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
-								} else {
 									if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
 										//checking image type
 										$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
@@ -362,16 +386,11 @@ class Employee_request_nae extends MY_Controller {
 											$Return['error'] = 'Jenis File Ijazah tidak diterima..';
 										}
 									}
-								}
 							}
-
 
 							if($_FILES['document_skck']['size'] == 0) {
 								$fnameskck=0;
 							} else {
-								if($_FILES['document_skck']['size'] > 2000000){
-									$Return['error'] = 'File SKCK Lebih dari 2MB	..';
-								} else {
 									if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 										//checking image type
 										$allowedskck =  array('pdf','PDF');
@@ -391,45 +410,11 @@ class Employee_request_nae extends MY_Controller {
 											$Return['error'] = 'Jenis File KK tidak diterima..';
 										}
 									}
-								}
 							}
-
-
-							if($_FILES['document_cv']['size'] == 0) {
-								$fnamecv=0;
-							} else {
-								if($_FILES['document_cv']['size'] > 2000000){
-									$Return['error'] = 'File CV Lebih dari 2MB	..';
-								} else {
-									if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
-										//checking image type
-										$allowedcv =  array('pdf','PDF');
-										$filenamecv = $_FILES['document_cv']['name'];
-										$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
-										
-										if(in_array($extcv,$allowedcv)){
-											$tmp_namecv = $_FILES["document_cv"]["tmp_name"];
-											$documentdcv = "uploads/document/cv/";
-											// basename() may prevent filesystem traversal attacks;
-											// further validation/sanitation of the filename may be appropriate
-											$name = basename($_FILES["document_cv"]["name"]);
-											$newfilenamecv = 'cv_'.round(microtime(true)).'.'.$extcv;
-											move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
-											$fnamecv = $newfilenamecv;
-										} else {
-											$Return['error'] = 'Jenis File CV tidak diterima..';
-										}
-									}
-								}
-							}
-
 
 							if($_FILES['document_pkl']['size'] == 0) {
 								$fnamepkl=0;
 							} else {
-								if($_FILES['document_pkl']['size'] > 2000000){
-									$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
-								} else {
 									if(is_uploaded_file($_FILES['document_pkl']['tmp_name'])) {
 										//checking image type
 										$allowedpkl =  array('pdf','PDF');
@@ -449,9 +434,8 @@ class Employee_request_nae extends MY_Controller {
 											$Return['error'] = 'Jenis File Paklaring tidak diterima..';
 										}
 									}
-								}
-
 							}
+
 
 					   	$fullname 					= str_replace("'"," ",$this->input->post('fullname'));
 					   	$nama_ibu						= $this->input->post('nama_ibu');

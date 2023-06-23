@@ -236,12 +236,11 @@
 
                                   <select class="form-control" name="marital_status" data-plugin="select_hrm">
                                   <option value=""></option>
-                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Belum Menikah</option>
+                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
                                               <option value="K/0" <?php if($marital_status=='K/0'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
                                               <option value="K/1" <?php if($marital_status=='K/1'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
                                               <option value="K/2" <?php if($marital_status=='K/2'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
                                               <option value="K/3" <?php if($marital_status=='K/3'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
-                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Janda/Duda (0 Anak)</option>
                                               <option value="TK/1" <?php if($marital_status=='TK/1'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
                                               <option value="TK/2" <?php if($marital_status=='TK/2'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
                                               <option value="TK/3" <?php if($marital_status=='TK/3'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
@@ -258,12 +257,16 @@
                                   <label class="form-label control-label">Golongan Darah</label>
                                <select class="form-control" name="blood_group" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_blood_group');?>">
                                 <option value=""></option>
+                                <option value="A" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>A</option>
                                 <option value="A+" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>A+</option>
                                 <option value="A-" <?php if($blood_group == 'A-'):?> selected="selected"<?php endif;?>>A-</option>
+                                <option value="B" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>B</option>
                                 <option value="B+" <?php if($blood_group == 'B+'):?> selected="selected"<?php endif;?>>B+</option>
                                 <option value="B-" <?php if($blood_group == 'B-'):?> selected="selected"<?php endif;?>>B-</option>
+                                <option value="AB" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>AB</option>
                                 <option value="AB+" <?php if($blood_group == 'AB+'):?> selected="selected"<?php endif;?>>AB+</option>
                                 <option value="AB-" <?php if($blood_group == 'AB-'):?> selected="selected"<?php endif;?>>AB-</option>
+                                <option value="O" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>0</option>
                                 <option value="O+" <?php if($blood_group == 'O+'):?> selected="selected"<?php endif;?>>O+</option>
                                 <option value="O-" <?php if($blood_group == 'O-'):?> selected="selected"<?php endif;?>>O-</option>
                               </select>
@@ -1032,8 +1035,12 @@
                                 <label for="waktu_kontrak">Waktu Kontrak<i class="hrpremium-asterisk">*</i></label>
                                 <select class="form-control" name="waktu_kontrak" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>">
                                   <option value="1" <?php if($contract_periode=='1'):?> selected <?php endif; ?>>1 (Bulan)</option>
+                                  <option value="3" <?php if($contract_periode=='2'):?> selected <?php endif; ?>>2 (Bulan)</option>
                                   <option value="3" <?php if($contract_periode=='3'):?> selected <?php endif; ?>>3 (Bulan)</option>
+                                  <option value="3" <?php if($contract_periode=='4'):?> selected <?php endif; ?>>4 (Bulan)</option>
+                                  <option value="3" <?php if($contract_periode=='5'):?> selected <?php endif; ?>>5 (Bulan)</option>
                                   <option value="6" <?php if($contract_periode=='6'):?> selected <?php endif; ?>>6 (Bulan)</option>
+                                  <option value="3" <?php if($contract_periode=='7'):?> selected <?php endif; ?>>7 (Bulan)</option>
                                   <option value="12" <?php if($contract_periode=='12'):?> selected <?php endif; ?>>12 (Bulan)</option>
                                 </select>
                               </div>

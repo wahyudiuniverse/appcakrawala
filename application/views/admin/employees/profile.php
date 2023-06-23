@@ -234,16 +234,15 @@
 
                                   <select class="form-control" name="marital_status" data-plugin="select_hrm">
                                   <option value=""></option>
-                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Belum Menikah</option>
+                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
                                               <option value="K/0" <?php if($marital_status=='K/0'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
                                               <option value="K/1" <?php if($marital_status=='K/1'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
                                               <option value="K/2" <?php if($marital_status=='K/2'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
                                               <option value="K/3" <?php if($marital_status=='K/3'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
-                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Janda/Duda (0 Anak)</option>
                                               <option value="TK/1" <?php if($marital_status=='TK/1'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
                                               <option value="TK/2" <?php if($marital_status=='TK/2'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
                                               <option value="TK/3" <?php if($marital_status=='TK/3'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
-                                              
+
                                 </select>
 
                                 </div>
@@ -256,12 +255,16 @@
                                   <label class="form-label control-label">Golongan Darah</label>
                                <select class="form-control" name="blood_group" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_blood_group');?>">
                                 <option value=""></option>
+                                <option value="A" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>A</option>
                                 <option value="A+" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>A+</option>
                                 <option value="A-" <?php if($blood_group == 'A-'):?> selected="selected"<?php endif;?>>A-</option>
+                                <option value="B" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>B</option>
                                 <option value="B+" <?php if($blood_group == 'B+'):?> selected="selected"<?php endif;?>>B+</option>
                                 <option value="B-" <?php if($blood_group == 'B-'):?> selected="selected"<?php endif;?>>B-</option>
+                                <option value="AB" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>AB</option>
                                 <option value="AB+" <?php if($blood_group == 'AB+'):?> selected="selected"<?php endif;?>>AB+</option>
                                 <option value="AB-" <?php if($blood_group == 'AB-'):?> selected="selected"<?php endif;?>>AB-</option>
+                                <option value="O" <?php if($blood_group == 'A+'):?> selected="selected"<?php endif;?>>0</option>
                                 <option value="O+" <?php if($blood_group == 'O+'):?> selected="selected"<?php endif;?>>O+</option>
                                 <option value="O-" <?php if($blood_group == 'O-'):?> selected="selected"<?php endif;?>>O-</option>
                               </select>
@@ -755,24 +758,25 @@
                         <div class="col-md-5">
                           <div class="form-group">
                             <label for="no_rek" class="control-label"><?php echo $this->lang->line('xin_e_details_acc_number');?><i class="hrpremium-asterisk">*</i></label>
-                            <input class="form-control" placeholder="Nomor Rekening Bank" name="no_rek" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $nomor_rek;?>" disabled>
+                            <input class="form-control" placeholder="Nomor Rekening Bank" name="no_rek" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $nomor_rek;?>">
                           </div>
                         </div>
 
-                        <div class="col-md-4" hidden>
+                        <div class="col-md-4">
                           <div class="form-group">
 
                             <fieldset class="form-group">
                               <label for="logo">Foto Rekening (Buku/E-Banking/Mobile-Banking)</label>
-                              <input type="file" class="form-control-file" id="docfile_rek" name="docfile_rek">
-                              <small>Jenis Photo/File: png, jpg, dan jpeg</small>
+                              <input type="file" class="form-control-file" id="docfile_rek" name="docfile_rek" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
                         </div>
 
                         <div class="col-md-3">
                           <div class="form-group">
-                            <div class="card-body media align-items-center"> <img src="<?php echo base_url().'uploads/document/'.$filename_rek;?>" alt="" class="d-block ui-w-80">
+                            <div class="card-body media align-items-center"> 
+                              <a href="<?php echo base_url().'uploads/document/rekening/'.$filename_rek;?>" target="_blank"><?php echo $filename_rek; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -783,7 +787,7 @@
                           <div class="col-md-5">
                             <div class="form-group">
                               <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?><i class="hrpremium-asterisk">*</i></label>
-                              <select name="bank_name" id="bank_name" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name');?>" disabled>
+                              <select name="bank_name" id="bank_name" class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name');?>">
                                 <option value=""></option>
                                 <?php 
                                 foreach ( $list_bank as $bank ) { 
@@ -801,7 +805,7 @@
                             <div class="col-md-5">
                               <div class="form-group">
                                 <label for="account_title">Nama Pemilik Rekening</label>
-                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="pemilik_rek" type="text" value="<?php echo $pemilik_rek;?>" disabled>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="pemilik_rek" type="text" value="<?php echo $pemilik_rek;?>">
                               </div>
                             </div>
                           </div>

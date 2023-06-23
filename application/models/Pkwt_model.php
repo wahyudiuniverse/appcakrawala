@@ -248,6 +248,7 @@ class Pkwt_model extends CI_Model {
 		$sql = 'SELECT *
 			FROM xin_employee_contract
 			WHERE approve_hrd = 0
+			AND project != 22
 			ORDER BY contract_id DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

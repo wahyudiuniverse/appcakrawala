@@ -544,8 +544,8 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
         <div>
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="document_ktp" name="document_ktp">
-                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                              <input type="file" class="form-control-file" id="document_ktp" name="document_ktp" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
         </div>
@@ -566,36 +566,14 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
         <div>
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="document_kk" name="document_kk">
-                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                              <input type="file" class="form-control-file" id="document_kk" name="document_kk" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
         </div>
       </div><?php echo '<a href="'.base_url().'uploads/document/kk/'.$kk.'" target="_blank"> '.$kk.'</a>';?></div>
   </div>
 
-
-<!-- REVISI FOTO SKCK -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <input name="fskck_name" type="text" value="<?php echo $skck;?>" hidden>
-      <div class="col-sm-4">
-        <div>
-          <label for="penempatan">Foto SKCK</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="document_skck" name="document_skck">
-                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
-                            </fieldset>
-                          </div>
-        </div>
-      </div><?php echo '<a href="'.base_url().'uploads/document/skck/'.$skck.'" target="_blank"> '.$skck.'</a>';?></div>
-  </div>
 
 
 <!-- REVISI FOTO IJAZAH -->
@@ -612,14 +590,59 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
         <div>
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="document_ijazah" name="document_ijazah">
-                              <small>Jenis File: .pdf, .png | Size Maximal: 2 mb</small>
+                              <input type="file" class="form-control-file" id="document_ijazah" name="document_ijazah" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
                           </div>
         </div>
       </div><?php echo '<a href="'.base_url().'uploads/document/ijazah/'.$ijazah.'" target="_blank"> '.$ijazah.'</a>';?></div>
   </div>
 
+
+<!-- REVISI dok SKCK -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <input name="fskck_name" type="text" value="<?php echo $skck;?>" hidden>
+      <div class="col-sm-4">
+        <div>
+          <label for="penempatan">Dokumen SKCK</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="document_skck" name="document_skck" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+        </div>
+      </div><?php echo '<a href="'.base_url().'uploads/document/skck/'.$skck.'" target="_blank"> '.$skck.'</a>';?></div>
+  </div>
+
+
+<!-- REVISI CIVI -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <input name="fcivi_name" type="text" value="<?php echo $cv;?>" hidden>
+      <div class="col-sm-4">
+        <div>
+          <label for="civi">Dokumen CV</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="document_cv" name="document_cv" accept="application/pdf">
+                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                            </fieldset>
+                          </div>
+        </div>
+      </div><?php echo '<a href="'.base_url().'uploads/document/cv/'.$cv.'" target="_blank"> '.$cv.'</a>';?></div>
+  </div>
 
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" >

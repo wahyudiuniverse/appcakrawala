@@ -4118,309 +4118,304 @@ class Employees extends MY_Controller {
 	
 	
 		if($this->input->post('type')=='document_info') {
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-		// if($this->input->post('type')=='document_info' && $this->input->post('data')=='document_info') {		
-		// /* Define return | here result is used to return user data and error for error message */
-		// $Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		// $Return['csrf_hash'] = $this->security->get_csrf_hash();
-			
-		/* Server side PHP input validation */		
-		if($this->input->post('title')==='') {
-			 $Return['error'] = 'Nomor KTP Kosong..!';
-		} else {
+			// if($this->input->post('type')=='document_info' && $this->input->post('data')=='document_info') {		
+			// /* Define return | here result is used to return user data and error for error message */
+			// $Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			// $Return['csrf_hash'] = $this->security->get_csrf_hash();
+				
+			/* Server side PHP input validation */		
+			if($this->input->post('nomor_ktp')==='') {
+				 // $Return['error'] = 'Nomor KTP Kosong..!';
 
-			/* upload ktp */
-			if($_FILES['document_file']['size'] == 0) {
-				$fname = $this->input->post('ffoto_ktp');
-			} else {
+				 $Return['error'] = 'SIZE:'.$_FILES['document_file']['size'];
+			}
+		
+			else if ($_FILES['document_file']['size'] > 2000000){
+				$Return['error'] = 'File KTP Lebih dari 2MB	..';
+			}
 
-				if($_FILES['document_file']['size'] > 2000000){
-					$Return['error'] = 'File KTP Lebih dari 2MB	..';
-				} else {
+			else if ($_FILES['document_file_kk']['size'] > 2000000){
+				$Return['error'] = 'File KK Lebih dari 2MB..';
+			}
 
-					if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
-						//checking image type
-						$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-						$filename = $_FILES['document_file']['name'];
-						$ext = pathinfo($filename, PATHINFO_EXTENSION);
-						
-						if(in_array($ext,$allowed)){
-							$tmp_name = $_FILES["document_file"]["tmp_name"];
-							$documentd = "uploads/document/ktp/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file"]["name"]);
-							$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
-							move_uploaded_file($tmp_name, $documentd.$newfilename);
-							$fname = $newfilename;
-						} else {
-							$Return['error'] = 'Jenis File KTP tidak diterima..';
-						}
-					}
-				}
+			else if ($_FILES['document_file_npwp']['size'] > 2000000){
+				$Return['error'] = 'File NPWP Lebih dari 2MB..';
+			}
+
+			else if ($_FILES['document_file_cv']['size'] > 2000000){
+				$Return['error'] = 'File CV Lebih dari 2MB..';
+			}
+
+			else if ($_FILES['document_file_skck']['size'] > 2000000){
+				$Return['error'] = 'File SKCK Lebih dari 2MB..';
+			}
+
+			else if ($_FILES['document_file_isd']['size'] > 2000000){
+				$Return['error'] = 'File IJAZAH Lebih dari 2MB..';
+			}
+
+			else if ($_FILES['document_file_pak']['size'] > 2000000){
+				$Return['error'] = 'File PAKLARING Lebih dari 2MB..';
+			}
+
+			else if ($_FILES['document_file_pkwt']['size'] > 2000000){
+				$Return['error'] = 'File PKWT Lebih dari 2MB..';
+			}
+
+			else {
+				// $Return['error'] = 'SIZE:'.$_FILES['document_file']['size'];
+							// if($_FILES['document_file']['size'] > 2000000){
+							// 	$Return['error'] = 'File PKWT Lebih dari 2MB..';
+							// } else {
+
+								if($_FILES['document_file']['size'] == 0) {
+									$fname = $this->input->post('ffoto_ktp');
+								} else {
+									if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
+										//checking image type
+										$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$filename = $_FILES['document_file']['name'];
+										$ext = pathinfo($filename, PATHINFO_EXTENSION);
+										
+										if(in_array($ext,$allowed)){
+											$tmp_name = $_FILES["document_file"]["tmp_name"];
+											$documentd = "uploads/document/ktp/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file"]["name"]);
+											$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
+											move_uploaded_file($tmp_name, $documentd.$newfilename);
+											$fname = $newfilename;
+										} else {
+											$Return['error'] = 'Jenis File KTP tidak diterima..';
+										}
+									}
+								}
+							// }
+
+								if($_FILES['document_file_kk']['size'] == 0) {
+									$fname_kk = $this->input->post('ffoto_kk');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
+										//checking image type
+										$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$filenamekk = $_FILES['document_file_kk']['name'];
+										$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
+										
+										if(in_array($extkk,$allowedkk)){
+											$tmp_namekk = $_FILES["document_file_kk"]["tmp_name"];
+											$documentdkk = "uploads/document/kk/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_kk"]["name"]);
+											$newfilenamekk = 'kk_'.round(microtime(true)).'.'.$extkk;
+											move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
+											$fname_kk = $newfilenamekk;
+										} else {
+											$Return['error'] = 'Jenis File KK tidak diterima..';
+										}
+									}
+								}
+
+
+								if($_FILES['document_file_npwp']['size'] == 0) {
+									$fname_npwp = $this->input->post('ffoto_npwp');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
+										//checking image type
+										$allowed_npwp =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$filename_npwp = $_FILES['document_file_npwp']['name'];
+										$ext_npwp = pathinfo($filename_npwp, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_npwp,$allowed_npwp)){
+											$tmp_name_npwp = $_FILES["document_file_npwp"]["tmp_name"];
+											$documentd_npwp = "uploads/document/npwp/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_npwp"]["name"]);
+											$newfilename_npwp = 'npwp_'.round(microtime(true)).'.'.$ext_npwp;
+											move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
+											$fname_npwp = $newfilename_npwp;
+										} else {
+											$Return['error'] = 'Jenis File NPWP tidak diterima..';
+										}
+									}
+								}
+
+								if($_FILES['document_file_cv']['size'] == 0) {
+									$fname_cv = $this->input->post('ffile_cv');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_cv']['tmp_name'])) {
+										//checking image type
+										$allowed_cv =  array('pdf','PDF');
+										$filename_cv = $_FILES['document_file_cv']['name'];
+										$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_cv,$allowed_cv)){
+											$tmp_name_cv = $_FILES["document_file_cv"]["tmp_name"];
+											$documentd_cv = "uploads/document/cv/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_cv"]["name"]);
+											$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
+											move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
+											$fname_cv = $newfilename_cv;
+										} else {
+											$Return['error'] = 'Jenis File CV tidak diterima..';
+										}
+									}
+								}
+
+								if($_FILES['document_file_skck']['size'] == 0) {
+									$fname_skck = $this->input->post('ffile_skck');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
+										//checking image type
+										$allowed_skck =  array('pdf','PDF');
+										$filename_skck = $_FILES['document_file_skck']['name'];
+										$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_skck,$allowed_skck)){
+											$tmp_name_skck = $_FILES["document_file_skck"]["tmp_name"];
+											$documentd_skck = "uploads/document/skck/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_skck"]["name"]);
+											$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
+											move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
+											$fname_skck = $newfilename_skck;
+										} else {
+											$Return['error'] = 'Jenis File SKCK tidak diterima..';
+										}
+									}
+								}
+
+								if($_FILES['document_file_isd']['size'] == 0) {
+									$fname_isd = $this->input->post('ffile_isd');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_isd']['tmp_name'])) {
+										//checking image type
+										$allowed_isd =  array('pdf','PDF');
+										$filename_isd = $_FILES['document_file_isd']['name'];
+										$ext_isd = pathinfo($filename_isd, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_isd,$allowed_isd)){
+											$tmp_name_isd = $_FILES["document_file_isd"]["tmp_name"];
+											$documentd_isd = "uploads/document/ijazah/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_isd"]["name"]);
+											$newfilename_isd = 'isd_'.round(microtime(true)).'.'.$ext_isd;
+											move_uploaded_file($tmp_name_isd, $documentd_isd.$newfilename_isd);
+											$fname_isd = $newfilename_isd;
+										} else {
+											$Return['error'] = 'Jenis File IJAZAH SD tidak diterima..';
+										}
+									}
+								}
+
+								if($_FILES['document_file_pak']['size'] == 0) {
+									$fname_pak = $this->input->post('ffile_pak');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_pak']['tmp_name'])) {
+										//checking image type
+										$allowed_pak =  array('pdf','PDF');
+										$filename_pak = $_FILES['document_file_pak']['name'];
+										$ext_pak = pathinfo($filename_pak, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_pak,$allowed_pak)){
+											$tmp_name_pak = $_FILES["document_file_pak"]["tmp_name"];
+											$documentd_pak = "uploads/document/paklaring/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_pak"]["name"]);
+											$newfilename_pak = 'pak_'.round(microtime(true)).'.'.$ext_pak;
+											move_uploaded_file($tmp_name_pak, $documentd_pak.$newfilename_pak);
+											$fname_pak = $newfilename_pak;
+										} else {
+											$Return['error'] = 'Jenis File PAKLARING tidak diterima..';
+										}
+									}
+								}
+
+								if($_FILES['document_file_pkwt']['size'] == 0) {
+									$fname_pkwt = $this->input->post('ffile_pkwt');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
+										//checking image type
+										$allowed_pkwt =  array('pdf','PDF');
+										$filename_pkwt = $_FILES['document_file_pkwt']['name'];
+										$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_pkwt,$allowed_pkwt)){
+											$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
+											$documentd_pkwt = "uploads/document/pkwt/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_pkwt"]["name"]);
+											$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
+											move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
+											$fname_pkwt = $newfilename_pkwt;
+										} else {
+											$Return['error'] = 'Jenis File PKWT tidak diterima..';
+										}
+									}
+								}
+
+
+				//clean simple fields
+
+				$id 				= $this->input->post('user_id');
+				$nomor_ktp 	= $this->Xin_model->clean_post($this->input->post('nomor_ktp'));
+				$kk_no 			= $this->Xin_model->clean_post($this->input->post('kk_no'));
+				$npwp_no 		= $this->Xin_model->clean_post($this->input->post('npwp_no'));
+				// $no_bpjstk = $this->Xin_model->clean_post($this->input->post('no_bpjstk'));
+				// $bpjstk_confirm = $this->Xin_model->clean_post($this->input->post('bpjstk_confirm'));
+				// $no_bpjsks = $this->Xin_model->clean_post($this->input->post('no_bpjsks'));
+				// $bpjsks_confirm = $this->Xin_model->clean_post($this->input->post('bpjsks_confirm'));
+				// clean date fields
+				// $date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
+				// $document_type = $this->input->post('document_type_id');
+
+				$data = array(
+
+				'ktp_no' 				=> $nomor_ktp,
+				'kk_no' 				=> $kk_no,
+				'npwp_no' 			=> $npwp_no,
+
+				'filename_ktp' 	=> $fname,
+				'filename_kk' 	=> $fname_kk,
+				'filename_npwp' => $fname_npwp,
+				'filename_cv' 	=> $fname_cv,
+				'filename_skck' => $fname_skck,
+				'filename_isd' 	=> $fname_isd,
+				'filename_paklaring' => $fname_pak,
+				'filename_pkwt' => $fname_pkwt
+
+				);
+
+				// $result = $this->Employees_model->document_info_add($data);
+				$result = $this->Employees_model->basic_info($data,$id);
 
 			}
 
-			/* upload kk */
-			if($_FILES['document_file_kk']['size'] == 0) {
-				$fname_kk = $this->input->post('ffoto_kk');
+			if($Return['error']!=''){
+					$this->output($Return);
+	    }
+
+
+			if ($result == TRUE) {
+				$Return['result'] = $this->lang->line('xin_employee_d_info_added');
 			} else {
-				if($_FILES['document_file_kk']['size'] > 2000000){
-					$Return['error'] = 'File KK Lebih dari 2MB	..';
-				} else {
-
-					if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
-						//checking image type
-						$allowed_kk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-						$filename_kk = $_FILES['document_file_kk']['name'];
-						$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_kk,$allowed_kk)){
-							$tmp_name_kk = $_FILES["document_file_kk"]["tmp_name"];
-							$documentd_kk = "uploads/document/kk/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_kk"]["name"]);
-							$newfilename_kk = 'kk_'.round(microtime(true)).'.'.$ext_kk;
-							move_uploaded_file($tmp_name_kk, $documentd_kk.$newfilename_kk);
-							$fname_kk = $newfilename_kk;
-						} else {
-							$Return['error'] = 'Jenis File KK tidak diterima..';
-						}
-					}
-				}
-
+				$Return['error'] = $this->lang->line('xin_error_msg');
 			}
 
-			/* upload npwp */
-			if($_FILES['document_file_npwp']['size'] == 0) {
-				$fname_npwp = $this->input->post('ffoto_npwp');
-			} else {
-				if($_FILES['document_file_npwp']['size'] > 2000000){
-					$Return['error'] = 'File NPWP Lebih dari 2MB	..';
-				} else {
-					if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
-						//checking image type
-						$allowed_npwp =  array('png','jpg','jpeg','PNG','JPG','JPEG');
-						$filename_npwp = $_FILES['document_file_npwp']['name'];
-						$ext_npwp = pathinfo($filename_npwp, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_npwp,$allowed_npwp)){
-							$tmp_name_npwp = $_FILES["document_file_npwp"]["tmp_name"];
-							$documentd_npwp = "uploads/document/npwp/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_npwp"]["name"]);
-							$newfilename_npwp = 'npwp_'.round(microtime(true)).'.'.$ext_npwp;
-							move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
-							$fname_npwp = $newfilename_npwp;
-						} else {
-							$Return['error'] = 'Jenis File KK tidak diterima..';
-						}
-					}
-				}
-
-			}
-
-			/* upload CV*/
-			if($_FILES['document_file_cv']['size'] == 0) {
-				$fname_cv = $this->input->post('ffile_cv');
-			} else {
-				if($_FILES['document_file_cv']['size'] > 2000000){
-					$Return['error'] = 'File CV Lebih dari 2MB	..';
-				} else {
-
-					if(is_uploaded_file($_FILES['document_file_cv']['tmp_name'])) {
-						//checking image type
-						$allowed_cv =  array('pdf','PDF');
-						$filename_cv = $_FILES['document_file_cv']['name'];
-						$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_cv,$allowed_cv)){
-							$tmp_name_cv = $_FILES["document_file_cv"]["tmp_name"];
-							$documentd_cv = "uploads/document/cv/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_cv"]["name"]);
-							$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
-							move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
-							$fname_cv = $newfilename_cv;
-						} else {
-							$Return['error'] = 'Jenis File CV tidak diterima..';
-						}
-					}
-				}
-
-			}
-
-			/* upload SKCK*/
-			if($_FILES['document_file_skck']['size'] == 0) {
-				$fname_skck = $this->input->post('ffile_skck');
-			} else {
-				if($_FILES['document_file_skck']['size'] > 2000000){
-					$Return['error'] = 'File SKCK Lebih dari 2MB	..';
-				} 
-					if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
-						//checking image type
-						$allowed_skck =  array('pdf','PDF');
-						$filename_skck = $_FILES['document_file_skck']['name'];
-						$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_skck,$allowed_skck)){
-							$tmp_name_skck = $_FILES["document_file_skck"]["tmp_name"];
-							$documentd_skck = "uploads/document/skck/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_skck"]["name"]);
-							$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
-							move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
-							$fname_skck = $newfilename_skck;
-						} else {
-							$Return['error'] = 'Jenis File SKCK tidak diterima..';
-						}
-					}
-			}
-
-			/* upload IJAZAH SD*/
-			if($_FILES['document_file_isd']['size'] == 0) {
-				$fname_isd = $this->input->post('ffile_isd');
-			} else {
-				if($_FILES['document_file_isd']['size'] > 2000000){
-					$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
-				} else {
-					if(is_uploaded_file($_FILES['document_file_isd']['tmp_name'])) {
-						//checking image type
-						$allowed_isd =  array('pdf','PDF');
-						$filename_isd = $_FILES['document_file_isd']['name'];
-						$ext_isd = pathinfo($filename_isd, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_isd,$allowed_isd)){
-							$tmp_name_isd = $_FILES["document_file_isd"]["tmp_name"];
-							$documentd_isd = "uploads/document/ijazah/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_isd"]["name"]);
-							$newfilename_isd = 'isd_'.round(microtime(true)).'.'.$ext_isd;
-							move_uploaded_file($tmp_name_isd, $documentd_isd.$newfilename_isd);
-							$fname_isd = $newfilename_isd;
-						} else {
-							$Return['error'] = 'Jenis File IJAZAH SD tidak diterima..';
-						}
-					}
-				}
-
-			}
-
-						/* upload PAKLARING*/
-			if($_FILES['document_file_pak']['size'] == 0) {
-				$fname_pak = $this->input->post('ffile_pak');
-			} else {
-				if($_FILES['document_file_pak']['size'] > 2000000){
-					$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
-				} else {
-					if(is_uploaded_file($_FILES['document_file_pak']['tmp_name'])) {
-						//checking image type
-						$allowed_pak =  array('pdf','PDF');
-						$filename_pak = $_FILES['document_file_pak']['name'];
-						$ext_pak = pathinfo($filename_pak, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_pak,$allowed_pak)){
-							$tmp_name_pak = $_FILES["document_file_pak"]["tmp_name"];
-							$documentd_pak = "uploads/document/paklaring/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_pak"]["name"]);
-							$newfilename_pak = 'pak_'.round(microtime(true)).'.'.$ext_pak;
-							move_uploaded_file($tmp_name_pak, $documentd_pak.$newfilename_pak);
-							$fname_pak = $newfilename_pak;
-						} else {
-							$Return['error'] = 'Jenis File PAKLARING tidak diterima..';
-						}
-					}
-				}
-
-			}
-
-			/* upload PKWT*/
-			if($_FILES['document_file_pkwt']['size'] == 0) {
-				$fname_pkwt = $this->input->post('ffile_pkwt');
-			} else {
-				if($_FILES['document_file_pkwt']['size'] > 2000000){
-					$Return['error'] = 'File PKWT Lebih dari 2MB	..';
-				} else {
-					if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
-						//checking image type
-						$allowed_pkwt =  array('pdf','PDF');
-						$filename_pkwt = $_FILES['document_file_pkwt']['name'];
-						$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_pkwt,$allowed_pkwt)){
-							$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
-							$documentd_pkwt = "uploads/document/pkwt/";
-							// basename() may prevent filesystem traversal attacks;
-							// further validation/sanitation of the filename may be appropriate
-							$name = basename($_FILES["document_file_pkwt"]["name"]);
-							$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
-							move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
-							$fname_pkwt = $newfilename_pkwt;
-						} else {
-							$Return['error'] = 'Jenis File PKWT tidak diterima..';
-						}
-					}
-				}
-
-			}
-
-		}
-
-		if($Return['error']!=''){
-				$this->output($Return);
-    	}
-
-		//clean simple fields
-		$nomor_ktp = $this->Xin_model->clean_post($this->input->post('nomor_ktp'));
-		$kk_no = $this->Xin_model->clean_post($this->input->post('kk_no'));
-		$npwp_no = $this->Xin_model->clean_post($this->input->post('npwp_no'));
-		// $no_bpjstk = $this->Xin_model->clean_post($this->input->post('no_bpjstk'));
-		// $bpjstk_confirm = $this->Xin_model->clean_post($this->input->post('bpjstk_confirm'));
-		// $no_bpjsks = $this->Xin_model->clean_post($this->input->post('no_bpjsks'));
-		// $bpjsks_confirm = $this->Xin_model->clean_post($this->input->post('bpjsks_confirm'));
-		// clean date fields
-		// $date_of_expiry = $this->Xin_model->clean_date_post($this->input->post('date_of_expiry'));
-		// $document_type = $this->input->post('document_type_id');
-
-		$data = array(
-
-		'ktp_no' 				=> $nomor_ktp,
-		'kk_no' 				=> $kk_no,
-		'npwp_no' 			=> $npwp_no,
-
-		'filename_ktp' 	=> $fname,
-		'filename_kk' 	=> $fname_kk,
-		'filename_npwp' => $fname_npwp,
-		'filename_cv' 	=> $fname_cv,
-		'filename_skck' => $fname_skck,
-		'filename_isd' 	=> $fname_isd,
-		'filename_paklaring' => $fname_pak,
-		'filename_pkwt' => $fname_pkwt
-
-		);
-
-		$id = $this->input->post('user_id');
-		// $result = $this->Employees_model->document_info_add($data);
-		$result = $this->Employees_model->basic_info($data,$id);
-
-		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_employee_d_info_added');
-		} else {
-			$Return['error'] = $this->lang->line('xin_error_msg');
-		}
-
-		$this->output($Return);
-		exit;
+			$this->output($Return);
+			exit;
 		}
 	}
 	
@@ -4656,87 +4651,87 @@ class Employees extends MY_Controller {
 		}
 	}
 	
-	// Validate and add info in database // e_document info
-	public function e_document_info() {
+	// // Validate and add info in database // e_document info
+	// public function e_document_info() {
 	 
-		if($this->input->post('type')=='e_document_info') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+	// 	if($this->input->post('type')=='e_document_info') {		
+	// 	/* Define return | here result is used to return user data and error for error message */
+	// 	$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+	// 	$Return['csrf_hash'] = $this->security->get_csrf_hash();
 			
-		/* Server side PHP input validation */		
-		if($this->input->post('document_type_id')==='') {
-       		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
-		} else if($this->input->post('title')==='') {
-			 $Return['error'] = $this->lang->line('xin_employee_error_document_title');
-		}
+	// 	/* Server side PHP input validation */		
+	// 	if($this->input->post('document_type_id')==='') {
+  //      		 $Return['error'] = $this->lang->line('xin_employee_error_d_type');
+	// 	} else if($this->input->post('title')==='') {
+	// 		 $Return['error'] = $this->lang->line('xin_employee_error_document_title');
+	// 	}
 		
-		/* Check if file uploaded..*/
-		else if($_FILES['document_file']['size'] == 0) {
-			$data = array(
-				'document_type_id' => $this->input->post('document_type_id'),
-				'date_of_expiry' => $this->input->post('date_of_expiry'),
-				'title' => $this->input->post('title'),
-				//'notification_email' => $this->input->post('email'),
-				//'is_alert' => $this->input->post('send_mail'),
-				'description' => $this->input->post('description')
-				);
-				$e_field_id = $this->input->post('e_field_id');
-				$result = $this->Employees_model->document_info_update($data,$e_field_id);
-				if ($result == TRUE) {
-					$Return['result'] = $this->lang->line('xin_employee_d_info_updated');
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_msg');
-				}
-				$this->output($Return);
-				exit;
-		} else {
-			if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
-				//checking image type
-				$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
-				$filename = $_FILES['document_file']['name'];
-				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+	// 	/* Check if file uploaded..*/
+	// 	else if($_FILES['document_file']['size'] == 0) {
+	// 		$data = array(
+	// 			'document_type_id' => $this->input->post('document_type_id'),
+	// 			'date_of_expiry' => $this->input->post('date_of_expiry'),
+	// 			'title' => $this->input->post('title'),
+	// 			//'notification_email' => $this->input->post('email'),
+	// 			//'is_alert' => $this->input->post('send_mail'),
+	// 			'description' => $this->input->post('description')
+	// 			);
+	// 			$e_field_id = $this->input->post('e_field_id');
+	// 			$result = $this->Employees_model->document_info_update($data,$e_field_id);
+	// 			if ($result == TRUE) {
+	// 				$Return['result'] = $this->lang->line('xin_employee_d_info_updated');
+	// 			} else {
+	// 				$Return['error'] = $this->lang->line('xin_error_msg');
+	// 			}
+	// 			$this->output($Return);
+	// 			exit;
+	// 	} else {
+	// 		if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
+	// 			//checking image type
+	// 			$allowed =  array('png','jpg','jpeg','pdf','gif','txt','pdf','xls','xlsx','doc','docx');
+	// 			$filename = $_FILES['document_file']['name'];
+	// 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
 				
-				if(in_array($ext,$allowed)){
-					$tmp_name = $_FILES["document_file"]["tmp_name"];
-					$documentd = "uploads/document/";
-					// basename() may prevent filesystem traversal attacks;
-					// further validation/sanitation of the filename may be appropriate
-					$name = basename($_FILES["document_file"]["name"]);
-					$newfilename = 'document_'.round(microtime(true)).'.'.$ext;
-					move_uploaded_file($tmp_name, $documentd.$newfilename);
-					$fname = $newfilename;
-					$data = array(
-					'document_type_id' => $this->input->post('document_type_id'),
-					'date_of_expiry' => $this->input->post('date_of_expiry'),
-					'document_file' => $fname,
-					'title' => $this->input->post('title'),
-					//'notification_email' => $this->input->post('email'),
-					//'is_alert' => $this->input->post('send_mail'),
-					'description' => $this->input->post('description')
-					);
-					$e_field_id = $this->input->post('e_field_id');
-					$result = $this->Employees_model->document_info_update($data,$e_field_id);
-					if ($result == TRUE) {
-						$Return['result'] = $this->lang->line('xin_employee_d_info_updated');
-					} else {
-						$Return['error'] = $this->lang->line('xin_error_msg');
-					}
-					$this->output($Return);
-					exit;
-				} else {
-					$Return['error'] = $this->lang->line('xin_employee_document_file_type');
-				}
-			}
-		}
+	// 			if(in_array($ext,$allowed)){
+	// 				$tmp_name = $_FILES["document_file"]["tmp_name"];
+	// 				$documentd = "uploads/document/";
+	// 				// basename() may prevent filesystem traversal attacks;
+	// 				// further validation/sanitation of the filename may be appropriate
+	// 				$name = basename($_FILES["document_file"]["name"]);
+	// 				$newfilename = 'document_'.round(microtime(true)).'.'.$ext;
+	// 				move_uploaded_file($tmp_name, $documentd.$newfilename);
+	// 				$fname = $newfilename;
+	// 				$data = array(
+	// 				'document_type_id' => $this->input->post('document_type_id'),
+	// 				'date_of_expiry' => $this->input->post('date_of_expiry'),
+	// 				'document_file' => $fname,
+	// 				'title' => $this->input->post('title'),
+	// 				//'notification_email' => $this->input->post('email'),
+	// 				//'is_alert' => $this->input->post('send_mail'),
+	// 				'description' => $this->input->post('description')
+	// 				);
+	// 				$e_field_id = $this->input->post('e_field_id');
+	// 				$result = $this->Employees_model->document_info_update($data,$e_field_id);
+	// 				if ($result == TRUE) {
+	// 					$Return['result'] = $this->lang->line('xin_employee_d_info_updated');
+	// 				} else {
+	// 					$Return['error'] = $this->lang->line('xin_error_msg');
+	// 				}
+	// 				$this->output($Return);
+	// 				exit;
+	// 			} else {
+	// 				$Return['error'] = $this->lang->line('xin_employee_document_file_type');
+	// 			}
+	// 		}
+	// 	}
 					
-		if($Return['error']!=''){
-       		$this->output($Return);
-    	}
+	// 	if($Return['error']!=''){
+  //      		$this->output($Return);
+  //   	}
 	
 		
-		}
-	}
+	// 	}
+	// }
 
 
 	// employee qualification - listing

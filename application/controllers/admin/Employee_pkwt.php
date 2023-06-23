@@ -89,11 +89,29 @@ class Employee_pkwt extends MY_Controller {
 
           foreach($listpkwt->result() as $r) {
 			  
+
+				$emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+				if(!is_null($emp)){
+					$fullname = $emp[0]->first_name;
+					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
+				} else {
+					$fullname = '--';	
+					$sub_project = '0';
+				}
+
 				$no = $r->contract_id;
 				$nip = $r->employee_id;
 				$jabatan = $r->jabatan;
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
-				$basic_pay = $r->basic_pay;
+
+				if($emp[0]->sub_project_id == '1' || $emp[0]->sub_project_id == '2'){
+
+					$basic_pay = '******' ;
+				} else {
+
+					$basic_pay = $this->Xin_model->rupiah($r->basic_pay) ;
+				}
+
 				// $ktp_no = $r->ktp_no;
 				// $penempatan = $r->penempatan;
 				$approve_nae = $r->approve_nae;
@@ -112,14 +130,6 @@ class Employee_pkwt extends MY_Controller {
 				}
 
 
-				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
-				if(!is_null($emp)){
-					$fullname = $emp[0]->first_name;
-					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
-				} else {
-					$fullname = '--';	
-					$sub_project = '0';
-				}
 
 				$projects = $this->Project_model->read_single_project($r->project);
 				if(!is_null($projects)){
@@ -139,7 +149,7 @@ class Employee_pkwt extends MY_Controller {
 				$nama_project,
 				$jabatan,
 				$begin_until,
-				$this->Xin_model->rupiah($basic_pay),
+				$basic_pay,
 			);
           }
 
@@ -507,12 +517,15 @@ class Employee_pkwt extends MY_Controller {
 					if(strtoupper($this->input->post('company'))=='PT. SIPRAMA CAKRAWALA'){
 						$pkwt_hr = 'E-PKWT-JKTSC-HR/';
 						$spb_hr = 'E-SPB-JKTSC-HR/';
+						$companyID = '2';
 					}else if (strtoupper($this->input->post('company'))=='PT. KRISTA AULIA CAKRAWALA'){
 						$pkwt_hr = 'E-PKWT-JKTKAC-HR/';
 						$spb_hr = 'E-SPB-JKTKAC-HR/';
+						$companyID = '3';
 					} else {
 						$pkwt_hr = 'E-PKWT-JKTMATA-HR/';
 						$spb_hr = 'E-SPB-JKTMATA-HR/';
+						$companyID = '4';
 					}
 
 
@@ -527,7 +540,7 @@ class Employee_pkwt extends MY_Controller {
 			   	$begin_date = $sub_kalimat = substr($this->input->post('begin'),0,10);
 			   	$end_date = $sub_kalimat = substr($this->input->post('begin'),-10);
 					$waktu_kontrak = $this->input->post('waktu_kontrak');
-					$company = strtoupper($this->input->post('company'));
+					$company = $companyID;
 					$jabatan = strtoupper($this->input->post('jabatan'));
 					$area = strtoupper($this->input->post('area'));
 					$harikerja = strtoupper($this->input->post('harikerja'));
