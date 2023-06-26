@@ -219,7 +219,7 @@ class Profile extends MY_Controller {
 			
 		/* Server side PHP input validation */		
 		if($this->input->post('first_name')==='') {
-      $Return['error'] = $this->lang->line('xin_employee_error_first_name');
+      $Return['error'] = 'Nama Legnkap Kosong';
 		} else if($this->input->post('tempat_lahir')==='') {
 			$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
 		} else if($this->input->post('tanggal_lahir')==='') {

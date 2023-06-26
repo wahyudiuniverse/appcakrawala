@@ -289,7 +289,6 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = 'File KK Lebih dari 2MB	..';
 					}
 
-
 					else if($_FILES['document_cv']['size'] == 0) {
 						$Return['error'] = 'Riwayat Hidup (CV) Kosong..!';
 					} else if ($_FILES['document_cv']['size'] > 2000000){
@@ -300,7 +299,9 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = 'File SKCK Lebih dari 2MB	..';
 					}
 
-					else if ($_FILES['document_ijz']['size'] > 2000000){
+					else if($_FILES['document_ijz']['size'] == 0) {
+						$Return['error'] = 'Ijazah Kosong..!';
+					} else if ($_FILES['document_ijz']['size'] > 2000000){
 						$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
 					}
 
@@ -352,7 +353,7 @@ class Employee_request extends MY_Controller {
 
 								if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
 										//checking image type
-										$allowedcv =  array('pdf','PDF');
+										$allowedcv =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
 										$filenamecv = $_FILES['document_cv']['name'];
 										$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
 										
@@ -370,12 +371,9 @@ class Employee_request extends MY_Controller {
 										}
 								}
 
-							if($_FILES['document_ijz']['size'] == 0) {
-								$fnameijz=0;
-							} else {
-									if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
+								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
 										//checking image type
-										$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
 										$filenameijz = $_FILES['document_ijz']['name'];
 										$extijz = pathinfo($filenameijz, PATHINFO_EXTENSION);
 										
@@ -391,16 +389,15 @@ class Employee_request extends MY_Controller {
 										} else {
 											$Return['error'] = 'Jenis File Ijazah tidak diterima..';
 										}
-									}
-							}
-
+								}
+							
 
 							if($_FILES['document_skck']['size'] == 0) {
 								$fnameskck=0;
 							} else {
 									if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 										//checking image type
-										$allowedskck =  array('pdf','PDF');
+										$allowedskck =  array('pdf','PDF','png','jpg','jpeg','PNG','JPG','JPEG');
 										$filenameskck = $_FILES['document_skck']['name'];
 										$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
 										
@@ -425,7 +422,7 @@ class Employee_request extends MY_Controller {
 							} else {
 									if(is_uploaded_file($_FILES['document_pkl']['tmp_name'])) {
 										//checking image type
-										$allowedpkl =  array('pdf','PDF');
+										$allowedpkl =  array('pdf','PDF','png','jpg','jpeg','PNG','JPG','JPEG');
 										$filenamepkl = $_FILES['document_pkl']['name'];
 										$extpkl = pathinfo($filenamepkl, PATHINFO_EXTENSION);
 										

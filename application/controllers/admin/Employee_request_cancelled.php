@@ -292,12 +292,12 @@ class Employee_request_cancelled extends MY_Controller {
 							if($_FILES['document_ktp']['size'] == 0) {
 								$fnamektp=$this->input->post('fktp_name');
 							} else {
-								if($_FILES['document_file']['size'] > 2000000){
-
-								} else {
+								// if($_FILES['document_ktp']['size'] > 2000000){
+								// 	$Return['error'] = 'File KTP Lebih dari 2MB	..';
+								// } else {
 									if(is_uploaded_file($_FILES['document_ktp']['tmp_name'])) {
 										//checking image type
-										$allowedktp =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+										$allowedktp =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
 										$filenamektp = $_FILES['document_ktp']['name'];
 										$extktp = pathinfo($filenamektp, PATHINFO_EXTENSION);
 										
@@ -314,14 +314,14 @@ class Employee_request_cancelled extends MY_Controller {
 											$Return['error'] = 'Jenis File KTP tidak diterima..';
 										}
 									}
-								}
+								// }
 							}
 
 
 							if($_FILES['document_kk']['size'] == 0) {$fnamekk=$this->input->post('fkk_name');} else {
 								if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
 									//checking image type
-									$allowedkk =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$allowedkk =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
 									$filenamekk = $_FILES['document_kk']['name'];
 									$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
 									
@@ -343,7 +343,7 @@ class Employee_request_cancelled extends MY_Controller {
 							if($_FILES['document_skck']['size'] == 0) {$fnameskck=$this->input->post('fskck_name');} else {
 								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 									//checking image type
-									$allowedskck =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$allowedskck =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
 									$filenameskck = $_FILES['document_skck']['name'];
 									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
 									
@@ -362,10 +362,12 @@ class Employee_request_cancelled extends MY_Controller {
 								}
 							}
 
-							if($_FILES['document_ijazah']['size'] == 0) {$fnameijazah=$this->input->post('fijz_name');} else {
+							if($_FILES['document_ijazah']['size'] == 0) {
+								$fnameijazah=$this->input->post('fijz_name');
+							} else {
 								if(is_uploaded_file($_FILES['document_ijazah']['tmp_name'])) {
 									//checking image type
-									$allowedijazah =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$allowedijazah =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
 									$filenameijazah = $_FILES['document_ijazah']['name'];
 									$extijazah = pathinfo($filenameijazah, PATHINFO_EXTENSION);
 									
@@ -385,11 +387,36 @@ class Employee_request_cancelled extends MY_Controller {
 							}
 
 
+								if($_FILES['document_cv']['size'] == 0) {
+									$fname_cv = $this->input->post('fcivi_name');
+								} else {
+									if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
+										//checking image type
+										$allowed_cv =  array('pdf','PDF');
+										$filename_cv = $_FILES['document_cv']['name'];
+										$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_cv,$allowed_cv)){
+											$tmp_name_cv = $_FILES["document_cv"]["tmp_name"];
+											$documentd_cv = "uploads/document/cv/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_cv"]["name"]);
+											$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
+											move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
+											$fname_cv = $newfilename_cv;
+										} else {
+											$Return['error'] = 'Jenis File CV tidak diterima..';
+										}
+									}
+								}
+
 			$data_up = array(
 				'ktp'							=> $fnamektp,
 				'kk'							=> $fnamekk,
 				'skck'						=> $fnameskck,
-				'ijazah'					=> $fnameijazah,
+				'ijazah'					=> $	,
+				'civi'						=> $fname_cv,
 				'cancel_stat'			=> 0,
 				'verified_by' 			=>  $session['user_id'],
 				'verified_date' 			=> date('Y-m-d h:i:s')

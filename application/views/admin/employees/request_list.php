@@ -393,7 +393,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">IJAZAH Terakhir</label>
+                              <label for="logo">IJAZAH Terakhir<strong>*</strong></label>
                               <input type="file" class="form-control-file" id="document_ijz" name="document_ijz" accept="image/png,image/jpg, image/jpeg">
                               <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>

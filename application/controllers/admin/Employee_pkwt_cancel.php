@@ -350,6 +350,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 		$employeeID = $this->input->post('employeeID');
 
 
+
 							if($_FILES['document_ktp']['size'] == 0) {$fnamektp=$this->input->post('fktp_name');} else {
 								if(is_uploaded_file($_FILES['document_ktp']['tmp_name'])) {
 									//checking image type
@@ -420,7 +421,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 							if($_FILES['document_ijazah']['size'] == 0) {$fnameijazah=$this->input->post('fijz_name');} else {
 								if(is_uploaded_file($_FILES['document_ijazah']['tmp_name'])) {
 									//checking image type
-									$allowedijazah =  array('png','jpg','PNG','JPG','jpeg','JPEG');
+									$allowedijazah =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
 									$filenameijazah = $_FILES['document_ijazah']['name'];
 									$extijazah = pathinfo($filenameijazah, PATHINFO_EXTENSION);
 									
@@ -430,7 +431,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 										// basename() may prevent filesystem traversal attacks;
 										// further validation/sanitation of the filename may be appropriate
 										$name = basename($_FILES["document_ijazah"]["name"]);
-										$newfilenameijazah = 'skck_'.round(microtime(true)).'.'.$extijazah;
+										$newfilenameijazah = 'ijz_'.round(microtime(true)).'.'.$extijazah;
 										move_uploaded_file($tmp_nameijazah, $documentdijazah.$newfilenameijazah);
 										$fnameijazah = $newfilenameijazah;
 									} else {
