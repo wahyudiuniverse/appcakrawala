@@ -565,45 +565,6 @@
     ?>
 
 
-
-<!-- Request PKW -->
-    <?php 
-    if (in_array('376',$role_resources_ids)) {
-    ?>
-      <li class="<?php if(!empty($arr_mod['pkwt_request_open']))echo $arr_mod['pkwt_request_open'];?> sidenav-item"> 
-        <a href="#" class="sidenav-link sidenav-toggle"> 
-          <i class="sidenav-icon ion ion-logo-buffer"></i>
-          <div><?php echo $this->lang->line('xin_request_pkwt');?></div>
-        </a>
-        
-        <ul class="sidenav-menu">
-          <?php 
-          if (in_array('376',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_active']))echo $arr_mod['pkwt_request_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/reports/pkwt');?>" > <?php echo $this->lang->line('xin_template_pkwt');?> 
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-          <?php 
-          if (in_array('128',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_import_active']))echo $arr_mod['pkwt_import_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importpkwt');?>" > <?php echo $this->lang->line('xin_pkwt_import');?> 
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-        </ul>
-      </li>
-    <?php 
-    } 
-    ?>
-
 <!-- payroll -->
     <?php 
     if ($system[0]->module_payroll=='yes') {

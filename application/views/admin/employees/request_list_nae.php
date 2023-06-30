@@ -65,7 +65,7 @@
       <div class="card-body">
         <?php $attributes = array('name' => 'add_employee', 'id' => 'xin-form', 'autocomplete' => 'off');?>
         <?php $hidden = array('_user' => $session['user_id']);?>
-        <?php echo form_open_multipart('admin/employee_request/request_add_employee', $attributes, $hidden);?>
+        <?php echo form_open_multipart('admin/employee_request_nae/request_add_employee', $attributes, $hidden);?>
         <div class="form-body">
 
           <div class="row">

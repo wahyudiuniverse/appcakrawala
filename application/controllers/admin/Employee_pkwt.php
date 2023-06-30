@@ -104,16 +104,14 @@ class Employee_pkwt extends MY_Controller {
 				$jabatan = $r->jabatan;
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
 
-				if($emp[0]->sub_project_id == '1' || $emp[0]->sub_project_id == '2'){
+				// if($emp[0]->sub_project_id == '1' || $emp[0]->sub_project_id == '2'){
 
-					$basic_pay = '******' ;
-				} else {
+				// 	$basic_pay = '******' ;
+				// } else {
 
-					$basic_pay = $this->Xin_model->rupiah($r->basic_pay) ;
-				}
+				// 	$basic_pay = $this->Xin_model->rupiah($r->basic_pay) ;
+				// }
 
-				// $ktp_no = $r->ktp_no;
-				// $penempatan = $r->penempatan;
 				$approve_nae = $r->approve_nae;
 				$approve_nom = $r->approve_nom;
 				$approve_hrd = $r->approve_hrd;
@@ -139,17 +137,18 @@ class Employee_pkwt extends MY_Controller {
 				}
 
 
-			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+			// $view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 			$data[] = array(
 				$no,
-				$status_pkwt.' '.$view_pkwt,
+				// $status_pkwt.' '.$view_pkwt,
+				$status_pkwt,
 				$nip,
 				$fullname,
 				$nama_project,
 				$jabatan,
 				$begin_until,
-				$basic_pay,
+				'$basic_pay',
 			);
           }
 

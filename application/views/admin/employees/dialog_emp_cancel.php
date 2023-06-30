@@ -580,7 +580,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
-      <input name="fijz_name" type="text" value="<?php echo $ktp;?>" hidden>
+      <input name="fijz_name" type="text" value="<?php echo $ijazah;?>" hidden>
       <div class="col-sm-4">
         <div>
           <label for="penempatan">Foto IJAZAH</label>

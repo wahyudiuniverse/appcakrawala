@@ -271,11 +271,16 @@ class Employee_pkwt_apnae extends MY_Controller {
 					$filename_kk 			= $emp[0]->filename_kk;
 					$filename_skck 		= $emp[0]->filename_skck;
 					$filename_isd 		= $emp[0]->filename_isd;
+
+					$periode 					= $emp[0]->contract_start . ' s/d '. $emp[0]->contract_end;
+
 				} else {
 					$filename_ktp 		= '0';	
 					$filename_kk 			= '0';	
 					$filename_skck 		= '0';	
 					$filename_isd 		= '0';	
+
+					$periode 					= '--';
 				}
 
 
@@ -297,7 +302,7 @@ class Employee_pkwt_apnae extends MY_Controller {
 				'ijazah' => $filename_isd,
 				
 				'waktu_kontrak' => $result[0]->waktu_kontrak.' (Bulan)',
-				'begin' => $result[0]->from_date . ' s/d '. $result[0]->to_date,
+				'begin' => $periode,
 				'hari_kerja' => $result[0]->hari_kerja,
 				'basic_pay' => $result[0]->basic_pay,
 				'dm_allow_grade' => $result[0]->dm_allow_grade,
@@ -324,6 +329,10 @@ class Employee_pkwt_apnae extends MY_Controller {
 				'allowance_transmeal' => $result[0]->allowance_transmeal,
 				'dm_allow_medicine' => $result[0]->dm_allow_medicine,
 				'allowance_medicine' => $result[0]->allowance_medicine,
+
+				'dm_allow_operational' => $result[0]->dm_allow_operation,
+				'allow_operational' => $result[0]->allowance_operation,
+				
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->request_pkwt),
 				'request_date' => $result[0]->request_date,
 				'approve_nae' => $this->Employees_model->read_employee_info($result[0]->approve_nae),

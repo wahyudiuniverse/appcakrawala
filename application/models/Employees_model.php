@@ -127,7 +127,7 @@ class Employees_model extends CI_Model {
 		WHERE request_empby is not null 
 		AND approved_naeby is null
 		AND approved_nomby is null
-		AND cancel_stat = 0
+        AND project != 22
 		ORDER BY secid DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

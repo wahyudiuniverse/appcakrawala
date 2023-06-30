@@ -1,6 +1,16 @@
-<?php $result = $this->Project_model->ajax_company_department($id_company);?>
+<?php //$result = $this->Project_model->ajax_company_department($id_company);
 
-            <label class="form-label">Projects</label>
+
+    $session = $this->session->userdata('username');
+    if(empty($session)){ 
+      redirect('admin/');
+    }
+
+    $result = $this->Project_model->get_project_maping($session['employee_id']);
+
+?>
+
+            <label class="form-label">Projects <?php echo $session['employee_id'];?></label>
             <select class="form-control" name="sub_project_id" id="aj_project" data-plugin="xin_select" data-placeholder="Sub Project">
 
     <option value="0">--</option>

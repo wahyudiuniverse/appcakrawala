@@ -524,6 +524,25 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 <?php } ?>
 
 
+<?php if($allow_operational!="0") {?>
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Tunjangan Operational</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allow_operational). ' /'.$dm_allow_operational;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
 
 <!-- FOTO KTP -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">

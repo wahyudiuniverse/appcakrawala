@@ -1247,12 +1247,15 @@ class Reports extends MY_Controller
 		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_attendance_employee');
 		$data['path_url'] = 'reports_employee_attendance';
 		$data['all_companies'] = $this->Xin_model->get_companies();
-		if(in_array('139',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
-			$data['all_projects'] = $this->Project_model->get_project_exist();
-		}
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		
+		// if(in_array('139',$role_resources_ids)) {
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// } else {
+		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
+		// }
 		if(in_array('112',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/employee_attendance", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load

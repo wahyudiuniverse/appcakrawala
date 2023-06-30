@@ -377,7 +377,7 @@ class Employee_request_cancelled extends MY_Controller {
 										// basename() may prevent filesystem traversal attacks;
 										// further validation/sanitation of the filename may be appropriate
 										$name = basename($_FILES["document_ijazah"]["name"]);
-										$newfilenameijazah = 'skck_'.round(microtime(true)).'.'.$extijazah;
+										$newfilenameijazah = 'ijz_'.round(microtime(true)).'.'.$extijazah;
 										move_uploaded_file($tmp_nameijazah, $documentdijazah.$newfilenameijazah);
 										$fnameijazah = $newfilenameijazah;
 									} else {
@@ -415,7 +415,7 @@ class Employee_request_cancelled extends MY_Controller {
 				'ktp'							=> $fnamektp,
 				'kk'							=> $fnamekk,
 				'skck'						=> $fnameskck,
-				'ijazah'					=> $	,
+				'ijazah'					=> $fnameijazah,
 				'civi'						=> $fname_cv,
 				'cancel_stat'			=> 0,
 				'verified_by' 			=>  $session['user_id'],

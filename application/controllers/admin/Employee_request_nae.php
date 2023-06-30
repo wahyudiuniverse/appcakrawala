@@ -184,6 +184,7 @@ class Employee_request_nae extends MY_Controller {
 	}
 	
 
+
 	// Validate and add info in database
 	public function request_add_employee() {
 		$session = $this->session->userdata('username');
@@ -553,13 +554,15 @@ class Employee_request_nae extends MY_Controller {
 								'ijazah'								=> $fnameijz,
 								'civi'									=> $fnamecv,
 								'paklaring'							=> $fnamepkl,
+
 								'request_empby' 				=> $session['user_id'],
 								'request_empon' 				=> date("Y-m-d h:i:s"),
+								'approved_naeby' 				=> $session['user_id'],
+								'approved_naeon'				=> date("Y-m-d h:i:s"),
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),
 								'createdby' => $session['user_id']
-								// 'modifiedon' => date('Y-m-d h:i:s')
 							);
 						$iresult = $this->Employees_model->addrequest($data);
 					}

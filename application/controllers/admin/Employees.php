@@ -4129,9 +4129,9 @@ class Employees extends MY_Controller {
 				
 			/* Server side PHP input validation */		
 			if($this->input->post('nomor_ktp')==='') {
-				 // $Return['error'] = 'Nomor KTP Kosong..!';
+				 $Return['error'] = 'Nomor KTP Kosong..!';
 
-				 $Return['error'] = 'SIZE:'.$_FILES['document_file']['size'];
+				 // $Return['error'] = 'SIZE:'.$_FILES['document_file']['size'];
 			}
 		
 			else if ($_FILES['document_file']['size'] > 2000000){
