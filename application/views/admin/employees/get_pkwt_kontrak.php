@@ -36,7 +36,7 @@
 
 ?>
 
-                    <label for="kontrak">: 3 (Bulan)</label>
+                    <label for="kontrak">: [Menyesuaikan Waktu Kontrak Dipilih]</label>
 
 
 

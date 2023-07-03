@@ -125,7 +125,7 @@
               <div class="row">
 
                 <!-- AREA -->
-                <div class="col-md-4">
+                <div class="col-md-4" hidden>
                   <div class="form-group" id="project_area_ajax">
                     <label for="area">Area/Penempatan<i class="hrpremium-asterisk">*</i></label>
                     <select class="form-control" name="area" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>" disabled>
@@ -135,7 +135,7 @@
                 </div>
 
                 <!-- POSISI -->
-                <div class="col-md-4">
+                <div class="col-md-4" hidden>
                   <div class="form-group" id="x">
                     <label for="posisi">Posisi/Jabatan<i class="hrpremium-asterisk">*</i></label>
                     <select class="form-control" name="posisi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>" disabled>
@@ -145,7 +145,7 @@
                 </div>
 
                 <!-- NONE -->
-                <div class="col-md-4">
+                <div class="col-md-4" hidden>
                   <div class="form-group">
                     <label for="office_lokasi">None<i class="hrpremium-asterisk">*</i></label>
                     <select class="form-control" name="office_lokasi" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_e_details_office_location');?>" disabled>
