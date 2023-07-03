@@ -66,13 +66,15 @@ class Employees_model extends CI_Model {
 		FROM xin_employees 
 		WHERE is_active = 1 
 		AND status_resign = 5
-		AND employee_id not IN (SELECT 1 AS nip FROM DUAL
-			UNION
-			SELECT employee_id AS nip FROM xin_employee_contract WHERE status_pkwt = 1)
 		AND project_id = '$id'
 		ORDER BY date_of_leaving DESC;");
   	  return $query->result();
 	}
+
+		// AND employee_id not IN (SELECT 1 AS nip FROM DUAL
+		// 	UNION
+		// 	SELECT employee_id AS nip FROM xin_employee_contract WHERE status_pkwt in (0,1))
+
 
 	public function get_all_employees_byposisi($id)
 	{

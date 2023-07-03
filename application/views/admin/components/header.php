@@ -320,7 +320,7 @@ if($theme[0]->animation_style == '') {
         <?php echo $cimg;?> <span class="px-1 mr-lg-2 ml-2 ml-lg-0"><?php echo $user[0]->first_name.' '.$user[0]->last_name;?></span> </span> </a>
         <div class="dropdown-menu dropdown-menu-right">
           <?php if(in_array('445',$role_resources_ids)) { ?>
-          <a class="dropdown-item" href="<?php echo site_url('admin/employees/detail/'.$user[0]->user_id);?>"> <i class="ion ion-ios-person text-lightest"></i> &nbsp; <?php echo $this->lang->line('header_my_profile');?></a>
+          <a class="dropdown-item" href="<?php echo site_url('admin/profile');?>"> <i class="ion ion-ios-person text-lightest"></i> &nbsp; <?php echo $this->lang->line('header_my_profile');?></a>
           <?php } ?>
           <?php if(in_array('9',$role_resources_ids)) { ?>
           <a class="dropdown-item" href="<?php echo site_url('admin/policy/view_all');?>"> <i class="lnr lnr-select text-lightest"></i> &nbsp; <?php echo $this->lang->line('header_policies');?></a>
