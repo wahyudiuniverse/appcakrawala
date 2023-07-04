@@ -971,7 +971,9 @@ class Importexceleslip extends MY_Controller
 				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
 				$deposit = $eslip[0]->deposit;
 				$pph = $eslip[0]->pph;
+				$pph_thr = $eslip[0]->pph_thr;
 				$penalty_late = $eslip[0]->penalty_late;
+				$penalty_alfa = $eslip[0]->penalty_alfa;
 				$penalty_attend = $eslip[0]->penalty_attend;
 				$mix_oplos = $eslip[0]->mix_oplos;
 				$pot_trip_malang = $eslip[0]->pot_trip_malang;

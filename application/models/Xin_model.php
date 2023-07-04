@@ -1585,40 +1585,44 @@ class Xin_model extends CI_Model {
 	}
 
 
-	public function count_emp_request_cancel()
+	public function count_emp_request_cancel($empID)
 	{
 	  $query = $this->db->query("SELECT * FROM xin_employee_request 
-				WHERE cancel_stat = 1");
+				WHERE cancel_stat = 1
+		        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')");
   	  return $query->num_rows();
 	}
 
-	public function count_emp_request_nae()
+	public function count_emp_request_nae($empID)
 	{
 	  $query = $this->db->query("SELECT * FROM xin_employee_request 
 				WHERE request_empby IS NOT null 
 				AND approved_naeby IS null
 				AND approved_nomby is null
+				AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 				AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
-	public function count_emp_request_nom()
+	public function count_emp_request_nom($empID)
 	{
 	  $query = $this->db->query("SELECT * FROM xin_employee_request 
 				WHERE request_empby IS NOT null 
 				AND approved_naeby IS NOT null
 				AND approved_nomby is null
+				AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 				AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
 
-	public function count_emp_request_hrd()
+	public function count_emp_request_hrd($empID)
 	{
 	  $query = $this->db->query("SELECT * FROM xin_employee_request 
 				WHERE request_empby IS NOT null 
 				AND approved_naeby IS NOT null
 				AND approved_nomby is NOT null
 				AND approved_hrdby is null
+				AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 				AND cancel_stat = 0");
   	  return $query->num_rows();
 	}
