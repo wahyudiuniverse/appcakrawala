@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ImportExcelEslip extends MY_Controller 
+class Importexceleslip extends MY_Controller 
 {
 
 	public function __construct(){
@@ -470,7 +470,9 @@ class ImportExcelEslip extends MY_Controller
 				$jaminan_pensiun = $user[0]->jaminan_pensiun;
 				$deposit = $user[0]->deposit;
 				$pph = $user[0]->pph;
+				$pph_thr = $user[0]->pph_thr;
 				$penalty_late = $user[0]->penalty_late;
+				$penalty_alfa = $user[0]->penalty_alfa;
 				$penalty_attend = $user[0]->penalty_attend;
 				$mix_oplos = $user[0]->mix_oplos;
 				$pot_trip_malang = $user[0]->pot_trip_malang;
@@ -533,7 +535,9 @@ class ImportExcelEslip extends MY_Controller
 					'jaminan_pensiun' => $jaminan_pensiun,
 					'deposit' => $deposit,
 					'pph' => $pph,
+					'pph_thr' => $pph_thr,
 					'penalty_late' => $penalty_late,
+					'penalty_alfa' => $penalty_alfa,
 					'penalty_attend' => $penalty_attend,
 					'mix_oplos' => $mix_oplos,
 					'pot_trip_malang' => $pot_trip_malang,
@@ -646,7 +650,10 @@ class ImportExcelEslip extends MY_Controller
 				$jaminan_pensiun = $user[0]->jaminan_pensiun;
 				$pph = $user[0]->pph;
 				$deposit = $user[0]->deposit;
+				$pph = $user[0]->pph;
+				$pph_thr = $user[0]->pph_thr;
 				$penalty_late = $user[0]->penalty_late;
+				$penalty_alfa = $user[0]->penalty_alfa;
 				$penalty_attend = $user[0]->penalty_attend;
 				$mix_oplos = $user[0]->mix_oplos;
 				$pot_trip_malang = $user[0]->pot_trip_malang;
@@ -709,7 +716,9 @@ class ImportExcelEslip extends MY_Controller
 					'jaminan_pensiun' => $jaminan_pensiun,
 					'deposit' => $deposit,
 					'pph' => $pph,
+					'pph_thr' => $pph_thr,
 					'penalty_late' => $penalty_late,
+					'penalty_alfa' => $penalty_alfa,
 					'penalty_attend' => $penalty_attend,
 					'mix_oplos' => $mix_oplos,
 					'pot_trip_malang' => $pot_trip_malang,
@@ -1691,32 +1700,74 @@ class ImportExcelEslip extends MY_Controller
 							</tr>
 						</table>
 					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penalty Keterlambatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penalty Kehadiran</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
 				</tr>';
 
+
+				if($pph_thr!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">PPH 21 THR</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+
+
+				if($penalty_late!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Penalty Keterlambatan</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+
+
+				if($penalty_attend!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+
+
+				if($penalty_alfa!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
 
 				if($mix_oplos!=0){	
 				$tbl_2 .= '
@@ -2057,7 +2108,9 @@ class ImportExcelEslip extends MY_Controller
 				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
 				$deposit = $eslip[0]->deposit;
 				$pph = $eslip[0]->pph;
+				$pph_thr = $eslip[0]->pph_thr;
 				$penalty_late = $eslip[0]->penalty_late;
+				$penalty_alfa = $eslip[0]->penalty_alfa;
 				$penalty_attend = $eslip[0]->penalty_attend;
 				$mix_oplos = $eslip[0]->mix_oplos;
 				$pot_trip_malang = $eslip[0]->pot_trip_malang;
@@ -2779,31 +2832,74 @@ class ImportExcelEslip extends MY_Controller
 							</tr>
 						</table>
 					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penalty Keterlambatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penalty Kehadiran</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
 				</tr>';
+
+
+				if($pph_thr!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">PPH21 THR</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+
+
+				if($penalty_late!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Penalty Keterlambatan</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+
+
+				if($penalty_attend!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+
+
+				if($penalty_alfa!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
 
 
 				if($mix_oplos!=0){	

@@ -77,7 +77,8 @@ class Employee_request_hrd extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_request_hrd();
+		// $employee = $this->Employees_model->get_request_hrd();
+		$employee = $this->Employees_model->get_request_hrd($session['employee_id']);
 
 		$data = array();
 

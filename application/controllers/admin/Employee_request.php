@@ -77,7 +77,9 @@ class Employee_request extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_monitoring_request();
+		$employee = $this->Employees_model->get_monitoring_request($session['employee_id']);
+
+		// $employee = $this->Project_model->get_project_maping($session['employee_id']);
 
 		$data = array();
 

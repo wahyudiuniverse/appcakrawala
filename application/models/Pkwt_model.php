@@ -249,7 +249,7 @@ class Pkwt_model extends CI_Model {
 			FROM xin_employee_contract
 			WHERE approve_hrd = 0
 			AND project != 22
-			ORDER BY contract_id DESC';
+			ORDER BY contract_id DESC LIMIT 10';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

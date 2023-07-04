@@ -75,7 +75,8 @@ class Employee_request_nom extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_request_nom();
+		// $employee = $this->Employees_model->get_request_nom();
+		$employee = $this->Employees_model->get_request_nom($session['employee_id']);
 
 		$data = array();
 

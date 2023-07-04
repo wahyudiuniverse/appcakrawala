@@ -101,11 +101,12 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_monitoring_request() {
+	public function get_monitoring_request($empID) {
 
 		$sql = 'SELECT *
 				FROM xin_employee_request
-				WHERE datediff(current_date(),DATE_FORMAT(createdon, "%Y-%m-%d")) <=30
+				WHERE datediff(current_date(),DATE_FORMAT(createdon, "%Y-%m-%d")) <=20
+				AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")
 				ORDER BY secid DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -113,37 +114,40 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_request_cancel() {
+	public function get_request_cancel($empID) {
 
 		$sql = 'SELECT * FROM xin_employee_request 
-		WHERE cancel_stat = 1';
+		WHERE cancel_stat = 1
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 
  	// monitoring request
-	public function get_request_nae() {
+	public function get_request_nae($empID) {
 
-		$sql = 'SELECT * FROM xin_employee_request 
-		WHERE request_empby is not null 
-		AND approved_naeby is null
-		AND approved_nomby is null
-        AND project != 22
-		ORDER BY secid DESC';
+		$sql = 'SELECT * 
+			FROM xin_employee_request 
+			WHERE request_empby is not null 
+			AND approved_naeby is null 
+			AND approved_nomby is null 
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")
+			ORDER BY secid DESC';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 
  	// monitoring request
-	public function get_request_nom() {
+	public function get_request_nom($empID) {
 
 		$sql = 'SELECT * FROM xin_employee_request 
 		WHERE request_empby is not null 
 		AND approved_naeby is not null
 		AND approved_nomby is null
 		AND approved_hrdby is null
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")
 		AND cancel_stat = 0';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -151,13 +155,14 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_request_hrd() {
+	public function get_request_hrd($empID) {
 
 		$sql = 'SELECT * FROM xin_employee_request 
 		WHERE request_empby is not null 
 		AND approved_naeby is not null
 		AND approved_nomby is not null
 		AND approved_hrdby is null
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")
 		AND cancel_stat = 0';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -171,7 +176,8 @@ class Employees_model extends CI_Model {
 		WHERE request_empby is not null 
 		AND approved_naeby is not null
 		AND approved_nomby is not null
-		AND approved_hrdby is not null';
+		AND approved_hrdby is not null
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

@@ -77,7 +77,9 @@ class Employee_request_nae extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_request_nae();
+		// $employee = $this->Employees_model->get_request_nae();
+		
+		$employee = $this->Employees_model->get_request_nae($session['employee_id']);
 
 		$data = array();
 

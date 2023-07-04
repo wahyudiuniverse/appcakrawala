@@ -52,7 +52,7 @@
 <?php $employee_id = $this->Xin_model->generate_random_employeeid();?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
 
-<?php if(in_array('491',$role_resources_ids)) {?>
+<?php if(in_array('376',$role_resources_ids)) {?>
 
 <div class="card mb-4">
   <!-- <div id="accordion"> -->
