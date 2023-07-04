@@ -201,7 +201,7 @@ class Reports_model extends CI_Model {
 			  // $binds = array($company_id);
 			  // $query = $this->db->query($sql, $binds);
 			  // return $query;
-			  return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id NOT IN (1)");
+			  return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id NOT IN (1) LIMIT 0");
 		// 1-1-0-0-0
 		  } else if($company_id!=0 && $department_id!=0 && $project_id==0 && $sub_project_id==0 && $status_resign==0) {
 		 	  $sql = "SELECT * from xin_employees where company_id = ? and department_id = ? AND employee_id NOT IN (1)";
@@ -240,7 +240,7 @@ class Reports_model extends CI_Model {
 			  return $query;
 		// 1-0-0-0-1
 		  } else if ($company_id!=0 && $department_id==0 && $project_id==0 && $sub_project_id==0 && $status_resign!=0) {
-		 	  $sql = "SELECT * from xin_employees where company_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+		 	  $sql = "SELECT * from xin_employees where company_id = ? AND status_resign = ? AND employee_id NOT IN (1) LIMIT 0";
 			  $binds = array($company_id,$status_resign);
 			  $query = $this->db->query($sql, $binds);
 			  return $query;

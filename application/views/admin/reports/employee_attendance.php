@@ -94,6 +94,10 @@
                 <th>Sub Project</th>
                 <th>ID Toko/Office</th>
                 <th>Toko/Office</th>
+
+                <th>Nama Pemilik</th>
+                <th>Nomor Kontak</th>
+
                 <th>Tanggal</th>
                 <th><?php echo $this->lang->line('dashboard_clock_in');?></th>
                 <th><?php echo $this->lang->line('dashboard_clock_out');?></th>

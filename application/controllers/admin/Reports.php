@@ -608,7 +608,7 @@ class Reports extends MY_Controller
 		
 		$data = array();
 
-        foreach($employee->result() as $r) {		  
+        foreach($employee->result() as $r) {
 
 			$full_name = $r->first_name.' '.$r->last_name;
 			$company = $this->Xin_model->read_company_info($r->company_id);
@@ -721,6 +721,18 @@ class Reports extends MY_Controller
 				$dol = $this->Xin_model->tgl_indo($r->date_of_leaving);
 			} else {
 				$dol = '--';	
+			}
+
+			if($r->contract_start!='' || !is_null($r->contract_start)){
+				$start_kontrak = $this->Xin_model->tgl_indo($r->contract_start);
+			} else {
+				$start_kontrak = '--';	
+			}
+
+			if($r->contract_end!='' || !is_null($r->contract_end)){
+				$end_kontrak = $this->Xin_model->tgl_indo($r->contract_end);
+			} else {
+				$end_kontrak = '--';	
 			}
 
 			if(!is_null($r->email)){
@@ -839,6 +851,10 @@ class Reports extends MY_Controller
 				$dob,
 				$doj,
 				$dol,
+
+				$start_kontrak,
+				$end_kontrak,
+
 				$gender,
 				$marital,
 				$agama, // agama
@@ -854,7 +870,17 @@ class Reports extends MY_Controller
 				$ibu,
 				$bank_name,
 				"'".$nomor_rek,
-				$pemilik_rek
+				$pemilik_rek,
+
+				'<a href="'.base_url().'uploads/document/ktp/'.$r->filename_ktp.'" target="_blank"> '.$r->filename_ktp.'</a>',
+				'<a href="'.base_url().'uploads/document/kk/'.$r->filename_kk.'" target="_blank"> '.$r->filename_kk.'</a>',
+				'<a href="'.base_url().'uploads/document/npwp/'.$r->filename_npwp.'" target="_blank"> '.$r->filename_npwp.'</a>',
+				'<a href="'.base_url().'uploads/document/ijazah/'.$r->filename_isd.'" target="_blank"> '.$r->filename_isd.'</a>',
+				'<a href="'.base_url().'uploads/document/skck/'.$r->filename_skck.'" target="_blank"> '.$r->filename_skck.'</a>',
+				'<a href="'.base_url().'uploads/document/cv/'.$r->filename_cv.'" target="_blank"> '.$r->filename_cv.'</a>',
+				'<a href="'.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'" target="_blank"> '.$r->filename_paklaring.'</a>',
+				'<a href="'.base_url().'uploads/document/pkwt/'.$r->filename_pkwt.'" target="_blank"> '.$r->filename_pkwt.'</a>'
+
 				// $pin
 			);
       
@@ -1370,9 +1396,13 @@ class Reports extends MY_Controller
 
 			$cust = $this->Customers_model->read_single_customer($r->customer_id);
 			if(!is_null($cust)){
-				$nama_toko = $cust[0]->customer_name;
+				$nama_toko 	= $cust[0]->customer_name;
+				$pemilik 	= $cust[0]->owner_name;
+				$no_kontak 	= $cust[0]->no_contact;
 			} else {
-				$nama_toko = '--';	
+				$nama_toko 	= '--';
+				$pemilik 	= '--';
+				$no_kontak 	= '--';	
 			}
 
 			if(!is_null($r->foto_in)){
@@ -1394,6 +1424,10 @@ class Reports extends MY_Controller
 				$r->sub_project_name,
 				$r->customer_id,
 				$nama_toko,
+
+				$pemilik,
+				$no_kontak,
+
 				$r->date_phone,
 				$r->time_in,
 				$r->time_out,

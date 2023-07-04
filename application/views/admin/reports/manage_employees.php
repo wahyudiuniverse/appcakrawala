@@ -118,7 +118,11 @@
                 <th style="width: 80px;">Region</th>
                 <th style="width: 120px;">Tempat Lahir</th>                
                 <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_dob');?></th>                
-                <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_doj');?></th>                
+                <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_doj');?></th>  
+
+                <th style="width: 120px;">Mulai Kontrak</th>   
+                <th style="width: 120px;">Akhir Kontrak</th>   
+
                 <th style="width: 120px;">Tanggal Resign</th>                
                 <th style="width: 60px;"><?php echo $this->lang->line('xin_employee_gender');?></th>
                 <th style="width: 50px;"><?php echo $this->lang->line('xin_employee_mstatus');?></th>
@@ -136,6 +140,16 @@
                 <th style="width: 100px;">Nama Bank</th>
                 <th style="width: 100px;">No. Rekening</th>
                 <th style="width: 100px;">Nama Pemilik Rek.</th>
+
+
+                <th style="width: 120px;">Foto KTP</th>   
+                <th style="width: 120px;">Foto KK</th>    
+                <th style="width: 120px;">Foto NPWP</th>   
+                <th style="width: 120px;">Foto Ijazah</th>   
+                <th style="width: 120px;">Dok SKCK</th>   
+                <th style="width: 120px;">Dok CV</th>
+                <th style="width: 120px;">Dok Paklaring</th>
+                <th style="width: 120px;">PKWT</th>         
               </tr>
             </thead>
           </table>
