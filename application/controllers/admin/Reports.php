@@ -850,11 +850,11 @@ class Reports extends MY_Controller
 				$tempat_lahir, // TEMPAT LAHIR
 				$dob,
 				$doj,
-				$dol,
 
 				$start_kontrak,
 				$end_kontrak,
 
+				$dol,
 				$gender,
 				$marital,
 				$agama, // agama

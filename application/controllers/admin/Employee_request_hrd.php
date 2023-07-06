@@ -534,6 +534,9 @@ class Employee_request_hrd extends MY_Controller {
 					$nik_ktp 						= $employee_request[0]->nik_ktp;
 					$alamat_ktp 				= $employee_request[0]->alamat_ktp;
 					$alamat_domisili		= $employee_request[0]->alamat_domisili;
+
+
+
 					$no_kk 							= $employee_request[0]->no_kk;
 					$npwp 							= $employee_request[0]->npwp;
 					$email 							= $employee_request[0]->email;
@@ -543,6 +546,11 @@ class Employee_request_hrd extends MY_Controller {
 					$sub_project 				= $employee_request[0]->sub_project;
 					$department 				= $employee_request[0]->department;
 					$posisi 						= $employee_request[0]->posisi;
+
+					$gender 						= $employee_request[0]->gender;
+					$agama 							= $employee_request[0]->agama;
+					$status_kawin 			= $employee_request[0]->status_kawin;
+
 					$doj 								= $employee_request[0]->doj;
 					$contract_start			= $employee_request[0]->contract_start;
 					$contract_end				= $employee_request[0]->contract_end;
@@ -637,6 +645,9 @@ class Employee_request_hrd extends MY_Controller {
 								'sub_project_id' 			=> $sub_project,
 								'department_id' 			=> $department,
 								'designation_id' 			=> $posisi,
+								'gender' 							=> $gender,
+								'ethnicity_type' 			=> $agama,
+								'marital_status' 			=> $status_kawin,
 
 								'date_of_joining' 		=> $doj,
 								'contract_start' 			=> $contract_start,

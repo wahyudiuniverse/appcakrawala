@@ -123,7 +123,8 @@
                 <th style="width: 120px;">Mulai Kontrak</th>   
                 <th style="width: 120px;">Akhir Kontrak</th>   
 
-                <th style="width: 120px;">Tanggal Resign</th>                
+                <th style="width: 120px;">Tanggal Resign</th>
+                                
                 <th style="width: 60px;"><?php echo $this->lang->line('xin_employee_gender');?></th>
                 <th style="width: 50px;"><?php echo $this->lang->line('xin_employee_mstatus');?></th>
                 <th style="width: 50px;">Agama</th>                

@@ -1458,6 +1458,7 @@
                                 <option value=""></option>
                                 <option value="1" <?php if($status_employee == 1):?> selected="selected"<?php endif;?>>ACTIVE</option>
                                 <option value="0" <?php if($status_employee == 0):?> selected="selected"<?php endif;?>>DEACTIVE</option>
+                                <option value="3" <?php if($status_employee == 3):?> selected="selected"<?php endif;?>>DOUBLE</option>
                               </select>
                             </div>
                           </div>
@@ -1470,6 +1471,7 @@
                                 <option value="[RESIGN]">RESIGN</option>
                                 <option value="[END CONTRACT]">END CONTRACT</option>
                                 <option value="[BLACKLIST]">BLACKLIST</option>
+                                <option value="[DOUBLE]">DOUBLE</option>
                                 <option value="[RE-ACTIVE]">RE-ACTIVE</option>
                               </select>
                             </div>

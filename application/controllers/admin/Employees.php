@@ -2090,8 +2090,11 @@ class Employees extends MY_Controller {
 		if($this->input->post('status_employee')=='1'){
 			$stResign = '1';
 			$userRole = '2';
-		} else {
+		} else if ($this->input->post('status_employee')=='0'){
 			$stResign = '5';
+			$userRole = '9';
+		} else {
+			$stResign = '6';
 			$userRole = '9';
 		}
 
