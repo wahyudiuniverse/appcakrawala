@@ -611,7 +611,7 @@ class Employees_model extends CI_Model {
 	
 	 public function CheckExistNIP_Periode($id, $periode) {
 	
-		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? and periode = ?';
+		$sql = 'SELECT * FROM xin_employees_saltab WHERE nip = ? and periode = ?';
 		$binds = array($id,$periode);
 		$query = $this->db->query($sql, $binds);
 		
@@ -622,8 +622,20 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+	public function CheckExistNIP_esaltab($id, $periode, $project) {
+	
+		$sql = 'SELECT * FROM xin_employees_saltab WHERE fullname = ? and periode = ? and project = ?';
+		$binds = array($id,$periode,$project);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 
-	 public function CheckExistNIP($id) {
+	public function CheckExistNIP($id) {
 	
 		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
 		$binds = array($id);

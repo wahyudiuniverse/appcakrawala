@@ -440,7 +440,7 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="title"><?php echo $this->lang->line('xin_bpjstk');?><i class="hrpremium-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="number" value="<?php echo $bpjs_tk_no;?>" id="title">
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjstk');?>" name="no_bpjstk" type="text" value="<?php echo $bpjs_tk_no;?>" id="title">
                             </div>
                           </div>
 
@@ -462,7 +462,7 @@
                           <div class="col-md-4">
                             <div class="form-group">
                               <label for="title"><?php echo $this->lang->line('xin_bpjsks');?><i class="hrpremium-asterisk">*</i></label>
-                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="number" value="<?php echo $bpjs_ks_no;?>" id="title">
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_bpjsks');?>" name="no_bpjsks" type="text" value="<?php echo $bpjs_ks_no;?>" id="title">
                             </div>
                           </div>
 

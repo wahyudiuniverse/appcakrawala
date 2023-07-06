@@ -175,7 +175,7 @@ class Importexcelsaltab extends MY_Controller
 
 				$now = new DateTime(date("Y-m-d"));
 
-				$isExist = $this->Employees_model->CheckExistNIP_Periode($r->nip, $r->periode);
+				$isExist = $this->Employees_model->CheckExistNIP_esaltab($r->fullname, $r->periode, $r->project);
 
 
 				if(!is_null($r->status_error)){
