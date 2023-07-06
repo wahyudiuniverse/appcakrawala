@@ -2223,6 +2223,9 @@ class Reports extends MY_Controller
 				$r->status_emp,
 				$edit.' '.$r->nip,
 				$r->fullname,
+				$r->project,
+				$r->project_sub,
+				$r->area,	
 
 				$r->gaji_pokok,
 				$r->bpjs_tk_deduction + $r->bpjs_tk,

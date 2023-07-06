@@ -25,7 +25,7 @@
 
 	// get employees list> reports
 	public function saltab_bpjs_list ($uploadid) {
-		return $query = $this->db->query("SELECT * FROM xin_employees_eslip WHERE uploadid = '$uploadid' ORDER BY secid DESC");
+		return $query = $this->db->query("SELECT * FROM xin_employees_saltab WHERE uploadid = '$uploadid' ORDER BY secid DESC");
 	}
 
 	public function get_company_single($company_id) {

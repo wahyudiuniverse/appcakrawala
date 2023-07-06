@@ -1075,6 +1075,17 @@
           ?>
 
           <?php 
+          if (in_array('481',$role_resources_ids)) { 
+          ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['imp_saltab_active']))echo $arr_mod['imp_saltab_active'];?>"> 
+              <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importsaltab');?>" > Import Saltab to BPJS 
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
           if (in_array('469',$role_resources_ids)) { 
           ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['eslip_active']))echo $arr_mod['eslip_active'];?>"> 

@@ -56,11 +56,21 @@ GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
 	    return $query;
 	}
 
+ 	// get all employes
+	public function get_all_saltab() {
+
+		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_saltab
+GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
 	 	// get all employes
 	public function get_eslip_project() {
 
-		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_eslip
-		WHERE createdby != 1
+		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_saltab
+		WHERE createdby != 0
 GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -98,6 +108,33 @@ GROUP BY uploadid, periode, project, project_sub;';
 			return $query->result();
 		} else {
 			return false;
+		}
+	}
+
+	public function get_temp_esaltab($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_saltab_temp WHERE uploadid = ? AND status_error is null';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+
+	// get single employee
+	public function read_esaltab_temp_info($id) {
+	
+		$sql = 'SELECT * FROM xin_employees_saltab_temp WHERE secid = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
 		}
 	}
 
@@ -142,6 +179,16 @@ GROUP BY uploadid, periode, project, project_sub;';
 	// Function to add record in table
 	public function addratecard($data){
 		$this->db->insert('xin_employee_ratecard', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
+	// Function to add record in table
+	public function addesaltab($data){
+		$this->db->insert('xin_employees_saltab', $data);
 		if ($this->db->affected_rows() > 0) {
 			return $this->db->insert_id();
 		} else {
@@ -217,6 +264,15 @@ GROUP BY uploadid, periode, project, project_sub;';
 	}
 
 		// get all employes temporary
+	public function get_esaltab_temp($importid) {
+		
+		$sql = 'SELECT * FROM xin_employees_saltab_temp WHERE uploadid = ?';
+		$binds = array($importid);
+		$query = $this->db->query($sql, $binds);
+	    return $query;
+	}
+
+		// get all employes temporary
 	public function get_ratecard_temp($importid) {
 		
 		$sql = 'SELECT * FROM xin_employee_ratecard_temp WHERE uploadid = ?';
@@ -225,6 +281,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	    return $query;
 	}
 	
+
 	// Function to add record in table
 	public function add($data){
 		$this->db->insert('xin_users', $data);
@@ -255,6 +312,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 		
 	}
 	
+
+	// Function to update record in table > basic_info
+	public function update_error_esaltab_temp($data, $id){
+		$this->db->where('secid', $id);
+		if( $this->db->update('xin_employees_saltab_temp',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 	// Function to update record in table > basic_info
 	public function update_release_eslip($data, $id){
 		$this->db->where('uploadid', $id);
@@ -295,6 +363,16 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 	}
 
+	// Function to add record in table
+	public function add_saltab_temp($data){
+		$this->db->insert('xin_employees_saltab_temp', $data);
+		if ($this->db->affected_rows() > 0) {
+			return $this->db->insert_id();
+		} else {
+			return false;
+		}
+	}
+
 	// Function to Delete selected record from table
 	public function delete_temp_by_nip(){
 		$this->db->where('nip', 'NIP');
@@ -302,6 +380,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 		
 	}
 	
+	// Function to Delete selected record from table
+	public function delete_saltabtemp_by_nip(){
+		$this->db->where('nip', 'NIP');
+		$this->db->delete('xin_employees_saltab_temp');
+		
+	}
+
 	// Function to Delete selected record from table
 	public function delete_temp_by_pt(){
 		$this->db->where('company_id', 'PT');

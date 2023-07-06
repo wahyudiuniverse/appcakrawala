@@ -451,6 +451,10 @@ class Xin_model extends CI_Model {
 			$arr['eslip_active'] = 'active';
 			$arr['importexcel_open'] = 'open';
 			return $arr;
+		} else if($mClass=='importexcel' && $mMethod=='importsaltab') {
+			$arr['imp_saltab_active'] = 'active';
+			$arr['importexcel_open'] = 'open';
+			return $arr;
 		}
 		else if($mClass=='importexcel') {
 			$arr['employees_active'] = 'active';

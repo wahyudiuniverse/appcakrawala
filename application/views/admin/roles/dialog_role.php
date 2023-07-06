@@ -1079,6 +1079,16 @@ dataSource: [
 			value: "232", 
 			check: "<?php if(isset($_GET['role_id'])) { if(in_array('232',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 		},
+
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "Import Saltab to BPJS",  
+			add_info: "", 
+			value: "481", 
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('481',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		},
+
 		{ 
 			id: "", 
 			class: "role-checkbox-modal custom-control-input", 

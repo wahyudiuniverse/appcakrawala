@@ -25,6 +25,9 @@
                 <th>Status</th>
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
+                <th>Project</th>
+                <th>Sub-Project</th>
+                <th>Area</th>
 
                 <th>Gapok UMK</th>
                 <th>BPJS Ketenagakerjaan</th>
