@@ -171,14 +171,14 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_request_approve() {
+	public function get_request_approve($empID) {
 
-		$sql = 'SELECT * FROM xin_employee_request 
+		$sql = "SELECT * FROM xin_employee_request 
 		WHERE request_empby is not null 
 		AND approved_naeby is not null
 		AND approved_nomby is not null
 		AND approved_hrdby is not null
-		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = "$empID")';
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

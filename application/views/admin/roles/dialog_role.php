@@ -456,7 +456,7 @@ dataSource: [
 	},
 
 //PKWT
-	{ 
+	{
 		id: "", 
 		class: "role-checkbox-modal custom-control-input", 
 		text: "<?php echo $this->lang->line('xin_pkwt');?>", 
@@ -819,7 +819,7 @@ dataSource: [
 				{ 
 					id: "", 
 					class: "role-checkbox-modal custom-control-input", 
-					text: "<?php echo $this->lang->line('xin_request');?>",  
+					text: "Cancel PKWT",  
 					add_info: "<?php echo $this->lang->line('xin_request');?>", 
 					value: "379",
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('379',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"

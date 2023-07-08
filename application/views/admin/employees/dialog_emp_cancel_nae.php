@@ -32,7 +32,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> <?php echo $this->lang->line('xin_request_employee');?></h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> HO - NAE > Tolak Karyawan</h4>
   </div>
 
 

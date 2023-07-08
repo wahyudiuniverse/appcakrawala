@@ -520,6 +520,239 @@
 
 
 
+<!-- PERMINTAAN KARYAWAN BARU -->
+    <?php 
+    if (in_array('327',$role_resources_ids) || 
+      in_array('337',$role_resources_ids) || 
+      in_array('338',$role_resources_ids)||
+      in_array('374',$role_resources_ids) || 
+      in_array('375',$role_resources_ids) || 
+      in_array('338',$role_resources_ids)) {
+    ?>
+      <li class="<?php if(!empty($arr_mod['emp_request_open']))echo $arr_mod['emp_request_open'];?> sidenav-item"> 
+        <a href="#" class="sidenav-link sidenav-toggle"> 
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+          <div>Karyawan Baru</div>
+        </a>
+        
+        <ul class="sidenav-menu">
+
+          <?php 
+          if (in_array('337',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>AREA</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('374',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_nae_active']))echo $arr_mod['emp_request_nae_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request_nae/');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>HO - NAE</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('375',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_nom_active']))echo $arr_mod['emp_request_nom_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request_nom/');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>HO - NOM</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('5555',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_sm_active']))echo $arr_mod['emp_request_sm_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request_sm');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>HO - SM</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+
+          <?php 
+          if (in_array('378',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_hrd_active']))echo $arr_mod['emp_request_hrd_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request_hrd');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>HO - HRD</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('338',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_cancel_active']))echo $arr_mod['emp_request_cancel_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request_cancelled');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>DITOLAK</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('470',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_approve_active']))echo $arr_mod['man_employees_approve_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_request_approve');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>Monitor Karyawan</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+        </ul>
+      </li>
+    <?php 
+    } 
+    ?>
+
+
+<!-- PERPANJANGAN PKWT -->
+    <?php 
+    if (in_array('376',$role_resources_ids) || 
+      in_array('379',$role_resources_ids) || 
+      in_array('377',$role_resources_ids)||
+      in_array('503',$role_resources_ids) || 
+      in_array('504',$role_resources_ids) || 
+      in_array('505',$role_resources_ids)) {
+    ?>
+      <li class="<?php if(!empty($arr_mod['pkwt_request_open']))echo $arr_mod['pkwt_request_open'];?> sidenav-item"> 
+        <a href="#" class="sidenav-link sidenav-toggle"> 
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+          <div>Perpanjangan PKWT</div>
+        </a>
+        
+        <ul class="sidenav-menu">
+
+          <?php 
+          if (in_array('377',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_active']))echo $arr_mod['pkwt_request_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT - AREA</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('503',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_nae_active']))echo $arr_mod['pkwt_request_nae_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt_apnae');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT - NAE</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('504',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_nom_active']))echo $arr_mod['pkwt_request_nom_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt_apnom');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT - NOM</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('5555',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_sm_active']))echo $arr_mod['pkwt_request_sm_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt_sm');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT - SM</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+
+          <?php 
+          if (in_array('505',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_hrd_active']))echo $arr_mod['pkwt_request_hrd_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT - HRD</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('379',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_cancel_active']))echo $arr_mod['pkwt_request_cancel_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt_cancel');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT - DITOLAK</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('470',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_history_active']))echo $arr_mod['pkwt_request_history_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_pkwt_history');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>PKWT Status</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+        </ul>
+      </li>
+    <?php 
+    } 
+    ?>
+
+
+
       
 
 

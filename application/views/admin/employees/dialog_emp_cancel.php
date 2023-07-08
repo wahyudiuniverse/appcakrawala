@@ -75,24 +75,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- LOKASI OFFICE -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('xin_e_details_office_location');?></label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$location_id[0]->location_name;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -150,7 +132,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- POSISI/JABATAN -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('left_department');?></label>
+          <label for="posisi">Posisi Jabatan</label>
         </div>
       </div>
       <div class="col-sm-4">
@@ -253,7 +235,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- ALAMAT KTP -->
       <div class="col-sm-4">
         <div>
-          <label for="alamat_ktp">DOJ</label>
+          <label for="alamat_ktp">Periode Kontrak</label>
         </div>
       </div>
       <div class="col-sm-4">

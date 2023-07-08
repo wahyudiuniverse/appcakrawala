@@ -7,41 +7,44 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
-<?php $count_pkwtcancel = $this->Xin_model->count_approve_pkwt_cancel();?>
-<?php $count_appnae = $this->Xin_model->count_approve_nae_pkwt();?>
-<?php $count_appnom = $this->Xin_model->count_approve_nom_pkwt();?>
-<?php $count_apphrd = $this->Xin_model->count_approve_hrd_pkwt();?>
-<?php $count_emp_request = $this->Xin_model->count_emp_request();?>
+
+<?php $count_appnae = $this->Xin_model->count_approve_nae_pkwt($session['employee_id']);?>
+<?php $count_appnom = $this->Xin_model->count_approve_nom_pkwt($session['employee_id']);?>
+<?php $count_apphrd = $this->Xin_model->count_approve_hrd_pkwt($session['employee_id']);?>
+<?php $count_pkwtcancel = $this->Xin_model->count_approve_pkwt_cancel($session['employee_id']);?>
+<?php $count_emp_request = $this->Xin_model->count_emp_request($session['employee_id']);?>
+
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt/');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span> Request PKWT
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PKWT - AREA
       </a> </li>
     <?php } ?>  
 
     <?php if(in_array('503',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NAE <?php echo '('.$count_appnae.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_apnae');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - NAE <?php echo '('.$count_appnae.')';?>
       </a> </li>
     <?php } ?>
 
-    <?php if(in_array('379',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Cancel PKWT <?php echo '('.$count_pkwtcancel.')';?>
-      </a> </li>
-    <?php } ?>
 
     <?php if(in_array('504',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_appnom.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_pkwt_apnom');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - NOM <?php echo '('.$count_appnom.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('505',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - HRD
       <?php echo '('.$count_apphrd.')';?></a> </li>
     <?php } ?>
     
+    <?php if(in_array('379',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_cancel');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Ditolak <?php echo '('.$count_pkwtcancel.')';?>
+      </a> </li>
+    <?php } ?>
+
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_pkwt_history/');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_history/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> History PKWT
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_history');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_history/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Status
       </a> </li>
     <?php } ?>
   </ul>

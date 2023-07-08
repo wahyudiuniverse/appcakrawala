@@ -726,11 +726,61 @@ class Xin_model extends CI_Model {
 			$arr['emp_request_active'] = 'active';
 			$arr['emp_request_open'] = 'open';
 			return $arr;
+		} else if($mClass=='employee_request_nae') {
+			$arr['emp_request_nae_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_request_nom') {
+			$arr['emp_request_nom_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;	
+		} else if($mClass=='employee_request_sm') {
+			$arr['emp_request_sm_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_request_cancelled') {
+			$arr['emp_request_cancel_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_request_approve') {
+			$arr['man_employees_approve_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_request_hrd') {
+			$arr['emp_request_hrd_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
 		} else if($mClass=='employee_pkwt') {
+			$arr['pkwt_request_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_pkwt_apnae') {
+			$arr['pkwt_request_nae_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_pkwt_apnom') {
+			$arr['pkwt_request_nom_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_pkwt_aphrd') {
+			$arr['pkwt_request_hrd_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_pkwt_cancel') {
+			$arr['pkwt_request_cancel_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_pkwt_history') {
+			$arr['pkwt_request_history_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		}
+
+		else if($mClass=='employee_pkwt') {
 			$arr['pkwt_request_active'] = 'active';
 			$arr['emp_request_open'] = 'open';
 			return $arr;
-		}
+		} 
 
 		else if($mClass=='employee_resign') {
 			$arr['resign_request_active'] = 'active';
@@ -1631,9 +1681,12 @@ class Xin_model extends CI_Model {
   	  return $query->num_rows();
 	}
 
-	public function count_emp_request()
+	public function count_emp_request($empID)
 	{
-	  $query = $this->db->query("SELECT * FROM xin_employee_request WHERE verified_by IS NOT null AND approved_by IS null");
+	  $query = $this->db->query("SELECT * FROM xin_employee_request 
+	  	WHERE verified_by IS NOT null 
+	  	AND approved_by IS null
+	  	AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')");
   	  return $query->num_rows();
 	}
 
@@ -1683,37 +1736,41 @@ class Xin_model extends CI_Model {
 	}
 
 
-	public function count_approve_pkwt_cancel()
+	public function count_approve_pkwt_cancel($empID)
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
 		WHERE status_pkwt = 0
-		AND cancel_stat = 1");
+		AND cancel_stat = 1
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')");
   	  return $query->num_rows();
 	}
 
-	public function count_approve_nae_pkwt()
+	public function count_approve_nae_pkwt($empID)
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
 		WHERE status_pkwt = 0
 		AND approve_nae = 0
-		AND cancel_stat = 0");
+		AND cancel_stat = 0
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')");
   	  return $query->num_rows();
 	}
 
-	public function count_approve_nom_pkwt()
+
+	public function count_approve_nom_pkwt($empID)
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
 		WHERE status_pkwt = 0
 		AND approve_nae != 0
 		AND approve_nom = 0
-		AND cancel_stat = 0");
+		AND cancel_stat = 0
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')");
   	  return $query->num_rows();
 	}
 
-	public function count_approve_hrd_pkwt()
+	public function count_approve_hrd_pkwt($empID)
 	{
 	  $query = $this->db->query("SELECT *
 		FROM xin_employee_contract
@@ -1721,7 +1778,8 @@ class Xin_model extends CI_Model {
 		AND approve_nae != 0
 		AND approve_nom != 0
 		AND approve_hrd = 0
-		AND cancel_stat = 0");
+		AND cancel_stat = 0
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')");
   	  return $query->num_rows();
 	}
 

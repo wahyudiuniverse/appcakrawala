@@ -32,7 +32,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> <?php echo $this->lang->line('xin_request_employee');?></h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i>HO - HRD >> Tolak Karyawan Baru</h4>
   </div>
 
 
@@ -70,24 +70,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <div class="col-sm-4">
         <div>
           <label for="plant"><?php echo ': '.$fullname;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- LOKASI OFFICE -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('xin_e_details_office_location');?></label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$location_id[0]->location_name;?></label>
         </div>
       </div>
     </div>
@@ -150,7 +132,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- POSISI/JABATAN -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('left_department');?></label>
+          <label for="no_transaksi">Posisi/Jabatan</label>
         </div>
       </div>
       <div class="col-sm-4">
@@ -253,7 +235,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- ALAMAT KTP -->
       <div class="col-sm-4">
         <div>
-          <label for="alamat_ktp">DOJ</label>
+          <label for="alamat_ktp">Periode Kontrak</label>
         </div>
       </div>
       <div class="col-sm-4">
