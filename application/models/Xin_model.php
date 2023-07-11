@@ -771,10 +771,34 @@ class Xin_model extends CI_Model {
 			$arr['pkwt_request_open'] = 'open';
 			return $arr;
 		} else if($mClass=='employee_pkwt_history') {
-			$arr['pkwt_request_history_active'] = 'active';
+			$arr['resign_req_nae_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';
 			return $arr;
-		}
+		} else if($mClass=='employee_resign') {
+			$arr['resign_req_emp_active'] = 'active';
+			$arr['resign_req_resign'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_resign_cancelled') {
+			$arr['resign_cancel_emp_active'] = 'active';
+			$arr['resign_req_resign'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_resign_apnae') {
+			$arr['resign_nae_emp_active'] = 'active';
+			$arr['resign_req_resign'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_resign_apnom') {
+			$arr['resign_nom_emp_active'] = 'active';
+			$arr['resign_req_resign'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_resign_aphrd') {
+			$arr['resign_hrd_emp_active'] = 'active';
+			$arr['resign_req_resign'] = 'open';
+			return $arr;
+		} else if($mClass=='employee_resign_history') {
+			$arr['resign_history_emp_active'] = 'active';
+			$arr['resign_req_resign'] = 'open';
+			return $arr;
+		}  
 
 		else if($mClass=='employee_pkwt') {
 			$arr['pkwt_request_active'] = 'active';

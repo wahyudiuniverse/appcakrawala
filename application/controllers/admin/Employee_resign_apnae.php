@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_resign_apnae extends MY_Controller {
+class employee_resign_apnae extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -40,12 +40,12 @@ class Employee_resign_apnae extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_resignin_employee').' | '.$this->Xin_model->site_title();
+		$data['title'] = 'Pengjuan Paklaring | '.$this->Xin_model->site_title();
 			$data['all_projects'] = $this->Project_model->get_all_projects();
 			$data['all_projects_sub'] = $this->Project_model->get_all_projects();
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
-		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
+		$data['breadcrumbs'] = 'Approval NAE';
 		$data['path_url'] = 'emp_resign_approve_nae';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('492',$role_resources_ids)) {

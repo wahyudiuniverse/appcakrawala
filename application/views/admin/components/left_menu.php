@@ -461,45 +461,6 @@
 
 
           <?php 
-          if (in_array('327',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
-                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-              <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div><?php echo $this->lang->line('xin_request_employee');?></div>
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('327',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_active']))echo $arr_mod['pkwt_request_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_pkwt/');?>" class="sidenav-link"> 
-                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-              <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div><?php echo $this->lang->line('xin_request_pkwt');?></div>
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('490',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['resign_request_active']))echo $arr_mod['resign_request_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_resign/');?>" class="sidenav-link"> 
-                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-              <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>Request Paklaring</div>
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
           if (in_array('470',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_active']))echo $arr_mod['man_employees_active'];?>"> 
               <a href="<?php echo site_url('admin/reports/manage_employees');?>" class="sidenav-link"> 
@@ -648,7 +609,7 @@
       <li class="<?php if(!empty($arr_mod['pkwt_request_open']))echo $arr_mod['pkwt_request_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
-          <div>Perpanjangan PKWT</div>
+          <div>Perpanjang PKWT</div>
         </a>
         
         <ul class="sidenav-menu">
@@ -753,6 +714,106 @@
 
 
 
+<!-- PERMINTAAN PAKLARING -->
+    <?php 
+    if (in_array('491',$role_resources_ids) || 
+      in_array('506',$role_resources_ids) || 
+      in_array('492',$role_resources_ids)||
+      in_array('493',$role_resources_ids) || 
+      in_array('494',$role_resources_ids)) {
+    ?>
+      <li class="<?php if(!empty($arr_mod['resign_req_resign']))echo $arr_mod['resign_req_resign'];?> sidenav-item"> 
+        <a href="#" class="sidenav-link sidenav-toggle"> 
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+          <div>Permintaan Paklaring</div>
+        </a>
+        
+        <ul class="sidenav-menu">
+
+          <?php 
+          if (in_array('491',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_req_emp_active']))echo $arr_mod['resign_req_emp_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>Ajukan Paklaring</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('506',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_cancel_emp_active']))echo $arr_mod['resign_cancel_emp_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign_cancelled');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>Ditolak</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('492',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_nae_emp_active']))echo $arr_mod['resign_nae_emp_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign_apnae');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>Approval NAE</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('493',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_nom_emp_active']))echo $arr_mod['resign_nom_emp_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign_apnom');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>Approval NOM/SM</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+
+          <?php 
+          if (in_array('494',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_hrd_emp_active']))echo $arr_mod['resign_hrd_emp_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign_aphrd');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>Approval HRD</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+          <?php 
+          if (in_array('490',$role_resources_ids)) { ?>
+            <li class="sidenav-item <?php if(!empty($arr_mod['resign_history_emp_active']))echo $arr_mod['resign_history_emp_active'];?>"> 
+              <a href="<?php echo site_url('admin/employee_resign_history');?>" class="sidenav-link"> 
+                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+                <div>History Paklaring</div>
+              </a> 
+            </li>
+          <?php 
+          } 
+          ?>
+
+        </ul>
+      </li>
+    <?php 
+    } 
+    ?>
       
 
 

@@ -48,7 +48,7 @@ class Employee_resign extends MY_Controller {
 		}
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = $this->lang->line('xin_resignin_employee').' | '.$this->Xin_model->site_title();
+			$data['title'] = 'Pengajuan Paklaring | '.$this->Xin_model->site_title();
 			$data['all_companies'] = $this->Xin_model->get_companies();
 			$data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
 			// $data['all_projects'] = $this->Project_model->get_project_exist_deactive();
@@ -56,7 +56,7 @@ class Employee_resign extends MY_Controller {
 
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
-		$data['breadcrumbs'] = $this->lang->line('xin_resignin_employee');
+		$data['breadcrumbs'] = 'PENGAJUAN PAKLARING';
 		$data['path_url'] = 'emp_resign';
 		if(in_array('490',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
