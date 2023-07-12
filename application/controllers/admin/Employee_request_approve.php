@@ -77,11 +77,11 @@ class Employee_request_approve extends MY_Controller {
 
 		// $employee = $this->Employees_model->get_request_approve();
 		$employee = $this->Employees_model->get_request_approve($session['employee_id']);
-
+		$no = 1;
 		$data = array();
 
           foreach($employee->result() as $r) {
-			  $no = $r->secid;
+			  
 				$fullname = $r->fullname;
 				$location_id = $r->location_id;
 				$project = $r->project;
@@ -92,16 +92,38 @@ class Employee_request_approve extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
+				$approved_naeby = $r->approved_naeby;
+				$approved_nomby = $r->approved_nomby;
 				$approved_hrdby = $r->approved_hrdby;
+				$cancel_stat = $r->cancel_stat;
 			  
+				if($cancel_stat==1){
 
-				if($approved_hrdby==null){
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal" data-target=".edit-modal-data" data-company_id='. $r->secid . '">Ditolak</button>';
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval HRD</button>';
-				} else {
+				} else if($approved_naeby==null){
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id='. $r->secid . '">Need Approval NAE</button>';
+				} else if ($approved_nomby==null) {
 					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval NOM</button>';
+
+				} else if ($approved_hrdby==null) {
+					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval HRD</button>';
+
+				} else {
+
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Approved</button>';
 				}
+
+				// if($approved_hrdby==null){
+
+			  // 	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Need Approval HRD</button>';
+				// } else {
+					
+			  // 	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->secid . '">Approved</button>';
+				// }
 
 
 				$projects = $this->Project_model->read_single_project($r->project);
@@ -134,7 +156,6 @@ class Employee_request_approve extends MY_Controller {
 
 			$data[] = array(
 				$no,
-				$status_migrasi,
 				$nik_ktp,
 				$fullname,
 				$nama_project,
@@ -143,8 +164,10 @@ class Employee_request_approve extends MY_Controller {
 				$designation_name,
 				$penempatan,
 				$doj,
-				$contact_no
+				$contact_no,
+				$status_migrasi
 			);
+			$no++;
           }
 
           $output = array(

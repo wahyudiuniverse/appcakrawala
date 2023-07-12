@@ -42,7 +42,7 @@
       </a> </li>
     <?php } ?>
 
-    <?php if(in_array('375',$role_resources_ids)) { ?>
+    <?php if(in_array('337',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>Status Karyawan
       </a> </li>
     <?php } ?>

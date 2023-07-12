@@ -78,12 +78,12 @@ class Employee_pkwt_history extends MY_Controller {
 		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
 		// $employee = $this->Pkwt_model->get_monitoring_pkwt_history();
 		$employee = $this->Pkwt_model->get_monitoring_pkwt_history($session['employee_id']);
-
+		$no = 1;
 		$data = array();
 
           foreach($employee->result() as $r) {
 			  
-				$no = $r->contract_id;
+				// $no = $r->contract_id;
 				$nip = $r->employee_id;
 				$project = $r->project;
 				$jabatan = $r->jabatan;
@@ -139,6 +139,7 @@ class Employee_pkwt_history extends MY_Controller {
 				$begin_until,
 				 $this->Xin_model->rupiah($basic_pay),
 			);
+			$no++;
           }
 
           $output = array(

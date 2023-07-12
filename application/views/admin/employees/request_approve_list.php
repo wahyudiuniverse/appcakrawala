@@ -49,7 +49,7 @@
       </a> </li>
     <?php } ?>
     
-    <?php if(in_array('375',$role_resources_ids)) { ?>
+    <?php if(in_array('337',$role_resources_ids)) { ?>
     <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Status Karyawan
       </a> </li>
     <?php } ?>
@@ -64,14 +64,13 @@
 
 
 <div class="card">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_companies');?></span> </div>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2">Monitoring <strong>Karyawan Baru</strong></span> </div>
   <div class="card-body">
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">
         <thead>
           <tr>
             <th>No.</th>
-            <th><?php echo $this->lang->line('xin_request_employee_status');?></th>
             <th>NIK-KTP</th>
             <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name');?></th>
             <th><?php echo $this->lang->line('left_projects');?></th>
@@ -81,6 +80,7 @@
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th><?php echo $this->lang->line('xin_employee_doj');?></th>
             <th><?php echo $this->lang->line('xin_e_details_contact');?></th>
+            <th><?php echo $this->lang->line('xin_request_employee_status');?></th>
           </tr>
         </thead>
       </table>

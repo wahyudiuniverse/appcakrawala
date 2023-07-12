@@ -578,7 +578,7 @@
           ?>
 
           <?php 
-          if (in_array('470',$role_resources_ids)) { ?>
+          if (in_array('337',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_approve_active']))echo $arr_mod['man_employees_approve_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_request_approve');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
