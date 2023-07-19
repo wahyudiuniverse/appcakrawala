@@ -1193,13 +1193,13 @@ class ImportExcel extends MY_Controller
 				  	if($project_sub=='INHOUSE' || $project_sub=='INHOUSE AREA' || $project_sub=='AREA' || $project_sub=='HO'){
 				  		if($session['user_id']=='1'){
 
-			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			  			$view_data = '<a href="'.site_url().'admin/importexcelsaltab/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
 				  		} else {
 				  			
 			  			$view_data = '';
 				  		}
 				  	} else {
-			  			$view_data = '<a href="'.site_url().'admin/Importexceleslip/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			  			$view_data = '<a href="'.site_url().'admin/importexcelsaltab/show_eslip/'.$uploadid.'/'.$preiode_param.'/'.$project_param.'/'.$project_sub_param.'"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
 				  	}
 
 
@@ -1470,7 +1470,7 @@ class ImportExcel extends MY_Controller
 
 			  			$view_data = '<a href="'.site_url().'admin/reports/saltab_bpjs/?upid='.$uploadid.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
 
-
+				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-usermobile_id="'. $uploadid . '"><span class="fas fa-pencil-alt"></span></button></span>';
 
      	$data[] = array(
 			  $view_data,
@@ -1480,6 +1480,8 @@ class ImportExcel extends MY_Controller
         $project_sub,
        	$total_mp,
 				$fullname,
+				$edit
+				
       );
     }
 
@@ -1492,6 +1494,65 @@ class ImportExcel extends MY_Controller
           echo json_encode($output);
           exit();
   }
+
+
+	 public function read()
+	{
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('admin/');
+		}
+		$data['title'] = $this->Xin_model->site_title();
+
+		// $keywords = preg_split("/[\s,]+/", $this->input->get('department_id'));
+		// $keystring = $this->input->get('department_id');
+
+		// 	if(!is_null($keywords[0])){
+
+    // 		$read_employee = $this->Employees_model->read_employee_info_by_nik($keywords[0]);
+    // 		$read_usermobile = $this->Usersmobile_model->read_users_mobile_by_nik($keywords[0]);
+
+    // 		$full_name = $read_employee[0]->first_name;
+
+		// 		$all_projects = $this->Project_model->get_projects();
+		// 		$all_usertype = $this->Usersmobile_model->get_usertype();
+		// 		$all_area = $this->Xin_model->get_area();
+		// 		// $all_area = $this->Usersmobile_model->get_district();
+
+		// 	}
+
+		// if(is_numeric($keywords[0])) {
+
+		// 	$id = $keywords[0];
+		// 	$id = $this->security->xss_clean($id);
+
+
+		// }
+
+			$data = array(
+				'usermobile_id' => 'DIALOG'
+				// 'fullname' => $full_name,
+				// 'usertype_id' => $read_usermobile[0]->usertype_id,
+				// 'project_id' => $read_usermobile[0]->project_id,
+				// 'areaid' => $read_usermobile[0]->areaid,
+				// 'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
+				// 'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
+				// 'device_id' => $read_usermobile[0]->device_id_one,
+				// 'all_usertype' => $all_usertype,
+				// 'all_projects' => $all_projects,
+				// 'all_area' => $all_area
+				);
+			
+				$this->load->view('admin/usermobile/dialog_usermobile', $data);
+			// $session = $this->session->userdata('username');
+			
+			// if(!empty($session)){
+			// 	$this->load->view('admin/usermobile/dialog_usermobile', $data);
+			// } else {
+			// 	redirect('admin/');
+			// }
+		
+	}
 
 
 } 

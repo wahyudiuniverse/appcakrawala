@@ -64,4 +64,30 @@ $(document).ready(function() {
 		
 		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
 	});
+	
+
+ $( document ).on( "click", ".tandaidownload", function() {
+	
+	jQuery.get(base_url+"/tandai_download/"+jQuery(this).data('user-id'), function(data, status){
+
+		// var xin_table = $('#xin_table').dataTable({
+		// 	"bDestroy": true,
+		// 	"ajax": {
+		// 		url : base_url+"/view_import_excel_employees/?upid="+$('#uploadid').val(),
+		// 		type : 'GET'
+		// 	},
+		// dom: 'lBfrtip',
+		// "buttons": ['csv', 'excel', 'pdf', 'print'],
+		// 	"fnDrawCallback": function(settings){
+		// 	$('[data-toggle="tooltip"]').tooltip();          
+		// 	}
+		// });
+		window.location.reload();
+		// window.location.href = window.location.href;
+		// xin_table.api().ajax.reload(function(){
+
+		// 	toastr.success(data);
+		// }, true);
+	});
+});
 });

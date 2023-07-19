@@ -137,6 +137,17 @@
 		}		
 	}
 	
+
+	// Function to update record without logo > in table
+	public function update_bpjs_saltab($data, $id){
+		$this->db->where('uploadid', $id);
+		if( $this->db->update('xin_employees_saltab',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 	// Function to update record without logo > in table
 	public function update_company_document_record($data, $id){
 		$this->db->where('document_id', $id);

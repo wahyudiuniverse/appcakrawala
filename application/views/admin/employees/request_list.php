@@ -48,7 +48,7 @@
     <?php } ?>
     
     <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Monitoring Karyawan
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link" target="_blank"> <span class="sw-icon ion ion-ios-paper"></span> Monitoring Karyawan
       </a> </li>
     <?php } ?>
 
@@ -374,7 +374,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">Foto KTP<strong>*</strong></label>
+                              <label for="logo">Foto KTP<strong></strong></label>
                               <input type="file" class="form-control-file" id="document_file" name="document_file" accept="image/png,image/jpg, image/jpeg">
                               <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
@@ -384,7 +384,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">Foto KK<strong>*</strong></label>
+                              <label for="logo">Foto KK<strong></strong></label>
                               <input type="file" class="form-control-file" id="document_kk" name="document_kk" accept="image/png,image/jpg, image/jpeg">
                               <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
@@ -394,7 +394,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">IJAZAH Terakhir<strong>*</strong></label>
+                              <label for="logo">IJAZAH Terakhir<strong></strong></label>
                               <input type="file" class="form-control-file" id="document_ijz" name="document_ijz" accept="image/png,image/jpg, image/jpeg">
                               <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
                             </fieldset>
@@ -407,7 +407,7 @@
                         <div class="col-md-3">
                           <div class="form-group">
                             <fieldset class="form-group">
-                              <label for="logo">Riwayat Hidup (CV)<strong>*</strong></label>
+                              <label for="logo">Riwayat Hidup (CV)<strong></strong></label>
                               <input type="file" class="form-control-file" id="document_cv" name="document_cv" accept="application/pdf">
                               <small>Jenis File: PDF | Size MAX 2 MB</small>
                             </fieldset>

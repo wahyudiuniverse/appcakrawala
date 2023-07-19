@@ -2139,7 +2139,7 @@ class Reports extends MY_Controller
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['title'] = 'Saltab to BPJS | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->input->get('upid', TRUE);
+		$data['breadcrumbs'] = 'BPJS Project';
 		$data['uploadid'] = $this->input->get('upid', TRUE);
 		$data['path_url'] = 'reports_saltab_bpjs';
 		// $data['all_companies'] = $this->Xin_model->get_companies();
@@ -2245,6 +2245,30 @@ class Reports extends MY_Controller
 
     }
 
-	 
+	
+	// Validate and update status info in database // status info
+	public function tandai_download() {
+		/* Define return | here result is used to return user data and error for error message */
+		// $status_id = $this->uri->segment(4);
+		$session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
+		$upload_id = $this->uri->segment(4);
+
+
+				$datas = array(
+					'release' => $session['user_id'],
+					'release_date' =>  date("Y-m-d h:i:s"),
+				);
+
+				$this->Import_model->update_release_saltab($datas, $upload_id);
+
+
+		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
+		// $tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+
+
+	} 
 } 
 ?>

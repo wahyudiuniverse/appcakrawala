@@ -13,11 +13,20 @@
 // PKWT START
 
 $pkwtinfo = $this->Pkwt_model->get_single_pkwt_by_userid($user_info[0]->employee_id);
+$emp = $this->Employees_model->read_employee_info_by_nik($user_info[0]->employee_id);
+        if(!is_null($emp)){
+          $fullname = $emp[0]->first_name;
+          $sub_project = 'pkwt'.$emp[0]->sub_project_id;
+        } else {
+          $fullname = '--'; 
+          $sub_project = '0';
+        }
 
 if(!is_null($pkwtinfo)){
-  $pkwtid = $pkwtinfo[0]->contract_id;
-  $nomorsurat = $pkwtinfo[0]->no_surat;
-  $approve_pkwt = $pkwtinfo[0]->status_approve;
+    $pkwtid         = $pkwtinfo[0]->contract_id;
+    $nomorsurat     = $pkwtinfo[0]->no_surat;
+    $approve_pkwt   = $pkwtinfo[0]->status_pkwt;
+    $uniqueid       = $pkwtinfo[0]->uniqueid;
 
   $pkwt_file = $this->Pkwt_model->get_pkwt_file($pkwtinfo[0]->contract_id);
   if(!is_null($pkwt_file)){
@@ -150,7 +159,7 @@ if($user_info[0]->user_role_id==1 ||
 
 
   <div class="col-sm-6 col-xl-3">
-  <a href="<?php echo site_url('admin/pkwt/view/'.$pkwtid.'/'.$user_info[0]->employee_id);?>" target="_blank">
+  <a href="<?php echo site_url('admin/'.$sub_project.'/view/'.$uniqueid);?>" target="_blank">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
@@ -172,7 +181,7 @@ if($user_info[0]->user_role_id==1 ||
 
 
   <div class="col-sm-6 col-xl-3">
-  <a href="<?php echo site_url('admin/mypkwt/uploadpkwt/'.$pkwtid.'/'.$user_info[0]->employee_id);?>">
+  <a href="<?php echo site_url('admin/'.$sub_project.'/view/'.$uniqueid);?>" target="_blank">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">

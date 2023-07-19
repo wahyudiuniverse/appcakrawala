@@ -175,6 +175,12 @@ GROUP BY pros.project_id");
   	  return $query->result();
 	}
 
+
+	public function get_sub_project_filter($project_id) {
+	  $query = $this->db->query("SELECT * FROM xin_projects_sub WHERE id_project = '$project_id' ORDER BY sub_project_name");
+  	  return $query->result();
+	}
+
 	// get employees list> reports
 	public function project_list() {
 

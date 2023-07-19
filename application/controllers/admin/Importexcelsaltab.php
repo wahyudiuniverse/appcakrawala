@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Importexcelsaltab extends MY_Controller 
+class importexcelsaltab extends MY_Controller 
 {
 
 	public function __construct(){

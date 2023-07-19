@@ -46,7 +46,7 @@
     <?php } ?>
     
     <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Status Karyawan
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_approve/');?>" data-link-data="<?php echo site_url('admin/employee_request_approve/');?>" class="mb-3 nav-link hrpremium-link" target="_blank"> <span class="sw-icon ion ion-ios-paper"></span> Status Karyawan
       </a> </li>
     <?php } ?>
 

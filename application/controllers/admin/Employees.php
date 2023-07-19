@@ -1277,14 +1277,10 @@ class Employees extends MY_Controller {
 			'deactive_reason' => $result[0]->deactive_reason,
 
 
-			
-
-
-
-
 			'all_companies' => $this->Xin_model->get_companies(),
 			'all_departments' => $this->Department_model->all_departments(),
 			'all_projects' => $this->Project_model->get_all_projects(),
+			'all_sub_projects' => $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' => $this->Designation_model->all_designations(),
 			'all_user_roles' => $this->Roles_model->all_user_roles(),
 			'title' => $this->lang->line('header_my_profile').' | '.$this->Xin_model->site_title(),

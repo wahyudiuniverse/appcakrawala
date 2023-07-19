@@ -242,7 +242,7 @@ class Employees_model extends CI_Model {
 		WHERE request_resign_by NOT IN ("NULL","0")
 		AND approve_resignnae NOT IN ("NULL","0")
 		AND approve_resignnom IS NULL
-		AND project_id NOT IN (22)
+		-- AND project_id NOT IN (22)
 		AND cancel_resign_stat = 0
 		ORDER BY request_resign_date DESC;';
 		// $binds = array(1,$cid);

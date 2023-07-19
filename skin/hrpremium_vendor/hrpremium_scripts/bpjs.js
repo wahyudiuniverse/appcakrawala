@@ -1,23 +1,18 @@
-
-
-
-
-
 $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/history_upload_eslip_bpjs/",
+            url : base_url+"/usermobile_list/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
 		$('[data-toggle="tooltip"]').tooltip();          
 		}
     });
-
+	
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' }); 
-
+		
 	/* Delete data */
 	$("#delete_record").submit(function(e){
 	/*Form Submit*/
@@ -32,24 +27,24 @@ $(document).ready(function() {
 				if (JSON.error != '') {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+					Ladda.stopAll();
 				} else {
 					$('.delete-modal').modal('toggle');
-					xin_table.api().ajax.reload(function(){ 
+					xin_table.api().ajax.reload(function(){
 						toastr.success(JSON.result);
 						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					}, true);							
+					}, true);	
+					Ladda.stopAll();						
 				}
 			}
 		});
 	});
-
-
+	
 	jQuery("#aj_company").change(function(){
 		jQuery.get(base_url+"/get_comp_project/"+jQuery(this).val(), function(data, status){
 			jQuery('#project_ajax').html(data);
 		});
 	});
-
 
 	jQuery("#aj_project").change(function(){
 		jQuery.get(base_url+"/get_subprojects/"+jQuery(this).val(), function(data, status){
@@ -57,7 +52,6 @@ $(document).ready(function() {
 		});
 	});
 
-	
 	// edit
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
@@ -66,7 +60,7 @@ $(document).ready(function() {
 	$.ajax({
 		url : base_url+"/read/",
 		type: "GET",
-		data: escapeHtmlSecure('jd=1&is_ajax=1&mode=modal&data=department&department_id='+ department_id),
+		data: 'jd=1&is_ajax=1&mode=modal&data=department&department_id='+department_id,
 		success: function (response) {
 			if(response) {
 				$("#ajax_modal").html(response);
@@ -74,7 +68,7 @@ $(document).ready(function() {
 		}
 		});
 	});
-
+	
 	/* projects report */
 	$("#employee_mobile").submit(function(e){
 		/*Form Submit*/
@@ -98,8 +92,13 @@ $(document).ready(function() {
 		toastr.success('Request Submit.');
 		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
 	});
-	
 
+	// jQuery("#aj_company").change(function(){
+	// 	jQuery.get(base_url+"/get_company_locations/"+jQuery(this).val(), function(data, status){
+	// 		jQuery('#location_ajax').html(data);
+	// 	});
+	// });
+	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e){
 	e.preventDefault();
@@ -117,6 +116,7 @@ $(document).ready(function() {
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
 					$('.icon-spinner3').hide();
+					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
@@ -126,6 +126,7 @@ $(document).ready(function() {
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
+					Ladda.stopAll();
 				}
 			}
 		});
@@ -134,5 +135,5 @@ $(document).ready(function() {
 $( document ).on( "click", ".delete", function() {
 	$('input[name=_token]').val($(this).data('record-id'));
 	var delUrl = base_url+'/delete/'+$(this).data('record-id');
-	$('#delete_record').attr('action',escapeHtmlSecure(delUrl));
+	$('#delete_record').attr('action',delUrl);
 });

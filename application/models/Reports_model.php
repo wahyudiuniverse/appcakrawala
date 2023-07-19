@@ -432,7 +432,7 @@ class Reports_model extends CI_Model {
 
 
 		return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip not in('0') ORDER BY secid DESC LIMIT 500");
-	}
+		}
 	}
 
 		// get employees att reports
@@ -467,41 +467,7 @@ WHERE employee_id = '99'");
 		// get employees att reports
 	public function filter_report_emp_att($company_id,$project_id,$sub_id,$start_date,$end_date) {
 
-		// return $query = $this->db->query("SELECT attdin.employee_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
-		// 	FROM (
-		// 		SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
-		// 		FROM xin_trx_cio
-		// 		WHERE c_io = 1
-		// 		AND project_id = '$project_id'
-        //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
-		// 		ORDER BY createdon DESC) attdin
-		// 	LEFT JOIN (
-		// 		SELECT employee_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
-		// 		FROM xin_trx_cio
-		// 		WHERE c_io = 2 
-		// 		AND project_id = '$project_id'
-        //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
-		// 	) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
-
-
-		// return $query = $this->db->query("SELECT attdin.employee_id, attdin.project_id, attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
-		// 	FROM (
-		// 		SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
-		// 		FROM xin_trx_cio
-		// 		WHERE c_io = 1
-		// 		AND project_id = '$project_id'
-        //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
-		// 		ORDER BY createdon DESC) attdin
-		// 	LEFT JOIN (
-		// 		SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
-		// 		FROM xin_trx_cio
-		// 		WHERE c_io = 2 
-		// 		AND project_id = '$project_id'
-        //         AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
-		// 	) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone");
-
 		return $query = $this->db->query("
-
 
 			SELECT attdin.employee_id, emp.first_name AS fullname, attdin.project_id, proj.title, emp.sub_project_id, projs.sub_project_name, attdin.customer_id, attdin.date_phone, 
 attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay,attdin.latitude, attdin.longitude, attdin.foto_in, cout.foto_out
@@ -528,43 +494,136 @@ WHERE emp.sub_project_id = '$sub_id'
 -- SELECT attdin.employee_id, emp.first_name AS fullname, attdin.project_id, proj.title, emp.sub_project_id, projs.sub_project_name, attdin.customer_id, attdin.date_phone, 
 -- attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay,attdin.latitude, attdin.longitude, attdin.foto_in, cout.foto_out
 -- 			FROM (
--- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in,latitude,longitude, foto AS foto_in
+-- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in, latitude, longitude, foto AS foto_in
 -- 				FROM xin_trx_cio
 -- 				WHERE c_io = 1
---                 AND project_id = '22'
---                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-05-09' AND '2023-05-09'
+--                 AND project_id = '62'
+--                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-07-17' AND '2023-07-17'
 -- 				ORDER BY createdon DESC) attdin
 -- 			LEFT JOIN (
--- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out,latitude,longitude,foto AS foto_out
+-- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out, latitude, longitude,foto AS foto_out
 -- 				FROM xin_trx_cio
 -- 				WHERE c_io = 2
---                 AND project_id = '22'
---                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-05-09' AND '2023-05-09'
+--                 AND project_id = '62'
+--                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-07-17' AND '2023-07-17'
 -- 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
 -- 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
 -- 			LEFT JOIN xin_projects proj ON proj.project_id = attdin.project_id
 -- 			LEFT JOIN xin_projects_sub projs ON projs.secid = emp.sub_project_id
--- WHERE emp.sub_project_id = '2'
+-- WHERE emp.sub_project_id = '125'
+-- AND attdin.employee_id in (
+-- 22505700,
+-- 22505701,
+-- 22505703,
+-- 22505704,
+-- 22505706,
+-- 22505707,
+-- 22505708,
+-- 22505709,
+-- 22505710,
+-- 22505712,
+-- 22505713,
+-- 22505714,
+-- 22505715,
+-- 22505716,
+-- 22505717,
+-- 22505718,
+-- 22505720,
+-- 22505721,
+-- 22505722,
+-- 22505723,
+-- 22505724,
+-- 22505725,
+-- 22505727,
+-- 22505738,
+-- 22505730,
+-- 22505734,
+-- 22505736,
+-- 21505796,
+-- 22505803,
+-- 22505829,
+-- 22505857,
+-- 22505893,
+-- 22505953,
+-- 22505954,
+-- 22505983,
+-- 22506031,
+-- 22606090,
+-- 22506114,
+-- 22506166,
+-- 22609395,
+-- 22609438,
+-- 22609459,
+-- 22609460,
+-- 22509481,
+-- 22609496,
+-- 22509534,
+-- 22509559,
+-- 22509570,
+-- 22509656,
+-- 22509657,
+-- 22509743,
+-- 22509815,
+-- 22509848,
+-- 22509850,
+-- 22509857,
+-- 22509859,
+-- 22609884,
+-- 22509889,
+-- 22509890,
+-- 22509945,
+-- 22609998,
+-- 22510021,
+-- 22610039,
+-- 22510056,
+-- 21610178,
+-- 21610227,
+-- 21610272,
+-- 21510289,
+-- 21610290,
+-- 21510291,
+-- 21510292,
+-- 21610293,
+-- 21510294,
+-- 21510303,
+-- 21510331,
+-- 21510333,
+-- 21510384,
+-- 21510387,
+-- 21510388,
+-- 21510473,
+-- 21510482
+-- )
 
 
 
--- SELECT attdin.employee_id, attdin.project_id, emp.sub_project_id,attdin.customer_id, attdin.date_phone, attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay
--- 			FROM (
--- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in
--- 				FROM xin_trx_cio
--- 				WHERE c_io = 1
--- 				AND project_id = '$project_id'
---                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
--- 				ORDER BY createdon DESC) attdin
--- 			LEFT JOIN (
--- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out
--- 				FROM xin_trx_cio
--- 				WHERE c_io = 2 
--- 				AND project_id = '$project_id'
---                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'
--- 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
--- 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
--- WHERE emp.sub_project_id = '$sub_id'
+
+
+
+
+ -- SELECT attdin.employee_id, emp.first_name AS fullname, attdin.project_id, proj.title, emp.sub_project_id, projs.sub_project_name, attdin.customer_id, attdin.date_phone, 
+ -- attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay,attdin.latitude, attdin.longitude, attdin.foto_in, cout.foto_out
+ -- 			FROM (
+ -- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y%m%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_in,latitude,longitude, foto AS foto_in
+ -- 				FROM xin_trx_cio
+ -- 				WHERE c_io = 1
+ --                 AND project_id = '22'
+ --                 AND DATE_FORMAT(datetime_phone, '%Y%m%d') BETWEEN '20230509' AND '20230509'
+ -- 				ORDER BY createdon DESC) attdin
+ -- 			LEFT JOIN (
+ -- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y%m%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out,latitude,longitude,foto AS foto_out
+ -- 				FROM xin_trx_cio
+ -- 				WHERE c_io = 2
+ --                 AND project_id = '22'
+ --                 AND DATE_FORMAT(datetime_phone, '%Y%m%d') BETWEEN '20230509' AND '20230509'
+ -- 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
+ -- 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
+ -- 			LEFT JOIN xin_projects proj ON proj.project_id = attdin.project_id
+ -- 			LEFT JOIN xin_projects_sub projs ON projs.secid = emp.sub_project_id
+ -- WHERE emp.sub_project_id = '2'
+
+
+
 
 ");
 

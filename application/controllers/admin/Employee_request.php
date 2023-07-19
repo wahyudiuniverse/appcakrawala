@@ -279,40 +279,43 @@ class Employee_request extends MY_Controller {
 						$Return['error'] = 'Tanggal Penggajian Kosong..!';
 					} 
 
-					else if($_FILES['document_file']['size'] == 0) {
-						$Return['error'] = 'KTP Kosongx..!';
-					} else if ($_FILES['document_file']['size'] > 2000000){
-						$Return['error'] = 'File KTP Lebih dari 2MB	..';
-					}
+					// else if($_FILES['document_file']['size'] == 0) {
+					// 	$Return['error'] = 'KTP Kosongx..!';
+					// } else if ($_FILES['document_file']['size'] > 2000000){
+					// 	$Return['error'] = 'File KTP Lebih dari 2MB	..';
+					// }
 
-					else if($_FILES['document_kk']['size'] == 0) {
-						$Return['error'] = 'KK KosongA..!';
-					} else if ($_FILES['document_kk']['size'] > 2000000){
-						$Return['error'] = 'File KK Lebih dari 2MB	..';
-					}
+					// else if($_FILES['document_kk']['size'] == 0) {
+					// 	$Return['error'] = 'KK KosongA..!';
+					// } else if ($_FILES['document_kk']['size'] > 2000000){
+					// 	$Return['error'] = 'File KK Lebih dari 2MB	..';
+					// }
 
-					else if($_FILES['document_cv']['size'] == 0) {
-						$Return['error'] = 'Riwayat Hidup (CV) Kosong..!';
-					} else if ($_FILES['document_cv']['size'] > 2000000){
-						$Return['error'] = 'File CV Lebih dari 2MB	..';
-					}
+					// else if($_FILES['document_cv']['size'] == 0) {
+					// 	$Return['error'] = 'Riwayat Hidup (CV) Kosong..!';
+					// } else if ($_FILES['document_cv']['size'] > 2000000){
+					// 	$Return['error'] = 'File CV Lebih dari 2MB	..';
+					// }
 
-					else if($_FILES['document_skck']['size'] > 2000000){
-						$Return['error'] = 'File SKCK Lebih dari 2MB	..';
-					}
+					// else if($_FILES['document_skck']['size'] > 2000000){
+					// 	$Return['error'] = 'File SKCK Lebih dari 2MB	..';
+					// }
 
-					else if($_FILES['document_ijz']['size'] == 0) {
-						$Return['error'] = 'Ijazah Kosong..!';
-					} else if ($_FILES['document_ijz']['size'] > 2000000){
-						$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
-					}
+					// else if($_FILES['document_ijz']['size'] == 0) {
+					// 	$Return['error'] = 'Ijazah Kosong..!';
+					// } else if ($_FILES['document_ijz']['size'] > 2000000){
+					// 	$Return['error'] = 'File Ijazah Lebih dari 2MB	..';
+					// }
 
-					else if ($_FILES['document_pkl']['size'] > 2000000){
-						$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
-					}
+					// else if ($_FILES['document_pkl']['size'] > 2000000){
+					// 	$Return['error'] = 'File PAKLARING Lebih dari 2MB	..';
+					// }
 
 					else {
 
+							if($_FILES['document_file']['size'] == 0) {
+								$fname=0;
+							} else {
 								if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
 									//checking image type
 									$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
@@ -329,10 +332,15 @@ class Employee_request extends MY_Controller {
 										move_uploaded_file($tmp_name, $documentd.$newfilename);
 										$fname = $newfilename;
 									} else {
-										$Return['error'] = 'Jenis File KTP tidak diterima..';
+										$fname=0;
+										// $Return['error'] = 'Jenis File KTP tidak diterima..';
 									}
 								}
+							}
 
+							if($_FILES['document_kk']['size'] == 0) {
+								$fnamekk=0;
+							} else {
 								if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
 									//checking image type
 									$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
@@ -349,10 +357,15 @@ class Employee_request extends MY_Controller {
 										move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
 										$fnamekk = $newfilenamekk;
 									} else {
-										$Return['error'] = 'Jenis File KK tidak diterima..';
+										$fnamekk=0;
+										// $Return['error'] = 'Jenis File KK tidak diterima..';
 									}
 								}
+							}
 
+							if($_FILES['document_cv']['size'] == 0) {
+								$fnamecv=0;
+							} else {
 								if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
 										//checking image type
 										$allowedcv =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
@@ -369,10 +382,16 @@ class Employee_request extends MY_Controller {
 											move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
 											$fnamecv = $newfilenamecv;
 										} else {
-											$Return['error'] = 'Jenis File CV tidak diterima..';
+											$fnamecv=0;
+											// $Return['error'] = 'Jenis File CV tidak diterima..';
 										}
 								}
+							}
 
+
+							if($_FILES['document_ijz']['size'] == 0) {
+								$fnameijz=0;
+							} else {
 								if(is_uploaded_file($_FILES['document_ijz']['tmp_name'])) {
 										//checking image type
 										$allowedijz =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
@@ -389,9 +408,11 @@ class Employee_request extends MY_Controller {
 											move_uploaded_file($tmp_nameijz, $documentdijz.$newfilenameijz);
 											$fnameijz = $newfilenameijz;
 										} else {
-											$Return['error'] = 'Jenis File Ijazah tidak diterima..';
+											$fnameijz=0;
+											// $Return['error'] = 'Jenis File Ijazah tidak diterima..';
 										}
 								}
+							}
 							
 
 							if($_FILES['document_skck']['size'] == 0) {
@@ -413,7 +434,8 @@ class Employee_request extends MY_Controller {
 											move_uploaded_file($tmp_nameskck, $documentdskck.$newfilenameskck);
 											$fnameskck = $newfilenameskck;
 										} else {
-											$Return['error'] = 'Jenis File KK tidak diterima..';
+											$fnameskck=0;
+											// $Return['error'] = 'Jenis File KK tidak diterima..';
 										}
 									}
 							}
@@ -438,7 +460,8 @@ class Employee_request extends MY_Controller {
 											move_uploaded_file($tmp_namepkl, $documentdpkl.$newfilenamepkl);
 											$fnamepkl = $newfilenamepkl;
 										} else {
-											$Return['error'] = 'Jenis File Paklaring tidak diterima..';
+											$fnamepkl=0;
+											// $Return['error'] = 'Jenis File Paklaring tidak diterima..';
 										}
 									}
 							}

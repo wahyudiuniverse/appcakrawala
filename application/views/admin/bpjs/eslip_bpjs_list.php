@@ -26,6 +26,7 @@
             <th>Sub Project</th>
             <th>Total MPP</th>
             <th><i class="fa fa-user"></i> Dibuat Oleh</th>
+            <th><i class="fa fa-user"></i> Diunduh Oleh</th>
           </tr>
         </thead>
       </table>

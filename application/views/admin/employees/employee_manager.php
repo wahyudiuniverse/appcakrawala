@@ -354,13 +354,19 @@
 
 
                             <div class="row">
-                              <div class="col-md-6" id="project_sub_project">
+                              <div class="col-md-6">
                                 <div class="form-group">
-                                  <label for="blogger_profile">Sub Project</label>
-                                  <input class="form-control" placeholder="" name="sub_project_id" type="text" value="<?php echo $nama_subproject;?>" disabled>
+                              <label for="projects">Sub Project<i class="hrpremium-asterisk"></i></label>
+                              <select class="form-control" id="aj_project" name="sub_project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                                <option value=""></option>
+                                <?php foreach($all_sub_projects as $sbpro) {?>
+                                <option value="<?php echo $sbpro->secid?>" <?php if($sub_project_id==$sbpro->secid):?> selected <?php endif;?>><?php echo $sbpro->sub_project_name?></option>
+                                <?php } ?>
+                              </select>
                                 </div>
                               </div>
                             </div>
+
 
                             <div class="row">
                               <div class="col-md-6">
