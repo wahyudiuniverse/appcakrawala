@@ -86,6 +86,21 @@
           </a>             
         </li>
 
+    <!-- CEK NIP -->
+    <?php 
+    if (in_array('134',$role_resources_ids)) {
+    ?>
+        <li class="sidenav-item <?php if(!empty($arr_mod['ceknip_active']))echo $arr_mod['ceknip_active'];?>"> 
+          <a href="<?php echo site_url('admin/ceknip/');?>" class="sidenav-link"> 
+            <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+          <i class="sidenav-icon ion ion-logo-buffer"></i>
+            <div>Check NIP</div>
+          </a>             
+        </li>
+    <?php 
+    } 
+    ?>
+
     <!-- hotspot -->
     <?php 
     if (in_array('393',$role_resources_ids)) {
@@ -367,7 +382,7 @@
           <?php 
           if (in_array('477',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['bpjs_employees_active']))echo $arr_mod['bpjs_employees_active'];?>"> 
-              <a href="<?php echo site_url('admin/importexcel/bpjs/');?>" class="sidenav-link"> 
+              <a href="<?php echo site_url('admin/bpjs/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
                 <div>Saltab</div>

@@ -75,7 +75,7 @@ class Employee_pkwt_apnae extends MY_Controller {
 
 		// $employee = $this->Employees_model->get_employees_request_verify();
 		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
-		$employee = $this->Pkwt_model->get_monitoring_pkwt_apnae();
+		$employee = $this->Pkwt_model->get_monitoring_pkwt_apnae($session['employee_id']);
 
 		$data = array();
 

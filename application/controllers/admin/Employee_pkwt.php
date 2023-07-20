@@ -83,7 +83,7 @@ class Employee_pkwt extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		// $employee = $this->Employees_model->get_monitoring_rsign();
-		$listpkwt = $this->Pkwt_model->get_monitoring_pkwt();
+		$listpkwt = $this->Pkwt_model->get_monitoring_pkwt($session['employee_id']);
 
 		$data = array();
 

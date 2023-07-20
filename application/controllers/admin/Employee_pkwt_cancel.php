@@ -75,7 +75,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 		// $employee = $this->Employees_model->get_employees_request_verify();
 		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
-		$employee = $this->Pkwt_model->get_monitoring_pkwt_cancel();
+		$employee = $this->Pkwt_model->get_monitoring_pkwt_cancel($session['employee_id']);
 
 		$data = array();
 
@@ -88,8 +88,13 @@ class Employee_pkwt_cancel extends MY_Controller {
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
 				$basic_pay = $r->basic_pay;
 				$approve_nom = $r->approve_nom;
+				$approve_nae = $r->approve_nae;
 
-				if($approve_nom=='0'){
+				if($approve_nae=='0') {
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval NAE</button>';
+			  	
+				} else if($approve_nom=='0'){
 
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval NOM</button>';
 				} else {

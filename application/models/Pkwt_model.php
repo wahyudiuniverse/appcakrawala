@@ -243,40 +243,42 @@ class Pkwt_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_monitoring_pkwt() {
+	public function get_monitoring_pkwt($empID) {
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 			FROM xin_employee_contract
 			WHERE approve_hrd = 0
-			AND project != 22
-			ORDER BY contract_id DESC LIMIT 50';
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC LIMIT 50";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 
  	// monitoring request
-	public function get_monitoring_pkwt_apnae() {
+	public function get_monitoring_pkwt_apnae($empID) {
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 			FROM xin_employee_contract
 			WHERE status_pkwt = 0
 			AND approve_nae = 0
 			AND cancel_stat = 0
-			ORDER BY contract_id DESC';
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 
  	// monitoring request
-	public function get_monitoring_pkwt_cancel() {
+	public function get_monitoring_pkwt_cancel($empID) {
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 			FROM xin_employee_contract
 			WHERE status_pkwt = 0
 			AND cancel_stat = 1
-			ORDER BY contract_id DESC';
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

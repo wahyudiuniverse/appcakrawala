@@ -31,6 +31,20 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+	public function get_employees_notho() {
+
+		$sql = "SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title,
+				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id
+				FROM xin_employees emp
+				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
+				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+				WHERE emp.employee_id not IN (1)
+				AND emp.project_id not in (22)";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
 
 	public function get_all_employees_all()
 	{

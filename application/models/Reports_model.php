@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Reports_model extends CI_Model { 
+class Reports_model extends CI_Model {
  
     public function __construct()
     {
@@ -288,115 +288,83 @@ class Reports_model extends CI_Model {
 
 	// get employees list> reports
 	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
-		// return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
-		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (
-		21402887,
-21500057,
-21402888,
-21500070,
-21300040,
-21602889,
-21202890,
-21500053,
-21500048,
-21600037,
-21500006,
-21300046,
-21600019,
-21600009,
-21300038,
-21500017,
-21300024,
-21300004,
-21500071,
-21500049,
-21500014,
-21300044,
-21500034,
-21600032,
-21500027,
-21500051,
-21500064,
-21500016,
-21500052,
-21500007,
-21500060,
-21300033,
-21502912,
-21500058,
-21500056,
-21300018,
-21502907,
-21502906,
-21502905,
-21502904,
-21300086,
-21302893,
-21500086,
-21502899,
-21502900,
-21302902,
-21302916,
-21502915,
-21300094,
-21300089,
-21300095,
-21300090,
-21504636,
-21300091,
-21500088,
-21300093,
-21305730,
-21305732,
-21205736,
-21505790,
-21505934,
-21509427,
-21505942,
-22505713,
-21209428,
-21209528,
-21502903,
-21309784,
-21509785,
-21309963,
-21509905,
-21509851,
-21310055,
-21509887,
-21502898,
-22505781,
-21402913,
-21402888,
-21402887,
-21500063,
-21300023,
-21500066,
-21500062,
-21500065,
-21500072,
-21500047,
-21300026,
-21500055,
-21300001,
-21600035,
-21300028,
-21300043,
-21300020,
-21300002,
-21300083,
-21300012,
-21600013,
-21300031,
-21300088,
-21300087,
-21500078,
-21300084,
-21500075,
-21500081,
-21300082,
-21300837
- 	)");
+		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
+// 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (
+// 		22505515,
+// 22505525,
+// 22505526,
+// 22505527,
+// 22505530,
+// 22505531,
+// 22505532,
+// 22505533,
+// 22505534,
+// 22505536,
+// 22505537,
+// 22505539,
+// 22505540,
+// 22505541,
+// 22505542,
+// 22505543,
+// 22505545,
+// 22505546,
+// 22505547,
+// 22505548,
+// 22505551,
+// 22505552,
+// 22505554,
+// 22505555,
+// 22505559,
+// 22505560,
+// 22505561,
+// 22505562,
+// 22505563,
+// 22505564,
+// 22505565,
+// 22505566,
+// 22505567,
+// 22505568,
+// 22505569,
+// 22505570,
+// 22505571,
+// 22505573,
+// 22505574,
+// 22505575,
+// 22505576,
+// 22505577,
+// 22505578,
+// 22505579,
+// 22505580,
+// 22505581,
+// 22505582,
+// 22505583,
+// 22505584,
+// 22505585,
+// 22505586,
+// 22505587,
+// 22505588,
+// 22505589,
+// 22505590,
+// 22505591,
+// 22505592,
+// 22505593,
+// 22505594,
+// 22505595,
+// 22505596,
+// 22505597,
+// 22505599,
+// 22505600,
+// 22505603,
+// 22505604,
+// 22505605,
+// 22505606,
+// 22505607,
+// 22505610,
+// 22505611,
+// 22505612,
+// 22505613,
+// 22505614
+//  	)");
 	}
 
 
@@ -469,6 +437,7 @@ WHERE employee_id = '99'");
 
 		return $query = $this->db->query("
 
+
 			SELECT attdin.employee_id, emp.first_name AS fullname, attdin.project_id, proj.title, emp.sub_project_id, projs.sub_project_name, attdin.customer_id, attdin.date_phone, 
 attdin.time_in, cout.time_out, TIMEDIFF(cout.time_out, attdin.time_in) AS timestay,attdin.latitude, attdin.longitude, attdin.foto_in, cout.foto_out
 			FROM (
@@ -498,28 +467,20 @@ WHERE emp.sub_project_id = '$sub_id'
 -- 				FROM xin_trx_cio
 -- 				WHERE c_io = 1
 --                 AND project_id = '62'
---                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-07-17' AND '2023-07-17'
+--                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-07-19' AND '2023-07-19'
 -- 				ORDER BY createdon DESC) attdin
 -- 			LEFT JOIN (
 -- 				SELECT employee_id, project_id, customer_id, DATE_FORMAT(datetime_phone, '%Y-%m-%d') AS date_phone, c_io, DATE_FORMAT(datetime_phone, '%H:%i:%s') AS time_out, latitude, longitude,foto AS foto_out
 -- 				FROM xin_trx_cio
 -- 				WHERE c_io = 2
 --                 AND project_id = '62'
---                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-07-17' AND '2023-07-17'
+--                 AND DATE_FORMAT(datetime_phone, '%Y-%m-%d') BETWEEN '2023-07-19' AND '2023-07-19'
 -- 			) cout ON cout.employee_id = attdin.employee_id AND cout.customer_id = attdin.customer_id AND cout.date_phone = attdin.date_phone
 -- 			LEFT JOIN xin_employees emp ON emp.employee_id = attdin.employee_id
 -- 			LEFT JOIN xin_projects proj ON proj.project_id = attdin.project_id
 -- 			LEFT JOIN xin_projects_sub projs ON projs.secid = emp.sub_project_id
 -- WHERE emp.sub_project_id = '125'
 -- AND attdin.employee_id in (
--- 22505700,
--- 22505701,
--- 22505703,
--- 22505704,
--- 22505706,
--- 22505707,
--- 22505708,
--- 22505709,
 -- 22505710,
 -- 22505712,
 -- 22505713,
@@ -571,6 +532,7 @@ WHERE emp.sub_project_id = '$sub_id'
 -- 22609884,
 -- 22509889,
 -- 22509890,
+-- 22609916,
 -- 22509945,
 -- 22609998,
 -- 22510021,

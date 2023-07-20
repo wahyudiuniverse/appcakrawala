@@ -1352,7 +1352,7 @@ class Pkwt163 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
 						</tr>';
 				}
 				
@@ -1361,7 +1361,7 @@ class Pkwt163 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1388,7 +1388,7 @@ class Pkwt163 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Parkir</td>
-							<td colspan="3"> : '.$allowance_park.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_park.',- Per Bulan</td>
 						</tr>';
 				}
 

@@ -259,6 +259,25 @@ dataSource: [
 	},
 
 
+// CEK NIP
+	{ 
+		id: "", 
+		class: "role-checkbox-modal custom-control-input", 
+		text: "CEK NIP",  
+		add_info: "CEK NIP", 
+		value: "134",  
+		items: [
+		{ 
+			id: "", 
+			class: "role-checkbox-modal custom-control-input", 
+			text: "<?php echo $this->lang->line('xin_role_enable');?>",  
+			add_info: "<?php echo $this->lang->line('xin_role_enable');?>", 
+			value: "134",
+			check: "<?php if(isset($_GET['role_id'])) { if(in_array('134',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+		}
+		]
+	},
+
 // MY PKWT
 	{ 
 		id: "", 
