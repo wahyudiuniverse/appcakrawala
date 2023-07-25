@@ -17,7 +17,7 @@
               'name'        => 'user_id',
               'id'          => 'user_id',
               'value'       => $session['user_id'],
-              'type'   		=> 'hidden',
+              'type'   		  => 'hidden',
               'class'       => 'form-control',
             );
             
@@ -25,31 +25,29 @@
             ?>
           <div class="form-row">
 
+
             <div class="col-md mb-3">
-              <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
-              <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
-                <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
-                <?php 
-                  foreach ($all_companies as $company) {
-                ?>
-                    <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
-                <?php 
-                  } 
-                ?>
+
+            <label class="form-label">Projects <?php echo $session['employee_id'];?></label>
+              <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+                  <option value="0">--</option>
+                <?php foreach($all_projects as $proj) {?>
+                  <option value="<?php echo $proj->project_id;?>"> <?php echo $proj->title;?></option>
+                <?php } ?>
               </select>
             </div>
 
 
-          <div class="col-md mb-3" id="project_ajax">
-            <label class="form-label"><?php echo $this->lang->line('left_projects');?></label>
-            <select class="form-control" name="project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+          <div class="col-md mb-3" id="subproject_ajax">
+            <label class="form-label">Sub Projects</label>
+            <select class="form-control" name="sub_project_id" data-plugin="select_hrm" data-placeholder="Sub Project">
               <option value="0">--</option>
             </select>
           </div>
 
-          <div class="col-md mb-3" id="subproject_ajax">
-            <label class="form-label">Sub Projects</label>
-            <select class="form-control" name="sub_project_id" data-plugin="select_hrm" data-placeholder="Sub Project">
+          <div class="col-md mb-3" id="areaemp_ajax">
+            <label class="form-label">Area/Penempatan</label>
+            <select class="form-control" name="area_emp" data-plugin="select_hrm" data-placeholder="Area/Penempatan">
               <option value="0">--</option>
             </select>
           </div>
@@ -59,7 +57,7 @@
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
           </div>
             
-            <div class="col-md mb-3">
+            <div class="col-md mb-3" hidden>
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>

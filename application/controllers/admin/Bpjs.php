@@ -64,7 +64,7 @@ class bpjs extends MY_Controller
 		$session = $this->session->userdata('username');
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 				
-		if(in_array('59',$role_resources_ids)) {
+		if(in_array('470',$role_resources_ids)) {
 			if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/bpjs/bpjs_saltab_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -79,7 +79,7 @@ class bpjs extends MY_Controller
 
 	public function usermobile_list() {
 
-		$data['title'] = $this->Xin_model->site_title();
+		$data['title'] = 'BPJS SALTAB';
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
 			$this->load->view("admin/bpjs/bpjs_saltab_list", $data);

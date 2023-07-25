@@ -1275,6 +1275,7 @@ class Reports extends MY_Controller
 		$data['all_companies'] = $this->Xin_model->get_companies();
 
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+
 		
 		// if(in_array('139',$role_resources_ids)) {
 		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
@@ -1361,16 +1362,18 @@ class Reports extends MY_Controller
 		$length = intval($this->input->get("length"));
 
 		
-		$company_id = $this->uri->segment(4);
-		$project_id = $this->uri->segment(5);
-		$sub_id = $this->uri->segment(6);
+		// $company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(4);
+		$sub_id = $this->uri->segment(5);
+		$area = $this->uri->segment(6);
 		$start_date = $this->uri->segment(7);
 		$end_date = $this->uri->segment(8);
 
-		if($company_id==0 || is_null($company_id)){
+		if($sub_id==0 || is_null($sub_id)){
 			$employee = $this->Reports_model->filter_report_emp_att_null();
+			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
 		} else {
-			$employee = $this->Reports_model->filter_report_emp_att($company_id,$project_id,$sub_id,$start_date,$end_date);
+			$employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
 		}
 
 		// $employee = $this->Employees_model->get_employees();
@@ -1421,6 +1424,8 @@ class Reports extends MY_Controller
 				$r->employee_id,
 				$r->fullname,
 				$r->title,
+				// $project_id,
+				// $sub_id,
 				$r->sub_project_name,
 				$r->customer_id,
 				$nama_toko,
@@ -1679,6 +1684,33 @@ class Reports extends MY_Controller
 	}
 
 
+	 // get location > departments
+	public function get_area_emp() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		// $id = $this->uri->segment(4);
+
+		$area = $this->uri->segment(4);
+		$sub_id = $this->uri->segment(5);
+		$project_id = $this->uri->segment(6);
+
+		
+		$data = array(
+			'area' => $area,
+			'sub_id' => $sub_id,
+			'pro_id' => $project_id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/get_area_emp", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
 	
 	// Validate and add info in database
 	public function payslip_report() {
@@ -2146,7 +2178,7 @@ class Reports extends MY_Controller
 		// $data['all_departments'] = $this->Department_model->all_departments();
 		// $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		// $data['all_designations'] = $this->Designation_model->all_designations();
-		if(in_array('470',$role_resources_ids)) {
+		if(in_array('477',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/saltab_bpjs", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -2228,7 +2260,7 @@ class Reports extends MY_Controller
 				$r->area,	
 
 				$r->gaji_pokok,
-				$r->bpjs_tk_deduction + $r->bpjs_tk,
+				$r->bpjs_tk_deduction + $r->bpjs_tk + $r->jaminan_pensiun_deduction + $r->jaminan_pensiun,
 				$r->bpjs_ks_deduction + $r->bpjs_ks
 			);
 		}

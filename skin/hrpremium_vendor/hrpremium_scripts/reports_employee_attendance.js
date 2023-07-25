@@ -14,13 +14,12 @@ $(document).ready(function() {
 	
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' });
-
-	jQuery("#aj_company").change(function(){
-		jQuery.get(base_url+"/get_company_project/"+jQuery(this).val(), function(data, status){
-			jQuery('#project_ajax').html(data);
-		});
-	});
 	
+	jQuery("#aj_project").change(function(){
+    jQuery.get(base_url+"/get_sub_project/"+jQuery(this).val(), function(data, status){
+      jQuery('#subproject_ajax').html(data);
+    });
+  });
 
 	$('.view-modal-data').on('show.bs.modal', function (event) {
 	var button = $(event.relatedTarget);
@@ -44,9 +43,10 @@ $(document).ready(function() {
 		/*Form Submit*/
 		e.preventDefault();
 
-		var company_id = document.getElementById("aj_company").value;
+		// var company_id = document.getElementById("aj_company").value;
 		var project_id = document.getElementById("aj_project").value;
 		var subproject_id = document.getElementById("aj_subproject").value;
+		var area_emp = document.getElementById("aj_area_emp").value;
 		var start_date = document.getElementById("start_date").value;
 		var end_date = document.getElementById("end_date").value;
 		
@@ -58,7 +58,8 @@ $(document).ready(function() {
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+subproject_id+"/"+start_date+"/"+end_date+"/",
+				url : site_url+"reports/empdtwise_attendance_list/"+project_id+"/"+subproject_id+"/"+area_emp+"/"+start_date+"/"+end_date+"/",
+				// url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+subproject_id+"/"+start_date+"/"+end_date+"/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',

@@ -518,6 +518,21 @@ GROUP BY pros.project_id");
 		}
 	}
 	
+
+	// get single record > company | employees
+	 public function ajax_area_employees($area, $sub, $pro) {
+	
+		$sql = "SELECT distinct(penempatan) as penempatan FROM xin_employees WHERE project_id = ? AND sub_project_id = ?";
+		$binds = array($pro,$sub);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get total project tasks 
 	public function total_project_tasks($id) {
 		

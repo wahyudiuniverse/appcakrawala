@@ -77,7 +77,7 @@ class ceknip extends MY_Controller {
 		
 			// reports to 
 	 		$reports_to = get_reports_team_data($session['user_id']);
-			if(in_array('13',$role_resources_ids) || $reports_to > 0) {
+			if(in_array('134',$role_resources_ids) || $reports_to > 0) {
 				if(!empty($session)){ 
 					$data['subview'] = $this->load->view("admin/employees/employees_list", $data, TRUE);
 					$this->load->view('admin/layout/layout_main', $data); //page load

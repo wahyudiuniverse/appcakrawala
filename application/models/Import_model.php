@@ -71,7 +71,7 @@ GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
 
 		$sql = "SELECT uploadid, periode, project, project_sub, downloadby, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_saltab
 		WHERE createdby != 0
-GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
+GROUP BY uploadid ORDER BY uploadid DESC LIMIT 150";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
