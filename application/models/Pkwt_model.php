@@ -285,14 +285,15 @@ class Pkwt_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_monitoring_pkwt_apnom() {
+	public function get_monitoring_pkwt_apnom($empID) {
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 			FROM xin_employee_contract
 			WHERE status_pkwt = 0
 			AND approve_nae != 0
 			AND approve_nom = 0
-			ORDER BY contract_id DESC';
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -321,6 +322,37 @@ class Pkwt_model extends CI_Model {
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
 			AND status_pkwt = 1
+			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+
+ 	// monitoring request
+	public function report_pkwt_history_null($empID) {
+		$today_date = date('Y-m-d');
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
+			FROM xin_employee_contract
+			WHERE date_format(approve_hrd_date, '%Y-%m-%d') = '$today_date' 
+			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+
+ 	// monitoring request
+	public function report_pkwt_history($empID,$project_id,$datefrom,$keyword) {
+
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
+			FROM xin_employee_contract
+			WHERE approve_nom !=0
+			AND status_pkwt = 1
+			AND project = '$project_id'
+			AND date_format(approve_hrd_date, '%Y-%m-%d') = '$datefrom'  
 			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);

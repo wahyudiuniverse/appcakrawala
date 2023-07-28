@@ -829,8 +829,123 @@ class Pkwt49 extends MY_Controller
 				<br>
 
 
+
+
+
 				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 10<br>KETENTUAN LAIN - LAIN</b>
+					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
+				</div>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+							</tr>
+				</table>
+				<br>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SIMPANAN KOPERASI</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Simpanan Pokok</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan diawal pendaftaran anggota dan hanya di potongkan 1 kali, besarnya sama untuk semua anggota yaitu sebesar Rp.50.000.-</td>
+							</tr>
+				<br>
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Simpanan Wajib</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan yang dipotongkan setiap bulannya Jumlah simpanan wajib per bulan bervariasi berdasarkan level/jenjang jabatan anggota di Perusahaan dengan rincian:</td>
+							</tr>
+				</table>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+									<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>HO</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Admin</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">NAE</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">Manager – General Manager </td>
+											<td colspan="9">: Rp. 100.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">d.</td>
+											<td colspan="8">Direksi / Komisaris</td>
+											<td colspan="9">: Rp. 150.000,-</td>
+										</tr>
+<br>
+
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>Area/Cabang</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Frontliner	( Sales/SPG SPB/Motoris/MD)</td>
+											<td colspan="9">: Rp. 25.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">Team Leader/Koordinator</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">PIC/Kepala Cabang/Area</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+									</table>
+
+								</td>
+							</tr>
+				</table>
+
+				<br>
+				<br>
+				<div style="text-align: center; text-justify: inter-word;">
+					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
 				</div>
 				<br>
 
@@ -855,7 +970,7 @@ class Pkwt49 extends MY_Controller
 								<td>4.</td>
 								<td colspan="20"><b>PKWT</b> ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
 							</tr>
-				<br>
+				<br><br><br>
 							<tr>
 								<td>5.</td>
 								<td colspan="20"><b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
@@ -934,7 +1049,9 @@ class Pkwt49 extends MY_Controller
 
 				$tbl_spb = '
 
-				<br>
+				<br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>

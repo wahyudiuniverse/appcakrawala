@@ -770,6 +770,10 @@ class Xin_model extends CI_Model {
 			$arr['pkwt_request_cancel_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';
 			return $arr;
+		} else if($mClass=='reports' && $mMethod=='pkwt_history') {
+			$arr['pkwt_request_history_active'] = 'active';
+			$arr['pkwt_request_open'] = 'open';
+			return $arr;
 		} else if($mClass=='employee_pkwt_history') {
 			$arr['resign_req_nae_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';

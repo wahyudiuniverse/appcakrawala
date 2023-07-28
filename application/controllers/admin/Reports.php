@@ -1427,6 +1427,7 @@ class Reports extends MY_Controller
 				// $project_id,
 				// $sub_id,
 				$r->sub_project_name,
+				$r->penempatan,
 				$r->customer_id,
 				$nama_toko,
 
@@ -1640,6 +1641,137 @@ class Reports extends MY_Controller
 	  exit();
 
     }
+
+
+	// reports > employee attendance
+	public function pkwt_history() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'PKWT HISTORY';
+		$data['breadcrumbs'] = 'PKWT HISTORY';
+		$data['path_url'] = 'reports_pkwt_history';
+		// $data['path_url'] = 'reports_employee_attendance';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+
+		
+		// if(in_array('139',$role_resources_ids)) {
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// } else {
+		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
+		// }
+		if(in_array('377',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/report_pkwt_history", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+	// daily attendance list > timesheet
+    public function pkwt_history_list()
+    {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/report_pkwt_history", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		
+		// $company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(4);
+		$start_date = $this->uri->segment(5);
+		$keywords = $this->uri->segment(6);
+			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
+		if($project_id==0 || $start_date==0 ){
+		// 	$employee = $this->Reports_model->report_pkwt_history();
+		// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
+			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+		} else {
+			$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
+		}
+		// $employee = $this->Employees_model->get_employees();
+		$no = 1;
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+ 		foreach($employee->result() as $r) {
+
+				$nip = $r->employee_id;
+				$project = $r->project;
+				$jabatan = $r->jabatan;
+				$penempatan = $r->penempatan;
+				$begin_until = $r->from_date .' s/d ' . $r->to_date;
+
+
+				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
+				if(!is_null($emp)){
+					$fullname = $emp[0]->first_name;
+					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
+				} else {
+					$fullname = '--';	
+					$sub_project = '0';
+				}
+
+				$projects = $this->Project_model->read_single_project($project);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+
+				$designation = $this->Designation_model->read_designation_information($r->jabatan);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
+
+			$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Approved</button>';
+
+			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+
+
+
+			$data[] = array (
+				$no,
+				$status_migrasi.' '.$view_pkwt,
+				$r->employee_id,
+				$fullname,
+				$nama_project,
+				$designation_name,
+				$penempatan,
+				$begin_until,
+				$r->approve_hrd_date
+			);
+			$no++;
+		}
+
+			$no++;
+
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $employee->num_rows(),
+			 "recordsFiltered" => $employee->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+
+    }
+
 
 	 // get location > departments
 	public function get_company_project() {

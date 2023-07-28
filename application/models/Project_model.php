@@ -522,7 +522,7 @@ GROUP BY pros.project_id");
 	// get single record > company | employees
 	 public function ajax_area_employees($area, $sub, $pro) {
 	
-		$sql = "SELECT distinct(penempatan) as penempatan FROM xin_employees WHERE project_id = ? AND sub_project_id = ?";
+		$sql = "SELECT distinct(penempatan) as penempatan FROM xin_employees WHERE status_employee = 1 AND project_id = ? AND sub_project_id = ?";
 		$binds = array($pro,$sub);
 		$query = $this->db->query($sql, $binds);
 		

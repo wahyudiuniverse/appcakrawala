@@ -452,7 +452,6 @@ class Pkwt8 extends MY_Controller
 							</tr>
 
 
-							<br>
 							<tr>
 								<td ></td>
 								<td colspan="20">Jaminan kesehatan (BPJS Kesehatan) dan ketenagakerjaan (BPJS Tenaga kerja), penetapan syarat berserta ketentuan yang berlaku mengenai jaminan perawatan kesehatan ini sepenuhnya menjadi hak <b>PIHAK PERTAMA</b>.</td>
@@ -562,6 +561,7 @@ class Pkwt8 extends MY_Controller
 				<br>
 
 
+				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td >4.6</td>
@@ -858,7 +858,120 @@ class Pkwt8 extends MY_Controller
 
 
 				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 10<br>KETENTUAN LAIN - LAIN</b>
+					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
+				</div>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+							</tr>
+				</table>
+				<br>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SIMPANAN KOPERASI</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Simpanan Pokok</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan diawal pendaftaran anggota dan hanya di potongkan 1 kali, besarnya sama untuk semua anggota yaitu sebesar Rp.50.000.-</td>
+							</tr>
+				<br>
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Simpanan Wajib</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan yang dipotongkan setiap bulannya Jumlah simpanan wajib per bulan bervariasi berdasarkan level/jenjang jabatan anggota di Perusahaan dengan rincian:</td>
+							</tr>
+				</table>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+									<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>HO</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Admin</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">NAE</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">Manager – General Manager </td>
+											<td colspan="9">: Rp. 100.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">d.</td>
+											<td colspan="8">Direksi / Komisaris</td>
+											<td colspan="9">: Rp. 150.000,-</td>
+										</tr>
+<br>
+
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>Area/Cabang</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Frontliner	( Sales/SPG SPB/Motoris/MD)</td>
+											<td colspan="9">: Rp. 25.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">Team Leader/Koordinator</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">PIC/Kepala Cabang/Area</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+									</table>
+
+								</td>
+							</tr>
+				</table>
+
+<br>
+<br>
+
+				<div style="text-align: center; text-justify: inter-word;">
+					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
 				</div>
 				<br>
 
@@ -965,19 +1078,6 @@ class Pkwt8 extends MY_Controller
 				$tbl_spb = '
 
 				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br><br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1307,6 +1407,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Gaji Pokok</td>
 							<td colspan="3"> : '.$basicpay.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan berdasarkan Cut Off 1-30/31 bulan berjalan)</b></td>
+							<td></td>
 						</tr>';
 
 
@@ -1316,6 +1420,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Grade</td>
 							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan jika sudah 1 bulan bekerja, jika belum 1 bulan atau resign akan diprorata Cut Off 1-30/31)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1343,6 +1451,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Makan</td>
 							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan  berdasarkan Cut  Off 11-10)</b></td>
+							<td></td>
 						</tr>';
 				}
 				
@@ -1352,6 +1464,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Transport</td>
 							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan  berdasarkan Cut  Off 11-10)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1361,6 +1477,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Rental</td>
 							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Min kehadiran 80% jika dibawah 80% maka tidak berhak menerima tunjangan sewa motor)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1370,6 +1490,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Komunikasi</td>
 							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan jika sudah 1 bulan bekerja, jika belum 1 bulan atau resign akan diprorata Cut Off 1-30/31)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1379,6 +1503,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Parkir</td>
 							<td colspan="3"> : '.$allowance_park.',- Per Hari</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan  berdasarkan Cut  Off 11-10)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1397,6 +1525,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Laptop</td>
 							<td colspan="3"> : '.$allowance_laptop.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan jika sudah 1 bulan bekerja, jika belum 1 bulan atau resign akan diprorata Cut Off 1-30/31)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1416,6 +1548,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
 							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan  berdasarkan Cut  Off 11-10)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1435,6 +1571,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Akomodasi</td>
 							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan jika sudah 1 bulan bekerja, jika belum 1 bulan atau resign akan diprorata Cut Off 1-30/31)</b></td>
+							<td></td>
 						</tr>';
 				}
 
@@ -1445,6 +1585,10 @@ class Pkwt8 extends MY_Controller
 						<tr>
 							<td>Tunjangan Operasional</td>
 							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+						</tr>
+						<tr>
+							<td colspan="20"><b>(Diberikan jika sudah 1 bulan bekerja, jika belum 1 bulan atau resign akan diprorata Cut Off 1-30/31)</b></td>
+							<td></td>
 						</tr>';
 				}
 

@@ -5,13 +5,58 @@
 <?php $session = $this->session->userdata('username');?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
+<?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
+<?php $system = $this->Xin_model->read_setting_info(1);?>
+
+
+<?php $count_appnae = $this->Xin_model->count_approve_nae_pkwt($session['employee_id']);?>
+<?php $count_appnom = $this->Xin_model->count_approve_nom_pkwt($session['employee_id']);?>
+<?php $count_apphrd = $this->Xin_model->count_approve_hrd_pkwt($session['employee_id']);?>
+<?php $count_pkwtcancel = $this->Xin_model->count_approve_pkwt_cancel($session['employee_id']);?>
+<?php $count_emp_request = $this->Xin_model->count_emp_request($session['employee_id']);?>
+
+<div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
+  <ul class="nav nav-tabs step-anchor">
+    <?php if(in_array('377',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PKWT - AREA
+      </a> </li>
+    <?php } ?>  
+
+    <?php if(in_array('503',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_apnae');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - NAE <?php echo '('.$count_appnae.')';?>
+      </a> </li>
+    <?php } ?>
+
+
+    <?php if(in_array('504',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_apnom');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - NOM <?php echo '('.$count_appnom.')';?>
+      </a> </li>
+    <?php } ?>
+
+    <?php if(in_array('505',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - HRD
+      <?php echo '('.$count_apphrd.')';?></a> </li>
+    <?php } ?>
+    
+    <?php if(in_array('379',$role_resources_ids)) { ?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_cancel');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Ditolak <?php echo '('.$count_pkwtcancel.')';?>
+      </a> </li>
+    <?php } ?>
+
+    <?php if(in_array('377',$role_resources_ids)) { ?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_pkwt_history');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_history/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Status
+      </a> </li>
+    <?php } ?>
+  </ul>
+</div>
+
 <div class="row">
     <div class="col-md-12 <?php echo $get_animate;?>">
         <div class="ui-bordered px-4 pt-4 mb-4">
         <input type="hidden" id="user_id" value="0" />
         <?php $attributes = array('name' => 'attendance_datewise_report', 'id' => 'attendance_datewise_report', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
 		<?php $hidden = array('euser_id' => $session['user_id']);?>
-        <?php echo form_open('admin/reports/employee_attendance', $attributes, $hidden);?>
+        <?php echo form_open('admin/reports/pkwt_history', $attributes, $hidden);?>
         <?php
             $data = array(
               'name'        => 'user_id',
@@ -38,16 +83,16 @@
             </div>
 
 
-          <div class="col-md mb-3" id="subproject_ajax">
+          <div class="col-md mb-3" id="subproject_ajax" hidden>
             <label class="form-label">Sub Projects</label>
-            <select class="form-control" name="sub_project_id" data-plugin="select_hrm" data-placeholder="Sub Project">
+            <select class="form-control" name="sub_project_id" id="aj_subproject"  data-plugin="select_hrm" data-placeholder="Sub Project">
               <option value="0">--</option>
             </select>
           </div>
 
-          <div class="col-md mb-3" id="areaemp_ajax">
+          <div class="col-md mb-3" id="areaemp_ajax" hidden>
             <label class="form-label">Area/Penempatan</label>
-            <select class="form-control" name="area_emp" data-plugin="select_hrm" data-placeholder="Area/Penempatan">
+            <select class="form-control" name="area_emp" id="aj_area_emp"  data-plugin="select_hrm" data-placeholder="Area/Penempatan">
               <option value="0">--</option>
             </select>
           </div>
@@ -86,24 +131,16 @@
                 <th colspan="9"><?php echo $this->lang->line('xin_attendance_report');?></th>
               </tr>
               <tr>
+                <th>No.</th>
+                <th>Status</th>
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
-                <th>Sub Project</th>
+                <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>ID Toko/Office</th>
-                <th>Toko/Office</th>
+                <th>Waktu Kontrak</th>
+                <th>PKWT Terbit</th>
 
-                <th>Nama Pemilik</th>
-                <th>Nomor Kontak</th>
-
-                <th>Tanggal</th>
-                <th><?php echo $this->lang->line('dashboard_clock_in');?></th>
-                <th><?php echo $this->lang->line('dashboard_clock_out');?></th>
-                <th>Koordinat</th>
-                <th>Total Jam Kerja</th>
-                <th>Foto IN</th>
-                <th>Foto OUT</th>
               </tr>
             </thead>
           </table>
