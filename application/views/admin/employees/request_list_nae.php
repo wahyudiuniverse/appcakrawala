@@ -698,7 +698,7 @@
             <th><?php echo $this->lang->line('left_designation');?></th>
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th><?php echo $this->lang->line('xin_employee_doj');?></th>
-            <th><?php echo $this->lang->line('xin_e_details_contact');?></th>
+            <th>Tanggal Permintaan</th>
           </tr>
         </thead>
       </table>

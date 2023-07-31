@@ -1699,7 +1699,9 @@ class Reports extends MY_Controller
 		// 	$employee = $this->Reports_model->report_pkwt_history();
 		// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
 			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
-		} else {
+		} else if ($project_id==999){
+			$employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date);
+		}else {
 			$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 		}
 		// $employee = $this->Employees_model->get_employees();

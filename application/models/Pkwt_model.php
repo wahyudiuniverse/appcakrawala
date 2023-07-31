@@ -345,6 +345,21 @@ class Pkwt_model extends CI_Model {
 
 
  	// monitoring request
+	public function report_pkwt_history_all($empID,$datefrom) {
+
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
+			FROM xin_employee_contract
+			WHERE approve_nom !=0
+			AND status_pkwt = 1
+			AND date_format(approve_hrd_date, '%Y-%m-%d') = '$datefrom'  
+			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
 	public function report_pkwt_history($empID,$project_id,$datefrom,$keyword) {
 
 		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
@@ -447,6 +462,16 @@ class Pkwt_model extends CI_Model {
 		
 	}
 
+
+		// Function to update record in table
+	public function update_pkwt_edit($data, $id){
+		$this->db->where('contract_id', $id);
+		if( $this->db->update('xin_employee_contract',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
 
 		// Function to update record in table
 	public function update_pkwt_apnae($data, $id){

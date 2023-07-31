@@ -88,6 +88,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
 				$basic_pay = $r->basic_pay;
 				$approve_hrd = $r->approve_hrd;
+				$cancel_on = $r->cancel_on;
 
 				if($approve_hrd=='0'){
 
@@ -96,6 +97,8 @@ class Employee_pkwt_aphrd extends MY_Controller {
 					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Approved</button>';
 				}
+
+				$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
@@ -125,17 +128,17 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				// 	$designation_name = '--';	
 				// }
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">CANCEL</button>';
 
 			$data[] = array(
-				$status_migrasi.' '.$cancel,
+				$status_migrasi.'<br> '.$cancel.' '.$editReq,
 				$nip,
 				$fullname,
 				$nama_project,
 				$jabatan,
 				$penempatan,
 				$begin_until,
-				 $this->Xin_model->rupiah($basic_pay),
+				$cancel_on,
 			);
           }
 

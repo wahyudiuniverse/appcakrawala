@@ -230,7 +230,7 @@ class employee_request_cancelled extends MY_Controller {
 		$data = array(
 
 			'title' => 'Edit Permintaan Karyawan Baru',
-			'breadcrumbs' => 'DITOLAK >> REQUEST EDIT >> '. $result[0]->fullname,
+			'breadcrumbs' => 'REQUEST EDIT >> '. $result[0]->fullname,
 			'path_url' => 'emp_request_edit',
 			'secid' => $result[0]->secid,
 			'employee_id' => $result[0]->nip,
@@ -242,7 +242,9 @@ class employee_request_cancelled extends MY_Controller {
 
 
 			'project_id' => $result[0]->project,
-			'project_list' => $this->Project_model->read_project_information($result[0]->project),
+			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
+			'sub_project' => $result[0]->sub_project,
+			'sub_project_list' => $this->Project_model->get_sub_project_filter($result[0]->project),
 			'department_id' => $result[0]->department,
 			'department_name' => $department_name,
 			'designation_id' => $result[0]->posisi,
@@ -295,30 +297,30 @@ class employee_request_cancelled extends MY_Controller {
 			// 'wages_type' => $result[0]->wages_type,
 			// 'is_active' => $result[0]->is_active,
 
-			// 'contract_start' => $result[0]->contract_start,
-			// 'contract_end' => $result[0]->contract_end,
-			// 'contract_periode' => $result[0]->contract_periode,
-			// 'hari_kerja' => $result[0]->hari_kerja,
-			// 'cut_start' => $result[0]->cut_start,
-			// 'cut_off' => $result[0]->cut_off,
-			// 'date_payment' => $result[0]->date_payment,
+			'contract_start' => $result[0]->contract_start,
+			'contract_end' => $result[0]->contract_end,
+			'contract_periode' => $result[0]->contract_periode,
+			'hari_kerja' => $result[0]->hari_kerja,
+			'cut_start' => $result[0]->cut_start,
+			'cut_off' => $result[0]->cut_off,
+			'date_payment' => $result[0]->date_payment,
 			'basic_salary' => $result[0]->gaji_pokok,
-			// 'allow_jabatan' => $result[0]->allow_jabatan,
-			// 'allow_area' => $result[0]->allow_area,
-			// 'allow_masakerja' => $result[0]->allow_masakerja,
-			// 'allow_trans_meal' => $result[0]->allow_trans_meal,
-			// 'allow_konsumsi' => $result[0]->allow_konsumsi,
-			// 'allow_transport' => $result[0]->allow_transport,
-			// 'allow_comunication' => $result[0]->allow_comunication,
-			// 'allow_device' => $result[0]->allow_device,
-			// 'allow_residence_cost' => $result[0]->allow_residence_cost,
-			// 'allow_rent' => $result[0]->allow_rent,
-			// 'allow_parking' => $result[0]->allow_parking,
-			// 'allow_medichine' => $result[0]->allow_medichine,
+			'allow_jabatan' => $result[0]->allow_jabatan,
+			'allow_area' => $result[0]->allow_area,
+			'allow_masakerja' => $result[0]->allow_masakerja,
+			'allow_trans_meal' => $result[0]->allow_trans_meal,
+			'allow_konsumsi' => $result[0]->allow_konsumsi,
+			'allow_transport' => $result[0]->allow_transport,
+			'allow_comunication' => $result[0]->allow_comunication,
+			'allow_device' => $result[0]->allow_device,
+			'allow_residence_cost' => $result[0]->allow_residence_cost,
+			'allow_rent' => $result[0]->allow_rent,
+			'allow_parking' => $result[0]->allow_parking,
+			'allow_medichine' => $result[0]->allow_medichine,
 			
-			// 'allow_akomodsasi' => $result[0]->allow_akomodsasi,
-			// 'allow_kasir' => $result[0]->allow_kasir,
-			// 'allow_operational' => $result[0]->allow_operational,
+			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
+			'allow_kasir' => $result[0]->allow_kasir,
+			'allow_operational' => $result[0]->allow_operational,
 			
 			// 'status_employee' => $result[0]->status_employee,
 			// 'deactive_by' => $result[0]->deactive_by,
@@ -408,6 +410,51 @@ class employee_request_cancelled extends MY_Controller {
 					   	$nama_ibu						= $this->input->post('nama_ibu');
 							$tempat_lahir 			= $this->input->post('tempat_lahir');
 							$tanggal_lahir 			= $this->input->post('date_of_birth');
+							$jenis_kelamin			= $this->input->post('gender');
+							$agama 							= $this->input->post('ethnicity');
+							$marital_status			= $this->input->post('marital_status');
+
+							$nomor_ktp					= $this->input->post('nomor_ktp');
+							$alamat_ktp					= $this->input->post('alamat_ktp');
+							$nomor_kk						= $this->input->post('nomor_kk');
+							$alamat_domisili			= $this->input->post('alamat_domisili');
+							$npwp								= $this->input->post('npwp');
+							$nomor_hp						= $this->input->post('nomor_hp');
+							$email							= $this->input->post('email');
+							$bank_name					= $this->input->post('bank_name');
+							$no_rek							= $this->input->post('no_rek');
+							$pemilik_rekening			= $this->input->post('pemilik_rekening');
+
+							$project_id					= $this->input->post('project_id');
+							$sub_project				= $this->input->post('sub_project');
+							$posisi 							= $this->input->post('posisi');
+							$date_of_join 							= $this->input->post('date_of_join');
+							$penempatan 							= $this->input->post('penempatan');
+							$gaji_pokok 							= $this->input->post('gaji_pokok');
+							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
+
+							$tunjangan_area 							= $this->input->post('tunjangan_area');
+							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
+							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_makan 							= $this->input->post('tunjangan_makan');
+							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
+							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
+							$tunjangan_device 							= $this->input->post('tunjangan_device');
+							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
+							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
+							$tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
+							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
+							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
+							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
+							$tunjangan_operational 							= $this->input->post('tunjangan_operational');
+							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
+							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
+							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
+							$hari_kerja 							= $this->input->post('hari_kerja');
+							$cut_start 							= $this->input->post('cut_start');
+							$cut_off 							= $this->input->post('cut_off');
+							$date_payment 							= $this->input->post('date_payment');
+
 
 
 					if($Return['error']!=''){
@@ -419,6 +466,51 @@ class employee_request_cancelled extends MY_Controller {
 								'nama_ibu' 						=> $nama_ibu,
 								'tempat_lahir' 				=> $tempat_lahir,
 								'tanggal_lahir' 			=> $tanggal_lahir,
+								'gender'							=> $jenis_kelamin,
+								'agama' 							=> $agama,
+								'status_kawin' 				=> $marital_status,
+								'nik_ktp' 						=> $nomor_ktp,
+								'alamat_ktp' 					=> $alamat_ktp,
+								'no_kk' 							=> $nomor_kk,
+
+								'alamat_domisili' 		=> $alamat_domisili,
+								'npwp' 								=> $npwp,
+								'contact_no' 					=> $nomor_hp,
+								'email' 							=> $email,
+								'bank_id' 						=> $bank_name,
+								'no_rek' 							=> $no_rek,
+								'pemilik_rekening' 		=> $pemilik_rekening,
+								'project' 						=> $project_id,
+								'sub_project' 				=> $sub_project,
+								'posisi' 							=> $posisi,
+
+								'doj' 								=> $date_of_join,
+								'penempatan' 					=> $penempatan,
+								'gaji_pokok' 					=> $gaji_pokok,
+								'allow_jabatan' 			=> $tunjangan_jabatan,
+								'allow_area' 					=> $tunjangan_area,
+								'allow_masakerja' 		=> $tunjangan_masakerja,
+								'allow_trans_meal' 		=> $tunjangan_makan_trans,
+								'allow_konsumsi' 			=> $tunjangan_makan,
+								'allow_transport' 		=> $tunjangan_transport,
+								'allow_comunication' 	=> $tunjangan_komunikasi,
+
+								'allow_device' 				=> $tunjangan_device,
+								'allow_residence_cost'=> $tunjangan_tempat_tinggal,
+								'allow_rent' 					=> $tunjangan_rental,
+								'allow_parking' 			=> $tunjangan_parkir,
+								'allow_medichine' 		=> $tunjangan_kesehatan,
+								'allow_akomodsasi' 		=> $tunjangan_akomodasi,
+								'allow_kasir' 				=> $tunjangan_kasir,
+								'allow_operational' 	=> $tunjangan_operational,
+								'contract_start' 			=> $join_date_pkwt,
+								'contract_end' 				=> $pkwt_end_date,
+
+								'contract_periode' 		=> $waktu_kontrak,
+								'hari_kerja' 					=> $hari_kerja,
+								'cut_start' 					=> $cut_start,
+								'cut_off' 						=> $cut_off,
+								'date_payment' 				=> $date_payment,
 							);
 
 						$iresult = $this->Employees_model->update_request_employee($data,$idrequest);
@@ -427,7 +519,7 @@ class employee_request_cancelled extends MY_Controller {
 
 // $Return['result'] = ' ELSE DIBAWAH Permintaan Karyawan berhasil di Ubah..';
 				if ($iresult == TRUE) {
-					$Return['result'] = $idrequest.' Permintaan Karyawan berhasil di Ubah..';
+					$Return['result'] = $idrequest.' Permintaan Karyawan Baru berhasil di Ubah..';
 				} else {
 					$Return['error'] = $this->lang->line('xin_error_msg');
 				}

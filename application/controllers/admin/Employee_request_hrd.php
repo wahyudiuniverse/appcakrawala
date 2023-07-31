@@ -105,6 +105,7 @@ class Employee_request_hrd extends MY_Controller {
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->secid . '">Approved</button>';
 				}
 
+				$editReq = '<a href="'.site_url().'admin/employee_request_cancelled/request_edit/'.$r->secid.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>'; 
 
 				$projects = $this->Project_model->read_single_project($r->project);
 				if(!is_null($projects)){
@@ -134,11 +135,11 @@ class Employee_request_hrd extends MY_Controller {
 					$designation_name = '--';	
 				}
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
 
 			$data[] = array(
 				$no,
-				$status_migrasi.' '.$cancel,
+				$status_migrasi.' <br>'.$cancel.' '.$editReq,
 				$nik_ktp,
 				$fullname,
 				$nama_project,

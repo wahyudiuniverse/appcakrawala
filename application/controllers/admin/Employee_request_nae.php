@@ -95,17 +95,19 @@ class Employee_request_nae extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
+				$request_empon = $r->request_empon;
 				$approved_naeby = $r->approved_naeby;
 			  
 
 				if($approved_naeby==null){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->secid . '">Need Approval Nae</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->secid . '">Approval Nae</button>';
 				} else {
 					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->secid . '">Approved</button>';
 				}
 
+				$editReq = '<a href="'.site_url().'admin/employee_request_cancelled/request_edit/'.$r->secid.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>'; 
 
 				$projects = $this->Project_model->read_single_project($r->project);
 				if(!is_null($projects)){
@@ -136,11 +138,11 @@ class Employee_request_nae extends MY_Controller {
 				}
 
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
 
 			$data[] = array(
 				$no,
-				$status_migrasi.' '.$cancel,
+				$status_migrasi.' <br>'.$cancel.' '.$editReq,
 				$nik_ktp,
 				$fullname,
 				$nama_project,
@@ -149,7 +151,7 @@ class Employee_request_nae extends MY_Controller {
 				$designation_name,
 				$penempatan,
 				$doj,
-				$contact_no
+				$request_empon
 			);
           }
 

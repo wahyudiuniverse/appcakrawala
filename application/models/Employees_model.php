@@ -591,6 +591,19 @@ class Employees_model extends CI_Model {
 	}
 
 
+	 public function read_employee_information_nip($nip) {
+	
+		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ?';
+		$binds = array($nip);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	 public function read_employee_nae($id) {
 	
 		$sql = "SELECT * FROM xin_employees WHERE sub_project_id = '1' AND user_id = ?";

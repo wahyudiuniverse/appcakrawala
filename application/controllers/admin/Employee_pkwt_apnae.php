@@ -97,6 +97,8 @@ class Employee_pkwt_apnae extends MY_Controller {
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Need Approval NOM</button>';
 				}
 
+				$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
 					$fullname = $emp[0]->first_name;
@@ -125,10 +127,10 @@ class Employee_pkwt_apnae extends MY_Controller {
 				// 	$designation_name = '--';	
 				// }
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">CANCEL</button>';
 
 			$data[] = array(
-				$status_migrasi.' '.$cancel,
+				$status_migrasi.'<br>'.$cancel.' '.$editReq,
 				$nip,
 				$fullname,
 				$nama_project,

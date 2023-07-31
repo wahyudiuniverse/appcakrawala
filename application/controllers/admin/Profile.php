@@ -306,12 +306,12 @@ class Profile extends MY_Controller {
     	}
 	
 		$data = array(
-		'penempatan' => $this->input->post('penempatan'),
-		'date_of_joining' => $this->input->post('tanggal_bergabung'),
-		'designation_id' => $this->input->post('designation_id'),
-		'project_id' => $this->input->post('project_id'),
-		'company_id' => $this->input->post('company_id'),
-		'sub_project_id' => $this->input->post('sub_project_id'),
+		// 'penempatan' => $this->input->post('penempatan'),
+		// 'date_of_joining' => $this->input->post('tanggal_bergabung'),
+		// 'designation_id' => $this->input->post('designation_id'),
+		// 'project_id' => $this->input->post('project_id'),
+		// 'company_id' => $this->input->post('company_id'),
+		// 'sub_project_id' => $this->input->post('sub_project_id'),
 		);
 
 		$id = $this->input->post('user_id');

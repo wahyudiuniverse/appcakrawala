@@ -1,9 +1,9 @@
 $(document).ready(function() {
 	
-	   var xin_table = $('#xin_table').dataTable({
+		   var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list_cancel/",
+            url : base_url+"/pkwt_list_appcancel/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -81,6 +81,7 @@ $(document).ready(function() {
 		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
 			jQuery('#project_sub_project').html(data);
 		});
+		
 		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
 		// 	jQuery('#ajax_office_shift').html(data);
 		// });

@@ -68,7 +68,7 @@
             <th><?php echo $this->lang->line('left_designation');?></th>
             <th>Area/Penempatan</th>
             <th>Waktu Kontrak</th>
-            <th>Gaji Pokok</th>
+            <th>Tanggal Ditolak</th>
           </tr>
         </thead>
       </table>

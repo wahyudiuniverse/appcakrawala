@@ -3,7 +3,7 @@ $(document).ready(function() {
 	   var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/request_list_cancel/",
+            url : base_url+"/pkwt_list_appcancel/",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){

@@ -118,9 +118,9 @@ $(document).ready(function() {
 						toastr.success(JSON.result);
 					}, true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('#xin-form')[0].reset(); // To reset form fields
+					// $('#xin-formx')[0].reset(); // To reset form fields
 					$('.add-form').removeClass('show');
-					$('.select2-selection__rendered').html('--Select--');
+					// $('.select2-selection__rendered').html('--Select--');
 					$('.save').prop('disabled', false);
 					Ladda.stopAll();
 				}

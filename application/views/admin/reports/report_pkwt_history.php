@@ -44,7 +44,7 @@
     <?php } ?>
 
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_pkwt_history');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_history/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Status
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/reports/pkwt_history');?>" data-link-data="<?php echo site_url('admin/reports/pkwt_history');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Status
       </a> </li>
     <?php } ?>
   </ul>
@@ -75,7 +75,8 @@
 
             <label class="form-label">Projects <?php echo $session['employee_id'];?></label>
               <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
-                  <option value="0">--</option>
+                  <option value="0">--Pilih Project--</option>
+                  <option value="999">--ALL--</option>
                 <?php foreach($all_projects as $proj) {?>
                   <option value="<?php echo $proj->project_id;?>"> <?php echo $proj->title;?></option>
                 <?php } ?>

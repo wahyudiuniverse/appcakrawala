@@ -89,6 +89,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 				$basic_pay = $r->basic_pay;
 				$approve_nom = $r->approve_nom;
 				$approve_nae = $r->approve_nae;
+				$cancel_on = $r->cancel_on;
 
 				if($approve_nae=='0') {
 
@@ -101,6 +102,9 @@ class Employee_pkwt_cancel extends MY_Controller {
 					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval HRD</button>';
 				}
+
+			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
@@ -131,14 +135,15 @@ class Employee_pkwt_cancel extends MY_Controller {
 				// }
 
 			$data[] = array(
-				$status_migrasi,
+				$status_migrasi.' '.$editReq,
 				$nip,
 				$fullname,
 				$nama_project,
 				$jabatan,
 				$penempatan,
 				$begin_until,
-				 $this->Xin_model->rupiah($basic_pay),
+				$cancel_on,
+				 // $this->Xin_model->rupiah($basic_pay),
 			);
           }
 
@@ -175,82 +180,313 @@ class Employee_pkwt_cancel extends MY_Controller {
 	}
 	
 
-	// Validate and add info in database
-	public function request_add_employee() {
+
+	public function pkwt_edit() { 
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$id = $this->uri->segment(4);
+		// $id = '5700';
+		$result = $this->Pkwt_model->read_pkwt_info($id);
+		if(is_null($result)){
 			redirect('admin/');
 		}
 
-		if($this->input->post('add_type')=='company') {
-			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			$system = $this->Xin_model->read_setting_info(1);
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 
-				if($this->input->post('fullname')=='') {
-					$Return['error'] = $this->lang->line('xin_employee_error_first_name');
-				} else if ($this->input->post('office_lokasi')=='') {
-					$Return['error'] = $this->lang->line('xin_employee_error_location_office');
-				} else if ($this->input->post('project_id')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_project');
-				} else if ($this->input->post('sub_project')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_sub_project');
-				} else if ($this->input->post('department_id')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_department');
-				} else if ($this->input->post('posisi')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_designation');
-				} else if ($this->input->post('date_of_join')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_joining_date');
-				} else if ($this->input->post('nomor_hp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-				} else if ($this->input->post('nomor_ktp')==''){
-					$Return['error'] = $this->lang->line('xin_employee_error_contact_number');
-				}
+
+		$emp_info = $this->Employees_model->read_employee_information_nip($result[0]->employee_id);
+		if(!is_null($emp_info)){
+		  $fullname = $emp_info[0]->first_name;
+		  $ibu_kandung = $emp_info[0]->ibu_kandung;
+		  $ktp_no = $emp_info[0]->ktp_no;
+		  $tempat_lahir = $emp_info[0]->tempat_lahir;
+		  $date_of_birth = $emp_info[0]->date_of_birth;
+
+
+		  $kk_no = $emp_info[0]->kk_no;
+		  $alamat_ktp = $emp_info[0]->alamat_ktp;
+		  $alamat_domisili = $emp_info[0]->alamat_domisili;
+		  $npwp_no = $emp_info[0]->npwp_no;
+		  $contact_no = $emp_info[0]->contact_no;
+		  $email = $emp_info[0]->email;
+		  $date_of_joining = $emp_info[0]->date_of_joining;
+		  $gender = $emp_info[0]->gender;
+		  $ethnicity_type = $emp_info[0]->ethnicity_type;
+		  $marital_status = $emp_info[0]->marital_status;
+
+		  $fullname = $emp_info[0]->first_name;
+		  $fullname = $emp_info[0]->first_name;
+		} else {
+		  $fullname = '--';
+		  $ibu_kandung = '--';
+		  $ktp_no = '--';
+		  $tempat_lahir = '--';
+		  $date_of_birth = '--';
+		}
+
+		// $company = $this->Xin_model->read_company_info($result[0]->company_id);
+		// if(!is_null($company)){
+		//   $company_name = $company[0]->name;
+		// } else {
+		//   $company_name = '--';
+		// }
+
+		// $department = $this->Department_model->read_department_information($result[0]->department);
+		// if(!is_null($department)){
+		// 	$department_name = $department[0]->department_name;
+		// } else {
+		// 	$department_name = '--';	
+		// }
+
+		// $designation = $this->Designation_model->read_designation_information($result[0]->posisi);
+		// if(!is_null($designation)){
+		// 	$edesignation_name = $designation[0]->designation_name;
+		// } else {
+		// 	$edesignation_name = '--';	
+		// }
+
+		$data = array(
+
+			'title' => 'Edit PKWT Karyawan',
+			'breadcrumbs' => 'PKWT EDIT >> '. $result[0]->employee_id,
+			'path_url' => 'emp_pkwt_edit',
+
+			'secid' => $result[0]->contract_id,
+			'employee_id' => $result[0]->employee_id,
+			'fullname' => strtoupper($fullname),
+			'nik_ktp' => $ktp_no,
+			'nama_ibu' => $ibu_kandung,
+			'tempat_lahir' => $tempat_lahir,
+			'tanggal_lahir' => $date_of_birth,
+
+
+			'project_id' => $result[0]->project,
+			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
+			'designation_id' => $result[0]->jabatan,
+			'designations_list' => $this->Designation_model->all_designations(),
+			'date_of_joining' => $date_of_joining,
+			'penempatan' => $result[0]->penempatan,
+			'gender' => $gender,
+			'ethnicity_type' => $ethnicity_type,
+			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
+			'marital_status' => $marital_status,
+
+			'ktp_no' => $ktp_no,
+			'kk_no' => $kk_no,
+			'alamat_ktp' => $alamat_ktp,
+			'alamat_domisili' => $alamat_domisili,
+			'npwp_no' => $npwp_no,
+			'contact_no' => $contact_no,
+			'email' => $email,
+
+			'contract_start' => $result[0]->from_date,
+			'contract_end' => $result[0]->to_date,
+			'contract_periode' => $result[0]->waktu_kontrak,
+			'hari_kerja' => $result[0]->hari_kerja,
+			'cut_start' => $result[0]->start_period_payment,
+			'cut_off' => $result[0]->end_period_payment,
+			'date_payment' => $result[0]->tgl_payment,
+			'basic_salary' => $result[0]->basic_pay,
+			'allow_jabatan' => $result[0]->allowance_grade,
+			'allow_area' => $result[0]->allowance_area,
+			'allow_masakerja' => $result[0]->allowance_masakerja,
+			'allow_trans_meal' => $result[0]->allowance_transmeal,
+			'allow_konsumsi' => $result[0]->allowance_meal,
+			'allow_transport' => $result[0]->allowance_transport,
+			'allow_comunication' => $result[0]->allowance_komunikasi,
+			'allow_device' => $result[0]->allowance_laptop,
+			'allow_residence_cost' => $result[0]->allowance_residance,
+			'allow_rent' => $result[0]->allowance_rent,
+			'allow_parking' => $result[0]->allowance_park,
+			'allow_medichine' => $result[0]->allowance_medicine,
+			'allow_akomodsasi' => $result[0]->allowance_akomodasi,
+			'allow_kasir' => $result[0]->allowance_kasir,
+			'allow_operational' => $result[0]->allowance_operation,
+			
+			// 'status_employee' => $result[0]->status_employee,
+			// 'deactive_by' => $result[0]->deactive_by,
+			// 'deactive_date' => $result[0]->deactive_date,
+			// 'deactive_reason' => $result[0]->deactive_reason,
+
+			);
+		
+		// if($check_role[0]->user_role_id==1 || $check_role[0]->user_role_id==3 || $check_role[0]->user_role_id==4) {
+
+		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
+		// } else {
+
+		$data['subview'] = $this->load->view("admin/pkwt/pkwt_edit", $data, TRUE);
+		// }
+
+		// if($result[0]->user_id == $id) {
+
+		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
+		// } else {
+		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
+		// }
+
+		$this->load->view('admin/layout/layout_main', $data); //page load
+		
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+
+	// Validate and add info in database
+	public function pkwt_edit_request() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){	
+			redirect('admin/');
+		}
+
+			// if($this->input->post('add_type')=='company') {
+				$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+				$Return['csrf_hash'] = $this->security->get_csrf_hash();
+				// $system = $this->Xin_model->read_setting_info(1);
+
+					if($this->input->post('gaji_pokok')=='') {
+						$Return['error'] = 'Gaji Pokok Kosong..!';
+					} 
+						// else if ($this->input->post('nama_ibu')=='') {
+					// 	$Return['error'] = 'Nama Ibu Kandung Kosong..!';
+					// } else if ($this->input->post('tempat_lahir')=='') {
+					// 	$Return['error'] = 'Tempat Lahir Kosong..!';
+					// } 
+					else {
+
+							$idrequest 					= $this->input->post('idrequest');
+					   	// $fullname 					= $this->input->post('fullname');
+					   	// $nama_ibu						= $this->input->post('nama_ibu');
+							// $tempat_lahir 			= $this->input->post('tempat_lahir');
+							// $tanggal_lahir 			= $this->input->post('date_of_birth');
+							// $jenis_kelamin			= $this->input->post('gender');
+							// $agama 							= $this->input->post('ethnicity');
+							// $marital_status			= $this->input->post('marital_status');
+
+							// $nomor_ktp					= $this->input->post('nomor_ktp');
+							// $alamat_ktp					= $this->input->post('alamat_ktp');
+							// $nomor_kk						= $this->input->post('nomor_kk');
+							// $alamat_domisili			= $this->input->post('alamat_domisili');
+							// $npwp								= $this->input->post('npwp');
+							// $nomor_hp						= $this->input->post('nomor_hp');
+							// $email							= $this->input->post('email');
+							// $bank_name					= $this->input->post('bank_name');
+							// $no_rek							= $this->input->post('no_rek');
+							// $pemilik_rekening			= $this->input->post('pemilik_rekening');
+
+							// $project_id					= $this->input->post('project_id');
+							// $sub_project				= $this->input->post('sub_project');
+							// $posisi 							= $this->input->post('posisi');
+							// $date_of_join 							= $this->input->post('date_of_join');
+							$penempatan 							= $this->input->post('penempatan');
+							$gaji_pokok 							= $this->input->post('gaji_pokok');
+							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
+							$tunjangan_area 							= $this->input->post('tunjangan_area');
+							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
+							$tunjangan_makan 							= $this->input->post('tunjangan_makan');
+							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
+							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
+							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_device 							= $this->input->post('tunjangan_device');
+							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
+							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
+							$tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
+							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
+							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
+							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
+							$tunjangan_operational 							= $this->input->post('tunjangan_operational');
+							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
+							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
+							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
+							$hari_kerja 							= $this->input->post('hari_kerja');
+							$cut_start 							= $this->input->post('cut_start');
+							$cut_off 							= $this->input->post('cut_off');
+							$date_payment 							= $this->input->post('date_payment');
+						}
+
 
 					if($Return['error']!=''){
 					$this->output($Return);
+
+
 			    }
-			}
 
-		   	$fullname = $this->Xin_model->clean_post($this->input->post('fullname'));
-				$office_lokasi = $this->input->post('office_lokasi');
-				$project_id = $this->input->post('project_id');
-				$sub_project_id = $this->input->post('sub_project');
-				$department_id = $this->input->post('department_id');
-				$posisi = $this->input->post('posisi');
-				$date_of_join = $this->input->post('date_of_join');
-				$contact_no = $this->input->post('nomor_hp');
-				$ktp_no = $this->input->post('nomor_ktp');
+							$data = array(
+								// 'fullname' 						=> $fullname,
+								// 'nama_ibu' 						=> $nama_ibu,
+								// 'tempat_lahir' 				=> $tempat_lahir,
+								// 'tanggal_lahir' 			=> $tanggal_lahir,
+								// 'gender'							=> $jenis_kelamin,
+								// 'agama' 							=> $agama,
+								// 'status_kawin' 				=> $marital_status,
+								// 'nik_ktp' 						=> $nomor_ktp,
+								// 'alamat_ktp' 					=> $alamat_ktp,
+								// 'no_kk' 							=> $nomor_kk,
+
+								// 'alamat_domisili' 		=> $alamat_domisili,
+								// 'npwp' 								=> $npwp,
+								// 'contact_no' 					=> $nomor_hp,
+								// 'email' 							=> $email,
+								// 'bank_id' 						=> $bank_name,
+								// 'no_rek' 							=> $no_rek,
+								// 'pemilik_rekening' 		=> $pemilik_rekening,
+								// 'project' 						=> $project_id,
+								// 'sub_project' 				=> $sub_project,
+								// 'posisi' 							=> $posisi,
+
+								// 'doj' 								=> $date_of_join,
+								'penempatan' 					=> $penempatan,
+								'basic_pay' 					=> $gaji_pokok,
+								'allowance_grade' 			=> $tunjangan_jabatan,
+								'allowance_area' 					=> $tunjangan_area,
+								'allowance_masakerja' 		=> $tunjangan_masakerja,
+								'allowance_meal' 			=> $tunjangan_makan,
+								'allowance_transport' 		=> $tunjangan_transport,
+								'allowance_komunikasi' 	=> $tunjangan_komunikasi,
+
+								'allowance_rent' 					=> $tunjangan_rental,
+								'allowance_park' 			=> $tunjangan_parkir,
+								'allowance_transmeal' 		=> $tunjangan_makan_trans,
+								'allowance_residance'=> $tunjangan_tempat_tinggal,
+								'allowance_laptop' 				=> $tunjangan_device,
+								
+								'allowance_medicine' 		=> $tunjangan_kesehatan,
+								'allowance_akomodasi' 		=> $tunjangan_akomodasi,
+								'allowance_kasir' 				=> $tunjangan_kasir,
+								'allowance_operation' 	=> $tunjangan_operational,
+								'from_date' 			=> $join_date_pkwt,
+								'to_date' 				=> $pkwt_end_date,
+								'waktu_kontrak' 		=> $waktu_kontrak,
+								'hari_kerja' 					=> $hari_kerja,
+								'start_period_payment' 					=> $cut_start,
+								'end_period_payment' 						=> $cut_off,
+								'tgl_payment' 				=> $date_payment,
+							);
+
+						$iresult = $this->Pkwt_model->update_pkwt_edit($data,$idrequest);
+
+					// }
+
+				if ($iresult == TRUE) {
+					$Return['result'] = $idrequest.' Permintaan Karyawan Baru berhasil di Ubah..';
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+				}
 				
-			// $options = array('cost' => 12);
-			// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
-			// $leave_categories = array($this->input->post('leave_categories'));
-			// $cat_ids = implode(',',$this->input->post('leave_categories'));
+				// $Return['result'] = $idrequest.' Permintaan Karyawan Baru berhasil di Ubah..';
 
-			$data = array(
-				'fullname' => $fullname,
-				'location_id' => $office_lokasi,
-				'project' => $project_id,
-				'sub_project' => $sub_project_id,
-				'department' => $department_id,
-				'posisi' => $posisi,
-				'doj' => $date_of_join,
-				'contact_no' => $contact_no,
-				'nik_ktp' => $ktp_no,
-				// 'pincode' => $this->input->post('pin_code'),
-				// 'createdon' => date('Y-m-d h:i:s'),
-				'createdby' => $session['user_id']
-			);
-
-			$iresult = $this->Employees_model->addrequest($data);
-			if ($iresult) {
-					$Return['result'] = $this->lang->line('xin_success_add_employee');
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_msg');
-			}
-			$this->output($Return);
-			exit;
+				$this->output($Return);
+				exit;
+			// }
 	}
+
+
 
 	public function read() {
 		$session = $this->session->userdata('username');
