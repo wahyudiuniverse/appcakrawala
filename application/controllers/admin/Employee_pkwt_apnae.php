@@ -304,7 +304,7 @@ class Employee_pkwt_apnae extends MY_Controller {
 				'ijazah' => $filename_isd,
 				
 				'waktu_kontrak' => $result[0]->waktu_kontrak.' (Bulan)',
-				'begin' => $periode,
+				'begin' => $result[0]->from_date . ' s/d '. $result[0]->to_date,
 				'hari_kerja' => $result[0]->hari_kerja,
 				'basic_pay' => $result[0]->basic_pay,
 				'dm_allow_grade' => $result[0]->dm_allow_grade,

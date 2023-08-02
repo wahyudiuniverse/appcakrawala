@@ -4,6 +4,7 @@ $(document).ready(function() {
 	$("#xin-form").submit(function(e){
 		var fd = new FormData(this);
 		var obj = $(this), action = obj.attr('name');
+		var ktp = document.getElementById("nomor_ktp").value ;
 		fd.append("is_ajax", 1);
 		fd.append("add_type", 'employer');
 		fd.append("form", action);
@@ -27,6 +28,7 @@ $(document).ready(function() {
 					$('.add-form').removeClass('show');
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.save').prop('disabled', false);
+					window.location = base_url+'/success/' + ktp;
 				}
 			},
 			error: function() 

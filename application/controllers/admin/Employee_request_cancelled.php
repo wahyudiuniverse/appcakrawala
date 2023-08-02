@@ -1057,7 +1057,7 @@ class employee_request_cancelled extends MY_Controller {
 								// } else {
 									if(is_uploaded_file($_FILES['document_ktp']['tmp_name'])) {
 										//checking image type
-										$allowedktp =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
+										$allowedktp =  array('png','jpg','jpeg','pdf');
 										$filenamektp = $_FILES['document_ktp']['name'];
 										$extktp = pathinfo($filenamektp, PATHINFO_EXTENSION);
 										
@@ -1081,7 +1081,7 @@ class employee_request_cancelled extends MY_Controller {
 							if($_FILES['document_kk']['size'] == 0) {$fnamekk=$this->input->post('fkk_name');} else {
 								if(is_uploaded_file($_FILES['document_kk']['tmp_name'])) {
 									//checking image type
-									$allowedkk =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
+									$allowedkk =  array('png','jpg','jpeg','pdf');
 									$filenamekk = $_FILES['document_kk']['name'];
 									$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
 									
@@ -1103,7 +1103,7 @@ class employee_request_cancelled extends MY_Controller {
 							if($_FILES['document_skck']['size'] == 0) {$fnameskck=$this->input->post('fskck_name');} else {
 								if(is_uploaded_file($_FILES['document_skck']['tmp_name'])) {
 									//checking image type
-									$allowedskck =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
+									$allowedskck =  array('png','jpg','jpeg','pdf');
 									$filenameskck = $_FILES['document_skck']['name'];
 									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
 									
@@ -1127,7 +1127,7 @@ class employee_request_cancelled extends MY_Controller {
 							} else {
 								if(is_uploaded_file($_FILES['document_ijazah']['tmp_name'])) {
 									//checking image type
-									$allowedijazah =  array('png','jpg','PNG','JPG','jpeg','JPEG','pdf','PDF');
+									$allowedijazah =  array('png','jpg','jpeg','pdf');
 									$filenameijazah = $_FILES['document_ijazah']['name'];
 									$extijazah = pathinfo($filenameijazah, PATHINFO_EXTENSION);
 									
@@ -1152,7 +1152,7 @@ class employee_request_cancelled extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_cv']['tmp_name'])) {
 										//checking image type
-										$allowed_cv =  array('pdf','PDF');
+										$allowed_cv =  array('png','jpg','jpeg','pdf');
 										$filename_cv = $_FILES['document_cv']['name'];
 										$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
 										

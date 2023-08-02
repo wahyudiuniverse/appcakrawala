@@ -55,7 +55,7 @@
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
 
 <div class="card">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>REQUEST </strong>EMPLOYEE RESIGN</span> </div>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>PERPANJANG </strong>PKWT KARYAWAN</span> </div>
   <div class="card-body">
     <div class="box-datatable table-responsive">
       <table class="datatables-demo table table-striped table-bordered" id="xin_table">

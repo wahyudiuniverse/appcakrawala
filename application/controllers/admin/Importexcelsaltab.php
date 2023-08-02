@@ -138,6 +138,7 @@ class importexcelsaltab extends MY_Controller
 			  $project_sub = $r->project_sub;
 			  $area = $r->area;
 			  $hari_kerja = $r->hari_kerja;
+			  $gaji_umk = $r->gaji_umk;
 			  $gaji_pokok = $r->gaji_pokok;
 
 			  $allow_jabatan = $r->allow_jabatan;
@@ -217,6 +218,7 @@ class importexcelsaltab extends MY_Controller
 				$project_sub,
 				$area,
 				$hari_kerja,
+				$gaji_umk,
 				$gaji_pokok,
 			  $allow_jabatan,
 			  $allow_konsumsi,
@@ -433,6 +435,7 @@ class importexcelsaltab extends MY_Controller
 				$area = $user[0]->area;
 				$status_emp = $user[0]->status_emp;
 				$hari_kerja = $user[0]->hari_kerja;
+				$gaji_umk = $user[0]->gaji_umk;
 				$gaji_pokok = $user[0]->gaji_pokok;
 
 				$allow_jabatan = $user[0]->allow_jabatan;
@@ -498,6 +501,7 @@ class importexcelsaltab extends MY_Controller
 					'area' => $area,
 					'status_emp' => $status_emp,
 					'hari_kerja' => $hari_kerja,
+					'gaji_umk' => $gaji_umk,
 					'gaji_pokok' => $gaji_pokok,
 					'allow_jabatan' => $allow_jabatan,
 					'allow_masakerja' => $allow_masakerja,
@@ -612,6 +616,7 @@ class importexcelsaltab extends MY_Controller
 				$area = $user[0]->area;
 				$status_emp = $user[0]->status_emp;
 				$hari_kerja = $user[0]->hari_kerja;
+				$gaji_umk		= $user[0]->gaji_umk;
 				$gaji_pokok = $user[0]->gaji_pokok;
 
 				$allow_jabatan = $user[0]->allow_jabatan;
@@ -678,6 +683,7 @@ class importexcelsaltab extends MY_Controller
 					'area' => $area,
 					'status_emp' => $status_emp,
 					'hari_kerja' => $hari_kerja,
+					'gaji_umk' => $gaji_umk,
 					'gaji_pokok' => $gaji_pokok,
 
 					'allow_jabatan' => $allow_jabatan,

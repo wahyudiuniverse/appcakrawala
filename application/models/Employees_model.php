@@ -115,6 +115,18 @@ class Employees_model extends CI_Model {
 	}
 
  	// monitoring request
+	public function get_monitoring_daftar() {
+
+		$sql = "SELECT *
+				FROM xin_employee_request
+				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
+				ORDER BY secid DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
 	public function get_monitoring_request($empID) {
 
 		$sql = 'SELECT *
@@ -766,7 +778,8 @@ class Employees_model extends CI_Model {
 
 	// Function to add record in table
 	public function addkandidat($data){
-		$this->db->insert('xin_employee_kandidat', $data);
+		$this->db->insert('xin_employee_request', $data);
+		// $this->db->insert('xin_employee_kandidat', $data);
 		if ($this->db->affected_rows() > 0) {
 			return $this->db->insert_id();
 		} else {

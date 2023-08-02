@@ -33,7 +33,7 @@ class Daftar extends MY_Controller {
 		if($system[0]->module_recruitment!='true'){
 			redirect('admin/');
 		}
-		$data['title'] = 'Dafta Karyawan Baru';
+		$data['title'] = 'DATABASE KARYAWAN CUSSONS 2023';
 		$session = $this->session->userdata('c_user_id');
 		if(!empty($session)){
 			redirect('');
@@ -45,6 +45,7 @@ class Daftar extends MY_Controller {
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['path_url'] = 'job_create_user';
 		$data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
+		// $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
 
@@ -61,9 +62,10 @@ class Daftar extends MY_Controller {
 			// $options = array('cost' => 12);
 			// $password_hash = password_hash($this->input->post('password'), PASSWORD_BCRYPT, $options);
 			/* Server side PHP input validation */
-			if($this->input->post('company_id')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_company_name');
-			} else if($this->input->post('first_name')==='') {
+			// if($this->input->post('company_id')==='') {
+			// 	$Return['error'] = $this->lang->line('xin_employee_error_company_name');
+			// } else 
+			if($this->input->post('first_name')==='') {
 				$Return['error'] = $this->lang->line('xin_employee_error_first_name');
 			} else if( $this->input->post('tempat_lahir')==='') {
 				$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
@@ -81,8 +83,6 @@ class Daftar extends MY_Controller {
 				$Return['error'] = $this->lang->line('xin_employee_error_ktp');
 			} else if($this->input->post('nomor_kk')==='') {
 				$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
-			} else if($this->input->post('npwp')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_npwp');
 			} else if($this->input->post('ibu_kandung')==='') {
 				$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
 			} else if($this->input->post('jenis_kelamin')==='') {
@@ -118,76 +118,103 @@ class Daftar extends MY_Controller {
 			} else if($this->input->post('pemilik_rek')==='') {
 				$Return['error'] = $this->lang->line('xin_employee_error_pemilik_rek');
 			} else if($_FILES['foto_ktp']['size'] == 0){
-				$Return['error'] = $this->lang->line('xin_employee_error_empty_ktp');
+				$Return['error'] = 'Foto KTP Masih Kosong...';
+			} else if($_FILES['foto_kk']['size'] == 0){
+				$Return['error'] = 'Foto KK Masih Kosong...';
+			} else if($_FILES['dokumen_cv']['size'] == 0){
+				$Return['error'] = 'Dokumen CV Masih Kosong...';
 			}
+
 			// else if($valid_email->num_rows() > 0) {
 			// 	$Return['error'] = $this->lang->line('xin_rec_email_exists');
 			// } 
 
 				else {
 
-					if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
-						//checking image type
-						$allowed =  array('png','jpg','jpeg','gif');
-						$filename = $_FILES['foto_ktp']['name'];
-						$ext = pathinfo($filename, PATHINFO_EXTENSION);
-						
-						if(in_array($ext,$allowed)){
-							$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
-							$bill_copy = "uploads/employers/";
-							$name = basename($_FILES["foto_ktp"]["name"]);
-							$newfilename = 'employer_ktp'.round(microtime(true)).'.'.$ext;
-							move_uploaded_file($tmp_name, $bill_copy.$newfilename);
-							$fname = $newfilename;
 
-						} else {
-							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
-						}
-					} else {
-						$fname = "";
-					}
+								if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
+									//checking image type
+									$allowed =  array('png','jpg','jpeg','pdf');
+									$filename = $_FILES['foto_ktp']['name'];
+									$ext = pathinfo($filename, PATHINFO_EXTENSION);
+									
+									if(in_array($ext,$allowed)){
+										$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
+										$documentd = "uploads/document/ktp/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["foto_ktp"]["name"]);
+										$newfilename = 'ktp_'.$this->input->post('nomor_ktp').'.'.$ext;
+										move_uploaded_file($tmp_name, $documentd.$newfilename);
+										$fname = $newfilename;
+									} else {
+										$Return['error'] = 'Jenis File KTP tidak diterima..';
+									}
+								}
 
-					if(is_uploaded_file($_FILES['foto_kk']['tmp_name'])) {
-						//checking image type
-						$allowed_kk =  array('png','jpg','jpeg','gif');
-						$filename_kk = $_FILES['foto_kk']['name'];
-						$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_kk,$allowed_kk)){
-							$tmp_name_kk = $_FILES["foto_kk"]["tmp_name"];
-							$bill_copy_kk = "uploads/employers/";
-							$name_kk = basename($_FILES["foto_kk"]["name"]);
-							$newfilename_kk = 'employer_kk'.round(microtime(true)).'.'.$ext_kk;
-							move_uploaded_file($tmp_name_kk, $bill_copy_kk.$newfilename_kk);
-							$fname_kk = $newfilename_kk;
+								if(is_uploaded_file($_FILES['foto_kk']['tmp_name'])) {
+									//checking image type
+									$allowedkk =  array('png','jpg','jpeg','pdf');
+									$filenamekk = $_FILES['foto_kk']['name'];
+									$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
+									
+									if(in_array($extkk,$allowedkk)){
+										$tmp_namekk = $_FILES["foto_kk"]["tmp_name"];
+										$documentdkk = "uploads/document/kk/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["foto_kk"]["name"]);
+										$newfilenamekk = 'kk_'.$this->input->post('nomor_ktp').'.'.$extkk;
+										move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
+										$fnamekk = $newfilenamekk;
+									} else {
+										$Return['error'] = 'Jenis File KK tidak diterima..';
+									}
+								}
 
-						} else {
-							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
-						}
-					} else {
-						$fname_kk = "";
-					}
+							if($_FILES['foto_npwp']['size'] == 0){
+								$fnamenpwp = '0';
+							} else {
+								if(is_uploaded_file($_FILES['foto_npwp']['tmp_name'])) {
+									//checking image type
+									$allowednpwp =  array('png','jpg','jpeg','pdf');
+									$filenamenpwp = $_FILES['foto_npwp']['name'];
+									$extnpwp = pathinfo($filenamenpwp, PATHINFO_EXTENSION);
+									
+									if(in_array($extnpwp,$allowednpwp)){
+										$tmp_namenpwp = $_FILES["foto_npwp"]["tmp_name"];
+										$documentnpwp = "uploads/document/npwp/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["foto_npwp"]["name"]);
+										$newfilenamenpwp = 'npwp_'.$this->input->post('nomor_ktp').'.'.$extnpwp;
+										move_uploaded_file($tmp_namenpwp, $documentnpwp.$newfilenamenpwp);
+										$fnamenpwp = $newfilenamenpwp;
+									} else {
+										$Return['error'] = 'Jenis File PKWT tidak diterima..';
+									}
+								}
+							}
 
-					if(is_uploaded_file($_FILES['foto_rek']['tmp_name'])) {
-						//checking image type
-						$allowed_rek =  array('png','jpg','jpeg','gif');
-						$filename_rek = $_FILES['foto_rek']['name'];
-						$ext_rek = pathinfo($filename_rek, PATHINFO_EXTENSION);
-						
-						if(in_array($ext_rek,$allowed_rek)){
-							$tmp_name_rek = $_FILES["foto_rek"]["tmp_name"];
-							$bill_copy_rek = "uploads/employers/";
-							$name_rek = basename($_FILES["foto_rek"]["name"]);
-							$newfilename_rek = 'employer_rek'.round(microtime(true)).'.'.$ext_rek;
-							move_uploaded_file($tmp_name_rek, $bill_copy_rek.$newfilename_rek);
-							$fname_rek = $newfilename_rek;
-
-						} else {
-							$Return['error'] = $this->lang->line('xin_error_attatchment_type');
-						}
-					} else {
-						$fname_rek = "";
-					}
+								if(is_uploaded_file($_FILES['dokumen_cv']['tmp_name'])) {
+										//checking image type
+										$allowedcv =  array('png','jpg','jpeg','pdf');
+										$filenamecv = $_FILES['dokumen_cv']['name'];
+										$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+										
+										if(in_array($extcv,$allowedcv)){
+											$tmp_namecv = $_FILES["dokumen_cv"]["tmp_name"];
+											$documentdcv = "uploads/document/cv/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["dokumen_cv"]["name"]);
+											$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'.'.$extcv;
+											move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
+											$fnamecv = $newfilenamecv;
+										} else {
+											$Return['error'] = 'Jenis File CV tidak diterima..';
+										}
+								}
 
 							$data = array(
 
@@ -199,15 +226,15 @@ class Daftar extends MY_Controller {
 							'tanggal_lahir' => $this->input->post('tanggal_lahir'),
 							'alamat_ktp' => $this->input->post('alamat_ktp'),
 							'alamat_domisili' => $this->input->post('alamat_domisili'),
-							'contact_number' => $this->input->post('contact_number'),
+							'contact_no' => $this->input->post('contact_number'),
 							'email' => $this->input->post('email'),
-							'nomor_ktp' => $this->input->post('nomor_ktp'),
-							'nomor_kk' => $this->input->post('nomor_kk'),
+							'nik_ktp' => $this->input->post('nomor_ktp'),
+							'no_kk' => $this->input->post('nomor_kk'),
 							'npwp' => $this->input->post('npwp'),
-							'ibu_kandung' => $this->input->post('ibu_kandung'),
-							'jenis_kelamin' => $this->input->post('jenis_kelamin'),
+							'nama_ibu' => $this->input->post('ibu_kandung'),
+							'gender' => $this->input->post('jenis_kelamin'),
 							'agama' => $this->input->post('agama'),
-							'pernikahan' => $this->input->post('pernikahan'),
+							'status_kawin' => $this->input->post('pernikahan'),
 							'tinggi_badan' => $this->input->post('tinggi_badan'),
 							'berat_badan' => $this->input->post('berat_badan'),
 							'last_company' => $this->input->post('last_company'),
@@ -215,16 +242,17 @@ class Daftar extends MY_Controller {
 							'last_edu' => $this->input->post('last_edu'),
 							'school_name' => $this->input->post('school_name'),
 							'jurusan' => $this->input->post('jurusan'),
-							'project_id' => $this->input->post('project_id'),
+							'project' => $this->input->post('project_id'),
 							'posisi_lamar' => $this->input->post('posisi_lamar'),
 							'penempatan' => $this->input->post('penempatan'),
 							'bank_name' => $this->input->post('bank_name'),
-							'nomor_rek' => $this->input->post('nomor_rek'),
-							'pemilik_rek' => $this->input->post('pemilik_rek'),
+							'no_rek' => $this->input->post('nomor_rek'),
+							'pemilik_rekening' => $this->input->post('pemilik_rek'),
 
-							'filename_ktp' => $fname,
-							'filename_kk' => $fname_kk,
-							'filename_rek' => $fname_rek
+							'ktp' => $fname,
+							'kk' => $fnamekk,
+							'file_npwp' => $fnamenpwp,
+							'civi' => $fnamecv
 
 							// 'project_id' => $this->input->post('project_id'),
 							// 'email' => $this->input->post('email'),
@@ -247,9 +275,95 @@ class Daftar extends MY_Controller {
 				$Return['error'] = $this->lang->line('xin_error_msg');
 			}
 			$this->output($Return);
-			exit;
+			// exit;
 		}
 	}
+
+	 public function success() {
+		$system = $this->Xin_model->read_setting_info(1);
+		if($system[0]->module_recruitment!='true'){
+			redirect('admin/');
+		}
+		$data['title'] = 'Manage Jobs';
+		$data['path_url'] = 'jobs_success';
+		// $session = $this->session->userdata('c_user_id');
+		// if(empty($session)){
+		// 	redirect('employer/sign_in/');
+		// }
+		// $data['all_job_categories'] = $this->Recruitment_model->all_job_categories();
+		$data['subview'] = $this->load->view("frontend/hrpremium/view_daftar_success", $data, TRUE);
+		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
+  }
+
+
+	public function success_list() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('c_user_id');
+		if(!empty($session)){ 
+			$this->load->view("frontend/hrpremium/view_daftar_success", $data);
+		} else {
+			redirect('');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		// $jobs = $this->Job_post_model->get_employer_jobs($session['c_user_id']);
+		$jobs = $this->Employees_model->get_monitoring_daftar();
+
+		$data = array();
+
+        foreach($jobs->result() as $r) {
+			 			  
+				// get job designation
+				// $category = $this->Job_post_model->read_job_category_info($r->category_id);
+				// if(!is_null($category)){
+				// 	$category_name = $category[0]->category_name;
+				// } else {
+				// 	$category_name = '--';
+				// }
+				// // get job type
+				// $job_type = $this->Job_post_model->read_job_type_information($r->job_type);
+				// if(!is_null($job_type)){
+				// 	$jtype = $job_type[0]->type;
+				// } else {
+				// 	$jtype = '--';
+				// }
+				// // get date
+				// $date_of_closing = $this->Xin_model->set_date_format($r->date_of_closing);
+				// $created_at = $this->Xin_model->set_date_format($r->created_at);
+				// /* get job status*/
+				// if($r->status==1): $status = $this->lang->line('xin_published'); elseif($r->status==2): $status = $this->lang->line('xin_unpublished'); endif;
+				// $employer = $this->Recruitment_model->read_employer_info($r->employer_id);
+				// if(!is_null($employer)){
+				// 	$employer_name = $employer[0]->company_name;
+				// } else {
+				// 	$employer_name = '--';	
+				// }
+		
+				$data[] = array(
+					'DD',
+					$r->nik_ktp,
+					'$category_name',
+					'$jtype',
+					'$r->job_vacancy',
+					'$date_of_closing',
+					'$status',
+					'$created_at'
+				);
+      }
+
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $jobs->num_rows(),
+			 "recordsFiltered" => $jobs->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+  }
 
 	/*Function to set JSON output*/
 	public function output($Return=array()){
@@ -276,7 +390,7 @@ class Daftar extends MY_Controller {
      }
 
 
-	 public function logout() {
+	public function logout() {
 	
 		$session = $this->session->userdata('c_user_id');
 		$last_data = array(
@@ -291,7 +405,8 @@ class Daftar extends MY_Controller {
 		$Return['result'] = 'Successfully Logout.';
 		redirect('employer/sign_in/', 'refresh');
 	}
-	  public function forgot_password() {
+
+	public function forgot_password() {
 		$system = $this->Xin_model->read_setting_info(1);
 		if($system[0]->module_recruitment!='true'){
 			redirect('admin/');
@@ -568,7 +683,8 @@ class Daftar extends MY_Controller {
 		exit;
 		}
 	}
-	 public function edit_job() {
+
+	public function edit_job() {
 		$id = $this->uri->segment(3);
 		$session = $this->session->userdata('c_user_id');
 		if(empty($session)){

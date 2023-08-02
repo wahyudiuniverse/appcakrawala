@@ -98,8 +98,11 @@ class Employee_resign extends MY_Controller {
 				$approve_resignnae = $r->approve_resignnae;
 				$approve_resignnom = $r->approve_resignnom;
 				$approve_resignhrd = $r->approve_resignhrd;
+				$cancel_resign_stat = $r->cancel_resign_stat;
 
-				if(is_null($approve_resignnae) || $approve_resignnae=='0'){
+				if(is_null($cancel_resign_stat) || $cancel_resign_stat==0){
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal">DITOLAK</button>';
+				} else if(is_null($approve_resignnae) || $approve_resignnae=='0'){
 
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NAE</button>';
 				} else if(is_null($approve_resignnom) || $approve_resignnom=='0') {

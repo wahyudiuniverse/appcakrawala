@@ -1722,9 +1722,11 @@ class Reports extends MY_Controller
 				if(!is_null($emp)){
 					$fullname = $emp[0]->first_name;
 					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
+					$nowhatsapp = $emp[0]->contact_no;
 				} else {
 					$fullname = '--';	
 					$sub_project = '0';
+					$nowhatsapp = '0';
 				}
 
 				$projects = $this->Project_model->read_single_project($project);
@@ -1745,12 +1747,13 @@ class Reports extends MY_Controller
 
 			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
+			$whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
 
 			$data[] = array (
 				$no,
 				$status_migrasi.' '.$view_pkwt,
-				$r->employee_id,
+				$r->employee_id.'<br>'.$whatsapp,
 				$fullname,
 				$nama_project,
 				$designation_name,
