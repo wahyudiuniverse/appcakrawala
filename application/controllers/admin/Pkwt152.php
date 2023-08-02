@@ -254,6 +254,8 @@ class Pkwt152 extends MY_Controller
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
 
 
+					$sum_salary = $pkwt[0]->basic_pay + $pkwt[0]->allowance_grade + $pkwt[0]->allowance_area + $pkwt[0]->allowance_masakerja + $pkwt[0]->allowance_meal + $pkwt[0]->allowance_transport + $pkwt[0]->allowance_rent + $pkwt[0]->allowance_komunikasi + $pkwt[0]->allowance_park + $pkwt[0]->allowance_residance + $pkwt[0]->allowance_laptop + $pkwt[0]->allowance_kasir + $pkwt[0]->allowance_transmeal + $pkwt[0]->allowance_medicine + $pkwt[0]->allowance_akomodasi + $pkwt[0]->allowance_operation;
+
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
 					$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
 					$tgl_payment = $pkwt[0]->tgl_payment;
@@ -836,8 +838,127 @@ class Pkwt152 extends MY_Controller
 				<br>
 
 
+
 				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 10<br>KETENTUAN LAIN - LAIN</b>
+					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
+				</div>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+							</tr>
+				</table>
+				<br>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SIMPANAN KOPERASI</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Simpanan Pokok</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan diawal pendaftaran anggota dan hanya di potongkan 1 kali, besarnya sama untuk semua anggota yaitu sebesar Rp.50.000.-</td>
+							</tr>
+				<br>
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Simpanan Wajib</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan yang dipotongkan setiap bulannya Jumlah simpanan wajib per bulan bervariasi berdasarkan level/jenjang jabatan anggota di Perusahaan dengan rincian:</td>
+							</tr>
+				</table>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+									<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>HO</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Admin</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">NAE</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">Manager – General Manager </td>
+											<td colspan="9">: Rp. 100.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">d.</td>
+											<td colspan="8">Direksi / Komisaris</td>
+											<td colspan="9">: Rp. 150.000,-</td>
+										</tr>
+<br>
+
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>Area/Cabang</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Frontliner	( Sales/SPG SPB/Motoris/MD)</td>
+											<td colspan="9">: Rp. 25.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">Team Leader/Koordinator</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">PIC/Kepala Cabang/Area</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+									</table>
+
+								</td>
+							</tr>
+				</table>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+				<div style="text-align: center; text-justify: inter-word;">
+					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
 				</div>
 				<br>
 
@@ -872,13 +993,6 @@ class Pkwt152 extends MY_Controller
 								<td>6.</td>
 								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
 							</tr>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 				
 							<tr>
@@ -955,14 +1069,6 @@ class Pkwt152 extends MY_Controller
 				<br>			<br>
 				<br>			<br>
 				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1421,7 +1527,13 @@ class Pkwt152 extends MY_Controller
 						</tr>';
 				}
 
-				$lampiran .= '	
+				$lampiran .= '
+
+						<tr>
+							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
+							<td></td>
+						</tr>
+							
 					</table>
 
 					</td>

@@ -2396,6 +2396,7 @@ class Reports extends MY_Controller
 				$r->project_sub,
 				$r->area,	
 
+				$r->gaji_umk,
 				$r->gaji_pokok,
 				$r->bpjs_tk_deduction + $r->bpjs_tk + $r->jaminan_pensiun_deduction + $r->jaminan_pensiun,
 				$r->bpjs_ks_deduction + $r->bpjs_ks

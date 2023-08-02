@@ -14,7 +14,7 @@ class Pkwt1 extends MY_Controller
 {
 
    /*Function to set JSON output*/
-	public function output($Return=array()){
+	public function output($Return=array()) {
 		/*Set response header*/
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
@@ -22,7 +22,7 @@ class Pkwt1 extends MY_Controller
 		exit(json_encode($Return));
 	}
 	
-	public function __construct(){
+	public function __construct() {
           parent::__construct();
           //load the login model
           $this->load->model('Company_model');
@@ -252,6 +252,8 @@ class Pkwt1 extends MY_Controller
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+
+					$sum_salary = $pkwt[0]->basic_pay + $pkwt[0]->allowance_grade + $pkwt[0]->allowance_area + $pkwt[0]->allowance_masakerja + $pkwt[0]->allowance_meal + $pkwt[0]->allowance_transport + $pkwt[0]->allowance_rent + $pkwt[0]->allowance_komunikasi + $pkwt[0]->allowance_park + $pkwt[0]->allowance_residance + $pkwt[0]->allowance_laptop + $pkwt[0]->allowance_kasir + $pkwt[0]->allowance_transmeal + $pkwt[0]->allowance_medicine + $pkwt[0]->allowance_akomodasi + $pkwt[0]->allowance_operation;
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -1649,6 +1651,17 @@ class Pkwt1 extends MY_Controller
 				}
 
 				$lampiran .= '	
+
+						<tr>
+							<td><b>Total Gaji</b></td>
+							<td colspan="3"><b> : '.$this->Xin_model->rupiah($sum_salary).',- Per Bulan </b></td>
+						</tr>
+
+						<tr>
+							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
+							<td></td>
+						</tr>
+
 					</table>
 
 					</td>

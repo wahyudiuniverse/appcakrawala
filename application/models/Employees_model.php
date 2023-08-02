@@ -120,12 +120,24 @@ class Employees_model extends CI_Model {
 		$sql = "SELECT *
 				FROM xin_employee_request
 				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
+				AND request_empby = '1'
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 
+ 	// monitoring request
+	public function get_monitoring_daftarnik($nik_ktp) {
+
+		$sql = "SELECT *
+				FROM xin_employee_request
+				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
+				ORDER BY secid DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
  	// monitoring request
 	public function get_monitoring_request($empID) {
 

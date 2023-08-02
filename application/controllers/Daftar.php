@@ -220,6 +220,12 @@ class Daftar extends MY_Controller {
 
 							// 'uploadid' => '000',
 							// 'employee_id' => '0',
+							'company_id' => '2',
+							'location_id' => '1',
+							'sub_project' => '184',
+							'department' => '3',
+							'posisi' => '0',
+
 							'fullname' => $this->input->post('first_name'),
 							'company_id' => $this->input->post('company_id'),
 							'tempat_lahir' => $this->input->post('tempat_lahir'),
@@ -249,10 +255,15 @@ class Daftar extends MY_Controller {
 							'no_rek' => $this->input->post('nomor_rek'),
 							'pemilik_rekening' => $this->input->post('pemilik_rek'),
 
+
 							'ktp' => $fname,
 							'kk' => $fnamekk,
 							'file_npwp' => $fnamenpwp,
-							'civi' => $fnamecv
+							'civi' => $fnamecv,
+
+								'request_empby' 				=> '1',
+								'request_empon' 				=> date("Y-m-d h:i:s"),
+								'createdby' => '1'
 
 							// 'project_id' => $this->input->post('project_id'),
 							// 'email' => $this->input->post('email'),
@@ -284,8 +295,9 @@ class Daftar extends MY_Controller {
 		if($system[0]->module_recruitment!='true'){
 			redirect('admin/');
 		}
-		$data['title'] = 'Manage Jobs';
+		$data['title'] = 'Daftar Karyawan';
 		$data['path_url'] = 'jobs_success';
+		$data['fullname'] = $this->uri->segment(3);
 		// $session = $this->session->userdata('c_user_id');
 		// if(empty($session)){
 		// 	redirect('employer/sign_in/');
@@ -305,6 +317,7 @@ class Daftar extends MY_Controller {
 		} else {
 			redirect('');
 		}
+
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));

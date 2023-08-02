@@ -253,6 +253,8 @@ class Pkwt2 extends MY_Controller
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
 
+					$sum_salary = $pkwt[0]->basic_pay + $pkwt[0]->allowance_grade + $pkwt[0]->allowance_area + $pkwt[0]->allowance_masakerja + $pkwt[0]->allowance_meal + $pkwt[0]->allowance_transport + $pkwt[0]->allowance_rent + $pkwt[0]->allowance_komunikasi + $pkwt[0]->allowance_park + $pkwt[0]->allowance_residance + $pkwt[0]->allowance_laptop + $pkwt[0]->allowance_kasir + $pkwt[0]->allowance_transmeal + $pkwt[0]->allowance_medicine + $pkwt[0]->allowance_akomodasi + $pkwt[0]->allowance_operation;
+
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
 					$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
@@ -1649,6 +1651,17 @@ class Pkwt2 extends MY_Controller
 				}
 
 				$lampiran .= '	
+
+						<tr>
+							<td><b>Total Gaji</b></td>
+							<td colspan="3"><b> : '.$this->Xin_model->rupiah($sum_salary).',- Per Bulan </b></td>
+						</tr>
+
+						<tr>
+							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
+							<td></td>
+						</tr>
+						
 					</table>
 
 					</td>

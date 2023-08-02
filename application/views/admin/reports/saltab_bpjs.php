@@ -53,6 +53,7 @@
                 <th>Area</th>
 
                 <th>Gapok UMK</th>
+                <th>Gapok Diterima</th>
                 <th>BPJS Ketenagakerjaan</th>
                 <th>BPJS Kesehatan</th>
               </tr>

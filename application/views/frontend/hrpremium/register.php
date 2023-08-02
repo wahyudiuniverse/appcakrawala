@@ -28,7 +28,7 @@
                 <p class="form-row form-row-wide">
 					<label for="first_name">NAMA LENGKAP (SESUAI KTP): <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>
-						<input type="text" class="input-text" name="first_name" id="first_name1" value="" />
+						<input type="text" class="input-text" name="first_name" id="nomor_ktp" value="" />
 					</label>
 				</p>
 
@@ -64,7 +64,7 @@
                 <p class="form-row form-row-wide">
 					<label for="contact_number">NOMOR KONTAK/HP/Whatsapp: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Phone-2"></i>
-						<input type="text" class="input-text" name="contact_number" id="contact_number1" value="" />
+						<input type="number" class="input-text" name="contact_number" id="contact_number1" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
 					</label>
 				</p>
 
@@ -78,14 +78,14 @@
                 <p class="form-row form-row-wide">
 					<label for="nomor_ktp">NOMOR KTP: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-ID-Card"></i>
-						<input type="text" class="input-text" name="nomor_ktp" id="nomor_ktp" value="" />
+						<input type="number" class="input-text" name="nomor_ktp" id="nomor_ktpx" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
 					</label>
 				</p>
 
                 <p class="form-row form-row-wide">
 					<label for="nomor_kk">NOMOR KK: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-ID-Card"></i>
-						<input type="text" class="input-text" name="nomor_kk" id="contact_number1" value="" />
+						<input type="number" class="input-text" name="nomor_kk" id="contact_number1" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
 					</label>
 				</p>
 
@@ -107,7 +107,7 @@
 					<label for="jenis_kelamin">JENIS KELAMIN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
 						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select">
-						<option value=""></option>
+						<option value="">--Pilih Salah Satu--</option>
                         <option value="L">Laki-Laki</option>
                         <option value="P">Perempuan</option>
 					</select>
@@ -118,7 +118,7 @@
 					<label for="agama">AGAMA/KEPERCAYAAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
 						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select">
-						<option value=""></option>
+						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Islam</option>
                         <option value="2">Kristen Protestan</option>
                         <option value="3">Kristen Katolik</option>
@@ -133,7 +133,7 @@
 					<label for="pernikahan">STATUS PERNIKAHAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
 						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select">
-						<option value=""></option>
+						<option value="">--Pilih Salah Satu--</option>
                         <option value="Belum Menikah">Belum Menikah/Janda/Duda</option>
                         <option value="Menikah (0 Anak)">Menikah (0 Anak)</option>
                         <option value="Menikah (1 Anak)">Menikah (1 Anak)</option>
@@ -148,16 +148,16 @@
 				</p>
 
                 <p class="form-row form-row-wide">
-					<label for="tinggi_badan">TINGGI BADAN :
+					<label for="tinggi_badan">TINGGI BADAN (cm):
 						<i class="ln ln-icon-Bodybuilding"></i>
-						<input type="text" class="input-text" name="tinggi_badan" id="contact_number1" value="" />
+						<input type="number" class="input-text" name="tinggi_badan" id="contact_number1" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
 					</label>
 				</p>
 
                 <p class="form-row form-row-wide">
-					<label for="berat_badan">BERATA BADAN:
+					<label for="berat_badan">BERATA BADAN (kg):
 						<i class="ln ln-icon-Bodybuilding"></i>
-						<input type="text" class="input-text" name="berat_badan" id="contact_number1" value="" />
+						<input type="number" class="input-text" name="berat_badan" id="contact_number1" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"/>
 					</label>
 				</p>
 
@@ -179,7 +179,7 @@
 					<label for="last_edu">PENDIDIKAN TERAKHIR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
 						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select">
-						<option value=""></option>
+						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Sekolah Dasar (SD)</option>
                         <option value="2">Sekolah Menengah Pertama (SMP/MTS)</option>
                         <option value="3">Sekolah Menengah Atas (SMA/SMK/MA)</option>
