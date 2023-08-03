@@ -247,8 +247,7 @@ class Daftar extends MY_Controller {
 							'company_id' => '2',
 							'location_id' => '1',
 							'sub_project' => '184',
-							'department' => '3',
-							'posisi' => '0',
+							'department' => '5',
 
 							'fullname' => $this->input->post('first_name'),
 							'company_id' => $this->input->post('company_id'),
@@ -273,7 +272,7 @@ class Daftar extends MY_Controller {
 							'school_name' => $this->input->post('school_name'),
 							'jurusan' => $this->input->post('jurusan'),
 							'project' => $this->input->post('project_id'),
-							'posisi_lamar' => $this->input->post('posisi_lamar'),
+							'posisi' => $this->input->post('posisi_lamar'),
 							'penempatan' => $this->input->post('penempatan'),
 							'bank_name' => $this->input->post('bank_name'),
 							'no_rek' => $this->input->post('nomor_rek'),

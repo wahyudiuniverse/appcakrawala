@@ -1,9 +1,15 @@
 <div class="container">
 
+<h3 style="text-align: center;"><strong><span style="color:red;">PORTAL PENGISIAN DATABASE KARYAWAN CUSSONS</span></strong></h3>
+<h3 style="text-align: center;"><strong><span style="color:red;">AKAN DITUTUP JUM'AT 4 AGUSTUS PUKUL 17:00 WIB</span></strong></h3>
+<h3 style="text-align: center;"><strong><span style="color:red;">MOHON SEGERA MENGISI DATA DIRI ANDA.</span></strong></h3>
+<BR><BR>
 	<div class="my-account">
 
-		<div class="tabs-container">
-			<!-- Register -->
+
+
+
+
 			<div class="tab-content" id="tab2">
 
                 <?php $attributes = array('id' => 'xin-form', 'class' => 'register', 'autocomplete' => 'on');?>
@@ -332,5 +338,9 @@
 input[type=file]::file-selector-button:hover {
   background: #0d45a5;
 }
+
+
+
 </style>
 <!-- Container -->
+
