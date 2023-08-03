@@ -1693,16 +1693,16 @@ class Reports extends MY_Controller
 		// $company_id = $this->uri->segment(4);
 		$project_id = $this->uri->segment(4);
 		$start_date = $this->uri->segment(5);
-		$keywords = $this->uri->segment(6);
+		$end_date = $this->uri->segment(6);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 		if($project_id==0 || $start_date==0 ){
 		// 	$employee = $this->Reports_model->report_pkwt_history();
 		// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
 			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
 		} else if ($project_id==999){
-			$employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date);
+			$employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date,$end_date);
 		}else {
-			$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
+			$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$end_date);
 		}
 		// $employee = $this->Employees_model->get_employees();
 		$no = 1;
@@ -1753,8 +1753,8 @@ class Reports extends MY_Controller
 			$data[] = array (
 				$no,
 				$status_migrasi.' '.$view_pkwt,
-				$r->employee_id.'<br>'.$whatsapp,
-				$fullname,
+				$r->employee_id,
+				$fullname.'<br>'.$whatsapp,
 				$nama_project,
 				$designation_name,
 				$penempatan,

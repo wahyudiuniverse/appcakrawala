@@ -217,7 +217,23 @@
                 <p class="form-row form-row-wide">
 					<label for="posisi_lamar">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Engineering"></i>
-						<input type="text" class="input-text" name="posisi_lamar" id="contact_number1" value="" />
+
+						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select">
+								<option value="">--Pilih Salah Satu--</option>
+                        <option value="38">ADMIN</option>
+                        <option value="38">ADMIN ANALISIS</option>
+                        <option value="587">BA MOBILE</option>
+                        <option value="588">BA STAY</option>
+                        <option value="589">JABATAMCR</option>
+                        <option value="590">MCR</option>
+                        <option value="591">MCR MINI MARKET</option>
+                        <option value="592">PIC ACTIVATION</option>
+                        <option value="212">TEAM LEADER</option>
+                        <option value="593">MANAGER ANALYST</option>
+                        <option value="153">PROJECT MANAGER</option>
+                        <option value="594">SALES OPERATION MANAGER</option>
+					</select>
+
 					</label>
 				</p>
 
@@ -254,7 +270,7 @@
                             <fieldset class="form-group">
                               <label for="foto_ktp">FOTO KTP <strong><span style="color:red;">*</span></strong></label>
                               <input type="file" class="form-control-file" id="foto_ktp" name="foto_ktp" accept="image/png,image/jpg, image/jpeg">
-                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
+                              <small>Jenis Foto: png & jpg | Size MAX 2 MB</small>
                             </fieldset>
                         </p>
 
@@ -262,16 +278,23 @@
                             <fieldset class="form-group">
                               <label for="foto_kk">FOTO KK <strong><span style="color:red;">*</span></strong></label>
                               <input type="file" class="form-control-file" id="foto_kk" name="foto_kk" accept="image/png,image/jpg, image/jpeg">
-                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
+                              <small>Jenis Foto: png & jpg | Size MAX 2 MB</small>
                             </fieldset>
                         </p>
-
 
                 <p class="form-row">
                             <fieldset class="form-group">
                               <label for="foto_npwp">FOTO NPWP (Jika ada) </label>
                               <input type="file" class="form-control-file" id="foto_npwp" name="foto_npwp" accept="image/png,image/jpg, image/jpeg">
-                              <small>Jenis Foto: png, jpg, dan jpeg | Size MAX 2 MB</small>
+                              <small>Jenis Foto: png & jpg | Size MAX 2 MB</small>
+                            </fieldset>
+                        </p>
+
+                <p class="form-row">
+                            <fieldset class="form-group">
+                              <label for="foto_skck">FOTO SKCK (Jika ada) </label>
+                              <input type="file" class="form-control-file" id="foto_skck" name="foto_skck" accept="image/png,image/jpg, image/jpeg">
+                              <small>Jenis Foto: png & jpg | Size MAX 2 MB</small>
                             </fieldset>
                         </p>
 

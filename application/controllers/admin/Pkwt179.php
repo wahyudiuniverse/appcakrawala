@@ -1658,6 +1658,14 @@ class Pkwt179 extends MY_Controller
 				}
 
 				$lampiran .= '	
+
+
+						<br>
+						<tr>
+							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
+							<td></td>
+						</tr>
+						
 					</table>
 
 					</td>

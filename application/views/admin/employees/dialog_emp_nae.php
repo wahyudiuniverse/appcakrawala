@@ -22,7 +22,15 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     } else {
       $approved_nom_name = '--'; 
     }
-        
+    
+    if(!is_null($posisi)){
+      $posisi_karyawan = $posisi[0]->designation_name;
+    } else {
+      $posisi_karyawan = '--';
+    }
+
+
+
 
   ?>
   <div class="modal-header">
@@ -132,7 +140,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$posisi[0]->designation_name;?></label>
+          <label for="plant"><?php echo ': '.$posisi_karyawan;?></label>
         </div>
       </div>
     </div>

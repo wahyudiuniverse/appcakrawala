@@ -196,6 +196,30 @@ class Daftar extends MY_Controller {
 								}
 							}
 
+							if($_FILES['foto_skck']['size'] == 0){
+								$fnameskck = '0';
+							} else {
+								if(is_uploaded_file($_FILES['foto_skck']['tmp_name'])) {
+									//checking image type
+									$allowedskck =  array('png','jpg','jpeg','pdf');
+									$filenameskck = $_FILES['foto_skck']['name'];
+									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+									
+									if(in_array($extskck,$allowedskck)){
+										$tmp_nameskck = $_FILES["foto_skck"]["tmp_name"];
+										$documentskck = "uploads/document/skck/";
+										// basename() may prevent filesystem traversal attacks;
+										// further validation/sanitation of the filename may be appropriate
+										$name = basename($_FILES["foto_skck"]["name"]);
+										$newfilenameskck = 'skck_'.$this->input->post('nomor_ktp').'.'.$extskck;
+										move_uploaded_file($tmp_nameskck, $documentskck.$newfilenameskck);
+										$fnameskck = $newfilenameskck;
+									} else {
+										$Return['error'] = 'Jenis File PKWT tidak diterima..';
+									}
+								}
+							}
+
 								if(is_uploaded_file($_FILES['dokumen_cv']['tmp_name'])) {
 										//checking image type
 										$allowedcv =  array('png','jpg','jpeg','pdf');
@@ -255,10 +279,10 @@ class Daftar extends MY_Controller {
 							'no_rek' => $this->input->post('nomor_rek'),
 							'pemilik_rekening' => $this->input->post('pemilik_rek'),
 
-
 							'ktp' => $fname,
 							'kk' => $fnamekk,
 							'file_npwp' => $fnamenpwp,
+							'skck' => $fnameskck,
 							'civi' => $fnamecv,
 
 								'request_empby' 				=> '1',

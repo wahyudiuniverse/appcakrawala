@@ -103,7 +103,7 @@
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
           </div>
             
-            <div class="col-md mb-3" hidden>
+            <div class="col-md mb-3">
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>

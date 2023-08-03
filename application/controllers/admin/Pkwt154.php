@@ -1430,7 +1430,7 @@ class Pkwt154 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1533,7 +1533,7 @@ class Pkwt154 extends MY_Controller
 							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
 							<td></td>
 						</tr>
-							
+
 					</table>
 
 					</td>
