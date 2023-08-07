@@ -1,7 +1,7 @@
 <?php $session = $this->session->userdata('c_user_id'); ?>
 <?php //$jobs = $this->Job_post_model->get_employer_jobs($session['c_user_id']);?>
 <?php $jobs = $this->Employees_model->get_monitoring_daftar(); ?>
-<?php $no = 1; ?>
+<?php $no = $jobs->num_rows(); ?>
 
 <!--<div class="container">
   <p class="margin-bottom-25">Your listings are shown in the table below.</p>
@@ -25,6 +25,7 @@
 		<h3 class="margin-bottom-25">Halo, <?php echo strtoupper($fullname); ?></h3>
 		<h3 class="margin-bottom-25">Data Diri Kamu Berhasil Tersimpan,</h3>
 
+
 		<table class="manage-table responsive-table">
 
 			<tr>
@@ -42,7 +43,7 @@
 				<td class="action"><?php echo str_repeat('*', MAX(4, strlen($r->contact_no)) - 4) . substr($r->contact_no, -4);?></td>
 				<td class="action"><?php echo $r->createdon;?></td>
 			</tr>
-			<?php $no++;} ?>
+			<?php $no--;} ?>
 		</table>
 
 		<br>

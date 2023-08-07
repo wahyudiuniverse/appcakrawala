@@ -127,19 +127,19 @@ class Employee_pkwt_cancel extends MY_Controller {
 				// 	$department_name = '--';	
 				// }
 
-				// $designation = $this->Designation_model->read_designation_information($r->designation_id);
-				// if(!is_null($designation)){
-				// 	$designation_name = $designation[0]->designation_name;
-				// } else {
-				// 	$designation_name = '--';	
-				// }
+				$designation = $this->Designation_model->read_designation_information($r->jabatan);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
 
 			$data[] = array(
 				$status_migrasi.' '.$editReq,
 				$nip,
 				$fullname,
 				$nama_project,
-				$jabatan,
+				$designation_name,
 				$penempatan,
 				$begin_until,
 				$cancel_on,

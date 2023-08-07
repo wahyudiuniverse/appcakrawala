@@ -87,14 +87,10 @@ class Pkwt186 extends MY_Controller
 
 		if($pkwt[0]->approve_hrd != null){
 
-				if($pkwt[0]->company==2){
+
 					$logo_cover = 'tcpdf_logo_sc.png';
 					$header_namae = 'PT. Siprama Cakrawala';
-				} else {
-					$logo_cover = 'tcpdf_logo_kac.png';
-					$header_namae = 'PT. Krista Aulia Cakrawala';
-				}
-
+					
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
 				$pdf->SetAuthor('HRCakrawala');
@@ -521,7 +517,7 @@ class Pkwt186 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18">4.1	Hari kerja normal dalam 1 bulan adalah '.$waktukerja.' hari kerja kalender sesuai dengan ketentuan PIHAK PERTAMA</td>
 							</tr>
 				<br>
 							<tr>
@@ -1764,6 +1760,387 @@ class Pkwt186 extends MY_Controller
 				
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
+
+
+
+				$lampiran2 = '
+
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+				
+				<table cellpadding="2" cellspacing="0" border="0">
+
+					<tr>
+						<td><b>Lampiran 2</b></td>
+						<td colspan="5"><b>INDIKATOR PENILAIAN</b></td>
+					</tr>
+<br>
+					<tr>
+						<td colspan="5"	><b>KPI PM (PROJECT MANAGER)</b></td>
+						<td></td>
+					</tr>
+
+				</table>
+
+
+
+					<img src="'.base_url().'assets/lampiran2.png" alt="Trulli" width="650" height="180">
+
+
+				<br>
+				<br>
+				<br>
+				<br>
+
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+				<table cellpadding="2" cellspacing="0" border="0">
+					<tr>
+						<td><b>Lampiran 3</b></td>
+						<td colspan="5"><b>JENIS PELANGGARAN</b></td>
+					</tr>
+<br>
+					<tr>
+						<td colspan="5"	><b>SANKSI PELANGGARAN TATA TERTIB DAN DISIPLIN</b></td>
+						<td></td>
+					</tr>
+
+				</table>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td >1.</td>
+								<td colspan="20">Surat Peringatan atau SP adalah surat yang berisi peringatan yang diberikan apabila Karyawan terbukti melakukan pelanggaran dan dapat diberikan sampai dengan SP 3 maupun SPHK (Surat Pemutusan Hubungan Kerja) sesuai dengan kategori pelanggaran yang dilanggar</td>
+								<td colspan="0"></td>
+							</tr>
+
+				</table>
+
+
+					<img src="'.base_url().'assets/lampiran3.png" alt="Trulli" width="650" height="500">
+
+<br><br>
+
+
+
+
+<br>
+				<table cellpadding="2" cellspacing="0" border="0">
+					<tr>
+						<td><b>A.</b></td>
+						<td colspan="18"><b>Kategori Pelanggaran- “Kedisiplinan”</b></td>
+					</tr>
+				
+				</table>
+
+<br><br>
+
+
+				<table cellpadding="2" cellspacing="0" border="1">
+
+				<tr>
+					<td colspan="15"><b>Jenis Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Kategori Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Tingkat Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Sanksi</b></td>
+					<td colspan="8" style="text-align:center"><b>Action</b></td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak melakukan absen di aplikasi atau pada tempat yang telah ditentukan sebanyak <b>1 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
+					<td colspan="5" style="text-align:center">Ringan</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">SP1</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak melakukan absen di aplikasi atau pada tempat yang telah ditentukan sebanyak <b>2 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
+					<td colspan="5" style="text-align:center">Sedang</td>
+					<td colspan="5" style="text-align:center">II</td>
+					<td colspan="5" style="text-align:center">SP2</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak melakukan absen di aplikasi atau pada tempat yang telah ditentukan sebanyak <b>3 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+
+				<tr>
+					<td colspan="15">Tidak hadir tanpa pemberitahuan (ALPA) sebanyak <b>1 kali</b>.</td>
+					<td colspan="5" style="text-align:center">Ringan</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">SP1</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
+				</tr>
+
+<br><br>
+				<tr>
+					<td colspan="15">Tidak hadir tanpa pemberitahuan (ALPA) sebanyak <b>2 kali, akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+
+				<tr>
+					<td colspan="15">Terlambat dengan toleransi waktu 10 menit  sebanyak <b>1 s/d 2 kali akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Ringan</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">SP1</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Terlambat dengan toleransi waktu 10 menit  sebanyak <b>3 s/d 4 kali akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Sedang</td>
+					<td colspan="5" style="text-align:center">II</td>
+					<td colspan="5" style="text-align:center">SP2</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Terlambat dengan toleransi waktu 10 menit  sebanyak <b>5 s/d 6 kali, akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Sakit tanpa surat keterangan dokter sebanyak <b>1  kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
+					<td colspan="5" style="text-align:center">Ringan</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">SP1</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Sakit tanpa surat keterangan dokter sebanyak 2 kali akumulasi atau berturut-turut dalam periode 1 bulan.</td>
+					<td colspan="5" style="text-align:center">Sedang</td>
+					<td colspan="5" style="text-align:center">II</td>
+					<td colspan="5" style="text-align:center">SP2</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Sakit tanpa surat keterangan dokter sebanyak <b>3 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Melakukan mangkir kerja selama 2 hari berturut-turut tanpa pemberitahuan/keterangan.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Mencuri, menggelapkan, melakukan penipuan, dan manipulasi baik itu berupa data, barang, uang dan harta benda lainnya.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Memberikan keterangan palsu atau dipalsukan.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Memakai obat-obatan terlarang, minum- minuman keras.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Terbukti melakukan perbuatan asusila, amoral, kegiatan perjudian di tempat kerja.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Menganiaya, menghina secara kasar mengucap secara fisik dan mental kepada perusahaan atau membiarkan teman kerjanya berada dalam bahaya.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Menyebabkan kerugian secara materil atau immaterial baik  kepada pihak Klien, Perusahaan ataupun Karyawan lain yang terlibat dalam melakukan pekerjaan.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">V</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				</table>
+
+
+
+
+<br>
+				<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0">
+					<tr>
+						<td><b>B.</b></td>
+						<td colspan="18"><b>Kategori Pelanggaran - Performa Kerja</b></td>
+					</tr>
+
+				</table>
+
+<br><br>
+
+				<table cellpadding="2" cellspacing="0" border="1">
+
+				<tr>
+					<td colspan="15"><b>Jenis Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Kategori Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Tingkat Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Sanksi</b></td>
+					<td colspan="8" style="text-align:center"><b>Action</b></td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak mencapai target yang telah ditentukan sebanyak <b>1 kali</b>.</td>
+					<td colspan="5" style="text-align:center">Ringan</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">SP1</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak mencapai target yang telah ditentukan sebanyak <b>2 kali, akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Sedang</td>
+					<td colspan="5" style="text-align:center">II</td>
+					<td colspan="5" style="text-align:center">SP2</td>
+					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak mencapai taíget yang telah ditentukan sebanyak <b>3 kali, akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Sangat  Berat</td>
+					<td colspan="5" style="text-align:center">III</td>
+					<td colspan="5" style="text-align:center">SP 3</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Tidak mencapai target yang telah ditentukan sebanyak <b>4 kali, akumulasi atau berturut-turut</b>.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">IV</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				</table>
+
+				<br>
+
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0">
+					<tr>
+						<td><b>C.</b></td>
+						<td colspan="18"><b>Kategori Pelanggaran - Kenyamanan dan Keamanan</b></td>
+					</tr>
+
+				</table>
+
+<br><br>
+
+				<table cellpadding="2" cellspacing="0" border="1">
+
+				<tr>
+					<td colspan="15"><b>Jenis Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Kategori Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Tingkat Pelanggaran</b></td>
+					<td colspan="5" style="text-align:center"><b>Sanksi</b></td>
+					<td colspan="8" style="text-align:center"><b>Action</b></td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Menghilangkan atau menyebabkan kerusakan pada barang atau properti milik Perusahaan atau Klien.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Melakukan tindakan apa pun yang mengatasnamakan Peíusahaan yang dapat menyebabkan keíugian baik materil maupun immaterial terhadap Perusahaan, Karyawan lain, atau Klien.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Berkata-kata kasar atau dianggap tidak sopan kepada Klien, pegawai Perusahaan, atau siapa pun yang terlibat dalam melakukan pekerjaan, tugas atau projek.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Mengancam atau mengintimidasi, atau melakukan upaya percobaan untuk mengancam atau mengintimidasi Klien, pegawai Perusahaan, Karyawan atau pihak ketiga lainnya.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+
+				<tr>
+					<td colspan="15">Melakukan pencemaían nama baik Klien/Perusahaan yang dapat menyebabkan keíugian baik secara materil dan imateril baik secara langsung ataupun melalui platform social media.</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="5" style="text-align:center">I</td>
+					<td colspan="5" style="text-align:center">Termination</td>
+					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
+				</tr>
+				</table>
+
+				<br>
+
+';
+				$pdf->writeHTML($lampiran2, true, false, false, false, '');
+
 			
 				$fname = strtolower($fname);
 				$pay_month = strtolower(date("F Y"));

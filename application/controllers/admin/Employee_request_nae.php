@@ -718,7 +718,9 @@ class Employee_request_nae extends MY_Controller {
 				$data_up = array(
 					// 'migrasi' => '1',
 					'approved_naeby' =>  $session['user_id'],
-					'approved_naeon' => date("Y-m-d h:i:s")
+					'approved_naeon' => date("Y-m-d h:i:s"),
+					'approved_nomby' =>  $session['user_id'],
+					'approved_nomon' => date('Y-m-d h:i:s')
 
 				);
 			}
