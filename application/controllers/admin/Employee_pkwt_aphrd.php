@@ -75,7 +75,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 		// $employee = $this->Employees_model->get_employees_request_verify();
 		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
-		$employee = $this->Pkwt_model->get_monitoring_pkwt_aphrd();
+		$employee = $this->Pkwt_model->get_monitoring_pkwt_aphrd($session['employee_id']);
 
 		$data = array();
 

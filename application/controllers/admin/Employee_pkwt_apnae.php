@@ -88,6 +88,7 @@ class Employee_pkwt_apnae extends MY_Controller {
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
 				$basic_pay = $r->basic_pay;
 				$approve_nae = $r->approve_nae;
+				$approve_nae = $r->approve_nae;
 
 				if($approve_nae=='0'){
 

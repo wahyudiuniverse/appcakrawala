@@ -1,7 +1,7 @@
 <div class="container">
 
 <h3 style="text-align: center;"><strong><span style="color:red;">PORTAL PENGISIAN DATABASE KARYAWAN CUSSONS</span></strong></h3>
-<h3 style="text-align: center;"><strong><span style="color:red;">AKAN DITUTUP SABTU 5 AGUSTUS PUKUL 18:00 WIB</span></strong></h3>
+<h3 style="text-align: center;"><strong><span style="color:red;">AKAN DITUTUP JUM'AT 4 AGUSTUS PUKUL 17:00 WIB</span></strong></h3>
 <h3 style="text-align: center;"><strong><span style="color:red;">MOHON SEGERA MENGISI DATA DIRI ANDA.</span></strong></h3>
 <BR><BR>
 

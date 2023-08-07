@@ -300,16 +300,17 @@ class Pkwt_model extends CI_Model {
 	}
 
  	// monitoring request
-	public function get_monitoring_pkwt_aphrd() {
+	public function get_monitoring_pkwt_aphrd($empID) {
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 			FROM xin_employee_contract
 			WHERE status_pkwt = 0
 			AND approve_nae != 0
 			AND approve_nom != 0
 			AND approve_hrd = 0
 			AND cancel_stat = 0
-			ORDER BY contract_id DESC';
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
