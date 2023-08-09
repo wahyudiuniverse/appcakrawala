@@ -446,10 +446,18 @@ class Pkwt194 extends MY_Controller
 								<td colspan="5"></td>
 							</tr>
 
+
 							<br>
 							<tr>
 								<td ></td>
 								<td colspan="20">Jaminan kesehatan (BPJS Kesehatan) dan ketenagakerjaan (BPJS Tenaga kerja), penetapan syarat berserta ketentuan yang berlaku mengenai jaminan perawatan kesehatan ini sepenuhnya menjadi hak <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<br>
+							<tr>
+								<td ></td>
+								<td colspan="20">Note : -Bpjs Kesehatan & Ketenagakerjaan akan didaftarkan setelah karyawan memiliki minimal 10 Hari Kerja, dan akan didaftarkan di bulan berikutnya(Proses Mendaftar). Efektif terdaftar (Muncul Nomor) maksimal di tanggal 10 1 bulan setelah bulan proses pendaftaran, Apabila terjadi sesuatu hal dalam jam operasional pekerjaan baik dalam kesehatan maupun keselamatan di lingkungan kerja akan menjadi beban mandiri yaitu Karyawan Tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -489,7 +497,7 @@ class Pkwt194 extends MY_Controller
 				<br>
 					<tr>
 						<td>3.4</td>
-						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang besarnya diperhitungkan secara pro-rata/proposional dan berdasarkan lamanya waktu kerja dikali 1 (satu) bulan gaji (bagi karyawan kontrak kebijakan mengenai THR disesuaikan dengan kesepakatan antara PIHAK PERTAMA dan Pihak User/Klien). Dan diberikan secara proporsional kepada PIHAK KEDUA melalui gaji perbulan.</td>
+						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang besarnya diperhitungkan secara pro-rata/proposional dan berdasarkan lamanya waktu kerja dikali 1 (satu) bulan gaji (bagi karyawan kontrak kebijakan mengenai THR disesuaikan dengan kesepakatan antara <b>PIHAK PERTAMA</b> dan Pihak User/Klien). Dan diberikan secara proporsional kepada <b>PIHAK KEDUA</b> melalui gaji perbulan.</td>
 					</tr>
 				<br>
 					<tr>
@@ -507,7 +515,7 @@ class Pkwt194 extends MY_Controller
 						<td colspan="18">Apabila masa kerja telah melampaui 1 (satu) bulan tetapi belum genap 12 (dua belas) bulan, maka Tunjangan Hari Raya (THR) akan dihitung secara proporsional.</td>
 					</tr>
 				</table>
-				<br><br><br><br><br><br><br>
+				<br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
@@ -538,17 +546,21 @@ class Pkwt194 extends MY_Controller
 
 							<tr>
 								<td></td>
-								<td colspan="18">•	6 hari kerja dalam 7 hari kalender</td>
+								<td colspan="18">•	5 hari kerja dalam 7 hari kalender</td>
 							</tr>
 
 							<tr>
 								<td></td>
-								<td colspan="18">•	Hari libur hari minggu</td>
+								<td colspan="18">•	Hari libur hari Sabtu & Minggu</td>
 							</tr>
 
+							<tr>
+								<td></td>
+								<td colspan="18">•	Apabila diperlukan masuk pada hari sabtu maka akan diberikan permintaan secara tertulis dari pihak Perusahaan</td>
+							</tr>
 				</table>
 
-			
+			<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">

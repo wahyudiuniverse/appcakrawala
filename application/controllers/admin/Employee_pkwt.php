@@ -641,7 +641,9 @@ class Employee_pkwt extends MY_Controller {
 							'sign_jabatan'					=> 'SM HR & GA',
 							'status_pkwt' => 0,
 							'request_pkwt' => $session['user_id'],
-							'request_date' => date('Y-m-d h:i:s')
+							'request_date' => date('Y-m-d h:i:s'),
+							'approve_nae' => $session['user_id'],
+							'approve_nae_date' => date('Y-m-d h:i:s')
 						);
 
 
