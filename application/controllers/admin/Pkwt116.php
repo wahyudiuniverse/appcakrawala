@@ -253,6 +253,7 @@ class Pkwt116 extends MY_Controller
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
 
+					$sum_salary = $pkwt[0]->basic_pay + $pkwt[0]->allowance_grade + $pkwt[0]->allowance_area + $pkwt[0]->allowance_masakerja + $pkwt[0]->allowance_meal + $pkwt[0]->allowance_transport + $pkwt[0]->allowance_rent + $pkwt[0]->allowance_komunikasi + $pkwt[0]->allowance_park + $pkwt[0]->allowance_residance + $pkwt[0]->allowance_laptop + $pkwt[0]->allowance_kasir + $pkwt[0]->allowance_transmeal + $pkwt[0]->allowance_medicine + $pkwt[0]->allowance_akomodasi + $pkwt[0]->allowance_operation;
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
 					$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
@@ -403,7 +404,7 @@ class Pkwt116 extends MY_Controller
 								<td colspan="18"><b>PIHAK PERTAMA</b> berdasarkan pertimbangan tertentu berhak memindah ke bagian lain serta merubah nama Jabatan <b>PIHAK KEDUA</b> dan karenanya <b>PIHAK KEDUA</b> wajib bersedia untuk dipindah ke bagian lain dan atau dirubah nama jabatannya sesuai dengan kebutuhan. Dalam hal ini <b>PIHAK PERTAMA</b> akan memberitahukan hal tersebut secara tertulis kepada <b>PIHAK KEDUA</b>.</td>
 							</tr>
 				</table>
-				<br>
+				<br><br><br><br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 2<br>JANGKA WAKTU PERJANJIAN</b>
@@ -495,7 +496,7 @@ class Pkwt116 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA dengan jam kerja normal adalah 7 jam kerja dalam lima hari kerja dan 5 jam kerja dalam satu hari kerja dengan total 40 (empat puluh) jam kerja untuk 1 (satu) minggu.</td>
+								<td colspan="18">Hari kerja normal adalah  hari kerja dalam 1 bulan kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
 							</tr>
 				<br>
 							<tr>
@@ -510,7 +511,7 @@ class Pkwt116 extends MY_Controller
 
 					</table>
 
-				<br>
+				<br><br><br><br><br>
 
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
@@ -774,7 +775,7 @@ class Pkwt116 extends MY_Controller
 								<td colspan="18">Dalam hal pengunduran diri tidak dilakukan dengan tata cara yang baik dan benar, maka <b>PIHAK PERTAMA</b> berhak memberikan sanksi kepada <b>PIHAK KEDUA</b> bilamana <b>Pihak kedua</b> mengundurkan diri sebelum masa kontrak berakhir.</td>
 							</tr>
 
-				<br>
+				<br><br><br>
 							<tr>
 								<td>m.</td>
 								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Siprama Cakrawala.</td>
@@ -931,7 +932,154 @@ class Pkwt116 extends MY_Controller
 								</td>
 							</tr>
 				</table>
-<br>
+
+
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>PAGU PINJAMAN /PLAFON PINJAMAN</b></td>
+							</tr>			
+				</table>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Besarnya maksimal pinjaman yang dapat diajukan kekoprasi adalah 1x dari Gaji Pokok.</td>
+							</tr>			
+				</table>
+
+<br><br>
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+							</tr>			
+				</table>
+				
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Dengan mempertimbangkan keberadaan Koperasi yang merupakan bagian yang tidak dapat dipisahkan dari bisnis utama dari Perusahaan. Dalam hal ini Perusahaan tergantung atas adanya Kontrak Kerjasama dengan Client/Customer maka :</td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>a.</td>
+								<td colspan="20">Karyawan yang dapat mengajukan pinjaman adalah karyawan yang telah menjadi anggota koperasi dengan 	ketentuan lebih lanjut</td>
+							</tr>
+							<tr>
+								<td>b.</td>
+								<td colspan="20">Memiliki kinerja yang baik dan tidak memiliki catatan dari  masing-masing pengawas</td>
+							</tr>
+				
+							<tr>
+								<td>c.</td>
+								<td colspan="20">Lamanya tenggang/tenor pinjaman maksimal mengikuti batas kontrak karyawan terhadap perusahaan dengan 	tetap mempertimbangan kontrak kerjasama Perusahaan  dengan Client/Customer.</td>
+							</tr>
+				</table>
+
+				<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Karyawan yang dapat mengajukan pinjaman hanyalah karyawan yang sudah menjadi anggota Koperasi dengan mengisi formulir pengajuan pinjaman dan harus atas persetujuan atasan dan Department  HR dengan memperhatikan ketentuan sebagai berikut :</td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>a.</td>
+								<td colspan="20">Anggota yang telah membayar simpanan pokok (satu kali) dan dua kali simpanan wajib.</td>
+							</tr>
+							<tr>
+								<td>b.</td>
+								<td colspan="20">Pinjaman akan diberikan berdasarkan urutan formulir yang telah masuk ke pengurus koperasi</td>
+							</tr>
+							<tr>
+								<td>c.</td>
+								<td colspan="20">Pinjaman diberikan dengan tetap memperhatikan ketersediaan keuangan koperasi</td>
+							</tr>
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Batas akhir penyerahan aplikasi pengajuan pinjaman adalah setiap tanggal 24 di setiap bulannya untuk pencairan di bulan berikutnya.</td>
+							</tr>			
+				</table>
+
+
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Seluruh simpanan baik simpanan  pokok, wajib  tidak dapat diambil selama masih menjadi anggota Koperasi.</td>
+							</tr>
+
+							<tr>
+								<td>Pengembalian simpanan anggota dapat setelah anggota tidak lagi menjadi anggota Koperasi. Dananya diberikan setelah 1 bulan periode penggajian terhitung sejak anggota tidak menjadi anggota Koperasi.</td>
+							</tr>
+
+							<tr>
+								<td>Apabila anggota keluar  namun masih memiliki kewajiban kepada Koperasi maka : </td>
+							</tr>
+
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Total simpanan anggota akan diperhitungkan untuk melunasi kewajiban pinjaman</td>
+							</tr>
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Apabila masih belum cukup melunasi kewajiban terhadap koperasi maka Gaji bulan terakhir akan dipotong untuk melunasi kewajiban tersebut</td>
+							</tr>
+							<tr>
+								<td>3.</td>
+								<td colspan="20">Apabila masih belum cukup melunasi juga, maka koperasi akan mengusulkan kepada Departemen HR untuk tidak memberikan surat pengalaman kerja sampai kewajibannya telah dilunasi</td>
+							</tr>
+				</table>
+
+				<br>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>MEKANISME PENGEMBALIAN SIMPANAN KOPERASI</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Pengembalian simpanan koperasi akan dikembalikan kepada karyawan yang bergabung sebagai anggota koperasi yaitu 1 bulan setelah karyawan resign sesuai dengan ketentuan didalam PKWT. Pengembalian dilakukan dengan cara transfer ke rekening <b>PIHAK KEDUA</b>.</td>
+							</tr>
+
+
+				</table>
+
+				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
@@ -1051,6 +1199,8 @@ class Pkwt116 extends MY_Controller
 				<br>			<br>
 				<br>			<br>
 				<br>			<br>
+				<br>			<br><br><br>
+				<br>			<br><br><br>
 				<br>			<br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1360,7 +1510,7 @@ class Pkwt116 extends MY_Controller
 				</tr>
 				<tr>
 					<td>Waktu Kerja</td>
-					<td colspan="5">8 Jam Kerja 1 Jam Istirahat  atau sesuai dengan ketentuan di klien</td>
+					<td colspan="5">8 Jam Kerja 30 Menit Istirahat  atau 08:00-16:30 WIB (Sesuai dengan ketentuan Klien)</td>
 				</tr>
 				<tr>
 					<td>Upah per bulan</td>
@@ -1368,7 +1518,7 @@ class Pkwt116 extends MY_Controller
 					<table cellpadding="2" cellspacing="0" border="0">
 						<tr>
 							<td>Gaji Pokok</td>
-							<td colspan="3"> : '.$basicpay.',- Per Bulan</td>
+							<td colspan="3"> : '.$basicpay.',- Per Bulan / Gross</td>
 						</tr>';
 
 
@@ -1377,7 +1527,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Grade</td>
-							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_grade.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1386,7 +1536,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Area</td>
-							<td colspan="3"> : '.$allowance_area.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_area.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1395,7 +1545,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Masa Kerja</td>
-							<td colspan="3"> : '.$allowance_masakerja.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_masakerja.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1404,7 +1554,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Hari / Gross</td>
 						</tr>';
 				}
 				
@@ -1413,8 +1563,14 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
-						</tr>';
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari / Gross</td>
+						</tr>
+
+						<tr>
+							<td colspan="20">(Uang transport diberikan sesuai dengan HK karyawan dengan ketentuan sebesar '.$allowance_transport.' Per Kehadiran)</td>
+							<td></td>
+						</tr>
+						';
 				}
 
 				if($allowance_rent!="Rp 0"){	
@@ -1422,7 +1578,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_rent.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1431,7 +1587,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1440,7 +1596,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Parkir</td>
-							<td colspan="3"> : '.$allowance_park.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_park.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1449,7 +1605,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Tempat Tinggal</td>
-							<td colspan="3"> : '.$allowance_residance.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_residance.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1458,7 +1614,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Laptop</td>
-							<td colspan="3"> : '.$allowance_laptop.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_laptop.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1468,7 +1624,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Kasir</td>
-							<td colspan="3"> : '.$allowance_kasir.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_kasir.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1477,7 +1633,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1486,7 +1642,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Kesehatan</td>
-							<td colspan="3"> : '.$allowance_medicine.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_medicine.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1496,7 +1652,7 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Akomodasi</td>
-							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
@@ -1506,11 +1662,12 @@ class Pkwt116 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Operasional</td>
-							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_operation.',- Per Bulan / Gross</td>
 						</tr>';
 				}
 
 				$lampiran .= '	
+						
 					</table>
 
 					</td>
@@ -1549,7 +1706,7 @@ class Pkwt116 extends MY_Controller
 
 					<table cellpadding="2" cellspacing="0" border="0">
 						<tr>
-							<td>Jaminan Kecelakaan Kerja 0,24% ditanggung oleh Pihak Pertama</td>
+							<td>Jaminan Kecelakaan Kerja 0,89% ditanggung oleh Pihak Pertama</td>
 						</tr>
 						<tr>
 							<td>Jaminan Kematian 0,3 % ditanggung oleh Pihak Pertama</td>

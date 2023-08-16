@@ -4126,6 +4126,8 @@ class Employees extends MY_Controller {
 			// $Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			// $Return['csrf_hash'] = $this->security->get_csrf_hash();
 				
+				$employee_id 				= $this->input->post('employee_id');
+
 			/* Server side PHP input validation */		
 			if($this->input->post('nomor_ktp')==='') {
 				 $Return['error'] = 'Nomor KTP Kosong..!';
@@ -4166,6 +4168,8 @@ class Employees extends MY_Controller {
 			}
 
 			else {
+
+
 				// $Return['error'] = 'SIZE:'.$_FILES['document_file']['size'];
 							// if($_FILES['document_file']['size'] > 2000000){
 							// 	$Return['error'] = 'File PKWT Lebih dari 2MB..';
@@ -4186,7 +4190,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file"]["name"]);
-											$newfilename = 'ktp_'.round(microtime(true)).'.'.$ext;
+											$newfilename = 'ktp_'.$employee_id.'.'.$ext;
 											move_uploaded_file($tmp_name, $documentd.$newfilename);
 											$fname = $newfilename;
 										} else {
@@ -4211,7 +4215,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_kk"]["name"]);
-											$newfilenamekk = 'kk_'.round(microtime(true)).'.'.$extkk;
+											$newfilenamekk = 'kk_'.$employee_id.'.'.$extkk;
 											move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
 											$fname_kk = $newfilenamekk;
 										} else {
@@ -4236,7 +4240,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_npwp"]["name"]);
-											$newfilename_npwp = 'npwp_'.round(microtime(true)).'.'.$ext_npwp;
+											$newfilename_npwp = 'npwp_'.$employee_id.'.'.$ext_npwp;
 											move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
 											$fname_npwp = $newfilename_npwp;
 										} else {
@@ -4260,7 +4264,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_cv"]["name"]);
-											$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
+											$newfilename_cv = 'cv_'.$employee_id.'.'.$ext_cv;
 											move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
 											$fname_cv = $newfilename_cv;
 										} else {
@@ -4284,7 +4288,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_skck"]["name"]);
-											$newfilename_skck = 'skck_'.round(microtime(true)).'.'.$ext_skck;
+											$newfilename_skck = 'skck_'.$employee_id.'.'.$ext_skck;
 											move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
 											$fname_skck = $newfilename_skck;
 										} else {
@@ -4308,7 +4312,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_isd"]["name"]);
-											$newfilename_isd = 'isd_'.round(microtime(true)).'.'.$ext_isd;
+											$newfilename_isd = 'isd_'.$employee_id.'.'.$ext_isd;
 											move_uploaded_file($tmp_name_isd, $documentd_isd.$newfilename_isd);
 											$fname_isd = $newfilename_isd;
 										} else {
@@ -4332,7 +4336,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_pak"]["name"]);
-											$newfilename_pak = 'pak_'.round(microtime(true)).'.'.$ext_pak;
+											$newfilename_pak = 'pak_'.$employee_id.'.'.$ext_pak;
 											move_uploaded_file($tmp_name_pak, $documentd_pak.$newfilename_pak);
 											$fname_pak = $newfilename_pak;
 										} else {
@@ -4356,7 +4360,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_pkwt"]["name"]);
-											$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
+											$newfilename_pkwt = 'pkwt_'.$employee_id.'.'.$ext_pkwt;
 											move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
 											$fname_pkwt = $newfilename_pkwt;
 										} else {

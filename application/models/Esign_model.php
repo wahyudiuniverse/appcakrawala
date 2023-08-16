@@ -127,7 +127,7 @@ class Esign_model extends CI_Model {
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,project_id,month(date_of_leaving) bln_skrng
 		FROM xin_employees 
 		WHERE is_active = 1 
-		AND status_resign in (2,4,5)
+		AND status_resign in (2,4)
 		AND approve_resignhrd is not null
 		AND employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
 		UNION

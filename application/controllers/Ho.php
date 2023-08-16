@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Daftar extends MY_Controller {
+class ho extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -33,7 +33,7 @@ class Daftar extends MY_Controller {
 		if($system[0]->module_recruitment!='true'){
 			redirect('admin/');
 		}
-		$data['title'] = 'DATABASE KARYAWAN CUSSONS 2023';
+		$data['title'] = 'DATABASE KARYAWAN HO 2023';
 		$session = $this->session->userdata('c_user_id');
 		if(!empty($session)){
 			redirect('');
@@ -44,7 +44,7 @@ class Daftar extends MY_Controller {
 		$data['all_designation'] = $this->Xin_model->get_designations();
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['path_url'] = 'job_create_user';
-		$data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
+		$data['subview'] = $this->load->view("frontend/hrpremium/register_ho", $data, TRUE);
 		// $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
@@ -246,7 +246,7 @@ class Daftar extends MY_Controller {
 							// 'employee_id' => '0',
 							'company_id' => '2',
 							'location_id' => '1',
-							'sub_project' => '184',
+							'sub_project' => '1',
 							'department' => '5',
 
 							'fullname' => $this->input->post('first_name'),
@@ -318,14 +318,14 @@ class Daftar extends MY_Controller {
 			redirect('admin/');
 		}
 		$data['title'] = 'Daftar Karyawan';
-		$data['path_url'] = 'jobs_success';
+		$data['path_url'] = 'jobs_success_ho';
 		$data['fullname'] = $this->uri->segment(3);
 		// $session = $this->session->userdata('c_user_id');
 		// if(empty($session)){
 		// 	redirect('employer/sign_in/');
 		// }
 		// $data['all_job_categories'] = $this->Recruitment_model->all_job_categories();
-		$data['subview'] = $this->load->view("frontend/hrpremium/view_daftar_success", $data, TRUE);
+		$data['subview'] = $this->load->view("frontend/hrpremium/view_daftar_success_ho", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
 
@@ -346,7 +346,7 @@ class Daftar extends MY_Controller {
 		$length = intval($this->input->get("length"));
 		
 		// $jobs = $this->Job_post_model->get_employer_jobs($session['c_user_id']);
-		$jobs = $this->Employees_model->get_monitoring_daftar();
+		$jobs = $this->Employees_model->get_monitoring_daftar_ho();
 
 		$data = array();
 

@@ -250,6 +250,23 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 
 
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" >
+    <div class="row" style="background-color: #ff4f4f;">
+      <!-- REQUESTED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi" style="color: white;">Info Revisi</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant" style="color: white;"><?php echo ': '.$info_revisi;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- REQUESTED -->

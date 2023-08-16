@@ -21,16 +21,10 @@
     <?php } ?>  
 
     <?php if(in_array('374',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_nae/');?>" data-link-data="<?php echo site_url('admin/employee_request_nae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>HO - NAE <?php echo '('.$count_emp_request_nae.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_nae/');?>" data-link-data="<?php echo site_url('admin/employee_request_nae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN BARU <?php echo '('.$count_emp_request_nae.')';?>
       </a> </li>
     <?php } ?>
 
-
-
-    <?php if(in_array('375',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_nom/');?>" data-link-data="<?php echo site_url('admin/Employee_request_nom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>HO - NOM <?php echo '('.$count_emp_request_nom.')';?>
-      </a> </li>
-    <?php } ?>
 
     <?php if(in_array('378',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_hrd/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>HO - HRD <?php echo '('.$count_emp_request_hrd.')';?>

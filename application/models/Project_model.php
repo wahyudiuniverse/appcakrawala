@@ -20,9 +20,16 @@ class Project_model extends CI_Model {
 	  return $this->db->get("xin_projects_akses");
 	}
 	// get all employees
-	public function all_projects()
+	public function all_projects_admin()
 	{
 	  $query = $this->db->query("SELECT * from xin_projects");
+  	  return $query->result();
+	}
+
+	// get all employees
+	public function all_projects()
+	{
+	  $query = $this->db->query("SELECT * from xin_projects WHERE project_id not in (22);");
   	  return $query->result();
 	}
 

@@ -1,11 +1,11 @@
 <div class="container">
 
-<h3 style="text-align: center;"><strong><span style="color:red;">PORTAL PENGISIAN DATABASE KARYAWAN CUSSONS</span></strong></h3>
-<h3 style="text-align: center;"><strong><span style="color:red;">AKAN DITUTUP JUM'AT 4 AGUSTUS PUKUL 17:00 WIB</span></strong></h3>
-<h3 style="text-align: center;"><strong><span style="color:red;">MOHON SEGERA MENGISI DATA DIRI ANDA.</span></strong></h3>
-<BR><BR>
+<h3 style="text-align: center;" hidden><strong><span style="color:red;">PORTAL PENGISIAN DATABASE KARYAWAN CUSSONS</span></strong></h3>
+<h3 style="text-align: center;" hidden><strong><span style="color:red;">AKAN DITUTUP JUM'AT 4 AGUSTUS PUKUL 17:00 WIB</span></strong></h3>
+<h3 style="text-align: center;" hidden><strong><span style="color:red;">MOHON SEGERA MENGISI DATA DIRI ANDA.</span></strong></h3>
 
-		<a href="<?php echo site_url('daftar/success/');?>" class="button" target="_blank">LIHAT DAFTAR TERSIMPAN</a>
+
+		<a href="<?php echo site_url('ho/success/');?>" class="button" target="_blank">LIHAT DAFTAR TERSIMPAN</a>
 
 	<div class="my-account">
 
@@ -17,7 +17,7 @@
 
                 <?php $attributes = array('id' => 'xin-form', 'class' => 'register', 'autocomplete' => 'on');?>
 				<?php $hidden = array('register' => '1');?>
-                <?php echo form_open('daftar/tambah_kandidat/', $attributes, $hidden);?>	
+                <?php echo form_open('ho/tambah_kandidat/', $attributes, $hidden);?>	
 
 
                 <input type="hidden" name="hrpremium_view" value="1" />
@@ -218,7 +218,7 @@
 					<label for="project_id">PROJECT:
 						<i class="ln ln-icon-Male"></i>					
 						<select id="project_id" name="project_id" data-placeholder="Choose Category" class="chosen-select">
-						<option value="89">PT. PZ CUSSONS INDONESIA</option>
+						<option value="22">PT. SIPRAMA CAKRAWALA</option>
 					</select>
 					</label>
 				</p>
@@ -229,18 +229,59 @@
 
 						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select">
 								<option value="">--Pilih Salah Satu--</option>
-                        <option value="38">ADMIN</option>
-                        <option value="38">ADMIN ANALISIS</option>
-                        <option value="587">BA MOBILE</option>
-                        <option value="588">BA STAY</option>
-                        <option value="589">JABATAMCR</option>
-                        <option value="590">MCR</option>
-                        <option value="591">MCR MINI MARKET</option>
-                        <option value="592">PIC ACTIVATION</option>
-                        <option value="212">TEAM LEADER</option>
-                        <option value="593">MANAGER ANALYST</option>
-                        <option value="153">PROJECT MANAGER</option>
-                        <option value="594">SALES OPERATION MANAGER</option>
+                        <option value="15">ACCCOUNT RECIEVABLE</option>
+<option value="16">ACCOUNT PAYMENT</option>
+<option value="39">ADMIN AREA</option>
+<option value="28">ADMIN BPJS</option>
+<option value="48">ADMIN FINANCE</option>
+<option value="595">ADMIN FREELANCE</option>
+<option value="29">ADMIN HRD</option>
+<option value="551">ADMIN LEGAL</option>
+<option value="552">ADMIN MARKETING</option>
+<option value="56">ADMIN OPERATIONAL</option>
+<option value="22">ADMIN PAYROLL</option>
+<option value="43">ADMIN PROJECT</option>
+<option value="516">ADMIN TAX</option>
+<option value="38">ADMIN</option>
+<option value="461">APROVAL TOKEN</option>
+<option value="40">AREA MANAGER</option>
+<option value="7">ASSISTANT MANAGER HRD</option>
+<option value="1">BOD</option>
+<option value="90">CLEANING SERVICE</option>
+<option value="523">FINANCE & ACCOUNTING AP</option>
+<option value="37">FREELANCE</option>
+<option value="32">GA </option>
+<option value="26">IT  SUPPORT</option>
+<option value="27">IT DESIGN OFFICER</option>
+<option value="25">IT PROGRAMMER</option>
+<option value="21">LEADER PAYROLL</option>
+<option value="126">LEARNING AND DEVELOPMENT </option>
+<option value="441">LEGAL & FIELD EXECUTIVE</option>
+<option value="125">LEGAL STAFF</option>
+<option value="462">MAGANG</option>
+<option value="565">MANAGER SDM</option>
+<option value="491">MARKETING MANAGER</option>
+<option value="14">MESSANGER</option>
+<option value="17">NAE ADMIN / PIC NASIONAL</option>
+<option value="18">NAE ADMIN RATECARD</option>
+<option value="8">NATIONAL OPERATION MANAGER</option>
+<option value="274">OFFICE BOY</option>
+<option value="155">PIC</option>
+<option value="164">QUALITY SUPPORT</option>
+<option value="36">RECEPTIONIST</option>
+<option value="33">RTO </option>
+<option value="208">SECURITY</option>
+<option value="4">SM FINANCE</option>
+<option value="2">SM HR & GA</option>
+<option value="3">SM OPERASIONAL</option>
+<option value="5">SM SALES & MARKETING</option>
+<option value="484">SOCIAL MEDIA AND DESIGN</option>
+<option value="478">SOCIAL MEDIA CONTENT CREATOR</option>
+<option value="9">STAFF MARKETING</option>
+<option value="24">STAFF PROCUREMENT</option>
+<option value="13">TAX</option>
+<option value="12">TREASURY</option>
+
 					</select>
 
 					</label>

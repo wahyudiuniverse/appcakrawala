@@ -506,7 +506,7 @@
                       ?>
 
                         <input name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
-
+                        <input name="employee_id" type="text" value="<?php echo $employee_id;?>" hidden>
                         <input name="nomor_ktp" type="text" value="<?php echo $ktp_no;?>" hidden>
                         <input name="kk_no" type="text" value="<?php echo $kk_no;?>" hidden>
                         <input name="npwp_no" type="text" value="<?php echo $npwp_no;?>" hidden>

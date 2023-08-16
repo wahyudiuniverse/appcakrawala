@@ -35,9 +35,16 @@ class Akses_project extends MY_Controller {
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+		
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['title'] = $this->lang->line('xin_akses_project').' | '.$this->Xin_model->site_title();
 		$data['all_employees'] = $this->Xin_model->all_employees();
-		$data['all_projects'] = $this->Project_model->all_projects();
+
+		if($user_info[0]->user_role_id==1){
+			$data['all_projects'] = $this->Project_model->all_projects_admin();
+		} else {
+			$data['all_projects'] = $this->Project_model->all_projects();
+		}
 		// $data['get_all_companies'] = $this->Xin_model->get_companies();
 		//$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['breadcrumbs'] = $this->lang->line('xin_akses_project');
@@ -74,7 +81,9 @@ class Akses_project extends MY_Controller {
 		// } else {
 		// 	$designation = $this->Designation_model->get_company_designations($user_info[0]->company_id);
 		// }
-		$aksesproject = $this->Project_model->get_akses_projects();
+
+			$aksesproject = $this->Project_model->get_akses_projects();
+
 		$data = array();
 
       foreach($aksesproject->result() as $r) {

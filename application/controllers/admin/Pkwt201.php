@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt192 extends MY_Controller 
+class Pkwt201 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -400,18 +400,18 @@ class Pkwt192 extends MY_Controller
 							</tr>
 				</table>
 				<br><br><br><br><br><br><br>
-				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 2<br>JANGKA WAKTU PERJANJIAN</b>
 				</div>
-				
 				<br>
+
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. PKWT berlaku selama <b>'.$waktukontrak.'</b> bulan apabila <b>PIHAK KEDUA</b> selama 2 bulan pencapaian &#60;70% maka bersedia untuk mengundurkan diri/resign.</td>
+								<td colspan="18"><b>PKWT</b> ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. Selama PIHAK KEDUA menjadi Karyawan Kontrak maka akan dilakukan evaluasi kinerja sesuai dengan hasi review dari perusahaan/klien.
+								</td>
 							</tr>
 				<br>
 							<tr>
@@ -537,7 +537,7 @@ class Pkwt192 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal dalam 1 bulan adalah '.$waktukerja.' hari kerja kalender sesuai dengan ketentuan PIHAK PERTAMA</td>
+								<td colspan="18">Hari kerja normal dalam 1 bulan adalah '.$waktukerja.' hari kerja kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
 							</tr>
 				<br>
 							<tr>
@@ -558,14 +558,18 @@ class Pkwt192 extends MY_Controller
 
 							<tr>
 								<td></td>
-								<td colspan="18">•	6 hari kerja dalam 7 hari kalender</td>
+								<td colspan="18">•	5 hari kerja dalam 7 hari kalender</td>
 							</tr>
 
 							<tr>
 								<td></td>
-								<td colspan="18">•	Hari libur sesuai dengan hari yang ditentukan oleh perusahaan/pihak toko</td>
+								<td colspan="18">•	Hari libur hari Sabtu & Minggu</td>
 							</tr>
 
+							<tr>
+								<td></td>
+								<td colspan="18">•	Apabila diperlukan masuk pada hari sabtu maka akan diberikan permintaan secara tertulis dari pihak Perusahaan</td>
+							</tr>
 				</table>
 
 			<br>
@@ -639,7 +643,7 @@ class Pkwt192 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br><br><br><br><br><br>
+				<br><br><br><br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1780,48 +1784,13 @@ class Pkwt192 extends MY_Controller
 <br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
-<br><br><br><br><br><br>
+<br><br><br><br>
+<br>
 				
-				<table cellpadding="2" cellspacing="0" border="0">
 
+				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>
 						<td><b>Lampiran 2</b></td>
-						<td colspan="5"><b>INDIKATOR PENILAIAN</b></td>
-					</tr>
-<br>
-					<tr>
-						<td colspan="5"	><b>KPI TL (TEAM LEADER)</b></td>
-						<td></td>
-					</tr>
-
-				</table>
-
-
-
-					<img src="'.base_url().'assets/lampiran2_tl.png" alt="Trulli" width="650" height="220">
-
-
-				<br>
-				<br>
-				<br>
-				<br>
-
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br>
-
-
-				<table cellpadding="2" cellspacing="0" border="0">
-					<tr>
-						<td><b>Lampiran 3</b></td>
 						<td colspan="5"><b>JENIS PELANGGARAN</b></td>
 					</tr>
 <br>
@@ -1845,11 +1814,14 @@ class Pkwt192 extends MY_Controller
 
 					<img src="'.base_url().'assets/lampiran3.png" alt="Trulli" width="650" height="500">
 
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+
+
+
+
 
 				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>

@@ -423,7 +423,7 @@ class employee_resign_aphrd extends MY_Controller {
 					// 'migrasi' => '1',
 					'cancel_resign_stat' =>  1,
 					'cancel_date' => date("Y-m-d h:i:s"),
-					'cancel_ket' => 'REVISI DOKUMEN PENDUKUNG',
+					'cancel_ket' => $this->input->post('ket_revisi'),
 					'status_employee' => 0, //0 = resign, 1 = aktif
 					'user_role_id' => 2,
 

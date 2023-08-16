@@ -95,7 +95,7 @@ class Employee_request_hrd extends MY_Controller {
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
 				$approved_hrdby = $r->approved_hrdby;
-			  
+
 
 				if($approved_hrdby==null){
 
@@ -604,14 +604,14 @@ class Employee_request_hrd extends MY_Controller {
 
 					//PKWT ATTRIBUTE
 					if ($company_id=='2'){
-						$pkwt_hr = 'E-PKWT-JKTSC-HR/';
-						$spb_hr = 'E-SPB-JKTSC-HR/';
+						$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+						$spb_hr = 'E-SPB-JKT/SC-HR/';
 					} else if($company_id=='3') {
-						$pkwt_hr = 'E-PKWT-JKTKAC-HR/';
-						$spb_hr = 'E-SPB-JKTKAC-HR/';
+						$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+						$spb_hr = 'E-SPB-JKT/KAC-HR/';
 					} else {
-						$pkwt_hr = 'E-PKWT-JKTMATA-HR/';
-						$spb_hr = 'E-SPB-JKTMATA-HR/';
+						$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+						$spb_hr = 'E-SPB-JKT/MATA-HR/';
 					}
 
 					$count_pkwt = $this->Xin_model->count_pkwt();

@@ -410,20 +410,14 @@ class Pkwt194 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>
-													'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>
-																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan. PKWT berlaku selama 6 bulan apabila PIHAK KEDUA selama 2 bulan pencapaian &#60;70% maka bersedia untuk mengundurkan diri/resign</td>
+								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan dilakukan evaluasi kinerja sesuai dengan hasi review dari perusahaan/klien.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka <b>PIHAK KEDUA</b> tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
-							</tr>
-				<br>
-							<tr>
-								<td>c.</td>
 								<td colspan="18"><b>PIHAK PERTAMA</b> berhak memutuskan/memberhentikan PKWT <b>PIHAK KEDUA</b> apabila jika pada saat masa Evaluasi Kinerja tidak sesuai dengan komitmen dan kinerja, walaupun PKWT masih berlaku/berjalan.</td>
 							</tr>
+
 				</table>
 				<br>
 
@@ -492,30 +486,48 @@ class Pkwt194 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>3.3</td>
-						<td colspan="18">Pembayaran gaji dilakukan setiap akhir bulan sesuai kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>, jika akhir bulan jatuh pada hari libur, maka pembayaran akan dilakukan 1 (satu) hari lebih awal. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
+						<td colspan="18">Pembayaran gaji dilakukan sesuai dengan lampiran 1,  kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomor rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomor rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
 					</tr>
 				<br>
 					<tr>
 						<td>3.4</td>
-						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang besarnya diperhitungkan secara pro-rata/proposional dan berdasarkan lamanya waktu kerja dikali 1 (satu) bulan gaji (bagi karyawan kontrak kebijakan mengenai THR disesuaikan dengan kesepakatan antara <b>PIHAK PERTAMA</b> dan Pihak User/Klien). Dan diberikan secara proporsional kepada <b>PIHAK KEDUA</b> melalui gaji perbulan.</td>
+						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang diberikan paling cepat 10 Hari kerja sebelum hari raya sesuai dengan PP NO. 15 Tahun 2023 Pasal 11, dengan perhitungan sebagai berikut :</td>
+					</tr>
+				<br>
+					<tr>
+						<td></td>
+						<td colspan="18">Perhitungan = (Masa Kerja x 1 Bulan Upah (Gaji Pokok)) / 12 Bulan.</td>
+					</tr>
+				<br>
+					<tr>
+						<td></td>
+						<td colspan="18">Tunjangan Hari Raya (THR) diberikan kepada karyawan yang telah menjalani masa kerja sekurang-kurangnya 1 (satu) bulan (ketentuan dan kebijakan bagi Karyawan Kontrak akan disesuaikan dengan peraturan dan atau kesepakatan dengan pihak User/Klien). Apabila masa kerja telah melampaui 1 (satu) bulan tetapi belum genap 12 (dua belas) bulan, maka Tunjangan Hari Raya (THR) akan dihitung secara proporsional.</td>
 					</tr>
 				<br>
 					<tr>
 						<td>3.5</td>
-						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak). Pengajuan cuti diajukan menggunakan form cuti dan diajukan minimal 7 hari sebelum  cuti dan sudah disetujui oleh atasan.</td>
+						<td colspan="18">Pemberian UUCK ( undang undang cipta kerja ) / kompensasi diberikan setelah masa kontrak berakhir dengan catatan hasil evaluasi kinerja dinyatakan sesuai dengan KPI yang berlaku, dengan perhitungan yang mengacu terhadap PP Nomor 35 Tahun 2021 sebagai berikut :</td>
+					</tr>
+				<br>
+					<tr>
+						<td></td>
+						<td colspan="18">Masa Kerja 1 – &#60;12 Bulan Uang Kompensasi = (Masa Kerja/12) x 1 Bulan Upah (Gaji Pokok)</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="18">Masa Kerja &#62;12 Bulan Uang Kompensasi = (Masa Kerja/12) x 1 Bulan Upah (Gaji Pokok)</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="18">Masa Kerja selama 12 bulan terus menerus	 = 1 Bulan Upah (Gaji Pokok) </td>
 					</tr>
 				<br>
 					<tr>
 						<td>3.6</td>
-						<td colspan="18">Tunjangan Hari Raya (THR) diberikan kepada karyawan yang telah menjalani masa kerja sekurang-kurangnya 1 (satu) bulan (ketentuan dan kebijakan bagi Karyawan Kontrak akan disesuaikan dengan peraturan dan atau kesepakatan dengan pihak User/Klien).</td>
-					</tr>
-				<br>
-					<tr>
-						<td>3.7</td>
-						<td colspan="18">Apabila masa kerja telah melampaui 1 (satu) bulan tetapi belum genap 12 (dua belas) bulan, maka Tunjangan Hari Raya (THR) akan dihitung secara proporsional.</td>
+						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak). Pengajuan cuti diajukan menggunakan form cuti dan diajukan minimal 7 hari sebelum  cuti dan sudah disetujui oleh atasan..</td>
 					</tr>
 				</table>
-				<br><br>
+				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
@@ -525,7 +537,7 @@ class Pkwt194 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">4.1	Hari kerja normal dalam 1 bulan adalah '.$waktukerja.' hari kerja kalender sesuai dengan ketentuan PIHAK PERTAMA</td>
+								<td colspan="18">Hari kerja normal dalam 1 bulan adalah '.$waktukerja.' hari kerja kalender sesuai dengan ketentuan PIHAK PERTAMA</td>
 							</tr>
 				<br>
 							<tr>
@@ -631,7 +643,7 @@ class Pkwt194 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br><br><br><br><br><br><br><br>
+				<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -946,7 +958,6 @@ class Pkwt194 extends MY_Controller
 								</td>
 							</tr>
 				</table>
-<br>
 
 				<br>
 				<br>
@@ -1075,6 +1086,24 @@ class Pkwt194 extends MY_Controller
 
 				<br>
 
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>MEKANISME PENGEMBALIAN SIMPANAN KOPERASI</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Pengembalian simpanan koperasi akan dikembalikan kepada karyawan yang bergabung sebagai anggota koperasi yaitu 1 bulan setelah karyawan resign sesuai dengan ketentuan didalam PKWT. Pengembalian dilakukan dengan cara transfer ke rekening <b>PIHAK KEDUA</b>.</td>
+							</tr>
+
+
+				</table>
+
+
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
 				</div>
@@ -1099,21 +1128,16 @@ class Pkwt194 extends MY_Controller
 				<br>
 							<tr>
 								<td>4.</td>
-								<td colspan="20"><b>PKWT</b> ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
+								<td colspan="20"><b>PKWT</b> ini hanya dapat diubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak. <b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>5.</td>
-								<td colspan="20"><b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
-							</tr>
-				<br>
-							<tr>
-								<td>6.</td>
 								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
 							</tr>
 				<br>
 							<tr>
-								<td>7.</td>
+								<td>6.</td>
 								<td colspan="20">Selama dalam hubungan kerja <b>PIHAK KEDUA</b> wajib mentaati dan melaksanakan ketentuan mengenai tata tertib, kedisiplinan dan kewajiban – kewajiban yang dibebankan kepada <b>PIHAK KEDUA</b>, sesuai dengan  ketentuan dalam peraturan perusahaan.</td>
 							</tr>
 				</table>
@@ -1208,6 +1232,11 @@ class Pkwt194 extends MY_Controller
 				<br>
 				<br>			
 				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>	
 				<br>			
 				<br>
 				<br>			
@@ -1319,7 +1348,7 @@ class Pkwt194 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">b.</td>
-								<td colspan="20">Selama saya menjadi Karyawan Kontrak maka akan ada Evaluasi kinerja setiap bulan dan atau <b>per 3 Bulan</b>. </td>
+								<td colspan="20">Selama saya menjadi Karyawan Kontrak maka akan ada Evaluasi kinerja setiap bulan dan atau <b>per 2 Bulan</b>. </td>
 							</tr>
 							<tr>
 								<td ></td>
@@ -1532,7 +1561,6 @@ class Pkwt194 extends MY_Controller
 							<td colspan="3"> : '.$basicpay.',- Per Bulan</td>
 						</tr>';
 
-
 				if($allowance_grade!="Rp 0"){
 				$lampiran .= '
 					
@@ -1690,31 +1718,10 @@ class Pkwt194 extends MY_Controller
 					<td>Periode Perhitungan</td>
 					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan</td>
 				</tr>
-				<tr>
-					<td>Tunjangan Lain</td>
-					<td colspan="5">
 
 
-					<table cellpadding="2" cellspacing="0" border="0">
-						<tr>
-							<td>Tunjangan Hari Raya (THR), dibayarkan dua minggu sebelum hari raya Idul Fitri dengan perhitungan sebagai berikut :</td>
-						</tr>
-						<tr>
-							<td>Masa kerja > 1 bulan < 1 tahun :  prorata x Gaji</td>
-						</tr>
-						<tr>
-							<td>Masa kerja > 1 tahun 1 kali gaji berjalan</td>
-						</tr>
-					</table>
-
-					</td>
-				</tr>
 				<tr>
 					<td>Jamsostek / BPJS Ketenagakerjaan</td>
-					<td colspan="5">Admin</td>
-				</tr>
-				<tr>
-					<td>Jabatan</td>
 					<td colspan="5">
 
 
@@ -1774,12 +1781,14 @@ class Pkwt194 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
 
+
 				$lampiran2 = '
 
 <br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
+<br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1789,7 +1798,7 @@ class Pkwt194 extends MY_Controller
 					</tr>
 <br>
 					<tr>
-						<td colspan="5"	><b>●	KPI ANALIST MANAJER</b></td>
+						<td colspan="5"	><b>KPI ANALIST MANAJER</b></td>
 						<td></td>
 					</tr>
 
@@ -1799,7 +1808,6 @@ class Pkwt194 extends MY_Controller
 
 					<img src="'.base_url().'assets/lampiran2_manager_analyst.png" alt="Trulli" width="650" height="400">
 
-
 				<br>
 				<br>
 				<br>
@@ -1812,6 +1820,7 @@ class Pkwt194 extends MY_Controller
 <br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
+<br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>
@@ -1839,7 +1848,12 @@ class Pkwt194 extends MY_Controller
 
 					<img src="'.base_url().'assets/lampiran3.png" alt="Trulli" width="650" height="500">
 
-<br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br>
 
 
 
@@ -1899,7 +1913,7 @@ class Pkwt194 extends MY_Controller
 					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
 				</tr>
 
-<br><br>
+
 				<tr>
 					<td colspan="15">Tidak hadir tanpa pemberitahuan (ALPA) sebanyak <b>2 kali, akumulasi atau berturut-turut</b>.</td>
 					<td colspan="5" style="text-align:center">Termination</td>
@@ -2017,8 +2031,6 @@ class Pkwt194 extends MY_Controller
 
 
 
-
-<br>
 				<br>
 				<br>
 
@@ -2076,9 +2088,6 @@ class Pkwt194 extends MY_Controller
 
 				</table>
 
-				<br>
-
-				<br>
 				<br>
 				<br>
 				<br>

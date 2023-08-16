@@ -371,7 +371,7 @@ class Customerservices extends MY_Controller
 				$email = '--';	
 			}
 			if(!is_null($r->contact_no)){
-				$kontak = $r->contact_no;
+				// $kontak = $r->contact_no;
 				$kontak = '<a href="https://wa.me/62'.$this->Xin_model->clean_post($r->contact_no).'" target="_blank">https://wa.me/62'.$this->Xin_model->clean_post($r->contact_no).'</a>';
 			} else {
 				$kontak = '--';	

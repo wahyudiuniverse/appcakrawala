@@ -100,7 +100,7 @@ class Employee_resign extends MY_Controller {
 				$approve_resignhrd = $r->approve_resignhrd;
 				$cancel_resign_stat = $r->cancel_resign_stat;
 
-				if(is_null($cancel_resign_stat) || $cancel_resign_stat==0){
+				if($cancel_resign_stat==1){
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal">DITOLAK</button>';
 				} else if(is_null($approve_resignnae) || $approve_resignnae=='0'){
 

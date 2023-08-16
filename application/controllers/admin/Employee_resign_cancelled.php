@@ -86,6 +86,7 @@ class Employee_resign_cancelled extends MY_Controller {
 				$date_of_leaving = $r->date_of_leaving;
 				$ktp_no = $r->ktp_no;
 				$penempatan = $r->penempatan;
+				$cancel_ket = $r->cancel_ket;
 				$approve_resignnae = $r->approve_resignnae;
 
 				if(is_null($approve_resignnae) || $approve_resignnae=='0'){
@@ -160,7 +161,7 @@ class Employee_resign_cancelled extends MY_Controller {
 				$date_of_leaving,
 				$penempatan,
 				$ktp_no,
-				$status_name,
+				'['.$status_name.']<br> <p style="background-color: #ff4f4f; color: white; padding-right: 5px; padding-left: 5px;">'.$cancel_ket.'</p>',
 				$dok_p,
 			);
           }
@@ -298,7 +299,7 @@ class Employee_resign_cancelled extends MY_Controller {
 				'doj' => $result[0]->date_of_joining,
 				'contact_no' => $result[0]->contact_no,
 				// 'email' => $result[0]->migrasi,
-				// 'logo' => $result[0]->tgl_migrasi,
+				'info_revisi' => $result[0]->cancel_ket,
 				'alamat_ktp' => $result[0]->alamat_ktp,
 				'penempatan' => $result[0]->penempatan,
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->request_resign_by),

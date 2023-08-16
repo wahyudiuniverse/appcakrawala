@@ -69,7 +69,7 @@ class ImportExcel extends MY_Controller
 		$data['path_url'] = 'hrpremium_import';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('126',$role_resources_ids) || in_array('127',$role_resources_ids)) {
+		if(in_array('127',$role_resources_ids) || in_array('127',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/import_excel/hr_import_excel", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
