@@ -135,7 +135,7 @@ class Employee_request_hrd extends MY_Controller {
 					$designation_name = '--';	
 				}
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">TOLAK</button>';
 
 			$data[] = array(
 				$no,

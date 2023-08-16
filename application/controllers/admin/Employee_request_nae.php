@@ -138,7 +138,7 @@ class Employee_request_nae extends MY_Controller {
 				}
 
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">TOLAK</button>';
 
 			$data[] = array(
 				$no,

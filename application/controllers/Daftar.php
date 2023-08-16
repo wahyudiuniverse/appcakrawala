@@ -132,181 +132,194 @@ class Daftar extends MY_Controller {
 				else {
 
 
-								if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
-									//checking image type
-									$allowed =  array('png','jpg','jpeg','pdf');
-									$filename = $_FILES['foto_ktp']['name'];
-									$ext = pathinfo($filename, PATHINFO_EXTENSION);
-									
-									if(in_array($ext,$allowed)){
-										$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
-										$documentd = "uploads/document/ktp/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["foto_ktp"]["name"]);
-										$newfilename = 'ktp_'.$this->input->post('nomor_ktp').'.'.$ext;
-										move_uploaded_file($tmp_name, $documentd.$newfilename);
-										$fname = $newfilename;
-									} else {
-										$Return['error'] = 'Jenis File KTP tidak diterima..';
-									}
-								}
+					$ktp_exist = $this->Employees_model->ktp_exist($this->input->post('nomor_ktp'));
+					if($ktp_exist==0){
 
-								if(is_uploaded_file($_FILES['foto_kk']['tmp_name'])) {
-									//checking image type
-									$allowedkk =  array('png','jpg','jpeg','pdf');
-									$filenamekk = $_FILES['foto_kk']['name'];
-									$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
-									
-									if(in_array($extkk,$allowedkk)){
-										$tmp_namekk = $_FILES["foto_kk"]["tmp_name"];
-										$documentdkk = "uploads/document/kk/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["foto_kk"]["name"]);
-										$newfilenamekk = 'kk_'.$this->input->post('nomor_ktp').'.'.$extkk;
-										move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
-										$fnamekk = $newfilenamekk;
-									} else {
-										$Return['error'] = 'Jenis File KK tidak diterima..';
-									}
-								}
-
-							if($_FILES['foto_npwp']['size'] == 0){
-								$fnamenpwp = '0';
-							} else {
-								if(is_uploaded_file($_FILES['foto_npwp']['tmp_name'])) {
-									//checking image type
-									$allowednpwp =  array('png','jpg','jpeg','pdf');
-									$filenamenpwp = $_FILES['foto_npwp']['name'];
-									$extnpwp = pathinfo($filenamenpwp, PATHINFO_EXTENSION);
-									
-									if(in_array($extnpwp,$allowednpwp)){
-										$tmp_namenpwp = $_FILES["foto_npwp"]["tmp_name"];
-										$documentnpwp = "uploads/document/npwp/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["foto_npwp"]["name"]);
-										$newfilenamenpwp = 'npwp_'.$this->input->post('nomor_ktp').'.'.$extnpwp;
-										move_uploaded_file($tmp_namenpwp, $documentnpwp.$newfilenamenpwp);
-										$fnamenpwp = $newfilenamenpwp;
-									} else {
-										$Return['error'] = 'Jenis File PKWT tidak diterima..';
-									}
-								}
-							}
-
-							if($_FILES['foto_skck']['size'] == 0){
-								$fnameskck = '0';
-							} else {
-								if(is_uploaded_file($_FILES['foto_skck']['tmp_name'])) {
-									//checking image type
-									$allowedskck =  array('png','jpg','jpeg','pdf');
-									$filenameskck = $_FILES['foto_skck']['name'];
-									$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
-									
-									if(in_array($extskck,$allowedskck)){
-										$tmp_nameskck = $_FILES["foto_skck"]["tmp_name"];
-										$documentskck = "uploads/document/skck/";
-										// basename() may prevent filesystem traversal attacks;
-										// further validation/sanitation of the filename may be appropriate
-										$name = basename($_FILES["foto_skck"]["name"]);
-										$newfilenameskck = 'skck_'.$this->input->post('nomor_ktp').'.'.$extskck;
-										move_uploaded_file($tmp_nameskck, $documentskck.$newfilenameskck);
-										$fnameskck = $newfilenameskck;
-									} else {
-										$Return['error'] = 'Jenis File PKWT tidak diterima..';
-									}
-								}
-							}
-
-								if(is_uploaded_file($_FILES['dokumen_cv']['tmp_name'])) {
+									if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
 										//checking image type
-										$allowedcv =  array('png','jpg','jpeg','pdf');
-										$filenamecv = $_FILES['dokumen_cv']['name'];
-										$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+										$allowed =  array('png','jpg','jpeg','pdf');
+										$filename = $_FILES['foto_ktp']['name'];
+										$ext = pathinfo($filename, PATHINFO_EXTENSION);
 										
-										if(in_array($extcv,$allowedcv)){
-											$tmp_namecv = $_FILES["dokumen_cv"]["tmp_name"];
-											$documentdcv = "uploads/document/cv/";
+										if(in_array($ext,$allowed)){
+											$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
+											$documentd = "uploads/document/ktp/";
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
-											$name = basename($_FILES["dokumen_cv"]["name"]);
-											$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'.'.$extcv;
-											move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
-											$fnamecv = $newfilenamecv;
+											$name = basename($_FILES["foto_ktp"]["name"]);
+											$newfilename = 'ktp_'.$this->input->post('nomor_ktp').'.'.$ext;
+											move_uploaded_file($tmp_name, $documentd.$newfilename);
+											$fname = $newfilename;
 										} else {
-											$Return['error'] = 'Jenis File CV tidak diterima..';
+											$Return['error'] = 'Jenis File KTP tidak diterima..';
 										}
+									}
+
+									if(is_uploaded_file($_FILES['foto_kk']['tmp_name'])) {
+										//checking image type
+										$allowedkk =  array('png','jpg','jpeg','pdf');
+										$filenamekk = $_FILES['foto_kk']['name'];
+										$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
+										
+										if(in_array($extkk,$allowedkk)){
+											$tmp_namekk = $_FILES["foto_kk"]["tmp_name"];
+											$documentdkk = "uploads/document/kk/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["foto_kk"]["name"]);
+											$newfilenamekk = 'kk_'.$this->input->post('nomor_ktp').'.'.$extkk;
+											move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
+											$fnamekk = $newfilenamekk;
+										} else {
+											$Return['error'] = 'Jenis File KK tidak diterima..';
+										}
+									}
+
+								if($_FILES['foto_npwp']['size'] == 0){
+									$fnamenpwp = '0';
+								} else {
+									if(is_uploaded_file($_FILES['foto_npwp']['tmp_name'])) {
+										//checking image type
+										$allowednpwp =  array('png','jpg','jpeg','pdf');
+										$filenamenpwp = $_FILES['foto_npwp']['name'];
+										$extnpwp = pathinfo($filenamenpwp, PATHINFO_EXTENSION);
+										
+										if(in_array($extnpwp,$allowednpwp)){
+											$tmp_namenpwp = $_FILES["foto_npwp"]["tmp_name"];
+											$documentnpwp = "uploads/document/npwp/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["foto_npwp"]["name"]);
+											$newfilenamenpwp = 'npwp_'.$this->input->post('nomor_ktp').'.'.$extnpwp;
+											move_uploaded_file($tmp_namenpwp, $documentnpwp.$newfilenamenpwp);
+											$fnamenpwp = $newfilenamenpwp;
+										} else {
+											$Return['error'] = 'Jenis File PKWT tidak diterima..';
+										}
+									}
 								}
 
-							$data = array(
+								if($_FILES['foto_skck']['size'] == 0){
+									$fnameskck = '0';
+								} else {
+									if(is_uploaded_file($_FILES['foto_skck']['tmp_name'])) {
+										//checking image type
+										$allowedskck =  array('png','jpg','jpeg','pdf');
+										$filenameskck = $_FILES['foto_skck']['name'];
+										$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+										
+										if(in_array($extskck,$allowedskck)){
+											$tmp_nameskck = $_FILES["foto_skck"]["tmp_name"];
+											$documentskck = "uploads/document/skck/";
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["foto_skck"]["name"]);
+											$newfilenameskck = 'skck_'.$this->input->post('nomor_ktp').'.'.$extskck;
+											move_uploaded_file($tmp_nameskck, $documentskck.$newfilenameskck);
+											$fnameskck = $newfilenameskck;
+										} else {
+											$Return['error'] = 'Jenis File PKWT tidak diterima..';
+										}
+									}
+								}
 
-							// 'uploadid' => '000',
-							// 'employee_id' => '0',
-							'company_id' => '2',
-							'location_id' => '1',
-							'sub_project' => '184',
-							'department' => '5',
+									if(is_uploaded_file($_FILES['dokumen_cv']['tmp_name'])) {
+											//checking image type
+											$allowedcv =  array('png','jpg','jpeg','pdf');
+											$filenamecv = $_FILES['dokumen_cv']['name'];
+											$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+											
+											if(in_array($extcv,$allowedcv)){
+												$tmp_namecv = $_FILES["dokumen_cv"]["tmp_name"];
+												$documentdcv = "uploads/document/cv/";
+												// basename() may prevent filesystem traversal attacks;
+												// further validation/sanitation of the filename may be appropriate
+												$name = basename($_FILES["dokumen_cv"]["name"]);
+												$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'.'.$extcv;
+												move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
+												$fnamecv = $newfilenamecv;
+											} else {
+												$Return['error'] = 'Jenis File CV tidak diterima..';
+											}
+									}
 
-							'fullname' => $this->input->post('first_name'),
-							'tempat_lahir' => $this->input->post('tempat_lahir'),
-							'tanggal_lahir' => $this->input->post('tanggal_lahir'),
-							'alamat_ktp' => $this->input->post('alamat_ktp'),
-							'alamat_domisili' => $this->input->post('alamat_domisili'),
-							'contact_no' => $this->input->post('contact_number'),
-							'email' => $this->input->post('email'),
-							'nik_ktp' => $this->input->post('nomor_ktp'),
-							'no_kk' => $this->input->post('nomor_kk'),
-							'npwp' => $this->input->post('npwp'),
-							'nama_ibu' => $this->input->post('ibu_kandung'),
-							'gender' => $this->input->post('jenis_kelamin'),
-							'agama' => $this->input->post('agama'),
-							'status_kawin' => $this->input->post('pernikahan'),
-							'tinggi_badan' => $this->input->post('tinggi_badan'),
-							'berat_badan' => $this->input->post('berat_badan'),
-							'last_company' => $this->input->post('last_company'),
-							'last_posisi' => $this->input->post('last_posisi'),
-							'last_edu' => $this->input->post('last_edu'),
-							'school_name' => $this->input->post('school_name'),
-							'jurusan' => $this->input->post('jurusan'),
-							'project' => $this->input->post('project_id'),
-							'posisi' => $this->input->post('posisi_lamar'),
-							'penempatan' => $this->input->post('penempatan'),
-							'bank_name' => $this->input->post('bank_name'),
-							'no_rek' => $this->input->post('nomor_rek'),
-							'pemilik_rekening' => $this->input->post('pemilik_rek'),
+								$data = array(
 
-							'ktp' => $fname,
-							'kk' => $fnamekk,
-							'file_npwp' => $fnamenpwp,
-							'skck' => $fnameskck,
-							'civi' => $fnamecv,
+								// 'uploadid' => '000',
+								// 'employee_id' => '0',
+								'company_id' => '2',
+								'location_id' => '1',
+								'sub_project' => '184',
+								'department' => '5',
 
-								'request_empby' 				=> '1',
-								'request_empon' 				=> date("Y-m-d h:i:s"),
-								'createdby' => '1'
+								'fullname' => $this->input->post('first_name'),
+								'tempat_lahir' => $this->input->post('tempat_lahir'),
+								'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+								'alamat_ktp' => $this->input->post('alamat_ktp'),
+								'alamat_domisili' => $this->input->post('alamat_domisili'),
+								'contact_no' => $this->input->post('contact_number'),
+								'email' => $this->input->post('email'),
+								'nik_ktp' => $this->input->post('nomor_ktp'),
+								'no_kk' => $this->input->post('nomor_kk'),
+								'npwp' => $this->input->post('npwp'),
+								'nama_ibu' => $this->input->post('ibu_kandung'),
+								'gender' => $this->input->post('jenis_kelamin'),
+								'agama' => $this->input->post('agama'),
+								'status_kawin' => $this->input->post('pernikahan'),
+								'tinggi_badan' => $this->input->post('tinggi_badan'),
+								'berat_badan' => $this->input->post('berat_badan'),
+								'last_company' => $this->input->post('last_company'),
+								'last_posisi' => $this->input->post('last_posisi'),
+								'last_edu' => $this->input->post('last_edu'),
+								'school_name' => $this->input->post('school_name'),
+								'jurusan' => $this->input->post('jurusan'),
+								'project' => $this->input->post('project_id'),
+								'posisi' => $this->input->post('posisi_lamar'),
+								'penempatan' => $this->input->post('penempatan'),
+								'bank_name' => $this->input->post('bank_name'),
+								'no_rek' => $this->input->post('nomor_rek'),
+								'pemilik_rekening' => $this->input->post('pemilik_rek'),
 
-							// 'project_id' => $this->input->post('project_id'),
-							// 'email' => $this->input->post('email'),
-							// 'contact_number' => $this->input->post('contact_number'),
-							// 'created_at' => date('d-m-Y h:i:s')
-							);
-							// add record > model
-							// $result = $this->Users_model->add($data);
-							$result = $this->Employees_model->addkandidat($data);
+								'ktp' => $fname,
+								'kk' => $fnamekk,
+								'file_npwp' => $fnamenpwp,
+								'skck' => $fnameskck,
+								'civi' => $fnamecv,
 
-				}
+									'request_empby' 				=> '1',
+									'request_empon' 				=> date("Y-m-d h:i:s"),
+									'createdby' => '1'
 
-			if($Return['error']!=''){
-	       		$this->output($Return);
-	    }
-		
-			if ($result == TRUE) {
-				$Return['result'] = $this->lang->line('xin_hr_success_register_user');
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_msg');
-			}
+								// 'project_id' => $this->input->post('project_id'),
+								// 'email' => $this->input->post('email'),
+								// 'contact_number' => $this->input->post('contact_number'),
+								// 'created_at' => date('d-m-Y h:i:s')
+								);
+								// add record > model
+								// $result = $this->Users_model->add($data);
+
+
+								$result = $this->Employees_model->addkandidat($data);
+
+
+					} else {
+						$result = TRUE;
+					}
+
+
+							}
+
+						if($Return['error']!=''){
+				       		$this->output($Return);
+				    }
+					
+						if ($result == TRUE) {
+							$Return['result'] = $this->lang->line('xin_hr_success_register_user');
+						} else {
+							$Return['error'] = $this->lang->line('xin_error_msg');
+						}
+
+
 			$this->output($Return);
 			// exit;
 		}

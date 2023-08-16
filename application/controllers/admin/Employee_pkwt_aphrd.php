@@ -92,7 +92,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 				if($approve_hrd=='0'){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Need Approval HRD</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Terbitkan Sekarang</button>';
 				} else {
 					
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Approved</button>';
@@ -128,7 +128,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				// 	$designation_name = '--';	
 				// }
 
-			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">CANCEL</button>';
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">TOLAK</button>';
 
 			$data[] = array(
 				$status_migrasi.'<br> '.$cancel.' '.$editReq,

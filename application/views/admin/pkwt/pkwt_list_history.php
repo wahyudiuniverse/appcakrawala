@@ -17,23 +17,12 @@
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PKWT - AREA
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PENGAJUAN PKWT
       </a> </li>
     <?php } ?>  
 
-    <?php if(in_array('503',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_apnae');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnae/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - NAE <?php echo '('.$count_appnae.')';?>
-      </a> </li>
-    <?php } ?>
-
-
-    <?php if(in_array('504',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_apnom');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - NOM <?php echo '('.$count_appnom.')';?>
-      </a> </li>
-    <?php } ?>
-
     <?php if(in_array('505',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT - HRD
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>TERBITKAN PKWT
       <?php echo '('.$count_apphrd.')';?></a> </li>
     <?php } ?>
     

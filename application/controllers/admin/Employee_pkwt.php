@@ -121,7 +121,7 @@ class Employee_pkwt extends MY_Controller {
 				} else if($approve_nae!="0" && $approve_nom=="0") {
 			  	$status_pkwt = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'.$r->contract_id. '">Need Approval NOM/SM</button><br>' . $r->no_surat;
 				} else if($approve_nae!="0" && $approve_nom!="0") {
-				  $status_pkwt = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'.$r->contract_id. '">Need Approval HRD</button><br>' . $r->no_surat;
+				  $status_pkwt = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'.$r->contract_id. '">Belum Terbit</button><br>' . $r->no_surat;
 				} 
 				else {
 			  	$status_pkwt = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal">Contact IT Care</button>';
@@ -514,16 +514,16 @@ class Employee_pkwt extends MY_Controller {
 				else {
 
 					if(strtoupper($this->input->post('company'))=='PT. SIPRAMA CAKRAWALA'){
-						$pkwt_hr = 'E-PKWT-JKTSC-HR/';
-						$spb_hr = 'E-SPB-JKTSC-HR/';
+						$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+						$spb_hr = 'E-SPB-JKT/SC-HR/';
 						$companyID = '2';
 					}else if (strtoupper($this->input->post('company'))=='PT. KRISTA AULIA CAKRAWALA'){
-						$pkwt_hr = 'E-PKWT-JKTKAC-HR/';
-						$spb_hr = 'E-SPB-JKTKAC-HR/';
+						$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+						$spb_hr = 'E-SPB-JKT/KAC-HR/';
 						$companyID = '3';
 					} else {
-						$pkwt_hr = 'E-PKWT-JKTMATA-HR/';
-						$spb_hr = 'E-SPB-JKTMATA-HR/';
+						$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+						$spb_hr = 'E-SPB-JKT/MATA-HR/';
 						$companyID = '4';
 					}
 
@@ -643,7 +643,10 @@ class Employee_pkwt extends MY_Controller {
 							'request_pkwt' => $session['user_id'],
 							'request_date' => date('Y-m-d h:i:s'),
 							'approve_nae' => $session['user_id'],
-							'approve_nae_date' => date('Y-m-d h:i:s')
+							'approve_nae_date' => date('Y-m-d h:i:s'),
+							'approved_nomby' =>  $session['user_id'],
+							'approved_nomon' => date('Y-m-d h:i:s')
+
 						);
 
 

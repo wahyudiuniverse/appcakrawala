@@ -466,7 +466,7 @@
     <?php 
     if (in_array('327',$role_resources_ids) || in_array('470',$role_resources_ids) || in_array('490',$role_resources_ids)) {
     ?>
-      <li class="<?php if(!empty($arr_mod['emp_request_open']))echo $arr_mod['emp_request_open'];?> sidenav-item"> 
+      <li class="<?php if(!empty($arr_mod['emp_manage_open']))echo $arr_mod['emp_manage_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
           <div><?php echo $this->lang->line('xin_manage_employees');?></div>
@@ -508,7 +508,7 @@
       <li class="<?php if(!empty($arr_mod['emp_request_open']))echo $arr_mod['emp_request_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
-          <div>Karyawan Baru</div>
+          <div>Pengajuan MPP</div>
         </a>
         
         <ul class="sidenav-menu">
@@ -532,7 +532,7 @@
               <a href="<?php echo site_url('admin/employee_request_nae/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>HO - NAE</div>
+                <div>KARYAWAN BARU</div>
               </a> 
             </li>
           <?php 
@@ -540,7 +540,7 @@
           ?>
 
           <?php 
-          if (in_array('375',$role_resources_ids)) { ?>
+          if (in_array('5555',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_nom_active']))echo $arr_mod['emp_request_nom_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_request_nom/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -635,46 +635,7 @@
               <a href="<?php echo site_url('admin/employee_pkwt');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT - AREA</div>
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('503',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_nae_active']))echo $arr_mod['pkwt_request_nae_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_pkwt_apnae');?>" class="sidenav-link"> 
-                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-              <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT - NAE</div>
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('504',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_nom_active']))echo $arr_mod['pkwt_request_nom_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_pkwt_apnom');?>" class="sidenav-link"> 
-                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-              <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT - NOM</div>
-              </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('5555',$role_resources_ids)) { ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['pkwt_request_sm_active']))echo $arr_mod['pkwt_request_sm_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_pkwt_sm');?>" class="sidenav-link"> 
-                <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-              <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT - SM</div>
+                <div>PENGAJUAN PKWT</div>
               </a> 
             </li>
           <?php 
@@ -688,7 +649,7 @@
               <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT - HRD</div>
+                <div>TERBITKAN PKWT</div>
               </a> 
             </li>
           <?php 
@@ -1445,101 +1406,6 @@
     <?php 
     } 
     ?>
-
-<!-- task -->
-    <?php 
-    if (in_array('45',$role_resources_ids) || in_array('90',$role_resources_ids) || in_array('91',$role_resources_ids)) {
-    ?>
-      <li class="<?php if(!empty($arr_mod['task_open']))echo $arr_mod['task_open'];?> sidenav-item"> 
-        <a href="#" class="sidenav-link sidenav-toggle"> 
-          <i class="sidenav-icon fab fa-fantasy-flight-games"></i>
-          <div><?php echo $this->lang->line('left_tasks');?></div>
-        </a>
-        
-        <ul class="sidenav-menu">
-          <?php 
-          if (in_array('45',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['task_active']))echo $arr_mod['task_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/timesheet/tasks/');?>" > <?php echo $this->lang->line('left_tasks');?> </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if (in_array('90',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['tasks_calendar_active']))echo $arr_mod['tasks_calendar_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/project/tasks_calendar/');?>" > <?php echo $this->lang->line('xin_tasks_calendar');?> </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-
-          <?php 
-          if(in_array('91',$role_resources_ids)) { 
-          ?>
-            <li class="sidenav-item <?php if(!empty($arr_mod['tasks_scrum_board_active']))echo $arr_mod['tasks_scrum_board_active'];?>"> 
-              <a class="sidenav-link" href="<?php echo site_url('admin/project/tasks_scrum_board/');?>" > <?php echo $this->lang->line('xin_tasks_sboard');?> </a> 
-            </li>
-          <?php 
-          } 
-          ?>
-        </ul>
-      </li>
-    <?php 
-    } 
-    ?>
-
-<!-- files -->
-    <?php 
-    if(in_array('47',$role_resources_ids) 
-      || in_array('400',$role_resources_ids) 
-      || in_array('442',$role_resources_ids)) { 
-    ?>
-      <li class="<?php if(!empty($arr_mod['files_open']))echo $arr_mod['files_open'];?> sidenav-item"> 
-        <a href="#" class="sidenav-link sidenav-toggle"> 
-          <i class="sidenav-icon fas fa-file-signature"></i>
-          <div><?php echo $this->lang->line('xin_files');?></div>
-        </a>
-
-          <ul class="sidenav-menu">
-            <?php 
-            if (in_array('47',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['file_active']))echo $arr_mod['file_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/files/');?>" > <?php echo $this->lang->line('xin_files');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if(in_array('442',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['official_documents_active']))echo $arr_mod['official_documents_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/company/official_documents/');?>" > <?php echo $this->lang->line('xin_hr_official_documents');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-
-            <?php 
-            if(in_array('501',$role_resources_ids)) { 
-            ?>
-              <li class="sidenav-item <?php if(!empty($arr_mod['expired_documents_active']))echo $arr_mod['expired_documents_active'];?>"> 
-                <a class="sidenav-link" href="<?php echo site_url('admin/employees/expired_documents/');?>" > <?php echo $this->lang->line('xin_paklaring');?> </a> 
-              </li>
-            <?php 
-            } 
-            ?>
-          </ul>
-        </li>
-    <?php 
-    } 
-    ?>
-
 
 <!-- mobile report -->
     <?php 
