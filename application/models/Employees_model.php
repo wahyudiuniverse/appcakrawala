@@ -609,6 +609,23 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+
+	// get single record > company | locations
+	 public function ajax_project_posisi($id) {
+	
+		$sql = 'SELECT pos.posisi, jab.designation_name FROM xin_projects_posisi pos
+LEFT JOIN xin_designations jab ON jab.designation_id = pos.posisi
+WHERE pos.project_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get total number of employees
 	public function get_total_employees() {
 	  $query = $this->db->get("xin_employees");

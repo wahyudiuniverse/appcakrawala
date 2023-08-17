@@ -89,6 +89,20 @@ class Project_model extends CI_Model {
 	}
 
 
+	// get all designation
+	public function get_designations()
+	{
+	  $query = $this->db->query("SELECT * from xin_designations");
+  	  return $query->result();
+	}
+
+	public function read_project_posisi()
+	{
+	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id;");
+  	  return $query->result();
+	}
+
 
 	public function get_project_bycompany($id)
 	{
