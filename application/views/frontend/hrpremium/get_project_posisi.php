@@ -1,14 +1,13 @@
 
-<?php $result = $this->Employees_model->ajax_project_posisi($id_project);?>
+<?php $results = $this->Employees_model->ajax_project_posisi($id_project);?>
 
 
 					<label for="psosisi">POSISI/JABATAN: <strong><span style="color:red;">*</span></strong>
 								
 
-
 						<select name="posisi_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
-
-	                        <?php foreach($result as $pos):?>
+							<option value="0">--</option>
+	                        <?php foreach($results as $pos):?>
 	                        <option value="<?php echo $pos->posisi;?>"><?php echo $pos->designation_name;?></option>
 	                        <?php endforeach;?>
 						</select>

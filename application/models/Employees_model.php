@@ -133,7 +133,7 @@ class Employees_model extends CI_Model {
 
 		$sql = "SELECT *
 				FROM xin_employee_request
-				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
+				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=10
 				AND request_empby = '1'
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);

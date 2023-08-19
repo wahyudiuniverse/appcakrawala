@@ -220,7 +220,7 @@
 				</p>
 
 
-				<p class="form-row form-row-wide" id="project_sub_project">
+				<p class="form-row form-row-wide" id="projectsubproject">
 					
 					<label for="subproject">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
@@ -247,7 +247,7 @@
 				
 
                 <p class="form-row form-row-wide">
-					<label for="penempatan">AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
+					<label for="penempatan">KOTA/AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Engineering"></i>
 						<input type="text" class="input-text" name="penempatan" id="contact_number1" value="" />
 					</label>

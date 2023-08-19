@@ -7,7 +7,7 @@
 
 
 						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
-
+													<option value="0">--</option>
 	                        <?php foreach($result as $sb):?>
 	                        <option value="<?php echo $sb->secid;?>"><?php echo $sb->sub_project_name;?></option>
 	                        <?php endforeach;?>
@@ -18,7 +18,6 @@
 
 
 
-</style>
 <script type="text/javascript">
 $(document).ready(function(){
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));

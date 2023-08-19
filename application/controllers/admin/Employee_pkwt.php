@@ -644,8 +644,8 @@ class Employee_pkwt extends MY_Controller {
 							'request_date' => date('Y-m-d h:i:s'),
 							'approve_nae' => $session['user_id'],
 							'approve_nae_date' => date('Y-m-d h:i:s'),
-							'approved_nomby' =>  $session['user_id'],
-							'approved_nomon' => date('Y-m-d h:i:s')
+							'approve_nom' =>  $session['user_id'],
+							'approve_nom_date' => date('Y-m-d h:i:s')
 
 						);
 

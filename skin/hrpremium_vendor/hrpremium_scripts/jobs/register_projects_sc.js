@@ -39,22 +39,20 @@ $(document).ready(function() {
 	   });
 	});
 
+
+
 	jQuery("#aj_project").change(function(){
 		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
-			jQuery('#project_sub_project').html(data);
+			jQuery('#projectsubproject').html(data);
 		});
-		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
-		// 	jQuery('#ajax_office_shift').html(data);
-		// });
 	});
+
 
 	jQuery("#aj_project").change(function(){
 		jQuery.get(base_url+"/get_project_posisi/"+jQuery(this).val(), function(data, status){
 			jQuery('#project_position').html(data);
 		});
-		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
-		// 	jQuery('#ajax_office_shift').html(data);
-		// });
+
 	});
 
 });
