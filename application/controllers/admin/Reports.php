@@ -1720,10 +1720,14 @@ class Reports extends MY_Controller
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
+					$pin = $emp[0]->private_code;
 					$fullname = $emp[0]->first_name;
 					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
 					$nowhatsapp = $emp[0]->contact_no;
+
 				} else {
+
+					$pin = '--';
 					$fullname = '--';	
 					$sub_project = '0';
 					$nowhatsapp = '0';
@@ -1747,7 +1751,27 @@ class Reports extends MY_Controller
 
 			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
-			$whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
+
+			$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
+			Nama Lengkap: *'.$fullname.'*%0a
+			NIP: *'.$r->employee_id.'*%0a
+			PIN: *'.$pin.'*%0a
+			PROJECT: *'.$nama_project.'* %0a%0a
+
+			Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Grup, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+
+			Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+			Link C.I.S : https://apps-cakrawala.com/admin%0a
+			Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://bit.ly/sign_digital_pwkt%0a%0a
+
+			*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+			*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+			
+			Terima kasih.';
+
+
+
+			$whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
 
 			$data[] = array (

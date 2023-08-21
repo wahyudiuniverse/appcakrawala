@@ -1516,7 +1516,7 @@ class Pkwt1 extends MY_Controller
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Grade</td>
+							<td>Tunjangan Jabatan</td>
 							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
 						</tr>';
 				}

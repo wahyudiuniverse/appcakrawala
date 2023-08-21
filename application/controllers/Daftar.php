@@ -133,6 +133,7 @@ class Daftar extends MY_Controller {
 
 
 					$ktp_exist = $this->Employees_model->ktp_exist($this->input->post('nomor_ktp'));
+					
 					if($ktp_exist==0){
 
 									if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {

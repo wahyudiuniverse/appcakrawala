@@ -106,7 +106,7 @@
 				<p class="form-row form-row-wide">
 					<label for="jenis_kelamin">JENIS KELAMIN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="L">Laki-Laki</option>
                         <option value="P">Perempuan</option>
@@ -117,7 +117,7 @@
 				<p class="form-row form-row-wide">
 					<label for="agama">AGAMA/KEPERCAYAAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Islam</option>
                         <option value="2">Kristen Protestan</option>
@@ -132,7 +132,7 @@
 				<p class="form-row form-row-wide">
 					<label for="pernikahan">STATUS PERNIKAHAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="TK/0">Belum Menikah/Janda/Duda</option>
                         <option value="K/0">Menikah (0 Anak)</option>
@@ -178,7 +178,7 @@
 				<p class="form-row form-row-wide">
 					<label for="last_edu">PENDIDIKAN TERAKHIR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Sekolah Dasar (SD)</option>
                         <option value="2">Sekolah Menengah Pertama (SMP/MTS)</option>
@@ -209,7 +209,7 @@
 					<label for="project">PROJECT: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
 
-						<select id="aj_project" name="project_id" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select id="aj_project" name="project_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 							<option value=""></option>
 	                        <?php foreach($all_project as $project):?>
 	                        <option value="<?php echo $project->project_id;?>"><?php echo $project->title;?></option>
