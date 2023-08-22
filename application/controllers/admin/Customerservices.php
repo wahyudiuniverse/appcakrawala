@@ -146,11 +146,8 @@ class Customerservices extends MY_Controller
 		$data['path_url'] = 'reports_bpjs_employees';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
-		if(in_array('139',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			$data['all_projects'] = $this->Project_model->get_project_exist();
-		}
+		$data['all_projects'] = $this->Project_model->get_employee_projects($session['user_id']);
+
 
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('476',$role_resources_ids)) {
@@ -408,16 +405,40 @@ class Customerservices extends MY_Controller
 				$pin = '--';	
 			}
 
-			$copypaste = '
-			<textarea rows="4" cols="20">*C.I.S -> Employees Registration.*&#13;&#10;&#13;&#10;Nama Lengkap: *'.$full_name.'*&#13;&#10;NIP: *'.$r->employee_id.'*&#13;&#10;PIN: *'.$pin.'*&#13;&#10;&#13;&#10;Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.*&#13;&#10;Link : *https://apps-cakrawala.com/admin*&#13;&#10;&#13;&#10;Lakukan Pembaharuan PIN anda secara berkala, dengan cara&#13;&#10;Pilih Menu *Employee* kemudian akses Menu *My Profile* dan *Ubah Pin*&#13;&#10;&#13;&#10;Jika ada yang ditanyakan hubungi IT-Care di Nomor Whatsapp: 085174123434&#13;&#10;Terima kasih.&#13;&#10;&#13;&#10;PT SIPRAMA CAKRAWALA SYSTEM</textarea>';
 
-				if($r->status_resign==2){
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
-				} else if ($r->status_resign==3) {
 
+			$copypaste = '*C.I.S -> Employees Registration.*%0a%0a
+			Nama Lengkap: *'.$full_name.'*%0a
+			NIP: *'.$r->employee_id.'*%0a
+			PIN: *'.$pin.'*%0a
+			PROJECT: *'.$project_name.'* %0a%0a
+
+			Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+			Link C.I.S : https://apps-cakrawala.com/admin%0a
+
+			Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu *My Profile* kemudian *Ubah Pin*%0a%0a
+
+			*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+			*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+			
+			Terima kasih.';
+
+
+
+			$whatsapp = '<a href="https://wa.me/62'.$this->Xin_model->clean_post($r->contact_no).'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$this->Xin_model->clean_post($r->contact_no).'</button> </a>';
+
+			// $copypaste = '
+			// <textarea rows="4" cols="20">*C.I.S -> Employees Registration.*&#13;&#10;&#13;&#10;Nama Lengkap: *'.$full_name.'*&#13;&#10;NIP: *'.$r->employee_id.'*&#13;&#10;PIN: *'.$pin.'*&#13;&#10;&#13;&#10;Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.*&#13;&#10;Link : *https://apps-cakrawala.com/admin*&#13;&#10;&#13;&#10;Lakukan Pembaharuan PIN anda secara berkala, dengan cara&#13;&#10;Pilih Menu *Employee* kemudian akses Menu *My Profile* dan *Ubah Pin*&#13;&#10;&#13;&#10;Jika ada yang ditanyakan hubungi IT-Care di Nomor Whatsapp: 085174123434&#13;&#10;Terima kasih.&#13;&#10;&#13;&#10;PT SIPRAMA CAKRAWALA SYSTEM</textarea>';
+
+				if($r->status_resign==5){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">DEACTIVE</button>';
+				} else if($r->status_resign==4){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">END CONTRACT</button>';
+				} else if($r->status_resign==3){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+				} else if($r->status_resign==2){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
 				} else {
-
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
 				}
 
@@ -428,8 +449,8 @@ class Customerservices extends MY_Controller
 			$data[] = array(
 				$stat,
 				$r->employee_id,
-				$copypaste,
-				$kontak,
+				$full_name,
+				$whatsapp,
 				$department_name,
 				$designation_name,
 				$project_name,
