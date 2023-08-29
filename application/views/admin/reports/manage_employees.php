@@ -122,6 +122,7 @@
 
                 <th style="width: 120px;">Mulai Kontrak</th>   
                 <th style="width: 120px;">Akhir Kontrak</th>   
+                <th style="width: 120px;">Gaji Pokok</th>   
 
                 <th style="width: 120px;">Tanggal Resign</th>
                                 

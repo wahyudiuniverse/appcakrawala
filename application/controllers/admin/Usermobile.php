@@ -197,7 +197,7 @@ class Usermobile extends MY_Controller
 			} else {
 				$edit = '';
 			}
-			if(in_array('242',$role_resources_ids)) { // delete
+			if(in_array('66',$role_resources_ids)) { // delete
 				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->user_id . '"><span class="fas fa-trash-restore"></span></button></span>';
 			} else {
 				$delete = '';

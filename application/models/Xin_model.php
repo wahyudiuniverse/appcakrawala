@@ -1277,6 +1277,21 @@ class Xin_model extends CI_Model {
 		}
 	}
 	
+
+	// get single user role info
+	public function read_dokumen_checker($id) {
+	
+		$sql = "SELECT `user_id`,`employee_id`,`ktp_no`,`filename_ktp`,`filename_kk`,`filename_skck`,`filename_isd`,`filename_cv` FROM `xin_employees` WHERE `employee_id` = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get setting info
 	public function read_setting_info($id) {
 	

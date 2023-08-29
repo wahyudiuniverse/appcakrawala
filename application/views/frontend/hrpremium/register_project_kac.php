@@ -1,23 +1,14 @@
 <div class="container">
 
-<h3 style="text-align: center;" hidden><strong><span style="color:red;">PORTAL PENGISIAN DATABASE KARYAWAN CUSSONS</span></strong></h3>
-<h3 style="text-align: center;" hidden><strong><span style="color:red;">AKAN DITUTUP JUM'AT 4 AGUSTUS PUKUL 17:00 WIB</span></strong></h3>
-<h3 style="text-align: center;" hidden><strong><span style="color:red;">MOHON SEGERA MENGISI DATA DIRI ANDA.</span></strong></h3>
-
-
-		<a href="<?php echo site_url('ho/success/');?>" class="button" target="_blank">LIHAT DAFTAR TERSIMPAN</a>
+		<a href="<?php echo site_url('register/success/');?>" class="button" target="_blank">LIHAT DAFTAR TERSIMPAN</a>
 
 	<div class="my-account">
-
-
-
-
 
 			<div class="tab-content" id="tab2">
 
                 <?php $attributes = array('id' => 'xin-form', 'class' => 'register', 'autocomplete' => 'on');?>
 				<?php $hidden = array('register' => '1');?>
-                <?php echo form_open('ho/tambah_kandidat/', $attributes, $hidden);?>	
+                <?php echo form_open('register_kac/tambah_kandidat/', $attributes, $hidden);?>	
 
 
                 <input type="hidden" name="hrpremium_view" value="1" />
@@ -115,7 +106,7 @@
 				<p class="form-row form-row-wide">
 					<label for="jenis_kelamin">JENIS KELAMIN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="L">Laki-Laki</option>
                         <option value="P">Perempuan</option>
@@ -126,7 +117,7 @@
 				<p class="form-row form-row-wide">
 					<label for="agama">AGAMA/KEPERCAYAAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Islam</option>
                         <option value="2">Kristen Protestan</option>
@@ -141,7 +132,7 @@
 				<p class="form-row form-row-wide">
 					<label for="pernikahan">STATUS PERNIKAHAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="TK/0">Belum Menikah/Janda/Duda</option>
                         <option value="K/0">Menikah (0 Anak)</option>
@@ -187,7 +178,7 @@
 				<p class="form-row form-row-wide">
 					<label for="last_edu">PENDIDIKAN TERAKHIR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select">
+						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Sekolah Dasar (SD)</option>
                         <option value="2">Sekolah Menengah Pertama (SMP/MTS)</option>
@@ -215,83 +206,48 @@
 				</p>
 
 				<p class="form-row form-row-wide">
-					<label for="project_id">PROJECT:
-						<i class="ln ln-icon-Male"></i>					
-						<select id="project_id" name="project_id" data-placeholder="Choose Category" class="chosen-select">
-						<option value="22">PT. SIPRAMA CAKRAWALA</option>
-					</select>
+					<label for="project">PROJECT: <strong><span style="color:red;">*</span></strong>
+						<i class="ln ln-icon-Male"></i>		
+
+						<select id="aj_project" name="project_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+							<option value=""></option>
+	                        <?php foreach($all_project as $project):?>
+	                        <option value="<?php echo $project->project_id;?>"><?php echo $project->title;?></option>
+	                        <?php endforeach;?>
+						</select>
+
 					</label>
 				</p>
 
-                <p class="form-row form-row-wide">
+
+				<p class="form-row form-row-wide" id="projectsubproject">
+					
+					<label for="subproject">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
+						<i class="ln ln-icon-Male"></i>		
+
+						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
+							<option value="0">--</option>
+						</select>
+
+					</label>
+				</p>
+
+
+				<p class="form-row form-row-wide" id="project_position">
 					<label for="posisi_lamar">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
-						<i class="ln ln-icon-Engineering"></i>
+						<i class="ln ln-icon-Male"></i>		
 
-						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select">
-								<option value="">--Pilih Salah Satu--</option>
-                        <option value="15">ACCCOUNT RECIEVABLE</option>
-<option value="16">ACCOUNT PAYMENT</option>
-<option value="39">ADMIN AREA</option>
-<option value="28">ADMIN BPJS</option>
-<option value="48">ADMIN FINANCE</option>
-<option value="595">ADMIN FREELANCE</option>
-<option value="29">ADMIN HRD</option>
-<option value="551">ADMIN LEGAL</option>
-<option value="552">ADMIN MARKETING</option>
-<option value="56">ADMIN OPERATIONAL</option>
-<option value="22">ADMIN PAYROLL</option>
-<option value="43">ADMIN PROJECT</option>
-<option value="516">ADMIN TAX</option>
-<option value="38">ADMIN</option>
-<option value="461">APROVAL TOKEN</option>
-<option value="40">AREA MANAGER</option>
-<option value="7">ASSISTANT MANAGER HRD</option>
-<option value="1">BOD</option>
-<option value="90">CLEANING SERVICE</option>
-<option value="523">FINANCE & ACCOUNTING AP</option>
-<option value="37">FREELANCE</option>
-<option value="32">GA </option>
-<option value="26">IT  SUPPORT</option>
-<option value="27">IT DESIGN OFFICER</option>
-<option value="25">IT PROGRAMMER</option>
-<option value="21">LEADER PAYROLL</option>
-<option value="126">LEARNING AND DEVELOPMENT </option>
-<option value="441">LEGAL & FIELD EXECUTIVE</option>
-<option value="125">LEGAL STAFF</option>
-<option value="462">MAGANG</option>
-<option value="565">MANAGER SDM</option>
-<option value="491">MARKETING MANAGER</option>
-<option value="14">MESSANGER</option>
-<option value="17">NAE ADMIN / PIC NASIONAL</option>
-<option value="18">NAE ADMIN RATECARD</option>
-<option value="8">NATIONAL OPERATION MANAGER</option>
-<option value="274">OFFICE BOY</option>
-<option value="155">PIC</option>
-<option value="164">QUALITY SUPPORT</option>
-<option value="36">RECEPTIONIST</option>
-<option value="33">RTO </option>
-<option value="208">SECURITY</option>
-<option value="4">SM FINANCE</option>
-<option value="2">SM HR & GA</option>
-<option value="3">SM OPERASIONAL</option>
-<option value="5">SM SALES & MARKETING</option>
-<option value="484">SOCIAL MEDIA AND DESIGN</option>
-<option value="478">SOCIAL MEDIA CONTENT CREATOR</option>
-<option value="9">STAFF MARKETING</option>
-<option value="24">STAFF PROCUREMENT</option>
-<option value="13">TAX</option>
-<option value="12">TREASURY</option>
-<option value="604">MARBOT DAN PENJAGA KANTIN</option>
-<option value="603">PENJAGA KOST</option>
-<option value="603">PENJAGA KOST</option>
-
-					</select>
+						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
+							<option value="0">--</option>
+						</select>
 
 					</label>
 				</p>
 
+				
+
                 <p class="form-row form-row-wide">
-					<label for="penempatan">AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
+					<label for="penempatan">KOTA/AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Engineering"></i>
 						<input type="text" class="input-text" name="penempatan" id="contact_number1" value="" />
 					</label>

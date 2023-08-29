@@ -418,7 +418,7 @@
 <!-- ESLIP -->
 
       <?php 
-      if (in_array('140',$role_resources_ids)) { ?>
+      if (in_array('55555',$role_resources_ids)) { ?>
         <li class="sidenav-item <?php if(!empty($arr_mod['eslip_active']))echo $arr_mod['eslip_active'];?>"> 
           <a href="<?php echo site_url('admin/eslip/');?>" class="sidenav-link"> 
             <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -514,7 +514,7 @@
         <ul class="sidenav-menu">
 
           <?php 
-          if (in_array('337',$role_resources_ids)) { ?>
+          if (in_array('5555',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_active']))echo $arr_mod['emp_request_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_request/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -527,7 +527,7 @@
           ?>
 
           <?php 
-          if (in_array('374',$role_resources_ids)) { ?>
+          if (in_array('55555',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_nae_active']))echo $arr_mod['emp_request_nae_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_request_nae/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -572,7 +572,7 @@
               <a href="<?php echo site_url('admin/employee_request_hrd');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>HO - HRD</div>
+                <div>KARYAWAN BARU</div>
               </a> 
             </li>
           <?php 
@@ -593,7 +593,7 @@
           ?>
 
           <?php 
-          if (in_array('337',$role_resources_ids)) { ?>
+          if (in_array('55555',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['man_employees_approve_active']))echo $arr_mod['man_employees_approve_active'];?>"> 
               <a href="<?php echo site_url('admin/employee_request_approve');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->

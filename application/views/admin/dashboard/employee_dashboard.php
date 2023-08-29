@@ -3,13 +3,13 @@ $session = $this->session->userdata('username');
 $user_info = $this->Exin_model->read_user_info($session['user_id']);
 $theme = $this->Xin_model->read_theme_info(1);
 if($user_info[0]->profile_picture!='' && $user_info[0]->profile_picture!='no file') {
-	$lde_file = base_url().'uploads/profile/'.$user_info[0]->profile_picture;
+  $lde_file = base_url().'uploads/profile/'.$user_info[0]->profile_picture;
 } else { 
-	if($user_info[0]->gender=='L') {
-		$lde_file = base_url().'uploads/profile/default_male.jpg'; 
-	} else {  
-		$lde_file = base_url().'uploads/profile/default_female.jpg';
-	}
+  if($user_info[0]->gender=='L') {
+    $lde_file = base_url().'uploads/profile/default_male.jpg'; 
+  } else {  
+    $lde_file = base_url().'uploads/profile/default_female.jpg';
+  }
 }
 // PAKLARING CEK
 
@@ -55,17 +55,58 @@ $last_login =  new DateTime($user_info[0]->last_login_date);
 // get designation
 $designation = $this->Designation_model->read_designation_information($user_info[0]->designation_id);
 if(!is_null($designation)){
-	$designation_name = $designation[0]->designation_name;
+  $designation_name = $designation[0]->designation_name;
 } else {
-	$designation_name = '--';	
+  $designation_name = '--'; 
 }
 
 $role_user = $this->Xin_model->read_user_role_info($user_info[0]->user_role_id);
 if(!is_null($role_user)){
-	$role_resources_ids = explode(',',$role_user[0]->role_resources);
+  $role_resources_ids = explode(',',$role_user[0]->role_resources);
 } else {
-	$role_resources_ids = explode(',',0);	
+  $role_resources_ids = explode(',',0); 
 }
+
+$dokumen_checker = $this->Xin_model->read_dokumen_checker($user_info[0]->employee_id);
+if(!is_null($dokumen_checker)){
+  if($dokumen_checker[0]->filename_ktp == null || $dokumen_checker[0]->filename_ktp=='0'){
+    $doc_ktp = 0;
+  } else {
+    $doc_ktp = 1;
+  }
+
+  if($dokumen_checker[0]->filename_kk=='0'){
+    $doc_kk = 0;
+  } else {
+    $doc_kk = 1;
+  }
+
+  if($dokumen_checker[0]->filename_skck == null || $dokumen_checker[0]->filename_skck=='0'){
+    $doc_skck = 0;
+  } else {
+    $doc_skck = 1;
+  }
+
+  if($dokumen_checker[0]->filename_isd == null || $dokumen_checker[0]->filename_isd=='0'){
+    $doc_ijazah = 0;
+  } else {
+    $doc_ijazah = 1;
+  }
+
+  if($dokumen_checker[0]->filename_cv == null || $dokumen_checker[0]->filename_cv=='0'){
+    $doc_cv = 0;
+  } else {
+    $doc_cv = 1;
+  }
+
+} else {
+  $doc_ktp = 0;
+  $doc_kk = 0;
+  $doc_skck = 0;
+  $doc_ijazah = 0;
+  $doc_cv = 0;
+}
+
 ?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
@@ -88,6 +129,186 @@ $new_date = date('d-M-Y', $strtotime);
     $user_info = $this->Exin_model->read_user_info($session['user_id']);
     $eslip_release = $this->Employees_model->read_eslip_by_nip($session['employee_id']);
 ?>
+
+<div class="row mt-6">
+  <div class="d-flex col-xl-12 align-items-stretch">
+    <!-- Stats + Links -->
+    <div class="card d-flex w-100 mb-4">
+      <div class="row no-gutters row-bordered h-100">
+
+
+<!-- KTP -->
+        <?php
+        if($doc_ktp==1){
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-checkmark-circle display-4 d-block text-primary"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO KTP</span><br>
+              <small class="text-muted">Sudah diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        } else {
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-danger">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-warning display-4 d-block text-danger"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO KTP</span><br>
+              <small class="text-muted">Belum diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        }
+        ?>
+
+<!-- KK -->
+        <?php
+        if($doc_kk==1){
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-checkmark-circle display-4 d-block text-primary"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO KK</span><br>
+              <small class="text-muted">Sudah diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        } else {
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-danger">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-warning display-4 d-block text-danger"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO KK</span><br>
+              <small class="text-muted">Belum diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        }
+        ?>
+
+<!-- SKCK -->
+        <?php
+        if($doc_ijazah==1){
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-checkmark-circle display-4 d-block text-primary"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO SKCK</span><br>
+              <small class="text-muted">Sudah diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        } else {
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-danger">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-warning display-4 d-block text-danger"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO SKCK</span><br>
+              <small class="text-muted">Belum diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        }
+        ?>
+
+<!-- IJAZAH -->
+
+        <?php
+        if($doc_skck==1){
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-checkmark-circle display-4 d-block text-primary"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO SKCK</span><br>
+              <small class="text-muted">Sudah diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        } else {
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-danger">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-warning display-4 d-block text-danger"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">FOTO SKCK</span><br>
+              <small class="text-muted">Belum diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        }
+        ?>
+
+<!-- DOK CV -->
+        <?php
+        if($doc_cv==1){
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-checkmark-circle display-4 d-block text-primary"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">RIWAYAT HIDUP (CV)</span><br>
+              <small class="text-muted">Sudah diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        } else {
+        ?>
+
+        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-danger">
+          <a href="#" class="card-body media align-items-center text-body">
+            <i class="lnr lnr-warning display-4 d-block text-danger"></i>
+            <span class="media-body d-block ml-3">
+              <span class="text-big font-weight-bolder">RIWAYAT HIDUP (CV)</span><br>
+              <small class="text-muted">Belum diunggah</small>
+            </span>
+          </a>
+        </div>
+
+        <?php
+        }
+        ?>
+
+
+      </div>
+    </div>
+    <!-- / Stats + Links -->
+  </div>  
+</div>
 
 <div class="row mt-3">
 
@@ -192,11 +413,34 @@ $new_date = date('d-M-Y', $strtotime);
 <?php
   if(!is_null($eslip_release)){
     foreach($eslip_release->result() as $r) {
+
+    if($doc_ktp==0 || $doc_kk==0 || $doc_skck==0 || $doc_ijazah==0 || $doc_cv==0) {
+?>
+
+
+  <div class="col-sm-6 col-xl-4">
+    <div class="card mb-4">
+      <a href="#">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?>  <p style="color: #F00;">(Selesaikan Unggah Dokumen Secara Lengkap)</p></div>
+            <p style="font-size: 18px;"><?php echo $r->periode;?></p>
+          </div>
+        </div>
+      </div>
+      </a>
+    </div>
+  </div>
+
+<?php
+    } else {
 ?>
 
   <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
-      <a href="<?php echo site_url().'admin/importexceleslip/view/'.$r->nip.'/'.$r->secid;?>" target="_blank">
+      <a href="<?php echo site_url().'admin/importexceleslip/view/'.$r->nip.'/'.$r->secid; ?>" target="_blank">
       <div class="card-body">
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
@@ -209,6 +453,11 @@ $new_date = date('d-M-Y', $strtotime);
       </a>
     </div>
   </div>
+<?php
+    }
+
+?>
+
 
 <?php
     }
@@ -485,7 +734,7 @@ $new_date = date('d-M-Y', $strtotime);
                         $sname = htmlspecialchars_decode($this->lang->line('xin_project_hold'));
                         $trow = total_user_tasks_status($etask->task_status,$session['user_id']);
                         $tbdcolor = '#673AB7';
-                    }	
+                    } 
                 ?>
                     <tr>
                       <td style="vertical-align: inherit;"><div style="width:4px;border:5px solid <?php echo $tbdcolor;?>;"></div></td>

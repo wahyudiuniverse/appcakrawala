@@ -59,6 +59,21 @@ class Pkwt_model extends CI_Model {
 	}
 	
 
+	// get single project by id
+	public function read_pkwt_emp($empid) {
+	
+		$sql = 'SELECT employee_id, basic_pay FROM xin_employee_contract WHERE employee_id = ?';
+		$binds = array($empid);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+
 	// get employees list> reports
 	public function filter_employees_reports($company_id,$department_id,$project_id,$sub_project_id) {
 

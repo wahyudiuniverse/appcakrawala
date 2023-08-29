@@ -1611,7 +1611,7 @@ class Pkwt177 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_komunikasi.',- Per Hari</td>
 						</tr>';
 				}
 

@@ -663,6 +663,13 @@ class Reports extends MY_Controller
 				$bank_name = '--';
 			}
 
+			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
+			if(!is_null($readPkwt)){
+				$basicpay = $readPkwt[0]->basic_pay;
+			} else {
+				$basicpay = '0';
+			}
+
 			// $docktp = $this->Xin_model->read_bank_info($r->user_id);
 			// if(!is_null($docktp)){
 			// 	$ktp = $docktp[0]->title;
@@ -853,7 +860,7 @@ class Reports extends MY_Controller
 
 				$start_kontrak,
 				$end_kontrak,
-
+				$basicpay,
 				$dol,
 				$gender,
 				$marital,
@@ -1773,10 +1780,12 @@ class Reports extends MY_Controller
 
 			$whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
+			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+
 
 			$data[] = array (
 				$no,
-				$status_migrasi.' '.$view_pkwt,
+				$status_migrasi.' '.$view_pkwt. ' '.$editReq,
 				$r->employee_id,
 				$fullname.'<br>'.$whatsapp,
 				$nama_project,

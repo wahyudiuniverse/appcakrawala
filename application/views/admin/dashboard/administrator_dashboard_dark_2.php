@@ -141,91 +141,7 @@ $theme = $this->Xin_model->read_theme_info(1);
   <?php } ?>
 </div>
 <?php } ?>
-<div class="row <?php echo $get_animate;?>">
-  <div class="col-md-6">
-    <div class="card mb-4">
-      <h6 class="card-header with-elements border-0 pr-0 pb-0">
-        <div class="card-header-title"><?php echo $this->lang->line('xin_employee_department_txt');?></div>
-      </h6>
-      <div class="row">
-        <div class="col-md-6">
-          <div id="overflow-scrolls" class="overflow-scrolls py-4 px-3 " style="overflow:auto; height:200px;">
-            <div class="table-responsive">
-              <table class="table mb-0 table-dashboard">
-                <tbody>
-                  <?php $c_color = array('#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b');?>
-                  <?php $j=0;foreach($this->Department_model->all_departments() as $department) { ?>
-                  <?php
-						$condition = "department_id =" . "'" . $department->department_id . "'";
-						$this->db->select('*');
-						$this->db->from('xin_employees');
-						$this->db->where($condition);
-						$query = $this->db->get();
-						// check if department available
-						if ($query->num_rows() > 0) {
-					?>
-                  <tr>
-                    <td style="vertical-align: inherit;"><div style="width:4px;border:5px solid <?php echo $c_color[$j];?>;"></div></td>
-                    <td><?php echo htmlspecialchars_decode($department->department_name);?> (<?php echo $query->num_rows();?>)</td>
-                  </tr>
-                  <?php $j++; } ?>
-                  <?php  } ?>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-5">
-          <div style="height:150px;">
-            <canvas id="employee_department" height="250" width="270" style="display: block; height: 150px; width:300px;"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card mb-4">
-      <h6 class="card-header with-elements border-0 pr-0 pb-0">
-        <div class="card-header-title"><?php echo $this->lang->line('xin_employee_designation_txt');?></div>
-      </h6>
-      <div class="row">
-        <div class="col-md-6">
-          <div id="overflow-scrolls2" class="py-4 px-3 " style="overflow:auto; height:200px;">
-            <div class="table-responsive">
-              <table class="table mb-0 table-dashboard">
-                <tbody>
-                  <?php $c_color2 = array('#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b','#46be8a','#f96868','#00c0ef','#3c8dbc','#f39c12','#605ca8','#d81b60','#001f3f','#39cccc','#3c8dbc','#006400','#dd4b39','#a98852','#b26fc2','#66456e','#c674ad','#975df3','#61a3ca','#6bddbd','#6bdd74','#95b655','#668b20','#bea034','#d3733b');?>
-                  <?php $k=0;foreach($this->Designation_model->all_designations() as $designation) { ?>
-                  <?php
-						$condition1 = "designation_id =" . "'" . $designation->designation_id . "'";
-						$this->db->select('*');
-						$this->db->from('xin_employees');
-						$this->db->where($condition1);
-						$query1 = $this->db->get();
-						// check if department available
-						if ($query1->num_rows() > 0) {
-					?>
-                  <tr>
-                    <td style="vertical-align: inherit;"><div style="width:4px;border:5px solid <?php echo $c_color2[$k];?>;"></div></td>
-                    <td><?php echo htmlspecialchars_decode($designation->designation_name);?> (<?php echo $query1->num_rows();?>)</td>
-                  </tr>
-                  <?php $k++; } ?>
-                  <?php  } ?>
 
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-5">
-          <div style="height:150px;">
-            <canvas id="employee_designation" height="250" width="270" style="display: block; height: 150px; width:300px;"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 <?php
 $current_month = date('Y-m-d');
 $working = $this->Xin_model->current_month_day_attendance($current_month);
@@ -387,6 +303,3 @@ $emp_work = $working / $total * 100;
 </div>  
 </div>
 <?php } ?>
-<?php if($theme[0]->dashboard_calendar == 'true'):?>
-<?php $this->load->view('admin/calendar/calendar_hr');?>
-<?php endif; ?>

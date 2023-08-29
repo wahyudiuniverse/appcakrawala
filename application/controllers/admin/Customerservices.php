@@ -58,11 +58,14 @@ class Customerservices extends MY_Controller
 		$data['path_url'] = 'cs_karyawan';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
-		if(in_array('139',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			$data['all_projects'] = $this->Project_model->get_project_exist();
-		}
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		
+		// if(in_array('139',$role_resources_ids)) {
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// } else {
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
+		// }
 
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('479',$role_resources_ids)) {
@@ -146,8 +149,12 @@ class Customerservices extends MY_Controller
 		$data['path_url'] = 'reports_bpjs_employees';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
-		$data['all_projects'] = $this->Project_model->get_employee_projects($session['user_id']);
 
+		if(in_array('139',$role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
 
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('476',$role_resources_ids)) {

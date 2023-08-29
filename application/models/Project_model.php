@@ -99,10 +99,24 @@ class Project_model extends CI_Model {
 	public function read_project_posisi()
 	{
 	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
-LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id;");
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '2' ORDER BY `title` ASC;");
   	  return $query->result();
 	}
 
+
+	public function read_project_posisi_kac()
+	{
+	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '3' ORDER BY `title` ASC;");
+  	  return $query->result();
+	}
+
+	public function read_project_posisi_mata()
+	{
+	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '4' ORDER BY `title` ASC;");
+  	  return $query->result();
+	}
 
 	public function get_project_bycompany($id)
 	{
