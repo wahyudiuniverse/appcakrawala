@@ -1,23 +1,16 @@
 <div class="container">
 
-<h3 style="text-align: center;"><strong><span style="color:red;">PORTAL PENGISIAN DATABASE KARYAWAN CUSSONS</span></strong></h3>
-<h3 style="text-align: center;"><strong><span style="color:red;">AKAN DITUTUP JUM'AT 4 AGUSTUS PUKUL 17:00 WIB</span></strong></h3>
-<h3 style="text-align: center;"><strong><span style="color:red;">MOHON SEGERA MENGISI DATA DIRI ANDA.</span></strong></h3>
-<BR><BR>
 
-		<a href="<?php echo site_url('daftar/success/');?>" class="button" target="_blank">LIHAT DAFTAR TERSIMPAN</a>
+		<a href="<?php echo site_url('register/success/');?>" class="button" target="_blank">LIHAT DAFTAR TERSIMPAN</a>
 
 	<div class="my-account">
-
-
-
 
 
 			<div class="tab-content" id="tab2">
 
                 <?php $attributes = array('id' => 'xin-form', 'class' => 'register', 'autocomplete' => 'on');?>
 				<?php $hidden = array('register' => '1');?>
-                <?php echo form_open('daftar/tambah_kandidat/', $attributes, $hidden);?>	
+                <?php echo form_open('register/tambah_kandidat/', $attributes, $hidden);?>	
 
 
                 <input type="hidden" name="hrpremium_view" value="1" />
@@ -214,37 +207,46 @@
 					</label>
 				</p>
 
+
 				<p class="form-row form-row-wide">
-					<label for="project_id">PROJECT:
-						<i class="ln ln-icon-Male"></i>					
-						<select id="project_id" name="project_id" data-placeholder="Choose Category" class="chosen-select">
-						<option value="89">PT. PZ CUSSONS INDONESIA</option>
-					</select>
+					<label for="project">PROJECT: <strong><span style="color:red;">*</span></strong>
+						<i class="ln ln-icon-Male"></i>		
+
+						<select id="aj_project" name="project_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+							<option value=""></option>
+	                        <?php foreach($all_project as $project):?>
+	                        <option value="<?php echo $project->project_id;?>"><?php echo $project->title;?></option>
+	                        <?php endforeach;?>
+						</select>
+
 					</label>
 				</p>
 
-                <p class="form-row form-row-wide">
+
+				<p class="form-row form-row-wide" id="projectsubproject">
+					
+					<label for="subproject">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
+						<i class="ln ln-icon-Male"></i>		
+
+						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
+							<option value="0">--</option>
+						</select>
+
+					</label>
+				</p>
+
+
+				<p class="form-row form-row-wide" id="project_position">
 					<label for="posisi_lamar">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
-						<i class="ln ln-icon-Engineering"></i>
+						<i class="ln ln-icon-Male"></i>		
 
-						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select">
-								<option value="">--Pilih Salah Satu--</option>
-                        <option value="38">ADMIN</option>
-                        <option value="38">ADMIN ANALISIS</option>
-                        <option value="587">BA MOBILE</option>
-                        <option value="588">BA STAY</option>
-                        <option value="589">JABATAMCR</option>
-                        <option value="590">MCR</option>
-                        <option value="591">MCR MINI MARKET</option>
-                        <option value="592">PIC ACTIVATION</option>
-                        <option value="212">TEAM LEADER</option>
-                        <option value="593">MANAGER ANALYST</option>
-                        <option value="153">PROJECT MANAGER</option>
-                        <option value="594">SALES OPERATION MANAGER</option>
-					</select>
+						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
+							<option value="0">--</option>
+						</select>
 
 					</label>
 				</p>
+				
 
                 <p class="form-row form-row-wide">
 					<label for="penempatan">AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>

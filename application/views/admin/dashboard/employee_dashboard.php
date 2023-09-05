@@ -136,7 +136,6 @@ $new_date = date('d-M-Y', $strtotime);
     <div class="card d-flex w-100 mb-4">
       <div class="row no-gutters row-bordered h-100">
 
-
 <!-- KTP -->
         <?php
         if($doc_ktp==1){
@@ -205,7 +204,7 @@ $new_date = date('d-M-Y', $strtotime);
 
 <!-- SKCK -->
         <?php
-        if($doc_ijazah==1){
+        if($doc_skck==1){
         ?>
 
         <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
@@ -239,14 +238,14 @@ $new_date = date('d-M-Y', $strtotime);
 <!-- IJAZAH -->
 
         <?php
-        if($doc_skck==1){
+        if($doc_ijazah==1){
         ?>
 
         <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-success">
           <a href="#" class="card-body media align-items-center text-body">
             <i class="lnr lnr-checkmark-circle display-4 d-block text-primary"></i>
             <span class="media-body d-block ml-3">
-              <span class="text-big font-weight-bolder">FOTO SKCK</span><br>
+              <span class="text-big font-weight-bolder">IJAZAH</span><br>
               <small class="text-muted">Sudah diunggah</small>
             </span>
           </a>
@@ -260,7 +259,7 @@ $new_date = date('d-M-Y', $strtotime);
           <a href="#" class="card-body media align-items-center text-body">
             <i class="lnr lnr-warning display-4 d-block text-danger"></i>
             <span class="media-body d-block ml-3">
-              <span class="text-big font-weight-bolder">FOTO SKCK</span><br>
+              <span class="text-big font-weight-bolder">IJAZAH</span><br>
               <small class="text-muted">Belum diunggah</small>
             </span>
           </a>
@@ -289,7 +288,7 @@ $new_date = date('d-M-Y', $strtotime);
         } else {
         ?>
 
-        <div class="d-flex col-sm-8 col-md-4 col-lg-2 align-items-center list-group-item-danger">
+        <div class="d-flex col-sm-8 col-md-4 col-lg-3 align-items-center list-group-item-danger">
           <a href="#" class="card-body media align-items-center text-body">
             <i class="lnr lnr-warning display-4 d-block text-danger"></i>
             <span class="media-body d-block ml-3">
@@ -414,7 +413,7 @@ $new_date = date('d-M-Y', $strtotime);
   if(!is_null($eslip_release)){
     foreach($eslip_release->result() as $r) {
 
-    if($doc_ktp==0 || $doc_kk==0 || $doc_skck==0 || $doc_ijazah==0 || $doc_cv==0) {
+    if($doc_ktp==0 || $doc_kk==0 || $doc_ijazah==0 || $doc_cv==0) {
 ?>
 
 

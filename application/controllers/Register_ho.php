@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class register extends MY_Controller {
+class register_ho extends MY_Controller {
 
 	 public function __construct() {
         parent::__construct();
@@ -33,7 +33,7 @@ class register extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['title'] = 'FORM PENDAFTARAN KARYAWAN PT. SIPRAMA CAKRAWALA 2023';
+		$data['title'] = 'FORM PENDAFTARAN KARYAWAN HO 2023';
 		$session = $this->session->userdata('c_user_id');
 		if(!empty($session)){
 			redirect('');
@@ -43,9 +43,9 @@ class register extends MY_Controller {
 		$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
 		$data['all_dept'] = $this->Xin_model->get_departments();
 		$data['all_designation'] = $this->Xin_model->get_designations();
-		$data['all_project'] = $this->Project_model->read_project_posisi();
-		$data['path_url'] = 'register_projects_sc';
-		$data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
+		$data['all_project'] = $this->Project_model->read_project_posisi_ho();
+		$data['path_url'] = 'register_ho';
+		$data['subview'] = $this->load->view("frontend/hrpremium/register_ho", $data, TRUE);
 		// $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
@@ -314,7 +314,7 @@ class register extends MY_Controller {
 
 
 					} else {
-						$Return['error'] = 'NIK KTP Sudah terdaftar di SISTEM CAKRAWALA.';
+						$result = TRUE;
 					}
 
 

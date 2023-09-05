@@ -28,7 +28,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 	}
 	
 	/*Function to set JSON output*/
-	public function output($Return=array()){
+	public function output($Return=array()){ 
 		/*Set response header*/
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
@@ -105,6 +105,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
 
+			$delete = '<button type="button" class="btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->contract_id . '">Delete</button>';
+
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
@@ -135,7 +137,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 				}
 
 			$data[] = array(
-				$status_migrasi.' '.$editReq,
+				$status_migrasi.' '.$editReq. ' '.$delete,
 				$nip,
 				$fullname,
 				$nama_project,
@@ -726,15 +728,16 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			$result = $this->Company_model->delete_record($id);
+			$result = $this->Pkwt_model->delete_pkwt_cancel($id);
 			if(isset($id)) {
-				$Return['result'] = $this->lang->line('xin_success_delete_company');
+				$Return['result'] = 'Delete PKWT Tolak berhasil.';
 			} else {
 				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
 			}
 			$this->output($Return);
 		}
 	}
+
 	public function delete_document() {
 		
 		if($this->input->post('is_ajax')==2) {

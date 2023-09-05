@@ -294,8 +294,10 @@ class register_kac extends MY_Controller {
 
 									'request_empby' 				=> '1',
 									'request_empon' 				=> date("Y-m-d h:i:s"),
-									// 'approved_naeby' 				=> '1',
-									// 'approved_naeon' 				=> date("Y-m-d h:i:s"),
+									'approved_naeby' 				=> '1',
+									'approved_naeon' 				=> date("Y-m-d h:i:s"),
+									'approved_nomby'				=> '1',
+									'approved_nomon'				=> date("Y-m-d h:i:s"),
 									'createdby' => '1'
 
 								// 'project_id' => $this->input->post('project_id'),

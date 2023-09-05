@@ -877,6 +877,13 @@ WHERE pos.project_id = ?';
 	}
 	/*  Update Employee Record */
 	
+	// Function to Delete selected record from table
+	public function delete_new_emp($id){
+		$this->db->where('secid', $id);
+		$this->db->delete('xin_employee_request');
+		
+	}
+	
 	// Function to update record in table
 	public function update_record($data, $id){
 		$this->db->where('user_id', $id);

@@ -62,7 +62,7 @@ class Pkwt_model extends CI_Model {
 	// get single project by id
 	public function read_pkwt_emp($empid) {
 	
-		$sql = 'SELECT employee_id, basic_pay FROM xin_employee_contract WHERE employee_id = ?';
+		$sql = "SELECT employee_id, basic_pay FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = 1;";
 		$binds = array($empid);
 		$query = $this->db->query($sql, $binds);
 		
@@ -195,6 +195,13 @@ class Pkwt_model extends CI_Model {
 	public function delete_sign_doc($id){
 		$this->db->where('secid', $id);
 		$this->db->delete('xin_documents_qrcode');
+		
+	}
+
+	// Function to Delete selected record from table
+	public function delete_pkwt_cancel($id){
+		$this->db->where('contract_id', $id);
+		$this->db->delete('xin_employee_contract');
 		
 	}
 
@@ -537,7 +544,7 @@ class Pkwt_model extends CI_Model {
 	// get single pkwt by userid
 	public function get_single_pkwt_by_userid($id) {
 	
-		$sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ? ORDER BY contract_id DESC';
+		$sql = "SELECT * FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = 1 ORDER BY contract_id DESC";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);		
 		

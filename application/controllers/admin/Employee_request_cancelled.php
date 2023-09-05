@@ -113,6 +113,8 @@ class employee_request_cancelled extends MY_Controller {
 			$editReq = '<a href="'.site_url().'admin/employee_request_cancelled/request_edit/'.$r->secid.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
 
 
+			$delete = '<button type="button" class="btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->secid . '">Delete</button>';
+
 
 				$projects = $this->Project_model->read_single_project($r->project);
 				if(!is_null($projects)){
@@ -144,7 +146,7 @@ class employee_request_cancelled extends MY_Controller {
 
 			$data[] = array(
 				$no,
-				$status_migrasi. ' ' .$editReq,
+				$status_migrasi. ' ' .$editReq.' '.$delete,
 				$nik_ktp,
 				$fullname,
 				$nama_project,
@@ -1209,9 +1211,9 @@ class employee_request_cancelled extends MY_Controller {
 			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 			$id = $this->uri->segment(4);
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			$result = $this->Company_model->delete_record($id);
+			$result = $this->Employees_model->delete_new_emp($id);
 			if(isset($id)) {
-				$Return['result'] = $this->lang->line('xin_success_delete_company');
+				$Return['result'] = 'Delete Karyawan Baru Tolak berhasil.';
 			} else {
 				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
 			}
