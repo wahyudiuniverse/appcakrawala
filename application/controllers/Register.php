@@ -281,7 +281,7 @@ class register extends MY_Controller {
 								'jurusan' => $this->input->post('jurusan'),
 								'project' => $this->input->post('project_id'),
 								'sub_project' => $this->input->post('subproject_id'),
-								'posisi' => $this->input->post('posisi_lamar'),
+								'posisi' => $this->input->post('posisi_id'),
 								'penempatan' => $this->input->post('penempatan'),
 								'bank_name' => $this->input->post('bank_name'),
 								'no_rek' => $this->input->post('nomor_rek'),

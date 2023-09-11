@@ -355,7 +355,23 @@ class Pkwt_model extends CI_Model {
 
  	// monitoring request
 	public function report_pkwt_history_null($empID) {
-		$today_date = date('Y-m-d');
+		// $today_date = date('Y-m-d');
+		$sql = "SELECT emp.user_id,emp.employee_id,emp.first_name,emp.project_id,emp.sub_project_id,emp.designation_id,emp.date_of_joining,emp.penempatan,emp.contract_end,pkwt.no_surat
+FROM xin_employees emp
+LEFT JOIN (SELECT * FROM xin_employee_contract WHERE status_pkwt = 1) pkwt
+	ON pkwt.employee_id = emp.employee_id
+WHERE emp.status_employee = 1
+AND emp.status_resign = 1
+AND pkwt.no_surat is null
+AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function report_pkwt_expired_null($keyword) {
+		// $today_date = date('Y-m-d');
 		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
 			FROM xin_employee_contract
 			WHERE date_format(approve_hrd_date, '%Y-%m-%d') = '$today_date' 
@@ -365,7 +381,6 @@ class Pkwt_model extends CI_Model {
 		$query = $this->db->query($sql);
 	    return $query;
 	}
-
 
  	// monitoring request
 	public function report_pkwt_history_all($empID,$datefrom,$enddate) {

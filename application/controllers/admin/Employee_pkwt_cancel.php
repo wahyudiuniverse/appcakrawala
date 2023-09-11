@@ -384,7 +384,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 							// $project_id					= $this->input->post('project_id');
 							// $sub_project				= $this->input->post('sub_project');
-							// $posisi 							= $this->input->post('posisi');
+							$jabatan 							= $this->input->post('posisi');
 							// $date_of_join 							= $this->input->post('date_of_join');
 							$penempatan 							= $this->input->post('penempatan');
 							$gaji_pokok 							= $this->input->post('gaji_pokok');
@@ -440,7 +440,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								// 'pemilik_rekening' 		=> $pemilik_rekening,
 								// 'project' 						=> $project_id,
 								// 'sub_project' 				=> $sub_project,
-								// 'posisi' 							=> $posisi,
+								'jabatan' 							=> $jabatan,
 
 								// 'doj' 								=> $date_of_join,
 								'penempatan' 					=> $penempatan,

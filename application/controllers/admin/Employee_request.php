@@ -588,8 +588,10 @@ class Employee_request extends MY_Controller {
 								'request_empby' 				=> $session['user_id'],
 								'request_empon' 				=> date("Y-m-d h:i:s"),
 
-								// 'approved_naeby' 				=> $session['user_id'],
-								// 'approved_naeon'				=> date("Y-m-d h:i:s"),
+									'approved_naeby' 				=> $session['user_id'],
+									'approved_naeon' 				=> date("Y-m-d h:i:s"),
+									'approved_nomby'				=> $session['user_id'],
+									'approved_nomon'				=> date("Y-m-d h:i:s"),
 
 								// 'pincode' => $this->input->post('pin_code'),
 								// 'createdon' => date('Y-m-d h:i:s'),

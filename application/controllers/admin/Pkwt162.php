@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt135 extends MY_Controller 
+class Pkwt162 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1111,8 +1111,6 @@ class Pkwt135 extends MY_Controller
 
 				<br>
 <br>
-
-
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
 				</div>
@@ -1701,7 +1699,7 @@ class Pkwt135 extends MY_Controller
 				}
 
 				$lampiran .= '
-					<br>
+
 						<tr>
 							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
 							<td></td>

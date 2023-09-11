@@ -68,67 +68,69 @@ class register_kac extends MY_Controller {
 			// 	$Return['error'] = $this->lang->line('xin_employee_error_company_name');
 			// } else 
 			if($this->input->post('first_name')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_first_name');
+				$Return['error'] = "Nama Lengkap Kosong...";
 			} else if( $this->input->post('tempat_lahir')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_tempat_lahir');
+				$Return['error'] = "Tempat Lahir Kosong";
 			} else if($this->input->post('tanggal_lahir')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_tanggal_lahir');
+				$Return['error'] = "Tanggal Lahir Kosong...";
 			} else if($this->input->post('alamat_domisili')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_alamat_domisili');
+				$Return['error'] = "Alamat Domisili Kosong...";
 			} else if($this->input->post('alamat_ktp')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_alamat_ktp');
+				$Return['error'] = "Alamat KTP Kosong...";
 			} else if($this->input->post('contact_number')==='') {
 				$Return['error'] = 'Nomor Kotak belum diisi';
 			} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
-				$Return['error'] = $this->lang->line('xin_employee_error_invalid_email');
+				$Return['error'] = "Alamat Email Tidak Sesuai...";
 			} else if($this->input->post('nomor_ktp')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_ktp');
+				$Return['error'] = "Nomor KTP Kosong";
 			} else if($this->input->post('nomor_kk')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_nomor_kk');
+				$Return['error'] = "Nomor KK Kosong...";
 			} else if($this->input->post('ibu_kandung')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_ibu_kandung');
+				$Return['error'] = "Nama Ibu Kandung Kosong...";
 			} else if($this->input->post('jenis_kelamin')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_jenis_kelamin');
+				$Return['error'] = "Jenis Kelamin Kosong...";
 			} else if($this->input->post('agama')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_agama');
+				$Return['error'] = "Agama Kosong...";
 			} else if($this->input->post('pernikahan')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_pernikahan');
+				$Return['error'] = "Status Pernikahan Kosong...";
 			} else if($this->input->post('tinggi_badan')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_tinggi_badan');
+				$Return['error'] = "Tinggi Badan Kosong...";
 			} else if($this->input->post('berat_badan')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_berat_badan');
+				$Return['error'] = "Berat Badan Kosong...";
 			} else if($this->input->post('last_company')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_last_company');
+				$Return['error'] = "Perusahaan Sebelum nya Kosong...";
 			} else if($this->input->post('last_posisi')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_last_posisi');
+				$Return['error'] = "Posisi Sebelumnya Kosong...";
 			} else if($this->input->post('last_edu')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_last_edu');
+				$Return['error'] = "Pendidikan Terakhir Kosong...";
 			} else if($this->input->post('school_name')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_school_name');
+				$Return['error'] = "Nama Sekolah Kosong...";
 			} else if($this->input->post('jurusan')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_jurusan');
+				$Return['error'] = "Jurusan Kosong...";
 			} else if($this->input->post('project_id')==='') {
-				$Return['error'] = 'PROJECT belum dipilih';
-			} else if($this->input->post('subproject_id')==='') {
-				$Return['error'] = 'SUB-PROJECT belum dipilih';
+				$Return['error'] = 'Project belum dipilih';
 			} else if($this->input->post('posisi_lamar')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_posisi_lamar');
+				$Return['error'] = "Posisi/Jabatan Kosong...";
 			} else if($this->input->post('penempatan')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_penempatan');
+				$Return['error'] = "Penempatan Kosong...";
 			} else if($this->input->post('bank_name')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_bank_name');
+				$Return['error'] = "Nama Bank Kosong...";
 			} else if($this->input->post('nomor_rek')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_nomor_rek');
+				$Return['error'] = "Nomor Rekening Kosong...";
 			} else if($this->input->post('pemilik_rek')==='') {
-				$Return['error'] = $this->lang->line('xin_employee_error_pemilik_rek');
-			} else if($_FILES['foto_ktp']['size'] == 0){
+				$Return['error'] = "Pemilik Rekening Kosong...";
+			} else if($_FILES['foto_ktp']['size'] == 0) {
 				$Return['error'] = 'Foto KTP Masih Kosong...';
-			} else if($_FILES['foto_kk']['size'] == 0){
+			} else if($_FILES['foto_kk']['size'] == 0) {
 				$Return['error'] = 'Foto KK Masih Kosong...';
-			} else if($_FILES['dokumen_cv']['size'] == 0){
+			} else if($_FILES['dokumen_cv']['size'] == 0) {
 				$Return['error'] = 'Dokumen CV Masih Kosong...';
-			} else if ($_FILES['dokumen_cv']['size'] > 2000000){
+			} else if ($_FILES['dokumen_cv']['size'] > 2000000) {
 				$Return['error'] = 'File CV Lebih dari 2MB..';
+			} else if ($_FILES['foto_ktp']['size'] > 2000000) {
+				$Return['error'] = 'Foto KTP Lebih dari 2MB..';
+			} else if ($_FILES['foto_kk']['size'] > 2000000) {
+				$Return['error'] = 'Foto KK Lebih dari 2MB..';
 			}
 
 			// else if($valid_email->num_rows() > 0) {
@@ -255,7 +257,6 @@ class register_kac extends MY_Controller {
 								// 'employee_id' => '0',
 								'company_id' => '3',
 								'location_id' => '1',
-								'sub_project' => $this->input->post('subproject_id'),
 								'department' => '5',
 
 								'fullname' => $this->input->post('first_name'),
@@ -280,7 +281,8 @@ class register_kac extends MY_Controller {
 								'school_name' => $this->input->post('school_name'),
 								'jurusan' => $this->input->post('jurusan'),
 								'project' => $this->input->post('project_id'),
-								'posisi' => $this->input->post('posisi_lamar'),
+								'sub_project' => $this->input->post('subproject_id'),
+								'posisi' => $this->input->post('posisi_id'),
 								'penempatan' => $this->input->post('penempatan'),
 								'bank_name' => $this->input->post('bank_name'),
 								'no_rek' => $this->input->post('nomor_rek'),
@@ -313,7 +315,7 @@ class register_kac extends MY_Controller {
 
 
 					} else {
-						$result = TRUE;
+						$Return['error'] = 'NIK KTP Sudah terdaftar di SISTEM CAKRAWALA.';
 					}
 
 
@@ -422,6 +424,15 @@ class register_kac extends MY_Controller {
 	  echo json_encode($output);
 	  exit();
   }
+
+	/*Function to set JSON output*/
+	public function output($Return=array()){
+		/*Set response header*/
+		header("Access-Control-Allow-Origin: *");
+		header("Content-Type: application/json; charset=UTF-8");
+		/*Final JSON response*/
+		exit(json_encode($Return));
+	}	
 
 	 // get location > departments
 	public function get_project_sub_project() {

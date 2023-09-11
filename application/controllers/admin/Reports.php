@@ -1807,9 +1807,169 @@ class Reports extends MY_Controller
 		);
 	  echo json_encode($output);
 	  exit();
-
     }
 
+	// reports > employee attendance
+	public function pkwt_expired() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'PKWT EXPIRED';
+		$data['breadcrumbs'] = 'PKWT EXPIRED';
+		$data['path_url'] = 'reports_pkwt_expired';
+		// $data['path_url'] = 'reports_employee_attendance';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+
+		
+		// if(in_array('139',$role_resources_ids)) {
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// } else {
+		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
+		// }
+		if(in_array('377',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/report_pkwt_expired", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+    public function pkwt_expired_list()
+    {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/report_pkwt_history", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		
+		// $company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(4);
+		$start_date = $this->uri->segment(5);
+		$end_date = $this->uri->segment(6);
+		$searchkey = $this->uri->segment(7);
+			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
+
+		if($searchkey==0 || $searchkey==null){
+			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+		} else {
+			if($project_id==0 || $start_date==0 ){
+			// 	$employee = $this->Reports_model->report_pkwt_history();
+			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
+				$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+			} else if ($project_id==999){
+				$employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date,$end_date);
+			}else {
+				$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$end_date);
+			}
+		}
+		// $employee = $this->Employees_model->get_employees();
+		$no = 1;
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+ 		foreach($employee->result() as $r) {
+
+				$nip = $r->employee_id;
+				$fullname = $r->first_name;
+				$project = $r->project_id;
+				$penempatan = $r->sub_project_id;
+				$begin_until = $r->date_of_joining;
+
+
+				// $emp = $this->Employees_model->read_employee_info_by_nik($nip);
+				// if(!is_null($emp)){
+				// 	$pin = $emp[0]->private_code;
+				// 	$fullname = $emp[0]->first_name;
+				// 	$sub_project = 'pkwt'.$emp[0]->sub_project_id;
+				// 	$nowhatsapp = $emp[0]->contact_no;
+
+				// } else {
+
+				// 	$pin = '--';
+				// 	$fullname = '--';	
+				// 	$sub_project = '0';
+				// 	$nowhatsapp = '0';
+				// }
+
+				$projects = $this->Project_model->read_single_project($r->project_id);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+
+				$designation = $this->Designation_model->read_designation_information($r->designation_id);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
+
+			// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Approved</button>';
+
+			// $view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+
+
+			// $copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
+			// Nama Lengkap: *'.$fullname.'*%0a
+			// NIP: *'.$r->employee_id.'*%0a
+			// PIN: *'.$pin.'*%0a
+			// PROJECT: *'.$nama_project.'* %0a%0a
+
+			// Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Grup, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+
+			// Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+			// Link C.I.S : https://apps-cakrawala.com/admin%0a
+			// Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://bit.ly/sign_digital_pwkt%0a%0a
+
+			// *INFO HRD di Nomor Whatsapp: 085175168275* %0a
+			// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+			
+			// Terima kasih.';
+
+
+
+			// $whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
+
+			// $editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+
+
+			$data[] = array (
+				$no,
+				$nip,
+				$fullname,
+				$nama_project,
+				$penempatan,
+				$designation_name,
+				$begin_until
+			);
+			$no++;
+		}
+
+			// $no++;
+
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $employee->num_rows(),
+			 "recordsFiltered" => $employee->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+    }
 
 	 // get location > departments
 	public function get_company_project() {
