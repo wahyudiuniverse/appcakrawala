@@ -134,7 +134,7 @@
                 <th>Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>Waktu Kontrak</th>
+                <th>Kontrak Terakhir</th>
 
               </tr>
             </thead>

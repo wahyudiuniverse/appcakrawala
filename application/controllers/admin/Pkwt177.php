@@ -1587,31 +1587,31 @@ class Pkwt177 extends MY_Controller
 							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
 						</tr>';
 				}
-				
+
 				if($allowance_transport!="Rp 0"){	
 				$lampiran .= '
-					
+
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
 				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '
-					
+
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_rent.',- Per Hari</td>
 						</tr>';
 				}
 
 				if($allowance_komunikasi!="Rp 0"){	
 				$lampiran .= '
-					
+
 						<tr>
 							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1797,11 +1797,12 @@ class Pkwt177 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
-				$fname = strtolower($fname);
-				$pay_month = strtolower(date("F Y"));
+				// $fname = strtolower($fname);
+				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				$pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 
 

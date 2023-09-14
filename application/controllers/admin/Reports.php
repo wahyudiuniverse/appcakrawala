@@ -1845,7 +1845,7 @@ class Reports extends MY_Controller
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/reports/report_pkwt_history", $data);
+			$this->load->view("admin/reports/report_pkwt_expired", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -1868,11 +1868,13 @@ class Reports extends MY_Controller
 			if($project_id==0 || $start_date==0 ){
 			// 	$employee = $this->Reports_model->report_pkwt_history();
 			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
-				$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
 			} else if ($project_id==999){
-				$employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date,$end_date);
+			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+				// $employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date,$end_date);
 			}else {
-				$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$end_date);
+			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+				// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$end_date);
 			}
 		}
 		// $employee = $this->Employees_model->get_employees();
@@ -1885,8 +1887,8 @@ class Reports extends MY_Controller
 				$nip = $r->employee_id;
 				$fullname = $r->first_name;
 				$project = $r->project_id;
-				$penempatan = $r->sub_project_id;
-				$begin_until = $r->date_of_joining;
+				$penempatan = $r->penempatan;
+				$last_contract = $r->contract_end;
 
 
 				// $emp = $this->Employees_model->read_employee_info_by_nik($nip);
@@ -1944,17 +1946,17 @@ class Reports extends MY_Controller
 
 			// $whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
-			// $editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+			$editReq = '<a href="'.site_url().'admin/employees/pkwt_expired_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
 
 
 			$data[] = array (
-				$no,
+				$editReq,
 				$nip,
 				$fullname,
 				$nama_project,
-				$penempatan,
 				$designation_name,
-				$begin_until
+				$penempatan,
+				$last_contract
 			);
 			$no++;
 		}

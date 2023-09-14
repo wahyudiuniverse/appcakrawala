@@ -131,10 +131,11 @@ class Employees_model extends CI_Model {
  	// monitoring request
 	public function get_monitoring_daftar() {
 
-		$sql = "SELECT *
-				FROM xin_employee_request
-				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=10
-				AND request_empby = '1'
+		$sql = "SELECT emp.fullname,emp.contact_no,emp.project,emp.createdon,pro.title
+				FROM xin_employee_request emp
+				LEFT JOIN xin_projects pro ON pro.project_id = emp.project
+				WHERE datediff(current_date(),DATE_FORMAT(emp.createdon, '%Y-%m-%d')) <=10
+				AND emp.request_empby = '1'
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -358,6 +359,16 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+
+ 	// get all employes
+	public function default_list() {
+
+		$sql = "SELECT '2' FROM DUAL;";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
  	// get all employes
 	public function get_employees_request_verify() {
 
@@ -435,7 +446,7 @@ class Employees_model extends CI_Model {
 	// get single employee request
 	public function read_employee_request($id) {
 	
-		$sql = 'SELECT * FROM xin_employee_request WHERE secid = ?';
+		$sql = "SELECT * FROM xin_employee_request WHERE secid = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -446,6 +457,20 @@ class Employees_model extends CI_Model {
 		}
 	}
 
+
+	// get single employee request
+	public function read_employee_expired($id) {
+	
+		$sql = "SELECT * FROM xin_employees WHERE employee_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 
 	// get single employee by NIP
 	public function read_eslip_info_by_nip_periode($id, $periode) {
@@ -613,9 +638,10 @@ class Employees_model extends CI_Model {
 	// get single record > company | locations
 	 public function ajax_project_posisi($id) {
 	
-		$sql = 'SELECT pos.posisi, jab.designation_name FROM xin_projects_posisi pos
+		$sql = "SELECT pos.posisi, jab.designation_name FROM xin_projects_posisi pos
 LEFT JOIN xin_designations jab ON jab.designation_id = pos.posisi
-WHERE pos.project_id = ?';
+WHERE pos.project_id = ?
+ORDER BY jab.designation_id ASC";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -968,6 +994,16 @@ WHERE pos.project_id = ?';
 	public function update_request_employee($data, $id){
 		$this->db->where('secid', $id);
 		if( $this->db->update('xin_employee_request',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+		// Function to update record in table
+	public function save_pkwt_expired($data, $id){
+		$this->db->where('user_id', $id);
+		if( $this->db->update('xin_employees',$data)) {
 			return true;
 		} else {
 			return false;

@@ -29,6 +29,20 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       $approved_hrd_name = '--'; 
     }
 
+    if(!is_null($sub_project)){
+      $sub_project = $sub_project[0]->sub_project_name;
+    } else {
+      $sub_project = '--';
+    }
+
+    if(!is_null($posisi)){
+      $jabatan = $posisi[0]->designation_name;
+    } else {
+      $jabatan = '--';
+    }
+
+
+
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
@@ -104,7 +118,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$sub_project[0]->sub_project_name;?></label>
+          <label for="plant"><?php echo ': '.$sub_project;?></label>
         </div>
       </div>
     </div>
@@ -138,7 +152,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$posisi[0]->designation_name;?></label>
+          <label for="plant"><?php echo ': '.$jabatan;?></label>
         </div>
       </div>
     </div>

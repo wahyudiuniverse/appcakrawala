@@ -256,10 +256,42 @@
 				</p>
 
                 <p class="form-row form-row-wide">
-					<label for="bank_name">NAMA BANK: <strong><span style="color:red;">*</span></strong>
-						<i class="ln ln-icon-Bank"></i>
-						<input type="text" class="input-text" name="bank_name" id="contact_number1" value="" />
+                	<label for="bank_name">NAMA BANK: <strong><span style="color:red;">*</span></strong>
+						<i class="ln ln-icon-Male"></i>		
+
+						<select name="bank_name" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+							<option value=""></option>
+	            <option value="1">Bank OCBC NISP</option>
+							<option value="2">Bank BCA</option>
+							<option value="3">Bank Mandiri</option>
+							<option value="4">Bank BNI</option>
+							<option value="5">Bank BRI</option>
+							<option value="6">Bank Danamon</option>
+							<option value="7">Permata Bank</option>
+							<option value="8">Bank CIMB Niaga</option>
+							<option value="9">Bank BII Maybank</option>
+							<option value="10">Bank Mega</option>
+							<option value="11">Bank Syariah Indonesia (BSI)</option>
+							<option value="14">Bank CIMB Niaga Syariah</option>
+							<option value="15">Bank Muamalat</option>
+							<option value="16">Bank Tabungan Negara (BTN)</option>
+							<option value="17">Citibank</option>
+							<option value="18">Bank Jabar dan Banten (BJB)</option>
+							<option value="19">Bank DKI</option>
+							<option value="20">BPD DIY</option>
+							<option value="21">Bank Jateng</option>
+							<option value="22">Bank Jatim</option>
+							<option value="23">BPD Jambi</option>
+							<option value="24">BPD Aceh, BPD Aceh Syariah</option>
+							<option value="25">Bank Sumut</option>
+							<option value="26">Bank Nagari</option>
+							<option value="27">Bank Riau</option>
+							<option value="28">Bank Sumsel Babel</option>
+							<option value="29">SINARMAS</option>
+						</select>
+
 					</label>
+					
 				</p>
 
                 <p class="form-row form-row-wide">

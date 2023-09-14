@@ -437,46 +437,46 @@ class Employee_pkwt extends MY_Controller {
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
 			$this->load->view("admin/employees/get_ktp", $data);
-		} else {
+		} else { 
 			redirect('admin/');
-		}
+		} 
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	}
+	} 
 
 	 // get location > departments
-	public function get_info_pkwt() {
+	public function get_info_pkwt() { 
 
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
 		
-		$data = array(
+		$data = array( 
 			'employee_id' => $id
-		);
+		); 
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
 			$this->load->view("admin/employees/get_info_pkwt", $data);
-		} else {
+		} else { 
 			redirect('admin/');
-		}
+		} 
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-	}
+	} 
 
-	public function request_employee_pkwt() {
+	public function request_employee_pkwt() { 
 		$session = $this->session->userdata('username');
-		if(empty($session)){
+		if(empty($session)){ 
 			redirect('admin/');
-		}
+		} 
 
-		if($this->input->post('add_type')=='company') {
-			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
-			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-			$system = $this->Xin_model->read_setting_info(1);
+		if($this->input->post('add_type')=='company') { 
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>''); 
+			$Return['csrf_hash'] = $this->security->get_csrf_hash(); 
+			$system = $this->Xin_model->read_setting_info(1); 
 
 
 			$config['cacheable']	= true; //boolean, the default is true

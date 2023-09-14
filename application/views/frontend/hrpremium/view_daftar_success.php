@@ -29,8 +29,9 @@
 		<table class="manage-table responsive-table">
 
 			<tr>
-				<th><i class="fa fa-file-text"></i> No. Registrasi</th>
+				<th><i class="fa fa-file-text"></i> No.</th>
 				<th><i class="fa fa-user"></i> Nama Lengkap</th>
+				<th><i class="fa fa-envelope"></i> Project</th>
 				<th><i class="fa fa-phone"></i> No. HP/Whatsapp</th>
 				<th><i class="fa fa-calendar"></i> Date Posted</th>
 			</tr>
@@ -38,8 +39,9 @@
 			<?php foreach($jobs->result() as $r) { ?>
   
 			<tr>
-				<td class="action"><?php echo $no;?></td>
+				<td><?php echo $no;?></td>
 				<td class="action"><?php echo $r->fullname;?></td>
+				<td class="action"><?php echo $r->title;?></td>
 				<td class="action"><?php echo str_repeat('*', MAX(4, strlen($r->contact_no)) - 4) . substr($r->contact_no, -4);?></td>
 				<td class="action"><?php echo $r->createdon;?></td>
 			</tr>

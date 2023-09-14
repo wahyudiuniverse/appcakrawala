@@ -519,7 +519,7 @@ class employee_request_cancelled extends MY_Controller {
 
 					}
 
-// $Return['result'] = ' ELSE DIBAWAH Permintaan Karyawan berhasil di Ubah..';
+		// $Return['result'] = ' ELSE DIBAWAH Permintaan Karyawan berhasil di Ubah..';
 				if ($iresult == TRUE) {
 					$Return['result'] = $idrequest.' Permintaan Karyawan Baru berhasil di Ubah..';
 				} else {
