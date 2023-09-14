@@ -18,7 +18,7 @@
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
 <hr class="border-light m-0 mb-3">
-<?php $employee_idx = $this->Xin_model->generate_random_employeeid();?>
+<?php $employee_id = $this->Xin_model->generate_random_employeeid();?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
 
 <?php if(in_array('337',$role_resources_ids)) {?>
@@ -32,7 +32,7 @@
       <div class="card-body">
         <?php $attributes = array('name' => 'add_employee', 'id' => 'xin-form', 'autocomplete' => 'off');?>
         <?php $hidden = array('_user' => $session['user_id']);?>
-        <?php echo form_open_multipart('admin/employee_pkwt_cancel/pkwt_expired_save', $attributes, $hidden);?>
+        <?php echo form_open_multipart('admin/employee_pkwt_cancel/pkwt_expired_approve', $attributes, $hidden);?>
         <div class="form-body">
 
           <div class="row">
@@ -40,7 +40,7 @@
               <div class="row">
                 <input name="idrequest" type="hidden" value="<?php echo $secid;?>">
                 <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
-                <input name="company" type="hidden" value="<?php echo $company;?>">
+                <input name="company" type="hidden" value="<?php echo $secid;?>">
 
                 <!--NAMA LENGKAP-->
                 <div class="col-md-8">
@@ -72,7 +72,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                   <label for="date_of_birth">Tanggal Lahir<i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="Tanggal Lahir" name="date_of_birth" type="text" value="<?php echo $tanggal_lahir; ?>" >
+                  <input class="form-control date" readonly placeholder="Tanggal Lahir" name="date_of_birth" type="text" value="<?php echo $tanggal_lahir; ?>">
                   </div>
                 </div>
 
@@ -85,7 +85,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                                   <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_gender');?>*</label>
-                                  <select class="form-control" name="gender" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>" disabled>
+                                  <select class="form-control" name="gender" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>">
                                     <option value="">Jenis Kelamin</option>
                                     <option value="L"<?php if($gender=='L'){ echo 'selected';}?>><?php echo $this->lang->line('xin_gender_male');?></option>
                                     <option value="P"<?php if($gender=='P'){ echo 'selected';}?>><?php echo $this->lang->line('xin_gender_female');?></option>
@@ -99,7 +99,7 @@
                                   <label class="form-label control-label">Agama/Kepercayaan*</label>
 
 
-                                  <select class="form-control" name="ethnicity" data-plugin="xin_select" disabled>
+                                  <select class="form-control" name="ethnicity" data-plugin="xin_select">
                                   <option value=""></option>
                                               <?php foreach($all_ethnicity as $eth):?>
                                               <option value="<?php echo $eth->ethnicity_type_id;?>" <?php if($ethnicity_type==$eth->ethnicity_type_id):?> selected <?php endif; ?> ><?php echo $eth->type;?></option>
@@ -116,7 +116,7 @@
                                   <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_mstatus');?>*</label>
 
 
-                                  <select class="form-control" name="marital_status" data-plugin="xin_select" disabled>
+                                  <select class="form-control" name="marital_status" data-plugin="xin_select">
                                   <option value=""></option>
                                               <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
                                               <option value="K/0" <?php if($marital_status=='K/0'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
@@ -139,7 +139,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="<?php echo $ktp_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="<?php echo $ktp_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -147,7 +147,7 @@
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="alamat_ktp"><?php echo $this->lang->line('xin_address_1');?><i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_ktp" type="text" value="<?php echo $alamat_ktp;?>" disabled>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_ktp" type="text" value="<?php echo $alamat_ktp;?>">
                   </div>
                 </div>
 
@@ -159,7 +159,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="<?php echo $kk_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="<?php echo $kk_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -167,7 +167,7 @@
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="alamat_domisili">Alamat Domisili</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_domisili" type="text" value="<?php echo $alamat_domisili;?>" disabled>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_domisili" type="text" value="<?php echo $alamat_domisili;?>">
                   </div>
                 </div>
 
@@ -179,7 +179,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                   <label for="npwp">NPWP<i class="hrpremium-asterisk"></i></label>
-                  <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="<?php echo $npwp_no;?>" disabled>
+                  <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="<?php echo $npwp_no;?>">
                   </div>
                 </div>
 
@@ -187,7 +187,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="<?php echo $contact_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
+                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="<?php echo $contact_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -195,7 +195,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="email" class="control-label">Email<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="example@mail.com" name="email" type="text" value="<?php echo $email;?>" disabled>
+                    <input class="form-control" placeholder="example@mail.com" name="email" type="text" value="<?php echo $email;?>">
                   </div>
                 </div>
 
@@ -214,7 +214,7 @@
 
                
                               
-                    <select class="form-control" id="aj_project" name="project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                    <select  class="form-control" id="aj_project" name="project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
                                 <option value=""></option>
                                 <?php foreach($project_list as $projects) {?>
                                 <option value="<?php echo $projects->project_id?>" <?php if($project_id==$projects->project_id):?> selected <?php endif;?>><?php echo $projects->title?></option>
@@ -230,7 +230,7 @@
                     <label for="sub_project"><?php echo $this->lang->line('left_sub_projects');?></label>
                     
 
-                    <select class="form-control" id="project_sub_project" name="sub_project_id" data-plugin="xin_select" data-placeholder="Sub-Project" >
+                    <select class="form-control" id="project_sub_project" name="sub_project_id" data-plugin="xin_select" data-placeholder="Sub-Project">
                                 <option value=""></option>
                                 <?php foreach($sub_project_list as $sbproject) {?>
                                 <option value="<?php echo $sbproject->secid?>" <?php if($sub_project_id==$sbproject->secid):?> selected <?php endif;?>><?php echo $sbproject->sub_project_name?></option>
@@ -246,7 +246,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="department_id"><?php echo $this->lang->line('left_department');?><i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="department_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_department');?>" disabled>
+                    <select class="form-control" name="department_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_department');?>">
 
                       <option value="5">OPERATION</option>
                      
@@ -534,7 +534,7 @@
 
         </div>
 
-        <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> 
+        <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.'APPROVE PKWT')); ?> 
         </div>
         <?php echo form_close(); ?> 
       </div>

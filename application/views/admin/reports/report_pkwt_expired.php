@@ -128,7 +128,7 @@
                 <th colspan="7"><?php echo $this->lang->line('xin_hr_info');?></th>
               </tr>
               <tr>
-                <th>No.</th>
+                <th>STATUS PKWT.</th>
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>

@@ -1862,18 +1862,18 @@ class Reports extends MY_Controller
 		$searchkey = $this->uri->segment(7);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 
-		if($searchkey==0 || $searchkey==null){
-			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+		if($searchkey==0){
+			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
 		} else {
 			if($project_id==0 || $start_date==0 ){
 			// 	$employee = $this->Reports_model->report_pkwt_history();
 			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
-			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
 			} else if ($project_id==999){
-			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
 				// $employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date,$end_date);
 			}else {
-			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
 				// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$end_date);
 			}
 		}
@@ -1884,6 +1884,7 @@ class Reports extends MY_Controller
 		// for($i=0 ; $i < count($attend); $i++) {
  		foreach($employee->result() as $r) {
 
+ 				$user_id = $r->user_id;
 				$nip = $r->employee_id;
 				$fullname = $r->first_name;
 				$project = $r->project_id;
@@ -1920,7 +1921,7 @@ class Reports extends MY_Controller
 					$designation_name = '--';	
 				}
 
-			// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Approved</button>';
+			// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->employee_id . '">PKWT SIAP</button>';
 
 			// $view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
@@ -1946,11 +1947,16 @@ class Reports extends MY_Controller
 
 			// $whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
-			$editReq = '<a href="'.site_url().'admin/employees/pkwt_expired_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/0" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">PERPANJANG PKWT</button></a>'; 
+
+			$terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">APPROVE PKWT</button></a>'; 
+
+
+			$stopPkwt = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-danger">STOP PKWT</button></a>';
 
 
 			$data[] = array (
-				$editReq,
+				$editReq .' '.$terbitPkwt.' '.$stopPkwt,
 				$nip,
 				$fullname,
 				$nama_project,

@@ -25,6 +25,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 		$this->load->model("Location_model");
 		$this->load->model("Pkwt_model");
 		$this->load->library('wablas');
+		$this->load->library('ciqrcode');
 	}
 	
 	/*Function to set JSON output*/
@@ -497,6 +498,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			redirect('admin/');
 		}
 		$id = $this->uri->segment(4);
+		$edit_approve = $this->uri->segment(5);
 		// $id = '5700';
 		// $result = $this->Pkwt_model->read_pkwt_info($id);
 		$result = $this->Employees_model->read_employee_expired($id);
@@ -574,10 +576,12 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'tanggal_lahir' => $date_of_birth,
 
 
+			'company' => $result[0]->company_id,
 			'project_id' => $result[0]->project_id,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
 
 			'sub_project_id' => $result[0]->sub_project_id,
+			'sub_project_list' => $this->Project_model->get_sub_project_filter($result[0]->project_id),
 
 			'designation_id' => $result[0]->designation_id,
 			'designations_list' => $this->Designation_model->all_designations(),
@@ -631,8 +635,11 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		// } else {
-
-		$data['subview'] = $this->load->view("admin/pkwt/pkwt_expired_edit", $data, TRUE);
+		if($edit_approve=='1'){
+			$data['subview'] = $this->load->view("admin/pkwt/pkwt_expired_approve", $data, TRUE);
+		} else {
+			$data['subview'] = $this->load->view("admin/pkwt/pkwt_expired_edit", $data, TRUE);
+		}
 		// }
 
 		// if($result[0]->user_id == $id) {
@@ -662,10 +669,14 @@ class Employee_pkwt_cancel extends MY_Controller {
 				$Return['csrf_hash'] = $this->security->get_csrf_hash();
 				// $system = $this->Xin_model->read_setting_info(1);
 
+
+
+
+
 					if($this->input->post('gaji_pokok')=='') {
 						$Return['error'] = 'Gaji Pokok Kosong..!';
 					} 
-						// else if ($this->input->post('nama_ibu')=='') {
+					// else if ($this->input->post('nama_ibu')=='') {
 					// 	$Return['error'] = 'Nama Ibu Kandung Kosong..!';
 					// } else if ($this->input->post('tempat_lahir')=='') {
 					// 	$Return['error'] = 'Tempat Lahir Kosong..!';
@@ -673,10 +684,18 @@ class Employee_pkwt_cancel extends MY_Controller {
 					else {
 
 							$idrequest 					= $this->input->post('idrequest');
-					   	// $fullname 					= $this->input->post('fullname');
-					   	// $nama_ibu						= $this->input->post('nama_ibu');
+					   	$fullname 					= $this->input->post('fullname');
+					   	$nama_ibu						= $this->input->post('nama_ibu');
 							$tempat_lahir 			= $this->input->post('tempat_lahir');
-							// $tanggal_lahir 			= $this->input->post('date_of_birth');
+							$tanggal_lahir 			= $this->input->post('date_of_birth');
+							$department_id 			= '5';
+							$project_id					= $this->input->post('project_id');
+							$sub_project				= $this->input->post('sub_project_id');
+							$jabatan 							= $this->input->post('posisi');
+							$date_of_join 							= $this->input->post('date_of_join');
+							$penempatan 							= $this->input->post('penempatan');
+							$gaji_pokok 							= $this->input->post('gaji_pokok');
+
 							// $jenis_kelamin			= $this->input->post('gender');
 							// $agama 							= $this->input->post('ethnicity');
 							// $marital_status			= $this->input->post('marital_status');
@@ -692,34 +711,32 @@ class Employee_pkwt_cancel extends MY_Controller {
 							// $no_rek							= $this->input->post('no_rek');
 							// $pemilik_rekening			= $this->input->post('pemilik_rekening');
 
-							// $project_id					= $this->input->post('project_id');
-							// $sub_project				= $this->input->post('sub_project');
-							// $jabatan 							= $this->input->post('posisi');
-							// // $date_of_join 							= $this->input->post('date_of_join');
-							// $penempatan 							= $this->input->post('penempatan');
-							// $gaji_pokok 							= $this->input->post('gaji_pokok');
-							// $tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
-							// $tunjangan_area 							= $this->input->post('tunjangan_area');
-							// $tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
-							// $tunjangan_makan 							= $this->input->post('tunjangan_makan');
-							// $tunjangan_transport 							= $this->input->post('tunjangan_transport');
-							// $tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
-							// $tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
-							// $tunjangan_device 							= $this->input->post('tunjangan_device');
-							// $tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
-							// $tunjangan_rental 							= $this->input->post('tunjangan_rental');
-							// $tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
-							// $tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
-							// $tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
-							// $tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
-							// $tunjangan_operational 							= $this->input->post('tunjangan_operational');
-							// $join_date_pkwt 							= $this->input->post('join_date_pkwt');
-							// $pkwt_end_date 							= $this->input->post('pkwt_end_date');
-							// $waktu_kontrak 							= $this->input->post('waktu_kontrak');
-							// $hari_kerja 							= $this->input->post('hari_kerja');
-							// $cut_start 							= $this->input->post('cut_start');
-							// $cut_off 							= $this->input->post('cut_off');
-							// $date_payment 							= $this->input->post('date_payment');
+							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
+							$tunjangan_area 							= $this->input->post('tunjangan_area');
+							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
+							$tunjangan_makan 							= $this->input->post('tunjangan_makan');
+							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
+							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
+							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_device 							= $this->input->post('tunjangan_device');
+							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
+							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
+							$tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
+							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
+							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
+							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
+							$tunjangan_operational 							= $this->input->post('tunjangan_operational');
+							
+							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
+							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
+							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
+							$hari_kerja 							= $this->input->post('hari_kerja');
+							$cut_start 							= $this->input->post('cut_start');
+							$cut_off 							= $this->input->post('cut_off');
+							$date_payment 							= $this->input->post('date_payment');
+
+							// $date_exp_pkwt		= $this->input->post('date_exp_pkwt');
+							$by_exp_pkwt			= $session['user_id'];
 						}
 
 
@@ -727,13 +744,15 @@ class Employee_pkwt_cancel extends MY_Controller {
 					$this->output($Return);
 
 
+
+
 			    }
 
 							$data = array(
-								// 'fullname' 						=> $fullname,
-								// 'nama_ibu' 						=> $nama_ibu,
-								'tempat_lahir' 				=> $tempat_lahir
-								// 'tanggal_lahir' 			=> $tanggal_lahir,
+								'first_name' 							=> $fullname,
+								'ibu_kandung' 						=> $nama_ibu,
+								'tempat_lahir' 						=> $tempat_lahir,
+								'date_of_birth' 					=> $tanggal_lahir,
 								// 'gender'							=> $jenis_kelamin,
 								// 'agama' 							=> $agama,
 								// 'status_kawin' 				=> $marital_status,
@@ -748,37 +767,45 @@ class Employee_pkwt_cancel extends MY_Controller {
 								// 'bank_id' 						=> $bank_name,
 								// 'no_rek' 							=> $no_rek,
 								// 'pemilik_rekening' 		=> $pemilik_rekening,
-								// 'project' 						=> $project_id,
-								// 'sub_project' 				=> $sub_project,
-								// 'jabatan' 							=> $jabatan,
+								'department_id'						=> $department_id,
+								'project_id' 							=> $project_id,
+								'sub_project_id' 					=> $sub_project,
+								'designation_id' 					=> $jabatan,
+								'date_of_joining' 				=> $date_of_join,
+								'penempatan' 							=> $penempatan,
+								'basic_salary'		 				=> $gaji_pokok,
 
-								// // 'doj' 								=> $date_of_join,
-								// 'penempatan' 					=> $penempatan,
-								// 'basic_pay' 					=> $gaji_pokok,
-								// 'allowance_grade' 			=> $tunjangan_jabatan,
-								// 'allowance_area' 					=> $tunjangan_area,
-								// 'allowance_masakerja' 		=> $tunjangan_masakerja,
-								// 'allowance_meal' 			=> $tunjangan_makan,
-								// 'allowance_transport' 		=> $tunjangan_transport,
-								// 'allowance_komunikasi' 	=> $tunjangan_komunikasi,
+								'allow_jabatan' 			=> $tunjangan_jabatan,
+								'allow_area' 					=> $tunjangan_area,
+								'allow_masakerja' 		=> $tunjangan_masakerja,
+								'allow_konsumsi' 			=> $tunjangan_makan,
+								'allow_transport' 		=> $tunjangan_transport,
+								'allow_comunication' 	=> $tunjangan_komunikasi,
 
-								// 'allowance_rent' 					=> $tunjangan_rental,
-								// 'allowance_park' 			=> $tunjangan_parkir,
-								// 'allowance_transmeal' 		=> $tunjangan_makan_trans,
-								// 'allowance_residance'=> $tunjangan_tempat_tinggal,
-								// 'allowance_laptop' 				=> $tunjangan_device,
+								'allow_rent' 					=> $tunjangan_rental,
+								'allow_parking' 			=> $tunjangan_parkir,
+								'allow_trans_meal' 		=> $tunjangan_makan_trans,
+								'allow_residence_cost'=> $tunjangan_tempat_tinggal,
+								'allow_device' 				=> $tunjangan_device,
 								
-								// 'allowance_medicine' 		=> $tunjangan_kesehatan,
-								// 'allowance_akomodasi' 		=> $tunjangan_akomodasi,
-								// 'allowance_kasir' 				=> $tunjangan_kasir,
-								// 'allowance_operation' 	=> $tunjangan_operational,
-								// 'from_date' 			=> $join_date_pkwt,
-								// 'to_date' 				=> $pkwt_end_date,
-								// 'waktu_kontrak' 		=> $waktu_kontrak,
-								// 'hari_kerja' 					=> $hari_kerja,
-								// 'start_period_payment' 					=> $cut_start,
-								// 'end_period_payment' 						=> $cut_off,
-								// 'tgl_payment' 				=> $date_payment,
+								'allow_medichine' 		=> $tunjangan_kesehatan,
+								'allow_akomodsasi' 		=> $tunjangan_akomodasi,
+								'allow_kasir' 				=> $tunjangan_kasir,
+								'allow_operational' 	=> $tunjangan_operational,
+
+								'contract_start' 			=> $join_date_pkwt,
+								'contract_end' 				=> $pkwt_end_date,
+								'contract_periode' 		=> $waktu_kontrak,
+								'hari_kerja' 					=> $hari_kerja,
+								'cut_start' 					=> $cut_start,
+								'cut_off' 						=> $cut_off,
+								'date_payment' 				=> $date_payment,
+
+								'date_exp_pkwt'							=> date('Y-m-d h:i:s'),
+								'by_exp_pkwt' 							=> $by_exp_pkwt
+
+
+
 							);
 
 						$iresult = $this->Employees_model->save_pkwt_expired($data,$idrequest);
@@ -786,7 +813,211 @@ class Employee_pkwt_cancel extends MY_Controller {
 					// }
 
 				if ($iresult == TRUE) {
-					$Return['result'] = $idrequest.' Perubahan PKWT Expired berhasil di Ubah..';
+					$Return['result'] = $fullname.' Perubahan PKWT Expired berhasil di Ubah..';
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+				}
+				
+				// $Return['result'] = $idrequest.' Permintaan Karyawan Baru berhasil di Ubah..';
+
+				$this->output($Return);
+				exit;
+			// }
+	}
+
+	// Validate and add info in database
+	public function pkwt_expired_approve() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){	
+			redirect('admin/');
+		}
+
+			// if($this->input->post('add_type')=='company') {
+				$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+				$Return['csrf_hash'] = $this->security->get_csrf_hash();
+				// $system = $this->Xin_model->read_setting_info(1);
+
+
+			$config['cacheable']	= true; //boolean, the default is true
+			$config['cachedir']		= './assets/'; //string, the default is application/cache/
+			$config['errorlog']		= './assets/'; //string, the default is application/logs/
+			$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
+			$config['quality']		= true; //boolean, the default is true
+			$config['size']			= '1024'; //interger, the default is 1024
+			$config['black']		= array(224,255,255); // array, default is array(255,255,255)
+			$config['white']		= array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+
+
+
+					if($this->input->post('gaji_pokok')=='') {
+						$Return['error'] = 'Gaji Pokok Kosong..!';
+					} 
+					// else if ($this->input->post('nama_ibu')=='') {
+					// 	$Return['error'] = 'Nama Ibu Kandung Kosong..!';
+					// } else if ($this->input->post('tempat_lahir')=='') {
+					// 	$Return['error'] = 'Tempat Lahir Kosong..!';
+					// } 
+					else {
+
+						if(strtoupper($this->input->post('company'))=='2'){
+							$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+							$spb_hr = 'E-SPB-JKT/SC-HR/';
+							$companyID = '2';
+						}else if (strtoupper($this->input->post('company'))=='3'){
+							$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+							$spb_hr = 'E-SPB-JKT/KAC-HR/';
+							$companyID = '3';
+						} else {
+							$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+							$spb_hr = 'E-SPB-JKT/MATA-HR/';
+							$companyID = '4';
+						}
+
+
+						$count_pkwt = $this->Xin_model->count_pkwt();
+						$romawi = $this->Xin_model->tgl_pkwt();
+						$unicode = $this->Xin_model->getUniqueCode(20);
+						$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+						$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
+							$idrequest 					= $this->input->post('idrequest');
+							$employee_id 					= $this->input->post('employee_id');
+					   	$fullname 					= $this->input->post('fullname');
+					   	$nama_ibu						= $this->input->post('nama_ibu');
+							$tempat_lahir 			= $this->input->post('tempat_lahir');
+							$tanggal_lahir 			= $this->input->post('date_of_birth');
+							$department_id 			= '5';
+							$project_id					= $this->input->post('project_id');
+							$sub_project				= $this->input->post('sub_project_id');
+							$jabatan 							= $this->input->post('posisi');
+							$date_of_join 							= $this->input->post('date_of_join');
+							$penempatan 							= $this->input->post('penempatan');
+							$gaji_pokok 							= $this->input->post('gaji_pokok');
+
+							// $jenis_kelamin			= $this->input->post('gender');
+							// $agama 							= $this->input->post('ethnicity');
+							// $marital_status			= $this->input->post('marital_status');
+
+							// $nomor_ktp					= $this->input->post('nomor_ktp');
+							// $alamat_ktp					= $this->input->post('alamat_ktp');
+							// $nomor_kk						= $this->input->post('nomor_kk');
+							// $alamat_domisili			= $this->input->post('alamat_domisili');
+							// $npwp								= $this->input->post('npwp');
+							// $nomor_hp						= $this->input->post('nomor_hp');
+							// $email							= $this->input->post('email');
+							// $bank_name					= $this->input->post('bank_name');
+							// $no_rek							= $this->input->post('no_rek');
+							// $pemilik_rekening			= $this->input->post('pemilik_rekening');
+
+							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
+							$tunjangan_area 							= $this->input->post('tunjangan_area');
+							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
+							$tunjangan_makan 							= $this->input->post('tunjangan_makan');
+							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
+							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
+							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_device 							= $this->input->post('tunjangan_device');
+							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
+							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
+							$tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
+							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
+							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
+							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
+							$tunjangan_operational 							= $this->input->post('tunjangan_operational');
+							
+							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
+							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
+							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
+							$hari_kerja 							= $this->input->post('hari_kerja');
+							$cut_start 							= $this->input->post('cut_start');
+							$cut_off 							= $this->input->post('cut_off');
+							$date_payment 							= $this->input->post('date_payment');
+
+							// $date_exp_pkwt		= $this->input->post('date_exp_pkwt');
+							$by_exp_pkwt			= $session['user_id'];
+
+
+						$docid = date('ymdHisv');
+						$image_name='esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
+						$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
+						$params['data'] = $domain; //data yang akan di jadikan QR CODE
+						$params['level'] = 'H'; //H=High
+						$params['size'] = 10;
+						$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+						
+
+						$data = array(
+							'uniqueid' 							=> $unicode,
+							'employee_id' 					=> $employee_id,
+							'docid'									=> $docid,
+							'project' 							=> $project_id,
+							'from_date'	 						=> $join_date_pkwt,
+							'to_date' 							=> $pkwt_end_date,
+							'no_surat' 							=> $nomor_surat,
+							'no_spb' 								=> $nomor_surat_spb,
+							'waktu_kontrak' 				=> $waktu_kontrak,
+							'company' 							=> $companyID,
+							'jabatan' 							=> $jabatan,
+							'penempatan' 						=> $penempatan,
+							'hari_kerja' 						=> $hari_kerja,
+							'tgl_payment'						=> $date_payment,
+							'start_period_payment' 	=> $cut_start,
+							'end_period_payment'		=> $cut_off,
+							'basic_pay' 						=> $gaji_pokok,
+							'dm_allow_grade' 				=> 'Month',
+							'allowance_grade'				=> $tunjangan_jabatan,
+							'dm_allow_area' 				=> 'Month',
+							'allowance_area'				=> $tunjangan_area,
+							'dm_allow_masakerja' 		=> 'Month',
+							'allowance_masakerja' 	=> $tunjangan_masakerja,
+							'dm_allow_transmeal' 		=> 'Month',
+							'allowance_transmeal' 	=> $tunjangan_makan_trans,
+							'dm_allow_meal' 				=> 'Month',
+							'allowance_meal' 				=> $tunjangan_makan,
+							'dm_allow_transport' 		=> 'Month',
+							'allowance_transport' 	=> $tunjangan_transport,
+							'dm_allow_komunikasi' 	=> 'Month',
+							'allowance_komunikasi' 	=> $tunjangan_komunikasi,
+							'dm_allow_laptop' 			=> 'Month',
+							'allowance_laptop' 			=> $tunjangan_device,
+							'dm_allow_residance' 		=> 'Month',
+							'allowance_residance' 	=> $tunjangan_tempat_tinggal,
+							'dm_allow_rent' 				=> 'Month',
+							'allowance_rent' 				=> $tunjangan_rental,
+							'dm_allow_park' 				=> 'Month',
+							'allowance_park' 				=> $tunjangan_parkir,
+							'dm_allow_medicine' 		=> 'Month',
+							'allowance_medicine' 		=> $tunjangan_kesehatan,
+							'dm_allow_akomodasi' 		=> 'Month',
+							'allowance_akomodasi' 	=> $tunjangan_akomodasi,
+							'dm_allow_kasir' 				=> 'Month',
+							'allowance_kasir' 			=> $tunjangan_kasir,
+							'dm_allow_operation' 		=> 'Month',
+							'allowance_operation' 	=> $tunjangan_operational,
+							'img_esign'							=> $image_name,
+
+							'sign_nip'							=> '21500006',
+							'sign_fullname'					=> 'ASTI PRASTISTA',
+							'sign_jabatan'					=> 'SM HR & GA',
+							'status_pkwt' => 0,
+							'request_pkwt' => $session['user_id'],
+							'request_date' => date('Y-m-d h:i:s'),
+							'approve_nae' => $session['user_id'],
+							'approve_nae_date' => date('Y-m-d h:i:s'),
+							'approve_nom' =>  $session['user_id'],
+							'approve_nom_date' => date('Y-m-d h:i:s')
+
+						);
+
+
+					$iresult = $this->Pkwt_model->add_pkwt_record($data);
+				}
+
+
+				if ($iresult == TRUE) {
+					$Return['result'] = $fullname.' PENGAJUAN PKWT EXPIRED berhasil..';
 				} else {
 					$Return['error'] = $this->lang->line('xin_error_msg');
 				}

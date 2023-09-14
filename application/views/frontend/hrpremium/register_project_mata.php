@@ -244,8 +244,6 @@
 					</label>
 				</p>
 
-				
-
                 <p class="form-row form-row-wide">
 					<label for="penempatan">KOTA/AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Engineering"></i>

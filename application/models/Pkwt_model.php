@@ -402,7 +402,7 @@ class Pkwt_model extends CI_Model {
 
 
  	// monitoring request
-	public function report_pkwt_expired_null($keyword) {
+	public function report_pkwt_expired_null($empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "SELECT emp.user_id,emp.employee_id,emp.first_name,emp.project_id,emp.sub_project_id,emp.designation_id,emp.date_of_joining,emp.penempatan,emp.contract_end,pkwt.no_surat
 FROM xin_employees emp
