@@ -882,7 +882,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 						$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
 
 							$idrequest 					= $this->input->post('idrequest');
-							$employee_id 					= $this->input->post('employee_id');
+							$employee_id 				= $this->input->post('employee_id');
 					   	$fullname 					= $this->input->post('fullname');
 					   	$nama_ibu						= $this->input->post('nama_ibu');
 							$tempat_lahir 			= $this->input->post('tempat_lahir');

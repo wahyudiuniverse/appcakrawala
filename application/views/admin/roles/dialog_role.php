@@ -816,6 +816,14 @@ dataSource: [
 					add_info: "", 
 					value: "378",
 					check: "<?php if(isset($_GET['role_id'])) { if(in_array('378',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
+				},
+				{ 
+					id: "", 
+					class: "role-checkbox-modal custom-control-input", 
+					text: "Release PKWT",  
+					add_info: "", 
+					value: "382",
+					check: "<?php if(isset($_GET['role_id'])) { if(in_array('382',$role_resources_ids)): echo 'checked'; else: echo ''; endif; }?>"
 				}
 				]
 			},

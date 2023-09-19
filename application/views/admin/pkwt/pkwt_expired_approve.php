@@ -18,7 +18,7 @@
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
 <hr class="border-light m-0 mb-3">
-<?php $employee_id = $this->Xin_model->generate_random_employeeid();?>
+<?php //$employee_id = $this->Xin_model->generate_random_employeeid();?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode();?>
 
 <?php if(in_array('337',$role_resources_ids)) {?>
@@ -40,7 +40,7 @@
               <div class="row">
                 <input name="idrequest" type="hidden" value="<?php echo $secid;?>">
                 <input name="employee_id" type="hidden" value="<?php echo $employee_id;?>">
-                <input name="company" type="hidden" value="<?php echo $secid;?>">
+                <input name="company" type="hidden" value="<?php echo $company;?>">
 
                 <!--NAMA LENGKAP-->
                 <div class="col-md-8">

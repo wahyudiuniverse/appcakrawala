@@ -95,6 +95,7 @@ class employee_request_cancelled extends MY_Controller {
 				$approved_naeby = $r->approved_naeby;
 				$approved_nomby = $r->approved_nomby;
 				$approved_hrdby = $r->approved_hrdby;
+				$tgl_tolak = $r->cancel_on;
 			  
 
 				if($approved_naeby==null){
@@ -155,7 +156,7 @@ class employee_request_cancelled extends MY_Controller {
 				$designation_name,
 				$penempatan,
 				$doj,
-				$contact_no
+				$tgl_tolak
 			);
           }
 
@@ -265,7 +266,7 @@ class employee_request_cancelled extends MY_Controller {
 			'npwp_no' => $result[0]->npwp,
 			'contact_no' => $result[0]->contact_no,
 			'email' => $result[0]->email,
-			'bank_id' => $result[0]->bank_id,
+			'bank_id' => $result[0]->bank_name,
 			'list_bank' => $this->Xin_model->get_bank_code(),
 			'nomor_rek' => $result[0]->no_rek,
 			'pemilik_rek' => $result[0]->pemilik_rekening,

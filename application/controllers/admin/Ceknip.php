@@ -117,10 +117,12 @@ class ceknip extends MY_Controller {
 				$full_name = $r->first_name;
 				$area = $r->penempatan;
 
+			$ename = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank">'.$full_name.'</a>'; 
+
 
 			// $role_status = $role_name;
 			$data[] = array(
-				$r->employee_id,
+				$ename,
 				$r->ktp_no,
 				$full_name,
 				$r->title,

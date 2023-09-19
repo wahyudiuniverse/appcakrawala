@@ -14,14 +14,12 @@
 <?php $count_pkwtcancel = $this->Xin_model->count_approve_pkwt_cancel($session['employee_id']);?>
 <?php $count_emp_request = $this->Xin_model->count_emp_request($session['employee_id']);?>
 
-
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PENGAJUAN PKWT
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/reports/pkwt_expired');?>" data-link-data="<?php echo site_url('admin/reports/pkwt_expired/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PENGAJUAN PKWT
       </a> </li>
     <?php } ?>  
-
 
     <?php if(in_array('505',$role_resources_ids)) { ?>
     <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>TERBITKAN PKWT

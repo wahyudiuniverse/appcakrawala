@@ -229,7 +229,7 @@
 						<i class="ln ln-icon-Male"></i>		
 
 						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
-							<option value="0">--</option>
+							<option value="">--</option>
 						</select>
 
 					</label>
@@ -241,7 +241,7 @@
 						<i class="ln ln-icon-Male"></i>		
 
 						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
-							<option value="0">--</option>
+							<option value="">--</option>
 						</select>
 
 					</label>

@@ -15,12 +15,7 @@
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
-  <ul class="nav nav-tabs step-anchor">
-
-    <?php if(in_array('337',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request/');?>" data-link-data="<?php echo site_url('admin/employee_request/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>AREA
-      </a> </li>
-    <?php } ?>  
+  <ul class="nav nav-tabs step-anchor"> 
 
     <?php if(in_array('378',$role_resources_ids)) { ?>
     <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request_hrd/');?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN BARU <?php echo '('.$count_emp_request_hrd.')';?>
@@ -58,7 +53,7 @@
             <th><?php echo $this->lang->line('left_designation');?></th>
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th><?php echo $this->lang->line('xin_employee_doj');?></th>
-            <th><?php echo $this->lang->line('xin_e_details_contact');?></th>
+            <th> Tanggal Register</th>
           </tr>
         </thead>
       </table>

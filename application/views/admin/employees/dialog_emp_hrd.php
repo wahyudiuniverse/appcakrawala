@@ -707,7 +707,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
 
-    <?php if(in_array('378',$role_resources_ids)) { ?>
+    <?php if(in_array('382',$role_resources_ids)) { ?>
     <button type="submit" class="btn btn-primary save">APPROVE HRD</button>
     <?php } ?>
 

@@ -94,6 +94,9 @@ class Employee_request_hrd extends MY_Controller {
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
 				$nik_ktp = $r->nik_ktp;
+				$notes = $r->catatan_hr;
+
+				$register_date = $r->request_empon;
 				$approved_hrdby = $r->approved_hrdby;
 
 
@@ -137,10 +140,18 @@ class Employee_request_hrd extends MY_Controller {
 
 			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">TOLAK</button>';
 
+			  	$noteHR = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal" data-target=".edit-modal-data" data-company_id="!'. $r->secid . '">note</button>';
+
+				if(in_array('382',$role_resources_ids)){
+					$nik_note = $nik_ktp. '<br><i>' .$notes.'</i> '.$noteHR;
+				} else {
+					$nik_note = $nik_ktp;
+				}
+
 			$data[] = array(
 				$no,
 				$status_migrasi.' <br>'.$cancel.' '.$editReq,
-				$nik_ktp,
+				$nik_note,
 				$fullname,
 				$nama_project,
 				$nama_subproject,
@@ -148,7 +159,7 @@ class Employee_request_hrd extends MY_Controller {
 				$designation_name,
 				$penempatan,
 				$doj,
-				$contact_no
+				$register_date
 			);
           }
 
@@ -404,7 +415,8 @@ class Employee_request_hrd extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 
 			$idsubmit = substr($this->input->get('company_id'),0,1);
-			$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
+			// $id = str_replace("#","",str_replace("$","",str_replace("@","",$this->input->get('company_id'))));
+			$id = str_replace("!","",str_replace("$","",str_replace("@","",$this->input->get('company_id'))));
 
 		// $id = $this->input->get('company_id');
        // $data['all_countries'] = $this->xin_model->get_countries();
@@ -412,6 +424,7 @@ class Employee_request_hrd extends MY_Controller {
 		$result = $this->Employees_model->read_employee_request($id);
 		$data = array(
 				'nik_ktp' => $result[0]->nik_ktp,
+				// 'nik_ktp' => $idsubmit,
 				'fullname' => $result[0]->fullname,
 				'location_id' => $this->Location_model->read_location_information($result[0]->location_id),
 				'project' => $this->Project_model->read_project_information($result[0]->project),
@@ -487,8 +500,10 @@ class Employee_request_hrd extends MY_Controller {
 
 				if($idsubmit=='$'){
 			$this->load->view('admin/employees/dialog_emp_hrd', $data);
-		} else {
+		} else if($idsubmit=='@'){
 			$this->load->view('admin/employees/dialog_emp_cancel_hrd', $data);
+		} else {
+			$this->load->view('admin/employees/dialog_emp_notehrd', $data);
 		}
 
 		// $this->load->view('admin/employees/dialog_emp_hrd', $data);
@@ -513,12 +528,13 @@ class Employee_request_hrd extends MY_Controller {
 			$config['white']		= array(70,130,180); // array, default is array(0,0,0)
 			$this->ciqrcode->initialize($config);
 
+		// $id = '31';
+
 		if($this->input->post('edit_type')=='company') {
 
-		$id = $this->uri->segment(4);
-		$cancel = $this->uri->segment(5);
-
-		// $id = $this->uri->segment(4);
+			$idtransaksi 	= $this->input->post('idtransaksi');
+			$id = $this->uri->segment(4);
+			$cancel = $this->uri->segment(5);
 
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
@@ -783,7 +799,7 @@ class Employee_request_hrd extends MY_Controller {
 
 
 
-			if($cancel=='YES'){
+			if($cancel==='YES'){
 
 				$data_up = array(
 
@@ -803,6 +819,97 @@ class Employee_request_hrd extends MY_Controller {
 				);
 			}
 
+			// $data_up = array(
+			// 	'nip' => $employee_id,
+			// 	'approved_hrdby' =>  $session['user_id'],
+			// 	'approved_hrdon' => date('Y-m-d h:i:s'),
+			// );
+			$result = $this->Employees_model->update_request_employee($data_up,$id);
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+		
+		
+		if ($result == TRUE) {
+			$Return['result'] = $this->lang->line('xin_success_update_company');
+		} else {
+			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+		}
+			$this->output($Return);
+			exit;
+		}
+	}
+	
+
+	// Validate and update info in database
+	public function updateNote() {
+		
+		$session = $this->session->userdata('username');
+		if(empty($session)) {
+			redirect('admin/');
+		}
+
+			$config['cacheable']	= true; //boolean, the default is true
+			$config['cachedir']		= './assets/'; //string, the default is application/cache/
+			$config['errorlog']		= './assets/'; //string, the default is application/logs/
+			$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
+			$config['quality']		= true; //boolean, the default is true
+			$config['size']			= '1024'; //interger, the default is 1024
+			$config['black']		= array(224,255,255); // array, default is array(255,255,255)
+			$config['white']		= array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
+
+		// $id = '31';
+		$id = $this->uri->segment(4);
+		$cancel = $this->uri->segment(5);
+
+		if($this->input->post('edit_type')=='company') {
+
+					$idtransaksi 	= $this->input->post('idtransaksi');
+		// $id = $this->uri->segment(4);
+
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		
+
+
+
+				$data_up = array(
+
+					'catatan_hr' 	=> $this->input->post('ket_note')
+
+				);
+
+			// if($cancel==='YES'){
+
+			// 	$data_up = array(
+
+			// 		'cancel_stat' => 1,
+			// 		'cancel_on' 	=> date("Y-m-d h:i:s"),
+			// 		'cancel_by' 	=> $session['user_id'], 
+			// 		'cancel_ket' 	=> $this->input->post('ket_revisi')
+
+			// 	);
+			// } else if ($cancel==='3'){
+
+
+			// 	$data_up = array(
+
+			// 		'catatan_hr' 	=> $this->input->post('ket_note')
+
+			// 	);
+
+			// }else {
+			// 	$data_up = array(
+			// 		// 'nip'							=> $employee_id,
+			// 		'migrasi' => '1',
+			// 		'approved_hrdby' =>  $session['user_id'],
+			// 		'approved_hrdon' => date("Y-m-d h:i:s")
+
+			// 	);
+			// }
 
 			// $data_up = array(
 			// 	'nip' => $employee_id,
@@ -821,11 +928,11 @@ class Employee_request_hrd extends MY_Controller {
 		} else {
 			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
 		}
-		$this->output($Return);
-		exit;
+			$this->output($Return);
+			exit;
 		}
 	}
-	
+
 	public function delete() {
 		
 		if($this->input->post('is_ajax')==2) {
