@@ -1736,7 +1736,7 @@ class Pkwt183 extends MY_Controller
 					<table cellpadding="2" cellspacing="0" border="0">
 						<tr>
 							<td>Program BPJS (Didaftarkan Satu bulan setelah masa kerja )<br>( sesuai dengan ketentuan klien / peraturan perusahaan )
-				</td>
+					</td>
 						</tr>
 						<tr>
 							<td>Iuran sebesar 4% ditanggung oleh pihak Pertama, 1 % Pihak kedua,</td>
@@ -1756,15 +1756,15 @@ class Pkwt183 extends MY_Controller
 					<td colspan="5">Ditanggung Pihak Kedua</td>
 				</tr>
 
-				
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
-				$fname = strtolower($fname);
-				$pay_month = strtolower(date("F Y"));
+				// $fname = strtolower($fname);
+				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				$pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 
 

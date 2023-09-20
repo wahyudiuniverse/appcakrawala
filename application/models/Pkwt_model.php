@@ -410,6 +410,7 @@ LEFT JOIN (SELECT * FROM xin_employee_contract WHERE status_pkwt = 1) pkwt
 	ON pkwt.employee_id = emp.employee_id
 WHERE emp.status_employee = 1
 AND emp.status_resign = 1
+AND emp.employee_id not in (1,1024)
 AND pkwt.no_surat is null
 AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
 		// $binds = array(1,$cid);
@@ -503,6 +504,14 @@ AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$e
 		
 	}
 
+	public function get_single_pkwt($id) {
+		
+		$sql = 'SELECT * FROM xin_employee_contract WHERE contract_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+	 	return $query->result();
+	}
+
 
 		// Function to update record in table
 	public function update_pkwt_edit($data, $id){
@@ -548,14 +557,6 @@ AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$e
 	  return $this->db->get("xin_tax_types");
 	}
 	 
-	public function get_single_pkwt($id) {
-		
-		$sql = 'SELECT * FROM xin_employee_contract WHERE contract_id = ?';
-		$binds = array(1);
-		$query = $this->db->query($sql, $binds);
-	 	return $query->result();
-	}
-
 
 	// get single pkwt by userid
 	public function get_single_pkwt_by_userid($id) {

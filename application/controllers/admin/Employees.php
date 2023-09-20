@@ -4381,9 +4381,6 @@ class Employees extends MY_Controller {
 				$Return['error'] = 'File PAKLARING Lebih dari 2MB..';
 			}
 
-			else if ($_FILES['document_file_pkwt']['size'] > 2000000){
-				$Return['error'] = 'File PKWT Lebih dari 2MB..';
-			}
 
 			else {
 
@@ -4563,31 +4560,6 @@ class Employees extends MY_Controller {
 									}
 								}
 
-								if($_FILES['document_file_pkwt']['size'] == 0) {
-									$fname_pkwt = $this->input->post('ffile_pkwt');
-								} else {
-									if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
-										//checking image type
-										$allowed_pkwt =  array('pdf','PDF');
-										$filename_pkwt = $_FILES['document_file_pkwt']['name'];
-										$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
-										
-										if(in_array($ext_pkwt,$allowed_pkwt)){
-											$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
-											$documentd_pkwt = "uploads/document/pkwt/";
-											// basename() may prevent filesystem traversal attacks;
-											// further validation/sanitation of the filename may be appropriate
-											$name = basename($_FILES["document_file_pkwt"]["name"]);
-											$newfilename_pkwt = 'pkwt_'.$employee_id.'.'.$ext_pkwt;
-											move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
-											$fname_pkwt = $newfilename_pkwt;
-										} else {
-											$Return['error'] = 'Jenis File PKWT tidak diterima..';
-										}
-									}
-								}
-
-
 				//clean simple fields
 
 				$id 				= $this->input->post('user_id');
@@ -4615,7 +4587,6 @@ class Employees extends MY_Controller {
 				'filename_skck' => $fname_skck,
 				'filename_isd' 	=> $fname_isd,
 				'filename_paklaring' => $fname_pak,
-				'filename_pkwt' => $fname_pkwt
 
 				);
 

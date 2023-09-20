@@ -30,9 +30,7 @@ class Profile extends MY_Controller {
 		$this->load->model("Complaints_model");
 		$this->load->model("Warning_model");
 		$this->load->model("Project_model");
-		$this->load->model("Payroll_model");
-		$this->load->model("Training_model");
-		$this->load->model("Trainers_model");
+		$this->load->model("Pkwt_model");
 	}
 	
 	/*Function to set JSON output*/
@@ -977,42 +975,51 @@ class Profile extends MY_Controller {
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
 			$this->load->view("admin/employees/profile", $data);
-		} else {
+		} else { 
 			redirect('admin/');
 		}
+
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
 		$contract = $this->Employees_model->set_employee_contract($id);
-		
+
 		$data = array();
 
         foreach($contract->result() as $r) {			
 			// designation
-			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			$projects = $this->Project_model->read_single_project($r->project);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+
+			$designation = $this->Designation_model->read_designation_information($r->jabatan);
 			if(!is_null($designation)){
 				$designation_name = $designation[0]->designation_name;
 			} else {
 				$designation_name = '--';
 			}
-			//contract type
-			$contract_type = $this->Employees_model->read_contract_type_information($r->contract_type_id);
-			if(!is_null($contract_type)){
-				$ctype = $contract_type[0]->name;
-			} else {
-				$ctype = '--';
-			}
-			// date
-			$duration = $this->Xin_model->set_date_format($r->from_date).' '.$this->lang->line('dashboard_to').' '.$this->Xin_model->set_date_format($r->to_date);
+
+				if($r->file_name==NULL || $r->file_name== '0' ){
+			  	$status_upload = '<button type="button" class="btn btn-xs btn-outline-warning" style="background: #FFD950;color: black;">Blum Upload</button>';
+				} else {
+			  	$status_upload = '<button type="button" class="btn btn-xs btn-outline-success" style="background: #5DD2A6;color: black;">Sudah Upload</button>';
+				}
 		
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '" >UPLOAD</button>';
+
+
 		$data[] = array(
-			$duration,
+			$r->no_surat,
+			$nama_project,
 			$designation_name,
-			$ctype,
-			$r->title
+			$status_upload.' '.$status_migrasi
 		);
       }
 
@@ -1077,6 +1084,119 @@ class Profile extends MY_Controller {
 	  exit();
      }
 	 
+
+	public function read() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = $this->Xin_model->site_title();
+
+			$id = $this->input->get('company_id');
+
+				$emp = $this->Pkwt_model->get_single_pkwt($id);
+				if(!is_null($emp)){
+					$no_surat 		= $emp[0]->no_surat;
+					$nip 			= $emp[0]->employee_id;
+					$file_name 		= $emp[0]->file_name;
+					$contract_id 		= $emp[0]->contract_id;
+				} else {
+					$no_surat 		= '0';	
+					$nip 			= '0';	
+					$file_name 		= '0';	
+					$contract_id 		= '0';	
+				}
+
+
+		$data = array(
+				'nip' => $nip,
+				'file_name' => $file_name,
+				'idrequest' => $id,
+				'no_surat' => $no_surat,
+				'contract_id' => $contract_id
+				);
+
+			$this->load->view('admin/employees/dialog_profile_pkwt.php', $data);
+
+
+		// $this->load->view('admin/pkwt/dialog_pkwt_approve_hrd', $data);
+	}
+
+
+	// Validate and update info in database
+	public function updatepkwt() {
+		
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('admin/');
+		}
+
+		if($this->input->post('edit_type')=='company') {
+
+		$id = $this->uri->segment(4);
+	
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+			if ($_FILES['document_file_pkwt']['size'] > 2460000){
+				$Return['error'] = 'File PKWT Lebih dari 2MB..';
+			}
+
+
+
+								if($_FILES['document_file_pkwt']['size'] == 0) {
+									$fname_pkwt = $this->input->post('ffile_pkwt');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
+										//checking image type
+										$allowed_pkwt =  array('pdf','PDF');
+										$filename_pkwt = $_FILES['document_file_pkwt']['name'];
+										$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_pkwt,$allowed_pkwt)){
+											$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
+											$yearmonth = date('Y/m');
+											$documentd_pkwt = "uploads/document/pkwt/".$yearmonth.'/';
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_pkwt"]["name"]);
+											$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
+											move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
+											$fname_pkwt = 'https://apps-cakrawala.com/uploads/document/pkwt/'.$yearmonth.'/'.$newfilename_pkwt;
+										} else {
+											$Return['error'] = 'Jenis File PKWT tidak diterima..';
+										}
+									}
+								}
+
+				$data_up = array(
+
+					'file_name' 	=> $fname_pkwt
+
+				);
+
+
+
+			$result = $this->Pkwt_model->update_pkwt_edit($data_up,$id);
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+		
+		
+		if ($result == TRUE) {
+			$Return['result'] = 'Dokumen PKWT berhasil disimpan...';
+		} else {
+			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+		}
+
+		$this->output($Return);
+		exit;
+		}
+	}
+
 	// employee office shift - listing
 	public function shift() {
 		//set data

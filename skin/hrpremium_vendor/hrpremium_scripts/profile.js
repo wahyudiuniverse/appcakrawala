@@ -1,43 +1,43 @@
 $(document).ready(function(){			
 	
 	// get data
-	$('.edit-modal-data').on('show.bs.modal', function (event) {
-		var button = $(event.relatedTarget);
-		var field_id = button.data('field_id');
-		var field_tpe = button.data('field_type');
-		if(field_tpe == 'contact'){
-			var field_add = '&data=emp_contact&type=emp_contact&';
-		} else if(field_tpe == 'document'){
-			var field_add = '&data=emp_document&type=emp_document&';
-		} else if(field_tpe == 'qualification'){
-			var field_add = '&data=emp_qualification&type=emp_qualification&';
-		} else if(field_tpe == 'work_experience'){
-			var field_add = '&data=emp_work_experience&type=emp_work_experience&';
-		} else if(field_tpe == 'bank_account'){
-			var field_add = '&data=emp_bank_account&type=emp_bank_account&';
-		} else if(field_tpe == 'contract'){
-			var field_add = '&data=emp_contract&type=emp_contract&';
-		} else if(field_tpe == 'leave'){
-			var field_add = '&data=emp_leave&type=emp_leave&';
-		} else if(field_tpe == 'shift'){
-			var field_add = '&data=emp_shift&type=emp_shift&';
-		}  else if(field_tpe == 'location'){
-			var field_add = '&data=emp_location&type=emp_location&';
-		} else if(field_tpe == 'imgdocument'){
-			var field_add = '&data=e_imgdocument&type=e_imgdocument&';
-		}
-		var modal = $(this);
-		$.ajax({
-			url: site_url+'employees/dialog_'+field_tpe,
-			type: "GET",
-			data: 'jd=1'+field_add+'field_id='+field_id,
-			success: function (response) {
-				if(response) {
-					$("#ajax_modal").html(response);
-				}
-			}
-		});
-   });
+// 	$('.edit-modal-data').on('show.bs.modal', function (event) {
+// 		var button = $(event.relatedTarget);
+// 		var field_id = button.data('field_id');
+// 		var field_tpe = button.data('field_type');
+// 		if(field_tpe == 'contact'){
+// 			var field_add = '&data=emp_contact&type=emp_contact&';
+// 		} else if(field_tpe == 'document'){
+// 			var field_add = '&data=emp_document&type=emp_document&';
+// 		} else if(field_tpe == 'qualification'){
+// 			var field_add = '&data=emp_qualification&type=emp_qualification&';
+// 		} else if(field_tpe == 'work_experience'){
+// 			var field_add = '&data=emp_work_experience&type=emp_work_experience&';
+// 		} else if(field_tpe == 'bank_account'){
+// 			var field_add = '&data=emp_bank_account&type=emp_bank_account&';
+// 		} else if(field_tpe == 'contract'){
+// 			var field_add = '&data=emp_contract&type=emp_contract&';
+// 		} else if(field_tpe == 'leave'){
+// 			var field_add = '&data=emp_leave&type=emp_leave&';
+// 		} else if(field_tpe == 'shift'){
+// 			var field_add = '&data=emp_shift&type=emp_shift&';
+// 		}  else if(field_tpe == 'location'){
+// 			var field_add = '&data=emp_location&type=emp_location&';
+// 		} else if(field_tpe == 'imgdocument'){
+// 			var field_add = '&data=e_imgdocument&type=e_imgdocument&';
+// 		}
+// 		var modal = $(this);
+// 		$.ajax({
+// 			url: site_url+'employees/dialog_'+field_tpe,
+// 			type: "GET",
+// 			data: 'jd=1'+field_add+'field_id='+field_id,
+// 			success: function (response) {
+// 				if(response) {
+// 					$("#ajax_modal").html(response);
+// 				}
+// 			}
+// 		});
+   // });
    
 	/* Update basic info */
 	$("#basic_info").submit(function(e){
@@ -530,6 +530,25 @@ $(document).ready(function(){
 	   });
 	});
 
+
+	// edit
+	$('.edit-modal-data').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget);
+		var company_id = button.data('company_id');
+		var modal = $(this);
+	$.ajax({
+		url : base_url+"/read/",
+		type: "GET",
+		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+		success: function (response) {
+			if(response) {
+				$("#ajax_modal").html(response);
+			}
+		}
+		});
+	});
+
+	
 	$('#modals-slide').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var xfield_id = button.data('xfield_id');
@@ -681,37 +700,37 @@ $(document).ready(function(){
 	});
 	
 	/* Add contract info */
-	jQuery("#contract_info").submit(function(e){
-	/*Form Submit*/
-	e.preventDefault();
-		var obj = jQuery(this), action = obj.attr('name');
-		jQuery('.save').prop('disabled', true);
-		$('.icon-spinner3').show();
-		jQuery.ajax({
-			type: "POST",
-			url: e.target.action,
-			data: obj.serialize()+"&is_ajax=19&data=contract_info&type=contract_info&form="+action,
-			cache: false,
-			success: function (JSON) {
-				if (JSON.error != '') {
-					toastr.error(JSON.error);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('.icon-spinner3').hide();
-					jQuery('.save').prop('disabled', false);
-					Ladda.stopAll();
-				} else {
-					xin_table_contract.api().ajax.reload(function(){ 
-						toastr.success(JSON.result);
-					}, true);
-					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
-					$('.icon-spinner3').hide();
-					jQuery('#contract_info')[0].reset(); // To reset form fields
-					jQuery('.save').prop('disabled', false);
-					Ladda.stopAll();
-				}
-			}
-		});
-	});
+	// jQuery("#contract_info").submit(function(e){
+	// /*Form Submit*/
+	// e.preventDefault();
+	// 	var obj = jQuery(this), action = obj.attr('name');
+	// 	jQuery('.save').prop('disabled', true);
+	// 	$('.icon-spinner3').show();
+	// 	jQuery.ajax({
+	// 		type: "POST",
+	// 		url: e.target.action,
+	// 		data: obj.serialize()+"&is_ajax=19&data=contract_info&type=contract_info&form="+action,
+	// 		cache: false,
+	// 		success: function (JSON) {
+	// 			if (JSON.error != '') {
+	// 				toastr.error(JSON.error);
+	// 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+	// 				$('.icon-spinner3').hide();
+	// 				jQuery('.save').prop('disabled', false);
+	// 				Ladda.stopAll();
+	// 			} else {
+	// 				xin_table_contract.api().ajax.reload(function(){ 
+	// 					toastr.success(JSON.result);
+	// 				}, true);
+	// 				$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
+	// 				$('.icon-spinner3').hide();
+	// 				jQuery('#contract_info')[0].reset(); // To reset form fields
+	// 				jQuery('.save').prop('disabled', false);
+	// 				Ladda.stopAll();
+	// 			}
+	// 		}
+	// 	});
+	// });
 	
 	/* Add leave info */
 	jQuery("#leave_info").submit(function(e){
