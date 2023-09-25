@@ -1711,8 +1711,9 @@ class Pkwt200 extends MY_Controller
 					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
 				</tr>
 				<tr>
-					<td>Periode Perhitungan</td>
-					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan</td>
+					<td> Periode Perhitungan</td>
+					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan <br>(Disesuaikan dengan bulan berjalan pada akhir bulan)
+					</td>
 				</tr>
 
 

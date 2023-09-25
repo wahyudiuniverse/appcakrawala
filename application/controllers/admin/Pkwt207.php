@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt192 extends MY_Controller 
+class Pkwt207 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -87,10 +87,9 @@ class Pkwt192 extends MY_Controller
 
 		if($pkwt[0]->approve_hrd != null){
 
-
 					$logo_cover = 'tcpdf_logo_sc.png';
 					$header_namae = 'PT. Siprama Cakrawala';
-					
+
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
 				$pdf->SetAuthor('HRCakrawala');
@@ -391,7 +390,7 @@ class Pkwt192 extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Adapun Tugas dan tanggung jawab yang ditetapkan tersebut di atas akan dituangkan didalam lampiran yang disesuaikan dengan masing – masing posisi</td>
+								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi setiap bulannya dan per <b>3 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada <b>PKWT</b> selanjutnya.</td>
 							</tr>
 				<br>
 							<tr>
@@ -399,23 +398,30 @@ class Pkwt192 extends MY_Controller
 								<td colspan="18"><b>PIHAK PERTAMA</b> berdasarkan pertimbangan tertentu berhak memindah ke bagian lain serta merubah nama Jabatan <b>PIHAK KEDUA</b> dan karenanya <b>PIHAK KEDUA</b> wajib bersedia untuk dipindah ke bagian lain dan atau dirubah nama jabatannya sesuai dengan kebutuhan. Dalam hal ini <b>PIHAK PERTAMA</b> akan memberitahukan hal tersebut secara tertulis kepada <b>PIHAK KEDUA</b>.</td>
 							</tr>
 				</table>
-				<br><br><br><br><br><br><br>
 				<br>
+<br><br><br><br><br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 2<br>JANGKA WAKTU PERJANJIAN</b>
 				</div>
-				
 				<br>
+
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. PKWT berlaku selama <b>'.$waktukontrak.'</b> bulan apabila <b>PIHAK KEDUA</b> selama 2 bulan pencapaian &#60;70% maka bersedia untuk mengundurkan diri/resign.</td>
+								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>
+													'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>
+																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>b.</td>
+								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka <b>PIHAK KEDUA</b> tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
+							</tr>
+				<br>
+							<tr>
+								<td>c.</td>
 								<td colspan="18"><b>PIHAK PERTAMA</b> berhak memutuskan/memberhentikan PKWT <b>PIHAK KEDUA</b> apabila jika pada saat masa Evaluasi Kinerja tidak sesuai dengan komitmen dan kinerja, walaupun PKWT masih berlaku/berjalan.</td>
 							</tr>
 				</table>
@@ -440,18 +446,15 @@ class Pkwt192 extends MY_Controller
 								<td colspan="5"></td>
 							</tr>
 
-
-							<br>
 							<tr>
 								<td ></td>
 								<td colspan="20">Jaminan kesehatan (BPJS Kesehatan) dan ketenagakerjaan (BPJS Tenaga kerja), penetapan syarat berserta ketentuan yang berlaku mengenai jaminan perawatan kesehatan ini sepenuhnya menjadi hak <b>PIHAK PERTAMA</b>.</td>
 								<td colspan="0"></td>
 							</tr>
-
-							<br>
+<br>
 							<tr>
 								<td ></td>
-								<td colspan="20">Note : -Bpjs Kesehatan & Ketenagakerjaan akan didaftarkan setelah karyawan memiliki minimal 10 Hari Kerja, dan akan didaftarkan di bulan berikutnya(Proses Mendaftar). Efektif terdaftar (Muncul Nomor) maksimal di tanggal 10 1 bulan setelah bulan proses pendaftaran, Apabila terjadi sesuatu hal dalam jam operasional pekerjaan baik dalam kesehatan maupun keselamatan di lingkungan kerja akan menjadi beban mandiri yaitu Karyawan Tersebut.</td>
+								<td colspan="20">Note : Bpjs Kesehatan & Ketenagakerjaan akan didaftarkan setelah karyawan memiliki minimal 10 Hari Kerja, dan akan didaftarkan di bulan berikutnya(Proses Mendaftar). Efektif terdaftar (Muncul Nomor) maksimal di tanggal 10 1 bulan setelah bulan proses pendaftaran, Apabila terjadi sesuatu hal dalam jam operasional pekerjaan baik dalam kesehatan maupun keselamatan dilingkungan kerja akan menjadi beban mandiri yaitu Karyawan Tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -486,47 +489,34 @@ class Pkwt192 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>3.3</td>
-						<td colspan="18">Pembayaran gaji dilakukan sesuai dengan lampiran 1,  kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomor rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomor rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
+						<td colspan="18">Pembayaran gaji dilakukan setiap akhir bulan sesuai kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>, jika akhir bulan jatuh pada hari libur, maka pembayaran akan dilakukan 1 (satu) hari lebih awal. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
 					</tr>
 				<br>
 					<tr>
 						<td>3.4</td>
-						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang diberikan paling cepat 10 Hari kerja sebelum hari raya sesuai dengan PP NO. 15 Tahun 2023 Pasal 11, dengan perhitungan sebagai berikut :</td>
-					</tr>
-				<br>
-					<tr>
-						<td></td>
-						<td colspan="18">Perhitungan = (Masa Kerja x 1 Bulan Upah (Gaji Pokok)) / 12 Bulan.</td>
-					</tr>
-				<br>
-					<tr>
-						<td></td>
-						<td colspan="18">Tunjangan Hari Raya (THR) diberikan kepada karyawan yang telah menjalani masa kerja sekurang-kurangnya 1 (satu) bulan (ketentuan dan kebijakan bagi Karyawan Kontrak akan disesuaikan dengan peraturan dan atau kesepakatan dengan pihak User/Klien). Apabila masa kerja telah melampaui 1 (satu) bulan tetapi belum genap 12 (dua belas) bulan, maka Tunjangan Hari Raya (THR) akan dihitung secara proporsional.</td>
+						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang besarnya diperhitungkan secara pro-rata/proposional dan berdasarkan lamanya waktu kerja dikali 1 (satu) bulan gaji (bagi karyawan kontrak kebijakan mengenai THR disesuaikan dengan kesepakatan antara PIHAK PERTAMA dan Pihak User/Klien).</td>
 					</tr>
 				<br>
 					<tr>
 						<td>3.5</td>
-						<td colspan="18">Pemberian UUCK ( undang undang cipta kerja ) / kompensasi diberikan setelah masa kontrak berakhir dengan catatan hasil evaluasi kinerja dinyatakan sesuai dengan KPI yang berlaku, dengan perhitungan yang mengacu terhadap PP Nomor 35 Tahun 2021 sebagai berikut :</td>
-					</tr>
-				<br>
-					<tr>
-						<td></td>
-						<td colspan="18">Masa Kerja 1 – &#60;12 Bulan Uang Kompensasi = (Masa Kerja/12) x 1 Bulan Upah (Gaji Pokok)</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td colspan="18">Masa Kerja &#62;12 Bulan Uang Kompensasi = (Masa Kerja/12) x 1 Bulan Upah (Gaji Pokok)</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td colspan="18">Masa Kerja selama 12 bulan terus menerus	 = 1 Bulan Upah (Gaji Pokok) </td>
+						<td colspan="18">Tunjangan Hari Raya (THR) diberikan kepada karyawan yang telah menjalani masa kerja sekurang-kurangnya 1 (satu) bulan (ketentuan dan kebijakan bagi Karyawan Kontrak akan disesuaikan dengan peraturan dan atau kesepakatan dengan pihak User/Klien).</td>
 					</tr>
 				<br>
 					<tr>
 						<td>3.6</td>
-						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak). Pengajuan cuti diajukan menggunakan form cuti dan diajukan minimal 7 hari sebelum  cuti dan sudah disetujui oleh atasan..</td>
+						<td colspan="18">Apabila masa kerja telah melampaui 1 (satu) bulan tetapi belum genap 12 (dua belas) bulan, maka Tunjangan Hari Raya (THR) akan dihitung secara proporsional.</td>
+					</tr>
+				<br>
+					<tr>
+						<td>3.7</td>
+						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak).</td>
 					</tr>
 				</table>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -537,12 +527,12 @@ class Pkwt192 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal dalam 1 bulan adalah '.$waktukerja.' hari kerja kalender sesuai dengan ketentuan PIHAK PERTAMA</td>
+								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>4.2</td>
-								<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat mengikat.</td>
+								<td colspan="18">Jam kerja normal adalah 8 (delapan) jam kerja untuk 1 (satu) hari kerja dan 40 (empat puluh) jam kerja untuk 1 (satu) minggu dengan 5 (lima) hari kerja dalam 7 (tujuh) hari kalender.</td>
 							</tr>
 				<br>
 							<tr>
@@ -553,22 +543,66 @@ class Pkwt192 extends MY_Controller
 				<br>
 							<tr>
 								<td>4.4</td>
+								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
+							</tr>
+				<br>
+							<tr>
+								<td>4.5</td>
 								<td colspan="18">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
 							</tr>
-
+<br>
 							<tr>
 								<td></td>
-								<td colspan="18">•	6 hari kerja dalam 7 hari kalender</td>
+								<td colspan="20">5 Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
+								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td></td>
-								<td colspan="18">•	Hari libur sesuai dengan hari yang ditentukan oleh perusahaan/pihak toko</td>
+								<td colspan="0"></td>
+								<td colspan="15">•	Hari Senin s/d Jumat 8 Jam Kerja.</td>
+							</tr>
+
+							<tr>
+								<td></td>
+								<td colspan="0"></td>
+								<td colspan="15">•	Hari libur Sabtu-Minggu.</td>
+							</tr>
+
+							<tr>
+								<td></td>
+								<td colspan="20">6 Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td></td>
+								<td colspan="0"></td>
+								<td colspan="15">•	Hari Senin – Sabtu 	7 Jam Kerja.</td>
+							</tr>
+
+							<tr>
+								<td></td>
+								<td colspan="0"></td>
+								<td colspan="15">•	Hari Sabtu 	5 Jam Kerja.</td>
+							</tr>
+
+							<tr>
+								<td></td>
+								<td colspan="0"></td>
+								<td colspan="15">•	Hari libur Minggu.</td>
+							</tr>
+<br>
+							<tr>
+								<td></td>
+								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja.</td>
+								<td colspan="0"></td>
 							</tr>
 
 				</table>
 
-			<br>
+				<br>
+				<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -628,7 +662,8 @@ class Pkwt192 extends MY_Controller
 								<td colspan="18">Bersedia melaksanakan tanggung jawab sebagai seorang Karyawan/Staff sesuai yang tertulis pada Instruksi Kerja dan SOP yang berlaku di perusahaan.</td>
 							</tr>
 				</table>
-<br>
+
+<br><br><br><br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
 				</div>
@@ -639,7 +674,8 @@ class Pkwt192 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br><br><br><br><br><br>
+				<br>
+
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -658,9 +694,10 @@ class Pkwt192 extends MY_Controller
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 
+
 							<tr>
 								<td>a.</td>
-								<td colspan="20"><b>PIHAK PERTAMA</b> dan Klient memutuskan hubungan kerja sepihak dengan alasan apapun tanpa mengeluarkan surat peringatan 1,2 dan 3. Dan <b>PIHAK KEDUA</b> tidak berhak menuntut apa pun dan salary dari sisa kontrak, pesangon dan tali kasih dalam bentuk apapun.</td>
+								<td colspan="20">PIHAK PERTAMA dan Klient memutuskan hubungan kerja sepihak dengan alasan apaun tanpa mengeluarkan surat peringatan 1,2 dan 3. Dan PIHAK KEDUA tidak berhak menuntut apapun dan salary dari sisa kontrak, pesangon dan tali kasih dalam bentuk apapun.</td>
 							</tr>
 
 				<br>
@@ -712,7 +749,7 @@ class Pkwt192 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">-</td>
-								<td colspan="20">Melakukan mangkir kerja selama 2 hari berturut-turut tanpa pemberitahuan/keterangan.</td>
+								<td colspan="20">Melakukan mangkir kerja selama 3 hari berturut-turut tanpa pemberitahuan/keterangan dan telah dipanggil oleh perusahaan dan karyawan tidak dapat memberikan surat keterangan yang sah atau dapat diterima.</td>
 							</tr>
 
 							<tr>
@@ -770,33 +807,33 @@ class Pkwt192 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="18">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>
 								<td ></td>
 								<td colspan="0">b)</td>
-								<td colspan="20">Menyelesaikan pekerjaanya sampai dengan tanggal pengunduran diri dengan dengan sebaik-baiknya serta melakukan serah terima pekerjaan kepada penggantinya atau pihak lain yang ditunjuk oleh <b>PIHAK KEDUA</b> atau dengan klient yang dibuktikan dengan Berita Acara Serah Terima Pekerjaan (BASTP).</td>
+								<td colspan="18">Menyelesaikan pekerjaanya sampai dengan tanggal pengunduran diri dengan dengan sebaik-baiknya serta melakukan serah terima pekerjaan kepada penggantinya atau pihak lain yang ditunjuk oleh <b>PIHAK KEDUA</b> atau dengan klient yang dibuktikan dengan Berita Acara Serah Terima Pekerjaan (BASTP).</td>
 							</tr>
-<br><br>
+<br>
 							<tr>
 								<td ></td>
+								<td colspan="0"></td>
 								<td colspan="20">Dalam hal pengunduran diri tidak diajukan dengan tata cara sebagaimana dimaksud dalam Huruf a ayat ini, maka PIHAK PERTAMA berhak untuk tidak membayarkan upah terakhir <b>PIHAK KEDUA</b> dan tidak memberikan surat referensi kerja kepada <b>PIHAK KEDUA</b>.</td>
-								<td colspan="0"></td>
 							</tr>
 
-				<br>
+<br>
 							<tr>
 								<td ></td>
+								<td colspan="0"></td>
 								<td colspan="20">Dalam hal pengunduran diri tidak diajukan dengan tata cara sebagaimana dimaksud dalam Huruf b ayat ini, maka <b>PIHAK PERTAMA</b> berhak untuk menahan upah terakhir dan surat keterangan kerja <b>PIHAK KEDUA</b> apabila belum menyelesaikan BASTP.</td>
-								<td colspan="0"></td>
 							</tr>
 
-				<br>
+<br>
 							<tr>
 								<td ></td>
-								<td colspan="20">Dalam hal pengunduran diri tidak dilakukan dengan tata cara yang baik dan benar, maka <b>PIHAK PERTAMA</b> berhak memberikan sanksi kepada <b>PIHAK KEDUA</b> bilamana Pihak kedua mengundurkan diri sebelum masa kontrak berakhir.</td>
 								<td colspan="0"></td>
+								<td colspan="20">Dalam hal pengunduran diri tidak dilakukan dengan tata cara yang baik dan benar, maka <b>PIHAK PERTAMA</b> berhak memberikan sanksi kepada <b>PIHAK KEDUA</b> bilamana Pihak kedua mengundurkan diri sebelum masa kontrak berakhir.</td>
 							</tr>
 
 				<br>
@@ -843,7 +880,8 @@ class Pkwt192 extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-				<br>
+				<br>	<br>
+
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
@@ -955,6 +993,7 @@ class Pkwt192 extends MY_Controller
 							</tr>
 				</table>
 
+
 				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1042,10 +1081,10 @@ class Pkwt192 extends MY_Controller
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
 							</tr>			
 				</table>
-
+<br>
 				<br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1056,7 +1095,7 @@ class Pkwt192 extends MY_Controller
 							<tr>
 								<td>Pengembalian simpanan anggota dapat setelah anggota tidak lagi menjadi anggota Koperasi. Dananya diberikan setelah 1 bulan periode penggajian terhitung sejak anggota tidak menjadi anggota Koperasi.</td>
 							</tr>
-
+<br>
 							<tr>
 								<td>Apabila anggota keluar  namun masih memiliki kewajiban kepada Koperasi maka : </td>
 							</tr>
@@ -1081,24 +1120,15 @@ class Pkwt192 extends MY_Controller
 				</table>
 
 				<br>
-
 				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td><b>MEKANISME PENGEMBALIAN SIMPANAN KOPERASI</b></td>
-							</tr>			
-				</table>
-
 				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Pengembalian simpanan koperasi akan dikembalikan kepada karyawan yang bergabung sebagai anggota koperasi yaitu 1 bulan setelah karyawan resign sesuai dengan ketentuan didalam PKWT. Pengembalian dilakukan dengan cara transfer ke rekening <b>PIHAK KEDUA</b>.</td>
-							</tr>
-
-
-				</table>
-
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
@@ -1124,16 +1154,24 @@ class Pkwt192 extends MY_Controller
 				<br>
 							<tr>
 								<td>4.</td>
-								<td colspan="20"><b>PKWT</b> ini hanya dapat diubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak. <b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
+								<td colspan="20"><b>PKWT</b> ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
 							</tr>
+				<br>
+				<br>
+				<br>
 				<br>
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
+								<td colspan="20"><b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>6.</td>
+								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT. Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
+							</tr>
+				<br>
+							<tr>
+								<td>7.</td>
 								<td colspan="20">Selama dalam hubungan kerja <b>PIHAK KEDUA</b> wajib mentaati dan melaksanakan ketentuan mengenai tata tertib, kedisiplinan dan kewajiban – kewajiban yang dibebankan kepada <b>PIHAK KEDUA</b>, sesuai dengan  ketentuan dalam peraturan perusahaan.</td>
 							</tr>
 				</table>
@@ -1208,30 +1246,7 @@ class Pkwt192 extends MY_Controller
 				<br>
 				<br>			
 				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
+				<br>		
 				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1339,7 +1354,7 @@ class Pkwt192 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">b.</td>
-								<td colspan="20">Selama saya menjadi Karyawan Kontrak maka akan ada Evaluasi kinerja setiap bulan dan atau <b>per 2 Bulan</b>. </td>
+								<td colspan="20">Selama saya menjadi Karyawan Kontrak maka akan ada Evaluasi kinerja setiap bulan dan atau <b>per 3 Bulan</b>. </td>
 							</tr>
 							<tr>
 								<td ></td>
@@ -1371,18 +1386,13 @@ class Pkwt192 extends MY_Controller
 								<td colspan="0">b.</td>
 								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
 							</tr>
+
 							<tr>
 								<td >8.</td>
 								<td colspan="20">Jika karyawan melanggar & menerima SP 1, SP 2 dan berakibat pada SPHK. Maka karyawan tidak berhak menuntut/mendapat hak kompensasi. Serta perusahaan berhak memutuskan kontrak kerja dengan karyawan tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
-							<br>
-							<br>
-							<br>
-							<br>	
-							<br>
-							<br>
-							<br>
+							<br><br><br><br><br><br><br>
 							<tr>
 								<td >9.</td>
 								<td colspan="20">Jika karyawan melakukan tindakan merugikan perusahaan secara disengaja maupun tidak disengaja maka karyawan tersebut tidak berhak mendapat/menuntut kompensasi terhadap perusahaan, serta perusahaan berhak memutus kontrak dengan karyawan tersebut. Adapun perbuatan yang dimaksud adalah:</td>
@@ -1496,9 +1506,10 @@ class Pkwt192 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br>
+				<br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1692,29 +1703,43 @@ class Pkwt192 extends MY_Controller
 				}
 
 				$lampiran .= '	
-					<br>
-						<tr>
-							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
-							<td></td>
-						</tr>
-
 					</table>
 
 					</td>
 				</tr>
 				<tr>
 					<td>Waktu Pembayaran</td>
-					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
+					<td colspan="5"> Tanggal '.$tgl_payment.' setiap Bulan</td>
 				</tr>
 				<tr>
-					<td> Periode Perhitungan</td>
-					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan <br>(Disesuaikan dengan bulan berjalan pada akhir bulan)
+					<td>Periode Perhitungan</td>
+					<td colspan="5"> Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan <br> (Disesuaikan dengan bulan berjalan pada akhir bulan)</td>
+				</tr>
+				<tr>
+					<td>Tunjangan Lain</td>
+					<td colspan="5">
+
+
+					<table cellpadding="2" cellspacing="0" border="0">
+						<tr>
+							<td>Tunjangan Hari Raya (THR), dibayarkan dua minggu sebelum hari raya Idul Fitri dengan perhitungan sebagai berikut :</td>
+						</tr>
+						<tr>
+							<td>Masa kerja > 1 bulan < 1 tahun :  prorata x Gaji</td>
+						</tr>
+						<tr>
+							<td>Masa kerja > 1 tahun 1 kali gaji berjalan</td>
+						</tr>
+					</table>
+
 					</td>
 				</tr>
-
-
 				<tr>
 					<td>Jamsostek / BPJS Ketenagakerjaan</td>
+					<td colspan="5">Admin</td>
+				</tr>
+				<tr>
+					<td>Jabatan</td>
 					<td colspan="5">
 
 
@@ -1772,384 +1797,6 @@ class Pkwt192 extends MY_Controller
 				
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
-
-
-
-				$lampiran2 = '
-
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br><br><br>
-				
-				<table cellpadding="2" cellspacing="0" border="0">
-
-					<tr>
-						<td><b>Lampiran 2</b></td>
-						<td colspan="5"><b>INDIKATOR PENILAIAN</b></td>
-					</tr>
-<br>
-					<tr>
-						<td colspan="5"	><b>KPI TL (TEAM LEADER)</b></td>
-						<td></td>
-					</tr>
-
-				</table>
-
-
-
-					<img src="'.base_url().'assets/lampiran2_tl.png" alt="Trulli" width="650" height="220">
-
-
-				<br>
-				<br>
-				<br>
-				<br>
-
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br>
-
-
-				<table cellpadding="2" cellspacing="0" border="0">
-					<tr>
-						<td><b>Lampiran 3</b></td>
-						<td colspan="5"><b>JENIS PELANGGARAN</b></td>
-					</tr>
-<br>
-					<tr>
-						<td colspan="5"	><b>SANKSI PELANGGARAN TATA TERTIB DAN DISIPLIN</b></td>
-						<td></td>
-					</tr>
-
-				</table>
-
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td >1.</td>
-								<td colspan="20">Surat Peringatan atau SP adalah surat yang berisi peringatan yang diberikan apabila Karyawan terbukti melakukan pelanggaran dan dapat diberikan sampai dengan SP 3 maupun SPHK (Surat Pemutusan Hubungan Kerja) sesuai dengan kategori pelanggaran yang dilanggar</td>
-								<td colspan="0"></td>
-							</tr>
-
-				</table>
-
-
-					<img src="'.base_url().'assets/lampiran3.png" alt="Trulli" width="650" height="500">
-
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br><br>
-<br><br><br><br>
-
-				<table cellpadding="2" cellspacing="0" border="0">
-					<tr>
-						<td><b>A.</b></td>
-						<td colspan="18"><b>Kategori Pelanggaran- “Kedisiplinan”</b></td>
-					</tr>
-				
-				</table>
-
-<br><br>
-
-
-				<table cellpadding="2" cellspacing="0" border="1">
-
-				<tr>
-					<td colspan="15"><b>Jenis Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Kategori Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Tingkat Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Sanksi</b></td>
-					<td colspan="8" style="text-align:center"><b>Action</b></td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak melakukan absen di aplikasi atau pada tempat yang telah ditentukan sebanyak <b>1 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
-					<td colspan="5" style="text-align:center">Ringan</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">SP1</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak melakukan absen di aplikasi atau pada tempat yang telah ditentukan sebanyak <b>2 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
-					<td colspan="5" style="text-align:center">Sedang</td>
-					<td colspan="5" style="text-align:center">II</td>
-					<td colspan="5" style="text-align:center">SP2</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak melakukan absen di aplikasi atau pada tempat yang telah ditentukan sebanyak <b>3 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-
-				<tr>
-					<td colspan="15">Tidak hadir tanpa pemberitahuan (ALPA) sebanyak <b>1 kali</b>.</td>
-					<td colspan="5" style="text-align:center">Ringan</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">SP1</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak hadir tanpa pemberitahuan (ALPA) sebanyak <b>2 kali, akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-
-				<tr>
-					<td colspan="15">Terlambat dengan toleransi waktu 10 menit  sebanyak <b>1 s/d 2 kali akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Ringan</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">SP1</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Terlambat dengan toleransi waktu 10 menit  sebanyak <b>3 s/d 4 kali akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Sedang</td>
-					<td colspan="5" style="text-align:center">II</td>
-					<td colspan="5" style="text-align:center">SP2</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Terlambat dengan toleransi waktu 10 menit  sebanyak <b>5 s/d 6 kali, akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Sakit tanpa surat keterangan dokter sebanyak <b>1  kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
-					<td colspan="5" style="text-align:center">Ringan</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">SP1</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Sakit tanpa surat keterangan dokter sebanyak 2 kali akumulasi atau berturut-turut dalam periode 1 bulan.</td>
-					<td colspan="5" style="text-align:center">Sedang</td>
-					<td colspan="5" style="text-align:center">II</td>
-					<td colspan="5" style="text-align:center">SP2</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Sakit tanpa surat keterangan dokter sebanyak <b>3 kali, akumulasi atau berturut-turut dalam periode 1 bulan</b>.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Melakukan mangkir kerja selama 2 hari berturut-turut tanpa pemberitahuan/keterangan.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Mencuri, menggelapkan, melakukan penipuan, dan manipulasi baik itu berupa data, barang, uang dan harta benda lainnya.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Memberikan keterangan palsu atau dipalsukan.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Memakai obat-obatan terlarang, minum- minuman keras.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Terbukti melakukan perbuatan asusila, amoral, kegiatan perjudian di tempat kerja.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Menganiaya, menghina secara kasar mengucap secara fisik dan mental kepada perusahaan atau membiarkan teman kerjanya berada dalam bahaya.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Menyebabkan kerugian secara materil atau immaterial baik  kepada pihak Klien, Perusahaan ataupun Karyawan lain yang terlibat dalam melakukan pekerjaan.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">V</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				</table>
-
-
-				<br>
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0">
-					<tr>
-						<td><b>B.</b></td>
-						<td colspan="18"><b>Kategori Pelanggaran - Performa Kerja</b></td>
-					</tr>
-
-				</table>
-
-<br><br>
-
-				<table cellpadding="2" cellspacing="0" border="1">
-
-				<tr>
-					<td colspan="15"><b>Jenis Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Kategori Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Tingkat Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Sanksi</b></td>
-					<td colspan="8" style="text-align:center"><b>Action</b></td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak mencapai target yang telah ditentukan sebanyak <b>1 kali</b>.</td>
-					<td colspan="5" style="text-align:center">Ringan</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">SP1</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 1)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak mencapai target yang telah ditentukan sebanyak <b>2 kali, akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Sedang</td>
-					<td colspan="5" style="text-align:center">II</td>
-					<td colspan="5" style="text-align:center">SP2</td>
-					<td colspan="8" style="text-align:center">Pembinaan disertai Surat Peringatan (SP 2)</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak mencapai taíget yang telah ditentukan sebanyak <b>3 kali, akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Sangat  Berat</td>
-					<td colspan="5" style="text-align:center">III</td>
-					<td colspan="5" style="text-align:center">SP 3</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Tidak mencapai target yang telah ditentukan sebanyak <b>4 kali, akumulasi atau berturut-turut</b>.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">IV</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				</table>
-
-				<br>
-				<br>
-				<br>
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0">
-					<tr>
-						<td><b>C.</b></td>
-						<td colspan="18"><b>Kategori Pelanggaran - Kenyamanan dan Keamanan</b></td>
-					</tr>
-
-				</table>
-
-<br><br>
-
-				<table cellpadding="2" cellspacing="0" border="1">
-
-				<tr>
-					<td colspan="15"><b>Jenis Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Kategori Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Tingkat Pelanggaran</b></td>
-					<td colspan="5" style="text-align:center"><b>Sanksi</b></td>
-					<td colspan="8" style="text-align:center"><b>Action</b></td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Menghilangkan atau menyebabkan kerusakan pada barang atau properti milik Perusahaan atau Klien.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Melakukan tindakan apa pun yang mengatasnamakan Peíusahaan yang dapat menyebabkan keíugian baik materil maupun immaterial terhadap Perusahaan, Karyawan lain, atau Klien.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Berkata-kata kasar atau dianggap tidak sopan kepada Klien, pegawai Perusahaan, atau siapa pun yang terlibat dalam melakukan pekerjaan, tugas atau projek.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Mengancam atau mengintimidasi, atau melakukan upaya percobaan untuk mengancam atau mengintimidasi Klien, pegawai Perusahaan, Karyawan atau pihak ketiga lainnya.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-
-				<tr>
-					<td colspan="15">Melakukan pencemaían nama baik Klien/Perusahaan yang dapat menyebabkan keíugian baik secara materil dan imateril baik secara langsung ataupun melalui platform social media.</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="5" style="text-align:center">I</td>
-					<td colspan="5" style="text-align:center">Termination</td>
-					<td colspan="8" style="text-align:center">Pengakhiran hubungan kerja</td>
-				</tr>
-				</table>
-
-				<br>
-
-';
-				$pdf->writeHTML($lampiran2, true, false, false, false, '');
-
 			
 				// $fname = strtolower($fname);
 				// $pay_month = strtolower(date("F Y"));

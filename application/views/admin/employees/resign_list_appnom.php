@@ -30,10 +30,8 @@
       </a> </li>
     <?php } ?>
 
-    <?php if(in_array('493',$role_resources_ids)) { ?>
     <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_resign_apnom/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_apnom/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve NOM/SM <?php echo '('.$count_appnom.')';?>
       </a> </li>
-    <?php } ?>
 
     <?php if(in_array('494',$role_resources_ids)) { ?>
     <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_resign_aphrd/');?>" data-link-data="<?php echo site_url('admin/Employee_resign_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span> Approve HRD

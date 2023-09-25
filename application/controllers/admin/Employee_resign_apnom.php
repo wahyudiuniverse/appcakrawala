@@ -48,7 +48,7 @@ class employee_resign_apnom extends MY_Controller {
 		$data['breadcrumbs'] = 'Approval NOM/SM';
 		$data['path_url'] = 'emp_resign_approve_nom';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('493',$role_resources_ids)) {
+		if(in_array('492',$role_resources_ids) || in_array('493',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/employees/resign_list_appnom", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {

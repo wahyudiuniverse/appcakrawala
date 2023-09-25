@@ -145,7 +145,7 @@ class Employee_request_hrd extends MY_Controller {
 				if(in_array('382',$role_resources_ids)){
 					$nik_note = $nik_ktp. '<br><i>' .$notes.'</i> '.$noteHR;
 				} else {
-					$nik_note = $nik_ktp;
+					$nik_note = $nik_ktp. '<br><i>' .$notes;
 				}
 
 			$data[] = array(

@@ -45,7 +45,7 @@
         <input type="hidden" id="user_id" value="0" />
         <?php $attributes = array('name' => 'attendance_datewise_report', 'id' => 'attendance_datewise_report', 'autocomplete' => 'off', 'class' => 'add form-hrm');?>
 		<?php $hidden = array('euser_id' => $session['user_id']);?>
-        <?php echo form_open('admin/reports/pkwt_history', $attributes, $hidden);?>
+        <?php echo form_open('admin/reports/pkwt_expired_list', $attributes, $hidden);?>
         <?php
             $data = array(
               'name'        => 'user_id',
@@ -87,12 +87,12 @@
             </select>
           </div>
 
-          <div class="col-md mb-3">
+          <div class="col-md mb-3" hidden>
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
           </div>
             
-            <div class="col-md mb-3">
+            <div class="col-md mb-3" hidden>
               <label class="form-label"><?php echo $this->lang->line('xin_select_date');?></label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>

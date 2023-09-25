@@ -4507,6 +4507,37 @@ function tgl_indo($tanggal){
 	return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
 }
 
+
+function tgl_excel($tanggal){
+
+	// $input = '06/10/2011 19:00:02';
+	$timetodate = strtotime($tanggal);
+	$date = date('Y-m-d', $timetodate);
+
+
+	$bulan = array (
+		1 =>   '01',
+		'02',
+		'03',
+		'04',
+		'05i',
+		'06',
+		'07',
+		'08',
+		'09',
+		'10',
+		'11',
+		'12'
+	);
+	$pecahkan = explode('-', $date);
+	
+	// variabel pecahkan 0 = tanggal
+	// variabel pecahkan 1 = bulan
+	// variabel pecahkan 2 = tahun
+ 
+	return $pecahkan[2] . '/' . $bulan[ (int)$pecahkan[1] ] . '/' . $pecahkan[0];
+}
+
 function tgl_pkwt(){
 
 	// $input = '06/10/2011 19:00:02';

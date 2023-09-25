@@ -44,7 +44,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-8">
         <div>
-          <label for="plant"><?php echo ': '.$file_name;?></label>
+          <label for="plant"> : <a href="<?php echo $file_name;?>" target="_blank"> <?php echo $file_name;?></a> </label> 
         </div>
       </div>
     </div>
@@ -85,11 +85,11 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          
+
                           <div class="form-group">
                             <fieldset class="form-group">
                               <input type="file" class="form-control-file" id="document_file_pkwt" name="document_file_pkwt" accept="application/pdf">
-                              <small>Jenis File: PDF | Size MAX 2 MB</small>
+                              <small>Jenis File: PDF | Size MAX 3 MB</small>
                             </fieldset>
                           </div>
         </div>

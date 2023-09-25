@@ -727,7 +727,7 @@
                             </fieldset>
                           </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" hidden>
                           <div class="form-group">
                             <div class="card-body media align-items-center"> 
                                 <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"><?php echo $filename_pkwt; ?></a>

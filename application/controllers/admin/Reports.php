@@ -711,14 +711,14 @@ class Reports extends MY_Controller
 				$marital = '--';	
 			}
 
-			if($r->date_of_joining!='' || !is_null($r->date_of_birth)){
+			if($r->date_of_birth!='' || !is_null($r->date_of_birth)){
 				$dob = $this->Xin_model->tgl_indo($r->date_of_birth);
 			} else {
 				$dob = '--';	
 			}
 
 			if($r->date_of_joining!='' || !is_null($r->date_of_joining)){
-				$doj = $this->Xin_model->tgl_indo($r->date_of_joining);
+				$doj = $this->Xin_model->tgl_excel($r->date_of_joining);
 			} else {
 				$doj = '--';	
 			}
@@ -731,13 +731,13 @@ class Reports extends MY_Controller
 			}
 
 			if($r->contract_start!='' || !is_null($r->contract_start)){
-				$start_kontrak = $this->Xin_model->tgl_indo($r->contract_start);
+				$start_kontrak = $this->Xin_model->tgl_excel($r->contract_start);
 			} else {
 				$start_kontrak = '--';	
 			}
 
 			if($r->contract_end!='' || !is_null($r->contract_end)){
-				$end_kontrak = $this->Xin_model->tgl_indo($r->contract_end);
+				$end_kontrak = $this->Xin_model->tgl_excel($r->contract_end);
 			} else {
 				$end_kontrak = '--';	
 			}
@@ -1723,7 +1723,14 @@ class Reports extends MY_Controller
 				$jabatan = $r->jabatan;
 				$penempatan = $r->penempatan;
 				$begin_until = $r->from_date .' s/d ' . $r->to_date;
+				// $file_pkwt = $r->file_name;
 
+			if(!is_null($r->file_name)){
+
+			$pkwt_file = '<a href="'.$r->file_name.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">PKWT FILE</button></a>'; 
+			} else {
+				$pkwt_file = '';
+			}
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
@@ -1792,7 +1799,8 @@ class Reports extends MY_Controller
 				$designation_name,
 				$penempatan,
 				$begin_until,
-				$r->approve_hrd_date
+				$r->approve_hrd_date,
+				$pkwt_file
 			);
 			$no++;
 		}
@@ -1862,20 +1870,13 @@ class Reports extends MY_Controller
 		$searchkey = $this->uri->segment(7);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 
-		if($searchkey==0){
-			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
+		if($searchkey!=0 || $searchkey!=""){
+			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_expired_key($searchkey, $session['employee_id']);
+		} else if ($project_id!=0) {
+			$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
 		} else {
-			if($project_id==0 || $start_date==0 ){
-			// 	$employee = $this->Reports_model->report_pkwt_history();
-			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
 			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
-			} else if ($project_id==999){
-			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
-				// $employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'],$start_date,$end_date);
-			}else {
-			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
-				// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$end_date);
-			}
 		}
 		// $employee = $this->Employees_model->get_employees();
 		$no = 1;
@@ -1949,14 +1950,14 @@ class Reports extends MY_Controller
 
 			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/0" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">PERPANJANG PKWT</button></a>'; 
 
-			$terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">APPROVE PKWT</button></a>'; 
+			$terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>'; 
 
 
 			$stopPkwt = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-danger">STOP PKWT</button></a>';
 
 
 			$data[] = array (
-				$editReq .' '.$terbitPkwt.' '.$stopPkwt,
+				$terbitPkwt.' '.$stopPkwt,
 				$nip,
 				$fullname,
 				$nama_project,

@@ -293,6 +293,7 @@ class register_kac extends MY_Controller {
 								'file_npwp' => $fnamenpwp,
 								'skck' => $fnameskck,
 								'civi' => $fnamecv,
+								'gaji_pokok' => 0,
 
 									'request_empby' 				=> '1',
 									'request_empon' 				=> date("Y-m-d h:i:s"),

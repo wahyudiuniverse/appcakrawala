@@ -1711,8 +1711,9 @@ class Pkwt201 extends MY_Controller
 					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
 				</tr>
 				<tr>
-					<td>Periode Perhitungan</td>
-					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan</td>
+					<td> Periode Perhitungan</td>
+					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan <br>(Disesuaikan dengan bulan berjalan pada akhir bulan)
+					</td>
 				</tr>
 
 
@@ -2122,11 +2123,12 @@ class Pkwt201 extends MY_Controller
 				$pdf->writeHTML($lampiran2, true, false, false, false, '');
 
 			
-				$fname = strtolower($fname);
-				$pay_month = strtolower(date("F Y"));
+				// $fname = strtolower($fname);
+				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				$pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 
 

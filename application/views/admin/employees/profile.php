@@ -482,12 +482,12 @@
                         <div class="card-block">
                           <?php $attributes = array('name' => 'dokumen_pkwt', 'id' => 'dokumen_pkwt', 'autocomplete' => 'off');?>
                           <?php $hidden = array('u_basic_info' => 'UPDATE');?>
-                          <?php echo form_open('admin/employees/bank_account_info/', $attributes, $hidden);?>
+                          <?php echo form_open('admin/employees/contract/', $attributes, $hidden);?>
                           <?php
                               $data_usr10 = array(
                                     'type'  => 'hidden',
                                     'name'  => 'user_id',
-                                    'value' => $session['user_id'],
+                                    'value' => $session['employee_id'],
                              );
                             echo form_input($data_usr10);
                             ?>

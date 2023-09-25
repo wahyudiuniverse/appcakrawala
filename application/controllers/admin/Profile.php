@@ -985,7 +985,7 @@ class Profile extends MY_Controller {
 		$length = intval($this->input->get("length"));
 
 		$id = $this->uri->segment(4);
-		$contract = $this->Employees_model->set_employee_contract($id);
+		$contract = $this->Employees_model->set_employee_contract($session['employee_id']);
 
 		$data = array();
 
@@ -1140,8 +1140,8 @@ class Profile extends MY_Controller {
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
 
-			if ($_FILES['document_file_pkwt']['size'] > 2460000){
-				$Return['error'] = 'File PKWT Lebih dari 2MB..';
+			if ($_FILES['document_file_pkwt']['size'] > 3072000){
+				$Return['error'] = 'File PKWT Lebih dari 3MB..';
 			}
 
 
@@ -1173,7 +1173,8 @@ class Profile extends MY_Controller {
 
 				$data_up = array(
 
-					'file_name' 	=> $fname_pkwt
+					'file_name' 	=> $fname_pkwt,
+					'upload_pkwt' => date('d-m-Y h:i:s')
 
 				);
 

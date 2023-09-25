@@ -1111,7 +1111,7 @@ class Pkwt39 extends MY_Controller
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
 							</tr>			
 				</table>
 
@@ -1821,11 +1821,11 @@ class Pkwt39 extends MY_Controller
 				</tr>
 				<tr>
 					<td>Waktu Pembayaran</td>
-					<td colspan="5">H - 1 Akhir Bulan</td>
+					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
 				</tr>
 				<tr>
 					<td>Periode Perhitungan</td>
-					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan</td>
+					<td colspan="5"> Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan<br> (Disesuaikan dengan bulan berjalan pada akhir bulan)</td>
 				</tr>
 				<tr>
 					<td>Tunjangan Lain</td>

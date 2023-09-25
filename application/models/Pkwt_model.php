@@ -356,7 +356,7 @@ class Pkwt_model extends CI_Model {
  	// monitoring request
 	public function report_pkwt_history_null($empID) {
 		$today_date = date('Y-m-d');
-		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE date_format(approve_hrd_date, '%Y-%m-%d') = '$today_date' 
 			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
@@ -369,7 +369,7 @@ class Pkwt_model extends CI_Model {
  	// monitoring request
 	public function report_pkwt_history_all($empID,$datefrom,$enddate) {
 
-		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
 			AND status_pkwt = 1
@@ -385,7 +385,7 @@ class Pkwt_model extends CI_Model {
  	// monitoring request
 	public function report_pkwt_history($empID,$project_id,$datefrom,$enddate) {
 
-		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
 			AND status_pkwt = 1
@@ -404,20 +404,64 @@ class Pkwt_model extends CI_Model {
  	// monitoring request
 	public function report_pkwt_expired_null($empID) {
 		// $today_date = date('Y-m-d');
-		$sql = "SELECT emp.user_id,emp.employee_id,emp.first_name,emp.project_id,emp.sub_project_id,emp.designation_id,emp.date_of_joining,emp.penempatan,emp.contract_end,pkwt.no_surat
-FROM xin_employees emp
-LEFT JOIN (SELECT * FROM xin_employee_contract WHERE status_pkwt = 1) pkwt
-	ON pkwt.employee_id = emp.employee_id
-WHERE emp.status_employee = 1
-AND emp.status_resign = 1
-AND emp.employee_id not in (1,1024)
-AND pkwt.no_surat is null
-AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
+		$sql = "
+		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end
+		FROM xin_employees emp 
+		LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
+		ON pkwt.employee_id = emp.employee_id 
+		WHERE emp.status_employee = 1
+		AND emp.status_resign = 1
+		AND emp.employee_id not in (1,1024)
+		AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null
+		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 	
+
+
+ 	// monitoring request
+	public function report_pkwt_expired_key($key, $empID) {
+		// $today_date = date('Y-m-d');
+		$sql = "
+		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end
+FROM (
+SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end, concat(concat(emp.employee_id,emp.first_name),emp.ktp_no) as all_name
+		FROM xin_employees emp 
+		LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
+		ON pkwt.employee_id = emp.employee_id 
+		WHERE emp.status_employee = 1
+		AND emp.status_resign = 1
+		AND emp.employee_id not in (1,1024)
+		AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null) exp
+WHERE exp.all_name LIKE '%$key%'";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function report_pkwt_expired_pro($project, $empID) {
+		// $today_date = date('Y-m-d');
+		$sql = "
+		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end
+		FROM (
+		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end
+				FROM xin_employees emp 
+				LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
+				ON pkwt.employee_id = emp.employee_id 
+				WHERE emp.status_employee = 1
+				AND emp.status_resign = 1
+				AND emp.employee_id not in (1,1024)
+				AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = 1)
+				AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null) exp
+		WHERE exp.project_id = '$project'";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
 	public function get_all_employees_byproject_exp($id)
 	{
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, project_id, date_of_leaving,month(date_of_leaving) bln_skrng

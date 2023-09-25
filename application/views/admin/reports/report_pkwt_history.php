@@ -132,6 +132,7 @@
                 <th>Area/Penempatan</th>
                 <th>Waktu Kontrak</th>
                 <th>PKWT Terbit</th>
+                <th>File PKWT</th>
 
               </tr>
             </thead>
