@@ -2587,7 +2587,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	  $query = $this->db->query("SELECT DISTINCT(emp.ktp_no) FROM (
 SELECT ktp_no FROM xin_employees
 UNION
-SELECT nik_ktp AS ktp_no FROM xin_employee_request) emp
+SELECT nik_ktp AS ktp_no FROM xin_employee_request WHERE `migrasi` = 0 ) emp
 WHERE emp.ktp_no = '$ktp';");
   	  return $query->num_rows();
 	}

@@ -902,6 +902,28 @@ class Reports extends MY_Controller
 	  exit();
     }
 
+
+	// get company > departments
+	public function get_comp_project() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'company_id' => $id
+			);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/usermobile/get_comp_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	} 
+
 	public function report_skk_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
@@ -1375,12 +1397,13 @@ class Reports extends MY_Controller
 		$area = $this->uri->segment(6);
 		$start_date = $this->uri->segment(7);
 		$end_date = $this->uri->segment(8);
+		$finalarea = str_replace("%20"," ",$area);
 
 		if($sub_id==0 || is_null($sub_id)){
 			$employee = $this->Reports_model->filter_report_emp_att_null();
 			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
 		} else {
-			$employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
+			$employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$finalarea,$start_date,$end_date);
 		}
 
 		// $employee = $this->Employees_model->get_employees();
@@ -1658,8 +1681,8 @@ class Reports extends MY_Controller
 			redirect('admin/');
 		}
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data['title'] = 'PKWT HISTORY';
-		$data['breadcrumbs'] = 'PKWT HISTORY';
+		$data['title'] = 'PKWT REPORT';
+		$data['breadcrumbs'] = 'PKWT REPORT';
 		$data['path_url'] = 'reports_pkwt_history';
 		// $data['path_url'] = 'reports_employee_attendance';
 		$data['all_companies'] = $this->Xin_model->get_companies();
@@ -1867,12 +1890,14 @@ class Reports extends MY_Controller
 		$project_id = $this->uri->segment(4);
 		$start_date = $this->uri->segment(5);
 		$end_date = $this->uri->segment(6);
+		// $searchkey = 'NURKHASANA';
 		$searchkey = $this->uri->segment(7);
+		$finalkey = str_replace("%20"," ",$searchkey);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 
 		if($searchkey!=0 || $searchkey!=""){
 			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
-			$employee = $this->Pkwt_model->report_pkwt_expired_key($searchkey, $session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
 		} else if ($project_id!=0) {
 			$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
 		} else {

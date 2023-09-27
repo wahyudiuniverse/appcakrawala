@@ -15,17 +15,13 @@ $(document).ready(function() {
 	$('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' });
 	// get departments
+
 	jQuery("#aj_company").change(function(){
-		var c_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_departments/"+c_id, function(data, status){
-			jQuery('#department_ajax').html(data);			
+		jQuery.get(base_url+"/get_comp_project/"+jQuery(this).val(), function(data, status){
+			jQuery('#project_ajax').html(data);
 		});
-		/*if(c_id == 0){
-			jQuery.get(base_url+"/designation/"+jQuery(this).val(), function(data, status){
-				jQuery('#designation_ajax').html(data);
-			});
-		}*/
 	});
+
 		
 		//get project
 	jQuery("#aj_project").change(function(){

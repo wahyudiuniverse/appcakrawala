@@ -508,7 +508,7 @@
       <li class="<?php if(!empty($arr_mod['emp_request_open']))echo $arr_mod['emp_request_open'];?> sidenav-item"> 
         <a href="#" class="sidenav-link sidenav-toggle"> 
           <i class="sidenav-icon ion ion-logo-buffer"></i>
-          <div>Pengajuan MPP</div>
+          <div>Karyawan Baru</div>
         </a>
         
         <ul class="sidenav-menu">
@@ -635,7 +635,7 @@
               <a href="<?php echo site_url('admin/reports/pkwt_expired/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PENGAJUAN PKWT</div>
+                <div>PKWT EXPIRED</div>
               </a> 
             </li>
           <?php 
@@ -649,7 +649,7 @@
               <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>TERBITKAN PKWT</div>
+                <div>HRD CHECKER</div>
               </a> 
             </li>
           <?php 
@@ -662,7 +662,7 @@
               <a href="<?php echo site_url('admin/employee_pkwt_cancel');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT - DITOLAK</div>
+                <div>PKWT DITOLAK</div>
               </a> 
             </li>
           <?php 
@@ -675,7 +675,7 @@
               <a href="<?php echo site_url('admin/reports/pkwt_history');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-                <div>PKWT Status</div>
+                <div>PKWT REPORT</div>
               </a> 
             </li>
           <?php 

@@ -412,30 +412,28 @@ class Pkwt_model extends CI_Model {
 		WHERE emp.status_employee = 1
 		AND emp.status_resign = 1
 		AND emp.employee_id not in (1,1024)
+		AND emp.sub_project_id not in (1,2)
 		AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null
 		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
-	
-
 
  	// monitoring request
 	public function report_pkwt_expired_key($key, $empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "
-		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end
-FROM (
-SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end, concat(concat(emp.employee_id,emp.first_name),emp.ktp_no) as all_name
+		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end, exp.all_name
+		FROM (
+		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end, concat(concat(emp.employee_id,emp.first_name),emp.ktp_no) as all_name
 		FROM xin_employees emp 
 		LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
 		WHERE emp.status_employee = 1
 		AND emp.status_resign = 1
-		AND emp.employee_id not in (1,1024)
-		AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null) exp
-WHERE exp.all_name LIKE '%$key%'";
+		AND emp.employee_id not in (1,1024)) exp
+		WHERE exp.all_name LIKE '%$key%'";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

@@ -18,24 +18,23 @@
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt');?>" data-link-data="<?php echo site_url('admin/employee_pkwt/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PERPANJANGAN PKWT
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/reports/pkwt_expired/');?>" data-link-data="<?php echo site_url('admin/reports/pkwt_expired/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon fa fa-database"></span>PKWT EXPIRED
       </a> </li>
     <?php } ?>  
 
 
-
     <?php if(in_array('505',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>TERBITKAN PKWT
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_aphrd');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_aphrd/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>HRD CHECKER
       <?php echo '('.$count_apphrd.')';?></a> </li>
     <?php } ?>
     
     <?php if(in_array('379',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_cancel');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Ditolak <?php echo '('.$count_pkwtcancel.')';?>
+    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_pkwt_cancel');?>" data-link-data="<?php echo site_url('admin/Employee_pkwt_cancel/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>DITOLAK <?php echo '('.$count_pkwtcancel.')';?>
       </a> </li>
     <?php } ?>
 
     <?php if(in_array('377',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/reports/pkwt_history');?>" data-link-data="<?php echo site_url('admin/reports/pkwt_history');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT Status
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/reports/pkwt_history');?>" data-link-data="<?php echo site_url('admin/reports/pkwt_history');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>PKWT REPORT
       </a> </li>
     <?php } ?>
   </ul>

@@ -1128,7 +1128,7 @@ class Employees extends MY_Controller {
 	}
 
 
-	public function emp_edit() { 
+	public function emp_edit() {
 
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 

@@ -48,7 +48,7 @@
           </div>   
         </div>
              
-        <div class="col-md mb-2">
+        <div class="col-md mb-2" id="project_ajax">
           <label class="form-label"><?php echo $this->lang->line('left_projects');?></label>
           <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
             <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>

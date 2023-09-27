@@ -49,7 +49,7 @@ $(document).ready(function() {
 		var area_emp = document.getElementById("aj_area_emp").value;
 		var start_date = document.getElementById("start_date").value;
 		var end_date = document.getElementById("end_date").value;
-		var end_date = document.getElementById("aj_searchkey").value;
+		var searchkey = document.getElementById("aj_searchkey").value;
 		
 		// var company_id = $('#aj_company').val();
 		// var project_id = $('#aj_project').val();
@@ -60,7 +60,7 @@ $(document).ready(function() {
 			"bDestroy": true,
 			"ajax": {
 				
-				url : site_url+"reports/pkwt_expired_list/"+project_id+"/"+start_date+"/"+end_date+"/",
+				url : site_url+"reports/pkwt_expired_list/"+project_id+"/"+start_date+"/"+end_date+"/"+searchkey+"/",
 				// url : site_url+"reports/empdtwise_attendance_list/"+project_id+"/"+subproject_id+"/"+area_emp+"/"+start_date+"/"+end_date+"/",
 				// url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+subproject_id+"/"+start_date+"/"+end_date+"/",
 				type : 'GET'
