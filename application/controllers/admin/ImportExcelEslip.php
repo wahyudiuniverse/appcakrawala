@@ -447,6 +447,7 @@ class Importexceleslip extends MY_Controller
 				$allow_device = $user[0]->allow_device;
 				$allow_kasir = $user[0]->allow_kasir;
 				$allow_trans_meal = $user[0]->allow_trans_meal;
+				$allow_trans_rent = $user[0]->allow_trans_rent;
 				$allow_vitamin = $user[0]->allow_vitamin;
 				$allow_operation = $user[0]->allow_operation;
 
@@ -477,6 +478,7 @@ class Importexceleslip extends MY_Controller
 				$mix_oplos = $user[0]->mix_oplos;
 				$pot_trip_malang = $user[0]->pot_trip_malang;
 				$pot_device = $user[0]->pot_device;
+				$pot_kpi = $user[0]->pot_kpi;
 				$deduction = $user[0]->deduction;
 				$simpanan_pokok = $user[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
@@ -511,6 +513,7 @@ class Importexceleslip extends MY_Controller
 					'allow_device' => $allow_device,
 					'allow_kasir' => $allow_kasir,
 					'allow_trans_meal' => $allow_trans_meal,
+					'allow_trans_rent' => $allow_trans_rent,
 					'allow_vitamin' => $allow_vitamin,
 					'allow_operation' => $allow_operation,
 
@@ -542,6 +545,7 @@ class Importexceleslip extends MY_Controller
 					'mix_oplos' => $mix_oplos,
 					'pot_trip_malang' => $pot_trip_malang,
 					'pot_device' => $pot_device,
+					'pot_kpi' => $pot_kpi,
 					'deduction' => $deduction,
 					'simpanan_pokok' => $simpanan_pokok,
 					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
@@ -626,6 +630,7 @@ class Importexceleslip extends MY_Controller
 				$allow_device = $user[0]->allow_device;
 				$allow_kasir = $user[0]->allow_kasir;
 				$allow_trans_meal = $user[0]->allow_trans_meal;
+				$allow_trans_rent = $user[0]->allow_trans_rent;
 				$allow_vitamin = $user[0]->allow_vitamin;
 				$allow_operation = $user[0]->allow_operation;
 
@@ -658,6 +663,7 @@ class Importexceleslip extends MY_Controller
 				$mix_oplos = $user[0]->mix_oplos;
 				$pot_trip_malang = $user[0]->pot_trip_malang;
 				$pot_device = $user[0]->pot_device;
+				$pot_kpi = $user[0]->pot_kpi;
 				$deduction = $user[0]->deduction;
 				$simpanan_pokok = $user[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
@@ -692,6 +698,7 @@ class Importexceleslip extends MY_Controller
 					'allow_device' => $allow_device,
 					'allow_kasir' => $allow_kasir,
 					'allow_trans_meal' => $allow_trans_meal,
+					'allow_trans_rent' => $allow_trans_rent,
 					'allow_vitamin' => $allow_vitamin,
 					'allow_operation' => $allow_operation,
 
@@ -723,6 +730,7 @@ class Importexceleslip extends MY_Controller
 					'mix_oplos' => $mix_oplos,
 					'pot_trip_malang' => $pot_trip_malang,
 					'pot_device' => $pot_device,
+					'pot_kpi' => $pot_kpi,
 					'deduction' => $deduction,
 					'simpanan_pokok' => $simpanan_pokok,
 					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
@@ -947,6 +955,7 @@ class Importexceleslip extends MY_Controller
 				$allow_device = $eslip[0]->allow_device;
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
+				$allow_trans_rent = $eslip[0]->allow_trans_rent;
 				$allow_vitamin = $eslip[0]->allow_vitamin;
 				$allow_operation = $eslip[0]->allow_operation;
 
@@ -978,6 +987,7 @@ class Importexceleslip extends MY_Controller
 				$mix_oplos = $eslip[0]->mix_oplos;
 				$pot_trip_malang = $eslip[0]->pot_trip_malang;
 				$pot_device = $eslip[0]->pot_device;
+				$pot_kpi = $eslip[0]->pot_kpi;
 				$deduction = $eslip[0]->deduction;
 				$simpanan_pokok = $eslip[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
@@ -1310,6 +1320,21 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Tunjangan Transport + Meal</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_trans_rent!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Transport + Rental</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -1818,6 +1843,21 @@ class Importexceleslip extends MY_Controller
 					</tr>';
 				}
 
+				if($pot_kpi!=0){
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Potongan KPI</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
 				$tbl_2 .= '<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">
@@ -2086,6 +2126,7 @@ class Importexceleslip extends MY_Controller
 				$allow_device = $eslip[0]->allow_device;
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
+				$allow_trans_rent = $eslip[0]->allow_trans_rent;
 				$allow_vitamin = $eslip[0]->allow_vitamin;
 				$allow_operation = $eslip[0]->allow_operation;
 
@@ -2117,6 +2158,7 @@ class Importexceleslip extends MY_Controller
 				$mix_oplos = $eslip[0]->mix_oplos;
 				$pot_trip_malang = $eslip[0]->pot_trip_malang;
 				$pot_device = $eslip[0]->pot_device;
+				$pot_kpi = $eslip[0]->pot_kpi;
 				$deduction = $eslip[0]->deduction;
 				$simpanan_pokok = $eslip[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
@@ -2445,6 +2487,21 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Tunjangan Transport + Meal</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_trans_rent!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Transport + Rental</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -2943,6 +3000,21 @@ class Importexceleslip extends MY_Controller
 									<td colspan="4">Potongan Laptop/HP</td>
 									<td colspan="2">: Rp.</td>
 									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+					</tr>';
+				}
+
+				if($pot_kpi!=0){	
+				$tbl_2 .= '
+					<tr>
+						<td>
+							<table cellpadding="1" cellspacing="0">
+								<tr>
+									<td colspan="4">Potongan KPI</td>
+									<td colspan="2">: Rp.</td>
+									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
 								</tr>
 							</table>
 						</td>

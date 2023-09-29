@@ -499,7 +499,7 @@ class Pkwt2 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">4.1	Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
+								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
 							</tr>
 				<br>
 							<tr>
