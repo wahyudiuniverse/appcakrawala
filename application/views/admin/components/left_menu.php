@@ -529,7 +529,7 @@
           <?php 
           if (in_array('55555',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_nae_active']))echo $arr_mod['emp_request_nae_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_request_nae/');?>" class="sidenav-link"> 
+              <a href="<?php echo site_url('admin/reports/new_employees/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
                 <div>KARYAWAN BARU</div>
@@ -569,7 +569,7 @@
           <?php 
           if (in_array('378',$role_resources_ids)) { ?>
             <li class="sidenav-item <?php if(!empty($arr_mod['emp_request_hrd_active']))echo $arr_mod['emp_request_hrd_active'];?>"> 
-              <a href="<?php echo site_url('admin/employee_request_hrd');?>" class="sidenav-link"> 
+              <a href="<?php echo site_url('admin/employee_request_hrd/');?>" class="sidenav-link"> 
                 <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
                 <div>KARYAWAN BARU</div>

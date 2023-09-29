@@ -1840,6 +1840,148 @@ class Reports extends MY_Controller
 	  exit();
     }
 
+
+	// reports > employee attendance
+	public function new_employees() {
+	
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'KARYAWAN BARU';
+		$data['breadcrumbs'] = 'KARYAWAN BARU';
+		$data['path_url'] = 'reports_new_employees';
+
+
+			$data['all_companies'] = $this->Xin_model->get_companies();
+			$data['all_projects'] = $this->Project_model->get_all_projects();
+			$data['all_projects_sub'] = $this->Project_model->get_all_projects();
+			$data['all_departments'] = $this->Department_model->all_departments();
+			$data['all_designations'] = $this->Designation_model->all_designations();
+			$data['list_bank'] = $this->Xin_model->get_bank_code();
+			$role_resources_ids = $this->Xin_model->user_role_resource();
+		if(in_array('327',$role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/employees/request_list_hrd", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	public function request_list_hrd() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){
+			$this->load->view("admin/employees/request_list_hrd", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
+		// $employee = $this->Employees_model->get_request_hrd();
+		$employee = $this->Employees_model->get_request_hrd($session['employee_id']);
+
+		$data = array();
+
+          foreach($employee->result() as $r) {
+			  $no = $r->secid;
+				$fullname = $r->fullname;
+				$location_id = $r->location_id;
+				$project = $r->project;
+				$sub_project = $r->sub_project;
+				$department = $r->department;
+				$posisi = $r->posisi;
+				$penempatan = $r->penempatan;
+				$doj = $r->doj;
+				$contact_no = $r->contact_no;
+				$nik_ktp = $r->nik_ktp;
+				$notes = $r->catatan_hr;
+
+				$register_date = $r->request_empon;
+				$approved_hrdby = $r->approved_hrdby;
+
+
+				if($approved_hrdby==null){
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->secid . '">Need Approval HRD</button>';
+				} else {
+					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->secid . '">Approved</button>';
+				}
+
+				$editReq = '<a href="'.site_url().'admin/employee_request_cancelled/request_edit/'.$r->secid.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>'; 
+
+				$projects = $this->Project_model->read_single_project($r->project);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+			
+				$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
+				if(!is_null($subprojects)){
+					$nama_subproject = $subprojects[0]->sub_project_name;
+				} else {
+					$nama_subproject = '--';	
+				}
+
+				$department = $this->Department_model->read_department_information($r->department);
+				if(!is_null($department)){
+					$department_name = $department[0]->department_name;
+				} else {
+					$department_name = '--';	
+				}
+
+				$designation = $this->Designation_model->read_designation_information($r->posisi);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
+
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->secid . '">TOLAK</button>';
+
+			  	$noteHR = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal" data-target=".edit-modal-data" data-company_id="!'. $r->secid . '">note</button>';
+
+				if(in_array('382',$role_resources_ids)){
+					$nik_note = $nik_ktp. '<br><i>' .$notes.'</i> '.$noteHR;
+				} else {
+					$nik_note = $nik_ktp. '<br><i>' .$notes;
+				}
+
+			$data[] = array(
+				$no,
+				$status_migrasi.' <br>'.$cancel.' '.$editReq,
+				$nik_note,
+				$fullname,
+				$nama_project,
+				$nama_subproject,
+				$department_name,
+				$designation_name,
+				$penempatan,
+				$doj,
+				$register_date
+			);
+          }
+
+          $output = array(
+               "draw" => $draw,
+                 "recordsTotal" => $employee->num_rows(),
+                 "recordsFiltered" => $employee->num_rows(),
+                 "data" => $data
+            );
+          echo json_encode($output);
+          exit();
+  }
+
+
 	// reports > employee attendance
 	public function pkwt_expired() {
 	
@@ -2641,7 +2783,6 @@ class Reports extends MY_Controller
 	  exit();
 
     }
-
 	
 	// Validate and update status info in database // status info
 	public function tandai_download() {
@@ -2667,5 +2808,6 @@ class Reports extends MY_Controller
 
 
 	} 
+
 } 
 ?>

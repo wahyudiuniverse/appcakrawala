@@ -5,6 +5,8 @@ $(document).ready(function() {
             url : base_url+"/request_list_hrd/",
             type : 'GET'
         },
+		dom: 'lBfrtip',
+		"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
 		"fnDrawCallback": function(settings){
 		$('[data-toggle="tooltip"]').tooltip();          
 		}
