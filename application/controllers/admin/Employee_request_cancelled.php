@@ -312,6 +312,7 @@ class employee_request_cancelled extends MY_Controller {
 			'allow_area' => $result[0]->allow_area,
 			'allow_masakerja' => $result[0]->allow_masakerja,
 			'allow_trans_meal' => $result[0]->allow_trans_meal,
+			'allow_trans_rent' => $result[0]->allow_trans_rent,
 			'allow_konsumsi' => $result[0]->allow_konsumsi,
 			'allow_transport' => $result[0]->allow_transport,
 			'allow_comunication' => $result[0]->allow_comunication,
@@ -439,6 +440,7 @@ class employee_request_cancelled extends MY_Controller {
 							$tunjangan_area 							= $this->input->post('tunjangan_area');
 							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
 							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_trans_rental 							= $this->input->post('tunjangan_trans_rent');
 							$tunjangan_makan 							= $this->input->post('tunjangan_makan');
 							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
 							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
@@ -489,23 +491,24 @@ class employee_request_cancelled extends MY_Controller {
 
 								'doj' 								=> $date_of_join,
 								'penempatan' 					=> $penempatan,
-								'gaji_pokok' 					=> $gaji_pokok,
-								'allow_jabatan' 			=> $tunjangan_jabatan,
-								'allow_area' 					=> $tunjangan_area,
-								'allow_masakerja' 		=> $tunjangan_masakerja,
-								'allow_trans_meal' 		=> $tunjangan_makan_trans,
-								'allow_konsumsi' 			=> $tunjangan_makan,
-								'allow_transport' 		=> $tunjangan_transport,
-								'allow_comunication' 	=> $tunjangan_komunikasi,
+								'gaji_pokok' 					=> str_replace(".","",$gaji_pokok),
+								'allow_jabatan' 			=> str_replace(".","",$tunjangan_jabatan),
+								'allow_area' 					=> str_replace(".","",$tunjangan_area),
+								'allow_masakerja' 		=> str_replace(".","",$tunjangan_masakerja),
+								'allow_trans_meal' 		=> str_replace(".","",$tunjangan_makan_trans),
+								'allow_trans_rent' 		=> str_replace(".","",$tunjangan_trans_rental),
+								'allow_konsumsi' 			=> str_replace(".","",$tunjangan_makan),
+								'allow_transport' 		=> str_replace(".","",$tunjangan_transport),
+								'allow_comunication' 	=> str_replace(".","",$tunjangan_komunikasi),
 
-								'allow_device' 				=> $tunjangan_device,
-								'allow_residence_cost'=> $tunjangan_tempat_tinggal,
-								'allow_rent' 					=> $tunjangan_rental,
-								'allow_parking' 			=> $tunjangan_parkir,
-								'allow_medichine' 		=> $tunjangan_kesehatan,
-								'allow_akomodsasi' 		=> $tunjangan_akomodasi,
-								'allow_kasir' 				=> $tunjangan_kasir,
-								'allow_operational' 	=> $tunjangan_operational,
+								'allow_device' 				=> str_replace(".","",$tunjangan_device),
+								'allow_residence_cost'=> str_replace(".","",$tunjangan_tempat_tinggal),
+								'allow_rent' 					=> str_replace(".","",$tunjangan_rental),
+								'allow_parking' 			=> str_replace(".","",$tunjangan_parkir),
+								'allow_medichine' 		=> str_replace(".","",$tunjangan_kesehatan),
+								'allow_akomodsasi' 		=> str_replace(".","",$tunjangan_akomodasi),
+								'allow_kasir' 				=> str_replace(".","",$tunjangan_kasir),
+								'allow_operational' 	=> str_replace(".","",$tunjangan_operational),
 								'contract_start' 			=> $join_date_pkwt,
 								'contract_end' 				=> $pkwt_end_date,
 

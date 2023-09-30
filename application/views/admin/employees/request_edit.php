@@ -335,13 +335,14 @@
 <!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span><hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
           <div class="row">
             <div class="col-md-8">
-              <div class="row">
 
+
+              <div class="row">
                 <!--GAJI POKOK-->
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="gaji_pokok">Gaji Pokok<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="<?php echo $basic_salary;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="gaji_pokok" type="text" value="<?php echo $this->Xin_model->rupiah_titik($basic_salary);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah1">
                   </div>
                 </div>
 
@@ -349,7 +350,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_jabatan" class="control-label">Tunjangan Jabatan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_jabatan" type="text" value="<?php echo $allow_jabatan;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"> 
+                    <input class="form-control" placeholder="0" name="tunjangan_jabatan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_jabatan);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah2"> 
                   </div>
                 </div>
 
@@ -357,7 +358,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_area" class="control-label">Tunjangan Area<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_area" type="text" value="<?php echo $allow_area;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_area" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_area);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah3">
                   </div>
                 </div>
 
@@ -365,27 +366,18 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_masakerja">Tunjangan Masa Kerja<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_masakerja" type="text" value="<?php echo $allow_masakerja;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_masakerja" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_masakerja);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah4">
                   </div>
                 </div>
               </div>
 
               <div class="row">
 
-
-                <!--TUNJANGAN MAKAN TRANSPORT-->
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="tunjangan_makan_trans" class="control-label">Tunjangan Makan & Transport<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="<?php echo $allow_trans_meal;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
-                  </div>
-                </div>
-
                 <!--TUNJANGAN MAKAN-->
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_makan" class="control-label">Tunjangan Makan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_makan" type="text" value="<?php echo $allow_konsumsi;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_makan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_konsumsi);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah5">
                   </div>
                 </div>
 
@@ -393,7 +385,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_transport" class="control-label">Tunjangan Transport<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_transport" type="text" value="<?php echo $allow_transport;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_transport" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_transport);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah6">
                   </div>
                 </div>
 
@@ -401,27 +393,27 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_komunikasi" class="control-label">Tunjangan Komunikasi<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_komunikasi" type="text" value="<?php echo $allow_comunication;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_komunikasi" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_comunication);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah7">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-
 
                 <!--TUNJANGAN DEVICE-->
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_device" class="control-label">Tunjangan Laptop/HP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_device" type="text" value="<?php echo $allow_device;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_device" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_device);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah8">
                   </div>
                 </div>
+
+              </div>
+
+              <div class="row">
 
                 <!--TUNJANGAN TEMPAT TINGGAL-->
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_tempat_tinggal">Tunjangan Tempat Tinggal<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="<?php echo $allow_residence_cost;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_tempat_tinggal" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_residence_cost);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah9">
                   </div>
                 </div>
 
@@ -429,7 +421,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_rental">Tunjangan Rental<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_rental" type="text" value="<?php echo $allow_rent;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_rental" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_rent);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah10">
                   </div>
                 </div>
 
@@ -437,28 +429,27 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_parkir" class="control-label">Tunjangan Parkir<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_parkir" type="text" value="<?php echo $allow_parking;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_parkir" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_parking);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah11">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-
 
                 <!--TUNJANGAN KESEHATAN-->
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_kesehatan" class="control-label">Tunjangan Kesehatan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="<?php echo $allow_medichine;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_medichine);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah12">
                   </div>
                 </div>
 
+              </div>
+
+              <div class="row">
 
                 <!--TUNJANGAN AKOMODASI-->
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_akomodasi">Tunjangan Akomodasi<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_akomodasi" type="text" value="<?php echo $allow_akomodsasi;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_akomodasi" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_akomodsasi);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah13">
                   </div>
                 </div>
 
@@ -466,7 +457,7 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_kasir" class="control-label">Tunjangan Kasir<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_kasir" type="text" value="<?php echo $allow_kasir;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_kasir" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_kasir);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah14">
                   </div>
                 </div>
 
@@ -474,12 +465,32 @@
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_operational" class="control-label">Tunjangan Operational<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="<?php echo $allow_operational;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_operational);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah15">
                   </div>
                 </div>
               </div>
               
 
+              <div class="row">
+
+                <!--TUNJANGAN MAKAN TRANSPORT-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_makan_trans" class="control-label">Tunjangan Makan & Transport<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_trans_meal);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah16">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN TRANSPORT RENTAL-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_trans_rent" class="control-label">Tunjangan Transport & Rental<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_trans_rent" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_trans_rent);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah17">
+                  </div>
+                </div>
+
+
+            </div>
             </div>
 
             <div class="col-md-4">
@@ -604,20 +615,111 @@
   </div>
 </div>
 
-<style type="text/css">
-  
-  input[type=file]::file-selector-button {
-  margin-right: 20px;
-  border: none;
-  background: #26ae61;
-  padding: 10px 20px;
-  border-radius: 2px;
-  color: #fff;
-  cursor: pointer;
-  transition: background .2s ease-in-out;
+<script type="text/javascript">
+
+  var rupiah1 = document.getElementById("rupiah1");
+rupiah1.addEventListener("keyup", function(e) {
+  rupiah1.value = convertRupiah(this.value);
+});
+
+  var rupiah2 = document.getElementById("rupiah2");
+rupiah2.addEventListener("keyup", function(e) {
+  rupiah2.value = convertRupiah(this.value);
+});
+
+var rupiah3 = document.getElementById("rupiah3");
+rupiah3.addEventListener("keyup", function(e) {
+  rupiah3.value = convertRupiah(this.value);
+});
+
+
+var rupiah4 = document.getElementById("rupiah4");
+rupiah4.addEventListener("keyup", function(e) {
+  rupiah4.value = convertRupiah(this.value);
+});
+
+var rupiah5 = document.getElementById("rupiah5");
+rupiah5.addEventListener("keyup", function(e) {
+  rupiah5.value = convertRupiah(this.value);
+});
+
+var rupiah6 = document.getElementById("rupiah6");
+rupiah6.addEventListener("keyup", function(e) {
+  rupiah6.value = convertRupiah(this.value);
+});
+
+var rupiah7 = document.getElementById("rupiah7");
+rupiah7.addEventListener("keyup", function(e) {
+  rupiah7.value = convertRupiah(this.value);
+});
+
+var rupiah8 = document.getElementById("rupiah8");
+rupiah8.addEventListener("keyup", function(e) {
+  rupiah8.value = convertRupiah(this.value);
+});
+
+
+var rupiah9 = document.getElementById("rupiah9");
+rupiah9.addEventListener("keyup", function(e) {
+  rupiah9.value = convertRupiah(this.value);
+});
+
+var rupiah10 = document.getElementById("rupiah10");
+rupiah10.addEventListener("keyup", function(e) {
+  rupiah10.value = convertRupiah(this.value);
+});
+
+var rupiah11 = document.getElementById("rupiah11");
+rupiah11.addEventListener("keyup", function(e) {
+  rupiah11.value = convertRupiah(this.value);
+});
+
+var rupiah12 = document.getElementById("rupiah12");
+rupiah12.addEventListener("keyup", function(e) {
+  rupiah12.value = convertRupiah(this.value);
+});
+
+var rupiah13 = document.getElementById("rupiah13");
+rupiah13.addEventListener("keyup", function(e) {
+  rupiah13.value = convertRupiah(this.value);
+});
+
+var rupiah14 = document.getElementById("rupiah14");
+rupiah14.addEventListener("keyup", function(e) {
+  rupiah14.value = convertRupiah(this.value);
+});
+
+var rupiah15 = document.getElementById("rupiah15");
+rupiah15.addEventListener("keyup", function(e) {
+  rupiah15.value = convertRupiah(this.value);
+});
+
+var rupiah16 = document.getElementById("rupiah16");
+rupiah16.addEventListener("keyup", function(e) {
+  rupiah16.value = convertRupiah(this.value);
+});
+
+var rupiah17 = document.getElementById("rupiah17");
+rupiah17.addEventListener("keyup", function(e) {
+  rupiah17.value = convertRupiah(this.value);
+});
+
+
+function convertRupiah(angka, prefix) {
+  var number_string = angka.replace(/[^,\d]/g, "").toString(),
+    split  = number_string.split(","),
+    sisa   = split[0].length % 3,
+    rupiah = split[0].substr(0, sisa),
+    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+  if (ribuan) {
+    separator = sisa ? "." : "";
+    rupiah += separator + ribuan.join(".");
+  }
+
+  rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+  return prefix == undefined ? rupiah : rupiah ? prefix + rupiah : "";
 }
 
-input[type=file]::file-selector-button:hover {
-  background: #20c997;
-}
-</style>
+
+</script>

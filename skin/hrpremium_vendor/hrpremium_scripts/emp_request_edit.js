@@ -164,3 +164,5 @@ $( document ).on( "click", ".delete", function() {
 	$('input[name=_token]').val($(this).data('record-id'));
 	$('#delete_record').attr('action',base_url+'/delete/'+$(this).data('record-id'));
 });
+
+
