@@ -598,12 +598,12 @@ class Reports extends MY_Controller
 
 		// $designation_id = $this->uri->segment(6);
 
-		if($company_id==0 || is_null($company_id)){
+		if($project_id==0 || is_null($project_id)){
 
-		$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
 		}else{
 
-		$employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+			$employee = $this->Reports_model->filter_employees_reports($project_id,$subproject_id,$status_resign);
 		}
 		
 		$data = array();
@@ -906,11 +906,18 @@ class Reports extends MY_Controller
 	// get company > departments
 	public function get_comp_project() {
 
+
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->uri->segment(4);
 		
 		$data = array(
-			'company_id' => $id
+			'company_id' => $id,
+			'empid' => $session['employee_id']
 			);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 

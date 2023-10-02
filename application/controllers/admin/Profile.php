@@ -1100,11 +1100,13 @@ class Profile extends MY_Controller {
 					$nip 			= $emp[0]->employee_id;
 					$file_name 		= $emp[0]->file_name;
 					$contract_id 		= $emp[0]->contract_id;
+					$upload_pkwt 	= $emp[0]->upload_pkwt;
 				} else {
 					$no_surat 		= '0';	
 					$nip 			= '0';	
 					$file_name 		= '0';	
 					$contract_id 		= '0';	
+					$upload_pkwt 	= '0';
 				}
 
 
@@ -1113,7 +1115,8 @@ class Profile extends MY_Controller {
 				'file_name' => $file_name,
 				'idrequest' => $id,
 				'no_surat' => $no_surat,
-				'contract_id' => $contract_id
+				'contract_id' => $contract_id,
+				'tgl_upload_pkwt' => $upload_pkwt
 				);
 
 			$this->load->view('admin/employees/dialog_profile_pkwt.php', $data);

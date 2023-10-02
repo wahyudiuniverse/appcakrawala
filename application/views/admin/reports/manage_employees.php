@@ -27,7 +27,7 @@
 
         <div class="col-md mb-2">
           <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
-          <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
+          <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
             <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
             <?php 
               foreach ($all_companies as $company) {

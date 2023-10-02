@@ -125,11 +125,17 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id 
   	  return $query->result();
 	}
 
-	public function get_project_bycompany($id)
+	public function get_project_bycompany($id, $empID)
 	{
-	  $query = $this->db->query("SELECT * FROM xin_projects WHERE company_id = '$id' ORDER BY title ASC;");
+	  $query = $this->db->query("SELECT * FROM xin_projects 
+	  	WHERE company_id = '$id' 
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+	  	ORDER BY title ASC;");
   	  return $query->result();
 	}
+
+
+
 
 	// get single project by id
 	public function read_single_subproject($id) {

@@ -33,6 +33,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
+
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -70,6 +71,23 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <input class="form-control" name="idtransaksi" type="text" value="<?php echo $idrequest;?>" hidden>
 
 
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- NAMA LENGKAP -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Tanggal Upload PKWT</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$tgl_upload_pkwt;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 <!-- EXIT CLEARANCE -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">

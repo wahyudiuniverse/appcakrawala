@@ -27,7 +27,6 @@ $(document).ready(function() {
 			jQuery('#project_ajax').html(data);
 		});
 	});
-
 		
 		//get project
 	jQuery("#aj_project").change(function(){

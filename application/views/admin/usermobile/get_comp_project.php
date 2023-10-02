@@ -1,5 +1,5 @@
 
-<?php $result = $this->Project_model->get_project_bycompany($company_id);?>
+<?php $result = $this->Project_model->get_project_bycompany($company_id,$employee_id);?>
 
 
           <label class="form-label"><?php echo $this->lang->line('left_projects').'c';?></label>
