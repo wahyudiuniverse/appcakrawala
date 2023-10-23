@@ -290,22 +290,25 @@ class Customerservices extends MY_Controller
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 		
-		$company_id = $this->uri->segment(4);
-		$department_id = $this->uri->segment(5);
-		$project_id = $this->uri->segment(6);
-		$subproject_id = $this->uri->segment(7);
-		$status_resign = $this->uri->segment(8);
+		// $project_id = $this->uri->segment(4);
+		// $subproject_id = $this->uri->segment(5);
+		// $status_resign = $this->uri->segment(6);
+
+		$project_id = $this->uri->segment(4);
+		$subproject_id = $this->uri->segment(5);
+		$status_resign = $this->uri->segment(6);
+
 	
 
-		if($company_id==0 || is_null($company_id)){
-			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+		if($project_id==0 || is_null($project_id)){
+			$employee = $this->Reports_model->filter_employees_reports_null($project_id,$subproject_id,$status_resign);
 		}else{
-			$employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+			$employee = $this->Reports_model->filter_employees_reports($project_id,$subproject_id,$status_resign);
 		}
 		
 		$data = array();
 
-        foreach($employee->result() as $r) {		  
+        foreach($employee->result() as $r) {
 
 			$full_name = $r->first_name;
 			$company = $this->Xin_model->read_company_info($r->company_id);

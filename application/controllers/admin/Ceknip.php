@@ -107,7 +107,14 @@ class ceknip extends MY_Controller {
 			$system = $this->Xin_model->read_setting_info(1);
 			$user_info = $this->Xin_model->read_user_info($session['user_id']);
 
+			if($user_info[0]->user_role_id == '1' || $user_info[0]->user_role_id == '3' || $user_info[0]->user_role_id == '4'){
+
+			$employee = $this->Employees_model->get_employees_who();
+			} else {
+
 			$employee = $this->Employees_model->get_employees_notho();
+			}
+
 
 			$data = array();
 
@@ -116,8 +123,53 @@ class ceknip extends MY_Controller {
 				// user full name 
 				$full_name = $r->first_name;
 				$area = $r->penempatan;
+				if($r->user_role_id==2){
+					$role = '['.$r->user_role_id.'] '.'Employee';
+				} else if ($r->user_role_id==3) {
+					$role = '['.$r->user_role_id.'] '.'HRD Admin';
+				} else if ($r->user_role_id==4){
+					$role = '['.$r->user_role_id.'] '.'HRD Admin';
+				} else if ($r->user_role_id==8){
+					$role = '['.$r->user_role_id.'] '.'NAE/ADMIN';
+				} else if ($r->user_role_id==9){
+					$role = '['.$r->user_role_id.'] '.'RESIGN';
+				} else if ($r->user_role_id==10){
+					$role = '['.$r->user_role_id.'] '.'PAYROLL ADMIN';
+				} else if ($r->user_role_id==11){
+					$role = '['.$r->user_role_id.'] '.'IT SUPPORT';
+				} else if ($r->user_role_id==12){
+					$role = '['.$r->user_role_id.'] '.'HEAD OF PAYROLL';
+				} else if ($r->user_role_id==13){
+					$role = '['.$r->user_role_id.'] '.'NOM';
+				} else if ($r->user_role_id==14){
+					$role = '['.$r->user_role_id.'] '.'TEAM LEADER';
+				} else if ($r->user_role_id==15){
+					$role = '['.$r->user_role_id.'] '.'BPJS ADMIN';
+				} else if ($r->user_role_id==16){
+					$role = '['.$r->user_role_id.'] '.'AREA MANAGER';
+				} else {
+					$role = $r->user_role_id;
+				}
+				
 
 			$ename = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank">'.$r->employee_id.'</a>'; 
+
+
+			$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
+
+			Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode September 2023, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+
+			Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
+
+			Link C.I.S : https://apps-cakrawala.com/admin%0a
+
+			*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+			
+			Terima kasih.';
+
+
+
+			$whatsapp = '<a href="https://wa.me/62'.$r->contact_no.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$r->contact_no.'</button> </a>';
 
 
 			// $role_status = $role_name;
@@ -128,9 +180,10 @@ class ceknip extends MY_Controller {
 				$r->title,
 				$r->designation_name,
 				$r->penempatan,
-				$r->contact_no,
+				$whatsapp,
 				$r->date_of_birth,
-				$r->user_role_id,
+				$r->last_login_date,
+				$role
 			);
 
 	  }

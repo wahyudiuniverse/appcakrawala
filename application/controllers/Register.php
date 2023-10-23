@@ -65,6 +65,8 @@ class register extends MY_Controller {
 			// if($this->input->post('company_id')==='') {
 			// 	$Return['error'] = $this->lang->line('xin_employee_error_company_name');
 			// } else 
+			// $ktp_active = $this->Employees_model->ktp_exist_active('3211819015500007');
+
 			if($this->input->post('first_name')==='') {
 				$Return['error'] = "Nama Lengkap Kosong...";
 			} else if( $this->input->post('tempat_lahir')==='') {
@@ -80,7 +82,7 @@ class register extends MY_Controller {
 			} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
 				$Return['error'] = "Alamat Email Tidak Sesuai...";
 			} else if($this->input->post('nomor_ktp')==='') {
-				$Return['error'] = "Nomor KTP Kosong";
+				$Return['error'] = "Nomor KTP Kosong = ";
 			} else if($this->input->post('nomor_kk')==='') {
 				$Return['error'] = "Nomor KK Kosong...";
 			} else if($this->input->post('ibu_kandung')==='') {
@@ -138,9 +140,25 @@ class register extends MY_Controller {
 				else {
 
 
-					$ktp_exist = $this->Employees_model->ktp_exist($this->input->post('nomor_ktp'));
+					$ktp_exist_blacklist = $this->Employees_model->ktp_exist_blacklist($this->input->post('nomor_ktp'));
+
+					$ktp_exist_active = $this->Employees_model->ktp_exist_active($this->input->post('nomor_ktp'));
+
+					$ktp_exist_regis = $this->Employees_model->ktp_exist_regis($this->input->post('nomor_ktp'));
 					
-					if($ktp_exist==0){
+					if($ktp_exist_blacklist!=0) {
+
+						$Return['error'] = 'NIK KTP sudah di BLACKLIST oleh SISTEM CAKRAWALA.';
+
+					} else if ($ktp_exist_active!=0) {
+
+						$Return['error'] = 'NIK KTP Sudah terdaftar dengan Status AKTIF sebegai karyawan di SISTEM CAKRAWALA.';
+					
+					} else if ($ktp_exist_regis!=0) {
+
+						$Return['error'] = 'NIK KTP sudah ada di DAFTAR KARYAWAN BARU.';
+
+					} else {
 
 									if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
 										//checking image type
@@ -238,13 +256,14 @@ class register extends MY_Controller {
 											
 											if(in_array($extcv,$allowedcv)){
 												$tmp_namecv = $_FILES["dokumen_cv"]["tmp_name"];
-												$documentdcv = "uploads/document/cv/";
+												$yearmonth = date('Y/m');
+												$documentdcv = "uploads/document/cv/".$yearmonth.'/';
 												// basename() may prevent filesystem traversal attacks;
 												// further validation/sanitation of the filename may be appropriate
 												$name = basename($_FILES["dokumen_cv"]["name"]);
-												$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'.'.$extcv;
+												$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$extcv;
 												move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
-												$fnamecv = $newfilenamecv;
+												$fnamecv = 'https://apps-cakrawala.com/uploads/document/cv/'.$yearmonth.'/'.$newfilenamecv;
 											} else {
 												$Return['error'] = 'Jenis File CV tidak diterima..';
 											}
@@ -291,6 +310,7 @@ class register extends MY_Controller {
 								'kk' => $fnamekk,
 								'file_npwp' => $fnamenpwp,
 								'skck' => $fnameskck,
+								'ijazah' => 0,
 								'civi' => $fnamecv,
 								'gaji_pokok' => 0,
 
@@ -314,9 +334,7 @@ class register extends MY_Controller {
 								$result = $this->Employees_model->addkandidat($data);
 
 
-					} else {
-						$Return['error'] = 'NIK KTP Sudah terdaftar di SISTEM CAKRAWALA.';
-					}
+					} 
 
 
 							}

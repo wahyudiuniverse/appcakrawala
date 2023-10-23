@@ -32,7 +32,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i>HO - HRD >> Tolak Karyawan Baru</h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i>HO - HRD >> Tolak Karyawan Baru <?php echo $idrequest;?></h4>
   </div>
 
 
@@ -595,7 +595,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/cv/'.$cv.'" target="_blank"> '.$cv.'</a>';?></label>
+          <label for="plant"><?php echo '<a href="'.$cv.'" target="_blank"> '.$cv.'</a>';?></label>
         </div>
       </div>
     </div>
@@ -632,40 +632,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <div class="col-sm-4">
         <div>
           <label for="plant"><?php echo ': '.$requets_name. ' ('.$request_empon.')';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Approve NAE/Admin</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$approve_nae_name. ' ('.$approved_naeon.')';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Approve NOM/SM</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$approved_nom_name. ' ('.$approved_nomon.')';?></label>
         </div>
       </div>
     </div>

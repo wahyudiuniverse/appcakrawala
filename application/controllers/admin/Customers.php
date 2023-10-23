@@ -100,69 +100,69 @@ class Customers extends MY_Controller
 				$now = new DateTime(date("Y-m-d"));
 
 
-				$village = $this->Customers_model->read_village($r->village_id);
-				if(!is_null($village)){
-					$vilage_name = $village[0]->name;
-				} else {
-					$vilage_name = '--';	
-				}
+			// 	$village = $this->Customers_model->read_village($r->village_id);
+			// 	if(!is_null($village)){
+			// 		$vilage_name = $village[0]->name;
+			// 	} else {
+			// 		$vilage_name = '--';	
+			// 	}
 
-				$district = $this->Customers_model->read_kecamatan($r->district_id);
-				if(!is_null($district)){
-					$district_name = $district[0]->name;
-				} else {
-					$district_name = '--';	
-				}
+			// 	$district = $this->Customers_model->read_kecamatan($r->district_id);
+			// 	if(!is_null($district)){
+			// 		$district_name = $district[0]->name;
+			// 	} else {
+			// 		$district_name = '--';	
+			// 	}
 
-				$city = $this->Customers_model->read_city($r->city_id);
-				if(!is_null($city)){
-					$city_name = $city[0]->name;
-				} else {
-					$city_name = '--';	
-				}
-
-
-
-				$coordinate ='
-
-				<div class="text-success small text-truncate">
-					<a href="#" class="" data-state="primary" data-placement="top" data-toggle="tooltip" title="'.$this->lang->line('xin_cust_latitude').'">Lat : '.$latitude.'
-
-					</a>
-				</div>
-
-				<div class="text-success small text-truncate">
-					<a href="#" class="" data-state="primary" data-placement="top" data-toggle="tooltip" title="'.$this->lang->line('xin_cust_longitude').'">Lon: '.$longitude.'
-
-					</a>
-				</div>';
+			// 	$city = $this->Customers_model->read_city($r->city_id);
+			// 	if(!is_null($city)){
+			// 		$city_name = $city[0]->name;
+			// 	} else {
+			// 		$city_name = '--';	
+			// 	}
 
 
 
-			  if(in_array('38',$role_resources_ids)) { //edit
-				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="#"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
-			} else {
-				$edit = '';
-			}
+			// 	$coordinate ='
+
+			// 	<div class="text-success small text-truncate">
+			// 		<a href="#" class="" data-state="primary" data-placement="top" data-toggle="tooltip" title="'.$this->lang->line('xin_cust_latitude').'">Lat : '.$latitude.'
+
+			// 		</a>
+			// 	</div>
+
+			// 	<div class="text-success small text-truncate">
+			// 		<a href="#" class="" data-state="primary" data-placement="top" data-toggle="tooltip" title="'.$this->lang->line('xin_cust_longitude').'">Lon: '.$longitude.'
+
+			// 		</a>
+			// 	</div>';
 
 
-			if(in_array('34',$role_resources_ids)) { //view
-				$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="#" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
-			} else {
-				$view = '';
-			}
 
-			$combhr = $edit.$view;
+			//   if(in_array('38',$role_resources_ids)) { //edit
+			// 	$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="#"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+			// } else {
+			// 	$edit = '';
+			// }
+
+
+			// if(in_array('34',$role_resources_ids)) { //view
+			// 	$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_view').'"><a href="#" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
+			// } else {
+			// 	$view = '';
+			// }
+
+			// $combhr = $edit.$view;
 
 		   $data[] = array(
-				$id_customer,
-				$name_cust,
-				$address,
-				ucwords(strtolower($vilage_name)),
-				ucwords(strtolower($district_name)),
-				ucwords(strtolower($city_name)),
-				$coordinate,
-				$combhr,
+				'$id_customer',
+				'$name_cust',
+				'$address',
+				'ucwords(strtolower($vilage_name))',
+				'ucwords(strtolower($district_name))',
+				'ucwords(strtolower($city_name))',
+				'$coordinate',
+				'$combhr',
 				// $this->Xin_model->tgl_indo($end),
 		   );
           }

@@ -66,6 +66,7 @@
             <th>Tanggal Resign</th>
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th>No KTP</th>
+            <th>Tanggal Approve</th>
           </tr>
         </thead>
       </table>

@@ -1,58 +1,76 @@
 $(document).ready(function(){			
 	
 	// get data
+// 	$('.edit-modal-data').on('show.bs.modal', function (event) {
+// 		var button = $(event.relatedTarget);
+// 		var field_id = button.data('field_id');
+// 		var field_tpe = button.data('field_type');
+// 		if(field_tpe == 'contact'){
+// 			var field_add = '&data=emp_contact&type=emp_contact&';
+// 		} else if(field_tpe == 'document'){
+// 			var field_add = '&data=emp_document&type=emp_document&';
+// 		} else if(field_tpe == 'qualification'){
+// 			var field_add = '&data=emp_qualification&type=emp_qualification&';
+// 		} else if(field_tpe == 'work_experience'){
+// 			var field_add = '&data=emp_work_experience&type=emp_work_experience&';
+// 		} else if(field_tpe == 'bank_account'){
+// 			var field_add = '&data=emp_bank_account&type=emp_bank_account&';
+// 		} else if(field_tpe == 'contract'){
+// 			var field_add = '&data=emp_contract&type=emp_contract&';
+// 		} else if(field_tpe == 'leave'){
+// 			var field_add = '&data=emp_leave&type=emp_leave&';
+// 		} else if(field_tpe == 'shift'){
+// 			var field_add = '&data=emp_shift&type=emp_shift&';
+// 		}  else if(field_tpe == 'location'){
+// 			var field_add = '&data=emp_location&type=emp_location&';
+// 		} else if(field_tpe == 'imgdocument'){
+// 			var field_add = '&data=e_imgdocument&type=e_imgdocument&';
+// 		} else if(field_tpe == 'salary_allowance'){
+// 			var field_add = '&data=e_salary_allowance&type=e_salary_allowance&';
+// 		} else if(field_tpe == 'salary_loan'){
+// 			var field_add = '&data=e_salary_loan&type=e_salary_loan&';
+// 		} else if(field_tpe == 'emp_overtime'){
+// 			var field_add = '&data=emp_overtime_info&type=emp_overtime_info&';
+// 		} else if(field_tpe == 'salary_commissions'){
+// 			var field_add = '&data=salary_commissions_info&type=salary_commissions_info&';
+// 		} else if(field_tpe == 'salary_statutory_deductions'){
+// 			var field_add = '&data=salary_statutory_deductions_info&type=salary_statutory_deductions_info&';
+// 		} else if(field_tpe == 'salary_other_payments'){
+// 			var field_add = '&data=salary_other_payments_info&type=salary_other_payments_info&';
+// 		} else if(field_tpe == 'security_level'){
+// 			var field_add = '&data=esecurity_level_info&type=esecurity_level_info&';
+// 		}
+// 		var modal = $(this);
+// 		$.ajax({
+// 			url: site_url+'employees/dialog_'+field_tpe+'/',
+// 			type: "GET",
+// 			data: 'jd=1'+field_add+'field_id='+field_id,
+// 			success: function (response) {
+// 				if(response) {
+// 					$("#ajax_modal").html(response);
+// 				}
+// 			}
+// 		});
+   // });
+   
+
+	// edit
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
-		var field_id = button.data('field_id');
-		var field_tpe = button.data('field_type');
-		if(field_tpe == 'contact'){
-			var field_add = '&data=emp_contact&type=emp_contact&';
-		} else if(field_tpe == 'document'){
-			var field_add = '&data=emp_document&type=emp_document&';
-		} else if(field_tpe == 'qualification'){
-			var field_add = '&data=emp_qualification&type=emp_qualification&';
-		} else if(field_tpe == 'work_experience'){
-			var field_add = '&data=emp_work_experience&type=emp_work_experience&';
-		} else if(field_tpe == 'bank_account'){
-			var field_add = '&data=emp_bank_account&type=emp_bank_account&';
-		} else if(field_tpe == 'contract'){
-			var field_add = '&data=emp_contract&type=emp_contract&';
-		} else if(field_tpe == 'leave'){
-			var field_add = '&data=emp_leave&type=emp_leave&';
-		} else if(field_tpe == 'shift'){
-			var field_add = '&data=emp_shift&type=emp_shift&';
-		}  else if(field_tpe == 'location'){
-			var field_add = '&data=emp_location&type=emp_location&';
-		} else if(field_tpe == 'imgdocument'){
-			var field_add = '&data=e_imgdocument&type=e_imgdocument&';
-		} else if(field_tpe == 'salary_allowance'){
-			var field_add = '&data=e_salary_allowance&type=e_salary_allowance&';
-		} else if(field_tpe == 'salary_loan'){
-			var field_add = '&data=e_salary_loan&type=e_salary_loan&';
-		} else if(field_tpe == 'emp_overtime'){
-			var field_add = '&data=emp_overtime_info&type=emp_overtime_info&';
-		} else if(field_tpe == 'salary_commissions'){
-			var field_add = '&data=salary_commissions_info&type=salary_commissions_info&';
-		} else if(field_tpe == 'salary_statutory_deductions'){
-			var field_add = '&data=salary_statutory_deductions_info&type=salary_statutory_deductions_info&';
-		} else if(field_tpe == 'salary_other_payments'){
-			var field_add = '&data=salary_other_payments_info&type=salary_other_payments_info&';
-		} else if(field_tpe == 'security_level'){
-			var field_add = '&data=esecurity_level_info&type=esecurity_level_info&';
-		}
+		var company_id = button.data('company_id');
 		var modal = $(this);
-		$.ajax({
-			url: site_url+'employees/dialog_'+field_tpe+'/',
-			type: "GET",
-			data: 'jd=1'+field_add+'field_id='+field_id,
-			success: function (response) {
-				if(response) {
-					$("#ajax_modal").html(response);
-				}
+	$.ajax({
+		url : base_url+"/read/",
+		type: "GET",
+		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+		success: function (response) {
+			if(response) {
+				$("#ajax_modal").html(response);
 			}
+		}
 		});
-   });
-   
+	});
+	
    // Month & Year
 	$('.ln_month_year').datepicker({
 	changeMonth: true,
@@ -536,7 +554,7 @@ $(document).ready(function(){
 	var xin_table_contract = $('#xin_table_contract').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"employees/contract/"+$('#user_id').val(),
+            url : site_url+"employees/contract/"+$('#employee_id').val(),
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){

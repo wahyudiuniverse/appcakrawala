@@ -488,12 +488,13 @@ if($user_info[0]->user_role_id==1 ||
           <tr>
             <th>NIP</th>
             <th>KTP</th>
-            <th width="200"><i class="fa fa-user"></i> NAMA LENGKAP</th>
+            <th><i class="fa fa-user"></i> NAMA LENGKAP</th>
             <th>PROJECT</th>
             <th>POSISI/JABATAN</th>
             <th>AREA</th>
             <th><?php echo $this->lang->line('dashboard_contact');?></th>
-            <th><?php echo $this->lang->line('xin_employee_dob');?></th>
+            <th><?php    $this->lang->line('xin_employee_dob');?></th>
+            <th>Last Login</th>
             <th><?php echo $this->lang->line('xin_employee_role');?></th>
           </tr>
         </thead>

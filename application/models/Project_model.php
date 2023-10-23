@@ -125,6 +125,14 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id 
   	  return $query->result();
 	}
 
+
+	public function read_project_posisi_tkhl()
+	{
+	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE pp.project_id in (49)  ORDER BY `title` ASC;");
+  	  return $query->result();
+	}
+
 	public function get_project_bycompany($id, $empID)
 	{
 	  $query = $this->db->query("SELECT * FROM xin_projects 

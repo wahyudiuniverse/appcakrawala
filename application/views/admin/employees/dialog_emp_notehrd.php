@@ -100,26 +100,26 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 						Ladda.stopAll();
 					} else {
 						// On page load: datatable
-               var xin_table = $('#xin_table').dataTable({
-        "bDestroy": true,
-    "ajax": {
-            url : base_url+"/request_list_hrd/",
-            type : 'GET'
-        },
-    dom: 'lBfrtip',
-    "buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
-    "fnDrawCallback": function(settings){
-    $('[data-toggle="tooltip"]').tooltip();          
-    }
-    });
+    //            var xin_table = $('#xin_table').dataTable({
+    //     "bDestroy": true,
+    // "ajax": {
+    //         url : base_url+"/request_list_hrd/",
+    //         type : 'GET'
+    //     },
+    // dom: 'lBfrtip',
+    // "buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+    // "fnDrawCallback": function(settings){
+    // $('[data-toggle="tooltip"]').tooltip();          
+    // }
+    // });
 
-						xin_table.api().ajax.reload(function(){ 
-							toastr.success(JSON.result);
-						}, true);
+		// 				xin_table.api().ajax.reload(function(){ 
+		// 					toastr.success(JSON.result);
+		// 				}, true);
 						$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 						$('.edit-modal-data').modal('toggle');
 						$('.save').prop('disabled', false);
-						Ladda.stopAll();
+						//Ladda.stopAll();
 					}
 				},
 				error: function() 
@@ -127,7 +127,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
-					Ladda.stopAll();
+					//Ladda.stopAll();
 				} 	        
 		   });
 		});

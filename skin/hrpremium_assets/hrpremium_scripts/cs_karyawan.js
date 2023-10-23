@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"customerservices/report_employees_list/0/0/0/0/",
+            url : site_url+"customerservices/report_employees_list/0/0/0/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -36,26 +36,50 @@ $(document).ready(function() {
 			jQuery('#subproject_ajax').html(data);			
 		});
 	});
-	/* projects report */
+		/* projects report */
 	$("#employee_reports").submit(function(e){
 		/*Form Submit*/
 		e.preventDefault();
 		var company_id = $('#aj_company').val();
 		var department_id = $('#aj_department').val();
-		var designation_id = $('#designation_id').val();
+		var project_id = $('#aj_project').val();
+		var subproject_id = $('#aj_subproject').val();
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"reports/report_employees_list/"+company_id+"/"+department_id+"/"+designation_id+"/"+subproject_id+"/",
+				url : site_url+"customerservices/report_employees_list/"+project_id+"/"+subproject_id+"/"+"0/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',
-			// "buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+			"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
 			"fnDrawCallback": function(settings){
 			$('[data-toggle="tooltip"]').tooltip();          
 			}
 		});
 		toastr.success('Request Submit.');
-		xin_table2.api().ajax.reload(function(){ }, true);
+		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
 	});
+	
+	/* projects report */
+	// $("#employee_reports").submit(function(e){
+	// 	/*Form Submit*/
+	// 	e.preventDefault();
+	// 	var company_id = $('#aj_company').val();
+	// 	var department_id = $('#aj_department').val();
+	// 	var designation_id = $('#designation_id').val();
+	// 	var xin_table2 = $('#xin_table').dataTable({
+	// 		"bDestroy": true,
+	// 		"ajax": {
+	// 			url : site_url+"reports/report_employees_list/"+designation_id+"/"+subproject_id+"/"+"0/",
+	// 			type : 'GET'
+	// 		},
+	// 		dom: 'lBfrtip',
+	// 		// "buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+	// 		"fnDrawCallback": function(settings){
+	// 		$('[data-toggle="tooltip"]').tooltip();          
+	// 		}
+	// 	});
+	// 	toastr.success('Request Submit.');
+	// 	xin_table2.api().ajax.reload(function(){ }, true);
+	// });
 });

@@ -78,6 +78,7 @@ class Esign_model extends CI_Model {
 		FROM xin_employees 
 		WHERE is_active = 1 
 		AND  status_resign in (2,4,5)
+		AND approve_resignhrd is not null
 		AND employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
 		UNION
 		SELECT 1 AS nip FROM DUAL)

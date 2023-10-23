@@ -181,7 +181,8 @@ class Reports_model extends CI_Model {
 		  }
 	}
 	
-	
+
+
 	// get employees list> reports
 	public function filter_employees_reports($project_id,$sub_project_id,$status_resign) {
 
@@ -313,7 +314,7 @@ class Reports_model extends CI_Model {
 
 
 	// get employees list> reports
-	public function filter_employees_reports_null($company_id,$department_id,$project_id,$sub_project_id,$status_resign) {
+	public function filter_employees_reports_null($project_id,$sub_project_id,$status_resign) {
 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
 // 		return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (
 // 		22505515,

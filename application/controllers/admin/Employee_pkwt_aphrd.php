@@ -1,5 +1,5 @@
 <?php
-  /**
+/**
  * NOTICE OF LICENSE
  *
  * This source file is subject to the dndsoft License
@@ -367,6 +367,13 @@ class Employee_pkwt_aphrd extends MY_Controller {
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
 
+				// $getnippkwt = $this->Pkwt_model->get_single_pkwt($id);
+				// if(!is_null($getnippkwt)){
+				// 	$nippkwt = $getnippkwt[0]->employee_id;
+				// } else {
+				// 	$nippkwt = '1';	
+				// }
+
 			if($cancel=='YES'){
 
 				$data_up = array(
@@ -378,6 +385,8 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 				);
 			} else {
+
+
 				$data_up = array(
 
 				'status_pkwt	' => 1,
@@ -385,9 +394,12 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'approve_hrd_date' => date("Y-m-d h:i:s")
 
 				);
+
+
+
 			}
 
-
+			
 			$result = $this->Pkwt_model->update_pkwt_apnae($data_up,$id);
 
 		if($Return['error']!=''){

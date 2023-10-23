@@ -467,13 +467,14 @@ class Profile extends MY_Controller {
 										
 										if(in_array($ext_cv,$allowed_cv)){
 											$tmp_name_cv = $_FILES["document_file_cv"]["tmp_name"];
-											$documentd_cv = "uploads/document/cv/";
+											$yearmonth = date('Y/m');
+											$documentd_cv = "uploads/document/cv/".$yearmonth.'/';
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_cv"]["name"]);
-											$newfilename_cv = 'cv_'.round(microtime(true)).'.'.$ext_cv;
+											$newfilename_cv = 'cv_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext_cv;
 											move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
-											$fname_cv = $newfilename_cv;
+											$fname_cv = 'https://apps-cakrawala.com/uploads/document/cv/'.$yearmonth.'/'.$newfilename_cv;
 										} else {
 											$Return['error'] = 'Jenis File CV tidak diterima..';
 										}
@@ -1031,7 +1032,7 @@ class Profile extends MY_Controller {
 		);
 	  echo json_encode($output);
 	  exit();
-     }
+  }
 	 
 	// employee leave - listing
 	public function leave() {

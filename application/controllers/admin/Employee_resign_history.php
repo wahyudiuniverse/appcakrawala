@@ -88,6 +88,7 @@ class Employee_resign_history extends MY_Controller {
 				$approve_resignnae = $r->approve_resignnae;
 				$approve_resignnom = $r->approve_resignnom;
 				$approve_resignhrd = $r->approve_resignhrd;
+				$approve_resignhrd_on = $r->approve_resignhrd_on;
 
 
 
@@ -137,6 +138,7 @@ class Employee_resign_history extends MY_Controller {
 				$date_of_leaving,
 				$penempatan,
 				$ktp_no,
+				$approve_resignhrd_on
 			);
           }
 

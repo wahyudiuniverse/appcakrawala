@@ -70,7 +70,9 @@
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-bpjs"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_manage_employees_bpjs');?></a>
 
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_document_id');?></a>
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-docpkwt"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; Dokumen PKWT</a>
+
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; Dokumen Pribadi</a>
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>
                   
@@ -494,6 +496,109 @@
                       <?php echo form_close(); ?> </div>
                   </div>
 
+                  <!-- DOKUMEN PKWT -->
+                  <div class="tab-pane fade" id="account-docpkwt">
+                    <div class="box md-4" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <?php $attributes = array('name' => 'dokumen_pkwt', 'id' => 'dokumen_pkwt', 'autocomplete' => 'off');?>
+                          <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                          <?php echo form_open('admin/employees/contract/', $attributes, $hidden);?>
+                          <?php
+                              $data_usr10 = array(
+                                    'type'  => 'hidden',
+                                    'name'  => 'user_id',
+                                    'value' => $session['employee_id'],
+                             );
+                            echo form_input($data_usr10);
+                            ?>
+
+
+                          <input class="form-control" placeholder="" name="employee_id" id="employee_id" type="text" value="<?php echo $employee_id;?>" hidden>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="" id="account_name">
+                              </div>
+                              <div class="form-group">
+                                <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="" id="account_number">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="" id="bank_name">
+                              </div>
+                              <div class="form-group">
+                                <label for="bank_code"><?php echo $this->lang->line('xin_e_details_bank_code');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_code');?>" name="bank_code" type="text" value="" id="bank_code">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="bank_branch"><?php echo $this->lang->line('xin_e_details_bank_branch');?></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="" id="bank_branch">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                              </div>
+                            </div>
+                            <?php echo form_close(); ?> </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="box">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <div class="table-responsive" data-pattern="priority-columns">
+                            <table class="table table-striped table-bordered dataTable" id="xin_table_contract" style="width:100%;">
+                              <thead>
+                                <tr>
+                                  <th>No. Dokumen</th>
+                                  <th>Project</th>
+                                  <th>Jabatan</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="account-docpkwt">
+
+                    <div class="box">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> DOKUMEN PKWT </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <div class="table-responsive" data-pattern="priority-columns">
+                            <table class="table table-striped table-bordered dataTable" id="xin_table_contract" style="width:100%;">
+                              <thead>
+                                <tr>
+                                  <th>No. Dokumen</th>
+                                  <th>Project</th>
+                                  <th>Jabatan</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <!-- DOKUMEN FOTO-->
                   <div class="tab-pane fade" id="account-document">
                    <div class="box" hidden>
@@ -635,7 +740,7 @@
           
                           <div class="form-group">
                             <div class="card-body media align-items-center"> 
-                                <a href="<?php echo base_url().'uploads/document/cv/'.$filename_cv;?>" target="_blank"><?php echo $filename_cv; ?></a>
+                                <a href="<?php echo $filename_cv;?>" target="_blank"><?php echo $filename_cv; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>
@@ -716,28 +821,6 @@
                         </div>
                       </div>
 
-                      <!-- PKWT -->
-                      <div class="row">
-                        <div class="col-md-5">
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <label for="logo">PKWT FILE</label>
-                              <input type="file" class="form-control-file" id="document_file_pkwt" name="document_file_pkwt" accept="application/pdf">
-                              <small>Jenis File: PDF | Size MAX 2 MB</small>
-                            </fieldset>
-                          </div>
-                        </div>
-                        <div class="col-md-4" hidden>
-                          <div class="form-group">
-                            <div class="card-body media align-items-center"> 
-                                <a href="<?php echo base_url().'uploads/document/pkwt/'.$filename_pkwt;?>" target="_blank"><?php echo $filename_pkwt; ?></a>
-                              <div class="media-body ml-4"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-md-3">
-                        </div>
-                      </div>
 
                       <div class="row">
                         <div class="col-md-12">

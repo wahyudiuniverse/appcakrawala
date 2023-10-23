@@ -20,7 +20,7 @@ class Employees_model extends CI_Model {
 
 	public function get_employees_all() {
 
-		$sql = 'SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title,
+		$sql = 'SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title, emp.last_login_date,
 				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id
 				FROM xin_employees emp
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
@@ -34,7 +34,7 @@ class Employees_model extends CI_Model {
 	public function get_employees_notho() {
 
 		$sql = "SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title,
-				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id
+				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.last_login_date
 				FROM xin_employees emp
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
@@ -45,6 +45,19 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+
+	public function get_employees_who() {
+
+		$sql = "SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title,
+				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.last_login_date
+				FROM xin_employees emp
+				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
+				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+				WHERE emp.employee_id not IN (1)";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
 
 	public function get_all_employees_all()
 	{
@@ -2582,13 +2595,21 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	}
 
 
-	public function ktp_exist($ktp)
+	public function ktp_exist_blacklist($ktp)
 	{
-	  $query = $this->db->query("SELECT DISTINCT(emp.ktp_no) FROM (
-SELECT ktp_no FROM xin_employees
-UNION
-SELECT nik_ktp AS ktp_no FROM xin_employee_request WHERE `migrasi` = 0 ) emp
-WHERE emp.ktp_no = '$ktp';");
+	  $query = $this->db->query("SELECT ktp_no FROM xin_employees WHERE status_resign = '3' AND ktp_no = '$ktp';");
+  	  return $query->num_rows();
+	}
+
+	public function ktp_exist_active($ktp)
+	{
+	  $query = $this->db->query("SELECT ktp_no FROM xin_employees WHERE status_resign = '1' AND ktp_no = '$ktp';");
+  	  return $query->num_rows();
+	}
+
+	public function ktp_exist_regis($ktp)
+	{
+	  $query = $this->db->query("SELECT nik_ktp AS ktp_no FROM xin_employee_request WHERE migrasi = 0 AND nik_ktp = '$ktp';");
   	  return $query->num_rows();
 	}
 

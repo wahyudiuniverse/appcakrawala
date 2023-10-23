@@ -948,6 +948,17 @@ class Employee_pkwt_cancel extends MY_Controller {
 						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 						
 
+				$pkwt_down = array(
+
+				'status_pkwt	' => 0
+
+				);
+
+				$resultx = $this->Pkwt_model->update_pkwt_status($pkwt_down,$employee_id);
+
+
+
+
 						$data = array(
 							'uniqueid' 							=> $unicode,
 							'employee_id' 					=> $employee_id,
@@ -1013,6 +1024,11 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 
 					$iresult = $this->Pkwt_model->add_pkwt_record($data);
+
+
+
+
+
 				}
 
 

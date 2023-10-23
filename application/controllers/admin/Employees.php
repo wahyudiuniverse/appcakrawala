@@ -704,7 +704,8 @@ class Employees extends MY_Controller {
 				$r->penempatan,
 				$r->contact_no,
 				$r->date_of_birth,
-				$r->user_role_id,
+				$r->last_login_date,
+				$r->user_role_id
 			);
 
 	  }
@@ -1258,6 +1259,7 @@ class Employees extends MY_Controller {
 			'allow_area' => $result[0]->allow_area,
 			'allow_masakerja' => $result[0]->allow_masakerja,
 			'allow_trans_meal' => $result[0]->allow_trans_meal,
+			'allow_trans_rent' => $result[0]->allow_trans_rent,
 			'allow_konsumsi' => $result[0]->allow_konsumsi,
 			'allow_transport' => $result[0]->allow_transport,
 			'allow_comunication' => $result[0]->allow_comunication,
@@ -3912,33 +3914,151 @@ class Employees extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	}
 	 
+	// public function read() {
+	// 	$session = $this->session->userdata('username');
+	// 	if(empty($session)){ 
+	// 		redirect('admin/');
+	// 	}
+	// 	$data['title'] = $this->Xin_model->site_title();
+	// 	// $id = $this->input->get('warning_id');
+	// 	$id = '10';
+	// 	$result = $this->Employees_model->read_employee_request($id);
+	// 	$data = array(
+	// 			'idrequest' => $result[0]->secid,
+	// 			'fullname' => $result[0]->fullname,
+	// 			'warning_by' => $result[0]->warning_by,
+	// 			'warning_date' => $result[0]->warning_date,
+	// 			'warning_type_id' => $result[0]->warning_type_id,
+	// 			'subject' => $result[0]->subject,
+	// 			'description' => $result[0]->description,
+	// 			'status' => $result[0]->status,
+	// 			'all_employees' => $this->Xin_model->all_employees(),
+	// 			'all_warning_types' => $this->Warning_model->all_warning_types(),
+	// 			);
+	// 	if(!empty($session)){ 
+	// 		$this->load->view('admin/employees/dialog_employees_request', $data);
+	// 	} else {
+	// 		redirect('admin/');
+	// 	}
+	// }
+
+
 	public function read() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();
-		// $id = $this->input->get('warning_id');
-		$id = '10';
-		$result = $this->Employees_model->read_employee_request($id);
+
+			$id = $this->input->get('company_id');
+
+				$emp = $this->Pkwt_model->get_single_pkwt($id);
+				if(!is_null($emp)){
+					$no_surat 		= $emp[0]->no_surat;
+					$nip 			= $emp[0]->employee_id;
+					$file_name 		= $emp[0]->file_name;
+					$contract_id 		= $emp[0]->contract_id;
+					$upload_pkwt 	= $emp[0]->upload_pkwt;
+				} else {
+					$no_surat 		= '0';	
+					$nip 			= '0';	
+					$file_name 		= '0';	
+					$contract_id 		= '0';	
+					$upload_pkwt 	= '0';
+				}
+
+
 		$data = array(
-				'idrequest' => $result[0]->secid,
-				'fullname' => $result[0]->fullname,
-				'warning_by' => $result[0]->warning_by,
-				'warning_date' => $result[0]->warning_date,
-				'warning_type_id' => $result[0]->warning_type_id,
-				'subject' => $result[0]->subject,
-				'description' => $result[0]->description,
-				'status' => $result[0]->status,
-				'all_employees' => $this->Xin_model->all_employees(),
-				'all_warning_types' => $this->Warning_model->all_warning_types(),
+				'nip' => $nip,
+				'file_name' => $file_name,
+				'idrequest' => $id,
+				'no_surat' => $no_surat,
+				'contract_id' => $contract_id,
+				'tgl_upload_pkwt' => $upload_pkwt
 				);
-		if(!empty($session)){ 
-			$this->load->view('admin/employees/dialog_employees_request', $data);
-		} else {
+
+			$this->load->view('admin/employees/dialog_emp_pkwt.php', $data);
+
+
+		// $this->load->view('admin/pkwt/dialog_pkwt_approve_hrd', $data);
+	}
+	
+
+	// Validate and update info in database
+	public function updatepkwt() {
+		
+		$session = $this->session->userdata('username');
+		if(empty($session)){
 			redirect('admin/');
 		}
+
+		if($this->input->post('edit_type')=='company') {
+
+		$id = $this->uri->segment(4);
+	
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+			if ($_FILES['document_file_pkwt']['size'] > 3072000){
+				$Return['error'] = 'File PKWT Lebih dari 3MB..';
+			}
+
+
+
+								if($_FILES['document_file_pkwt']['size'] == 0) {
+									$fname_pkwt = $this->input->post('ffile_pkwt');
+								} else {
+									if(is_uploaded_file($_FILES['document_file_pkwt']['tmp_name'])) {
+										//checking image type
+										$allowed_pkwt =  array('pdf','PDF');
+										$filename_pkwt = $_FILES['document_file_pkwt']['name'];
+										$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
+										
+										if(in_array($ext_pkwt,$allowed_pkwt)){
+											$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
+											$yearmonth = date('Y/m');
+											$documentd_pkwt = "uploads/document/pkwt/".$yearmonth.'/';
+											// basename() may prevent filesystem traversal attacks;
+											// further validation/sanitation of the filename may be appropriate
+											$name = basename($_FILES["document_file_pkwt"]["name"]);
+											$newfilename_pkwt = 'pkwt_'.round(microtime(true)).'.'.$ext_pkwt;
+											move_uploaded_file($tmp_name_pkwt, $documentd_pkwt.$newfilename_pkwt);
+											$fname_pkwt = 'https://apps-cakrawala.com/uploads/document/pkwt/'.$yearmonth.'/'.$newfilename_pkwt;
+										} else {
+											$Return['error'] = 'Jenis File PKWT tidak diterima..';
+										}
+									}
+								}
+
+				$data_up = array(
+
+					'file_name' 	=> $fname_pkwt,
+					'upload_pkwt' => date('d-m-Y h:i:s')
+
+				);
+
+
+
+			$result = $this->Pkwt_model->update_pkwt_edit($data_up,$id);
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+		
+		
+		if ($result == TRUE) {
+			$Return['result'] = 'Dokumen PKWT berhasil disimpan...';
+		} else {
+			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+		}
+
+		$this->output($Return);
+		exit;
+		}
 	}
+
 	
 	// Validate and update status info in database // status info
 	public function update_status_info() {
@@ -4395,7 +4515,7 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file']['tmp_name'])) {
 										//checking image type
-										$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$allowed =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
 										$filename = $_FILES['document_file']['name'];
 										$ext = pathinfo($filename, PATHINFO_EXTENSION);
 										
@@ -4420,7 +4540,7 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file_kk']['tmp_name'])) {
 										//checking image type
-										$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$allowedkk =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
 										$filenamekk = $_FILES['document_file_kk']['name'];
 										$extkk = pathinfo($filenamekk, PATHINFO_EXTENSION);
 										
@@ -4445,7 +4565,7 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file_npwp']['tmp_name'])) {
 										//checking image type
-										$allowed_npwp =  array('png','jpg','jpeg','PNG','JPG','JPEG');
+										$allowed_npwp =  array('png','jpg','jpeg','PNG','JPG','JPEG','pdf','PDF');
 										$filename_npwp = $_FILES['document_file_npwp']['name'];
 										$ext_npwp = pathinfo($filename_npwp, PATHINFO_EXTENSION);
 										
@@ -4469,19 +4589,20 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file_cv']['tmp_name'])) {
 										//checking image type
-										$allowed_cv =  array('pdf','PDF');
+										$allowed_cv =  array('pdf','PDF','png','jpg');
 										$filename_cv = $_FILES['document_file_cv']['name'];
 										$ext_cv = pathinfo($filename_cv, PATHINFO_EXTENSION);
 										
 										if(in_array($ext_cv,$allowed_cv)){
 											$tmp_name_cv = $_FILES["document_file_cv"]["tmp_name"];
-											$documentd_cv = "uploads/document/cv/";
+											$yearmonth = date('Y/m');
+											$documentd_cv = "uploads/document/cv/".$yearmonth.'/';
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_cv"]["name"]);
-											$newfilename_cv = 'cv_'.$employee_id.'.'.$ext_cv;
+											$newfilename_cv = 'cv_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext_cv;
 											move_uploaded_file($tmp_name_cv, $documentd_cv.$newfilename_cv);
-											$fname_cv = $newfilename_cv;
+											$fname_cv = 'https://apps-cakrawala.com/uploads/document/cv/'.$yearmonth.'/'.$newfilename_cv;
 										} else {
 											$Return['error'] = 'Jenis File CV tidak diterima..';
 										}
@@ -4493,7 +4614,7 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file_skck']['tmp_name'])) {
 										//checking image type
-										$allowed_skck =  array('pdf','PDF');
+										$allowed_skck =  array('pdf','PDF','png','jpg');
 										$filename_skck = $_FILES['document_file_skck']['name'];
 										$ext_skck = pathinfo($filename_skck, PATHINFO_EXTENSION);
 										
@@ -4517,7 +4638,7 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file_isd']['tmp_name'])) {
 										//checking image type
-										$allowed_isd =  array('pdf','PDF');
+										$allowed_isd =  array('pdf','PDF','png','jpg');
 										$filename_isd = $_FILES['document_file_isd']['name'];
 										$ext_isd = pathinfo($filename_isd, PATHINFO_EXTENSION);
 										
@@ -4541,7 +4662,7 @@ class Employees extends MY_Controller {
 								} else {
 									if(is_uploaded_file($_FILES['document_file_pak']['tmp_name'])) {
 										//checking image type
-										$allowed_pak =  array('pdf','PDF');
+										$allowed_pak =  array('pdf','PDF','png','jpg');
 										$filename_pak = $_FILES['document_file_pak']['name'];
 										$ext_pak = pathinfo($filename_pak, PATHINFO_EXTENSION);
 										
@@ -6023,46 +6144,69 @@ class Employees extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/employee_detail", $data);
-		} else {
+			$this->load->view("admin/employees/profile", $data);
+		} else { 
 			redirect('admin/');
 		}
+
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
-		
+
 		$id = $this->uri->segment(4);
-		$employee = $this->Employees_model->read_employee_info($id);
-		$contract = $this->Employees_model->set_employee_contract($employee[0]->employee_id);
-		
+		$nik = $this->uri->segment(5);
+		$contract = $this->Employees_model->set_employee_contract($id);
+
+
+			$emp = $this->Employees_model->read_employee_info_by_nik($id);
+        if(!is_null($emp)){
+          $fullname = $emp[0]->first_name;
+          $sub_project = 'pkwt'.$emp[0]->sub_project_id;
+        } else {
+          $fullname = '--'; 
+          $sub_project = '0';
+        }
+
 		$data = array();
 
         foreach($contract->result() as $r) {			
 			// designation
-			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			$projects = $this->Project_model->read_single_project($r->project);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+
+			$designation = $this->Designation_model->read_designation_information($r->jabatan);
 			if(!is_null($designation)){
 				$designation_name = $designation[0]->designation_name;
 			} else {
 				$designation_name = '--';
 			}
-			//contract type
-			$contract_type = $this->Employees_model->read_contract_type_information($r->contract_type_id);
-			if(!is_null($contract_type)){
-				$ctype = $contract_type[0]->name;
-			} else {
-				$ctype = '--';
-			}
-			// date
-			$duration = $this->Xin_model->set_date_format($r->from_date).' - '.$this->Xin_model->set_date_format($r->to_date);
-		
-		$data[] = array(
-			'<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->contract_id . '" data-field_type="contract"><i class="fas fa-pencil-alt"></i></button></span><span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->contract_id . '" data-token_type="contract"><i class="fas fa-trash-restore"></i></button></span>',
 
+
+				if($r->file_name==NULL || $r->file_name== '0' ){
+			  	$status_upload = '<button type="button" class="btn btn-xs btn-outline-warning" style="background: #FFD950;color: black;"> BELUM UPLOAD PKWT</button>';
+				} else {
+			  	$status_upload = '<button type="button" class="btn btn-xs btn-outline-success" style="background: #5DD2A6;color: black;"> SUDAH UPLOAD PKWT </button>';
+				}
+		
+
+			  	$download = 
+			   '<a href="'.site_url().'admin/'.$sub_project.'/view'.'/'.$r->uniqueid.'/" target="_blank">
+  					<button type="button" class="btn btn-xs btn-outline-twitter">DOWNLOAD</button>
+  				</a>';
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '" >UPLOAD</button>';
+
+
+		$data[] = array(
 			$r->no_surat,
-			$duration,
+			$nama_project,
 			$designation_name,
-			$ctype
+			$status_upload.'<br>'.$download.' '.$status_migrasi
 		);
       }
 
@@ -6074,7 +6218,7 @@ class Employees extends MY_Controller {
 		);
 	  echo json_encode($output);
 	  exit();
-     }
+  }
 	 
 	// employee leave - listing
 	public function leave() {

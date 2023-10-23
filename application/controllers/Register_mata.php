@@ -237,13 +237,14 @@ class register_mata extends MY_Controller {
 											
 											if(in_array($extcv,$allowedcv)){
 												$tmp_namecv = $_FILES["dokumen_cv"]["tmp_name"];
-												$documentdcv = "uploads/document/cv/";
+												$yearmonth = date('Y/m');
+												$documentdcv = "uploads/document/cv/".$yearmonth.'/';
 												// basename() may prevent filesystem traversal attacks;
 												// further validation/sanitation of the filename may be appropriate
 												$name = basename($_FILES["dokumen_cv"]["name"]);
-												$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'.'.$extcv;
+												$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$extcv;
 												move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
-												$fnamecv = $newfilenamecv;
+												$fnamecv = 'https://apps-cakrawala.com/uploads/document/cv/'.$yearmonth.'/'.$newfilenamecv;
 											} else {
 												$Return['error'] = 'Jenis File CV tidak diterima..';
 											}

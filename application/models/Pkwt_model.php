@@ -405,16 +405,17 @@ class Pkwt_model extends CI_Model {
 	public function report_pkwt_expired_null($empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "
-		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end
+		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
 		FROM xin_employees emp 
-		LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
+		LEFT JOIN (SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where status_pkwt = 1 UNION SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where request_pkwt != 0 and approve_nae != 0 and approve_nom != 0) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
-		WHERE emp.status_employee = 1
-		AND emp.status_resign = 1
+		WHERE emp.status_employee = 1 
+		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
-		AND emp.sub_project_id not in (1,2)
-		AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null
-		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
+		AND emp.sub_project_id not in (1,2) 
+		AND pkwt.to_date < now() + INTERVAL 21 day OR pkwt.to_date is null 
+        AND pkwt.approve_hrd = 0
+		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID') LIMIT 5000";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -447,13 +448,15 @@ class Pkwt_model extends CI_Model {
 		FROM (
 		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end
 				FROM xin_employees emp 
-				LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
+				LEFT JOIN (SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where status_pkwt = 1 UNION SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where request_pkwt != 0 and approve_nae != 0 and approve_nom != 0) pkwt 
 				ON pkwt.employee_id = emp.employee_id 
 				WHERE emp.status_employee = 1
 				AND emp.status_resign = 1
 				AND emp.employee_id not in (1,1024)
-				AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = 1)
-				AND pkwt.to_date < now() + INTERVAL 30 day  OR pkwt.to_date is null) exp
+				AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+				AND pkwt.to_date < now() + INTERVAL 21 day  OR pkwt.to_date is null
+				AND pkwt.approve_hrd = 0) exp
+				
 		WHERE exp.project_id = '$project'";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -554,7 +557,6 @@ class Pkwt_model extends CI_Model {
 	 	return $query->result();
 	}
 
-
 		// Function to update record in table
 	public function update_pkwt_edit($data, $id){
 		$this->db->where('contract_id', $id);
@@ -568,6 +570,16 @@ class Pkwt_model extends CI_Model {
 		// Function to update record in table
 	public function update_pkwt_apnae($data, $id){
 		$this->db->where('contract_id', $id);
+		if( $this->db->update('xin_employee_contract',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
+		// Function to update record in table
+	public function update_pkwt_status($data, $id){
+		$this->db->where('employee_id', $id);
 		if( $this->db->update('xin_employee_contract',$data)) {
 			return true;
 		} else {
