@@ -1085,7 +1085,7 @@ class ImportExcel extends MY_Controller
 		// } else {
 		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
 		// }
-		$history_eslip = $this->Import_model->get_all_eslip();
+		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
 
 		$data = array();
 

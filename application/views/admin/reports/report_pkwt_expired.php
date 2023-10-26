@@ -64,8 +64,7 @@
 
             <label class="form-label">Projects <?php echo $session['employee_id'];?></label>
               <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
-                  <option value="0">--Pilih Project--</option>
-                  <option value="999">--ALL--</option>
+                  <option value="0">--ALL--</option>
                 <?php foreach($all_projects as $proj) {?>
                   <option value="<?php echo $proj->project_id;?>"> <?php echo $proj->title;?></option>
                 <?php } ?>
@@ -99,7 +98,7 @@
 
           <div class="col-md mb-3">
               <label class="form-label">NIP/FULLNAME/KTP</label>
-              <input class="form-control" placeholder="Cari: Nama Lengkap/NIP/KTP" name="searchkey" id="aj_searchkey" type="text" value="">
+              <input class="form-control" placeholder="Cari: Nama Lengkap/NIP/KTP" name="searchkey" id="aj_searchkey" type="text" value="0">
           </div>
 
 

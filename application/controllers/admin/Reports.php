@@ -808,6 +808,48 @@ class Reports extends MY_Controller
 				$pin = '******';
 			}
 
+			if($r->filename_ktp=='0' || $r->filename_ktp== null){
+				$link_ktp = '-';
+			} else {
+				$link_ktp = '<a href="'.base_url().'uploads/document/ktp/'.$r->filename_ktp.'" target="_blank"> '.base_url().'uploads/document/ktp/'.$r->filename_ktp.'</a>';
+			}
+
+			if($r->filename_kk=='0' || $r->filename_kk== null){
+				$link_kk = '-';
+			} else {
+				$link_kk = '<a href="'.base_url().'uploads/document/kk/'.$r->filename_kk.'" target="_blank"> '.base_url().'uploads/document/kk/'.$r->filename_kk.'</a>';
+			}
+
+			if($r->filename_npwp=='0' || $r->filename_npwp== null){
+				$link_npwp = '-';
+			} else {
+				$link_npwp = '<a href="'.base_url().'uploads/document/npwp/'.$r->filename_npwp.'" target="_blank"> '.base_url().'uploads/document/npwp/'.$r->filename_npwp.'</a>';
+			}
+
+			if($r->filename_isd=='0' || $r->filename_isd== null){
+				$link_isd = '-';
+			} else {
+				$link_isd = '<a href="'.base_url().'uploads/document/ijazah/'.$r->filename_isd.'" target="_blank"> '.base_url().'uploads/document/ijazah/'.$r->filename_isd.'</a>';
+			}
+
+			if($r->filename_skck=='0' || $r->filename_skck== null){
+				$link_skck = '-';
+			} else {
+				$link_skck = '<a href="'.base_url().'uploads/document/skck/'.$r->filename_skck.'" target="_blank"> '.base_url().'uploads/document/skck/'.$r->filename_skck.'</a>';
+			}
+
+			if($r->filename_cv=='0' || $r->filename_cv== null){
+				$link_cv = '-';
+			} else {
+				$link_cv = '<a href="'.base_url().'uploads/document/cv/'.$r->filename_cv.'" target="_blank"> '.base_url().'uploads/document/cv/'.$r->filename_cv.'</a>';
+			}
+
+			if($r->filename_paklaring=='0' || $r->filename_paklaring== null){
+				$link_paklaring = '-';
+			} else {
+				$link_paklaring = '<a href="'.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'" target="_blank"> '.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'</a>';
+			}
+
 			$ktp = $r->ktp_no;
 			$kk = $r->kk_no;
 			$npwp = $r->npwp_no;
@@ -878,15 +920,16 @@ class Reports extends MY_Controller
 				$bank_name,
 				"'".$nomor_rek,
 				$pemilik_rek,
-
-				'<a href="'.base_url().'uploads/document/ktp/'.$r->filename_ktp.'" target="_blank"> '.$r->filename_ktp.'</a>',
-				'<a href="'.base_url().'uploads/document/kk/'.$r->filename_kk.'" target="_blank"> '.$r->filename_kk.'</a>',
-				'<a href="'.base_url().'uploads/document/npwp/'.$r->filename_npwp.'" target="_blank"> '.$r->filename_npwp.'</a>',
-				'<a href="'.base_url().'uploads/document/ijazah/'.$r->filename_isd.'" target="_blank"> '.$r->filename_isd.'</a>',
-				'<a href="'.base_url().'uploads/document/skck/'.$r->filename_skck.'" target="_blank"> '.$r->filename_skck.'</a>',
-				'<a href="'.base_url().'uploads/document/cv/'.$r->filename_cv.'" target="_blank"> '.$r->filename_cv.'</a>',
-				'<a href="'.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'" target="_blank"> '.$r->filename_paklaring.'</a>',
-				'<a href="'.base_url().'uploads/document/pkwt/'.$r->filename_pkwt.'" target="_blank"> '.$r->filename_pkwt.'</a>'
+				$link_ktp,
+				$link_kk,
+				$link_npwp,
+				$link_isd,
+				$link_skck,
+				$link_cv,
+				$link_paklaring,
+				'<a href="<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank">
+					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"> PKWT </button>
+				</a>'
 
 				// $pin
 			);
@@ -2044,17 +2087,20 @@ class Reports extends MY_Controller
 		$finalkey = str_replace("%20"," ",$searchkey);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 
-		if($searchkey!=0 || $searchkey!=""){
+		if($project_id==0 && $searchkey==0){
 			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
-			$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
-		} else if ($project_id!=0) {
+			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
+		} else if ($project_id!=0 && $searchkey== '') {
+			// $employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
+			// $employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
 			$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
 		} else {
-			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
+			$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
+			// $employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
 		}
 		// $employee = $this->Employees_model->get_employees();
 		$no = 1;
-		$data = array();
+		$data = array();	
 
 		// for($i=0 ; $i < count($attend); $i++) {
  		foreach($employee->result() as $r) {

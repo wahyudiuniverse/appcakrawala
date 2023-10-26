@@ -225,7 +225,7 @@
 
 				<p class="form-row form-row-wide" id="projectsubproject">
 					
-					<label for="subproject">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
+					<label for="subproject_id">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
 
 						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
@@ -237,10 +237,10 @@
 
 
 				<p class="form-row form-row-wide" id="project_position">
-					<label for="posisi_lamar">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
+					<label for="posisi_id">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
 
-						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
+						<select name="posisi_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
 							<option value="">--</option>
 						</select>
 

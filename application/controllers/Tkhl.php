@@ -135,22 +135,9 @@ class tkhl extends MY_Controller {
 
 				else {
 
-
-					$ktp_exist_blacklist = $this->Employees_model->ktp_exist_blacklist($this->input->post('nomor_ktp'));
-
-					$ktp_exist_active = $this->Employees_model->ktp_exist_active($this->input->post('nomor_ktp'));
-
 					$ktp_exist_regis = $this->Employees_model->ktp_exist_regis($this->input->post('nomor_ktp'));
 					
-					if($ktp_exist_blacklist!=0) {
-
-						$Return['error'] = 'NIK KTP sudah di BLACKLIST oleh SISTEM CAKRAWALA.';
-
-					} else if ($ktp_exist_active!=0) {
-
-						$Return['error'] = 'NIK KTP Sudah terdaftar dengan Status AKTIF sebegai karyawan di SISTEM CAKRAWALA.';
-					
-					} else if ($ktp_exist_regis!=0) {
+					if ($ktp_exist_regis!=0) {
 
 						$Return['error'] = 'NIK KTP sudah ada di DAFTAR KARYAWAN BARU.';
 
@@ -196,76 +183,73 @@ class tkhl extends MY_Controller {
 										}
 									}
 
-
-								if($_FILES['foto_skck']['size'] == 0){
-									$fnameskck = '0';
-								} else {
-									if(is_uploaded_file($_FILES['foto_skck']['tmp_name'])) {
-										//checking image type
-										$allowedskck =  array('png','jpg','jpeg','pdf');
-										$filenameskck = $_FILES['foto_skck']['name'];
-										$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
-										
-										if(in_array($extskck,$allowedskck)){
-											$tmp_nameskck = $_FILES["foto_skck"]["tmp_name"];
-											$documentskck = "uploads/document/skck/";
-											// basename() may prevent filesystem traversal attacks;
-											// further validation/sanitation of the filename may be appropriate
-											$name = basename($_FILES["foto_skck"]["name"]);
-											$newfilenameskck = 'skck_'.$this->input->post('nomor_ktp').'.'.$extskck;
-											move_uploaded_file($tmp_nameskck, $documentskck.$newfilenameskck);
-											$fnameskck = $newfilenameskck;
-										} else {
-											$Return['error'] = 'Jenis File PKWT tidak diterima..';
+									if($_FILES['foto_skck']['size'] == 0){
+										$fnameskck = '0';
+									} else {
+										if(is_uploaded_file($_FILES['foto_skck']['tmp_name'])) {
+											//checking image type
+											$allowedskck =  array('png','jpg','jpeg','pdf');
+											$filenameskck = $_FILES['foto_skck']['name'];
+											$extskck = pathinfo($filenameskck, PATHINFO_EXTENSION);
+											
+											if(in_array($extskck,$allowedskck)){
+												$tmp_nameskck = $_FILES["foto_skck"]["tmp_name"];
+												$documentskck = "uploads/document/skck/";
+												// basename() may prevent filesystem traversal attacks;
+												// further validation/sanitation of the filename may be appropriate
+												$name = basename($_FILES["foto_skck"]["name"]);
+												$newfilenameskck = 'skck_'.$this->input->post('nomor_ktp').'.'.$extskck;
+												move_uploaded_file($tmp_nameskck, $documentskck.$newfilenameskck);
+												$fnameskck = $newfilenameskck;
+											} else {
+												$Return['error'] = 'Jenis File PKWT tidak diterima..';
+											}
 										}
 									}
-								}
-
 
 								$data = array (
 
-								// 'uploadid' => '000',
-								// 'employee_id' => '0',
-								'company_id' => '2',
-								'location_id' => '3',
-								'department' => '5',
+									// 'uploadid' => '000',
+									// 'employee_id' => '0',
+									'company_id' => '2',
+									'location_id' => '3',
+									'department' => '5',
+									'e_status' => '1',
 
-								'fullname' => $this->input->post('first_name'),
-								'tempat_lahir' => $this->input->post('tempat_lahir'),
-								'tanggal_lahir' => $this->input->post('tanggal_lahir'),
-								'alamat_ktp' => $this->input->post('alamat_ktp'),
-								'alamat_domisili' => $this->input->post('alamat_domisili'),
-								'contact_no' => $this->input->post('contact_number'),
-								'email' => $this->input->post('email'),
-								'nik_ktp' => $this->input->post('nomor_ktp'),
-								'no_kk' => $this->input->post('nomor_kk'),
-								'npwp' => $this->input->post('npwp'),
-								'nama_ibu' => $this->input->post('ibu_kandung'),
-								'gender' => $this->input->post('jenis_kelamin'),
-								'agama' => $this->input->post('agama'),
-								'status_kawin' => $this->input->post('pernikahan'),
-								'tinggi_badan' => $this->input->post('tinggi_badan'),
-								'berat_badan' => $this->input->post('berat_badan'),
-								'last_company' => $this->input->post('last_company'),
-								'last_posisi' => $this->input->post('last_posisi'),
-								'last_edu' => $this->input->post('last_edu'),
-								'school_name' => $this->input->post('school_name'),
-								'jurusan' => $this->input->post('jurusan'),
-								'project' => $this->input->post('project_id'),
-								'sub_project' => $this->input->post('subproject_id'),
-								'posisi' => $this->input->post('posisi_id'),
-								'penempatan' => $this->input->post('penempatan'),
-								'bank_name' => $this->input->post('bank_name'),
-								'no_rek' => $this->input->post('nomor_rek'),
-								'pemilik_rekening' => $this->input->post('pemilik_rek'),
+									'fullname' => $this->input->post('first_name'),
+									'tempat_lahir' => $this->input->post('tempat_lahir'),
+									'tanggal_lahir' => $this->input->post('tanggal_lahir'),
+									'alamat_ktp' => $this->input->post('alamat_ktp'),
+									'alamat_domisili' => $this->input->post('alamat_domisili'),
+									'contact_no' => $this->input->post('contact_number'),
+									'email' => $this->input->post('email'),
+									'nik_ktp' => $this->input->post('nomor_ktp'),
+									'no_kk' => $this->input->post('nomor_kk'),
+									'npwp' => $this->input->post('npwp'),
+									'nama_ibu' => $this->input->post('ibu_kandung'),
+									'gender' => $this->input->post('jenis_kelamin'),
+									'agama' => $this->input->post('agama'),
+									'status_kawin' => $this->input->post('pernikahan'),
+									'tinggi_badan' => $this->input->post('tinggi_badan'),
+									'berat_badan' => $this->input->post('berat_badan'),
+									'last_company' => $this->input->post('last_company'),
+									'last_posisi' => $this->input->post('last_posisi'),
+									'last_edu' => $this->input->post('last_edu'),
+									'school_name' => $this->input->post('school_name'),
+									'jurusan' => $this->input->post('jurusan'),
+									'project' => $this->input->post('project_id'),
+									'sub_project' => $this->input->post('subproject_id'),
+									'posisi' => $this->input->post('posisi_id'),
+									'penempatan' => $this->input->post('penempatan'),
+									'bank_name' => $this->input->post('bank_name'),
+									'no_rek' => $this->input->post('nomor_rek'),
+									'pemilik_rekening' => $this->input->post('pemilik_rek'),
 
-								'ktp' => $fname,
-								'kk' => $fnamekk,
-								'file_npwp' => $fnamenpwp,
-								'skck' => $fnameskck,
-								'ijazah' => 0,
-								'civi' => $fnamecv,
-								'gaji_pokok' => 0,
+									'ktp' => $fname,
+									'kk' => $fnamekk,
+									'skck' => $fnameskck,
+									'ijazah' => 0,
+									'gaji_pokok' => 0,
 
 									'request_empby' 				=> '1',
 									'request_empon' 				=> date("Y-m-d h:i:s"),
@@ -287,11 +271,6 @@ class tkhl extends MY_Controller {
 								$result = $this->Employees_model->addkandidat($data);
 
 
-					} 
-
-
-							}
-
 						if($Return['error']!=''){
 				       		$this->output($Return);
 				    }
@@ -301,6 +280,10 @@ class tkhl extends MY_Controller {
 						} else {
 							$Return['error'] = $this->lang->line('xin_error_msg');
 						}
+
+					} 
+
+				}
 
 
 			$this->output($Return);
@@ -321,7 +304,7 @@ class tkhl extends MY_Controller {
 		// 	redirect('employer/sign_in/');
 		// }
 		// $data['all_job_categories'] = $this->Recruitment_model->all_job_categories();
-		$data['subview'] = $this->load->view("frontend/hrpremium/view_daftar_success", $data, TRUE);
+		$data['subview'] = $this->load->view("frontend/hrpremium/view_daftar_success_tkhl", $data, TRUE);
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
 
@@ -330,7 +313,7 @@ class tkhl extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('c_user_id');
 		if(!empty($session)){ 
-			$this->load->view("frontend/hrpremium/view_daftar_success", $data);
+			$this->load->view("frontend/hrpremium/view_daftar_success_tkhl", $data);
 		} else {
 			redirect('');
 		}

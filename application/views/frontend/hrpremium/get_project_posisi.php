@@ -6,7 +6,7 @@
 								
 
 						<select name="posisi_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
-							<option value="0">--</option>
+							<option value="">--</option>
 	                        <?php foreach($results as $pos):?>
 	                        <option value="<?php echo $pos->posisi;?>"><?php echo $pos->designation_name;?></option>
 	                        <?php endforeach;?>

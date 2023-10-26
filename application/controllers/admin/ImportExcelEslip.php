@@ -3118,7 +3118,6 @@ class Importexceleslip extends MY_Controller
 			$tbl_ttd = '';
 			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 
-
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
@@ -3126,7 +3125,7 @@ class Importexceleslip extends MY_Controller
 			$pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
-			$pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
+			$pdf->Output('eslip_'.strtoupper($namalengkap).'_'.$periode.'.pdf', 'I');
 			ob_end_flush();
 
 		// } else {

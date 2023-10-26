@@ -31,7 +31,9 @@
             <label class="form-label">Projects <?php echo $session['employee_id'];?></label>
               <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
                   <option value="0">--</option>
+                  <?php if($session['user_id']=='9197'){ echo '<option value="22">PT. SIPRAMA CAKRAWALA</option>'; }?>
                 <?php foreach($all_projects as $proj) {?>
+
                   <option value="<?php echo $proj->project_id;?>"> <?php echo $proj->title;?></option>
                 <?php } ?>
               </select>

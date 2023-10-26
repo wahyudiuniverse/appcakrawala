@@ -47,10 +47,24 @@
 
 
  	// get all employes
-	public function get_all_eslip() {
+	public function get_all_eslip($empID) {
 
-		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp FROM xin_employees_eslip
+		if($empID=='21502900'){
+
+		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp 
+FROM xin_employees_eslip
+WHERE project = 'PT. Indofarma Global Medika'
 GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
+
+		} else {
+
+		$sql = "SELECT uploadid, periode, project, project_sub, createdby, DATE_FORMAT(createdon, '%Y-%m-%d') AS up_date, COUNT(nip) AS total_mp 
+FROM xin_employees_eslip
+WHERE createdby = '$empID'
+GROUP BY uploadid ORDER BY uploadid DESC LIMIT 100";
+
+		}
+
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

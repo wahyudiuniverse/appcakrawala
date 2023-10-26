@@ -82,7 +82,7 @@ class register extends MY_Controller {
 			} else if (!filter_var($this->input->post('email'), FILTER_VALIDATE_EMAIL)) {
 				$Return['error'] = "Alamat Email Tidak Sesuai...";
 			} else if($this->input->post('nomor_ktp')==='') {
-				$Return['error'] = "Nomor KTP Kosong = ";
+				$Return['error'] = "Nomor KTP Kosong";
 			} else if($this->input->post('nomor_kk')==='') {
 				$Return['error'] = "Nomor KK Kosong...";
 			} else if($this->input->post('ibu_kandung')==='') {
@@ -109,7 +109,9 @@ class register extends MY_Controller {
 				$Return['error'] = "Jurusan Kosong...";
 			} else if($this->input->post('project_id')==='') {
 				$Return['error'] = 'Project belum dipilih';
-			} else if($this->input->post('posisi_lamar')==='') {
+			} else if($this->input->post('subproject_id')===''){
+				$Return['error'] = 'Sub Project belum dipilih';
+			} else if($this->input->post('posisi_id')==='') {
 				$Return['error'] = "Posisi/Jabatan Kosong...";
 			} else if($this->input->post('penempatan')==='') {
 				$Return['error'] = "Penempatan Kosong...";
@@ -125,11 +127,11 @@ class register extends MY_Controller {
 				$Return['error'] = 'Foto KK Masih Kosong...';
 			} else if($_FILES['dokumen_cv']['size'] == 0) {
 				$Return['error'] = 'Dokumen CV Masih Kosong...';
-			} else if ($_FILES['dokumen_cv']['size'] > 2000000) {
+			} else if ($_FILES['dokumen_cv']['size'] > 2150000) {
 				$Return['error'] = 'File CV Lebih dari 2MB..';
-			} else if ($_FILES['foto_ktp']['size'] > 2000000) {
+			} else if ($_FILES['foto_ktp']['size'] > 2150000) {
 				$Return['error'] = 'Foto KTP Lebih dari 2MB..';
-			} else if ($_FILES['foto_kk']['size'] > 2000000) {
+			} else if ($_FILES['foto_kk']['size'] > 2150000) {
 				$Return['error'] = 'Foto KK Lebih dari 2MB..';
 			}
 
@@ -153,7 +155,7 @@ class register extends MY_Controller {
 					} else if ($ktp_exist_active!=0) {
 
 						$Return['error'] = 'NIK KTP Sudah terdaftar dengan Status AKTIF sebegai karyawan di SISTEM CAKRAWALA.';
-					
+						
 					} else if ($ktp_exist_regis!=0) {
 
 						$Return['error'] = 'NIK KTP sudah ada di DAFTAR KARYAWAN BARU.';
@@ -166,7 +168,7 @@ class register extends MY_Controller {
 										$filename = $_FILES['foto_ktp']['name'];
 										$ext = pathinfo($filename, PATHINFO_EXTENSION);
 										
-										if(in_array($ext,$allowed)){
+										if(in_array($ext,$allowed)) {
 											$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
 											$documentd = "uploads/document/ktp/";
 											// basename() may prevent filesystem traversal attacks;
@@ -209,7 +211,7 @@ class register extends MY_Controller {
 										$filenamenpwp = $_FILES['foto_npwp']['name'];
 										$extnpwp = pathinfo($filenamenpwp, PATHINFO_EXTENSION);
 										
-										if(in_array($extnpwp,$allowednpwp)){
+										if(in_array($extnpwp,$allowednpwp)) {
 											$tmp_namenpwp = $_FILES["foto_npwp"]["tmp_name"];
 											$documentnpwp = "uploads/document/npwp/";
 											// basename() may prevent filesystem traversal attacks;

@@ -135,6 +135,7 @@ class Employees_model extends CI_Model {
 				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
 				AND request_empby = '1'
 				AND project = '22'
+				AND e_status = '0'
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -149,6 +150,22 @@ class Employees_model extends CI_Model {
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project
 				WHERE datediff(current_date(),DATE_FORMAT(emp.createdon, '%Y-%m-%d')) <=10
 				AND emp.request_empby = '1'
+				AND e_status = '0'
+				ORDER BY secid DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
+	public function get_monitoring_daftar_tkhl() {
+
+		$sql = "SELECT emp.fullname,emp.contact_no,emp.project,emp.createdon,pro.title
+				FROM xin_employee_request emp
+				LEFT JOIN xin_projects pro ON pro.project_id = emp.project
+				WHERE datediff(current_date(),DATE_FORMAT(emp.createdon, '%Y-%m-%d')) <=10
+				AND emp.request_empby = '1'
+				AND e_status = '1'
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -161,7 +178,8 @@ class Employees_model extends CI_Model {
 		$sql = "SELECT *
 				FROM xin_employee_request
 				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
-				ORDER BY secid DESC";
+				AND e_status = '0'
+				ORDER BY secid DESC";	
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -200,6 +218,7 @@ class Employees_model extends CI_Model {
 			AND approved_nomby is null 
 	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 	        AND cancel_stat = 0
+        	AND e_status = 0
 			ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -215,7 +234,8 @@ class Employees_model extends CI_Model {
 		AND approved_nomby is null
 		AND approved_hrdby is null
 		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-		AND cancel_stat = 0";
+		AND cancel_stat = 0
+        AND e_status = 0";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -230,7 +250,25 @@ class Employees_model extends CI_Model {
 		AND approved_nomby is not null
 		AND approved_hrdby is null
 		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-		AND cancel_stat = 0";
+		AND cancel_stat = 0
+        AND e_status = 0";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+
+ 	// monitoring request
+	public function get_request_tkhl($empID) {
+
+		$sql = "SELECT * FROM xin_employee_request 
+		WHERE request_empby is not null 
+		AND approved_naeby is not null
+		AND approved_nomby is not null
+		AND approved_hrdby is null
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+		AND cancel_stat = 0
+        AND e_status = 1";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

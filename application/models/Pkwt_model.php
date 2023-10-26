@@ -405,17 +405,33 @@ class Pkwt_model extends CI_Model {
 	public function report_pkwt_expired_null($empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "
-		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
+
+
+		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
 		FROM xin_employees emp 
-		LEFT JOIN (SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where status_pkwt = 1 UNION SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where request_pkwt != 0 and approve_nae != 0 and approve_nom != 0) pkwt 
+		LEFT JOIN (SELECT employee_id, to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
 		WHERE emp.status_employee = 1 
 		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
 		AND emp.sub_project_id not in (1,2) 
-		AND pkwt.to_date < now() + INTERVAL 21 day OR pkwt.to_date is null 
-        AND pkwt.approve_hrd = 0
-		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID') LIMIT 5000";
+		AND pkwt.to_date < now() + INTERVAL 21 day
+      --  AND pkwt.approve_hrd = 0
+		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+
+		UNION 
+
+		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
+		FROM xin_employees emp 
+		LEFT JOIN (SELECT employee_id, to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
+		ON pkwt.employee_id = emp.employee_id 
+		WHERE emp.status_employee = 1 
+		AND emp.status_resign = 1 
+		AND emp.employee_id not in (1,1024)
+		AND emp.sub_project_id not in (1,2) 
+		AND pkwt.to_date is null
+      --  AND pkwt.approve_hrd = 0
+		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
@@ -425,11 +441,12 @@ class Pkwt_model extends CI_Model {
 	public function report_pkwt_expired_key($key, $empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "
+
 		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end, exp.all_name
 		FROM (
 		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end, concat(concat(emp.employee_id,emp.first_name),emp.ktp_no) as all_name
 		FROM xin_employees emp 
-		LEFT JOIN (SELECT status_pkwt,employee_id,to_date FROM xin_employee_contract where status_pkwt = 1) pkwt 
+		LEFT JOIN (SELECT employee_id, to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
 		WHERE emp.status_employee = 1
 		AND emp.status_resign = 1
@@ -444,20 +461,33 @@ class Pkwt_model extends CI_Model {
 	public function report_pkwt_expired_pro($project, $empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "
-		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end
-		FROM (
-		SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end
-				FROM xin_employees emp 
-				LEFT JOIN (SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where status_pkwt = 1 UNION SELECT status_pkwt,employee_id,to_date, approve_hrd FROM xin_employee_contract where request_pkwt != 0 and approve_nae != 0 and approve_nom != 0) pkwt 
-				ON pkwt.employee_id = emp.employee_id 
-				WHERE emp.status_employee = 1
-				AND emp.status_resign = 1
-				AND emp.employee_id not in (1,1024)
-				AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-				AND pkwt.to_date < now() + INTERVAL 21 day  OR pkwt.to_date is null
-				AND pkwt.approve_hrd = 0) exp
-				
-		WHERE exp.project_id = '$project'";
+
+		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
+		FROM xin_employees emp 
+		LEFT JOIN (SELECT employee_id, to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
+		ON pkwt.employee_id = emp.employee_id 
+		WHERE emp.status_employee = 1 
+		AND emp.status_resign = 1 
+		AND emp.employee_id not in (1,1024)
+		AND emp.sub_project_id not in (1,2) 
+		AND pkwt.to_date < now() + INTERVAL 21 day
+      --  AND pkwt.approve_hrd = 0
+		AND emp.project_id = '$project'
+
+		UNION 
+
+		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
+		FROM xin_employees emp 
+		LEFT JOIN (SELECT employee_id, to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
+		ON pkwt.employee_id = emp.employee_id 
+		WHERE emp.status_employee = 1 
+		AND emp.status_resign = 1 
+		AND emp.employee_id not in (1,1024)
+		AND emp.sub_project_id not in (1,2) 
+		AND pkwt.to_date is null 
+      --  AND pkwt.approve_hrd = 0
+		AND emp.project_id = '$project'
+";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
