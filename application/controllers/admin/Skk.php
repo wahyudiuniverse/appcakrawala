@@ -411,6 +411,7 @@ class Skk extends MY_Controller {
 				$nomor_dokumen = $eskk[0]->nomor_dokumen;
 				$nip = $eskk[0]->nip;
 				$fullname = $employee[0]->first_name;
+				$blacklist = $employee[0]->status_resign;
 				$join_date = $this->Xin_model->tgl_indo($eskk[0]->join_date);
 				$resign_date = $this->Xin_model->tgl_indo($eskk[0]->resign_date);
 
@@ -558,7 +559,7 @@ class Skk extends MY_Controller {
 
 
 
-			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '21300004' && $nip != '21306162' && $nip != '21500027'){
+			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '21300004' && $nip != '21306162' && $nip != '21500027' && $blacklist != 3){
 
 			$tbl_2 = '
 

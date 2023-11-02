@@ -2089,7 +2089,17 @@ class Employees extends MY_Controller {
 			$stResign = '1';
 			$userRole = '2';
 		} else if ($this->input->post('status_employee')=='0'){
-			$stResign = '5';
+
+			if($this->input->post('head_reason')=='[BLACKLIST]'){
+				$stResign = '3';
+			} else if($this->input->post('head_reason')=='[RESIGN]') {
+				$stResign = '2';
+			} else if($this->input->post('head_reason')=='[END CONTRACT]'){
+				$stResign = '4';
+			} else {
+				$stResign = '5';
+			}
+
 			$userRole = '9';
 		} else {
 			$stResign = '6';

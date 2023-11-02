@@ -262,7 +262,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// get all employes temporary
 	public function get_eslip_preview($importid) {
 		
-		$sql = 'SELECT * FROM xin_employees_eslip WHERE uploadid = ?';
+		$sql = "SELECT eslip.*, emp.contact_no FROM xin_employees_eslip eslip LEFT JOIN xin_employees emp ON emp.employee_id = eslip.nip WHERE uploadid = ?";
 		$binds = array($importid);
 		$query = $this->db->query($sql, $binds);
 	    return $query;

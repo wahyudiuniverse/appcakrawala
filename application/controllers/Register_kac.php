@@ -67,6 +67,8 @@ class register_kac extends MY_Controller {
 			// if($this->input->post('company_id')==='') {
 			// 	$Return['error'] = $this->lang->line('xin_employee_error_company_name');
 			// } else 
+			// $ktp_active = $this->Employees_model->ktp_exist_active('3211819015500007');
+
 			if($this->input->post('first_name')==='') {
 				$Return['error'] = "Nama Lengkap Kosong...";
 			} else if( $this->input->post('tempat_lahir')==='') {
@@ -109,7 +111,9 @@ class register_kac extends MY_Controller {
 				$Return['error'] = "Jurusan Kosong...";
 			} else if($this->input->post('project_id')==='') {
 				$Return['error'] = 'Project belum dipilih';
-			} else if($this->input->post('posisi_lamar')==='') {
+			} else if($this->input->post('subproject_id')===''){
+				$Return['error'] = 'Sub Project belum dipilih';
+			} else if($this->input->post('posisi_id')==='') {
 				$Return['error'] = "Posisi/Jabatan Kosong...";
 			} else if($this->input->post('penempatan')==='') {
 				$Return['error'] = "Penempatan Kosong...";
@@ -125,11 +129,11 @@ class register_kac extends MY_Controller {
 				$Return['error'] = 'Foto KK Masih Kosong...';
 			} else if($_FILES['dokumen_cv']['size'] == 0) {
 				$Return['error'] = 'Dokumen CV Masih Kosong...';
-			} else if ($_FILES['dokumen_cv']['size'] > 2000000) {
+			} else if ($_FILES['dokumen_cv']['size'] > 2150000) {
 				$Return['error'] = 'File CV Lebih dari 2MB..';
-			} else if ($_FILES['foto_ktp']['size'] > 2000000) {
+			} else if ($_FILES['foto_ktp']['size'] > 2150000) {
 				$Return['error'] = 'Foto KTP Lebih dari 2MB..';
-			} else if ($_FILES['foto_kk']['size'] > 2000000) {
+			} else if ($_FILES['foto_kk']['size'] > 2150000) {
 				$Return['error'] = 'Foto KK Lebih dari 2MB..';
 			}
 
@@ -140,8 +144,25 @@ class register_kac extends MY_Controller {
 				else {
 
 
-					$ktp_exist = $this->Employees_model->ktp_exist($this->input->post('nomor_ktp'));
-					if($ktp_exist==0){
+					$ktp_exist_blacklist = $this->Employees_model->ktp_exist_blacklist($this->input->post('nomor_ktp'));
+
+					$ktp_exist_active = $this->Employees_model->ktp_exist_active($this->input->post('nomor_ktp'));
+
+					$ktp_exist_regis = $this->Employees_model->ktp_exist_regis($this->input->post('nomor_ktp'));
+					
+					if($ktp_exist_blacklist!=0) {
+
+						$Return['error'] = 'NIK KTP sudah di BLACKLIST oleh SISTEM CAKRAWALA.';
+
+					} else if ($ktp_exist_active!=0) {
+
+						$Return['error'] = 'NIK KTP Sudah terdaftar dengan Status AKTIF sebegai karyawan di SISTEM CAKRAWALA.';
+						
+					} else if ($ktp_exist_regis!=0) {
+
+						$Return['error'] = 'NIK KTP sudah ada di DAFTAR KARYAWAN BARU.';
+
+					} else {
 
 									if(is_uploaded_file($_FILES['foto_ktp']['tmp_name'])) {
 										//checking image type
@@ -149,7 +170,7 @@ class register_kac extends MY_Controller {
 										$filename = $_FILES['foto_ktp']['name'];
 										$ext = pathinfo($filename, PATHINFO_EXTENSION);
 										
-										if(in_array($ext,$allowed)){
+										if(in_array($ext,$allowed)) {
 											$tmp_name = $_FILES["foto_ktp"]["tmp_name"];
 											$documentd = "uploads/document/ktp/";
 											// basename() may prevent filesystem traversal attacks;
@@ -183,7 +204,7 @@ class register_kac extends MY_Controller {
 										}
 									}
 
-								if($_FILES['foto_npwp']['size'] == 0){
+								if($_FILES['foto_npwp']['size'] == 0) {
 									$fnamenpwp = '0';
 								} else {
 									if(is_uploaded_file($_FILES['foto_npwp']['tmp_name'])) {
@@ -192,7 +213,7 @@ class register_kac extends MY_Controller {
 										$filenamenpwp = $_FILES['foto_npwp']['name'];
 										$extnpwp = pathinfo($filenamenpwp, PATHINFO_EXTENSION);
 										
-										if(in_array($extnpwp,$allowednpwp)){
+										if(in_array($extnpwp,$allowednpwp)) {
 											$tmp_namenpwp = $_FILES["foto_npwp"]["tmp_name"];
 											$documentnpwp = "uploads/document/npwp/";
 											// basename() may prevent filesystem traversal attacks;
@@ -252,10 +273,8 @@ class register_kac extends MY_Controller {
 											}
 									}
 
-								$data = array(
+								$data = array (
 
-								// 'uploadid' => '000',
-								// 'employee_id' => '0',
 								'company_id' => '3',
 								'location_id' => '1',
 								'department' => '5',
@@ -289,10 +308,12 @@ class register_kac extends MY_Controller {
 								'no_rek' => $this->input->post('nomor_rek'),
 								'pemilik_rekening' => $this->input->post('pemilik_rek'),
 
+	
 								'ktp' => $fname,
 								'kk' => $fnamekk,
 								'file_npwp' => $fnamenpwp,
 								'skck' => $fnameskck,
+								'ijazah' => 0,
 								'civi' => $fnamecv,
 								'gaji_pokok' => 0,
 
@@ -316,9 +337,7 @@ class register_kac extends MY_Controller {
 								$result = $this->Employees_model->addkandidat($data);
 
 
-					} else {
-						$Return['error'] = 'NIK KTP Sudah terdaftar di SISTEM CAKRAWALA.';
-					}
+					} 
 
 
 							}
@@ -338,6 +357,7 @@ class register_kac extends MY_Controller {
 			// exit;
 		}
 	}
+
 
 	 public function success() {
 		$system = $this->Xin_model->read_setting_info(1);

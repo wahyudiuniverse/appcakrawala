@@ -92,7 +92,7 @@ class Employees_model extends CI_Model {
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, project_id, date_of_leaving,month(date_of_leaving) bln_skrng
 		FROM xin_employees 
 		WHERE is_active = 1 
-		AND status_resign = 5
+		AND status_resign in (2,3,4,5)
 		AND project_id = '$id'
 		ORDER BY date_of_leaving DESC;");
   	  return $query->result();
@@ -457,6 +457,24 @@ class Employees_model extends CI_Model {
 	
 		$sql = 'SELECT * FROM xin_employees WHERE user_id = ?';
 		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// get single employee
+	public function checknik($nik) {
+	
+		$sql = 'SELECT max(date_of_joining), emp.employee_id, emp.first_name, emp.designation_id, pos.designation_name, emp.project_id,pro.priority, pro.title, emp.company_id,emp.ktp_no, emp.status_resign
+FROM xin_employees emp
+LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
+WHERE ktp_no = ?';
+		$binds = array($nik);
 		$query = $this->db->query($sql, $binds);
 		
 		if ($query->num_rows() > 0) {

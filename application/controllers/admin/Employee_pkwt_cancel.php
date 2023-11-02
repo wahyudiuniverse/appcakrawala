@@ -208,7 +208,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $ktp_no = $emp_info[0]->ktp_no;
 		  $tempat_lahir = $emp_info[0]->tempat_lahir;
 		  $date_of_birth = $emp_info[0]->date_of_birth;
-
+		  $sub_project = $emp_info[0]->sub_project_id;
+		  $department = $emp_info[0]->department_id;
 
 		  $kk_no = $emp_info[0]->kk_no;
 		  $alamat_ktp = $emp_info[0]->alamat_ktp;
@@ -229,6 +230,10 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $ktp_no = '--';
 		  $tempat_lahir = '--';
 		  $date_of_birth = '--';
+
+		  $sub_project = '-';
+		  $department = '-';
+
 		}
 
 		// $company = $this->Xin_model->read_company_info($result[0]->company_id);
@@ -269,6 +274,12 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 			'project_id' => $result[0]->project,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
+
+
+			'sub_project_id' => $sub_project,
+			'sub_project_list' => $this->Project_model->get_sub_project_filter($result[0]->project),
+
+			'sub_project' => $sub_project,
 
 			'designation_id' => $result[0]->jabatan,
 			'designations_list' => $this->Designation_model->all_designations(),

@@ -750,6 +750,10 @@ class Xin_model extends CI_Model {
 			$arr['emp_request_hrd_active'] = 'active';
 			$arr['emp_request_open'] = 'open';
 			return $arr;
+		} else if($mClass=='employee_request_tkhl') {
+			$arr['emp_request_tkhl_active'] = 'active';
+			$arr['emp_request_open'] = 'open';
+			return $arr;
 		} else if($mClass=='reports' && $mMethod=='pkwt_expired') {
 			$arr['pkwt_request_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';

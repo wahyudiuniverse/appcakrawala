@@ -2069,36 +2069,53 @@ class Reports extends MY_Controller
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
 			$this->load->view("admin/reports/report_pkwt_expired", $data);
-		} else {
+		} else { 
 			redirect('admin/');
-		}
+		} 
+
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 
-		
+	
 		// $company_id = $this->uri->segment(4);
 		$project_id = $this->uri->segment(4);
 		$start_date = $this->uri->segment(5);
 		$end_date = $this->uri->segment(6);
-		// $searchkey = 'NURKHASANA';
 		$searchkey = $this->uri->segment(7);
 		$finalkey = str_replace("%20"," ",$searchkey);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 
-		if($project_id==0 && $searchkey==0){
-			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
-			$employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
-		} else if ($project_id!=0 && $searchkey== '') {
-			// $employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
-			// $employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
-			$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+		if($searchkey=='0'){
+
+			if($project_id=='0'){
+				$employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
+			} else {
+				$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+			}
+
 		} else {
-			$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
-			// $employee = $this->Pkwt_model->report_pkwt_expired_null($session['employee_id']);
+
+			if($searchkey!=""){
+
+				$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
+
+			} else {
+
+				if($project_id==0){
+					$employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
+				} else {
+					$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+				}
+
+
+			}
+
+
 		}
-		// $employee = $this->Employees_model->get_employees();
+
+
 		$no = 1;
 		$data = array();	
 
@@ -2124,30 +2141,30 @@ class Reports extends MY_Controller
 				if(!is_null($designation)){
 					$designation_name = $designation[0]->designation_name;
 				} else {
-					$designation_name = '--';	
+					$designation_name = '--';
 				}
 
-			// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->employee_id . '">PKWT SIAP</button>';
+				// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->employee_id . '">PKWT SIAP</button>';
 
-			// $view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+				// $view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 
-			// $copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
-			// Nama Lengkap: *'.$fullname.'*%0a
-			// NIP: *'.$r->employee_id.'*%0a
-			// PIN: *'.$pin.'*%0a
-			// PROJECT: *'.$nama_project.'* %0a%0a
+				// $copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
+				// Nama Lengkap: *'.$fullname.'*%0a
+				// NIP: *'.$r->employee_id.'*%0a
+				// PIN: *'.$pin.'*%0a
+				// PROJECT: *'.$nama_project.'* %0a%0a
 
-			// Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Grup, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+				// Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Grup, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
 
-			// Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
-			// Link C.I.S : https://apps-cakrawala.com/admin%0a
-			// Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://bit.ly/sign_digital_pwkt%0a%0a
+				// Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+				// Link C.I.S : https://apps-cakrawala.com/admin%0a
+				// Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://bit.ly/sign_digital_pwkt%0a%0a
 
-			// *INFO HRD di Nomor Whatsapp: 085175168275* %0a
-			// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
-			
-			// Terima kasih.';
+				// *INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				
+				// Terima kasih.';
 
 
 
