@@ -496,7 +496,7 @@ class Employee_request_tkhl extends MY_Controller {
 				);
 
 				if($idsubmit=='$'){
-			$this->load->view('admin/employees/dialog_emp_hrd', $data);
+			$this->load->view('admin/employees/dialog_emp_tkhl', $data);
 		} else if($idsubmit=='@'){
 			$this->load->view('admin/employees/dialog_emp_cancel_hrd', $data);
 		} else {
@@ -518,7 +518,7 @@ class Employee_request_tkhl extends MY_Controller {
 			$config['cacheable']	= true; //boolean, the default is true
 			$config['cachedir']		= './assets/'; //string, the default is application/cache/
 			$config['errorlog']		= './assets/'; //string, the default is application/logs/
-			$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
+			$config['imagedir']		= './assets/images/tkhl/'; //direktori penyimpanan qr code
 			$config['quality']		= true; //boolean, the default is true
 			$config['size']			= '1024'; //interger, the default is 1024
 			$config['black']		= array(224,255,255); // array, default is array(255,255,255)
@@ -600,8 +600,8 @@ class Employee_request_tkhl extends MY_Controller {
 					$kk										= $employee_request[0]->kk;
 					$skck									= $employee_request[0]->skck;
 					$ijazah								= $employee_request[0]->ijazah;
-					$civi								= $employee_request[0]->civi;
-					$paklaring								= $employee_request[0]->paklaring;
+					$civi									= $employee_request[0]->civi;
+					$paklaring						= $employee_request[0]->paklaring;
 
 					$createdby 						= $employee_request[0]->request_empby;
 					$createdon 						= $employee_request[0]->request_empon;
@@ -618,17 +618,17 @@ class Employee_request_tkhl extends MY_Controller {
 
 					//PKWT ATTRIBUTE
 					if ($company_id=='2'){
-						$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
-						$spb_hr = 'E-SPB-JKT/SC-HR/';
+						$pkwt_hr = 'KEMITRAAN/SC-HR/';
+						$spb_hr = 'KEMITRAAN/SC-HR/';
 					} else if($company_id=='3') {
-						$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
-						$spb_hr = 'E-SPB-JKT/KAC-HR/';
+						$pkwt_hr = 'KEMITRAAN/KAC-HR/';
+						$spb_hr = 'KEMITRAAN/KAC-HR/';
 					} else {
-						$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-						$spb_hr = 'E-SPB-JKT/MATA-HR/';
-					}
+						$pkwt_hr = 'KEMITRAAN/MATA-HR/';
+						$spb_hr = 'KEMITRAAN/MATA-HR/';
+					} 
 
-					$count_pkwt = $this->Xin_model->count_pkwt();
+					$count_pkwt = $this->Xin_model->count_tkhl();
 					$romawi = $this->Xin_model->tgl_pkwt();
 					$unicode = $this->Xin_model->getUniqueCode(20);
 					$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
@@ -637,7 +637,7 @@ class Employee_request_tkhl extends MY_Controller {
 
 					$docid = date('ymdHisv');
 					$image_name='esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
-					$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
+					$domain = 'https://apps-cakrawala.com/esign/tkhl/'.$docid;
 					$params['data'] = $domain; //data yang akan di jadikan QR CODE
 					$params['level'] = 'H'; //H=High
 					$params['size'] = 10;
@@ -700,6 +700,7 @@ class Employee_request_tkhl extends MY_Controller {
 											'bank_name' 						=> $bank_id,
 											'nomor_rek' 						=> $no_rek,
 											'pemilik_rek' 					=> $pemilik_rekening,
+											'e_status'							=> 1,
 
 											'basic_salary' 					=> $gaji_pokok,
 											'allow_jabatan' 				=> $allow_jabatan,
@@ -789,6 +790,7 @@ class Employee_request_tkhl extends MY_Controller {
 										'dm_allow_operation' 		=> 'Month',
 										'allowance_operation' 	=> $allow_operational,
 										'img_esign'							=> $image_name,
+										'contract_type_id'			=> '2',
 
 										'request_pkwt' 					=> $createdby,
 										'request_date'					=> $createdon,

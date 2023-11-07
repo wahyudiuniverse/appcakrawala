@@ -11,6 +11,7 @@
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae($session['employee_id']);?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom($session['employee_id']);?>
 <?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']);?>
+<?php $count_emp_request_tkhl = $this->Xin_model->count_emp_request_tkhl($session['employee_id']);?>
 <?php //$list_bank = $this->Xin_model->get_bank_code();?>
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
@@ -23,7 +24,7 @@
     <?php } ?>
 
  <?php if(in_array('312',$role_resources_ids)) { ?>
-    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request_hrd/');?>" data-link-data="<?php echo site_url('admin/employee_request_tkhl/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN TKHL <?php echo '('.$count_emp_request_hrd.')';?>
+    <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request_tkhl/');?>" data-link-data="<?php echo site_url('admin/employee_request_tkhl/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN TKHL <?php echo '('.$count_emp_request_tkhl.')';?>
       </a> </li>
     <?php } ?>
 

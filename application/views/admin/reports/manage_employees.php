@@ -131,6 +131,7 @@
                 <th style="width: 50px;">Agama</th>                
                 <th style="width: 160px;"><?php echo $this->lang->line('dashboard_email');?></th>
                 <th style="width: 100px;"><?php echo $this->lang->line('xin_contact_number');?></th>
+                <th style="width: 100px;">Pendidikan</th>
                 <th style="width: 400px;"><?php echo $this->lang->line('xin_address');?></th>    
                 <th style="width: 400px;">Alamat Domisili</th>                
                 <th style="width: 110px;"><?php echo $this->lang->line('xin_kk');?></th>

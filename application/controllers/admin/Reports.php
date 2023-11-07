@@ -670,6 +670,25 @@ class Reports extends MY_Controller
 				$basicpay = '0';
 			}
 
+			// $last_edu = $this->Xin_model->read_bank_info($r->last_edu);
+			if($r->last_edu=='1'){
+				$education = 'Sekolah Dasar (SD)';
+			} else if($r->last_edu=='2') {
+				$education = 'Sekolah Menengah Pertama (SMP/MTS)';
+			} else if($r->last_edu=='3') {
+				$education = 'Sekolah Menengah Atas (SMA/SMK/MA)';
+			} else if($r->last_edu=='4') {
+				$education = 'Diploma (D1,D2,D3)';
+			} else if($r->last_edu=='5') {
+				$education = 'Strata 1 (S1)';
+			} else if($r->last_edu=='6') {
+				$education = 'Strata 2 (S2)';
+			} else if($r->last_edu=='7') {
+				$education = 'Strata 3 (S3)';
+			} else {
+				$education = '-';
+			}
+
 			// $docktp = $this->Xin_model->read_bank_info($r->user_id);
 			// if(!is_null($docktp)){
 			// 	$ktp = $docktp[0]->title;
@@ -909,6 +928,7 @@ class Reports extends MY_Controller
 				$agama, // agama
 				$email,
 				$kontak,
+				$education,
 				$alamat_ktp,
 				$alamat_domisili,
 				"'".$kk,

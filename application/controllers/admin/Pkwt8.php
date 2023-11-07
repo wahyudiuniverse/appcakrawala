@@ -523,67 +523,131 @@ class Pkwt8 extends MY_Controller
 				<br>
 				<br>
 				<br>
-				<br>
-
-				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
-				</div>
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
-							</tr>
-				<br>
-							<tr>
-								<td>4.2</td>
-								<td colspan="18">Bekerja pada hari sabtu ( 4x sabtu ) akan menerima  “Tunjangan operasional” sebesar total Rp. 300.000  /     bulan sebagai pengganti kelebihan hari kerja (overtime) di hari Sabtu.</td>
-							</tr>
-				<br>
-							<tr>
-								<td>4.3</td>
-								<td colspan="18">Namun jika karyawan tidak masuk di sabtu maka tunjangan operasional tersebut tidak berhak untuk menerima ( di hitung prorate sesuai dengan ke hadiran ).</td>
-							</tr>
-				<br>
-							<tr>
-								<td>4.4</td>
-								<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat  mengikat.</td>
-							</tr>
-				<br>
-							<tr>
-								<td>4.5</td>
-								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
-							</tr>
-
-				</table>
-
-				<br>
+				<br>';
 
 
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td >4.6</td>
-								<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.1 adalah </td>
-								<td colspan="0"></td>
-							</tr>
+				if($allowance_operation=="Rp 0"){	
+				$tbl_2 .= '
+							
+					<div style="text-align: center; text-justify: inter-word;">
+						<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
+					</div>
+					<br>
 
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Hari Senin s/d Sabtu 08:00-17:00 WIB</td>
-							</tr>
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+								<tr>
+									<td>4.1</td>
+									<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
+								</tr>
+					
+					<br>
+								<tr>
+									<td>4.2</td>
+									<td colspan="18">Namun jika karyawan tidak masuk di sabtu maka tunjangan operasional tersebut tidak berhak untuk menerima ( di hitung prorate sesuai dengan ke hadiran ).</td>
+								</tr>
+					<br>
+								<tr>
+									<td>4.3</td>
+									<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat  mengikat.</td>
+								</tr>
+					<br>
+								<tr>
+									<td>4.4</td>
+									<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
+								</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Hari Libur hari Minggu</td>
-							</tr>
-				</table>
-				<br>
+					</table>
+
+					<br>
 
 
+					<br>
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+								<tr>
+									<td >4.5</td>
+									<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.1 adalah </td>
+									<td colspan="0"></td>
+								</tr>
+
+								<tr>
+									<td ></td>
+									<td colspan="0">•</td>
+									<td colspan="20">Hari Senin s/d Sabtu 08:00-17:00 WIB</td>
+								</tr>
+
+								<tr>
+									<td ></td>
+									<td colspan="0">•</td>
+									<td colspan="20">Hari Libur hari Minggu</td>
+								</tr>
+					</table>
+					<br>';
+				} else {
+
+				$tbl_2 .= '
+							
+					<div style="text-align: center; text-justify: inter-word;">
+						<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
+					</div>
+					<br>
+
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+								<tr>
+									<td>4.1</td>
+									<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
+								</tr>
+					<br>
+								<tr>
+									<td>4.2</td>
+									<td colspan="18">Bekerja pada hari sabtu ( 4x sabtu ) akan menerima  “Tunjangan operasional” sebesar total Rp. 300.000  /     bulan sebagai pengganti kelebihan hari kerja (overtime) di hari Sabtu.</td>
+								</tr>
+					<br>
+								<tr>
+									<td>4.3</td>
+									<td colspan="18">Namun jika karyawan tidak masuk di sabtu maka tunjangan operasional tersebut tidak berhak untuk menerima ( di hitung prorate sesuai dengan ke hadiran ).</td>
+								</tr>
+					<br>
+								<tr>
+									<td>4.4</td>
+									<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat  mengikat.</td>
+								</tr>
+					<br>
+								<tr>
+									<td>4.5</td>
+									<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
+								</tr>
+
+					</table>
+
+					<br>
+
+
+					<br>
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+								<tr>
+									<td >4.6</td>
+									<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.1 adalah </td>
+									<td colspan="0"></td>
+								</tr>
+
+								<tr>
+									<td ></td>
+									<td colspan="0">•</td>
+									<td colspan="20">Hari Senin s/d Sabtu 08:00-17:00 WIB</td>
+								</tr>
+
+								<tr>
+									<td ></td>
+									<td colspan="0">•</td>
+									<td colspan="20">Hari Libur hari Minggu</td>
+								</tr>
+					</table>
+					<br>';
+
+				}
+
+
+		$tbl_2 .= '
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 5<br>ETIKA PRILAKU</b>
 				</div>

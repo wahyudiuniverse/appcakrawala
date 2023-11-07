@@ -22,14 +22,14 @@ class Project_model extends CI_Model {
 	// get all employees
 	public function all_projects_admin()
 	{
-	  $query = $this->db->query("SELECT * from xin_projects");
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects");
   	  return $query->result();
 	}
 
 	// get all employees
 	public function all_projects()
 	{
-	  $query = $this->db->query("SELECT * from xin_projects WHERE project_id not in (22);");
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id not in (22, 95);");
   	  return $query->result();
 	}
 
@@ -129,7 +129,7 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id 
 	public function read_project_posisi_tkhl()
 	{
 	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
-LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE pp.project_id in (49)  ORDER BY `title` ASC;");
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE pp.project_id in (98)  ORDER BY `title` ASC;");
   	  return $query->result();
 	}
 

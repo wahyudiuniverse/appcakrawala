@@ -1513,7 +1513,7 @@ class Xin_model extends CI_Model {
 	// get all project
 	public function get_projects()
 	{
-	  $query = $this->db->query("SELECT * from xin_projects");
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects");
   	  return $query->result();
 	}
 
@@ -1724,7 +1724,21 @@ class Xin_model extends CI_Model {
 				AND approved_nomby is NOT null
 				AND approved_hrdby is null
 				AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-				AND cancel_stat = 0");
+				AND cancel_stat = 0
+				AND e_status = 0");
+  	  return $query->num_rows();
+	}
+
+	public function count_emp_request_tkhl($empID)
+	{
+	  $query = $this->db->query("SELECT * FROM xin_employee_request 
+				WHERE request_empby IS NOT null 
+				AND approved_naeby IS NOT null
+				AND approved_nomby is NOT null
+				AND approved_hrdby is null
+				AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+				AND cancel_stat = 0
+				AND e_status = 1");
   	  return $query->num_rows();
 	}
 
@@ -4465,7 +4479,16 @@ function getUniqueCode($n)
 
 function count_pkwt(){
 	
-		$sql = "SELECT COUNT(contract_id) + 1 AS newpkwt FROM xin_employee_contract";
+		$sql = "SELECT COUNT(contract_id) + 1 AS newpkwt FROM xin_employee_contract WHERE contract_type_id = 1";
+		$query = $this->db->query($sql);
+		// return $query->num_rows();
+		$res = $query->result();
+		return $res;
+}
+
+function count_tkhl(){
+	
+		$sql = "SELECT COUNT(contract_id) + 1 AS newpkwt FROM xin_employee_contract WHERE contract_type_id = 2";
 		$query = $this->db->query($sql);
 		// return $query->num_rows();
 		$res = $query->result();
