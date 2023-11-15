@@ -106,7 +106,7 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id 
 	public function read_project_posisi()
 	{
 	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
-LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '2' AND pp.project_id not in (22)  ORDER BY `title` ASC;");
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '2' AND pp.project_id not in (22,98,100)  ORDER BY `title` ASC;");
   	  return $query->result();
 	}
 
@@ -114,14 +114,14 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id 
 	public function read_project_posisi_kac()
 	{
 	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
-LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '3' AND pp.project_id not in (22)  ORDER BY `title` ASC;");
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '3' AND pp.project_id not in (22,98,100)  ORDER BY `title` ASC;");
   	  return $query->result();
 	}
 
 	public function read_project_posisi_mata()
 	{
 	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
-LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '4' AND pp.project_id not in (22)  ORDER BY `title` ASC;");
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id = '4' AND pp.project_id not in (22,98,100)  ORDER BY `title` ASC;");
   	  return $query->result();
 	}
 
@@ -129,7 +129,7 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE company_id 
 	public function read_project_posisi_tkhl()
 	{
 	  $query = $this->db->query("SELECT distinct(pp.project_id), CONCAT('[ ',npro.priority,' ] ',npro.title) title FROM xin_projects_posisi pp
-LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE pp.project_id in (98)  ORDER BY `title` ASC;");
+LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE pp.project_id in (98,100)  ORDER BY `title` ASC;");
   	  return $query->result();
 	}
 

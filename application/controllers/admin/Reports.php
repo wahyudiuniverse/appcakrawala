@@ -1831,6 +1831,7 @@ class Reports extends MY_Controller
 					$fullname = $emp[0]->first_name;
 					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
 					$nowhatsapp = $emp[0]->contact_no;
+					$tkhl_status = $emp[0]->e_status;
 
 				} else {
 
@@ -1838,6 +1839,7 @@ class Reports extends MY_Controller
 					$fullname = '--';	
 					$sub_project = '0';
 					$nowhatsapp = '0';
+					$tkhl_status = '0';
 				}
 
 				$projects = $this->Project_model->read_single_project($project);
@@ -1859,22 +1861,44 @@ class Reports extends MY_Controller
 			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
 
-			$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
-			Nama Lengkap: *'.$fullname.'*%0a
-			NIP: *'.$r->employee_id.'*%0a
-			PIN: *'.$pin.'*%0a
-			PROJECT: *'.$nama_project.'* %0a%0a
+			if($tkhl_status=='0'){
 
-			Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Grup, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+				$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
+				Nama Lengkap: *'.$fullname.'*%0a
+				NIP: *'.$r->employee_id.'*%0a
+				PIN: *'.$pin.'*%0a
+				PROJECT: *'.$nama_project.'* %0a%0a
 
-			Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
-			Link C.I.S : https://apps-cakrawala.com/admin%0a
-			Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+				Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
 
-			*INFO HRD di Nomor Whatsapp: 085175168275* %0a
-			*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
-			
-			Terima kasih.';
+				Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+				Link C.I.S : https://apps-cakrawala.com/admin%0a
+				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+
+				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				
+				Terima kasih.';
+			} else {
+
+				$copypaste = '*HRD Notification -> KEMITRAAN DIGITAL.*%0a%0a
+				Nama Lengkap: *'.$fullname.'*%0a
+				NIP: *'.$r->employee_id.'*%0a
+				PIN: *'.$pin.'*%0a
+				PROJECT: *'.$nama_project.'* %0a%0a
+
+				Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen KEMITRAAN, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+
+				Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+				Link C.I.S : https://apps-cakrawala.com/admin%0a
+				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT Kemitraan bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+
+				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				
+				Terima kasih.';
+			}
+
 
 
 
@@ -2081,6 +2105,11 @@ class Reports extends MY_Controller
 		} else {
 			redirect('admin/dashboard');
 		}
+
+
+
+
+
 	}
     public function pkwt_expired_list()
     {
@@ -2106,6 +2135,10 @@ class Reports extends MY_Controller
 		$searchkey = $this->uri->segment(7);
 		$finalkey = str_replace("%20"," ",$searchkey);
 			// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
+
+
+
+		//$employee = $this->Pkwt_model->get_monitoring_pkwt_aphrd($session['employee_id']);
 
 		if($searchkey=='0'){
 
@@ -2164,35 +2197,33 @@ class Reports extends MY_Controller
 					$designation_name = '--';
 				}
 
-				// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->employee_id . '">PKWT SIAP</button>';
 
-				// $view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
+				$readyHrd = $this->Pkwt_model->read_pkwt_pengajuan($r->employee_id);
+
+				if(!is_null($readyHrd)){
+
+					$terbitPkwt = '<a href="#" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-warning">SUDAH DIAJUKAN</button></a>'; 
+
+				} else {
+
+					$terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>'; 
 
 
-				// $copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
-				// Nama Lengkap: *'.$fullname.'*%0a
-				// NIP: *'.$r->employee_id.'*%0a
-				// PIN: *'.$pin.'*%0a
-				// PROJECT: *'.$nama_project.'* %0a%0a
-
-				// Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Grup, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
-
-				// Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
-				// Link C.I.S : https://apps-cakrawala.com/admin%0a
-				// Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://bit.ly/sign_digital_pwkt%0a%0a
-
-				// *INFO HRD di Nomor Whatsapp: 085175168275* %0a
-				// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
-				
-				// Terima kasih.';
+				}
 
 
 
+
+
+			        
+
+
+
+				// $terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>'; 
 			// $whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
 			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/0" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">PERPANJANG PKWT</button></a>'; 
 
-			$terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>'; 
 
 
 			$stopPkwt = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-danger">STOP PKWT</button></a>';
@@ -2200,6 +2231,7 @@ class Reports extends MY_Controller
 
 			$data[] = array (
 				$terbitPkwt.' '.$stopPkwt,
+				// $stopPkwt,
 				$nip,
 				$fullname,
 				$nama_project,

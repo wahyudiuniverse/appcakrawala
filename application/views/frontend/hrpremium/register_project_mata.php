@@ -106,7 +106,7 @@
 				<p class="form-row form-row-wide">
 					<label for="jenis_kelamin">JENIS KELAMIN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+						<select name="jenis_kelamin" data-placeholder="Pilih salah satu" class="chosen-select">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="L">Laki-Laki</option>
                         <option value="P">Perempuan</option>
@@ -117,7 +117,7 @@
 				<p class="form-row form-row-wide">
 					<label for="agama">AGAMA/KEPERCAYAAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+						<select name="agama" data-placeholder="Pilih salah satu" class="chosen-select">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Islam</option>
                         <option value="2">Kristen Protestan</option>
@@ -132,7 +132,7 @@
 				<p class="form-row form-row-wide">
 					<label for="pernikahan">STATUS PERNIKAHAN: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+						<select name="pernikahan" data-placeholder="Pilih salah satu" class="chosen-select">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="TK/0">Belum Menikah/Janda/Duda</option>
                         <option value="K/0">Menikah (0 Anak)</option>
@@ -178,7 +178,7 @@
 				<p class="form-row form-row-wide">
 					<label for="last_edu">PENDIDIKAN TERAKHIR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>					
-						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+						<select name="last_edu" data-placeholder="Pilih salah satu" class="chosen-select">
 						<option value="">--Pilih Salah Satu--</option>
                         <option value="1">Sekolah Dasar (SD)</option>
                         <option value="2">Sekolah Menengah Pertama (SMP/MTS)</option>
@@ -205,6 +205,7 @@
 					</label>
 				</p>
 
+
 				<p class="form-row form-row-wide">
 					<label for="project">PROJECT: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
@@ -222,7 +223,7 @@
 
 				<p class="form-row form-row-wide" id="projectsubproject">
 					
-					<label for="subproject">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
+					<label for="subproject_id">SUB-PROJECT: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
 
 						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
@@ -234,25 +235,26 @@
 
 
 				<p class="form-row form-row-wide" id="project_position">
-					<label for="posisi_lamar">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
+					<label for="posisi_id">POSISI/JABATAN YG DILAMAR: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
 
-						<select name="posisi_lamar" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
+						<select name="posisi_id" data-placeholder="Pilih salah satu" class="chosen-select" disabled>
 							<option value="">--</option>
 						</select>
 
 					</label>
 				</p>
+				
 
                 <p class="form-row form-row-wide">
-					<label for="penempatan">KOTA/AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
+					<label for="penempatan">AREA/PENEMPATAN KERJA: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Engineering"></i>
 						<input type="text" class="input-text" name="penempatan" id="contact_number1" value="" />
 					</label>
 				</p>
 
-        <p class="form-row form-row-wide">
-					<label for="bank_name">NAMA BANK: <strong><span style="color:red;">*</span></strong>
+                <p class="form-row form-row-wide">
+                	<label for="bank_name">NAMA BANK: <strong><span style="color:red;">*</span></strong>
 						<i class="ln ln-icon-Male"></i>		
 
 						<select name="bank_name" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
@@ -287,6 +289,7 @@
 						</select>
 
 					</label>
+					
 				</p>
 
                 <p class="form-row form-row-wide">

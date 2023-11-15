@@ -138,6 +138,7 @@ class Importexceleslip extends MY_Controller
 			  $project_sub = $r->project_sub;
 			  $area = $r->area;
 			  $hari_kerja = $r->hari_kerja;
+			  $gaji_umk = $r->gaji_umk;
 			  $gaji_pokok = $r->gaji_pokok;
 
 			  $allow_jabatan = $r->allow_jabatan;
@@ -296,6 +297,7 @@ class Importexceleslip extends MY_Controller
 			  $project_sub = $r->project_sub;
 			  $area = $r->area;
 			  $hari_kerja = $r->hari_kerja;
+			  $gaji_umk = $r->gaji_umk;
 			  $gaji_pokok = $r->gaji_pokok;
 
 			  $allow_jabatan = $r->allow_jabatan;
@@ -449,6 +451,7 @@ class Importexceleslip extends MY_Controller
 				$area = $user[0]->area;
 				$status_emp = $user[0]->status_emp;
 				$hari_kerja = $user[0]->hari_kerja;
+				$gaji_umk = $user[0]->gaji_umk;
 				$gaji_pokok = $user[0]->gaji_pokok;
 
 				$allow_jabatan = $user[0]->allow_jabatan;
@@ -465,6 +468,8 @@ class Importexceleslip extends MY_Controller
 				$allow_trans_meal = $user[0]->allow_trans_meal;
 				$allow_trans_rent = $user[0]->allow_trans_rent;
 				$allow_vitamin = $user[0]->allow_vitamin;
+				$allow_grooming = $user[0]->allow_grooming;
+				$allow_others = $user[0]->allow_others;
 				$allow_operation = $user[0]->allow_operation;
 
 				$over_salary = $user[0]->over_salary;
@@ -516,6 +521,7 @@ class Importexceleslip extends MY_Controller
 					'area' => $area,
 					'status_emp' => $status_emp,
 					'hari_kerja' => $hari_kerja,
+					'gaji_umk' => $gaji_umk,
 					'gaji_pokok' => $gaji_pokok,
 					'allow_jabatan' => $allow_jabatan,
 					'allow_masakerja' => $allow_masakerja,
@@ -531,6 +537,8 @@ class Importexceleslip extends MY_Controller
 					'allow_trans_meal' => $allow_trans_meal,
 					'allow_trans_rent' => $allow_trans_rent,
 					'allow_vitamin' => $allow_vitamin,
+					'allow_grooming' => $allow_grooming,
+					'allow_others' => $allow_others,
 					'allow_operation' => $allow_operation,
 
 					'over_salary' => $over_salary,
@@ -632,6 +640,7 @@ class Importexceleslip extends MY_Controller
 				$area = $user[0]->area;
 				$status_emp = $user[0]->status_emp;
 				$hari_kerja = $user[0]->hari_kerja;
+				$gaji_umk = $user[0]->gaji_umk;
 				$gaji_pokok = $user[0]->gaji_pokok;
 
 				$allow_jabatan = $user[0]->allow_jabatan;
@@ -648,6 +657,8 @@ class Importexceleslip extends MY_Controller
 				$allow_trans_meal = $user[0]->allow_trans_meal;
 				$allow_trans_rent = $user[0]->allow_trans_rent;
 				$allow_vitamin = $user[0]->allow_vitamin;
+				$allow_grooming = $user[0]->allow_grooming;
+				$allow_others = $user[0]->allow_others;
 				$allow_operation = $user[0]->allow_operation;
 
 				$over_salary = $user[0]->over_salary;
@@ -700,6 +711,7 @@ class Importexceleslip extends MY_Controller
 					'area' => $area,
 					'status_emp' => $status_emp,
 					'hari_kerja' => $hari_kerja,
+					'gaji_umk' => $gaji_umk,
 					'gaji_pokok' => $gaji_pokok,
 
 					'allow_jabatan' => $allow_jabatan,
@@ -716,6 +728,8 @@ class Importexceleslip extends MY_Controller
 					'allow_trans_meal' => $allow_trans_meal,
 					'allow_trans_rent' => $allow_trans_rent,
 					'allow_vitamin' => $allow_vitamin,
+					'allow_grooming' => $allow_grooming,
+					'allow_others' => $allow_others,
 					'allow_operation' => $allow_operation,
 
 					'over_salary' => $over_salary,
@@ -958,6 +972,7 @@ class Importexceleslip extends MY_Controller
 				$project = $eslip[0]->project;
 				$area = $eslip[0]->area;
 				$hari_kerja = $eslip[0]->hari_kerja;
+				$gaji_umk = $eslip[0]->gaji_umk;
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$allow_jabatan = $eslip[0]->allow_jabatan;
 				$allow_masakerja = $eslip[0]->allow_masakerja;
@@ -973,6 +988,8 @@ class Importexceleslip extends MY_Controller
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_trans_rent = $eslip[0]->allow_trans_rent;
 				$allow_vitamin = $eslip[0]->allow_vitamin;
+				$allow_grooming = $eslip[0]->allow_grooming;
+				$allow_others = $eslip[0]->allow_others;
 				$allow_operation = $eslip[0]->allow_operation;
 
 				$over_salary = $eslip[0]->over_salary;
@@ -1150,7 +1167,19 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Gaji Pokok</td>
+								<td colspan="4">Gaji UMK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_umk).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Gaji Diterima</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_pokok).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -1364,9 +1393,39 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Medicine</td>
+								<td colspan="4">Tunjangan Kesehatan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_grooming!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Grooming</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_others!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Lain-lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -1974,11 +2033,12 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			$fname = strtolower($fname);
-			$pay_month = strtolower(date("F Y"));
+			// $fname = strtolower($fname);
+			// $pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
-			$pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
+			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
+			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
 			ob_end_flush();
 
 		// } else {
@@ -2129,6 +2189,7 @@ class Importexceleslip extends MY_Controller
 				$project = $eslip[0]->project;
 				$area = $eslip[0]->area;
 				$hari_kerja = $eslip[0]->hari_kerja;
+				$gaji_umk = $eslip[0]->gaji_umk;
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$allow_jabatan = $eslip[0]->allow_jabatan;
 				$allow_masakerja = $eslip[0]->allow_masakerja;
@@ -2144,6 +2205,8 @@ class Importexceleslip extends MY_Controller
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_trans_rent = $eslip[0]->allow_trans_rent;
 				$allow_vitamin = $eslip[0]->allow_vitamin;
+				$allow_grooming = $eslip[0]->allow_grooming;
+				$allow_others = $eslip[0]->allow_others;
 				$allow_operation = $eslip[0]->allow_operation;
 
 				$over_salary = $eslip[0]->over_salary;
@@ -2317,7 +2380,19 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Gaji Pokok</td>
+								<td colspan="4">Gaji UMK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_umk).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Gaji Diterima</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_pokok).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -3137,11 +3212,12 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			$fname = strtolower($fname);
-			$pay_month = strtolower(date("F Y"));
+			// $fname = strtolower($fname);
+			// $pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
-			$pdf->Output('eslip_'.strtoupper($namalengkap).'_'.$periode.'.pdf', 'I');
+			// $pdf->Output('eslip_'.strtoupper($namalengkap).'_'.$periode.'.pdf', 'I');
+			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
 			ob_end_flush();
 
 		// } else {

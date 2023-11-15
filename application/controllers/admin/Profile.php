@@ -999,6 +999,15 @@ class Profile extends MY_Controller {
 					$nama_project = '--';	
 				}
 
+			$emp = $this->Employees_model->read_employee_info_by_nik($session['employee_id']);
+        if(!is_null($emp)){
+          $fullname = $emp[0]->first_name;
+          $sub_project = 'pkwt'.$emp[0]->sub_project_id;
+        } else {
+          $fullname = '--'; 
+          $sub_project = '0';
+        }
+
 			$designation = $this->Designation_model->read_designation_information($r->jabatan);
 			if(!is_null($designation)){
 				$designation_name = $designation[0]->designation_name;
@@ -1013,6 +1022,11 @@ class Profile extends MY_Controller {
 				}
 		
 
+			  	$download = 
+			   '<a href="'.site_url().'admin/'.$sub_project.'/view'.'/'.$r->uniqueid.'/" target="_blank">
+  					<button type="button" class="btn btn-xs btn-outline-twitter">DOWNLOAD</button>
+  				</a>';
+
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '" >UPLOAD</button>';
 
 
@@ -1020,7 +1034,7 @@ class Profile extends MY_Controller {
 			$r->no_surat,
 			$nama_project,
 			$designation_name,
-			$status_upload.' '.$status_migrasi
+			$status_upload.'<br>'.$download.' '.$status_migrasi
 		);
       }
 

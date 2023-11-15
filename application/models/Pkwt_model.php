@@ -353,6 +353,21 @@ class Pkwt_model extends CI_Model {
 	}
 
 
+	
+	 public function read_pkwt_pengajuan($id) {
+	
+		$sql = 'SELECT employee_id FROM xin_employee_contract WHERE status_pkwt = 0 AND approve_nae != 0 AND approve_nom != 0 AND approve_hrd = 0 AND cancel_stat = 0 AND employee_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+
  	// monitoring request
 	public function report_pkwt_history_null($empID) {
 		$today_date = date('Y-m-d');

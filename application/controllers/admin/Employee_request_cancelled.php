@@ -21,7 +21,7 @@ class employee_request_cancelled extends MY_Controller {
 		$this->load->model("Employees_model");
 		$this->load->model("Project_model");
 		$this->load->model("Department_model");
-		$this->load->model("Designation_model");
+		$this->load->model("Designation_model");	
 		$this->load->model("Location_model");
 	}
 	
@@ -460,7 +460,12 @@ class employee_request_cancelled extends MY_Controller {
 							$cut_off 							= $this->input->post('cut_off');
 							$date_payment 							= $this->input->post('date_payment');
 
-
+							$company = $this->Project_model->read_single_project($this->input->post('project_id'));
+							if(!is_null($company)){
+								$company_id = $company[0]->company_id;
+							} else {
+								$company_id = '0';
+							}
 
 					if($Return['error']!=''){
 					$this->output($Return);
@@ -485,6 +490,7 @@ class employee_request_cancelled extends MY_Controller {
 								'bank_id' 						=> $bank_name,
 								'no_rek' 							=> $no_rek,
 								'pemilik_rekening' 		=> $pemilik_rekening,
+								'company_id' 					=> $company_id,
 								'project' 						=> $project_id,
 								'sub_project' 				=> $sub_project,
 								'posisi' 							=> $posisi,

@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt221 extends MY_Controller 
+class Pkwt225 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -454,22 +454,7 @@ class Pkwt221 extends MY_Controller
 								<td colspan="20">Komisi lain – lain berupa insentive dimana akan diberikan apabila mencapai target 100% dalam 1 bulan dengan ketentuan sebagai berikut :</td>
 							</tr>
 
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1"></td>
-								<td colspan="20"><img src="'.base_url().'assets/tkhl_rao_tabel.png" alt="Trulli" width="360" height="280"></td>
-							</tr>
-
-							<tr>
-								<td colspan="10">Note:<br>Minimal Visit Per hari 10 toko/ Hari<br>Minimal Visit Per hari 11 toko/ Hari<br>Minimal Visit Per hari 12 toko/ Hari</td>
-								<td colspan="0"></td>
-								<td colspan="0"></td>
-							</tr>
-
-
 							<br>
-
 							<tr>
 								<td>5.</td>
 								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
@@ -481,6 +466,9 @@ class Pkwt221 extends MY_Controller
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 							
+							<br>
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td>7.</td>

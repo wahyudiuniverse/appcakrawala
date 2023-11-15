@@ -110,7 +110,7 @@ class register_mata extends MY_Controller {
 				$Return['error'] = "Jurusan Kosong...";
 			} else if($this->input->post('project_id')==='') {
 				$Return['error'] = 'Project belum dipilih';
-			} else if($this->input->post('subproject_id')==='') {
+			} else if($this->input->post('subproject_id')===''){
 				$Return['error'] = 'Sub Project belum dipilih';
 			} else if($this->input->post('posisi_id')==='') {
 				$Return['error'] = "Posisi/Jabatan Kosong...";
@@ -375,6 +375,15 @@ class register_mata extends MY_Controller {
 		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
 
+	/*Function to set JSON output*/
+	public function output($Return=array()){
+		/*Set response header*/
+		header("Access-Control-Allow-Origin: *");
+		header("Content-Type: application/json; charset=UTF-8");
+		/*Final JSON response*/
+		exit(json_encode($Return));
+	}	 
+	
 
 	public function success_list() {
 

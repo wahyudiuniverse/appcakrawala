@@ -90,6 +90,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				$approve_hrd = $r->approve_hrd;
 				$cancel_on = $r->cancel_on;
 
+
 				if($approve_hrd=='0'){
 
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Terbitkan Sekarang</button>';
