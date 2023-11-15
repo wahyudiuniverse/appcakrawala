@@ -2606,9 +2606,39 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Medicine</td>
+								<td colspan="4">Tunjangan Kesehatan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_grooming!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Grooming</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_others!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Lain-lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -2848,7 +2878,7 @@ class Importexceleslip extends MY_Controller
 						<td>
 							<table cellpadding="1" cellspacing="0">
 								<tr>
-									<td colspan="4">Kelebihan Gaji</td>
+									<td colspan="4">Kelebihan Gaji / <i>Extra Cost</i></td>
 									<td colspan="2">: Rp.</td>
 									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
 								</tr>

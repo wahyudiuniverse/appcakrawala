@@ -25,7 +25,7 @@ $(document).ready(function() {
 					$('.save').prop('disabled', false);
 				} else {
 					toastr.success(JSON.result);
-					$('.add-form').removeClass('show');
+					$('.add-form').removeClass('in');
 					$('#xin-form')[0].reset(); // To reset form fields
 					$('.save').prop('disabled', false);
 					window.location = base_url+'/success/' + ktp;
@@ -44,7 +44,6 @@ $(document).ready(function() {
 			jQuery('#projectsubproject').html(data);
 		});
 	});
-
 
 	jQuery("#aj_project").change(function(){
 		jQuery.get(base_url+"/get_project_posisi/"+jQuery(this).val(), function(data, status){

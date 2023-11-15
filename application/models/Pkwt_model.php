@@ -387,7 +387,7 @@ class Pkwt_model extends CI_Model {
 		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
-			AND status_pkwt = 1
+			AND approve_hrd != 0
 			-- AND date_format(approve_hrd_date, '%Y-%m-%d') = '$datefrom'  
 			AND DATE_FORMAT(approve_hrd_date, '%Y-%m-%d') BETWEEN '$datefrom' AND '$enddate'
 			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
@@ -403,7 +403,7 @@ class Pkwt_model extends CI_Model {
 		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
-			AND status_pkwt = 1
+			AND approve_hrd != 0
 			AND project = '$project_id'
 			-- AND date_format(approve_hrd_date, '%Y-%m-%d') = '$datefrom'  
 			AND DATE_FORMAT(approve_hrd_date, '%Y-%m-%d') BETWEEN '$datefrom' AND '$enddate'
