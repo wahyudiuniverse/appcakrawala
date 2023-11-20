@@ -152,20 +152,52 @@ class ceknip extends MY_Controller {
 				}
 				
 
+			if(!is_null($r->private_code)){
+				$pin = $r->private_code;
+			} else {
+				$pin = '--';	
+			}
+
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if(!is_null($project)){
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';	
+			}
+			
+
 			$ename = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank">'.$r->employee_id.'</a>'; 
 
 
-			$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
 
-			Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode September 2023, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+			$copypaste = '*C.I.S -> Employees Registration.*%0a%0a
+			Nama Lengkap: *'.$full_name.'*%0a
+			NIP: *'.$r->employee_id.'*%0a
+			PIN: *'.$pin.'*%0a
+			PROJECT: *'.$pin.'* %0a%0a
 
-			Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
-
+			Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
 			Link C.I.S : https://apps-cakrawala.com/admin%0a
 
+			Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu *My Profile* kemudian *Ubah Pin*%0a%0a
+
+			*INFO HRD di Nomor Whatsapp: 085175168275* %0a
 			*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
 			
 			Terima kasih.';
+
+
+			// $copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
+
+			// Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode September 2023, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+
+			// Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
+
+			// Link C.I.S : https://apps-cakrawala.com/admin%0a
+
+			// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+			
+			// Terima kasih.';
 
 
 

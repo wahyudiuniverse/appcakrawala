@@ -430,7 +430,7 @@ class employee_request_cancelled extends MY_Controller {
 							$pemilik_rekening			= $this->input->post('pemilik_rekening');
 
 							$project_id					= $this->input->post('project_id');
-							$sub_project				= $this->input->post('sub_project');
+							$sub_project				= $this->input->post('sub_project_id');
 							$posisi 							= $this->input->post('posisi');
 							$date_of_join 							= $this->input->post('date_of_join');
 							$penempatan 							= $this->input->post('penempatan');

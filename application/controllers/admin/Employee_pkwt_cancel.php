@@ -199,7 +199,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
-
+		$sub_project = $result[0]->sub_project;
 
 		$emp_info = $this->Employees_model->read_employee_information_nip($result[0]->employee_id);
 		if(!is_null($emp_info)){
@@ -208,7 +208,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $ktp_no = $emp_info[0]->ktp_no;
 		  $tempat_lahir = $emp_info[0]->tempat_lahir;
 		  $date_of_birth = $emp_info[0]->date_of_birth;
-		  $sub_project = $emp_info[0]->sub_project_id;
 		  $department = $emp_info[0]->department_id;
 
 		  $kk_no = $emp_info[0]->kk_no;
@@ -222,8 +221,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $ethnicity_type = $emp_info[0]->ethnicity_type;
 		  $marital_status = $emp_info[0]->marital_status;
 
-		  $fullname = $emp_info[0]->first_name;
-		  $fullname = $emp_info[0]->first_name;
 		} else {
 		  $fullname = '--';
 		  $ibu_kandung = '--';
@@ -231,8 +228,19 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $tempat_lahir = '--';
 		  $date_of_birth = '--';
 
-		  $sub_project = '-';
+		  // $sub_project = '-';
 		  $department = '-';
+
+		  $kk_no = '-';
+		  $alamat_ktp = '-';
+		  $alamat_domisili = '-';
+		  $npwp_no = '-';
+		  $contact_no = '-';
+		  $email = '-';
+		  $date_of_joining = '-';
+		  $gender = '-';
+		  $ethnicity_type = '-';
+		  $marital_status = '-';
 
 		}
 
@@ -274,7 +282,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 			'project_id' => $result[0]->project,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
-
 
 			'sub_project_id' => $sub_project,
 			'sub_project_list' => $this->Project_model->get_sub_project_filter($result[0]->project),
@@ -395,8 +402,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 							// $no_rek							= $this->input->post('no_rek');
 							// $pemilik_rekening			= $this->input->post('pemilik_rekening');
 
-							// $project_id					= $this->input->post('project_id');
-							// $sub_project				= $this->input->post('sub_project');
+							$project					= $this->input->post('project_id');
+							$sub_project				= $this->input->post('sub_project_id');
 							$jabatan 							= $this->input->post('posisi');
 							// $date_of_join 							= $this->input->post('date_of_join');
 							$penempatan 							= $this->input->post('penempatan');
@@ -451,8 +458,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 								// 'bank_id' 						=> $bank_name,
 								// 'no_rek' 							=> $no_rek,
 								// 'pemilik_rekening' 		=> $pemilik_rekening,
-								// 'project' 						=> $project_id,
-								// 'sub_project' 				=> $sub_project,
+								'project' 						=> $project,
+								'sub_project' 				=> $sub_project,
 								'jabatan' 							=> $jabatan,
 
 								// 'doj' 								=> $date_of_join,
@@ -465,20 +472,20 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allowance_transport' 		=> $tunjangan_transport,
 								'allowance_komunikasi' 	=> $tunjangan_komunikasi,
 
-								'allowance_rent' 					=> $tunjangan_rental,
-								'allowance_park' 			=> $tunjangan_parkir,
-								'allowance_transmeal' 		=> $tunjangan_makan_trans,
-								'allowance_residance'=> $tunjangan_tempat_tinggal,
-								'allowance_laptop' 				=> $tunjangan_device,
+								'allowance_rent' 								=> $tunjangan_rental,
+								'allowance_park' 								=> $tunjangan_parkir,
+								'allowance_transmeal' 					=> $tunjangan_makan_trans,
+								'allowance_residance'						=> $tunjangan_tempat_tinggal,
+								'allowance_laptop' 							=> $tunjangan_device,
 								
-								'allowance_medicine' 		=> $tunjangan_kesehatan,
-								'allowance_akomodasi' 		=> $tunjangan_akomodasi,
-								'allowance_kasir' 				=> $tunjangan_kasir,
-								'allowance_operation' 	=> $tunjangan_operational,
-								'from_date' 			=> $join_date_pkwt,
-								'to_date' 				=> $pkwt_end_date,
-								'waktu_kontrak' 		=> $waktu_kontrak,
-								'hari_kerja' 					=> $hari_kerja,
+								'allowance_medicine' 						=> $tunjangan_kesehatan,
+								'allowance_akomodasi' 					=> $tunjangan_akomodasi,
+								'allowance_kasir' 							=> $tunjangan_kasir,
+								'allowance_operation' 					=> $tunjangan_operational,
+								'from_date' 										=> $join_date_pkwt,
+								'to_date' 											=> $pkwt_end_date,
+								'waktu_kontrak' 								=> $waktu_kontrak,
+								'hari_kerja' 										=> $hari_kerja,
 								'start_period_payment' 					=> $cut_start,
 								'end_period_payment' 						=> $cut_off,
 								'tgl_payment' 				=> $date_payment,

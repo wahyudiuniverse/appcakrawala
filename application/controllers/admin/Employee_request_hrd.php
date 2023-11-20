@@ -743,6 +743,7 @@ class Employee_request_hrd extends MY_Controller {
 										'employee_id' 					=> $employee_id,
 										'docid'									=> $docid,
 										'project' 							=> $project,
+										'sub_project'						=> $sub_project,
 										'from_date'	 						=> $contract_start,
 										'to_date' 							=> $contract_end,
 										'no_surat' 							=> $nomor_surat,

@@ -29,15 +29,15 @@ class ceknik extends MY_Controller {
 	
 
 	public function index() {
-		$system = $this->Xin_model->read_setting_info(1);
-		if($system[0]->module_recruitment!='true'){
-			redirect('admin/');
-		}
+		// $system = $this->Xin_model->read_setting_info(1);
+		// if($system[0]->module_recruitment!='true'){
+		// 	redirect('admin/');
+		// }
 		$data['title'] = 'CEK NIK PT. SIPRAMA CACKRAWALA';
-		$session = $this->session->userdata('c_user_id');
-		if(!empty($session)){
-			redirect('');
-		}
+		// $session = $this->session->userdata('c_user_id');
+		// if(!empty($session)){
+		// 	redirect('');
+		// }
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
 		$data['all_dept'] = $this->Xin_model->get_departments();
@@ -120,12 +120,12 @@ class ceknik extends MY_Controller {
 	public function success_list() {
 
 		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('c_user_id');
-		if(!empty($session)){ 
+		// $session = $this->session->userdata('c_user_id');
+		// if(!empty($session)){
 			$this->load->view("frontend/hrpremium/view_daftar_success", $data);
-		} else {
-			redirect('');
-		}
+		// } else {
+		// 	redirect('');
+		// }
 
 		// Datatables Variables
 		$draw = intval($this->input->get("draw"));
