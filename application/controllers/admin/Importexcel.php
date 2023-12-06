@@ -695,11 +695,11 @@ class ImportExcel extends MY_Controller
 						$data = array(
 						'uploadid' 								=> $uploadid,
 						'nip' 										=> $line[0],
-						'fullname' 								=> $line[1],
-						'periode' 								=> $line[2],
+						'fullname' 								=> str_replace("'"," ",$line[1]),
+						'periode' 								=> str_replace("'"," ",$line[2]),
 						'project' 								=> $line[3],
 						'project_sub' 						=> $line[4],
-						'area' 										=> $line[5],
+						'area' 										=> str_replace("'"," ",$line[5]),
 						'status_emp' 							=> $line[6],
 						'hari_kerja' 							=> $line[7],
 						'gaji_umk' 								=> $line[8],
@@ -879,15 +879,15 @@ class ImportExcel extends MY_Controller
 						'project_id' 					=> $line[5], //project id
 						'project' 						=> $line[6],//project
 						'sub_project_id' 			=> $line[7],//sub project id
-						'sub_project' 				=> $line[8], // sub project
-						'kota' 								=> $line[9], //kota
+						'sub_project' 				=> $line[8],// sub project
+						'kota' 								=> $line[9],//kota
 						'posisi_jabatan' 			=> $line[10],//jabatan
 						'jumlah_mpp' 					=> $line[11],//jumlah mpp
 						'gaji_pokok' 					=> $line[12],//gapok
 						'hari_kerja' 					=> $line[13],//hari kerja
-						'dm_grade' 						=> $line[14], // dm_grade
+						'dm_grade' 						=> $line[14],// dm_grade
 						'allow_grade' 				=> $line[15],//grade
-						'dm_masa_kerja' 			=> $line[16], // dm_grade
+						'dm_masa_kerja' 			=> $line[16],// dm_grade
 						'allow_masa_kerja' 		=> $line[17],//grade
 						'dm_konsumsi' 				=> $line[18],//dm_konsumsi
 						'allow_konsumsi' 			=> $line[19],//konsumsi
@@ -895,16 +895,16 @@ class ImportExcel extends MY_Controller
 						'allow_transport' 		=> $line[21],//transport
 						'dm_rent' 						=> $line[22],//dm_sewa
 						'allow_rent' 					=> $line[23],//sewa
-						'dm_comunication' 		=> $line[24],
-						'allow_comunication'	=> $line[25],
+						'dm_comunication' 		=> $line[24],//
+						'allow_comunication'	=> $line[25],//
 						'dm_parking'					=> $line[26],//dm_parkir
 						'allow_parking' 			=> $line[27],//parkir
 						'dm_resicance' 				=> $line[28],//dm_residance
-						'allow_residance' 		=> $line[29], //allow resicande
+						'allow_residance' 		=> $line[29],//allow resicande
 						'dm_device' 					=> $line[30],//dm_device
 						'allow_device' 				=> $line[31],//device
 						'dm_kasir' 						=> $line[32],//dm kasair
-						'allow_kasir' 				=> $line[33], //allow kasir
+						'allow_kasir' 				=> $line[33],//allow kasir
 						'dm_trans_meal' 			=> $line[34],//dm_transmeal
 						'allow_trans_meal' 		=> $line[35],//transmeal
 						'dm_medicine' 				=> $line[36],//dm_medical
@@ -997,9 +997,9 @@ class ImportExcel extends MY_Controller
 				  	$project_sub = $this->Xin_model->clean_post($r->sub_project);
 				  	$createdby = $r->createdby;
 
-				  	$preiode_param = str_replace(" ","",$r->periode);
-				  	$project_param = str_replace(" ","",$r->project);
-				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->sub_project)));
+				  	$preiode_param 			= str_replace(" ","",$r->periode);
+				  	$project_param 			= str_replace(")","",str_replace("(","",str_replace(" ","",$r->project)));
+				  	$project_sub_param 	= str_replace(")","",str_replace("(","",str_replace(" ","",$r->sub_project)));
 
 			  // get created
 			  $empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
@@ -1101,7 +1101,7 @@ class ImportExcel extends MY_Controller
 				  	$createdby = $r->createdby;
 
 				  	$preiode_param = str_replace(" ","",$r->periode);
-				  	$project_param = str_replace(" ","",$r->project);
+				  	$project_param 			= str_replace(")","",str_replace("(","",str_replace(" ","",$r->project)));
 				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->project_sub)));
 
 			  // get created
@@ -1183,7 +1183,7 @@ class ImportExcel extends MY_Controller
 				  	$createdby = $r->createdby;
 
 				  	$preiode_param = str_replace(" ","",$r->periode);
-				  	$project_param = str_replace(" ","",$r->project);
+				  	$project_param 			= str_replace(")","",str_replace("(","",str_replace(" ","",$r->project)));
 				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->project_sub)));
 
 			  // get created
@@ -1313,6 +1313,8 @@ class ImportExcel extends MY_Controller
 						'hari_kerja' 							=> $line[7],
 						'gaji_umk' 								=> $line[8],
 						'gaji_pokok' 							=> $line[9],
+
+
 						'allow_jabatan' 					=> $line[10],
 						'allow_area' 							=> $line[11],
 						'allow_masakerja' 				=> $line[12],
@@ -1328,43 +1330,46 @@ class ImportExcel extends MY_Controller
 						'allow_trans_meal' 				=> $line[22],
 						'allow_trans_rent' 				=> $line[23],
 						'allow_vitamin' 					=> $line[24],
-						'allow_operation' 				=> $line[25],
-						'over_salary' 						=> $line[26],
-						'penyesuaian_umk' 				=> $line[27],
-						'insentive'								=> $line[28],
-						'overtime' 								=> $line[29],
-						'overtime_holiday' 				=> $line[30],
-						'overtime_national_day' 	=> $line[31],
-						'overtime_rapel' 					=> $line[32],
-						'kompensasi' 							=> $line[33],
-						'bonus' 									=> $line[34],
-						'uuck' 										=> $line[35],
-						'thr' 										=> $line[36],
-						'bpjs_tk_deduction' 			=> $line[37],
-						'bpjs_ks_deduction' 			=> $line[38],
-						'jaminan_pensiun_deduction' => $line[39],
-						'pendapatan' 							=> $line[40],
-						'bpjs_tk' 								=> $line[41],
-						'bpjs_ks' 								=> $line[42],
-						'jaminan_pensiun' 				=> $line[43],
-						'deposit' 								=> $line[44],
-						'pph' 										=> $line[45],
-						'pph_thr' 								=> $line[46],
-						'penalty_late' 						=> $line[47],
-						'penalty_alfa' 						=> $line[48],
-						'penalty_attend' 					=> $line[49],
-						'mix_oplos' 							=> $line[50],
-						'pot_trip_malang' 				=> $line[51],
-						'pot_device' 							=> $line[52],
-						'pot_kpi' 								=> $line[53],
-						'deduction' 							=> $line[54],
-						'simpanan_pokok' 					=> $line[55],
-						'simpanan_wajib_koperasi' => $line[56],
-						'pembayaran_pinjaman' 		=> $line[57],
-						'biaya_admin_bank' 				=> $line[58],
-						'adjustment' 							=> $line[59],
-						'adjustment_dlk' 					=> $line[60],
-						'total' 									=> $line[61],
+						'allow_grooming'					=> $line[25],
+						'allow_others'						=> $line[26],
+						'allow_operation' 				=> $line[27],
+
+						'over_salary' 						=> $line[28],
+						'penyesuaian_umk' 				=> $line[29],
+						'insentive'								=> $line[30],
+						'overtime' 								=> $line[31],
+						'overtime_holiday' 				=> $line[32],
+						'overtime_national_day' 	=> $line[33],
+						'overtime_rapel' 					=> $line[34],
+						'kompensasi' 							=> $line[35],
+						'bonus' 									=> $line[36],
+						'uuck' 										=> $line[37],
+						'thr' 										=> $line[38],
+						'bpjs_tk_deduction' 			=> $line[39],
+						'bpjs_ks_deduction' 			=> $line[40],
+						'jaminan_pensiun_deduction' => $line[41],
+						'pendapatan' 							=> $line[42],
+						'bpjs_tk' 								=> $line[43],
+						'bpjs_ks' 								=> $line[44],
+						'jaminan_pensiun' 				=> $line[45],
+						'deposit' 								=> $line[46],
+						'pph' 										=> $line[47],
+						'pph_thr' 								=> $line[48],
+						'penalty_late' 						=> $line[49],
+						'penalty_alfa' 						=> $line[50],
+						'penalty_attend' 					=> $line[51],
+						'mix_oplos' 							=> $line[52],
+						'pot_trip_malang' 				=> $line[53],
+						'pot_device' 							=> $line[54],
+						'pot_kpi' 								=> $line[55],
+						'deduction' 							=> $line[56],
+						'simpanan_pokok' 					=> $line[57],
+						'simpanan_wajib_koperasi' => $line[58],
+						'pembayaran_pinjaman' 		=> $line[59],
+						'biaya_admin_bank' 				=> $line[60],
+						'adjustment' 							=> $line[61],
+						'adjustment_dlk' 					=> $line[62],
+						'total' 									=> $line[63],
 						'createdby' 							=> $employee_id,
 
 						);

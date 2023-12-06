@@ -1152,8 +1152,17 @@ class Importexceleslip extends MY_Controller
 							</tr>
 						</table>
 					</td>
+		
 					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td>Gaji UMK/UMP</td>
+								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).';-</td>
+							</tr>
+						</table>
 					</td>
+
+
 				</tr>
 
 			</table>
@@ -1163,17 +1172,7 @@ class Importexceleslip extends MY_Controller
 			<br><br>
 
 			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji UMK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
+
 
 				<tr>
 					<td>
@@ -2365,8 +2364,18 @@ class Importexceleslip extends MY_Controller
 							</tr>
 						</table>
 					</td>
+		
+
 					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td>UMK/UMP</td>
+								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).'</td>
+							</tr>
+						</table>
 					</td>
+
+
 				</tr>
 
 			</table>
@@ -2376,18 +2385,6 @@ class Importexceleslip extends MY_Controller
 			<br><br>
 
 			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji UMK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
 				<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">

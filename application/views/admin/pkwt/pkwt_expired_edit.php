@@ -230,12 +230,13 @@
                     <label for="sub_project"><?php echo $this->lang->line('left_sub_projects');?></label>
                     
 
-                    <select class="form-control" id="project_sub_project" name="sub_project_id" data-plugin="xin_select" data-placeholder="Sub-Project" >
+                    <select class="form-control" id="project_sub_project" name="sub_project_id" data-plugin="xin_select" data-placeholder="Sub-Project">
                                 <option value=""></option>
                                 <?php foreach($sub_project_list as $sbproject) {?>
                                 <option value="<?php echo $sbproject->secid?>" <?php if($sub_project_id==$sbproject->secid):?> selected <?php endif;?>><?php echo $sbproject->sub_project_name?></option>
                                 <?php } ?>
                     </select>
+                    
 
                 </div>
               </div>

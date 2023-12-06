@@ -279,12 +279,12 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'tempat_lahir' => $tempat_lahir,
 			'tanggal_lahir' => $date_of_birth,
 
-
 			'project_id' => $result[0]->project,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
 
 			'sub_project_id' => $sub_project,
 			'sub_project_list' => $this->Project_model->get_sub_project_filter($result[0]->project),
+			// 'sub_project_list' => $this->Project_model->get_sub_project_filter($result[0]->project_id),
 
 			'sub_project' => $sub_project,
 
@@ -535,7 +535,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $ktp_no = $emp_info[0]->ktp_no;
 		  $tempat_lahir = $emp_info[0]->tempat_lahir;
 		  $date_of_birth = $emp_info[0]->date_of_birth;
-
 
 		  $kk_no = $emp_info[0]->kk_no;
 		  $alamat_ktp = $emp_info[0]->alamat_ktp;
@@ -974,14 +973,12 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 				$resultx = $this->Pkwt_model->update_pkwt_status($pkwt_down,$employee_id);
 
-
-
-
 						$data = array(
 							'uniqueid' 							=> $unicode,
 							'employee_id' 					=> $employee_id,
 							'docid'									=> $docid,
 							'project' 							=> $project_id,
+							'sub_project'						=> $sub_project,
 							'from_date'	 						=> $join_date_pkwt,
 							'to_date' 							=> $pkwt_end_date,
 							'no_surat' 							=> $nomor_surat,

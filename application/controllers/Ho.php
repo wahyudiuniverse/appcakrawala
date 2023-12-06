@@ -29,24 +29,27 @@ class ho extends MY_Controller {
 	
 
 	public function index() {
-		$system = $this->Xin_model->read_setting_info(1);
-		if($system[0]->module_recruitment!='true'){
-			redirect('admin/');
-		}
-		$data['title'] = 'DATABASE KARYAWAN HO 2023';
-		$session = $this->session->userdata('c_user_id');
-		if(!empty($session)){
-			redirect('');
-		}
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
-		$data['all_dept'] = $this->Xin_model->get_departments();
-		$data['all_designation'] = $this->Xin_model->get_designations();
-		$data['all_project'] = $this->Xin_model->get_projects();
-		$data['path_url'] = 'job_create_user';
-		$data['subview'] = $this->load->view("frontend/hrpremium/register_ho", $data, TRUE);
-		// $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
-		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
+
+		redirect('register_ho/');
+
+		// $system = $this->Xin_model->read_setting_info(1);
+		// if($system[0]->module_recruitment!='true'){
+		// 	redirect('admin/');
+		// }
+		// $data['title'] = 'DATABASE KARYAWAN HO 2023';
+		// $session = $this->session->userdata('c_user_id');
+		// if(!empty($session)){
+		// 	redirect('');
+		// }
+		// $data['all_companies'] = $this->Xin_model->get_companies();
+		// $data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
+		// $data['all_dept'] = $this->Xin_model->get_departments();
+		// $data['all_designation'] = $this->Xin_model->get_designations();
+		// $data['all_project'] = $this->Xin_model->get_projects();
+		// $data['path_url'] = 'job_create_user';
+		// $data['subview'] = $this->load->view("frontend/hrpremium/register_ho", $data, TRUE);
+		// // $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
+		// $this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
 
 

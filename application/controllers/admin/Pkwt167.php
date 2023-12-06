@@ -767,7 +767,7 @@ class Pkwt167 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>
@@ -961,6 +961,8 @@ class Pkwt167 extends MY_Controller
 				<br>
 				<br>
 
+				<br>
+				<br>
 				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1423,6 +1425,12 @@ class Pkwt167 extends MY_Controller
 								<td ></td>
 								<td colspan="0">d.</td>
 								<td colspan="20">Memanipulasi data (Data Absen ataupun Data Penjualan) agar mendapatkan keuntungan pribadi sekaligus kerugian untuk perusahaan.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">e.</td>
+								<td colspan="20">Melakukan tindakan memanipulasi penggunaan GPS.</td>
 							</tr>
 
 							<tr>

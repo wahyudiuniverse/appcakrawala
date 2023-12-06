@@ -269,6 +269,23 @@ $session = $this->session->userdata('username');
       <!-- PENEMPATAN -->
       <div class="col-sm-4">
         <div>
+          <label for="cutoff">CUT-OFF</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$cut_off;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- PENEMPATAN -->
+      <div class="col-sm-4">
+        <div>
           <label for="penempatan">HK</label>
         </div>
       </div>

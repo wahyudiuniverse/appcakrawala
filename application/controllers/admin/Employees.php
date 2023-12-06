@@ -4535,7 +4535,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file"]["name"]);
-											$newfilename = 'ktp_'.$employee_id.'.'.$ext;
+											$newfilename = 'ktp_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext;
 											move_uploaded_file($tmp_name, $documentd.$newfilename);
 											$fname = $newfilename;
 										} else {
@@ -4560,7 +4560,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_kk"]["name"]);
-											$newfilenamekk = 'kk_'.$employee_id.'.'.$extkk;
+											$newfilenamekk = 'kk_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$extkk;
 											move_uploaded_file($tmp_namekk, $documentdkk.$newfilenamekk);
 											$fname_kk = $newfilenamekk;
 										} else {
@@ -4585,7 +4585,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_npwp"]["name"]);
-											$newfilename_npwp = 'npwp_'.$employee_id.'.'.$ext_npwp;
+											$newfilename_npwp = 'npwp_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext_npwp;
 											move_uploaded_file($tmp_name_npwp, $documentd_npwp.$newfilename_npwp);
 											$fname_npwp = $newfilename_npwp;
 										} else {
@@ -4634,7 +4634,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_skck"]["name"]);
-											$newfilename_skck = 'skck_'.$employee_id.'.'.$ext_skck;
+											$newfilename_skck = 'skck_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext_skck;
 											move_uploaded_file($tmp_name_skck, $documentd_skck.$newfilename_skck);
 											$fname_skck = $newfilename_skck;
 										} else {
@@ -4658,7 +4658,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_isd"]["name"]);
-											$newfilename_isd = 'isd_'.$employee_id.'.'.$ext_isd;
+											$newfilename_isd = 'isd_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext_isd;
 											move_uploaded_file($tmp_name_isd, $documentd_isd.$newfilename_isd);
 											$fname_isd = $newfilename_isd;
 										} else {
@@ -4682,7 +4682,7 @@ class Employees extends MY_Controller {
 											// basename() may prevent filesystem traversal attacks;
 											// further validation/sanitation of the filename may be appropriate
 											$name = basename($_FILES["document_file_pak"]["name"]);
-											$newfilename_pak = 'pak_'.$employee_id.'.'.$ext_pak;
+											$newfilename_pak = 'pak_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$ext_pak;
 											move_uploaded_file($tmp_name_pak, $documentd_pak.$newfilename_pak);
 											$fname_pak = $newfilename_pak;
 										} else {
@@ -5986,7 +5986,7 @@ class Employees extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/employees/employee_detail", $data);
+			$this->load->view("admin/employees/employee_manager", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -6002,34 +6002,11 @@ class Employees extends MY_Controller {
 
         foreach($documents->result() as $r) {
 			
-			$d_type = $this->Employees_model->read_document_type_information($r->document_type_id);
-			if(!is_null($d_type)){
-				$document_d = $d_type[0]->document_type;
-			} else {
-				$document_d = '--';
-			}
-			if($r->date_of_expiry == ''){
-				$date_of_expiry = '';
-			} else {
-				$date_of_expiry = $this->Xin_model->set_date_format($r->date_of_expiry);
-			}
-			if($r->document_file!='' && $r->document_file!='no file') {
-			 $functions = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="Download"><a href="'.site_url().'admin/download?type=document&filename='.$r->document_file.'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" title="'.$this->lang->line('xin_download').'"><i class="oi oi-cloud-download"></i></button></a></span>';
-			 } else {
-				 $functions ='';
-			 }
-			 
-			 /*if($r->is_alert==1){
-			 	$alert = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_e_details_alert_notifyemail').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><i class="fa fa-bell"></i></button></span>';
-			 } else {
-				 $alert = '';
-			 }*/
 		
 		$data[] = array(
-			$functions.'<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light" data-toggle="modal" data-target=".edit-modal-data" data-field_id="'. $r->document_id . '" data-field_type="document"><i class="fas fa-pencil-alt"></i></button></span><span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->document_id . '" data-token_type="document"><i class="fas fa-trash-restore"></i></button></span>',
-			$document_d,
-			$r->title,
-			$date_of_expiry
+			'A',
+			'B',
+			'C'
 		);
       }
 

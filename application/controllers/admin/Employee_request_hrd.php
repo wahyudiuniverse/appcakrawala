@@ -441,6 +441,8 @@ class Employee_request_hrd extends MY_Controller {
 
 				'waktu_kontrak' => $result[0]->contract_periode.' (Bulan)',
 				'begin' => $result[0]->contract_start . ' s/d '. $result[0]->contract_end,
+
+				'cut_off' => $result[0]->cut_start.' - '.$result[0]->cut_off,
 				'hari_kerja' => $result[0]->hari_kerja,
 				'basic_pay' => $result[0]->gaji_pokok,
 				'dm_allow_grade' => $result[0]->dm_allow_jabatan,
