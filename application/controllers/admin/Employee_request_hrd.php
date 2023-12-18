@@ -90,6 +90,7 @@ class Employee_request_hrd extends MY_Controller {
 				$sub_project = $r->sub_project;
 				$department = $r->department;
 				$posisi = $r->posisi;
+				$contact_no = $r->contact_no;
 				$penempatan = $r->penempatan;
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
@@ -157,6 +158,7 @@ class Employee_request_hrd extends MY_Controller {
 				$nama_subproject,
 				$department_name,
 				$designation_name,
+				$contact_no,
 				$penempatan,
 				$doj,
 				$register_date

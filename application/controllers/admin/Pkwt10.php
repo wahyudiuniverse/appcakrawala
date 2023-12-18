@@ -207,7 +207,7 @@ class Pkwt10 extends MY_Controller
 					$sign_qrcode 							= $pkwt[0]->img_esign;
 					$pkwt_active							= $pkwt[0]->status_pkwt;
 
-					$tanggalcetak 						= date("Y-m-d");
+					$tanggalcetak 						= $pkwt[0]->from_date;
 					$namalengkap 							= $user[0]->first_name;
 					$tempattgllahir 					= $user[0]->tempat_lahir.', '.$this->Xin_model->tgl_indo($user[0]->date_of_birth);
 

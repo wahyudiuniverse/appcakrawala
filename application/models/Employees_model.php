@@ -795,7 +795,7 @@ ORDER BY jab.designation_id ASC";
 	
 	 public function CheckExistNIP_Periode($id, $periode) {
 	
-		$sql = 'SELECT * FROM xin_employees_saltab WHERE nip = ? and periode = ?';
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? and periode = ?';
 		$binds = array($id,$periode);
 		$query = $this->db->query($sql, $binds);
 		

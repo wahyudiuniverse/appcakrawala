@@ -102,57 +102,56 @@
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_hr_report_employees');?></strong></span> </div>
       <div class="card-body">
         <div class="box-datatable table-responsive">
-          <table class="datatables-demo table table-striped table-bordered" id="xin_table" style="width:100%;table-layout: fixed;">
+          <table class="datatables-demo table table-striped table-bordered" id="xin_table">
             <thead>
               <tr>
-                <th style="width: 100px;">Status</th>
-                <th style="width: 60px;"><?php echo $this->lang->line('xin_nip');?></th>
-                <th style="width: 160px;"><?php echo $this->lang->line('xin_employees_full_name');?></th>
-                <th style="width: 150px;">PIN</th>
-                <th style="width: 150px;"><?php echo $this->lang->line('left_company');?></th>
-                <th style="width: 150px;"><?php echo $this->lang->line('left_department');?></th>
-                <th style="width: 200px;"><?php echo $this->lang->line('left_designation');?></th>
-                <th style="width: 120px;"><?php echo $this->lang->line('left_projects');?></th>
-                <th style="width: 120px;"><?php echo $this->lang->line('left_sub_projects');?></th>                
-                <th style="width: 80px;">Area</th>               
-                <th style="width: 80px;">Region</th>
-                <th style="width: 120px;">Tempat Lahir</th>                
-                <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_dob');?></th>                
-                <th style="width: 120px;"><?php echo $this->lang->line('xin_employee_doj');?></th>  
+                <th>Status</th>
+                <th><?php echo $this->lang->line('xin_nip');?></th>
+                <th><?php echo $this->lang->line('xin_employees_full_name');?></th>
+                <th>PIN</th>
+                <th><?php echo $this->lang->line('left_company');?></th>
+                <th><?php echo $this->lang->line('left_department');?></th>
+                <th><?php echo $this->lang->line('left_designation');?></th>
+                <th><?php echo $this->lang->line('left_projects');?></th>
+                <th><?php echo $this->lang->line('left_sub_projects');?></th>                
+                <th>Area</th>               
+                <th>Region</th>
+                <th>Tempat Lahir</th>                
+                <th><?php echo $this->lang->line('xin_employee_dob');?></th>                
+                <th><?php echo $this->lang->line('xin_employee_doj');?></th>  
 
-                <th style="width: 120px;">Mulai Kontrak</th>   
-                <th style="width: 120px;">Akhir Kontrak</th>   
-                <th style="width: 120px;">Gaji Pokok</th>   
+                <th>Mulai Kontrak</th>   
+                <th>Akhir Kontrak</th>   
+                <th>Gaji Pokok</th>   
 
-                <th style="width: 120px;">Tanggal Resign</th>
+                <th>Tanggal Resign</th>
                                 
-                <th style="width: 60px;"><?php echo $this->lang->line('xin_employee_gender');?></th>
-                <th style="width: 50px;"><?php echo $this->lang->line('xin_employee_mstatus');?></th>
-                <th style="width: 50px;">Agama</th>                
-                <th style="width: 160px;"><?php echo $this->lang->line('dashboard_email');?></th>
-                <th style="width: 100px;"><?php echo $this->lang->line('xin_contact_number');?></th>
-                <th style="width: 100px;">Pendidikan</th>
-                <th style="width: 400px;"><?php echo $this->lang->line('xin_address');?></th>    
-                <th style="width: 400px;">Alamat Domisili</th>                
-                <th style="width: 110px;"><?php echo $this->lang->line('xin_kk');?></th>
-                <th style="width: 110px;"><?php echo $this->lang->line('xin_ktp');?></th>
-                <th style="width: 150px;"><?php echo $this->lang->line('xin_npwp');?></th>
-                <th style="width: 150px;">BPJS-TK</th>
-                <th style="width: 150px;">BPJS-KS</th>
-                <th style="width: 150px;">Nama Ibu Kandung</th>
-                <th style="width: 100px;">Nama Bank</th>
-                <th style="width: 100px;">No. Rekening</th>
-                <th style="width: 100px;">Nama Pemilik Rek.</th>
+                <th><?php echo $this->lang->line('xin_employee_gender');?></th>
+                <th><?php echo $this->lang->line('xin_employee_mstatus');?></th>
+                <th>Agama</th>                
+                <th><?php echo $this->lang->line('dashboard_email');?></th>
+                <th><?php echo $this->lang->line('xin_contact_number');?></th>
+                <th>Pendidikan</th>
+                <th><?php echo $this->lang->line('xin_address');?></th>    
+                <th>Alamat Domisili</th>                
+                <th><?php echo $this->lang->line('xin_kk');?></th>
+                <th><?php echo $this->lang->line('xin_ktp');?></th>
+                <th><?php echo $this->lang->line('xin_npwp');?></th>
+                <th>BPJS-TK</th>
+                <th>BPJS-KS</th>
+                <th>Nama Ibu Kandung</th>
+                <th>Nama Bank</th>
+                <th>No. Rekening</th>
+                <th>Nama Pemilik Rek.</th>
 
-
-                <th style="width: 120px;">Foto KTP</th>   
-                <th style="width: 120px;">Foto KK</th>    
-                <th style="width: 120px;">Foto NPWP</th>   
-                <th style="width: 120px;">Foto Ijazah</th>   
-                <th style="width: 120px;">Dok SKCK</th>   
-                <th style="width: 120px;">Dok CV</th>
-                <th style="width: 120px;">Dok Paklaring</th>
-                <th style="width: 120px;">PKWT</th>         
+                <th>Foto KTP</th>   
+                <th>Foto KK</th>    
+                <th>Foto NPWP</th>   
+                <th>Foto Ijazah</th>   
+                <th>Dok SKCK</th>   
+                <th>Dok CV</th>
+                <th>Dok Paklaring</th>
+                <th>PKWT</th>         
               </tr>
             </thead>
           </table>

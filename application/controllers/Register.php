@@ -158,7 +158,7 @@ class register extends MY_Controller {
 						
 					} else if ($ktp_exist_regis!=0) {
 
-						$Return['error'] = 'NIK KTP sudah ada di DAFTAR KARYAWAN BARU.';
+						$Return['result'] = 'NIK KTP sudah berhasil REGISTER.';
 
 					} else {
 

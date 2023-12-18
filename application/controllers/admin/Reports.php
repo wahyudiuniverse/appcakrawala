@@ -656,67 +656,51 @@ class Reports extends MY_Controller
 				$agama = '--';
 			}
 
-			$banklist = $this->Xin_model->read_bank_info($r->bank_name);
-			if(!is_null($banklist)){
-				$bank_name = $banklist[0]->bank_name;
-			} else {
-				$bank_name = '--';
-			}
+			// $banklist = $this->Xin_model->read_bank_info($r->bank_name);
+			// if(!is_null($banklist)){
+			// 	$bank_name = $banklist[0]->bank_name;
+			// } else {
+			// 	$bank_name = '--';
+			// }
 
 			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
 			if(!is_null($readPkwt)){
-				$basicpay = $readPkwt[0]->basic_pay;
+
+				$basicpay 		= $readPkwt[0]->basic_pay;
+				$start_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->from_date);
+				$end_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->to_date);
+
 			} else {
+
 				$basicpay = '0';
+				$start_kontrak 	= '0';
+				$end_kontrak 	= '0';
 			}
 
-			// $last_edu = $this->Xin_model->read_bank_info($r->last_edu);
-			if($r->last_edu=='1'){
-				$education = 'Sekolah Dasar (SD)';
-			} else if($r->last_edu=='2') {
-				$education = 'Sekolah Menengah Pertama (SMP/MTS)';
-			} else if($r->last_edu=='3') {
-				$education = 'Sekolah Menengah Atas (SMA/SMK/MA)';
-			} else if($r->last_edu=='4') {
-				$education = 'Diploma (D1,D2,D3)';
-			} else if($r->last_edu=='5') {
-				$education = 'Strata 1 (S1)';
-			} else if($r->last_edu=='6') {
-				$education = 'Strata 2 (S2)';
-			} else if($r->last_edu=='7') {
-				$education = 'Strata 3 (S3)';
+
+			if(!is_null($r->last_edu)){
+				if($r->last_edu=='1'){
+					$education = 'Sekolah Dasar (SD)';
+				} else if($r->last_edu=='2') {
+					$education = 'Sekolah Menengah Pertama (SMP/MTS)';
+				} else if($r->last_edu=='3') {
+					$education = 'Sekolah Menengah Atas (SMA/SMK/MA)';
+				} else if($r->last_edu=='4') {
+					$education = 'Diploma (D1,D2,D3)';
+				} else if($r->last_edu=='5') {
+					$education = 'Strata 1 (S1)';
+				} else if($r->last_edu=='6') {
+					$education = 'Strata 2 (S2)';
+				} else if($r->last_edu=='7') {
+					$education = 'Strata 3 (S3)';
+				} else {
+					$education = '-';
+				}
+
 			} else {
-				$education = '-';
+				$education = '--';	
 			}
 
-			// $docktp = $this->Xin_model->read_bank_info($r->user_id);
-			// if(!is_null($docktp)){
-			// 	$ktp = $docktp[0]->title;
-			// } else {
-			// 	$ktp = '--';
-			// }
-
-
-			// $dockk = $this->Xin_model->read_document_kk($r->user_id);
-			// if(!is_null($dockk)){
-			// 	$kk = $dockk[0]->title;
-			// } else {
-			// 	$kk = '--';
-			// }
-
-			// $docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
-			// if(!is_null($docnpwp)){
-			// 	$npwp = $docnpwp[0]->title;
-			// } else {
-			// 	$npwp = '--';
-			// }
-
-			// $docnpwp = $this->Xin_model->read_document_npwp($r->user_id);
-			// if(!is_null($docnpwp)){
-			// 	$npwp = $docnpwp[0]->title;
-			// } else {
-			// 	$npwp = '--';
-			// }
 
 			if(!is_null($r->gender)){
 				$gender = $r->gender;
@@ -749,18 +733,6 @@ class Reports extends MY_Controller
 				$dol = '--';	
 			}
 
-			if($r->contract_start!='' || !is_null($r->contract_start)){
-				$start_kontrak = $this->Xin_model->tgl_excel($r->contract_start);
-			} else {
-				$start_kontrak = '--';	
-			}
-
-			if($r->contract_end!='' || !is_null($r->contract_end)){
-				$end_kontrak = $this->Xin_model->tgl_excel($r->contract_end);
-			} else {
-				$end_kontrak = '--';	
-			}
-
 			if(!is_null($r->email)){
 				$email = $r->email;
 			} else {
@@ -790,6 +762,7 @@ class Reports extends MY_Controller
 			} else {
 				$bpjstk = '--';	
 			}
+
 			if(!is_null($r->bpjs_ks_no)){
 				$bpjsks = $r->bpjs_ks_no;
 			} else {
@@ -814,11 +787,6 @@ class Reports extends MY_Controller
 				$tempat_lahir = '--';
 			}
 
-			// if($r->dol != '' || !is_null($r->dol)){
-			// 	$dol = $this->Xin_model->tgl_indo($dol);
-			// } else {
-			// 	$dol = '--';	
-			// }
 
 			if($r->password_change==0 || $r->project_id != '22'){
 					
@@ -873,7 +841,7 @@ class Reports extends MY_Controller
 			$kk = $r->kk_no;
 			$npwp = $r->npwp_no;
 			$nomor_rek = $r->nomor_rek;
-			// $bank_name = $r->bank_name;
+			$bank_name = $r->bank_name;
 			$pemilik_rek = $r->pemilik_rek;
 
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
@@ -886,14 +854,15 @@ class Reports extends MY_Controller
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
 				} else if($r->status_resign==5){
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
+				} else if($r->status_resign==6){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
 				} else {
 			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
 				}
 
 
-			// get status
-			if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
-			elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
+			// if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
+			// elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
 
 			$role_resources_ids = $this->Xin_model->user_role_resource();
 
@@ -1956,7 +1925,7 @@ class Reports extends MY_Controller
 			$data['list_bank'] = $this->Xin_model->get_bank_code();
 			$role_resources_ids = $this->Xin_model->user_role_resource();
 		if(in_array('327',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/employees/request_list_hrd", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/reports/request_list_hrd", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -1968,7 +1937,7 @@ class Reports extends MY_Controller
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){
-			$this->load->view("admin/employees/request_list_hrd", $data);
+			$this->load->view("admin/reports/request_list_hrd", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -1995,8 +1964,9 @@ class Reports extends MY_Controller
 				$penempatan = $r->penempatan;
 				$doj = $r->doj;
 				$contact_no = $r->contact_no;
-				$nik_ktp = $r->nik_ktp;
+				$nik_ktp = "'".$r->nik_ktp;
 				$notes = $r->catatan_hr;
+				$ktp = 'https://apps-cakrawala.com/admin/uploads/document/ktp/'.$r->ktp;
 
 				$register_date = $r->request_empon;
 				$approved_hrdby = $r->approved_hrdby;
@@ -2052,15 +2022,16 @@ class Reports extends MY_Controller
 
 			$data[] = array(
 				$no,
-				$status_migrasi.' <br>'.$cancel.' '.$editReq,
-				$nik_note,
+				$nik_ktp,
 				$fullname,
 				$nama_project,
 				$nama_subproject,
 				$department_name,
 				$designation_name,
 				$penempatan,
+				$contact_no,
 				$doj,
+				$ktp,
 				$register_date
 			);
           }

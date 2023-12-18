@@ -207,7 +207,7 @@ class Pkwt141 extends MY_Controller
 					$sign_qrcode 							= $pkwt[0]->img_esign;
 					$pkwt_active							= $pkwt[0]->status_pkwt;
 
-					$tanggalcetak 						= date("Y-m-d");
+					$tanggalcetak 						= $pkwt[0]->from_date;
 					$namalengkap 							= $user[0]->first_name;
 					$tempattgllahir 					= $user[0]->tempat_lahir.', '.$this->Xin_model->tgl_indo($user[0]->date_of_birth);
 
@@ -239,6 +239,7 @@ class Pkwt141 extends MY_Controller
 					$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
 					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
 					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
+					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
 					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
 					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
 					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
@@ -1549,6 +1550,15 @@ class Pkwt141 extends MY_Controller
 						<tr>
 							<td>Tunjangan Masa Kerja</td>
 							<td colspan="3"> : '.$allowance_masakerja.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_meal!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Makan</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
 						</tr>';
 				}
 

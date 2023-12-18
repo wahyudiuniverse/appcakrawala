@@ -62,7 +62,9 @@ class Pkwt_model extends CI_Model {
 	// get single project by id
 	public function read_pkwt_emp($empid) {
 	
-		$sql = "SELECT employee_id, basic_pay FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = 1;";
+		$sql = " 
+SELECT contract_id, employee_id, basic_pay, from_date, to_date FROM xin_employee_contract WHERE employee_id = ?
+ORDER BY contract_id DESC LIMIT 1";
 		$binds = array($empid);
 		$query = $this->db->query($sql, $binds);
 		

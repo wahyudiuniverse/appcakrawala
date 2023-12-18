@@ -57,6 +57,7 @@
             <th><?php echo $this->lang->line('left_sub_projects');?></th>
             <th><?php echo $this->lang->line('left_department');?></th>
             <th><?php echo $this->lang->line('left_designation');?></th>
+            <th>Nomor HP</th>
             <th><?php echo $this->lang->line('xin_placement');?></th>
             <th><?php echo $this->lang->line('xin_employee_doj');?></th>
             <th> Tanggal Register</th>
