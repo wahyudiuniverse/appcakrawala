@@ -1144,17 +1144,6 @@ class Employees extends MY_Controller {
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
-		// if(!in_array('202',$role_resources_ids)) {
-		// 	redirect('admin/employees');
-		// }
-		/*if($check_role[0]->user_id!=$result[0]->user_id) {
-			redirect('admin/employees');
-		}*/
-		
-		//$role_resources_ids = $this->Xin_model->user_role_resource();
-		//$data['breadcrumbs'] = $this->lang->line('xin_employee_details');
-		//$data['path_url'] = 'employees_detail';	
-
 
 		// company info
 		$company = $this->Xin_model->read_company_info($result[0]->company_id);
@@ -1237,9 +1226,10 @@ class Employees extends MY_Controller {
 			'project_id' => $result[0]->project_id,
 			'project_name' => $nama_project,
 			'sub_project_id' => $result[0]->sub_project_id,
-			// 'sub_project_name' => $nama_subproject,
+			'location_id' => $result[0]->location_id,
 			'date_of_joining' => $result[0]->date_of_joining,
 			'penempatan' => $result[0]->penempatan,
+			'role_id' => $result[0]->user_role_id,
 
 			'user_role_id' => $result[0]->user_role_id,
 			'date_of_leaving' => $result[0]->date_of_leaving,
@@ -1281,7 +1271,10 @@ class Employees extends MY_Controller {
 
 			'all_companies' => $this->Xin_model->get_companies(),
 			'all_departments' => $this->Department_model->all_departments(),
-			'all_projects' => $this->Project_model->get_all_projects(),
+			'all_projects' => $this->Project_model->get_project_brand(),
+
+			// 'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
+
 			'all_sub_projects' => $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' => $this->Designation_model->all_designations(),
 			'all_user_roles' => $this->Roles_model->all_user_roles(),
@@ -1507,7 +1500,7 @@ class Employees extends MY_Controller {
 				'marital_status' => $this->input->post('marital_status'),
 				'blood_group' => $this->input->post('blood_group'),
 				'leave_categories' => $cat_ids,
-				// 'office_shift_id' => $this->input->post('office_shift_id'),
+				// 'location_id' => $this->input->post('office_shift_id'),
 				'address' => $address,
 				'state' => $this->input->post('estate'),
 				'city' => $this->input->post('ecity'),
@@ -3714,8 +3707,8 @@ class Employees extends MY_Controller {
 			'id_project' => $id
 		);
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/employees/get_project_sub_project", $data);
+		if(!empty($session)) { 
+			$this->load->view("admin/employees/get_subproject_manageemp", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -3728,7 +3721,7 @@ class Employees extends MY_Controller {
 	public function dialog_contact() {
 		
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if(empty($session)) { 
 			redirect('admin/');
 		}
 		$data['title'] = $this->Xin_model->site_title();

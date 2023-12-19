@@ -417,21 +417,15 @@ $(document).ready(function(){
 	});
 
 
-	jQuery("#aj_project").change(function(){
+	jQuery("#ajx_project").change(function(){
 		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
-			jQuery('#project_sub_project').html(data);
-		});
+			jQuery('#subprojects_mmp').html(data);
+		}); 
 		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
-		// 	jQuery('#ajax_office_shift').html(data);
-		// });
-	});
+		// 	jQuery('#ajax_office_shift').html(data); 
+		// }); 
+	}); 
 
-	// get departments
-	/*jQuery("#aj_company").change(function(){
-		jQuery.get(base_url+"/get_departments/"+jQuery(this).val(), function(data, status){
-			jQuery('#department_ajax').html(data);
-		});
-	});*/
 	// jQues
 	
 	$(".nav-tabs-link").click(function(){

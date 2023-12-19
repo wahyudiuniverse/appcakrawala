@@ -15,8 +15,23 @@
 <?php } ?>
 <?php } ?>
 <?php $full_name = $user[0]->first_name.' '.$user[0]->last_name;?>
-<?php $designation = $this->Designation_model->read_designation_information($user[0]->designation_id);?>
+<?php $designation = $this->Designation_model->read_designation_information($designation_id);?>
 <?php
+
+  if($location_id=='1'){
+    $location_name = 'INHOUSE';
+  } else if ($location_id=='2') {
+    $location_name = 'AREA';
+  } else if ($location_id=='3') {
+    $location_name = 'RATECARD';
+  } else if ($location_id=='4') {
+    $location_name = 'MAGANG';
+  } else if ($location_id=='5') {
+    $location_name = 'FRELANCE';
+  } else {
+    $location_name = '-';
+  }
+
   if(!is_null($designation)){
     $designation_name = $designation[0]->designation_name;
   } else {
@@ -90,6 +105,14 @@
               <div class="col-md-9">
                 <div class="tab-content">
 
+                    <div class="card-body media align-items-center"> <img src="<?php echo $de_file;?>" alt="" class="d-block ui-w-80">
+                      <div class="media-body ml-4">
+                        <div class="text-big  mt-1"><label class="form-label"><?php echo $first_name;?></label></div>
+                        <div class="text-big  mt-1"><label class="form-label">NIP: <?php echo $employee_id;?></label></div>
+                        <div class="text-muted  mt-1"><label class="form-label"><?php echo $location_name.' | '.$designation[0]->designation_name;?></label></div>
+                      </div>
+                    </div>
+                    
                   <!-- BASIC INFO -->
                   <div class="tab-pane fade show active" id="account-basic_info">
                     <?php $shift_info = $this->Employees_model->read_shift_information($user[0]->office_shift_id); ?>
@@ -102,13 +125,7 @@
                       ?>
 
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DATA </strong> DIRI </span> </div>
-                    <div class="card-body media align-items-center"> <img src="<?php echo $de_file;?>" alt="" class="d-block ui-w-80">
-                      <div class="media-body ml-4">
-                        <div class="text-big  mt-1"><label class="form-label"><?php echo $first_name;?></label></div>
-                        <div class="text-big  mt-1"><label class="form-label">NIP: <?php echo $employee_id;?></label></div>
-                        <div class="text-muted  mt-1"><label class="form-label"><?php echo $designation[0]->designation_name;?></label></div>
-                      </div>
-                    </div>
+
 
                     <hr class="border-light m-0">
                     <div class="card-body">
@@ -298,6 +315,7 @@
                   <!-- POSISI/JABATAN -->
                   <div class="tab-pane fade" id="account-grade">
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> POSISI </strong> DAN JABATAN </span> </div>
+
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'grade_info', 'id' => 'grade_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_basic_info' => 'UPDATE');?>
@@ -340,11 +358,12 @@
                               </div>
                             </div>
 
+
                             <div class="row">
                               <div class="col-md-6">
                                 <div class="form-group">
-                              <label for="projects"><?php echo $this->lang->line('xin_projects');?><i class="hrpremium-asterisk"></i></label>
-                              <select class="form-control" id="aj_project" name="project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                              <label for="designation"><?php echo $this->lang->line('xin_projects');?><i class="hrpremium-asterisk"></i></label>
+                              <select class="form-control" id="ajx_project" name="project_id" data-plugin="select_hrm" data-placeholder="">
                                 <option value=""></option>
                                 <?php foreach($all_projects as $projects) {?>
                                 <option value="<?php echo $projects->project_id?>" <?php if($project_id==$projects->project_id):?> selected <?php endif;?>><?php echo $projects->title?></option>
@@ -354,12 +373,11 @@
                               </div>
                             </div>
 
-
                             <div class="row">
-                              <div class="col-md-6">
+                              <div class="col-md-6" id="subprojects_mmp">
                                 <div class="form-group">
                               <label for="projects">Sub Project<i class="hrpremium-asterisk"></i></label>
-                              <select class="form-control" id="aj_project" name="sub_project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                              <select class="form-control" name="sub_project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
                                 <option value=""></option>
                                 <?php foreach($all_sub_projects as $sbpro) {?>
                                 <option value="<?php echo $sbpro->secid?>" <?php if($sub_project_id==$sbpro->secid):?> selected <?php endif;?>><?php echo $sbpro->sub_project_name?></option>
@@ -403,6 +421,34 @@
                             </div>
 
 
+                            <div class="row" <?php if($role_id!='1'):?> hidden>
+                              <div class="col-md-4">
+                                <div class="form-group">
+                                  <label class="form-label control-label">ROLE</label>
+
+                                  <select class="form-control" name="role_status" data-plugin="select_hrm">
+                                  <option value=""></option>
+                                              <option value="2" <?php if($role_id=='2'):?> selected <?php endif; ?>>Employee</option>
+                                              <option value="3" <?php if($role_id=='3'):?> selected <?php endif; ?>>HR Admin</option>
+                                              <option value="4" <?php if($role_id=='4'):?> selected <?php endif; ?>>HR Manager</option>
+                                              <option value="8" <?php if($role_id=='8'):?> selected <?php endif; ?>>NAE Admin</option>
+                                              <option value="9" <?php if($role_id=='9'):?> selected <?php endif; ?>>Resign</option>
+                                              <option value="10" <?php if($role_id=='10'):?> selected <?php endif; ?>>Payroll Admin</option>
+                                              <option value="11" <?php if($role_id=='11'):?> selected <?php endif; ?>>IT Support</option>
+                                              <option value="13" <?php if($role_id=='13'):?> selected <?php endif; ?>>NOM</option>
+                                              <option value="14" <?php if($role_id=='14'):?> selected <?php endif; ?>>Team Leader</option>
+
+                                              <option value="15" <?php if($role_id=='15'):?> selected <?php endif; ?>>BPJS Admin</option>
+                                              <option value="16" <?php if($role_id=='16'):?> selected <?php endif; ?>>Area Manager</option>
+                                              <option value="17" <?php if($role_id=='17'):?> selected <?php endif; ?>>Client</option>
+                                              <option value="18" <?php if($role_id=='18'):?> selected <?php endif; ?>>Magang</option>
+                                              
+                                </select>
+
+                                </div>
+                              </div>
+                            </div>
+
                             <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
                           </div>
                         </div>
@@ -426,9 +472,13 @@
                             </thead>
                           </table>
                         </div>
-                      </div>s
+                      </div>
                     </div>
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> BPJS </strong> TK & KS </span> </div>
+
+
+
+
                     <div class="card-body pb-2">
                       <?php $attributes = array('name' => 'bpjs_info', 'id' => 'bpjs_info', 'autocomplete' => 'off');?>
                       <?php $hidden = array('u_basic_info' => 'UPDATE');?>
@@ -498,8 +548,11 @@
 
                   <!-- DOKUMEN PKWT -->
                   <div class="tab-pane fade" id="account-docpkwt">
+
+
                     <div class="box md-4" hidden>
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+
                       <div class="card-body">
                         <div class="card-block">
                           <?php $attributes = array('name' => 'dokumen_pkwt', 'id' => 'dokumen_pkwt', 'autocomplete' => 'off');?>

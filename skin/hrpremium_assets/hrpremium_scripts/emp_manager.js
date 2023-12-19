@@ -433,52 +433,16 @@ $(document).ready(function(){
 	});
 
 
-	jQuery("#aj_project").change(function(){
+	jQuery("#ajx_project").change(function(){
 		jQuery.get(base_url+"/get_project_sub_project/"+jQuery(this).val(), function(data, status){
-			jQuery('#project_sub_project').html(data);
+			jQuery('#subprojects_mmp').html(data);
 		});
 		// jQuery.get(base_url+"/get_company_office_shifts/"+jQuery(this).val(), function(data, status){
 		// 	jQuery('#ajax_office_shift').html(data);
 		// });
 	});
-	
-	// get departments
-	/*jQuery("#aj_company").change(function(){
-		jQuery.get(base_url+"/get_departments/"+jQuery(this).val(), function(data, status){
-			jQuery('#department_ajax').html(data);
-		});
-	});*/
-	// jQuery("#aj_company").change(function(){
-	// 	jQuery.get(escapeHtmlSecure(base_url+"/get_company_elocations/"+jQuery(this).val()), function(data, status){
-	// 		jQuery('#location_ajax').html(data);
-	// 	});
-	// 	jQuery.get(escapeHtmlSecure(base_url+"/get_company_office_shifts/"+jQuery(this).val()), function(data, status){
-	// 		jQuery('#ajax_office_shift').html(data);
-	// 	});
-	// });
-	// jQuery("#location_id").change(function(){
-	// 	jQuery.get(base_url+"/get_location_departments/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#department_ajax').html(data);
-	// 	});
-	// });
-	// get sub departments
-	// jQuery("#aj_subdepartments").change(function(){
-	// 	jQuery.get(base_url+"/get_sub_departments/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#subdepartment_ajax').html(data);
-	// 	});
-	// });
-	// get designations
-	// jQuery("#aj_subdepartment").change(function(){
-	// 	jQuery.get(base_url+"/designation/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#designation_ajax').html(data);
-	// 	});
-	// });
-	// jQuery("#is_aj_subdepartments").change(function(){
-	// 	jQuery.get(base_url+"/is_designation/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#designation_ajax').html(data);
-	// 	});
-	// });
-	
+
+
 	$(".nav-tabs-link").click(function(){
 		var profile_id = $(this).data('profile');
 		var profile_block = $(this).data('profile-block');
