@@ -151,7 +151,8 @@
                 <th>Dok SKCK</th>   
                 <th>Dok CV</th>
                 <th>Dok Paklaring</th>
-                <th>PKWT</th>         
+                <th>PKWT</th>
+                <th>Tanggal Upload PKWT</th>
               </tr>
             </thead>
           </table>

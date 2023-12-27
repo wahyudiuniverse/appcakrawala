@@ -669,12 +669,16 @@ class Reports extends MY_Controller
 				$basicpay 		= $readPkwt[0]->basic_pay;
 				$start_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->from_date);
 				$end_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->to_date);
+				$pkwt_files 	= $readPkwt[0]->file_name;
+				$pkwt_tanggal	= $readPkwt[0]->upload_pkwt;
 
 			} else {
 
 				$basicpay = '0';
 				$start_kontrak 	= '0';
 				$end_kontrak 	= '0';
+				$pkwt_files 	= '0';
+				$pkwt_tanggal	= '-';
 			}
 
 
@@ -871,7 +875,18 @@ class Reports extends MY_Controller
 			} else {
 				$edits = $stat;
 			}
-						
+				
+
+			if(!is_null($pkwt_files) || $pkwt_files != 0){
+				
+				$file_pkwt = '<a href="'.$pkwt_files.'" target="_blank">
+					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"> PKWT </button>
+				</a>';
+			} else {
+				$file_pkwt = '-';	
+			}
+
+
 			$data[] = array(
 				$edits,
 				$r->employee_id,
@@ -916,9 +931,8 @@ class Reports extends MY_Controller
 				$link_skck,
 				$link_cv,
 				$link_paklaring,
-				'<a href="<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank">
-					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"> PKWT </button>
-				</a>'
+				$file_pkwt,
+				$pkwt_tanggal
 
 				// $pin
 			);
