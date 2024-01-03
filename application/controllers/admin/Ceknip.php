@@ -209,10 +209,10 @@ class ceknip extends MY_Controller {
 				$ename,
 				$r->ktp_no,
 				$full_name,
-				$r->title,
+				$project_name,
 				$r->designation_name,
 				$r->penempatan,
-				$whatsapp,
+				'$whatsapp',
 				$r->date_of_birth,
 				$r->last_login_date,
 				$role

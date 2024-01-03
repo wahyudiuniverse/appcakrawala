@@ -873,9 +873,12 @@ class Importexceleslip extends MY_Controller
 				if($employee[0]->company_id == '2'){
 					$company_name = 'PT. SIPRAMA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_sc.png';
-				} else {
+				} else if ($employee[0]->company_id == '3'){
 					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_kac.png';
+				} else {
+					$company_name = 'PT. MATA CAKRAWALA';
+					$logohead			= 'tcpdf_logo_mata.png';
 				}
 			// set document information
 			$pdf->SetCreator('PT Siprama Cakrawala');
@@ -2092,9 +2095,12 @@ class Importexceleslip extends MY_Controller
 				if($employee[0]->company_id == '2'){
 					$company_name = 'PT. SIPRAMA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_sc.png';
-				} else {
+				} else if($employee[0]->company_id == '3') {
 					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_kac.png';
+				} else {
+					$company_name = 'PT. MATA CAKRAWALA';
+					$logohead			= 'tcpdf_logo_mata.png';
 				}
 			// set document information
 			$pdf->SetCreator('PT Siprama Cakrawala');

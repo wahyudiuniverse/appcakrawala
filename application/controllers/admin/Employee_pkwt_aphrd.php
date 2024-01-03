@@ -122,12 +122,12 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				// 	$department_name = '--';	
 				// }
 
-				// $designation = $this->Designation_model->read_designation_information($r->designation_id);
-				// if(!is_null($designation)){
-				// 	$designation_name = $designation[0]->designation_name;
-				// } else {
-				// 	$designation_name = '--';	
-				// }
+				$designation = $this->Designation_model->read_designation_information($r->jabatan);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
 
 			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->contract_id . '">TOLAK</button>';
 
@@ -136,7 +136,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				$nip,
 				$fullname,
 				$nama_project,
-				$jabatan,
+				$designation_name,
 				$penempatan,
 				$begin_until,
 				$cancel_on,

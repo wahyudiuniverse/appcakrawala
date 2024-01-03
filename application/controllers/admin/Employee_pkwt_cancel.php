@@ -965,13 +965,13 @@ class Employee_pkwt_cancel extends MY_Controller {
 						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 						
 
-				$pkwt_down = array(
+				// $pkwt_down = array(
 
-				'status_pkwt	' => 0
+				// 'status_pkwt	' => 0
 
-				);
+				// );
 
-				$resultx = $this->Pkwt_model->update_pkwt_status($pkwt_down,$employee_id);
+				// $resultx = $this->Pkwt_model->update_pkwt_status($pkwt_down,$employee_id);
 
 						$data = array(
 							'uniqueid' 							=> $unicode,
@@ -1024,8 +1024,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'allowance_operation' 	=> $tunjangan_operational,
 							'img_esign'							=> $image_name,
 
-							'sign_nip'							=> '21500006',
-							'sign_fullname'					=> 'ASTI PRASTISTA',
+							'sign_nip'							=> '21513829',
+							'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
 							'sign_jabatan'					=> 'SM HR & GA',
 							'status_pkwt' => 0,
 							'request_pkwt' => $session['user_id'],

@@ -267,8 +267,16 @@ class Skk extends MY_Controller {
 			$sign_fullname = 'Maitsa Valenska Pristiyanty';
 			$sign_nip = '21300025';
 		} else {
-			$sign_fullname = 'Asti Prastista';
-			$sign_nip = '21500006';
+
+			$lastT = new DateTime(date("2023-12-31"));
+
+			if($resign_date<$lastT){
+				$sign_fullname = 'Asti Prastista';
+				$sign_nip = '21500006';
+			} else {
+				$sign_fullname = 'TATOK PURHANDONO SETYAWAN';
+				$sign_nip = '21513829';
+			}
 		}
 
 		if($this->input->post('company_id')=='2'){
