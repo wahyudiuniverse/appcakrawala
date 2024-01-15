@@ -444,6 +444,16 @@
                 </div>
               </div>
               
+              <div class="row">
+                <!--TUNJANGAN TRANSPORT RENTAL-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_trans_rental" class="control-label">Tunjangan Transport Rental<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_trans_rental" type="text" value="<?php echo $allow_trans_rent;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+              </div>
+
 
             </div>
 

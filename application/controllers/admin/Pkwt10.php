@@ -412,7 +412,8 @@ class Pkwt10 extends MY_Controller
 								<td colspan="18"><b>PIHAK PERTAMA</b> berdasarkan pertimbangan tertentu berhak memindah ke bagian lain serta merubah nama Jabatan <b>PIHAK KEDUA</b> dan karenanya <b>PIHAK KEDUA</b> wajib bersedia untuk dipindah ke bagian lain dan atau dirubah nama jabatannya sesuai dengan kebutuhan. Dalam hal ini <b>PIHAK PERTAMA</b> akan memberitahukan hal tersebut secara tertulis kepada <b>PIHAK KEDUA</b>.</td>
 							</tr>
 				</table>
-				<br>
+				<br><br><br><br><br>
+				<br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 2<br>JANGKA WAKTU PERJANJIAN</b>
@@ -646,7 +647,8 @@ class Pkwt10 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -808,11 +810,6 @@ class Pkwt10 extends MY_Controller
 				</table>
 
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 8<br>HUKUM YANG BERLAKU</b>
@@ -961,7 +958,6 @@ class Pkwt10 extends MY_Controller
 							</tr>
 				</table>
 
-
 				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -977,14 +973,6 @@ class Pkwt10 extends MY_Controller
 							</tr>			
 				</table>
 
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1057,7 +1045,7 @@ class Pkwt10 extends MY_Controller
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
 							</tr>			
 				</table>
 
@@ -1095,7 +1083,6 @@ class Pkwt10 extends MY_Controller
 							</tr>
 				</table>
 
-
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1129,7 +1116,7 @@ class Pkwt10 extends MY_Controller
 								<td>5.</td>
 								<td colspan="20"><b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
 							</tr>
-				<br>
+				<br><br><br><br>
 							<tr>
 								<td>6.</td>
 								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
@@ -1234,13 +1221,6 @@ class Pkwt10 extends MY_Controller
 				<br>
 				<br>
 				<br>		
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 				<br>
 				<br>
@@ -1614,7 +1594,7 @@ class Pkwt10 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_rent!="0Rp 0"){	
+				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
@@ -1675,6 +1655,15 @@ class Pkwt10 extends MY_Controller
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
 							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_transrent!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Trans-Rental</td>
+							<td colspan="3"> : '.$allowance_transrent.',- Per Hari</td>
 						</tr>';
 				}
 

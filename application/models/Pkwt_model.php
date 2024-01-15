@@ -333,8 +333,8 @@ ORDER BY contract_id DESC LIMIT 1";
 			AND approve_nom != 0
 			AND approve_hrd = 0
 			AND cancel_stat = 0
-	        AND project in (67,82,101,102)
-	        -- AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+	        -- AND project in (8,97,90,106,94,46,74)
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

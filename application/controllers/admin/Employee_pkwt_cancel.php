@@ -629,6 +629,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_area' => $result[0]->allow_area,
 			'allow_masakerja' => $result[0]->allow_masakerja,
 			'allow_trans_meal' => $result[0]->allow_trans_meal,
+			'allow_trans_rent' => $result[0]->allow_trans_rent,
 			'allow_konsumsi' => $result[0]->allow_konsumsi,
 			'allow_transport' => $result[0]->allow_transport,
 			'allow_comunication' => $result[0]->allow_comunication,
@@ -735,6 +736,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
 							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
 							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_trans_rental 							= $this->input->post('tunjangan_trans_rental');
 							$tunjangan_device 							= $this->input->post('tunjangan_device');
 							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
 							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
@@ -802,6 +804,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allow_rent' 					=> $tunjangan_rental,
 								'allow_parking' 			=> $tunjangan_parkir,
 								'allow_trans_meal' 		=> $tunjangan_makan_trans,
+								'allow_trans_rent' 		=> $tunjangan_trans_rental,
 								'allow_residence_cost'=> $tunjangan_tempat_tinggal,
 								'allow_device' 				=> $tunjangan_device,
 								
@@ -934,6 +937,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
 							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
 							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_trans_rental 							= $this->input->post('tunjangan_trans_rental');
 							$tunjangan_device 							= $this->input->post('tunjangan_device');
 							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
 							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
@@ -1000,6 +1004,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'allowance_masakerja' 	=> $tunjangan_masakerja,
 							'dm_allow_transmeal' 		=> 'Month',
 							'allowance_transmeal' 	=> $tunjangan_makan_trans,
+							'dm_allow_transrent' 		=> 'Month',
+							'allowance_transrent' 	=> $tunjangan_trans_rental,
 							'dm_allow_meal' 				=> 'Month',
 							'allowance_meal' 				=> $tunjangan_makan,
 							'dm_allow_transport' 		=> 'Month',

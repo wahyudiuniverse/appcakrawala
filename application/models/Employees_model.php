@@ -39,7 +39,9 @@ class Employees_model extends CI_Model {
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 				WHERE emp.employee_id not IN (1)
-				AND emp.project_id not in (22,95)";
+				AND emp.project_id not in (18)
+				-- AND emp.project_id not in (22,95)
+				";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;

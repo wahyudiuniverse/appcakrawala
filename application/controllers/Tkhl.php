@@ -33,7 +33,7 @@ class tkhl extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['title'] = 'REGISTER KEMITRAAN / TKHL PT. SIPRAMA CAKRAWALA 2023';
+		$data['title'] = 'REGISTER KEMITRAAN / TKHL PT. SIPRAMA CAKRAWALA 2024';
 		$session = $this->session->userdata('c_user_id');
 		if(!empty($session)){
 			redirect('');

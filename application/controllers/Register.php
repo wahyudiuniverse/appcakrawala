@@ -33,7 +33,7 @@ class register extends MY_Controller {
 			redirect('admin/');
 		}
 
-		$data['title'] = 'FORM PENDAFTARAN KARYAWAN PT. SIPRAMA CAKRAWALA 2023';
+		$data['title'] = 'FORM PENDAFTARAN KARYAWAN PT. SIPRAMA CAKRAWALA 2024';
 		$session = $this->session->userdata('c_user_id');
 		if(!empty($session)){
 			redirect('');
