@@ -30,22 +30,44 @@ $emp = $this->Employees_model->read_employee_info_by_nik($user_info[0]->employee
 
 
 if(!is_null($pkwtinfo)){
-  $pkwtid         = $pkwtinfo[0]->contract_id;
-  $nomorsurat     = $pkwtinfo[0]->no_surat;
-  $approve_pkwt   = $pkwtinfo[0]->status_pkwt;
-  $uniqueid       = $pkwtinfo[0]->uniqueid;
+  if($pkwtinfo[0]->file_name == NULL){
 
-  $pkwt_file = $this->Pkwt_model->get_pkwt_file($pkwtinfo[0]->contract_id);
-  if(!is_null($pkwt_file)){
-    $file_name = $pkwt_file[0]->document_file;
-    $uploaded = 1;
+    $pkwtid         = $pkwtinfo[0]->contract_id;
+    $nomorsurat     = $pkwtinfo[0]->no_surat;
+    $approve_pkwt   = $pkwtinfo[0]->status_pkwt;
+    $uniqueid       = $pkwtinfo[0]->uniqueid;
+    $pkwt_periode   = 'PKWT '.$pkwtinfo[0]->from_date. ' - ' .$pkwtinfo[0]->to_date;
+
   } else {
-    $file_name = '';
-    $uploaded = 0;
+
+    $pkwtid         = $pkwtinfo[0]->contract_id;
+    $nomorsurat     = $pkwtinfo[0]->no_surat;
+    $approve_pkwt   = '2';
+    $uniqueid       = '0';
+    $pkwt_periode   = 'PKWT '.$pkwtinfo[0]->from_date. ' - ' .$pkwtinfo[0]->to_date;
+
+
+    // $file_name = '';
+    // $uploaded = 0;
+    // $pkwt_periode   = '-';
+
   }
 
+
+  // $pkwt_file = $this->Pkwt_model->get_pkwt_file($pkwtinfo[0]->contract_id);
+  // if(!is_null($pkwt_file)){
+  //   $file_name = $pkwt_file[0]->document_file;
+  //   $uploaded = 1;
+  // } else {
+  // }
+
 } else {
-  $pkwtid = '0';
+    $pkwtid = '0';
+    $nomorsurat     = '0';
+    $approve_pkwt   = '0';
+    $uniqueid       = '0';
+    $pkwt_periode   = '-';
+
 }
 
 // PKWT END
@@ -312,7 +334,7 @@ $new_date = date('d-M-Y', $strtotime);
 <div class="row mt-3">
 
 
-<!-- ESLIP STATUS -->
+<!-- PAKLARING STATUS -->
 <?php
   if(!is_null($skk_release)){
     foreach($skk_release->result() as $r) {
@@ -362,7 +384,31 @@ $new_date = date('d-M-Y', $strtotime);
 
 <!-- PKWT STATUS -->
   <?php 
-  if($pkwtid=='0'){
+  if($approve_pkwt=='2'){
+    ?>
+
+  <div class="col-sm-6 col-xl-4">
+  <a href="#" target="_blank">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small">SUDAH DIUPLOAD</div>
+            <div class="text-large"><?php echo $pkwt_periode;?>
+          <i class="fa fa-check-circle" aria-hidden="true" style="color:#03b403"></i></div>
+            <div class="text-muted small"><?php echo $nomorsurat;?></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </div>
+
+  <?php
+  }
+
+  else if($approve_pkwt=='0'){
   ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -380,7 +426,9 @@ $new_date = date('d-M-Y', $strtotime);
   </div>
 
   <?php
+
   } else {
+
   ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -390,9 +438,8 @@ $new_date = date('d-M-Y', $strtotime);
         <div class="d-flex align-items-center">
           <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('xin_pkwt');?></div>
-            <div class="text-large"><?php echo $this->lang->line('xin_download');?>
-          <i class="fa fa-check-circle" aria-hidden="true" style="color:#03b403"></i></div>
+            <div class="text-muted small">DOWNLOAD</div>
+            <div class="text-large"><?php echo $pkwt_periode;?></div>
             <div class="text-muted small"><?php echo $nomorsurat;?></div>
           </div>
         </div>

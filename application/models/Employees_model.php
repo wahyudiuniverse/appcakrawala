@@ -39,8 +39,8 @@ class Employees_model extends CI_Model {
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 				WHERE emp.employee_id not IN (1)
-				AND emp.project_id not in (18)
-				-- AND emp.project_id not in (22,95)
+				-- AND emp.project_id not in (18)
+				AND emp.project_id not in (22,95)
 				";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -259,6 +259,48 @@ class Employees_model extends CI_Model {
 	    return $query;
 	}
 
+
+ 	// monitoring request
+	public function get_request_hrdpro($empID, $project) {
+
+		$sql = "SELECT * FROM xin_employee_request 
+		WHERE request_empby is not null 
+		AND approved_naeby is not null
+		AND approved_nomby is not null
+		AND approved_hrdby is null
+		AND project  = '$project'
+		AND cancel_stat = 0
+        AND e_status = 0";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+
+	public function get_req_empproject($empID) {
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id in (SELECT distinct(project) FROM xin_employee_request 
+		WHERE request_empby is not null 
+		AND approved_naeby is not null
+		AND approved_nomby is not null
+		AND approved_hrdby is null
+		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+		AND cancel_stat = 0
+        AND e_status = 0)");
+  	  return $query->result();
+	}
+
+	public function get_proj_pkwtchecker($empID) {
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id in (SELECT  distinct(project) FROM xin_employee_contract
+			WHERE status_pkwt = 0
+			AND approve_nae != 0
+			AND approve_nom != 0
+			AND approve_hrd = 0
+			AND cancel_stat = 0
+	        -- AND project in (8,97,90,106,94,46,74)
+	        AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			ORDER BY contract_id DESC)");
+  	  return $query->result();
+	}
 
  	// monitoring request
 	public function get_request_tkhl($empID) {
@@ -1521,7 +1563,7 @@ ORDER BY jab.designation_id ASC";
 	// get employee contract
 	public function set_employee_contract($id) {
 	
-		$sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ?';
+		$sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = 1';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

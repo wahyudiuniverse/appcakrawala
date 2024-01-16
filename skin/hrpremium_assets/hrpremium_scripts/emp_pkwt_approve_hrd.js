@@ -127,6 +127,36 @@ $(document).ready(function() {
 			} 	        
 	   });
 	});
+
+
+	/* attendance datewise report */
+	$("#pkwt_hrd_checker").submit(function(e){
+		/*Form Submit*/
+		e.preventDefault();
+
+		// var company_id = document.getElementById("aj_company").value;
+		var project_id = document.getElementById("aj_project").value;
+		
+		var xin_table2 = $('#xin_table').dataTable({
+			"bDestroy": true,
+			"ajax": {
+				
+				url : site_url+"Employee_pkwt_aphrd/pkwt_list_apphrd/"+project_id+"/",
+				// url : site_url+"reports/empdtwise_attendance_list/"+project_id+"/"+subproject_id+"/"+area_emp+"/"+start_date+"/"+end_date+"/",
+				// url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+subproject_id+"/"+start_date+"/"+end_date+"/",
+				type : 'GET'
+			},
+			dom: 'lBfrtip',
+			"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+			"fnDrawCallback": function(settings){
+			$('[data-toggle="tooltip"]').tooltip();          
+			}
+		});
+		toastr.success('Request Submit.');
+		// xin_table2.api().ajax.reload(function(){ }, true);
+		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
+	});
+
 });
 	//open the lateral panel
 	$( document ).on( "click", ".cd-btn", function() {

@@ -42,7 +42,7 @@ class ceknip extends MY_Controller {
 		$data['breadcrumbs'] = "CEK NIP";
 		$data['path_url'] = 'cek_nip';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('6',$role_resources_ids)) {
+		if(in_array('134',$role_resources_ids)) {
 			if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/ceknip/nip_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load

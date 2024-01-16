@@ -33,6 +33,17 @@ class Project_model extends CI_Model {
   	  return $query->result();
 	}
 
+
+	// get all employees
+	public function get_project_emprequest()
+	{
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id not in (22, 95);");
+  	  return $query->result();
+	}
+
+	
+
+
 	 public function read_project_information($id) {
 	
 		$sql = 'SELECT * FROM xin_projects WHERE project_id = ?';

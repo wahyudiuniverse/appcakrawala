@@ -44,7 +44,9 @@ class Employee_request_hrd extends MY_Controller {
 		$data['title'] = $this->lang->line('xin_request_employee').' | '.$this->Xin_model->site_title();
 
 			$data['all_companies'] = $this->Xin_model->get_companies();
-			$data['all_projects'] = $this->Project_model->get_all_projects();
+			// $data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+			$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
 			$data['all_projects_sub'] = $this->Project_model->get_all_projects();
 			$data['all_departments'] = $this->Department_model->all_departments();
 			$data['all_designations'] = $this->Designation_model->all_designations();
@@ -76,9 +78,20 @@ class Employee_request_hrd extends MY_Controller {
 		$length = intval($this->input->get("length"));
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$project_id = $this->uri->segment(4);
+
+				if($project_id==0){
+					// $employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
+
+				$employee = $this->Employees_model->get_request_hrd($session['employee_id']);
+				} else {
+					// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+
+				$employee = $this->Employees_model->get_request_hrdpro($session['employee_id'], $project_id);
+				}
 
 		// $employee = $this->Employees_model->get_request_hrd();
-		$employee = $this->Employees_model->get_request_hrd($session['employee_id']);
+		// $employee = $this->Employees_model->get_request_hrd($session['employee_id']);
 
 		$data = array();
 

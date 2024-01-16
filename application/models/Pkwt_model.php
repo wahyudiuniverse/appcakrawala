@@ -342,6 +342,24 @@ ORDER BY contract_id DESC LIMIT 1";
 	}
 
  	// monitoring request
+	public function get_monitoring_pkwt_aphrdpro($empID, $project) {
+
+		$sql = "SELECT *
+			FROM xin_employee_contract
+			WHERE status_pkwt = 0
+			AND approve_nae != 0
+			AND approve_nom != 0
+			AND approve_hrd = 0
+			AND cancel_stat = 0
+	        -- AND project in (8,97,90,106,94,46,74)
+	        AND project = '$project'
+			ORDER BY contract_id DESC";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+	    return $query;
+	}
+
+ 	// monitoring request
 	public function get_monitoring_pkwt_history($empID) {
 
 		$sql = "SELECT *
@@ -661,7 +679,7 @@ ORDER BY contract_id DESC LIMIT 1";
 	// get single pkwt by userid
 	public function get_single_pkwt_by_userid($id) {
 	
-		$sql = "SELECT * FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = 1 ORDER BY contract_id DESC";
+		$sql = "SELECT * FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = 1 ORDER BY contract_id DESC LIMIT 1";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);		
 		

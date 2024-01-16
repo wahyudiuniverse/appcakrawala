@@ -2096,7 +2096,9 @@ class Reports extends MY_Controller
 
 
 	}
+
     public function pkwt_expired_list()
+    
     {
 
 		$data['title'] = $this->Xin_model->site_title();
