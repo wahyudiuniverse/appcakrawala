@@ -604,7 +604,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
-    <?php if(in_array('503',$role_resources_ids)) { ?>
+    <?php if($approver=='1' || $approver=='5725') { ?>
     <button type="submit" class="btn btn-primary save">APPROVE HRD</button>
     <?php } ?>
   </div>

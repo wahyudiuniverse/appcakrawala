@@ -14,12 +14,14 @@ class Reports extends MY_Controller
 {
 
    /*Function to set JSON output*/
-	public function output($Return=array()){
+	public function output($Return=array()) {
+
 		/*Set response header*/
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
 		/*Final JSON response*/
 		exit(json_encode($Return));
+
 	}
 	
 	public function __construct()
@@ -1756,6 +1758,36 @@ class Reports extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+
+
+	public function read_pkwt_report() {
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->input->get('company_id');
+       // $data['all_countries'] = $this->xin_model->get_countries();
+		// $result = $this->Company_model->read_company_information('2');
+		// $result = $this->Employees_model->read_employee_info($id);
+		$result = $this->Pkwt_model->read_pkwt_info_by_contractid($id);
+
+		$data = array(
+				'contract_id' => $result[0]->contract_id,
+				'no_surat' => $result[0]->no_surat,
+				'no_spb' => $result[0]->no_spb,
+				'nip' => $result[0]->employee_id,
+				'employee' => $this->Employees_model->read_employee_info_by_nik($result[0]->employee_id),
+				'company' => $result[0]->company,
+				'jabatan' => $result[0]->jabatan,
+				'posisi' => $this->Designation_model->read_designation_information($result[0]->jabatan),
+				'project' => $this->Project_model->read_project_information($result[0]->project),
+				'penempatan' => $result[0]->penempatan
+				);
+		$this->load->view('admin/pkwt/dialog_pkwt_cancel_report', $data);
+	}
+
+
 	// daily attendance list > timesheet
     public function pkwt_history_list()
     {
@@ -1843,6 +1875,8 @@ class Reports extends MY_Controller
 
 			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
 
+			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Hapus</button>';
+
 
 			if($tkhl_status=='0'){
 
@@ -1892,7 +1926,7 @@ class Reports extends MY_Controller
 
 			$data[] = array (
 				$no,
-				$status_migrasi.' '.$view_pkwt. ' '.$editReq,
+				$view_pkwt. ' '.$editReq.' '.$delete,
 				$r->employee_id,
 				$fullname.'<br>'.$whatsapp,
 				$nama_project,
@@ -2902,6 +2936,28 @@ class Reports extends MY_Controller
 
 
 	} 
+
+
+	public function delete() {
+		
+		if($this->input->post('is_ajax')==2) {
+			$session = $this->session->userdata('username');
+			if(empty($session)){ 
+				redirect('admin/');
+			}
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+			$id = $this->uri->segment(4);
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			$result = $this->Pkwt_model->delete_pkwt_cancel($id);
+			if(isset($id)) {
+				$Return['result'] = 'Delete PKWT Tolak berhasil.';
+			} else {
+				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+			}
+			$this->output($Return);
+		}
+	}
 
 } 
 ?>

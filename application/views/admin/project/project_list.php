@@ -33,6 +33,15 @@
         </div>
 
         <div class="form-group">
+          <label for="reg_tkhl">REG/TKHL</label>
+          <select class=" form-control" name="reg_tkhl" data-plugin="select_hrm" data-placeholder="--Pilih REG or TKHL--">
+            <option value=""></option>
+            <option value="1">REGULER</option>
+            <option value="2">TKHL</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label for="first_name">Perusahaan/PT</label>
           <select class=" form-control" name="company_id" data-plugin="select_hrm" data-placeholder="--Pilih Perusahaan--">
             <option value=""></option>
@@ -72,6 +81,7 @@
                 <th>ID</th>
                 <th>Nama Project</th>
                 <th>Alias</th>
+                <th>REG/TKHL</th>
                 <th>Perusahaan/PT</th>
               </tr>
             </thead>

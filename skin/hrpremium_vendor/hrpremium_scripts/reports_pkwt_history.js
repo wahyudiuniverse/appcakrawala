@@ -21,6 +21,25 @@ $(document).ready(function() {
     });
   });
 
+
+	// edit
+	$('.edit-modal-data').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget);
+		var company_id = button.data('company_id');
+		var modal = $(this);
+	$.ajax({
+		url : base_url+"/read_pkwt_report/",
+		type: "GET",
+		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+		success: function (response) {
+			if(response) {
+				$("#ajax_modal").html(response);
+			}
+		}
+		});
+	});
+
+
 	$('.view-modal-data').on('show.bs.modal', function (event) {
 	var button = $(event.relatedTarget);
 	var ipaddress = button.data('ipaddress');

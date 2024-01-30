@@ -567,6 +567,7 @@
                                   <th>Project</th>
                                   <th>Jabatan</th>
                                   <th>Status</th>
+                                  <th>Pkwt Report</th>
                                 </tr>
                               </thead>
                             </table>

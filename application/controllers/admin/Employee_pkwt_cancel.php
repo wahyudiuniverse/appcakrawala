@@ -160,7 +160,6 @@ class Employee_pkwt_cancel extends MY_Controller {
           exit();
   }
 
-
 	 // get location > departments
 	public function get_project_sub_project() {
 
@@ -1270,6 +1269,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$result = $this->Employees_model->update_record_bynip($data_emp,$employeeID);
 
 			$data_up = array(
+				'status_pkwt' 		=> 0,
+				'approve_hrd' 		=> 0,
 				'cancel_stat'			=> 0,
 				'modifiedby' 			=>  $session['user_id'],
 				'modifiedon' 			=> date('Y-m-d h:i:s')
@@ -1293,6 +1294,51 @@ class Employee_pkwt_cancel extends MY_Controller {
 		}
 	}
 	
+		// Validate and update info in database
+	public function update_pkwt_report() {
+		
+		$session = $this->session->userdata('username');
+		if(empty($session)){
+			redirect('admin/');
+		}
+
+		if($this->input->post('edit_type')=='company') {
+		$id = $this->uri->segment(4);
+				
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+		$employeeID = $this->input->post('employeeID');
+
+
+
+			$data_up = array(
+				'status_pkwt ' 		=> 0,
+				'cancel_stat'			=> 1,
+				'approve_hrd'			=> null,
+				'modifiedby' 			=>  $session['user_id'],
+				'modifiedon' 			=> date('Y-m-d h:i:s')
+			);
+
+			$result = $this->Pkwt_model->update_pkwt_apnae($data_up,$id);
+
+		if($Return['error']!=''){
+       		$this->output($Return);
+    	}
+		
+		
+		if ($result == TRUE) {
+			$Return['result'] = $this->lang->line('xin_success_update_company');
+		} else {
+			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+		}
+
+		$this->output($Return);
+		exit;
+		}
+	}
+
 	public function delete() {
 		
 		if($this->input->post('is_ajax')==2) {

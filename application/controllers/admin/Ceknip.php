@@ -59,7 +59,7 @@ class ceknip extends MY_Controller {
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/location/location_list", $data);
+			$this->load->view("admin/ceknip/nip_list", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -93,6 +93,12 @@ class ceknip extends MY_Controller {
 					$pin = $r->private_code;
 				} else {
 					$pin = '--';	
+				}
+
+				if(!is_null($r->date_of_joining)){
+					$join = $r->date_of_joining;
+				} else {
+					$join = '--';	
 				}
 				
 							if($r->user_role_id==2){
@@ -147,6 +153,7 @@ class ceknip extends MY_Controller {
 			   				$ename,
                 $nik,
 								$full_name,
+								$join,
 								$whatsapp,
 								$role
                );

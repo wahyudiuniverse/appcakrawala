@@ -395,6 +395,8 @@ ORDER BY contract_id DESC LIMIT 1";
 		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE date_format(approve_hrd_date, '%Y-%m-%d') = '$today_date' 
+			AND approve_nom !=0
+			AND approve_hrd != 0
 			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);

@@ -299,6 +299,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 
 		$data = array(
+				'approver' => $session['user_id'],
 				'contract_id' => $result[0]->contract_id,
 				'no_surat' => $result[0]->no_surat,
 				'no_spb' => $result[0]->no_spb,
@@ -430,8 +431,8 @@ class Employee_pkwt_aphrd extends MY_Controller {
 			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
 		}
 
-		$this->output($Return);
-		exit;
+		// $this->output($Return);
+		// exit;
 		}
 	}
 	

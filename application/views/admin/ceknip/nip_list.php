@@ -19,6 +19,7 @@
             <th>NIP</th>
             <th>NIK</th>
             <th>Nama Lengkap</th>
+            <th>Join</th>
             <th>Whatsapp</th>
             <th>Role</th>
           </tr>

@@ -325,8 +325,8 @@ class employee_request_cancelled extends MY_Controller {
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,
 			'allow_operational' => $result[0]->allow_operational,
+			'e_status' => $result[0]->e_status,
 			
-			// 'status_employee' => $result[0]->status_employee,
 			// 'deactive_by' => $result[0]->deactive_by,
 			// 'deactive_date' => $result[0]->deactive_date,
 			// 'deactive_reason' => $result[0]->deactive_reason,
@@ -417,6 +417,7 @@ class employee_request_cancelled extends MY_Controller {
 							$jenis_kelamin			= $this->input->post('gender');
 							$agama 							= $this->input->post('ethnicity');
 							$marital_status			= $this->input->post('marital_status');
+							$e_status			= $this->input->post('e_status');
 
 							$nomor_ktp					= $this->input->post('nomor_ktp');
 							$alamat_ktp					= $this->input->post('alamat_ktp');
@@ -494,6 +495,7 @@ class employee_request_cancelled extends MY_Controller {
 								'project' 						=> $project_id,
 								'sub_project' 				=> $sub_project,
 								'posisi' 							=> $posisi,
+								'e_status' 							=> $e_status,
 
 								'doj' 								=> $date_of_join,
 								'penempatan' 					=> $penempatan,

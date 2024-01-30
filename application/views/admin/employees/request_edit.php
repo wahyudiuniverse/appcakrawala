@@ -327,6 +327,29 @@
                 </div>
 
               </div>
+
+              <div class="row">
+
+                <!--REG-TKHL-->
+                <div class="col-md-6">
+                  
+                  <div class="form-group">
+                    <label for="e_status">Employee Kategori<i class="hrpremium-asterisk">*</i></label>
+                    <select class="form-control" name="e_status" data-plugin="xin_select" data-placeholder="e_status">
+                                <option value="0" <?php if($e_status==0):?> selected <?php endif;?>>REGULER</option>
+                                <option value="1" <?php if($e_status==1):?> selected <?php endif;?>>TKHL</option>
+                                
+                    </select>
+
+                  </div>
+                </div>
+
+                <!-- PENEMPATAN -->
+                <div class="col-md-6">
+                </div>
+
+              </div>
+
             <!-- end row -->
             </div>
           </div>

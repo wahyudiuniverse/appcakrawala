@@ -21,7 +21,7 @@ class Employees_model extends CI_Model {
 	public function get_employees_all() {
 
 		$sql = 'SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title, emp.last_login_date,
-				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id
+				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.date_of_joining
 				FROM xin_employees emp
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
@@ -34,7 +34,7 @@ class Employees_model extends CI_Model {
 	public function get_employees_notho() {
 
 		$sql = "SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title,
-				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.last_login_date, emp.private_code
+				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.last_login_date, emp.private_code, emp.date_of_joining
 				FROM xin_employees emp
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
@@ -51,7 +51,7 @@ class Employees_model extends CI_Model {
 	public function get_employees_who() {
 
 		$sql = "SELECT emp.user_id, emp.employee_id, emp.ktp_no, emp.first_name, emp.project_id, pro.title,
-				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.last_login_date, emp.private_code
+				emp.designation_id, pos.designation_name, emp.penempatan, emp.contact_no, emp.date_of_birth, emp.user_role_id, emp.last_login_date, emp.private_code, emp.date_of_joining
 				FROM xin_employees emp
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
@@ -736,7 +736,7 @@ WHERE ktp_no = ?';
 	// get single record > company | locations
 	 public function ajax_project_sub($id) {
 	
-		$sql = 'SELECT * FROM xin_projects_sub WHERE id_project = ?';
+		$sql = 'SELECT * FROM xin_projects_sub WHERE id_project = ? AND sub_active = 1';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

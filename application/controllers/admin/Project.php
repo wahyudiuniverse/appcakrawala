@@ -79,6 +79,13 @@ class Project extends MY_Controller {
     	$project_id = $r->project_id;
     	$title = $r->title;
     	$priority = $r->priority;
+    	if($r->doc_id==1){
+    		$doc_id = 'REGULER';
+    	} else if ($r->doc_id==2){
+    		$doc_id = 'TKHL';
+    	} else {
+    		$doc_id = '-';
+    	}
 
 			$company_id = $this->Company_model->read_company_information($r->company_id);
 			if(!is_null($company_id)){
@@ -100,6 +107,7 @@ class Project extends MY_Controller {
 				$project_id,
 				$title,
 				$priority,
+				$doc_id,
 				$company_name,
 		   );
     }
@@ -263,6 +271,8 @@ class Project extends MY_Controller {
         	$Return['error'] = $this->lang->line('error_department_field');
 		} else if($this->input->post('alias')==='') {
         	$Return['error'] = $this->lang->line('xin_hr_sub_department_field_error');
+		} else if($this->input->post('reg_tkhl')==='') {
+        	$Return['error'] = 'Pilih REGULER / TKHL';
 		}
 				
 		if($Return['error']!=''){
@@ -271,6 +281,7 @@ class Project extends MY_Controller {
 		$data = array(
 		'title' => $this->input->post('title'),
 		'client_id' => 1,
+		'doc_id' => $this->input->post('reg_tkhl'),
 		'company_id' => $this->input->post('company_id'),
 		'priority' => $this->input->post('alias'),
 		'added_by' => $this->input->post('user_id'),

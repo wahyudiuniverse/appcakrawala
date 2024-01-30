@@ -97,16 +97,16 @@ class Importexceleslip extends MY_Controller
 		$session = $this->session->userdata('username');
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 				
-		if(in_array('469',$role_resources_ids)) {
+		// if(in_array('127',$role_resources_ids)) {
 			if(!empty($session)){ 
 			$data['subview'] = $this->load->view("admin/import_excel/preview_eslip", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 			} else { 
 				redirect('admin/');
 			}
-		} else {
-			redirect('admin/dashboard');
-		}
+		// } else {
+		// 	redirect('admin/dashboard');
+		// }
 	}
 
 	public function view_import_excel_employees() {

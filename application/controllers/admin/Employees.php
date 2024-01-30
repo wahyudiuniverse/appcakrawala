@@ -1302,7 +1302,6 @@ class Employees extends MY_Controller {
 			'all_office_locations' => $this->Location_model->all_office_locations(),
 			'all_leave_types' => $this->Timesheet_model->all_leave_types()
 
-
 			);
 		
 		// if($check_role[0]->user_role_id==1 || $check_role[0]->user_role_id==3 || $check_role[0]->user_role_id==4) {
@@ -6186,7 +6185,8 @@ class Employees extends MY_Controller {
 			$r->no_surat,
 			$nama_project,
 			$designation_name,
-			$status_upload.'<br>'.$download.' '.$status_migrasi
+			$status_upload.'<br>'.$download.' '.$status_migrasi,
+			$r->approve_hrd_date,
 		);
       }
 
