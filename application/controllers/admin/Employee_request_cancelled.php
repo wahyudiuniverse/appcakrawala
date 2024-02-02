@@ -417,7 +417,7 @@ class employee_request_cancelled extends MY_Controller {
 							$jenis_kelamin			= $this->input->post('gender');
 							$agama 							= $this->input->post('ethnicity');
 							$marital_status			= $this->input->post('marital_status');
-							$e_status			= $this->input->post('e_status');
+							$e_status						= $this->input->post('e_status');
 
 							$nomor_ktp					= $this->input->post('nomor_ktp');
 							$alamat_ktp					= $this->input->post('alamat_ktp');
@@ -436,8 +436,8 @@ class employee_request_cancelled extends MY_Controller {
 							$date_of_join 							= $this->input->post('date_of_join');
 							$penempatan 							= $this->input->post('penempatan');
 							$gaji_pokok 							= $this->input->post('gaji_pokok');
-							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
 
+							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
 							$tunjangan_area 							= $this->input->post('tunjangan_area');
 							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
 							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
@@ -461,7 +461,7 @@ class employee_request_cancelled extends MY_Controller {
 							$cut_off 							= $this->input->post('cut_off');
 							$date_payment 							= $this->input->post('date_payment');
 
-							$company = $this->Project_model->read_single_project($this->input->post('project_id'));
+							$company = $this->Project_model->getcomp_single_project($this->input->post('project_id'));
 							if(!is_null($company)){
 								$company_id = $company[0]->company_id;
 							} else {
@@ -500,6 +500,7 @@ class employee_request_cancelled extends MY_Controller {
 								'doj' 								=> $date_of_join,
 								'penempatan' 					=> $penempatan,
 								'gaji_pokok' 					=> str_replace(".","",$gaji_pokok),
+
 								'allow_jabatan' 			=> str_replace(".","",$tunjangan_jabatan),
 								'allow_area' 					=> str_replace(".","",$tunjangan_area),
 								'allow_masakerja' 		=> str_replace(".","",$tunjangan_masakerja),
@@ -508,7 +509,6 @@ class employee_request_cancelled extends MY_Controller {
 								'allow_konsumsi' 			=> str_replace(".","",$tunjangan_makan),
 								'allow_transport' 		=> str_replace(".","",$tunjangan_transport),
 								'allow_comunication' 	=> str_replace(".","",$tunjangan_komunikasi),
-
 								'allow_device' 				=> str_replace(".","",$tunjangan_device),
 								'allow_residence_cost'=> str_replace(".","",$tunjangan_tempat_tinggal),
 								'allow_rent' 					=> str_replace(".","",$tunjangan_rental),
@@ -524,7 +524,7 @@ class employee_request_cancelled extends MY_Controller {
 								'hari_kerja' 					=> $hari_kerja,
 								'cut_start' 					=> $cut_start,
 								'cut_off' 						=> $cut_off,
-								'date_payment' 				=> $date_payment,
+								'date_payment' 				=> $date_payment
 							);
 
 						$iresult = $this->Employees_model->update_request_employee($data,$idrequest);

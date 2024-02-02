@@ -1,6 +1,6 @@
 
 <?php $result = $this->Employees_model->ajax_project_sub($id_project);?>
-<?php $projcomp = $this->Project_model->read_single_project($id_project);?>
+<?php $projcomp = $this->Project_model->getcomp_single_project($id_project);?>
 
 
 <div class="form-group">

@@ -532,6 +532,7 @@ class Employee_request_hrd extends MY_Controller {
 			redirect('admin/');
 		}
 
+			$yearmonth = date('Y/m');
 			$config['cacheable']	= true; //boolean, the default is true
 			$config['cachedir']		= './assets/'; //string, the default is application/cache/
 			$config['errorlog']		= './assets/'; //string, the default is application/logs/
@@ -546,7 +547,7 @@ class Employee_request_hrd extends MY_Controller {
 
 		if($this->input->post('edit_type')=='company') {
 
-			$idtransaksi 	= $this->input->post('idtransaksi');
+			// $idtransaksi 	= $this->input->post('idtransaksi');
 			$id = $this->uri->segment(4);
 			$cancel = $this->uri->segment(5);
 
@@ -653,11 +654,12 @@ class Employee_request_hrd extends MY_Controller {
 
 
 					$docid = date('ymdHisv');
-					$image_name='esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
-					$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
-					$params['data'] = $domain; //data yang akan di jadikan QR CODE
-					$params['level'] = 'H'; //H=High
-					$params['size'] = 10;
+					$yearmonth = date('Y/m');
+					$image_name=$yearmonth.'/esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
+					$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$yearmonth.'/'.$docid;
+					$params['data'] 	= $domain; //data yang akan di jadikan QR CODE
+					$params['level'] 	= 'H'; //H=High
+					$params['size'] 	= 10;
 					$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 					$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 

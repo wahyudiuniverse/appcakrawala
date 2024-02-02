@@ -231,7 +231,7 @@
                 <!--PEMILIK REKENING-->
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="email" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label>
+                    <label for="pemilik_rek" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="Nama Pemilik Rekening" name="pemilik_rekening" type="text" value="<?php echo $pemilik_rek;?>">
                   </div>
                 </div>

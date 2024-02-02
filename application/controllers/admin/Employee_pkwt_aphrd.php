@@ -407,9 +407,9 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 				$data_up = array(
 
-				'status_pkwt	' => 1,
-				'approve_hrd' =>  $session['user_id'],
-				'approve_hrd_date' => date("Y-m-d h:i:s")
+					'status_pkwt	' => 1,
+					'approve_hrd' =>  $session['user_id'],
+					'approve_hrd_date' => date("Y-m-d h:i:s")
 
 				);
 

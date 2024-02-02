@@ -1226,23 +1226,13 @@ class Pkwt237 extends MY_Controller
 						        </tr>
 						        <tr>
 						            <td>1</td>
-						            <td colspan="8">Senior Manager</td>
-						            <td colspan="2">Rp. 100.000;</td>
+						            <td colspan="8">Office Boy Senior</td>
+						            <td colspan="2">Rp. 30.000;</td>
 						        </tr>
 						        <tr>
 						            <td>2</td>
-						            <td colspan="8">National Operation Manager</td>
-						            <td colspan="2">Rp. 70.000;</td>
-						        </tr>
-						        <tr>
-						            <td>3</td>
-						            <td colspan="8">SPV/ National Account Executive/Area Manager/ Leader</td>
-						            <td colspan="2">Rp. 50.000;</td>
-						        </tr>
-						        <tr>
-						            <td>4</td>
-						            <td colspan="8">Staff/Admin</td>
-						            <td colspan="2">Rp. 30.000;</td>
+						            <td colspan="8">Office Boy Junior</td>
+						            <td colspan="2">Rp. 15.000;</td>
 						        </tr>
 					    		</table>
 								</td>
@@ -1302,7 +1292,7 @@ class Pkwt237 extends MY_Controller
 								<td colspan="20">Apabila saya karyawan yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
 							</tr>
 
-<BR><BR><BR>
+<BR><BR><BR><BR><BR><BR>
 							<tr>
 								<td >7.</td>
 								<td colspan="20">Surat keterangan kerja tidak dapat dikeluarkan apabila karyawan bekerja dibawah 3 bulan dengan pengecualian:</td>

@@ -612,6 +612,53 @@ class Pkwt112 extends MY_Controller
 								
 							</tr>
 	
+							<tr>
+								<td ></td>
+								<td colspan="1">G.</td>
+								<td colspan="20">Kelahiran</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="1"></td>
+								<td colspan="1">a.</td>
+								<td colspan="10">Istri sah karyawan melahirkan :</td>
+								<td colspan="4">2 (dua) hari kerja</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="1"></td>
+								<td colspan="1">b.</td>
+								<td colspan="10">Istirahat karyawan melahirkan :</td>
+								<td colspan="4">2 (dua) hari kerja</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="1"></td>
+								<td colspan="1"></td>
+								<td colspan="10">dengan akumulasi 1,5 bulan sebelum tanggal melahirkan dan 1,5 bulan setelah melahirkan</td>
+								<td colspan="4"></td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="1"></td>
+								<td colspan="1">b.</td>
+								<td colspan="10">c.	Istirahat karyawan yang mengalami keguguran kandungan :</td>
+								<td colspan="4">1,5 (satu setengah)</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="1"></td>
+								<td colspan="1"></td>
+								<td colspan="10">atau sesuai dengan surat keterangan dokter kandungan atau bidan (dengan melampirkan surat keterangan 	dokter)</td>
+								<td colspan="4"></td>
+							</tr>
+
+
+
 				</table>
 				<br>
 
@@ -697,7 +744,7 @@ class Pkwt112 extends MY_Controller
 								<td>5.6</td>
 								<td colspan="18">Dalam melaksanakan pekerjaannya, <b>PIHAK KEDUA</b> wajib memahami dan mematui pedoman/kebijakan yang telah ditentukan diperusahaan <b>PIHAK PERTAMA</b> maupun perusahaan dimana <b>PIHAK KEDUA</b> ditempatkan.</td>
 							</tr>
-				<br><br><br><br>
+				<br>
 							<tr>
 								<td>5.7</td>
 								<td colspan="18">Mengelola asset dan barang milik perusahaan <b>PIHAK PERTAMA</b> maupun perusahaan dimana <b>PIHAK KEDUA</b> ditempatkan dengan penuh tanggung jawab.</td>
@@ -824,7 +871,7 @@ class Pkwt112 extends MY_Controller
 								<td colspan="20">Menganiaya, menghina secara kasar mengucap secara fisik dan mental kepada <b>PIHAK PERTAMA</b>, atau membiarkan teman kerjanya berada dalam bahaya</td>
 							</tr>
 
-				<br><br><br><br><br><br>
+				<br>
 							<tr>
 								<td>i.</td>
 								<td colspan="18">diketahui memiliki catatan kriminal atau pernah melakukan kejahatan.</td>
@@ -873,7 +920,7 @@ class Pkwt112 extends MY_Controller
 								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Siprama Cakrawala.</td>
 							</tr>
 				</table>
-
+<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 8<br>HUKUM YANG BERLAKU</b>
@@ -909,7 +956,7 @@ class Pkwt112 extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-				<br>
+				<br><br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -925,7 +972,6 @@ class Pkwt112 extends MY_Controller
 				</table>
 				<br>
 
-				<br><br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td><b>SIMPANAN KOPERASI</b></td>
@@ -1038,7 +1084,7 @@ class Pkwt112 extends MY_Controller
 							</tr>			
 				</table>
 
-<br><br>
+<br>
 				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1151,7 +1197,7 @@ class Pkwt112 extends MY_Controller
 
 				<br>
 
-				<br><br><br><br>
+				<br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td><b>MEKANISME PENGEMBALIAN SIMPANAN KOPERASI</b></td>
@@ -1277,7 +1323,7 @@ class Pkwt112 extends MY_Controller
 
 				$tbl_spb = '
 
-			<br><br><br><br><br><br><br>
+			<br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>

@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt118 extends MY_Controller 
+class Pkwt255 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1322,14 +1322,14 @@ class Pkwt118 extends MY_Controller
 						</tr>';
 				}
 
-				// if($allowance_meal!="Rp 0"){	
+				if($allowance_meal!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Makan</td>
 							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
 						</tr>';
-				// }
+				}
 				
 				if($allowance_transport!="Rp 0"){	
 				$lampiran .= '

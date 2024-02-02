@@ -88,7 +88,7 @@ class Project_model extends CI_Model {
 	// get single project by id
 	public function read_single_project($id) {
 	
-		$sql = 'SELECT * FROM xin_projects WHERE project_id = ?';
+		$sql = "SELECT CONCAT('[ ',priority,' ] ',title) title FROM xin_projects WHERE project_id = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -100,6 +100,19 @@ class Project_model extends CI_Model {
 	}
 
 
+	// get single project by id
+	public function getcomp_single_project($id) {
+	
+		$sql = "SELECT company_id, title FROM xin_projects WHERE project_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 	// get all designation
 	public function get_designations()
 	{
@@ -581,7 +594,7 @@ ORDER BY title ASC");
 	// get single record > company | employees
 	 public function ajax_sub_project($id) {
 	
-		$sql = "SELECT * FROM xin_projects_sub WHERE id_project = ?";
+		$sql = "SELECT * FROM xin_projects_sub WHERE id_project = ? AND sub_active = 1";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		
@@ -970,7 +983,7 @@ ORDER BY title ASC");
 	// get company > projects
 	public function ajax_proj_subproj_info($id) {
 	
-		$condition = "id_project =" . "'" . $id . "'";
+		$condition = "id_project =" . "'" . $id . "'"." and sub_active=1";
 		$this->db->select('*');
 		$this->db->from('xin_projects_sub');
 		$this->db->where($condition);

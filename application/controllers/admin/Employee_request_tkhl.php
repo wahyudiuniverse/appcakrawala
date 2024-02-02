@@ -515,6 +515,7 @@ class Employee_request_tkhl extends MY_Controller {
 			redirect('admin/');
 		}
 
+			$yearmonth = date('Y/m');
 			$config['cacheable']	= true; //boolean, the default is true
 			$config['cachedir']		= './assets/'; //string, the default is application/cache/
 			$config['errorlog']		= './assets/'; //string, the default is application/logs/
@@ -529,7 +530,7 @@ class Employee_request_tkhl extends MY_Controller {
 
 		if($this->input->post('edit_type')=='company') {
 
-			$idtransaksi 	= $this->input->post('idtransaksi');
+			// $idtransaksi 	= $this->input->post('idtransaksi');
 			$id = $this->uri->segment(4);
 			$cancel = $this->uri->segment(5);
 
@@ -635,9 +636,10 @@ class Employee_request_tkhl extends MY_Controller {
 					$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
 
 
+					$yearmonth = date('Y/m');
 					$docid = date('ymdHisv');
-					$image_name='esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
-					$domain = 'https://apps-cakrawala.com/esign/tkhl/'.$docid;
+					$image_name=$yearmonth.'/esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
+					$domain = 'https://apps-cakrawala.com/esign/tkhl/'.$yearmonth.'/'.$docid;
 					$params['data'] = $domain; //data yang akan di jadikan QR CODE
 					$params['level'] = 'H'; //H=High
 					$params['size'] = 10;

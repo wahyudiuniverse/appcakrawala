@@ -514,66 +514,8 @@ class Pkwt239 extends MY_Controller
 
 				</table>
 <br><br><br><br><br>
-<br><br>
 
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td >4.4</td>
-								<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
-								<td colspan="0"></td>
-							</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
-								<td colspan="0"><br></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20">•	Hari Senin - Jumat 	8 Jam Kerja</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20">•	Hari libur Sabtu-Minggu</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20">•	Hari Senin – Sabtu 	7 Jam Kerja</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20">•	Hari Sabtu 	5 Jam Kerja</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20">•	Hari libur Minggu</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja.</td>
-								<td colspan="0"></td>
-							</tr>
-
-				</table>
-			
-<br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 5<br>ETIKA PRILAKU</b>
@@ -645,9 +587,7 @@ class Pkwt239 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br><br><br>
-				<br><br><br><br>
-				<br><br><br><br>
+				<br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -773,9 +713,7 @@ class Pkwt239 extends MY_Controller
 								<td>l.</td>
 								<td colspan="18">Pekerja yang melakukan mangkir sebagaimana dimaksud dalam undang-undang KetenagaKerjaan dapat diputuskan hubungan kerjanya karena dikualifikasikan mengundurkan diri.</td>
 							</tr>
-				<br><br><br><br>
-				<br><br><br><br>
-				<br><br>	
+				<br>
 							<tr>
 								<td>m.</td>
 								<td colspan="18">Bila mana <b>PIHAK KEDUA</b> bermaksud mengundurkan diri sebelum berakhirnya jangka waktu PKWT ini, maka <b>PIHAK KEDUA</b> wajib :</td>
@@ -816,7 +754,8 @@ class Pkwt239 extends MY_Controller
 
 
 				</table>
-
+<br><br><br><br>
+<br><br><br><br><br><br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 8<br>HUKUM YANG BERLAKU</b>
@@ -840,7 +779,7 @@ class Pkwt239 extends MY_Controller
 								<td colspan="20">Dalam hal selama jangka waktu <b>PKWT</b> ini ternyata dilarang oleh suatu undang-undang/peraturan baru, maka <b>PKWT</b> ini akan secara otomatis berakhir. Dalam hal ini, <b>PIHAK PERTAMA</b> maupun klient <b>PIHAK PERTAMA</b> tidak berkewajiban membayar kompensasi apapun kepada <b>PIHAK KEDUA</b> kecuali atas gaji sampai dengan hari kerjanya yang berakhir.</td>
 							</tr>
 				</table>
-				<br>
+				<br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 9<br>ATURAN PEMELIHARAAN</b>
@@ -854,7 +793,7 @@ class Pkwt239 extends MY_Controller
 				</table>
 				
 
-
+<br><br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
 				</div>
@@ -886,8 +825,7 @@ class Pkwt239 extends MY_Controller
 								<td></td>
 								<td colspan="20">Simpanan diawal pendaftaran anggota dan hanya di potongkan 1 kali, besarnya sama untuk semua anggota yaitu sebesar Rp.50.000.-</td>
 							</tr>
-				<br><br><br><br><br>
-				<br><br><br><br>
+				<br><br>
 							<tr>
 								<td>2.</td>
 								<td colspan="20">Simpanan Wajib</td>
@@ -983,14 +921,16 @@ class Pkwt239 extends MY_Controller
 				</table>
 
 				<br>
-				<br>
+				<br><br><br><br>
+				<br><br><br><br>	
+				
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
 							</tr>			
 				</table>
 				
-				<br>
+				<br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td>Dengan mempertimbangkan keberadaan Koperasi yang merupakan bagian yang tidak dapat dipisahkan dari bisnis utama dari Perusahaan. Dalam hal ini Perusahaan tergantung atas adanya Kontrak Kerjasama dengan Client/Customer maka :</td>
@@ -1051,7 +991,7 @@ class Pkwt239 extends MY_Controller
 
 
 				<br>
-				<br>
+				<br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
@@ -1092,8 +1032,7 @@ class Pkwt239 extends MY_Controller
 							</tr>
 				</table>
 
-				<br><br><br><br><br>
-				<br><br><br><br><br>
+				<br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1204,6 +1143,12 @@ class Pkwt239 extends MY_Controller
 				<br><br><br><br>
 				<br><br><br><br>
 				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
