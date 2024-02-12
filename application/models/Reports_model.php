@@ -207,7 +207,9 @@ class Reports_model extends CI_Model {
 			return $query;
 
 		} else if ($project_id!=0 && $sub_project_id!=0 && $status_resign!=0){
-			$sql = "SELECT * from xin_employees where project_id = ? AND sub_project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+
+			//$sql = "SELECT * from xin_employees where project_id in (6) and employee_id NOT IN (1)";
+$sql = "SELECT * from xin_employees where project_id = ? AND sub_project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
 			$binds = array($project_id,$sub_project_id,$status_resign);
 			$query = $this->db->query($sql, $binds);
 			return $query;

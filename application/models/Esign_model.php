@@ -93,7 +93,7 @@ class Esign_model extends CI_Model {
 		WHERE emp.is_active = 1 
 		AND  emp.status_resign in (2,4,5)
         AND emp.approve_resignhrd is not null
-		AND emp.employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
+		AND emp.employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk WHERE is_download = 0
 		UNION SELECT 1 AS nip FROM DUAL)
 
 		UNION
@@ -130,7 +130,7 @@ class Esign_model extends CI_Model {
 		WHERE is_active = 1 
 		AND status_resign in (2,4)
 		AND approve_resignhrd is not null
-		AND employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk
+		AND employee_id not IN (SELECT distinct(nip) AS nip FROM xin_qrcode_skk WHERE is_download = 0
 		UNION
 		SELECT 1 AS nip FROM DUAL)
 		AND project_id = '$id'

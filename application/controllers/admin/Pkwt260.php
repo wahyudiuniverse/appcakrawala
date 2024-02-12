@@ -397,7 +397,7 @@ class Pkwt260 extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi setiap bulannya dan per <b>1 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada PKWT selanjutnya</td>
+								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi perminggu dan per <b>1 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada PKWT selanjutnya</td>
 							</tr>
 				<br>
 							<tr>
@@ -1366,7 +1366,7 @@ class Pkwt260 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">b.</td>
-								<td colspan="20">Selama saya menjadi Karyawan Kontrak maka akan ada Evaluasi kinerja setiap bulan dan atau <b>per 3 Bulan</b>. </td>
+								<td colspan="20">Selama saya menjadi Karyawan Kontrak maka akan ada Evaluasi kinerja setiap minggu dan atau <b>per 1 Bulan</b>. </td>
 							</tr>
 							<tr>
 								<td ></td>
@@ -1407,7 +1407,7 @@ class Pkwt260 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a.</td>
-								<td colspan="20">Saya selaku Koordinator Motoris bertanggung jawab dalam memonitoring team dibawah saya yaitu motoris untuk melakukan pekerjaan sesuai dengan SOP salah satunya ialah melakukan setoran hasil penjualan kepada pihak distributor yang ditunjuk, dan apabila melakukan pelanggaran atas sop tersebut detail penyelesaiannya terdapat dalam surat pernyataan komitmen bersedia untuk tidak diberikan gaji sampai permasalahan selesai.</td>
+								<td colspan="20">Saya selaku Koordinator Motoris bertanggung jawab dalam memonitoring team dibawah saya yaitu motoris untuk melakukan pekerjaan sesuai dengan SOP salah satunya ialah melakukan setoran hasil penjualan kepada pihak distributor yang ditunjuk, dan apabila melakukan pelanggaran atas sop tersebut detail penyelesaiannya terdapat dalam surat pernyataan komitmen bersedia untuk tidak diberikan gaji sampai permasalahan selesai oleh kedua belah pihak.</td>
 							</tr>
 							<tr>
 								<td ></td>
@@ -1893,7 +1893,7 @@ class Pkwt260 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>•</td>
-								<td colspan="20">Saya selaku Koordinator Motoris bertanggung jawab apabila ada salah satu tim saya (motoris) yang tidak  bertanggung jawab akan pekerjaan dan kewajibannya seperti tidak setoran, fraud, tidak koperatif maupun melakukan tindakan yang merugikan perusahaan maka saya selaku kordinator motoris dan team saya akan bertanggung jawab, dan bersedia untuk tidak diberikan gaji terakhir saya bekerja hingga persoalan tersebut selesai.</td>
+								<td colspan="20">Saya selaku Koordinator Motoris bertanggung jawab apabila ada salah satu tim saya (motoris) yang tidak  bertanggung jawab akan pekerjaan dan kewajibannya seperti tidak setoran, fraud, tidak koperatif maupun melakukan tindakan yang merugikan perusahaan maka saya selaku kordinator motoris dan team saya akan bertanggung jawab, dan bersedia untuk tidak diberikan gaji terakhir saya bekerja hingga persoalan tersebut selesai oleh kedua belah pihak.</td>
 							</tr>
 							<br>
 							<tr>

@@ -81,6 +81,7 @@ class Designation extends MY_Controller {
 			  
 			// get department
           	$designation_id = $r->designation_id;
+          	$level = $r->level;
 			$department = $this->Department_model->read_department_information($r->department_id);
 			if(!is_null($department)){
 				$department_name = $department[0]->department_name;
@@ -123,6 +124,7 @@ class Designation extends MY_Controller {
             $data[] = array(
 				$combhr,
 				$designation_id,
+				$level,
 				$idesignation_name,
 				$comp_name
 		   );
@@ -300,6 +302,7 @@ class Designation extends MY_Controller {
 		'company_id' => $this->input->post('company_id'),
 		'designation_name' => $this->input->post('designation_name'),
 		'description' => $this->input->post('description'),
+		'level' => $this->input->post('level'),
 		'added_by' => $this->input->post('user_id'),
 		'created_at' => date('d-m-Y'),
 		);

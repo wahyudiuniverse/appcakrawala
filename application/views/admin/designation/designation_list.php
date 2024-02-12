@@ -94,6 +94,21 @@ $session = $this->session->userdata('username');
         <?php } else {?>
         <input type="hidden" name="subdepartment_id" value="0" />
         <?php } ?>
+
+        <div class="form-group">
+          <label for="level_name">Level</label>
+          <select class="select2" data-plugin="select_hrm" data-placeholder="Level" name="level">
+            <option value="A">A</option>
+            <option value="B1">B1</option>
+            <option value="B2">B2</option>
+            <option value="C1">C1</option>
+            <option value="C2">C2</option>
+            <option value="D1">D1</option>
+            <option value="D2" selected>D2</option>
+            <option value="D3">D3</option>
+          </select>
+        </div>
+
         <div class="form-group">
           <label for="name"><?php echo $this->lang->line('xin_designation_name');?></label>
           <input type="text" class="form-control" name="designation_name" placeholder="<?php echo $this->lang->line('xin_designation_name');?>">
@@ -122,10 +137,9 @@ $session = $this->session->userdata('username');
               <tr>
                 <th style="width:65px;"><?php echo $this->lang->line('xin_action');?></th>
                 <th><?php echo $this->lang->line('xin_sub_project_id');?></th>
+                <th>Level</th>
                 <th><?php echo $this->lang->line('xin_designation');?></th>
                 <th><?php echo $this->lang->line('left_company');?></th>
-                <!--<th><?php echo $this->lang->line('xin_department');?></th>
-                <th><?php echo $this->lang->line('xin_hr_sub_department');?></th>-->
               </tr>
             </thead>
           </table>

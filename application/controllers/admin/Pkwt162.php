@@ -397,7 +397,7 @@ class Pkwt162 extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi setiap bulannya dan per <b>1 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada PKWT selanjutnya</td>
+								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi setiap minggu atau per <b>1 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada PKWT selanjutnya</td>
 							</tr>
 				<br>
 							<tr>
@@ -503,7 +503,7 @@ class Pkwt162 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>3.3</td>
-						<td colspan="18">Pembayaran gaji dilakukan setiap akhir bulan sesuai kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>, jika akhir bulan jatuh pada hari libur, maka pembayaran akan dilakukan 1 (satu) hari lebih awal. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
+						<td colspan="18">Pembayaran gaji dilakukan setiap tanggal pada lampiran 1 kalender setiap bulannya dengan cara transfer Bank sesuai dengan nama kepemilikan <b>PIHAK KEDUA</b>. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
 					</tr>
 				<br>
 					<tr>
@@ -1418,7 +1418,7 @@ class Pkwt162 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">c.</td>
-								<td colspan="20">Saya selaku motoris apabila terbukti melakukan pelanggaran, tidak setoran dan fraud maupun tindakan yang merugikan perusahaan bersedia untuk tidak diberikan gaji terakhir saya dan deposit sampai masalah tersebut selesai dan atas hal tersebut maka akan berakibat berakhirnya masa kontrak kerja saya.</td>
+								<td colspan="20">Saya selaku motoris apabila terbukti melakukan pelanggaran, tidak setoran dan fraud maupun tindakan yang merugikan perusahaan bersedia untuk tidak diberikan gaji terakhir saya dan deposit sampai masalah tersebut selesai oleh kedua belah pihak dan atas hal tersebut maka akan berakibat berakhirnya masa kontrak kerja saya.</td>
 							</tr>
 
 							<tr>

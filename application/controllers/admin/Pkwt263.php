@@ -1888,18 +1888,13 @@ class Pkwt263 extends MY_Controller
 				<br>
 				<br>
 
-
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+
 							<tr>
 								<td>•</td>
-								<td colspan="20">Saya selaku Koordinator Motoris bertanggung jawab apabila ada salah satu tim saya (motoris) yang tidak  bertanggung jawab akan pekerjaan dan kewajibannya seperti tidak setoran, fraud, tidak koperatif maupun melakukan tindakan yang merugikan perusahaan maka saya selaku kordinator motoris dan team saya akan bertanggung jawab, dan bersedia untuk tidak diberikan gaji terakhir saya bekerja hingga persoalan tersebut selesai.</td>
+								<td colspan="20">Saya selaku Area Koordinator Motoris menyetujui untuk akan bertanggungjawab menyelesaikan pelanggaran (fraud) team dibawah saya yaitu, koordinator motoris (KORMOT) dan motoris yang tidak bertanggung jawab akan pekerjaan dan kewajibannya seperti tidak melakukan setoran, fraud, tidak koperatif maupun melakukan tindakan yang merugikan perusahaan.</td>
 							</tr>
 							<br>
-							<tr>
-								<td>•</td>
-								<td colspan="20">Saya selaku koordinator motoris bertanggung jawab atas karyawan yang baru join ataupun replacement.</td>
-							</tr>
-
 
 				</table>
 				<br><br>

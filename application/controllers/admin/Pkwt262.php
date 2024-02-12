@@ -424,7 +424,7 @@ class Pkwt262 extends MY_Controller
 								<td>a.</td>
 								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>
 													'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>
-																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa <i>Evaluasi kinerja</i> setiap minggu dan atau per <b>1 Bulan</b>.</td>
+																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa <i>Evaluasi kinerja</i> setiap bulan dan atau per <b>3 Bulan</b>.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1890,7 +1890,7 @@ class Pkwt262 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>•</td>
-								<td colspan="20">Saya selaku Project Manager menyetujui untuk bertanggung jawab menyelesaikan team dibawah saya yaitu Area Koordinator Motoris (AKM), Koordinator Motoris (KORMOT) dan Motoris tidak bertanggung jawab akan pekerjaan dan kewajibannya seperti tidak melakukan setoran, fraud dan ,tidak kooperatif maupun melakukan tindakan yang merugikan perusahaan</td>
+								<td colspan="20">Saya selaku Project Manager menyetujui untuk bertanggung jawab menyelesaikan pelanggaran (froud) team dibawah saya yaitu Area Koordinator Motoris (AKM), Koordinator Motoris (KORMOT) dan Motoris yang tidak bertanggung jawab akan pekerjaan dan kewajibannya seperti tidak melakukan setoran, fraud dan ,tidak kooperatif maupun melakukan tindakan yang merugikan perusahaan</td>
 							</tr>
 							
 
