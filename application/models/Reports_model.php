@@ -189,19 +189,19 @@ class Reports_model extends CI_Model {
 		if($project_id==0 && $sub_project_id==0 && $status_resign==0){
 			return $query = $this->db->query("SELECT * FROM xin_employees WHERE employee_id IN (99)");
 		} else if ($project_id!=0 && $sub_project_id==0 && $status_resign==0)  {
-			$sql = "SELECT * from xin_employees where project_id = ? AND employee_id NOT IN (1)";
+			$sql = "SELECT emp.*, pos.level from xin_employees emp left join xin_designations pos ON pos.designation_id = emp.designation_id where emp.project_id = ? AND emp.employee_id NOT IN (1) AND pos.level NOT IN ('A','A1','B1','B2')";
 			$binds = array($project_id);
 			$query = $this->db->query($sql, $binds);
 			return $query;
 
 		} else if ($project_id!=0 && $sub_project_id!=0 && $status_resign==0) {
-			$sql = "SELECT * from xin_employees where project_id = ? AND sub_project_id = ? AND employee_id NOT IN (1)";
+			$sql = "SELECT emp.*, pos.level from xin_employees emp left join xin_designations pos ON pos.designation_id = emp.designation_id where emp.project_id = ? AND emp.sub_project_id = ? AND emp.employee_id NOT IN (1) AND pos.level NOT IN ('A','A1','B1','B2')";
 			$binds = array($project_id,$sub_project_id);
 			$query = $this->db->query($sql, $binds);
 			return $query;
 
 		} else if ($project_id!=0 && $sub_project_id==0 && $status_resign!=0) {
-			$sql = "SELECT * from xin_employees where project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
+			$sql = "SELECT emp.*, pos.level from xin_employees emp left join xin_designations pos ON pos.designation_id = emp.designation_id where emp.project_id = ? AND emp.status_resign = ? AND emp.employee_id NOT IN (1) AND pos.level NOT IN ('A','A1','B1','B2')";
 			$binds = array($project_id,$status_resign);
 			$query = $this->db->query($sql, $binds);
 			return $query;
@@ -209,10 +209,10 @@ class Reports_model extends CI_Model {
 		} else if ($project_id!=0 && $sub_project_id!=0 && $status_resign!=0){
 
 			//$sql = "SELECT * from xin_employees where project_id in (6) and employee_id NOT IN (1)";
-$sql = "SELECT * from xin_employees where project_id = ? AND sub_project_id = ? AND status_resign = ? AND employee_id NOT IN (1)";
-			$binds = array($project_id,$sub_project_id,$status_resign);
-			$query = $this->db->query($sql, $binds);
-			return $query;
+			$sql = "SELECT emp.*, pos.level from xin_employees emp left join xin_designations pos ON pos.designation_id = emp.designation_id where emp.project_id = ? AND emp.sub_project_id = ? AND emp.status_resign = ? AND emp.employee_id NOT IN (1) AND pos.level NOT IN ('A','A1','B1','B2')";
+						$binds = array($project_id,$sub_project_id,$status_resign);
+						$query = $this->db->query($sql, $binds);
+						return $query;
 
 		} else {
 

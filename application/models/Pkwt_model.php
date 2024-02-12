@@ -449,11 +449,13 @@ ORDER BY contract_id DESC LIMIT 1";
 		FROM xin_employees emp 
 		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
+		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 		WHERE emp.status_employee = 1 
 		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
 		AND emp.sub_project_id not in (1,2) 
 		AND pkwt.to_date < now() + INTERVAL 21 day
+		AND pos.level NOT IN ('A','A1','B1','B2')
       --  AND pkwt.approve_hrd = 0
 		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
 
@@ -463,11 +465,13 @@ ORDER BY contract_id DESC LIMIT 1";
 		FROM xin_employees emp 
 		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
+		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 		WHERE emp.status_employee = 1 
 		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
 		AND emp.sub_project_id not in (1,2) 
 		AND pkwt.to_date is null
+		AND pos.level NOT IN ('A','A1','B1','B2')
       --  AND pkwt.approve_hrd = 0
 		AND emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID');";
 		// $binds = array(1,$cid);
@@ -486,8 +490,10 @@ ORDER BY contract_id DESC LIMIT 1";
 			FROM xin_employees emp 
 			LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 			ON pkwt.employee_id = emp.employee_id 
+			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 			WHERE emp.status_employee = 1
 			AND emp.status_resign = 1
+			AND pos.level NOT IN ('A','A1','B1','B2')
 			AND emp.employee_id not in (1,1024)) exp
 		WHERE exp.all_name LIKE '%$key%'";
 		// $binds = array(1,$cid);
@@ -504,12 +510,14 @@ ORDER BY contract_id DESC LIMIT 1";
 		FROM xin_employees emp 
 		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
+		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 		WHERE emp.status_employee = 1 
 		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
 		AND pkwt.to_date < now() + INTERVAL 21 day
       --  AND pkwt.approve_hrd = 0
 		AND emp.project_id = '$project'
+		AND pos.level NOT IN ('A','A1','B1','B2')
 
 		UNION 
 
@@ -517,12 +525,14 @@ ORDER BY contract_id DESC LIMIT 1";
 		FROM xin_employees emp 
 		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
 		ON pkwt.employee_id = emp.employee_id 
+		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 		WHERE emp.status_employee = 1 
 		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
 		AND pkwt.to_date is null 
       --  AND pkwt.approve_hrd = 0
 		AND emp.project_id = '$project'
+		AND pos.level NOT IN ('A','A1','B1','B2')
 ";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
