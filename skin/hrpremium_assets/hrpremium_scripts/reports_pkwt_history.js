@@ -28,7 +28,7 @@ $(document).ready(function() {
 		var company_id = button.data('company_id');
 		var modal = $(this);
 	$.ajax({
-		url : base_url+"/read/",
+		url : base_url+"/read_pkwt_report/",
 		type: "GET",
 		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
 		success: function (response) {

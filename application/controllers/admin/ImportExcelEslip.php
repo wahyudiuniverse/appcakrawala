@@ -350,7 +350,7 @@ class Importexceleslip extends MY_Controller
 
 				$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
 
-				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1-31 Oktober 2023, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1-31 Januari 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
 
 				Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
 
@@ -782,7 +782,7 @@ class Importexceleslip extends MY_Controller
 						$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
 		}
 
-				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
+				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');            
 				echo $user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
 
 			}
@@ -1159,7 +1159,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>Gaji UMK/UMP</td>
+								<td>Gaji Pokok</td>
 								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).';-</td>
 							</tr>
 						</table>
@@ -1896,7 +1896,7 @@ class Importexceleslip extends MY_Controller
 						<td>
 							<table cellpadding="1" cellspacing="0">
 								<tr>
-									<td colspan="4">Potongan Trip Malang</td>
+									<td colspan="4">Potongan Trip Bali</td>
 									<td colspan="2">: Rp.</td>
 									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
 								</tr>
@@ -2375,7 +2375,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>UMK/UMP</td>
+								<td>Gaji Pokok</td>
 								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).'</td>
 							</tr>
 						</table>
@@ -3106,7 +3106,7 @@ class Importexceleslip extends MY_Controller
 						<td>
 							<table cellpadding="1" cellspacing="0">
 								<tr>
-									<td colspan="4">Potongan Trip Malang</td>
+									<td colspan="4">Potongan Trip Bali</td>
 									<td colspan="2">: Rp.</td>
 									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
 								</tr>
