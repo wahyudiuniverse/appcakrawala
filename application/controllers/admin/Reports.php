@@ -597,6 +597,7 @@ class Reports extends MY_Controller
 		$project_id = $this->uri->segment(6);
 		$subproject_id = $this->uri->segment(7);
 		$status_resign = $this->uri->segment(8);
+	
 
 		// $designation_id = $this->uri->segment(6);
 

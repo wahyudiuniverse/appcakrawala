@@ -525,7 +525,7 @@ class Pkwt180 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
+								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
 							</tr>
 				<br>
 							<tr>

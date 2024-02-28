@@ -272,6 +272,7 @@
 							<option value="6">Bank Danamon</option>
 							<option value="7">Permata Bank</option>
 							<option value="8">Bank CIMB Niaga</option>
+							<option value="38">Bank UOB Indonesia</option>
 							<option value="9">Bank BII Maybank</option>
 							<option value="10">Bank Mega</option>
 							<option value="11">Bank Syariah Indonesia (BSI)</option>
@@ -279,6 +280,7 @@
 							<option value="15">Bank Muamalat</option>
 							<option value="16">Bank Tabungan Negara (BTN)</option>
 							<option value="17">Citibank</option>
+							<option value="36">Bank Multiarta Sentosa</option>
 							<option value="18">Bank Jabar dan Banten (BJB)</option>
 							<option value="19">Bank DKI</option>
 							<option value="20">BPD DIY</option>
@@ -289,8 +291,11 @@
 							<option value="25">Bank Sumut</option>
 							<option value="26">Bank Nagari</option>
 							<option value="27">Bank Riau</option>
+							<option value="33">Bank Kalbar</option>
 							<option value="28">Bank Sumsel Babel</option>
 							<option value="29">SINARMAS</option>
+							<option value="35">Bank Jago</option>
+							<option value="37">Bank Seabank Indonesia</option>
 						</select>
 
 					</label>

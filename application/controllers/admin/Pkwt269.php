@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt_sample extends MY_Controller 
+class Pkwt269 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -391,7 +391,7 @@ class Pkwt_sample extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi setiap bulannya dan <b>per 3 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada PKWT selanjutnya.</td>
+								<td colspan="18">Adapun Tugas dan tanggung jawab yang ditetapkan tersebut di atas akan dituangkan didalam lampiran yang disesuaikan dengan masing – masing posisi</td>
 							</tr>
 				<br>
 							<tr>
@@ -410,7 +410,7 @@ class Pkwt_sample extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18"><b>PKWT</b> ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> bulan terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.
+								<td colspan="18"><b>PKWT</b> ini berlangsung/berlaku selama <b>'.$waktukontrak.' bulan</b> terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.
 								</td>
 							</tr>
 				<br>
@@ -491,7 +491,7 @@ class Pkwt_sample extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>3.3</td>
-						<td colspan="18">Pembayaran gaji dilakukan setiap tanggal pada lampiran 1 kalender setiap bulannya dengan cara transfer Bank sesuai dengan nama kepemilikan <b>PIHAK KEDUA</b>. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
+						<td colspan="18">Pembayaran gaji dilakukan sesuai dengan lampiran 1,  kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomor rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomor rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
 					</tr>
 				<br>
 					<tr>
@@ -518,10 +518,6 @@ class Pkwt_sample extends MY_Controller
 				</table>
 		
 				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
@@ -531,7 +527,7 @@ class Pkwt_sample extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
 							</tr>
 				<br>
 							<tr>
@@ -543,7 +539,7 @@ class Pkwt_sample extends MY_Controller
 								<td>4.3</td>
 								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
 							</tr>
-				<br>
+
 				</table>
 
 
@@ -580,7 +576,7 @@ class Pkwt_sample extends MY_Controller
 
 							<tr>
 								<td ></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
+								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -657,7 +653,7 @@ class Pkwt_sample extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br>
+				<br><br><br><br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1241,9 +1237,6 @@ class Pkwt_sample extends MY_Controller
 				<br>			
 				<br>
 				<br>			
-				<br>
-				<br>			
-				<br>
 				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1356,7 +1349,7 @@ class Pkwt_sample extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">c.</td>
-								<td colspan="20">Selama saya menjadi Karyawan Kontrak, Perusahaan dapat memutuskan hubungan kerja tanpa syarat dan kompensasi dalam bentuk apapun dan memberitahukan hal tersebut kepada Karyawan Kontrak minimal 14 hari kerja sebelum tanggal pelaksanaan Pemutusan Hubungan Kerja.</td>
+								<td colspan="20">Selama saya menjadi Karyawan Kontrak, Perusahaan dapat memutuskan hubungan kerja tanpa syarat dan menyetujui tidak diberikan kompensasi dalam bentuk apapun dan karyawan menyetujui hal tersebut.</td>
 							</tr>
 							<tr>
 								<td ></td>
@@ -1383,20 +1376,95 @@ class Pkwt_sample extends MY_Controller
 								<td colspan="0">b.</td>
 								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
 							</tr>
+
 							<tr>
 								<td >8.</td>
+								<td colspan="20">Ruang lingkup pekerjaan saya adalah:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Saya selaku motoris diberikan target sebesar 1.250.000 per hari, dengan total barang yang dibawa setiap harinya Rp. 1.500.000 dengan rincian sebagai berikut :</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Target call 20 toko dengan Incentive Call 3.000/ Hari</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Effective call 10 toko (min 50.000 per toko) dengan Incentive Effective Call 5.000/Hari</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Target Sales 1.250.000 per hari, dengan Incentive Sales 20.000/ Hari</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Insentive ONC (Open New Customer, Incentive 100.000/ Toko yang pengambilannya min 250.000 per bulan, transaksi setiap bulan, selama 2 bulan berurut – turut dan dialihkan ke team sales.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
+							</tr>
+
+							<tr>
+								<td >9.</td>
+								<td colspan="20">Karyawan memberikan deposit/jaminan dengan ketentuan sebagai berikut:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Pemotongan deposit dipotong sebesar Rp. 1.000.000 potongan berlaku hanya untuk sales motoris prochiz all area dengan pemotongan sebanyak 3x selama 3 bulan dengan rincian sebagai berikut :</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="10">Gaji bulan pertama potongan sebesar</td>
+								<td colspan="10">Rp. 300.000</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="10">Gaji bulan kedua potongan sebesar</td>
+								<td colspan="10">Rp. 350.000</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="10">Gaji bulan ketiga potongan sebesar</td>
+								<td colspan="10">Rp. 350.000</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Jaminan yang dijaminkan di awal oleh sales motoris berupa BPKP atau Akta Kelahiran, jika potongan depositnya sudah mencapai Rp. 1.000.000 maka jaminan BPKP/ Akta Kelahiran bisa dikembali kepada yang bersangkutan.</td>
+							</tr>
+
+							<tr>
+								<td >10.</td>
 								<td colspan="20">Jika karyawan melanggar & menerima SP 1, SP 2 dan berakibat pada SPHK. Maka karyawan tidak berhak menuntut/mendapat hak kompensasi. Serta perusahaan berhak memutuskan kontrak kerja dengan karyawan tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
-							<br>
-							<br>
-							<br>
-							<br>	
-							<br>
-							<br>
-							<br>
 							<tr>
-								<td >9.</td>
+								<td >11.</td>
 								<td colspan="20">Jika karyawan melakukan tindakan merugikan perusahaan secara disengaja maupun tidak disengaja maka karyawan tersebut tidak berhak mendapat/menuntut kompensasi terhadap perusahaan, serta perusahaan berhak memutus kontrak dengan karyawan tersebut. Adapun perbuatan yang dimaksud adalah:</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1422,19 +1490,19 @@ class Pkwt_sample extends MY_Controller
 							</tr>
 
 							<tr>
-								<td >10.</td>
+								<td >12.</td>
 								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan diakhiri kontrak kerjasama.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
-								<td >11.</td>
+								<td >13.</td>
 								<td colspan="20">Apabila terjadi hubungan asmara diluar wajar/selingkuh yang berakibat terhadap produktivitas dan menggangu kinerja serta nama baik perusahaan maka karyawan bersedia untuk mengakhiri masa kerjasama</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
-								<td >12.</td>
+								<td >14.</td>
 								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1509,8 +1577,7 @@ class Pkwt_sample extends MY_Controller
 				$lampiran = '
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

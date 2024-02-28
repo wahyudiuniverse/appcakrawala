@@ -6,7 +6,7 @@
 								
 
 
-						<select name="subproject_id" data-placeholder="Pilih salah satu" class="chosen-select" style="height: 50px;padding-left: 20px;">
+						<select name="subproject_id" data-placeholder="Pilih salah satu" class="select_hrm" style="height: 50px;padding-left: 20px;">
 													<option value="">--</option>
 	                        <?php foreach($result as $sb):?>
 	                        <option value="<?php echo $sb->secid;?>"><?php echo $sb->sub_project_name;?></option>

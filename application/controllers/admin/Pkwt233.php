@@ -410,7 +410,7 @@ class Pkwt233 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18"><b>PKWT</b> ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.
+								<td colspan="18"><b>PKWT</b> ini berlangsung/berlaku selama <b>'.$waktukontrak.' bulan</b> terhitung sejak <b>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b>. Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.
 								</td>
 							</tr>
 				<br>

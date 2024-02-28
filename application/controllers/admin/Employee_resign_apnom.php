@@ -150,10 +150,13 @@ class employee_resign_apnom extends MY_Controller {
 					$designation_name = '--';	
 				}
 
+
+			  	$cancel = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@'. $r->user_id . '">CANCEL</button>';
+			  	
 				$dok_p = $vexc.' '.$vsrs.' '.$vhov;
 
 			$data[] = array(
-				$status_migrasi,
+				$status_migrasi.' '.$cancel,
 				$nip,
 				$fullname,
 				$nama_project,
