@@ -1102,7 +1102,7 @@ class ImportExcel extends MY_Controller
 
 				  	$preiode_param = str_replace(" ","",$r->periode);
 				  	$project_param 			= str_replace(")","",str_replace("(","",str_replace(" ","",$r->project)));
-				  	$project_sub_param = str_replace(")","",str_replace("(","",str_replace(" ","",$r->project_sub)));
+				  	$project_sub_param = str_replace("]","",str_replace("[","",str_replace(")","",str_replace("(","",str_replace(" ","",$r->project_sub)))));
 
 			  // get created
 			  $empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);

@@ -445,15 +445,6 @@ class register_ho extends MY_Controller {
 	  exit();
   }
 
-	/*Function to set JSON output*/
-	public function output($Return=array()){
-		/*Set response header*/
-		header("Access-Control-Allow-Origin: *");
-		header("Content-Type: application/json; charset=UTF-8");
-		/*Final JSON response*/
-		exit(json_encode($Return));
-	}	 
-
 	 // get location > departments
 	public function get_project_sub_project() {
 
