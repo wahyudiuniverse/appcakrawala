@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -68,16 +68,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | make active.  By default there is only one group (the 'default' group).
 |
 | The $query_builder variables lets you determine whether or not to load
-| the query builder class.
+| the query builder class. 112.78.157.244
 */
 $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=localhost;dbname=cakrawalaglobaldata',
-	'hostname' => "localhost",
-	'username' => "root",
-	'password' => "",
+	'dsn'	=> 'mysql:host=36.92.157.172;dbname=cakrawalaglobaldata',
+	'hostname' => "36.92.157.172",
+	'username' => "cakrawala",
+	'password' => "ytrewq1qtw!@#*()",
 	'database' => "cakrawalaglobaldata",
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
@@ -94,4 +94,3 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-
