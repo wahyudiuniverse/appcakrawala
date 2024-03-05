@@ -77,6 +77,48 @@
     };
 </script>
 
+<!-- Tombol Next di tab dokumen TKHL -->
+<script type="text/javascript">
+    document.getElementById("dokumen_next_button_tkhl").onclick = function() {
+        //konstruksi link tujuan
+        var baseURL = "<?php echo base_url(); ?>";
+        var pages = "<?php print($halaman); ?>";
+        var nik = "<?php print($nik_url); ?>";
+        var link_tujuan = "<?= base_url() ?>registrasi_tkhl/addRegister/";
+        var link_cancat = link_tujuan.concat("review", "/", nik);
+
+        //cek apakah input mandatory sudah terisi?
+        var ktp = "<?php print($register['ktp']); ?>";
+        var kk = "<?php print($register['kk']); ?>";
+        var ijazah = "<?php print($register['ijazah']); ?>";
+        var cv = "<?php print($register['civi']); ?>";
+        var pesan = "";
+        //cek ktp
+        if (ktp == "" || ktp == "0" || (!ktp.includes("/"))) {
+            pesan = pesan.concat("Dokumen KTP masih kosong\n");
+        }
+        //cek kk
+        if (kk == "" || kk == "0" || (!kk.includes("/"))) {
+            pesan = pesan.concat("Dokumen KK masih kosong\n");
+        }
+        //cek ijazah
+        if (ijazah == "" || ijazah == "0" || (!ijazah.includes("/"))) {
+            pesan = pesan.concat("Dokumen Ijazah masih kosong\n");
+        }
+        //cek cv
+        if (cv == "" || cv == "0" || (cv.includes("apps-cakrawala.com")) || (!cv.includes("/"))) {
+            pesan = pesan.concat("Dokumen CV masih kosong\n");
+        }
+
+        //tampilkan alert kalau ada yg blm diisi
+        if (pesan) {
+            alert(pesan);
+        } else {
+            location.href = link_cancat;
+        }
+    };
+</script>
+
 <!-- Fungsi navigasi halaman -->
 <script>
     function pindahHalaman(halaman, nik) {
@@ -101,6 +143,19 @@
     };
 </script>
 
+<!-- Tombol Edit Project dan Jabatan TKHL-->
+<script type="text/javascript">
+    document.getElementById("edit_project_dan_jabatan").onclick = function() {
+        var baseURL = "<?php echo base_url(); ?>";
+        var pages = "<?php print($halaman); ?>";
+        pages.value = "perusahaan";
+        var nik = "<?php print($nik_url); ?>";
+        var link_tujuan = "<?= base_url() ?>registrasi_tkhl/addRegister/";
+        var link_cancat = link_tujuan.concat("perusahaan", "/", nik);
+        location.href = link_cancat;
+    };
+</script>
+
 <!-- Tombol Edit Data Diri -->
 <script type="text/javascript">
     document.getElementById("edit_data_diri").onclick = function() {
@@ -108,6 +163,18 @@
         var pages = "data_diri";
         var nik = "<?php print($nik_url); ?>";
         var link_tujuan = "<?= base_url() ?>registrasi/addRegister/";
+        var link_cancat = link_tujuan.concat("data_diri", "/", nik);
+        location.href = link_cancat;
+    };
+</script>
+
+<!-- Tombol Edit Data Diri TKHL-->
+<script type="text/javascript">
+    document.getElementById("edit_data_diri").onclick = function() {
+        var baseURL = "<?php echo base_url(); ?>";
+        var pages = "data_diri";
+        var nik = "<?php print($nik_url); ?>";
+        var link_tujuan = "<?= base_url() ?>registrasi_tkhl/addRegister/";
         var link_cancat = link_tujuan.concat("data_diri", "/", nik);
         location.href = link_cancat;
     };
@@ -125,6 +192,18 @@
     };
 </script>
 
+<!-- Tombol Kontak Darurat TKHL-->
+<script type="text/javascript">
+    document.getElementById("edit_kontak_darurat").onclick = function() {
+        var baseURL = "<?php echo base_url(); ?>";
+        var pages = "kontak_darurat";
+        var nik = "<?php print($nik_url); ?>";
+        var link_tujuan = "<?= base_url() ?>registrasi_tkhl/addRegister/";
+        var link_cancat = link_tujuan.concat("kontak_darurat", "/", nik);
+        location.href = link_cancat;
+    };
+</script>
+
 <!-- Tombol Edit Dokumen -->
 <script type="text/javascript">
     document.getElementById("edit_dokumen").onclick = function() {
@@ -132,6 +211,18 @@
         var pages = "dokumen";
         var nik = "<?php print($nik_url); ?>";
         var link_tujuan = "<?= base_url() ?>registrasi/addRegister/";
+        var link_cancat = link_tujuan.concat("dokumen", "/", nik);
+        location.href = link_cancat;
+    };
+</script>
+
+<!-- Tombol Edit Dokumen -->
+<script type="text/javascript">
+    document.getElementById("edit_dokumen").onclick = function() {
+        var baseURL = "<?php echo base_url(); ?>";
+        var pages = "dokumen";
+        var nik = "<?php print($nik_url); ?>";
+        var link_tujuan = "<?= base_url() ?>registrasi_tkhl/addRegister/";
         var link_cancat = link_tujuan.concat("dokumen", "/", nik);
         location.href = link_cancat;
     };
