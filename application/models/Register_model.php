@@ -300,7 +300,32 @@ class Register_model extends CI_model
             'approved_nomby'          => '1',
             'approved_nomon'          => date("Y-m-d h:i:s"),
             'createdby'               => '1',
-            'e_status'                => '1'
+            'e_status'                => '1',
+            'department'                => '5'
+        ];
+
+        //$otherdb = $this->load->database('default', TRUE);
+
+        $this->db->where('nik_ktp', $id['nik']);
+        $this->db->update('xin_employee_request', $datakaryawan);
+
+        //return null;
+    }
+
+    //mengisi data saat finish
+    public function updateDataFinishTKHL($id)
+    {
+        //Input untuk Database
+        $datakaryawan = [
+            'request_empby'           => '1',
+            'request_empon'           => date("Y-m-d h:i:s"),
+            'approved_naeby'          => '1',
+            'approved_naeon'          => date("Y-m-d h:i:s"),
+            'approved_nomby'          => '1',
+            'approved_nomon'          => date("Y-m-d h:i:s"),
+            'createdby'               => '1',
+            'e_status'                => '2',
+            'department'                => '5'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);

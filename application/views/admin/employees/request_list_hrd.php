@@ -127,6 +127,7 @@
           <table class="display dataTable table table-striped table-bordered" id="xin_table2">
             <thead>
               <tr>
+                <th><?php echo $this->lang->line('xin_request_employee_status'); ?></th>
                 <th>Gol. Karyawan</th>
                 <th>NIK</th>
                 <th>Nama</th>
@@ -144,6 +145,10 @@
       </div>
     </div>
 
+    <?php
+    echo $this->db->last_query();
+    ?>
+
     <!-- Script xin_table2 -->
     <script type="text/javascript">
       var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
@@ -153,6 +158,9 @@
           'processing': true,
           'serverSide': true,
           'serverMethod': 'post',
+          'order': [
+            [3, 'asc']
+          ],
           'ajax': {
             'url': '<?= base_url() ?>admin/employee_request_hrd/request_list_hrd2',
             data: {
@@ -160,10 +168,16 @@
             },
           },
           'columns': [{
-              data: 'nik_ktp'
+              data: 'aksi',
+              "orderable": false
             },
             {
-              data: 'golongan_karyawan'
+              data: 'golongan_karyawan',
+              "orderable": false
+            },
+            {
+              data: 'nik_ktp',
+              "orderable": false
             },
             {
               data: 'fullname'
@@ -175,7 +189,8 @@
               data: 'sub_project'
             },
             {
-              data: 'jabatan'
+              data: 'jabatan',
+              "orderable": false
             },
             {
               data: 'penempatan'
@@ -184,20 +199,26 @@
               data: 'gaji_pokok'
             },
             {
-              data: 'periode'
+              data: 'periode',
+              "orderable": false
             },
             {
-              data: 'tanggal_register'
+              data: 'tanggal_register',
+              "orderable": false
             },
           ]
         });
       });
     </script>
 
+<<<<<<< HEAD
 
     <div class="card">
 
 
+=======
+    <!-- <div class="card">
+>>>>>>> 2d4f66631bc9c9b90ebea3165a7c99143d8f0ac9
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> <?php echo $this->lang->line('xin_companies'); ?></span> </div>
       <div class="card-body">
         <div class="box-datatable table-responsive">
