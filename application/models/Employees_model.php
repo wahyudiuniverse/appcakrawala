@@ -291,6 +291,68 @@ class Employees_model extends CI_Model
 		return $query;
 	}
 
+	//ambil golongan karawan berdasarkan project
+	function get_golongan_karyawan($proj_id)
+	{
+		$golongan = "GOL";
+		$this->db->select('*');
+		$this->db->from('xin_projects');
+		$this->db->where('project_id', $proj_id);
+
+		$query = $this->db->get()->row_array();
+
+		//return $query->doc_id;
+		if ($query['doc_id'] == '1') {
+			return "PKWT";
+		} else if ($query['doc_id'] == '2') {
+			return "TKHL";
+		} else {
+			return "";
+		}
+	}
+
+	//ambil nama project
+	function get_nama_project($proj_id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_projects');
+		$this->db->where('project_id', $proj_id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query['title'];
+	}
+
+	//ambil nama sub project
+	function get_nama_sub_project($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_projects_sub');
+		$this->db->where('secid', $id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query['sub_project_name'];
+	}
+
+	//ambil nama jabatan
+	function get_nama_jabatan($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_designations');
+		$this->db->where('designation_id', $id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query['designation_name'];
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data request employee yang belum diapprove HRD dan belum ditolak HRD
+	* 
+	* @author Fadla Qamara
+	*/
 	function get_request_hrd2($postData = null)
 	{
 
@@ -321,7 +383,7 @@ class Employees_model extends CI_Model
 
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecords = $records[0]->allcount;
 
@@ -330,35 +392,38 @@ class Employees_model extends CI_Model
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
 		$this->db->select('*');
-
-		// $this->db->select('xin_employee_request.nik_ktp, xin_employee_request.fullname, xin_employee_request.penempatan, xin_projects.title as project_name, xin_employee_request.posisi');
-
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		//$this->db->join('xin_projects', 'xin_projects.project_id=xin_employee_request.project');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employee_request')->result();
 
 		$data = array();
+		$i = 1;
 
 		foreach ($records as $record) {
 
 			$data[] = array(
-				"nik_ktp" => "Ini NIK lho " . $record->nik_ktp,
+				"nik_ktp" => $this->get_golongan_karyawan($record->project),
 				"fullname" => $record->fullname,
+				"golongan_karyawan" => $record->nik_ktp,
 				"penempatan" => $record->penempatan,
-				"project" => $record->project,
-				"posisi" => $record->posisi
+				"project" => $this->get_nama_project($record->project),
+				"sub_project" => $this->get_nama_sub_project($record->sub_project),
+				"jabatan" => $this->get_nama_jabatan($record->posisi),
+				"gaji_pokok" => $record->gaji_pokok,
+				"periode" => $record->contract_start . "-" . $record->contract_end,
+				"tanggal_register" => $record->request_empon
 			);
+			$i++;
 		}
 
 		## Response
@@ -368,6 +433,7 @@ class Employees_model extends CI_Model
 			"iTotalDisplayRecords" => $totalRecordwithFilter,
 			"aaData" => $data
 		);
+		//print_r($otherdb->last_query());
 
 		return $response;
 	}
