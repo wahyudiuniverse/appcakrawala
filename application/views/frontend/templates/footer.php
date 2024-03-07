@@ -268,6 +268,46 @@
     }
 </script>
 
+<!-- Tombol Selesai isi -->
+<script>
+    function myFunctionTKHL() {
+        // baseURL variable
+        var baseURL = "<?php echo base_url(); ?>";
+        var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
+            csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+        var nik = "<?php print($cek_nik); ?>";
+
+        //alert(nik);
+        //alert(baseURL);
+
+        // AJAX request
+        $.ajax({
+            url: '<?= base_url() ?>registrasi/isiDataFinishTKHL/',
+            method: 'post',
+            data: {
+                [csrfName]: csrfHash,
+                nik: nik
+            },
+            success: function(response) {
+                //alert("masuk dengan nik".nik);
+            }
+        });
+
+        //return false;
+
+        //var nik = "<?php print($cek_nik); ?>";
+        //var baseURL = "<?php echo base_url(); ?>";
+        //var link_tujuan = "<?= base_url() ?>registrasi/isiDataFinish/";
+        //var link_cancat = link_tujuan.concat(nik);
+        //document.getElementById("finish").innerHTML = nik;
+        //alert(baseURL);
+        //alert(link_cancat);
+        //alert(nik);
+        //location.href = link_cancat;
+    }
+</script>
+
 <!-- Chained Dropdown (Project - Sub Project) & (Project - Jabatan) -->
 <script type='text/javascript'>
     // baseURL variable

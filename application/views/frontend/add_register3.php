@@ -1427,7 +1427,7 @@
             <!-- End Section Dokumen -->
 
             <!-- Button trigger modal finish -->
-            <button type="button" id="finish" name="finish" onclick="myFunction()" class="btn btn-primary btn-sm btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
+            <button type="button" id="finish_tkhl" name="finish_tkhl" onclick="myFunctionTKHL()" class="btn btn-primary btn-sm btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
                 Selesai
             </button>
         <?php } ?>

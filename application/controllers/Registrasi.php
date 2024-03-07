@@ -78,6 +78,17 @@ class Registrasi extends CI_Controller
     }
 
     //mengambil Json data Sub Project berdasarkan projectnya
+    public function isiDataFinishTKHL()
+    {
+        $postData = $this->input->post();
+
+        // get data 
+        $data = $this->register->updateDataFinishTKHL($postData);
+        //echo json_encode($data);
+        //echo "data berhasil masuk";
+    }
+
+    //mengambil Json data Sub Project berdasarkan projectnya
     public function getSubByProjectTes($id)
     {
         //$postData = $this->input->post();
