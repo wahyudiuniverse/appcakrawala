@@ -127,11 +127,16 @@
           <table class="display dataTable table table-striped table-bordered" id="xin_table2">
             <thead>
               <tr>
+                <th>Gol. Karyawan</th>
                 <th>NIK</th>
                 <th>Nama</th>
+                <th>Project</th>
+                <th>Sub Project</th>
+                <th>Jabatan</th>
                 <th>Penempatan</th>
-                <th>Project ID</th>
-                <th>Jabatan ID</th>
+                <th>Gaji Pokok</th>
+                <th>Periode</th>
+                <th>Tanggal Register</th>
               </tr>
             </thead>
           </table>
@@ -158,23 +163,38 @@
               data: 'nik_ktp'
             },
             {
-              data: 'fullname'
+              data: 'golongan_karyawan'
             },
             {
-              data: 'penempatan'
+              data: 'fullname'
             },
             {
               data: 'project'
             },
             {
-              data: 'posisi'
+              data: 'sub_project'
+            },
+            {
+              data: 'jabatan'
+            },
+            {
+              data: 'penempatan'
+            },
+            {
+              data: 'gaji_pokok'
+            },
+            {
+              data: 'periode'
+            },
+            {
+              data: 'tanggal_register'
             },
           ]
         });
       });
     </script>
 
-    <div class="card">
+    <!-- <div class="card">
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> <?php echo $this->lang->line('xin_companies'); ?></span> </div>
       <div class="card-body">
         <div class="box-datatable table-responsive">
@@ -198,6 +218,6 @@
           </table>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
