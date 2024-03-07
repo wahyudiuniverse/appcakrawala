@@ -74,10 +74,10 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=36.92.157.172;dbname=cakrawalaglobaldata',
-	'hostname' => "36.92.157.172",
-	'username' => "cakrawala",
-	'password' => "ytrewq1qtw!@#*()",
+	'dsn'	=> 'mysql:host=localhost;dbname=cakrawalaglobaldata',
+	'hostname' => "localhost",
+	'username' => "root",
+	'password' => "",
 	'database' => "cakrawalaglobaldata",
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
