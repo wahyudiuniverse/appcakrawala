@@ -174,7 +174,7 @@
       });
     </script>
 
-    <div class="card">
+<!--     <div class="card">
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> <?php echo $this->lang->line('xin_companies'); ?></span> </div>
       <div class="card-body">
         <div class="box-datatable table-responsive">
@@ -198,6 +198,6 @@
           </table>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

@@ -116,7 +116,7 @@
 <div class="row m-b-1 <?php echo $get_animate;?>">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_hr_reports_attendance_employee');?></strong></span> </div>
+      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>Table PKWT Expired</strong></span> </div>
       <div class="card-body">
         <div class="box-datatable table-responsive">
           <table class="datatables-demo table table-striped table-bordered" id="xin_table">
