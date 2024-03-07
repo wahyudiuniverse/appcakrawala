@@ -211,12 +211,6 @@
       });
     </script>
 
-<<<<<<< HEAD
-
-    <div class="card">
-
-
-=======
     <!-- <div class="card">
 >>>>>>> 2d4f66631bc9c9b90ebea3165a7c99143d8f0ac9
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> <?php echo $this->lang->line('xin_companies'); ?></span> </div>
