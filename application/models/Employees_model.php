@@ -294,7 +294,7 @@ class Employees_model extends CI_Model
 	//ambil golongan karawan berdasarkan project
 	function get_golongan_karyawan($proj_id)
 	{
-		$golongan = "GOL";
+		// $golongan = "GOL";
 		$this->db->select('*');
 		$this->db->from('xin_projects');
 		$this->db->where('project_id', $proj_id);
@@ -378,7 +378,6 @@ class Employees_model extends CI_Model
 		AND approved_nomby = 1
 		AND approved_hrdby is null
 		AND cancel_stat = 0
-        AND e_status = 1
 		)";
 
 		## Total number of records without filtering
@@ -417,6 +416,7 @@ class Employees_model extends CI_Model
 				"golongan_karyawan" => $record->nik_ktp,
 				"penempatan" => $record->penempatan,
 				"project" => $this->get_nama_project($record->project),
+				// "project" => $record->project,
 				"sub_project" => $this->get_nama_sub_project($record->sub_project),
 				"jabatan" => $this->get_nama_jabatan($record->posisi),
 				"gaji_pokok" => $record->gaji_pokok,
