@@ -2212,6 +2212,13 @@ class Reports extends MY_Controller
 					$nama_project = '--';	
 				}
 
+				$subprojects = $this->Project_model->read_single_subproject($r->sub_project_id);
+				if(!is_null($projects)){
+					$nama_subproject = $subprojects[0]->sub_project_name;
+				} else {
+					$nama_subproject = '--';	
+				}
+
 				$designation = $this->Designation_model->read_designation_information($r->designation_id);
 				if(!is_null($designation)){
 					$designation_name = $designation[0]->designation_name;
@@ -2257,6 +2264,7 @@ class Reports extends MY_Controller
 				$nip,
 				$fullname,
 				$nama_project,
+				$nama_subproject,
 				$designation_name,
 				$penempatan,
 				$last_contract
