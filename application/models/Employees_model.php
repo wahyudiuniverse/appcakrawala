@@ -383,7 +383,7 @@ class Employees_model extends CI_Model
 
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecords = $records[0]->allcount;
 
@@ -392,24 +392,16 @@ class Employees_model extends CI_Model
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
 		$this->db->select('*');
-
-		// $this->db->select('xin_employee_request.nik_ktp, xin_employee_request.fullname, xin_employee_request.penempatan, xin_projects.title as project_name, xin_employee_request.posisi');
-
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		//$this->db->join('xin_projects', 'xin_projects.project_id=xin_employee_request.project');
-<<<<<<< HEAD
 		$this->db->where($kondisiDefaultQuery);
-=======
-		//$this->db->where($kondisiDefaultQuery);
->>>>>>> da620ae431596a2753eecd26186c3598966920ed
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employee_request')->result();
@@ -424,17 +416,12 @@ class Employees_model extends CI_Model
 				"fullname" => $record->fullname,
 				"golongan_karyawan" => $record->nik_ktp,
 				"penempatan" => $record->penempatan,
-<<<<<<< HEAD
 				"project" => $this->get_nama_project($record->project),
 				"sub_project" => $this->get_nama_sub_project($record->sub_project),
 				"jabatan" => $this->get_nama_jabatan($record->posisi),
 				"gaji_pokok" => $record->gaji_pokok,
 				"periode" => $record->contract_start . "-" . $record->contract_end,
 				"tanggal_register" => $record->request_empon
-=======
-				"project" => $record->project,
-				"posisi" => $record->posisi
->>>>>>> da620ae431596a2753eecd26186c3598966920ed
 			);
 			$i++;
 		}
