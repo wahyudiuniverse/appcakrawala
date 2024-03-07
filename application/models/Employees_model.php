@@ -321,7 +321,7 @@ class Employees_model extends CI_Model
 
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
-		$this->db->where($kondisiDefaultQuery);
+		//$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecords = $records[0]->allcount;
 
@@ -330,17 +330,20 @@ class Employees_model extends CI_Model
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		$this->db->where($kondisiDefaultQuery);
+		//$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
 		$this->db->select('*');
+
+		// $this->db->select('xin_employee_request.nik_ktp, xin_employee_request.fullname, xin_employee_request.penempatan, xin_projects.title as project_name, xin_employee_request.posisi');
+
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		$this->db->join('xin_projects', 'xin_projects.project_id=xin_employee_request.project');
-		$this->db->where($kondisiDefaultQuery);
+		//$this->db->join('xin_projects', 'xin_projects.project_id=xin_employee_request.project');
+		//$this->db->where($kondisiDefaultQuery);
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employee_request')->result();
@@ -353,7 +356,7 @@ class Employees_model extends CI_Model
 				"nik_ktp" => "Ini NIK lho " . $record->nik_ktp,
 				"fullname" => $record->fullname,
 				"penempatan" => $record->penempatan,
-				"project" => $record->title,
+				"project" => $record->project,
 				"posisi" => $record->posisi
 			);
 		}
