@@ -300,7 +300,9 @@ class Register_model_tkhl extends CI_model
             'approved_nomby'          => '1',
             'approved_nomon'          => date("Y-m-d h:i:s"),
             'createdby'               => '1',
-            'e_status'                => '1'
+            'e_status'                => '1',
+            'department'              => '5',
+            'location_id'             => '1'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
