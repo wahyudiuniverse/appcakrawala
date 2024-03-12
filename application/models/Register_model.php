@@ -301,7 +301,8 @@ class Register_model extends CI_model
             'approved_nomon'          => date("Y-m-d h:i:s"),
             'createdby'               => '1',
             'e_status'                => '1',
-            'department'                => '5'
+            'department'              => '5',
+            'location_id'             => '1'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
@@ -325,7 +326,8 @@ class Register_model extends CI_model
             'approved_nomon'          => date("Y-m-d h:i:s"),
             'createdby'               => '1',
             'e_status'                => '2',
-            'department'                => '5'
+            'department'              => '5',
+            'location_id'             => '1'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
