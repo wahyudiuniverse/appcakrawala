@@ -302,7 +302,7 @@ class Register_model extends CI_model
             'createdby'               => '1',
             'e_status'                => '1',
             'department'              => '5',
-            'location_id'             => '1'
+            'location_id'             => '0'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
@@ -327,7 +327,7 @@ class Register_model extends CI_model
             'createdby'               => '1',
             'e_status'                => '2',
             'department'              => '5',
-            'location_id'             => '1'
+            'location_id'             => '0'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
