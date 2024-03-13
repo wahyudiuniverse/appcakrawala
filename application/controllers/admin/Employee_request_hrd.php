@@ -52,6 +52,19 @@ class Employee_request_hrd extends MY_Controller
 		// $data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 
+		//Parameter filter datatables
+		$project_karyawan = $this->input->post('project_id');
+		$golongan_karyawan = $this->input->post('golongan');
+		$kategori_karyawan = $this->input->post('kategori');
+		$approve_karyawan = $this->input->post('approve');
+
+		//Cek apakah ada input parameter
+		$data['project_karyawan'] = is_null($project_karyawan) ? "" : $project_karyawan;
+		$data['golongan_karyawan'] = is_null($golongan_karyawan) ? "" : $golongan_karyawan;
+		$data['kategori_karyawan'] = is_null($kategori_karyawan) ? "" : $kategori_karyawan;
+		$data['approve_karyawan'] = is_null($approve_karyawan) ? "" : $approve_karyawan;
+		$data['session'] = $session;
+
 		$data['all_projects_sub'] = $this->Project_model->get_all_projects();
 		$data['all_departments'] = $this->Department_model->all_departments();
 		$data['all_designations'] = $this->Designation_model->all_designations();
@@ -905,9 +918,6 @@ class Employee_request_hrd extends MY_Controller
 			$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-
-
-
 			$data_up = array(
 
 				'catatan_hr' 	=> $this->input->post('ket_note')
@@ -961,7 +971,9 @@ class Employee_request_hrd extends MY_Controller
 				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
 			}
 			$this->output($Return);
-			exit;
+			//exit;
+
+			redirect(base_url() . 'admin/employee_request_hrd/');
 		}
 	}
 

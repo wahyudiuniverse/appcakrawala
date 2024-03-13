@@ -363,6 +363,29 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nama kategori karyawan
+	function get_nama_kategori($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('mt_employee_category');
+			$this->db->where('id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['sub_project_name'];
+			if ($query['name'] == null) {
+				return "";
+			} else {
+				return $query['name'];
+			}
+		}
+	}
+
 	//ambil nama jabatan
 	function get_nama_jabatan($id)
 	{
@@ -406,11 +429,22 @@ class Employees_model extends CI_Model
 		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
 		$searchValue = $postData['search']['value']; // Search value
 
+		//variabel filter (diambil dari post ajax di view)
+		$project_id = $postData['project_id'];
+		$golongan = $postData['golongan'];
+		$kategori = $postData['kategori'];
+		$approve = $postData['approve'];
+		$idsession = $postData['idsession'];
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
 			$searchQuery = " (penempatan like '%" . $searchValue . "%' or nik_ktp like '%" . $searchValue . "%' or fullname like'%" . $searchValue . "%' ) ";
 		}
+
 		$kondisiDefaultQuery = "(
 			request_empby = 1
 		AND	approved_naeby = 1
@@ -418,10 +452,46 @@ class Employees_model extends CI_Model
 		AND approved_hrdby is null
 		AND cancel_stat = 0
 		)";
+		//AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $idsession . ")
+
+		//kalau ada input filter
+		//project
+		if (($project_id != null) && ($project_id != "") && ($project_id != '0')) {
+			$filterProject = "(
+			project = " . $project_id . "
+		)";
+		} else {
+			$filterProject = "";
+		}
+		//golongan
+		if (($golongan != null) && ($golongan != "") && ($golongan != '0')) {
+			$filterGolongan = "(
+			e_status = " . $golongan . "
+		)";
+		} else {
+			$filterGolongan = "";
+		}
+		//kaegori
+		if (($kategori != null) && ($kategori != "") && ($kategori != '0')) {
+			$filterKategori = "(
+			location_id = " . $kategori . "
+		)";
+		} else {
+			$filterKategori = "";
+		}
 
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		$this->db->where($kondisiDefaultQuery);
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterGolongan != '') {
+			$this->db->where($filterGolongan);
+		}
+		if ($filterKategori != '') {
+			$this->db->where($filterKategori);
+		}
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecords = $records[0]->allcount;
 
@@ -431,6 +501,15 @@ class Employees_model extends CI_Model
 			$this->db->where($searchQuery);
 		}
 		$this->db->where($kondisiDefaultQuery);
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterGolongan != '') {
+			$this->db->where($filterGolongan);
+		}
+		if ($filterKategori != '') {
+			$this->db->where($filterKategori);
+		}
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
@@ -440,6 +519,15 @@ class Employees_model extends CI_Model
 			$this->db->where($searchQuery);
 		}
 		$this->db->where($kondisiDefaultQuery);
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterGolongan != '') {
+			$this->db->where($filterGolongan);
+		}
+		if ($filterKategori != '') {
+			$this->db->where($filterKategori);
+		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employee_request')->result();
@@ -450,7 +538,7 @@ class Employees_model extends CI_Model
 		foreach ($records as $record) {
 			if ($record->approved_hrdby == null) {
 
-				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $record->secid . '">Need Approval HRD</button>';
+				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $record->secid . '">Approve HRD</button>';
 			} else {
 
 				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $record->secid . '">Approved</button>';
@@ -462,22 +550,124 @@ class Employees_model extends CI_Model
 
 			$noteHR = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal" data-target=".edit-modal-data" data-company_id="!' . $record->secid . '">note</button>';
 
-			$data[] = array(
-				"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-				"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-				"fullname" => $record->fullname,
-				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-				"penempatan" => $record->penempatan,
-				"project" => $this->get_nama_project($record->project),
-				//"project" => $record->project,
-				"sub_project" => $this->get_nama_sub_project($record->sub_project),
-				//"sub_project" => $record->sub_project,
-				"jabatan" => $this->get_nama_jabatan($record->posisi),
-				//"jabatan" => $record->posisi,
-				"gaji_pokok" => $record->gaji_pokok,
-				"periode" => $record->contract_start . "-" . $record->contract_end,
-				"tanggal_register" => $record->request_empon
-			);
+			$sambung_periode = "";
+			if (($record->contract_start == null) || ($record->contract_start == "")) {
+				if (($record->contract_end == null) || ($record->contract_end == "")) {
+					$sambung_periode = " -- ";
+				} else {
+					$sambung_periode = " s/d ";
+				}
+			} else {
+				$sambung_periode = " s/d ";
+			}
+
+			$status_golongan = "";
+			if ($record->e_status == '1') {
+				$status_golongan = "PKWT";
+			} else if ($record->e_status == '2') {
+				$status_golongan = "TKHL";
+			} else {
+				$status_golongan = "PKWT";
+			}
+
+			//cek kondisi siap approve
+			$siap_approve = "";
+			if (($record->gaji_pokok != null) && ($record->gaji_pokok != "") && ($record->gaji_pokok != "0")) { //cek gaji pokok
+				if (($record->doj != null) && ($record->doj != "") && ($record->doj != "0")) { //cek join date
+					if (($record->penempatan != null) && ($record->penempatan != "") && ($record->penempatan != "0")) { //cek penempatan
+						if (($record->contract_start != null) && ($record->contract_start != "") && ($record->contract_start != "0")) { //cek start kontak
+							if (($record->contract_end != null) && ($record->contract_end != "") && ($record->contract_end != "0")) { //cek end kontrak
+								if (($record->contract_periode != null) && ($record->contract_periode != "") && ($record->contract_periode != "0")) { //cek waku kontrak
+									if (($record->cut_start != null) && ($record->cut_start != "") && ($record->cut_start != "0")) { //cek cut start
+										if (($record->cut_off != null) && ($record->cut_off != "") && ($record->cut_off != "0")) { //cek cut off
+											if (($record->date_payment != null) && ($record->date_payment != "") && ($record->date_payment != "0")) { //cek date payment
+												if (($record->hari_kerja != null) && ($record->hari_kerja != "") && ($record->hari_kerja != "0")) { //cek hari kerja
+													if (($record->company_id != null) && ($record->company_id != "") && ($record->company_id != "0")) {
+														if (($record->project != null) && ($record->project != "") && ($record->project != "0")) {
+															if (($record->sub_project != null) && ($record->sub_project != "") && ($record->sub_project != "0")) {
+																if (($record->posisi != null) && ($record->posisi != "") && ($record->posisi != "0")) {
+																	$siap_approve = "</br><button type='button' class='btn btn-xs btn-outline-info' data-toggle='modal' data-target='.edit-modal-data' data-company_id='$" . $record->secid . "'>Siap Approve</button>";
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if ($approve == '1') {
+				if ($siap_approve != "") {
+					$data[] = array(
+						"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+						//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+						"golongan_karyawan" => $status_golongan,
+						//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+						"fullname" => $record->fullname . $siap_approve,
+						"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+						"penempatan" => $record->penempatan,
+						"project" => $this->get_nama_project($record->project),
+						//"project" => $record->project,
+						"sub_project" => $this->get_nama_sub_project($record->sub_project),
+						//"sub_project" => $record->sub_project,
+						"jabatan" => $this->get_nama_jabatan($record->posisi),
+						//"jabatan" => $record->posisi,
+						"gaji_pokok" => $record->gaji_pokok,
+						"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+						"kategori" => $this->get_nama_kategori($record->location_id),
+						"tanggal_register" => $record->request_empon
+					);
+				}
+			} else if ($approve == '2') {
+				if ($siap_approve == "") {
+					$data[] = array(
+						"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+						//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+						"golongan_karyawan" => $status_golongan,
+						//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+						"fullname" => $record->fullname . $siap_approve,
+						"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+						"penempatan" => $record->penempatan,
+						"project" => $this->get_nama_project($record->project),
+						//"project" => $record->project,
+						"sub_project" => $this->get_nama_sub_project($record->sub_project),
+						//"sub_project" => $record->sub_project,
+						"jabatan" => $this->get_nama_jabatan($record->posisi),
+						//"jabatan" => $record->posisi,
+						"gaji_pokok" => $record->gaji_pokok,
+						"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+						"kategori" => $this->get_nama_kategori($record->location_id),
+						"tanggal_register" => $record->request_empon
+					);
+				}
+			} else {
+
+				$data[] = array(
+					"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+					//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+					"golongan_karyawan" => $status_golongan,
+					//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+					"fullname" => $record->fullname . $siap_approve,
+					"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+					"penempatan" => $record->penempatan,
+					"project" => $this->get_nama_project($record->project),
+					//"project" => $record->project,
+					"sub_project" => $this->get_nama_sub_project($record->sub_project),
+					//"sub_project" => $record->sub_project,
+					"jabatan" => $this->get_nama_jabatan($record->posisi),
+					//"jabatan" => $record->posisi,
+					"gaji_pokok" => $record->gaji_pokok,
+					"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+					"kategori" => $this->get_nama_kategori($record->location_id),
+					"tanggal_register" => $record->request_empon
+				);
+			}
 			$i++;
 		}
 
@@ -488,7 +678,8 @@ class Employees_model extends CI_Model
 			"iTotalDisplayRecords" => $totalRecordwithFilter,
 			"aaData" => $data
 		);
-		//print_r($otherdb->last_query());
+		//print_r($this->db->last_query());
+		//die;
 
 		return $response;
 	}
@@ -502,10 +693,11 @@ class Employees_model extends CI_Model
 		AND approved_nomby is not null
 		AND approved_hrdby is null
 		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-		AND cancel_stat = 0
-        AND e_status = 0)");
+		AND cancel_stat = 0)
+        
+		ORDER BY title asc");
 		return $query->result();
-	}
+	} //AND e_status = 0)
 
 	public function get_proj_pkwtchecker($empID)
 	{
