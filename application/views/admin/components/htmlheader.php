@@ -47,14 +47,20 @@
   <!-- Core scripts -->
   <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/js/pace.js"></script>
 
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+
   <!-- requirement for datatables -->
   <!-- <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" /> -->
   <link href="https://cdn.datatables.net/searchpanes/1.1.1/css/searchPanes.dataTables.min.css" rel="stylesheet" />
   <link href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" rel="stylesheet" />
 
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/searchpanes/1.1.1/js/dataTables.searchPanes.min.js"></script>
+  <!-- <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script> -->
+  <!-- <script src="https://cdn.datatables.net/searchpanes/1.1.1/js/dataTables.searchPanes.min.js"></script> -->
   <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
   <!-- <link href="https://cdn.datatables.net/2.0.2/css/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link href="https://cdn.datatables.net/autofill/2.7.0/css/autoFill.bootstrap4.css" rel="stylesheet">
@@ -156,7 +162,7 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/select2/select2.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/smartwizard/smartwizard.css">
-  <!-- <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/jquery-ui/jquery-ui.css"> -->
+  <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/jquery-ui/jquery-ui.css">
 
   <!-- Picker -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css">

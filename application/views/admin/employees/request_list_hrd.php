@@ -145,7 +145,7 @@
     <div class="form-row">
       <div class="col-md mb-3">
         <label class="form-label">Kesiapan Data</label>
-        <select class="form-control" name="approve" id="approve" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
+        <select class="form-control selectpicker" data-live-search="true" name="approve" id="approve" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
           <option value="1" <?php if ($approve_karyawan == "1") {
                               echo " selected";
@@ -158,7 +158,7 @@
 
       <div class="col-md mb-3">
         <label class="form-label">Jenis Dokumen</label>
-        <select class="form-control" name="golongan" id="golongan" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
+        <select class="form-control selectpicker" data-live-search="true" name="golongan" id="golongan" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
           <option value="1" <?php if ($golongan_karyawan == "1") {
                               echo " selected";
@@ -171,7 +171,7 @@
 
       <div class="col-md mb-3">
         <label class="form-label">Kategori</label>
-        <select class="form-control" name="kategori" id="kategori" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
+        <select class="form-control selectpicker" data-live-search="true" name="kategori" id="kategori" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
           <option value="1" <?php if ($kategori_karyawan == "1") {
                               echo " selected";
@@ -191,7 +191,7 @@
 
       <div class="col-md mb-3">
         <label class="form-label">Projects</label>
-        <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
+        <select class="form-control selectpicker" data-live-search="true" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
           <?php foreach ($all_projects as $proj) { ?>
             <option value="<?php echo $proj->project_id; ?>" <?php if ($project_karyawan == $proj->project_id) {
