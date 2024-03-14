@@ -397,7 +397,7 @@ class Pkwt229 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah yang didapatkan dengan perhitungan sebesar '.$this->Xin_model->rupiah($sum_salary).'/Bulan.</td>
+								<td colspan="20">Total Upah yang didapatkan dengan perhitungan sebesar '.$this->Xin_model->rupiah($sum_salary).'/Hari.</td>
 							</tr>
 
 

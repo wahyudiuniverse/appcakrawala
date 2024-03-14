@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt74 extends MY_Controller 
+class Pkwt76 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -859,8 +859,6 @@ class Pkwt74 extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-
-
 <br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1099,6 +1097,7 @@ class Pkwt74 extends MY_Controller
 				</table>
 
 				<br>
+
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
