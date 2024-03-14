@@ -518,7 +518,9 @@ class Employees_model extends CI_Model
 			project = " . $project_id . "
 		)";
 		} else {
-			$filterProject = "";
+			//$filterProject = "(project in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $idsession . ")";
+			$filterProject = "project in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $idsession . ")";
+			//$filterProject = "";
 		}
 		//golongan
 		if (($golongan != null) && ($golongan != "") && ($golongan != '0')) {
@@ -842,6 +844,7 @@ class Employees_model extends CI_Model
 				//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
 				"golongan_karyawan" => $status_golongan,
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
 				"fullname" => $record->fullname . $siap_approve,
 				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
 				"penempatan" => $record->penempatan,
