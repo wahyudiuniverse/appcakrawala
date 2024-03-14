@@ -266,8 +266,7 @@ class Employees_model extends CI_Model
 		AND approved_nomby is not null
 		AND approved_hrdby is null
 		AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-		AND cancel_stat = 0
-        AND e_status = 0";
+		AND cancel_stat = 0";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;
@@ -803,7 +802,7 @@ class Employees_model extends CI_Model
 			} else if ($record->e_status == '2') {
 				$status_golongan = "TKHL";
 			} else {
-				$status_golongan = "PKWT";
+				$status_golongan = "--";
 			}
 
 			//cek kondisi siap approve
