@@ -454,6 +454,64 @@ class Employees_model extends CI_Model
 		)";
 		//AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $idsession . ")
 
+		$kondisiBelumSiapApprove = "(
+			gaji_pokok = '0'
+		OR	gaji_pokok is null
+		OR  gaji_pokok = ''
+
+		OR  doj = '0'
+		OR	doj is null
+		OR  doj = ''
+
+		OR  penempatan = '0'
+		OR	penempatan is null
+		OR  penempatan = ''
+
+		OR  contract_start = '0'
+		OR	contract_start is null
+		OR  contract_start = ''
+
+		OR  contract_end = '0'
+		OR	contract_end is null
+		OR  contract_end = ''
+
+		OR  contract_periode = '0'
+		OR	contract_periode is null
+		OR  contract_periode = ''
+
+		OR  cut_start = '0'
+		OR	cut_start is null
+		OR  cut_start = ''
+
+		OR  cut_off = '0'
+		OR	cut_off is null
+		OR  cut_off = ''
+
+		OR  date_payment = '0'
+		OR	date_payment is null
+		OR  date_payment = ''
+
+		OR  hari_kerja = '0'
+		OR	hari_kerja is null
+		OR  hari_kerja = ''
+
+		OR  company_id = '0'
+		OR	company_id is null
+		OR  company_id = ''
+
+		OR  project = '0'
+		OR	project is null
+		OR  project = ''
+
+		OR  sub_project = '0'
+		OR	sub_project is null
+		OR  sub_project = ''
+
+		OR  posisi = '0'
+		OR	posisi is null
+		OR  posisi = ''
+		)";
+
 		//kalau ada input filter
 		//project
 		if (($project_id != null) && ($project_id != "") && ($project_id != '0')) {
@@ -492,6 +550,65 @@ class Employees_model extends CI_Model
 		if ($filterKategori != '') {
 			$this->db->where($filterKategori);
 		}
+		if ($approve == '1') {
+			$this->db->where('gaji_pokok !=', '0');
+			$this->db->where('gaji_pokok !=', 'null');
+			$this->db->where('gaji_pokok !=', '');
+
+			$this->db->where('doj !=', '0');
+			$this->db->where('doj !=', 'null');
+			$this->db->where('doj !=', '');
+
+			$this->db->where('penempatan !=', '0');
+			$this->db->where('penempatan !=', 'null');
+			$this->db->where('penempatan !=', '');
+
+			$this->db->where('contract_start !=', '0');
+			$this->db->where('contract_start !=', 'null');
+			$this->db->where('contract_start !=', '');
+
+			$this->db->where('contract_end !=', '0');
+			$this->db->where('contract_end !=', 'null');
+			$this->db->where('contract_end !=', '');
+
+			$this->db->where('contract_periode !=', '0');
+			$this->db->where('contract_periode !=', 'null');
+			$this->db->where('contract_periode !=', '');
+
+			$this->db->where('cut_start !=', '0');
+			$this->db->where('cut_start !=', 'null');
+			$this->db->where('cut_start !=', '');
+
+			$this->db->where('cut_off !=', '0');
+			$this->db->where('cut_off !=', 'null');
+			$this->db->where('cut_off !=', '');
+
+			$this->db->where('date_payment !=', '0');
+			$this->db->where('date_payment !=', 'null');
+			$this->db->where('date_payment !=', '');
+
+			$this->db->where('hari_kerja !=', '0');
+			$this->db->where('hari_kerja !=', 'null');
+			$this->db->where('hari_kerja !=', '');
+
+			$this->db->where('company_id !=', '0');
+			$this->db->where('company_id !=', 'null');
+			$this->db->where('company_id !=', '');
+
+			$this->db->where('project !=', '0');
+			$this->db->where('project !=', 'null');
+			$this->db->where('project !=', '');
+
+			$this->db->where('sub_project !=', '0');
+			$this->db->where('sub_project !=', 'null');
+			$this->db->where('sub_project !=', '');
+
+			$this->db->where('posisi !=', '0');
+			$this->db->where('posisi !=', 'null');
+			$this->db->where('posisi !=', '');
+		} else if ($approve == '2') {
+			$this->db->where($kondisiBelumSiapApprove);
+		}
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecords = $records[0]->allcount;
 
@@ -509,6 +626,65 @@ class Employees_model extends CI_Model
 		}
 		if ($filterKategori != '') {
 			$this->db->where($filterKategori);
+		}
+		if ($approve == '1') {
+			$this->db->where('gaji_pokok !=', '0');
+			$this->db->where('gaji_pokok !=', 'null');
+			$this->db->where('gaji_pokok !=', '');
+
+			$this->db->where('doj !=', '0');
+			$this->db->where('doj !=', 'null');
+			$this->db->where('doj !=', '');
+
+			$this->db->where('penempatan !=', '0');
+			$this->db->where('penempatan !=', 'null');
+			$this->db->where('penempatan !=', '');
+
+			$this->db->where('contract_start !=', '0');
+			$this->db->where('contract_start !=', 'null');
+			$this->db->where('contract_start !=', '');
+
+			$this->db->where('contract_end !=', '0');
+			$this->db->where('contract_end !=', 'null');
+			$this->db->where('contract_end !=', '');
+
+			$this->db->where('contract_periode !=', '0');
+			$this->db->where('contract_periode !=', 'null');
+			$this->db->where('contract_periode !=', '');
+
+			$this->db->where('cut_start !=', '0');
+			$this->db->where('cut_start !=', 'null');
+			$this->db->where('cut_start !=', '');
+
+			$this->db->where('cut_off !=', '0');
+			$this->db->where('cut_off !=', 'null');
+			$this->db->where('cut_off !=', '');
+
+			$this->db->where('date_payment !=', '0');
+			$this->db->where('date_payment !=', 'null');
+			$this->db->where('date_payment !=', '');
+
+			$this->db->where('hari_kerja !=', '0');
+			$this->db->where('hari_kerja !=', 'null');
+			$this->db->where('hari_kerja !=', '');
+
+			$this->db->where('company_id !=', '0');
+			$this->db->where('company_id !=', 'null');
+			$this->db->where('company_id !=', '');
+
+			$this->db->where('project !=', '0');
+			$this->db->where('project !=', 'null');
+			$this->db->where('project !=', '');
+
+			$this->db->where('sub_project !=', '0');
+			$this->db->where('sub_project !=', 'null');
+			$this->db->where('sub_project !=', '');
+
+			$this->db->where('posisi !=', '0');
+			$this->db->where('posisi !=', 'null');
+			$this->db->where('posisi !=', '');
+		} else if ($approve == '2') {
+			$this->db->where($kondisiBelumSiapApprove);
 		}
 		$records = $this->db->get('xin_employee_request')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
@@ -528,9 +704,69 @@ class Employees_model extends CI_Model
 		if ($filterKategori != '') {
 			$this->db->where($filterKategori);
 		}
+		if ($approve == '1') {
+			$this->db->where('gaji_pokok !=', '0');
+			$this->db->where('gaji_pokok !=', 'null');
+			$this->db->where('gaji_pokok !=', '');
+
+			$this->db->where('doj !=', '0');
+			$this->db->where('doj !=', 'null');
+			$this->db->where('doj !=', '');
+
+			$this->db->where('penempatan !=', '0');
+			$this->db->where('penempatan !=', 'null');
+			$this->db->where('penempatan !=', '');
+
+			$this->db->where('contract_start !=', '0');
+			$this->db->where('contract_start !=', 'null');
+			$this->db->where('contract_start !=', '');
+
+			$this->db->where('contract_end !=', '0');
+			$this->db->where('contract_end !=', 'null');
+			$this->db->where('contract_end !=', '');
+
+			$this->db->where('contract_periode !=', '0');
+			$this->db->where('contract_periode !=', 'null');
+			$this->db->where('contract_periode !=', '');
+
+			$this->db->where('cut_start !=', '0');
+			$this->db->where('cut_start !=', 'null');
+			$this->db->where('cut_start !=', '');
+
+			$this->db->where('cut_off !=', '0');
+			$this->db->where('cut_off !=', 'null');
+			$this->db->where('cut_off !=', '');
+
+			$this->db->where('date_payment !=', '0');
+			$this->db->where('date_payment !=', 'null');
+			$this->db->where('date_payment !=', '');
+
+			$this->db->where('hari_kerja !=', '0');
+			$this->db->where('hari_kerja !=', 'null');
+			$this->db->where('hari_kerja !=', '');
+
+			$this->db->where('company_id !=', '0');
+			$this->db->where('company_id !=', 'null');
+			$this->db->where('company_id !=', '');
+
+			$this->db->where('project !=', '0');
+			$this->db->where('project !=', 'null');
+			$this->db->where('project !=', '');
+
+			$this->db->where('sub_project !=', '0');
+			$this->db->where('sub_project !=', 'null');
+			$this->db->where('sub_project !=', '');
+
+			$this->db->where('posisi !=', '0');
+			$this->db->where('posisi !=', 'null');
+			$this->db->where('posisi !=', '');
+		} else if ($approve == '2') {
+			$this->db->where($kondisiBelumSiapApprove);
+		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employee_request')->result();
+		$tes_query = $this->db->last_query();
 
 		$data = array();
 		$i = 1;
@@ -602,72 +838,92 @@ class Employees_model extends CI_Model
 				}
 			}
 
-			if ($approve == '1') {
-				if ($siap_approve != "") {
-					$data[] = array(
-						"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-						//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-						"golongan_karyawan" => $status_golongan,
-						//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-						"fullname" => $record->fullname . $siap_approve,
-						"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-						"penempatan" => $record->penempatan,
-						"project" => $this->get_nama_project($record->project),
-						//"project" => $record->project,
-						"sub_project" => $this->get_nama_sub_project($record->sub_project),
-						//"sub_project" => $record->sub_project,
-						"jabatan" => $this->get_nama_jabatan($record->posisi),
-						//"jabatan" => $record->posisi,
-						"gaji_pokok" => $record->gaji_pokok,
-						"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-						"kategori" => $this->get_nama_kategori($record->location_id),
-						"tanggal_register" => $record->request_empon
-					);
-				}
-			} else if ($approve == '2') {
-				if ($siap_approve == "") {
-					$data[] = array(
-						"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-						//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-						"golongan_karyawan" => $status_golongan,
-						//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-						"fullname" => $record->fullname . $siap_approve,
-						"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-						"penempatan" => $record->penempatan,
-						"project" => $this->get_nama_project($record->project),
-						//"project" => $record->project,
-						"sub_project" => $this->get_nama_sub_project($record->sub_project),
-						//"sub_project" => $record->sub_project,
-						"jabatan" => $this->get_nama_jabatan($record->posisi),
-						//"jabatan" => $record->posisi,
-						"gaji_pokok" => $record->gaji_pokok,
-						"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-						"kategori" => $this->get_nama_kategori($record->location_id),
-						"tanggal_register" => $record->request_empon
-					);
-				}
-			} else {
+			$data[] = array(
+				"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+				//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+				"golongan_karyawan" => $status_golongan,
+				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+				"fullname" => $record->fullname . $siap_approve,
+				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+				"penempatan" => $record->penempatan,
+				"project" => $this->get_nama_project($record->project),
+				//"project" => $record->project,
+				"sub_project" => $this->get_nama_sub_project($record->sub_project),
+				//"sub_project" => $record->sub_project,
+				"jabatan" => $this->get_nama_jabatan($record->posisi),
+				//"jabatan" => $record->posisi,
+				"gaji_pokok" => $record->gaji_pokok,
+				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+				"kategori" => $this->get_nama_kategori($record->location_id),
+				"tanggal_register" => $record->request_empon
+			);
 
-				$data[] = array(
-					"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-					//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-					"golongan_karyawan" => $status_golongan,
-					//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-					"fullname" => $record->fullname . $siap_approve,
-					"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-					"penempatan" => $record->penempatan,
-					"project" => $this->get_nama_project($record->project),
-					//"project" => $record->project,
-					"sub_project" => $this->get_nama_sub_project($record->sub_project),
-					//"sub_project" => $record->sub_project,
-					"jabatan" => $this->get_nama_jabatan($record->posisi),
-					//"jabatan" => $record->posisi,
-					"gaji_pokok" => $record->gaji_pokok,
-					"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-					"kategori" => $this->get_nama_kategori($record->location_id),
-					"tanggal_register" => $record->request_empon
-				);
-			}
+			// if ($approve == '1') {
+			// 	if ($siap_approve != "") {
+			// 		$data[] = array(
+			// 			"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+			// 			//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+			// 			"golongan_karyawan" => $status_golongan,
+			// 			//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+			// 			"fullname" => $record->fullname . $siap_approve,
+			// 			"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+			// 			"penempatan" => $record->penempatan,
+			// 			"project" => $this->get_nama_project($record->project),
+			// 			//"project" => $record->project,
+			// 			"sub_project" => $this->get_nama_sub_project($record->sub_project),
+			// 			//"sub_project" => $record->sub_project,
+			// 			"jabatan" => $this->get_nama_jabatan($record->posisi),
+			// 			//"jabatan" => $record->posisi,
+			// 			"gaji_pokok" => $record->gaji_pokok,
+			// 			"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+			// 			"kategori" => $this->get_nama_kategori($record->location_id),
+			// 			"tanggal_register" => $record->request_empon
+			// 		);
+			// 	}
+			// } else if ($approve == '2') {
+			// 	if ($siap_approve == "") {
+			// 		$data[] = array(
+			// 			"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+			// 			//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+			// 			"golongan_karyawan" => $status_golongan,
+			// 			//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+			// 			"fullname" => $record->fullname . $siap_approve,
+			// 			"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+			// 			"penempatan" => $record->penempatan,
+			// 			"project" => $this->get_nama_project($record->project),
+			// 			//"project" => $record->project,
+			// 			"sub_project" => $this->get_nama_sub_project($record->sub_project),
+			// 			//"sub_project" => $record->sub_project,
+			// 			"jabatan" => $this->get_nama_jabatan($record->posisi),
+			// 			//"jabatan" => $record->posisi,
+			// 			"gaji_pokok" => $record->gaji_pokok,
+			// 			"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+			// 			"kategori" => $this->get_nama_kategori($record->location_id),
+			// 			"tanggal_register" => $record->request_empon
+			// 		);
+			// 	}
+			// } else {
+
+			// 	$data[] = array(
+			// 		"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+			// 		//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
+			// 		"golongan_karyawan" => $status_golongan,
+			// 		//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
+			// 		"fullname" => $record->fullname . $siap_approve,
+			// 		"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
+			// 		"penempatan" => $record->penempatan,
+			// 		"project" => $this->get_nama_project($record->project),
+			// 		//"project" => $record->project,
+			// 		"sub_project" => $this->get_nama_sub_project($record->sub_project),
+			// 		//"sub_project" => $record->sub_project,
+			// 		"jabatan" => $this->get_nama_jabatan($record->posisi),
+			// 		//"jabatan" => $record->posisi,
+			// 		"gaji_pokok" => $record->gaji_pokok,
+			// 		"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+			// 		"kategori" => $this->get_nama_kategori($record->location_id),
+			// 		"tanggal_register" => $record->request_empon
+			// 	);
+			// }
 			$i++;
 		}
 
