@@ -252,9 +252,6 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="projects"><?php echo $this->lang->line('left_projects'); ?><i class="hrpremium-asterisk">*</i></label>
-
-
-
                     <select class="form-control" id="aj_project" name="project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects'); ?>">
                       <option value=""></option>
                       <?php foreach ($project_list as $projects) { ?>
@@ -340,18 +337,28 @@
 
                   <div class="form-group">
                     <label for="e_status">Jenis Dokumen<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="e_status" data-plugin="xin_select" data-placeholder="e_status">
+                    <!-- <select class="form-control" name="e_status" id="e_status" data-plugin="xin_select" data-placeholder="e_status">
                       <option value="">-Pilih Jenis Dokumen-</option>
                       <option value="0" <?php if ($e_status == 0) : ?> selected <?php endif; ?>>Pilih Jenis Dokumen-</option>
                       <option value="1" <?php if ($e_status == 1) : ?> selected <?php endif; ?>>PKWT</option>
                       <option value="2" <?php if ($e_status == 2) : ?> selected <?php endif; ?>>TKHL</option>
-                    </select>
-
+                    </select> -->
+                    <?php
+                    $jenis_dokumen = "";
+                    if ($e_status == 1) {
+                      $jenis_dokumen = "PKWT";
+                    } else if ($e_status == 2) {
+                      $jenis_dokumen = "TKHL";
+                    }
+                    ?>
+                    <input class="form-control" hidden readonly placeholder="Jenis Dokumen" name="e_status" id="e_status" type="text" value="<?php echo $e_status; ?>">
+                    <input class="form-control" readonly placeholder="Jenis Dokumen" name="jenis_dokumen" id="jenis_dokumen" type="text" value="<?php echo $jenis_dokumen; ?>">
                   </div>
                 </div>
 
                 <!--Kateori karyawan-->
-                <?php //echo $location_id; ?>
+                <?php //echo $location_id; 
+                ?>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="location_id">Kategori Karyawan<i class="hrpremium-asterisk">*</i></label>
@@ -375,8 +382,150 @@
             </div>
           </div>
 
+          <!-- Section Dokumen Karyawan -->
+          <br><span class="card-header-title mr-2"><strong>DOKUMEN</strong> KARYAWAN</span>
+          <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
+          <!-- baris 1 -->
+          <div class="form-row">
+            <!-- upload ktp -->
+            <div class="form-group col-md-2">
+              <?php
+              //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
+              $t = time();
+              $file_ada = "ada";
+              $tesfile1 = base_url('/uploads/document/ktp/') . $ktp . "?" . $t; ?>
+              <?php if ($ktp == "" || $ktp == "0") {
+                $tesfile1 = base_url('/uploads/document/ktp/') . "default.jpg";
+                $file_ada = "";
+              }
+              $parameterfile1 = substr($tesfile1, -14);
+              ?>
+              <label>Foto KTP</label>
+              <embed class="form-group col-md-12" id="output_ktp" type='<?php if (substr($parameterfile1, 0, 3) == "pdf") {
+                                                                          echo "application/pdf";
+                                                                        } else {
+                                                                          echo "image/jpg";
+                                                                        }
+                                                                        ?>' src="<?php echo $tesfile1; ?>"></embed>
+              <a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile1; ?>" target="_blank">Buka File</a>
+            </div>
 
-          <!--  --> <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span>
+            <!-- upload kk -->
+            <div class="form-group col-md-2">
+              <?php
+              //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
+              $t = time();
+              $file_ada = "ada";
+              $tesfile2 = base_url('/uploads/document/kk/') . $kk . "?" . $t; ?>
+              <?php if ($kk == "" || $kk == "0") {
+                $tesfile2 = base_url('/uploads/document/kk/') . "default.jpg";
+                $file_ada = "";
+              }
+              $parameterfile2 = substr($tesfile2, -14);
+              ?>
+              <label>Foto KK</label>
+              <embed class="form-group col-md-12" id="output_kk" type='<?php if (substr($parameterfile2, 0, 3) == "pdf") {
+                                                                          echo "application/pdf";
+                                                                        } else {
+                                                                          echo "image/jpg";
+                                                                        }
+                                                                        ?>' src="<?php echo $tesfile2; ?>"></embed>
+              <a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile2; ?>" target="_blank">Buka File</a>
+            </div>
+
+            <!-- upload npwp -->
+            <div class="form-group col-md-2">
+              <?php
+              //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
+              $t = time();
+              $file_ada = "ada";
+              $tesfile3 = base_url('/uploads/document/npwp/') . $file_npwp . "?" . $t; ?>
+              <?php if ($file_npwp == "" || $file_npwp == "0") {
+                $tesfile3 = base_url('/uploads/document/npwp/') . "default.jpg";
+                $file_ada = "";
+              }
+              $parameterfile3 = substr($tesfile3, -14);
+              ?>
+              <label>Foto NPWP</label>
+              <embed class="form-group col-md-12" id="output_npwp" type='<?php if (substr($parameterfile3, 0, 3) == "pdf") {
+                                                                            echo "application/pdf";
+                                                                          } else {
+                                                                            echo "image/jpg";
+                                                                          }
+                                                                          ?>' src="<?php echo $tesfile3; ?>"></embed>
+              <a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile3; ?>" target="_blank">Buka File</a>
+            </div>
+            <div class="form-group col-md-2">
+              <?php
+              //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
+              $t = time();
+              $file_ada = "ada";
+              $tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t; ?>
+              <?php if ($ijazah == "" || $ijazah == "0") {
+                $tesfile4 = base_url('/uploads/document/ijazah/') . "default.jpg";
+                $file_ada = "";
+              }
+              $parameterfile4 = substr($tesfile4, -14);
+              ?>
+              <label>Foto Ijazah</label>
+              <embed class="form-group col-md-12" id="output_ijazah" type='<?php if (substr($parameterfile4, 0, 3) == "pdf") {
+                                                                              echo "application/pdf";
+                                                                            } else {
+                                                                              echo "image/jpg";
+                                                                            }
+                                                                            ?>' src="<?php echo $tesfile4; ?>"></embed>
+              <a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile4; ?>" target="_blank">Buka File</a>
+            </div>
+
+            <!-- upload CV -->
+            <div class="form-group col-md-2">
+              <?php
+              //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
+              $t = time();
+              $file_ada = "ada";
+              $tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t; ?>
+              <?php if ($civi == "" || $civi == "0") {
+                $tesfile5 = base_url('/uploads/document/cv/') . "default.jpg";
+                $file_ada = "";
+              }
+              $parameterfile5 = substr($tesfile5, -14);
+              ?>
+              <label>Foto CV</label>
+              <embed class="form-group col-md-12" id="output_cv" type='<?php if (substr($parameterfile5, 0, 3) == "pdf") {
+                                                                          echo "application/pdf";
+                                                                        } else {
+                                                                          echo "image/jpg";
+                                                                        }
+                                                                        ?>' src="<?php echo $tesfile5; ?>"></embed>
+              <a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile5; ?>" target="_blank">Buka File</a>
+            </div>
+
+            <!-- upload SKCK -->
+            <div class="form-group col-md-2">
+              <?php
+              //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
+              $t = time();
+              $file_ada = "ada";
+              $tesfile6 = base_url('/uploads/document/skck/') . $skck . "?" . $t; ?>
+              <?php if ($skck == "" || $skck == "0") {
+                $tesfile6 = base_url('/uploads/document/skck/') . "default.jpg";
+                $file_ada = "";
+              }
+              $parameterfile6 = substr($tesfile6, -14);
+              ?>
+              <label>Foto SKCK</label>
+              <embed class="form-group col-md-12" id="output_skck" type='<?php if (substr($parameterfile6, 0, 3) == "pdf") {
+                                                                            echo "application/pdf";
+                                                                          } else {
+                                                                            echo "image/jpg";
+                                                                          }
+                                                                          ?>' src="<?php echo $tesfile6; ?>"></embed>
+              <a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile6; ?>" target="_blank">Buka File</a>
+            </div>
+          </div>
+
+          <!-- Section Paket Gaji Karyawan -->
+          <br><span class="card-header-title mr-2"><strong>PAKET GAJI</strong> KARYAWAN</span>
           <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"><br>
           <div class="row">
             <div class="col-md-8">
@@ -764,4 +913,61 @@
     rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
     return prefix == undefined ? rupiah : rupiah ? prefix + rupiah : "";
   }
+</script>
+
+<!-- Chained Dropdown (Project - Sub Project) & (Project - Jabatan) -->
+<script type='text/javascript'>
+  // baseURL variable
+  var baseURL = "<?php echo base_url(); ?>";
+  var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
+    csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+  //id="aj_project" name="project_id"
+
+  $(document).ready(function() {
+
+    // Project Change - Sub Project (on Change)
+    $('#aj_project').change(function() {
+      var project = $(this).val();
+      //alert("masuk javascript");
+
+      // AJAX request
+      $.ajax({
+        url: '<?= base_url() ?>admin/employee_request_cancelled/getDocId/',
+        method: 'post',
+        data: {
+          [csrfName]: csrfHash,
+          project: project
+        },
+        dataType: 'json',
+        success: function(response) {
+          //csrfName = data.csrfName;
+          //csrfHash = data.csrfHash;
+          //alert("doc id =" + data);
+
+
+          // Remove options 
+          //$('#jenis_dokumen').remove();
+
+          // Add options
+          $.each(response, function(index, data) {
+            //$('#e_status').append('<input class="form-control" readonly placeholder="Nama Ibu" name="e_status" id="e_status" type="text" value="' + data['doc_id'] + '">');
+            //alert("ajax sukses");
+            //alert(data);
+            document.getElementById("e_status").value = data['doc_id'];
+            if (data['doc_id'] == 1) {
+              document.getElementById("jenis_dokumen").value = "PKWT";
+            } else if (data['doc_id'] == 2) {
+              document.getElementById("jenis_dokumen").value = "TKHL";
+            }
+            //$('#jenis_dokumen').append('<input class="form-control" readonly placeholder="Nama Ibu" name="e_status" id="e_status" type="text" value="' + data['title'] + '">');
+          }).show();
+        }
+      });
+      //alert("selesai ajax");
+    });
+
+
+
+  });
 </script>

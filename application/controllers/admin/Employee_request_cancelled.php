@@ -336,6 +336,14 @@ class employee_request_cancelled extends MY_Controller
 			'e_status' => $result[0]->e_status,
 			'location_id' => $result[0]->location_id,
 
+			//variabel dokumen
+			'ktp'  => $result[0]->ktp,
+			'kk'  => $result[0]->kk,
+			'file_npwp'  => $result[0]->file_npwp,
+			'skck'  => $result[0]->skck,
+			'ijazah'  => $result[0]->ijazah,
+			'civi'  => $result[0]->civi
+
 			// 'deactive_by' => $result[0]->deactive_by,
 			// 'deactive_date' => $result[0]->deactive_date,
 			// 'deactive_reason' => $result[0]->deactive_reason,
@@ -394,6 +402,20 @@ class employee_request_cancelled extends MY_Controller
 		$draw = intval($this->input->get("draw"));
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
+	}
+
+	//get document_id from project table
+	public function getDocId()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Project_model->get_document_id($postData);
+		echo json_encode($data);
+
+		// $proj_id = $this->input->post('project');
+		// $data = $this->Project_model->get_document_id($proj_id);
+		// echo json_encode($data);
 	}
 
 
