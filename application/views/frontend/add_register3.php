@@ -198,7 +198,7 @@
 
                         <div class="form-group">
                             <label>Perusahaan</label>
-                            <select name="perusahaan" id="perusahaan" class="form-control" required>
+                            <select name="perusahaan" id="perusahaan" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Perusahaan</option>
                                 <?php foreach ($companies as $cmp) : ?>
                                     <option value="<?= $cmp['company_id']; ?>" <?php if (($register['company_id']) == $cmp['company_id']) {
@@ -267,7 +267,7 @@
                         <div class="form-group">
                             <label>Project</label>
                             <!-- <select class="col-md-12 selectpicker" data-live-search="true" name="project" id="project" class="form-control" required> -->
-                            <select name="project" id="project" class="form-control" required>
+                            <select name="project" id="project" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Project</option>
                                 <?php foreach ($projects as $prj) : ?>
                                     <option value="<?= $prj['project_id']; ?>" <?php if ($register['project'] == $prj['project_id']) {
@@ -282,7 +282,7 @@
 
                         <div class="form-group">
                             <label>Sub Project</label>
-                            <select name="sub_project" id="sub_project" class="form-control" required>
+                            <select name="sub_project" id="sub_project" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Sub Project</option>
                                 <?php foreach ($sub_projects as $sub) : ?>
                                     <option value="<?= $sub['secid']; ?>" <?php if ($register['sub_project'] == $sub['secid']) {
@@ -297,7 +297,7 @@
 
                         <div class="form-group">
                             <label>Jabatan</label>
-                            <select name="jabatan" id="jabatan" class="form-control" required>
+                            <select name="jabatan" id="jabatan" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Jabatan</option>
                                 <?php foreach ($jabatan as $jabatan) : ?>
                                     <option value="<?= $jabatan['designation_id']; ?>" <?php if ($register['posisi'] == $jabatan['designation_id']) {

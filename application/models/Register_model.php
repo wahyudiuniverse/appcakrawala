@@ -375,6 +375,7 @@ class Register_model extends CI_model
         //$otherdb = $this->load->database('default', TRUE);
 
         $this->db->insert('xin_employee_emergency', $datakaryawan);
+        //print_r($this->db->last_query());
     }
 
     //mengisi update data kontak darurat

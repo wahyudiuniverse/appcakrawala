@@ -198,7 +198,7 @@
 
                         <div class="form-group">
                             <label>Perusahaan</label>
-                            <select name="perusahaan" id="perusahaan" class="form-control" required>
+                            <select name="perusahaan" id="perusahaan" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Perusahaan</option>
                                 <?php foreach ($companies as $cmp) : ?>
                                     <option value="<?= $cmp['company_id']; ?>" <?php if (($register['company_id']) == $cmp['company_id']) {
@@ -261,19 +261,17 @@
                     <h5 class="card-header text-black bg-gradient-blue">Form Project</h5>
                     <div class="card-body border-bottom-blue ">
 
-                        <input type="hidden" id="halaman" name="halaman" value="project">
-                        <input type="hidden" id="nik_karyawan" name="nik_karyawan" value=<?php echo $cek_nik; ?>>
-
                         <div class="form-group">
                             <label>Project</label>
                             <!-- <select class="col-md-12 selectpicker" data-live-search="true" name="project" id="project" class="form-control" required> -->
-                            <select name="project" id="project" class="form-control" required>
+                            <!-- <select name="project" id="project" class="form-control selectpicker" data-show-subtext="true" data-mobile="true" data-live-search="true" required> -->
+                            <select name="project" id="project" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Project</option>
                                 <?php foreach ($projects as $prj) : ?>
                                     <option value="<?= $prj['project_id']; ?>" <?php if ($register['project'] == $prj['project_id']) {
                                                                                     echo " selected";
                                                                                 } ?>>
-                                        <?php echo $prj['title']; ?>
+                                        <div style="text-wrap: wrap;"><?php echo $prj['title']; ?></div>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
@@ -282,7 +280,7 @@
 
                         <div class="form-group">
                             <label>Sub Project</label>
-                            <select name="sub_project" id="sub_project" class="form-control" required>
+                            <select name="sub_project" id="sub_project" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Sub Project</option>
                                 <?php foreach ($sub_projects as $sub) : ?>
                                     <option value="<?= $sub['secid']; ?>" <?php if ($register['sub_project'] == $sub['secid']) {
@@ -297,7 +295,7 @@
 
                         <div class="form-group">
                             <label>Jabatan</label>
-                            <select name="jabatan" id="jabatan" class="form-control" required>
+                            <select name="jabatan" id="jabatan" class="form-control dropdown-dengan-search" required>
                                 <option value="">Pilih Jabatan</option>
                                 <?php foreach ($jabatan as $jabatan) : ?>
                                     <option value="<?= $jabatan['designation_id']; ?>" <?php if ($register['posisi'] == $jabatan['designation_id']) {
@@ -672,6 +670,8 @@
                 <div class="card border-blue">
                     <h5 class="card-header text-black bg-gradient-blue">Form Dokumen</h5>
                     <div class="card-body border-bottom-blue ">
+                        <?php //print_r($this->db->last_query()); 
+                        ?>
 
                         <div class="form-row">
                             <!-- upload ktp -->

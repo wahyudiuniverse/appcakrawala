@@ -20,6 +20,14 @@ class Registrasi extends CI_Controller
         //Memanggil Helper
         $this->load->helper('wpp');
         $this->load->helper(array('file', 'form', 'url'));
+        $this->load->model("Company_model");
+        $this->load->model("Xin_model");
+        $this->load->model("Custom_fields_model");
+        $this->load->model("Employees_model");
+        $this->load->model("Project_model");
+        $this->load->model("Department_model");
+        $this->load->model("Designation_model");
+        $this->load->model("Location_model");
     }
 
     //Menampilkan halaman awal data karyawan
@@ -823,11 +831,16 @@ class Registrasi extends CI_Controller
         $data['cek_nik'] = $nik;
         $data['halaman'] = $halaman;
 
-        //menampilkan view form pengisian data
+        // //menampilkan view form pengisian data
         $this->load->view('frontend/templates/header', $data);
-        //$this->load->view('templates/sidebar', $data);
+        // //$this->load->view('admin/components/vendor/hmlheader', $data);
+        // //$this->load->view('templates/sidebar', $data);
         $this->load->view('frontend/templates/topbar_register', $data);
         $this->load->view('frontend/add_register2', $data);
         $this->load->view('frontend/templates/footer');
+
+        //$data['subview'] = $this->load->view("admin/employees/add_register2", $data, TRUE);
+
+        //$this->load->view('admin/layout/layout_main', $data); //page load
     }
 }

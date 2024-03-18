@@ -317,6 +317,8 @@
 
     $(document).ready(function() {
 
+        $('.dropdown-dengan-search').select2();
+
         // Project Change - Sub Project (on Change)
         $('#project').change(function() {
             var project = $(this).val();
