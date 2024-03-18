@@ -24,10 +24,10 @@
         </a> </li>
     <?php } ?>
 
-    <?php if (in_array('312', $role_resources_ids)) { ?>
+    <!-- <?php if (in_array('312', $role_resources_ids)) { ?>
       <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_tkhl/'); ?>" data-link-data="<?php echo site_url('admin/employee_request_tkhl/'); ?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN TKHL <?php echo '(' . $count_emp_request_tkhl . ')'; ?>
         </a> </li>
-    <?php } ?>
+    <?php } ?> -->
 
     <?php if (in_array('338', $role_resources_ids)) { ?>
       <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_cancelled/'); ?>" data-link-data="<?php echo site_url('admin/Employee_request_cancelled/'); ?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>DITOLAK <?php echo '(' . $count_emp_request_cancel . ')'; ?>
