@@ -173,6 +173,10 @@
                         //print_r($register);
                         //echo '</pre>';
                         ?>
+                        <?php echo '<pre>';
+                        print_r($cek_post);
+                        echo '</pre>';
+                        ?>
 
                         <!-- button submit -->
                         <button type="submit" class="btn btn-primary btn-sm btn-lg btn-block">NEXT</button>
@@ -241,6 +245,10 @@
                         //print_r($jabatan);
                         //echo '</pre>'; 
                         ?>
+                        <?php echo '<pre>';
+                        print_r($cek_post);
+                        echo '</pre>';
+                        ?>
 
                         <!-- button submit -->
                         <button type="submit" class="btn btn-primary btn-sm btn-lg btn-block">NEXT</button>
@@ -260,6 +268,10 @@
                 <div class="card border-blue">
                     <h5 class="card-header text-black bg-gradient-blue">Form Project</h5>
                     <div class="card-body border-bottom-blue ">
+
+                        <input type="hidden" id="halaman" name="halaman" value="project">
+                        <input type="hidden" id="nik_karyawan" name="nik_karyawan" value=<?php echo $cek_nik; ?>>
+
 
                         <div class="form-group">
                             <label>Project</label>
@@ -342,9 +354,9 @@
                         //print_r($register);
                         // echo '</pre>'; 
                         ?>
-                        <?php //echo '<pre>';
-                        //print_r($projects);
-                        //echo '</pre>';
+                        <?php echo '<pre>';
+                        print_r($cek_post);
+                        echo '</pre>';
                         ?>
 
                         <!-- button submit -->
