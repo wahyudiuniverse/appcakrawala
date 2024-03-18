@@ -317,7 +317,9 @@
 
     $(document).ready(function() {
 
-        $('.dropdown-dengan-search').select2();
+        $('.dropdown-dengan-search').select2({
+            width: '100%'
+        });
 
         // Project Change - Sub Project (on Change)
         $('#project').change(function() {
