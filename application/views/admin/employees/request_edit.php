@@ -45,6 +45,7 @@
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name'); ?><i class="hrpremium-asterisk">*</i></label>
+                    <i class="sidenav-icon ion ion-logo-buffer"></i>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name'); ?>" name="fullname" type="text" value="<?php echo $fullname; ?>">
                   </div>
                 </div>
@@ -117,18 +118,19 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_mstatus'); ?>*</label>
-
-
                     <select class="form-control" name="marital_status" data-plugin="xin_select">
                       <option value=""></option>
-                      <option value="TK/0" <?php if ($marital_status == 'TK/0') : ?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
+                      <?php foreach ($list_marital as $marital) : ?>
+                        <option value="<?php echo $marital['id_marital']; ?>" <?php if ($marital_status == $marital['id_marital']) : ?> selected <?php endif; ?>><?php echo $marital['nama']; ?></option>
+                      <?php endforeach; ?>
+                      <!-- <option value="TK/0" <?php if ($marital_status == 'TK/0') : ?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
                       <option value="K/0" <?php if ($marital_status == 'K/0') : ?> selected <?php endif; ?>>Menikah (0 Anak)</option>
                       <option value="K/1" <?php if ($marital_status == 'K/1') : ?> selected <?php endif; ?>>Menikah (1 Anak)</option>
                       <option value="K/2" <?php if ($marital_status == 'K/2') : ?> selected <?php endif; ?>>Menikah (2 Anak)</option>
                       <option value="K/3" <?php if ($marital_status == 'K/3') : ?> selected <?php endif; ?>>Menikah (3 Anak)</option>
                       <option value="TK/1" <?php if ($marital_status == 'TK/1') : ?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
                       <option value="TK/2" <?php if ($marital_status == 'TK/2') : ?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
-                      <option value="TK/3" <?php if ($marital_status == 'TK/3') : ?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
+                      <option value="TK/3" <?php if ($marital_status == 'TK/3') : ?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option> -->
 
                     </select>
 

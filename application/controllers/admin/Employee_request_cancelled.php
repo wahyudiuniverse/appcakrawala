@@ -266,6 +266,7 @@ class employee_request_cancelled extends MY_Controller
 			'ethnicity_type' => $result[0]->agama,
 			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
 			'marital_status' => $result[0]->status_kawin,
+			'list_marital' => $this->Employees_model->getAllMarital(),
 
 			'ktp_no' => $result[0]->nik_ktp,
 			'kk_no' => $result[0]->no_kk,
@@ -274,7 +275,7 @@ class employee_request_cancelled extends MY_Controller
 			'npwp_no' => $result[0]->npwp,
 			'contact_no' => $result[0]->contact_no,
 			'email' => $result[0]->email,
-			'bank_id' => $result[0]->bank_name,
+			'bank_id' => $result[0]->bank_id,
 			'list_bank' => $this->Xin_model->get_bank_code(),
 			'nomor_rek' => $result[0]->no_rek,
 			'pemilik_rek' => $result[0]->pemilik_rekening,

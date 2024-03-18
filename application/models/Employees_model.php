@@ -385,6 +385,16 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//mengambil semua status perkawinan
+	public function getAllMarital()
+	{
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$query = $this->db->get('mt_marital')->result_array();
+
+		return $query;
+	}
+
 	//ambil nama jabatan
 	function get_nama_jabatan($id)
 	{
