@@ -173,10 +173,6 @@
                         //print_r($register);
                         //echo '</pre>';
                         ?>
-                        <?php echo '<pre>';
-                        print_r($cek_post);
-                        echo '</pre>';
-                        ?>
 
                         <!-- button submit -->
                         <button type="submit" class="btn btn-primary btn-sm btn-lg btn-block">NEXT</button>
@@ -244,10 +240,6 @@
                         <?php //echo '<pre>';
                         //print_r($jabatan);
                         //echo '</pre>'; 
-                        ?>
-                        <?php echo '<pre>';
-                        print_r($cek_post);
-                        echo '</pre>';
                         ?>
 
                         <!-- button submit -->
@@ -353,10 +345,6 @@
                         <?php //echo '<pre>';
                         //print_r($register);
                         // echo '</pre>'; 
-                        ?>
-                        <?php echo '<pre>';
-                        print_r($cek_post);
-                        echo '</pre>';
                         ?>
 
                         <!-- button submit -->
