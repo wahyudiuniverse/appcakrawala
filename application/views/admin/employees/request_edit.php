@@ -45,8 +45,11 @@
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name'); ?><i class="hrpremium-asterisk">*</i></label>
-                    <i class="sidenav-icon ion ion-logo-buffer"></i>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name'); ?>" name="fullname" type="text" value="<?php echo $fullname; ?>">
+                    <!-- icon lock - unlock - log -->
+                    <i hidden id="lock_nama" onclick="lock_on_nama()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
+                    <i hidden id="unlock_nama" onclick="lock_off_nama()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
+                    <i hidden id="log_nama" onclick="show_log_nama()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i>
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name'); ?>" name="fullname" id="fullname" type="text" value="<?php echo $fullname; ?>">
                   </div>
                 </div>
 
@@ -140,11 +143,15 @@
               </div>
 
               <div class="row">
-                <!--NO KP-->
+                <!--NO KTP-->
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="<?php echo $ktp_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <!-- icon lock - unlock - log -->
+                    <i hidden id="lock_ktp" onclick="lock_on_ktp()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
+                    <i hidden id="unlock_ktp" onclick="lock_off_ktp()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
+                    <i hidden id="log_ktp" onclick="show_log_ktp()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i>
+                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" id="nomor_ktp" type="text" value="<?php echo $ktp_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -164,7 +171,11 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="<?php echo $kk_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <!-- icon lock - unlock - log -->
+                    <i hidden id="lock_kk" onclick="lock_on_kk()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
+                    <i hidden id="unlock_kk" onclick="lock_off_kk()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
+                    <i hidden id="log_kk" onclick="show_log_kk()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i>
+                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" id="nomor_kk" type="text" value="<?php echo $kk_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
 
@@ -917,7 +928,240 @@
   }
 </script>
 
-<!-- Chained Dropdown (Project - Sub Project) & (Project - Jabatan) -->
+<!-- SCRIPT LOCK - UNLOCK Kolom -->
+<script type=text/javascript>
+  //read variable
+  var baseURL = "<?php echo base_url(); ?>";
+  var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
+  var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+  var nama_lock = "<?php print($nama_lock); ?>";
+  var ktp_lock = "<?php print($ktp_lock); ?>";
+  var kk_lock = "<?php print($kk_lock); ?>";
+  var user_id = "<?php print($session['user_id']); ?>";
+  var employee_id = "<?php print($secid); ?>";
+
+  //initiate state lock
+  if (nama_lock == 0) {
+    if (fullname.readOnly) document.getElementById("fullname").removeAttribute("readonly");
+    unlock_nama.setAttribute("hidden", "hidden");
+    if (lock_nama.hidden) document.getElementById("lock_nama").removeAttribute("hidden");
+  } else if (nama_lock == 1) {
+    fullname.setAttribute("readonly", "readonly");
+    lock_nama.setAttribute("hidden", "hidden");
+    if (unlock_nama.hidden) document.getElementById("unlock_nama").removeAttribute("hidden");
+  }
+
+  if (ktp_lock == 0) {
+    if (nomor_ktp.readOnly) document.getElementById("nomor_ktp").removeAttribute("readonly");
+    unlock_ktp.setAttribute("hidden", "hidden");
+    if (lock_ktp.hidden) document.getElementById("lock_ktp").removeAttribute("hidden");
+  } else if (ktp_lock == 1) {
+    nomor_ktp.setAttribute("readonly", "readonly");
+    lock_ktp.setAttribute("hidden", "hidden");
+    if (unlock_ktp.hidden) document.getElementById("unlock_ktp").removeAttribute("hidden");
+  }
+
+  if (kk_lock == 0) {
+    if (nomor_kk.readOnly) document.getElementById("nomor_kk").removeAttribute("readonly");
+    unlock_kk.setAttribute("hidden", "hidden");
+    if (lock_kk.hidden) document.getElementById("lock_kk").removeAttribute("hidden");
+  } else if (kk_lock == 1) {
+    nomor_kk.setAttribute("readonly", "readonly");
+    lock_kk.setAttribute("hidden", "hidden");
+    if (unlock_kk.hidden) document.getElementById("unlock_kk").removeAttribute("hidden");
+  }
+
+  //-----Lock - Unlock kolom nama-----
+  function lock_on_nama() {
+    var nama_kolom = "fullname";
+    var status = "1";
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        nama_kolom: nama_kolom,
+        status: status,
+        user_id: user_id
+      },
+      success: function(response) {
+        fullname.setAttribute("readonly", "readonly");
+        lock_nama.setAttribute("hidden", "hidden");
+        if (unlock_nama.hidden) document.getElementById("unlock_nama").removeAttribute("hidden");
+        alert("Berhasil Mengunci Kolom Nama");
+      }
+    });
+  }
+
+  function lock_off_nama() {
+    var nama_kolom = "fullname";
+    var status = "0";
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        nama_kolom: nama_kolom,
+        status: status,
+        user_id: user_id
+      },
+      success: function(response) {
+        if (fullname.readOnly) document.getElementById("fullname").removeAttribute("readonly");
+        unlock_nama.setAttribute("hidden", "hidden");
+        if (lock_nama.hidden) document.getElementById("lock_nama").removeAttribute("hidden");
+        alert("Berhasil Membuka Kunci Kolom Nama");
+      }
+    });
+  }
+
+  $("#lock_nama").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+  $("#unlock_nama").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+  $("#log_nama").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+
+  //-----Lock - Unlock kolom KTP-----
+  function lock_on_ktp() {
+    var nama_kolom = "ktp";
+    var status = "1";
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        nama_kolom: nama_kolom,
+        status: status,
+        user_id: user_id
+      },
+      success: function(response) {
+        nomor_ktp.setAttribute("readonly", "readonly");
+        lock_ktp.setAttribute("hidden", "hidden");
+        if (unlock_ktp.hidden) document.getElementById("unlock_ktp").removeAttribute("hidden");
+        alert("Berhasil Mengunci Kolom KTP");
+      }
+    });
+  }
+
+  function lock_off_ktp() {
+    var nama_kolom = "ktp";
+    var status = "0";
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        nama_kolom: nama_kolom,
+        status: status,
+        user_id: user_id
+      },
+      success: function(response) {
+        if (nomor_ktp.readOnly) document.getElementById("nomor_ktp").removeAttribute("readonly");
+        unlock_ktp.setAttribute("hidden", "hidden");
+        if (lock_ktp.hidden) document.getElementById("lock_ktp").removeAttribute("hidden");
+        alert("Berhasil Membuka Kunci Kolom KTP");
+      }
+    });
+  }
+
+  $("#lock_ktp").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+  $("#unlock_ktp").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+  $("#log_ktp").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+
+  //-----Lock - Unlock kolom KK-----
+  function lock_on_kk() {
+    var nama_kolom = "kk";
+    var status = "1";
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        nama_kolom: nama_kolom,
+        status: status,
+        user_id: user_id
+      },
+      success: function(response) {
+        nomor_kk.setAttribute("readonly", "readonly");
+        lock_kk.setAttribute("hidden", "hidden");
+        if (unlock_kk.hidden) document.getElementById("unlock_kk").removeAttribute("hidden");
+        alert("Berhasil Mengunci Kolom KK");
+      }
+    });
+  }
+
+  function lock_off_kk() {
+    var nama_kolom = "kk";
+    var status = "0";
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        nama_kolom: nama_kolom,
+        status: status,
+        user_id: user_id
+      },
+      success: function(response) {
+        if (nomor_kk.readOnly) document.getElementById("nomor_kk").removeAttribute("readonly");
+        unlock_kk.setAttribute("hidden", "hidden");
+        if (lock_kk.hidden) document.getElementById("lock_kk").removeAttribute("hidden");
+        alert("Berhasil Membuka Kunci Kolom KK");
+      }
+    });
+  }
+
+  $("#lock_kk").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+  $("#unlock_kk").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+  $("#log_kk").hover(function() {
+    $(this).css('cursor', 'pointer');
+  }, function() {
+    $(this).css('cursor', 'auto');
+  });
+</script>
+
+<!-- Chained Dropdown (Project - Jenis Dokumen) -->
 <script type='text/javascript'>
   // baseURL variable
   var baseURL = "<?php echo base_url(); ?>";
@@ -928,7 +1172,7 @@
 
   $(document).ready(function() {
 
-    // Project Change - Sub Project (on Change)
+    // Project Change - Jenis Dokumen (on Change)
     $('#aj_project').change(function() {
       var project = $(this).val();
       //alert("masuk javascript");

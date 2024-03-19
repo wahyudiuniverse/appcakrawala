@@ -418,6 +418,39 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//get lock status kolom
+	function get_lock_status($id, $column)
+	{
+		$this->db->select('*');
+		$this->db->from('log_lock_unlock');
+		$this->db->where('employee_id', $id);
+		$this->db->where('nama_kolom', $column);
+		$this->db->order_by('time', 'desc');
+		$this->db->limit(1);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//set Lock Kolom
+	public function setLockKolom($postData)
+	{
+		//Input untuk Database
+		$datalock = [
+			'employee_id'     => $postData['employee_id'],
+			'nama_kolom'      => $postData['nama_kolom'],
+			'status'          => $postData['status'],
+			'change_by'       => $postData['user_id']
+		];
+
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$this->db->insert('log_lock_unlock', $datalock);
+
+		//return null;
+	}
+
 	/*
 	* persiapan data untuk datatable pagination
 	* data request employee yang belum diapprove HRD dan belum ditolak HRD

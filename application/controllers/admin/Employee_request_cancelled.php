@@ -199,6 +199,16 @@ class employee_request_cancelled extends MY_Controller
 		$length = intval($this->input->get("length"));
 	}
 
+	//mengambil Json data set status lock kolom
+	public function setLockKolom()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Employees_model->setLockKolom($postData);
+		echo json_encode($data);
+		//echo "data berhasil masuk";
+	}
 
 	public function request_edit()
 	{
@@ -217,12 +227,28 @@ class employee_request_cancelled extends MY_Controller
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 
-		// $company = $this->Xin_model->read_company_info($result[0]->company_id);
-		// if(!is_null($company)){
-		//   $company_name = $company[0]->name;
-		// } else {
-		//   $company_name = '--';
-		// }
+		//cek status lock ke database
+		$nama_lock = "0";
+		$nama_lock_query = $this->Employees_model->get_lock_status($id, 'fullname');
+		if (is_null($nama_lock_query)) {
+			$nama_lock = "0";
+		} else {
+			$nama_lock = $nama_lock_query['status'];
+		}
+		$ktp_lock = "0";
+		$ktp_lock_query = $this->Employees_model->get_lock_status($id, 'ktp');
+		if (is_null($ktp_lock_query)) {
+			$ktp_lock = "0";
+		} else {
+			$ktp_lock = $ktp_lock_query['status'];
+		}
+		$kk_lock = "0";
+		$kk_lock_query = $this->Employees_model->get_lock_status($id, 'kk');
+		if (is_null($kk_lock_query)) {
+			$kk_lock = "0";
+		} else {
+			$kk_lock = $kk_lock_query['status'];
+		}
 
 		$department = $this->Department_model->read_department_information($result[0]->department);
 		if (!is_null($department)) {
@@ -387,6 +413,10 @@ class employee_request_cancelled extends MY_Controller
 		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		// } else {
 
+		$data['nama_lock'] = $nama_lock;
+		$data['ktp_lock'] = $ktp_lock;
+		$data['kk_lock'] = $kk_lock;
+
 		$data['subview'] = $this->load->view("admin/employees/request_edit", $data, TRUE);
 		// }
 
@@ -396,6 +426,8 @@ class employee_request_cancelled extends MY_Controller
 		// } else {
 		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		// }
+
+
 
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
