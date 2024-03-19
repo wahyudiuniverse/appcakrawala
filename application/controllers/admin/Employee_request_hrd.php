@@ -73,6 +73,7 @@ class Employee_request_hrd extends MY_Controller
 		$data['breadcrumbs'] = $this->lang->line('xin_request_employee');
 		$data['path_url'] = 'emp_request_hrd';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+		//$role_resources_ids = is_null($role_resources_ids_temp) ? 0 : $role_resources_ids_temp;
 		if (in_array('327', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/employees/request_list_hrd", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -572,317 +573,669 @@ class Employee_request_hrd extends MY_Controller
 
 		// $id = '31';
 
-		if ($this->input->post('edit_type') == 'company') {
+		//if ($this->input->post('edit_type') == 'company') {
 
-			// $idtransaksi 	= $this->input->post('idtransaksi');
-			$id = $this->uri->segment(4);
-			$cancel = $this->uri->segment(5);
+		// $idtransaksi 	= $this->input->post('idtransaksi');
+		$id = $this->uri->segment(4);
+		$cancel = $this->uri->segment(5);
 
-			/* Define return | here result is used to return user data and error for error message */
-			$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-			$Return['csrf_hash'] = $this->security->get_csrf_hash();
-
-
-
-			$count_nip = $this->Xin_model->count_nip();
-			$employee_request = $this->Employees_model->read_employee_request($id);
-
-			$fullname 					= $employee_request[0]->fullname;
-			$nama_ibu 					= $employee_request[0]->nama_ibu;
-			$tempat_lahir 			= $employee_request[0]->tempat_lahir;
-			$tanggal_lahir 			= $employee_request[0]->tanggal_lahir;
-			$contact_no 				= $employee_request[0]->contact_no;
-			$nik_ktp 						= $employee_request[0]->nik_ktp;
-			$alamat_ktp 				= $employee_request[0]->alamat_ktp;
-			$alamat_domisili		= $employee_request[0]->alamat_domisili;
-
-			$no_kk 							= $employee_request[0]->no_kk;
-			$npwp 							= $employee_request[0]->npwp;
-			$email 							= $employee_request[0]->email;
-			$company_id 				= $employee_request[0]->company_id;
-			$location_id 				= $employee_request[0]->location_id;
-			$project 						= $employee_request[0]->project;
-			$sub_project 				= $employee_request[0]->sub_project;
-			$department 				= $employee_request[0]->department;
-			$posisi 						= $employee_request[0]->posisi;
-
-			$gender 						= $employee_request[0]->gender;
-			$agama 							= $employee_request[0]->agama;
-			$status_kawin 			= $employee_request[0]->status_kawin;
-
-			$doj 								= $employee_request[0]->doj;
-			$contract_start			= $employee_request[0]->contract_start;
-			$contract_end				= $employee_request[0]->contract_end;
-			$contract_periode		= $employee_request[0]->contract_periode;
-			$penempatan 				= $employee_request[0]->penempatan;
-			$hari_kerja					= $employee_request[0]->hari_kerja;
-			$bank_id						= $employee_request[0]->bank_id;
-			$no_rek							= $employee_request[0]->no_rek;
-			$pemilik_rekening		= $employee_request[0]->pemilik_rekening;
-
-			$gaji_pokok					= $employee_request[0]->gaji_pokok;
-			$allow_jabatan			= $employee_request[0]->allow_jabatan;
-			$allow_area					= $employee_request[0]->allow_area;
-			$allow_masakerja		= $employee_request[0]->allow_masakerja;
-			$allow_trans_meal		= $employee_request[0]->allow_trans_meal;
-			$allow_trans_rent		= $employee_request[0]->allow_trans_rent;
-			$allow_konsumsi			= $employee_request[0]->allow_konsumsi;
-			$allow_transport		= $employee_request[0]->allow_transport;
-			$allow_comunication		= $employee_request[0]->allow_comunication;
-			$allow_device					= $employee_request[0]->allow_device;
-			$allow_residence_cost	= $employee_request[0]->allow_residence_cost;
-			$allow_rent						= $employee_request[0]->allow_rent;
-			$allow_parking				= $employee_request[0]->allow_parking;
-			$allow_medichine			= $employee_request[0]->allow_medichine;
-			$allow_akomodsasi			= $employee_request[0]->allow_akomodsasi;
-			$allow_kasir					= $employee_request[0]->allow_kasir;
-			$allow_operational		= $employee_request[0]->allow_operational;
-
-			$cut_start 						=	$employee_request[0]->cut_start;
-			$cut_off							= $employee_request[0]->cut_off;
-			$date_payment 				= $employee_request[0]->date_payment;
-			$ktp									= $employee_request[0]->ktp;
-			$kk										= $employee_request[0]->kk;
-			$skck									= $employee_request[0]->skck;
-			$ijazah								= $employee_request[0]->ijazah;
-			$civi								= $employee_request[0]->civi;
-			$paklaring								= $employee_request[0]->paklaring;
-
-			$createdby 						= $employee_request[0]->request_empby;
-			$createdon 						= $employee_request[0]->request_empon;
-			$approved_naeby 						= $employee_request[0]->approved_naeby;
-			$approved_naeon 						= $employee_request[0]->approved_naeon;
-			$approved_nomby 						= $employee_request[0]->approved_nomby;
-			$approved_nomon 						= $employee_request[0]->approved_nomon;
-
-			// $employee_id = '2'.$employee_request[0]->location_id.$employee_request[0]->department.$count_nip;
-			$employee_id = '2' . $employee_request[0]->location_id . $employee_request[0]->department . sprintf("%05d", $count_nip[0]->newcount);
-			$private_code = rand(100000, 999999);
-			$options = array('cost' => 12);
-			$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
-
-			//PKWT ATTRIBUTE
-			if ($company_id == '2') {
-				$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
-				$spb_hr = 'E-SPB-JKT/SC-HR/';
-			} else if ($company_id == '3') {
-				$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
-				$spb_hr = 'E-SPB-JKT/KAC-HR/';
-			} else {
-				$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-				$spb_hr = 'E-SPB-JKT/MATA-HR/';
-			}
-
-			$count_pkwt = $this->Xin_model->count_pkwt();
-			$romawi = $this->Xin_model->tgl_pkwt();
-			$unicode = $this->Xin_model->getUniqueCode(20);
-			$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
-			$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
 
-			$docid = date('ymdHisv');
-			$yearmonth = date('Y/m');
-			$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
-			$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $yearmonth . '/' . $docid;
-			$params['data'] 	= $domain; //data yang akan di jadikan QR CODE
-			$params['level'] 	= 'H'; //H=High
-			$params['size'] 	= 10;
-			$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
-			$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 
+		$count_nip = $this->Xin_model->count_nip();
+		$employee_request = $this->Employees_model->read_employee_request($id);
 
-			if ($cancel === 'YES') {
+		$fullname 					= $employee_request[0]->fullname;
+		$nama_ibu 					= $employee_request[0]->nama_ibu;
+		$tempat_lahir 			= $employee_request[0]->tempat_lahir;
+		$tanggal_lahir 			= $employee_request[0]->tanggal_lahir;
+		$contact_no 				= $employee_request[0]->contact_no;
+		$nik_ktp 						= $employee_request[0]->nik_ktp;
+		$alamat_ktp 				= $employee_request[0]->alamat_ktp;
+		$alamat_domisili		= $employee_request[0]->alamat_domisili;
 
-				$data_up = array(
+		$no_kk 							= $employee_request[0]->no_kk;
+		$npwp 							= $employee_request[0]->npwp;
+		$email 							= $employee_request[0]->email;
+		$company_id 				= $employee_request[0]->company_id;
+		$location_id 				= $employee_request[0]->location_id;
+		$project 						= $employee_request[0]->project;
+		$sub_project 				= $employee_request[0]->sub_project;
+		$department 				= $employee_request[0]->department;
+		$posisi 						= $employee_request[0]->posisi;
 
-					'cancel_stat' => 1,
-					'cancel_on' 	=> date("Y-m-d h:i:s"),
-					'cancel_by' 	=> $session['user_id'],
-					'cancel_ket' 	=> $this->input->post('ket_revisi')
+		$gender 						= $employee_request[0]->gender;
+		$agama 							= $employee_request[0]->agama;
+		$status_kawin 			= $employee_request[0]->status_kawin;
 
-				);
+		$doj 								= $employee_request[0]->doj;
+		$contract_start			= $employee_request[0]->contract_start;
+		$contract_end				= $employee_request[0]->contract_end;
+		$contract_periode		= $employee_request[0]->contract_periode;
+		$penempatan 				= $employee_request[0]->penempatan;
+		$hari_kerja					= $employee_request[0]->hari_kerja;
+		$bank_id						= $employee_request[0]->bank_id;
+		$no_rek							= $employee_request[0]->no_rek;
+		$pemilik_rekening		= $employee_request[0]->pemilik_rekening;
 
-				$result = $this->Employees_model->update_request_employee($data_up, $id);
-			} else if ($contract_start == '' || $contract_end == '') {
+		$gaji_pokok					= $employee_request[0]->gaji_pokok;
+		$allow_jabatan			= $employee_request[0]->allow_jabatan;
+		$allow_area					= $employee_request[0]->allow_area;
+		$allow_masakerja		= $employee_request[0]->allow_masakerja;
+		$allow_trans_meal		= $employee_request[0]->allow_trans_meal;
+		$allow_trans_rent		= $employee_request[0]->allow_trans_rent;
+		$allow_konsumsi			= $employee_request[0]->allow_konsumsi;
+		$allow_transport		= $employee_request[0]->allow_transport;
+		$allow_comunication		= $employee_request[0]->allow_comunication;
+		$allow_device					= $employee_request[0]->allow_device;
+		$allow_residence_cost	= $employee_request[0]->allow_residence_cost;
+		$allow_rent						= $employee_request[0]->allow_rent;
+		$allow_parking				= $employee_request[0]->allow_parking;
+		$allow_medichine			= $employee_request[0]->allow_medichine;
+		$allow_akomodsasi			= $employee_request[0]->allow_akomodsasi;
+		$allow_kasir					= $employee_request[0]->allow_kasir;
+		$allow_operational		= $employee_request[0]->allow_operational;
 
-				$Return['error'] = 'Periode Kontrak Kosong...';
-			} else {
+		$cut_start 						=	$employee_request[0]->cut_start;
+		$cut_off							= $employee_request[0]->cut_off;
+		$date_payment 				= $employee_request[0]->date_payment;
+		$ktp									= $employee_request[0]->ktp;
+		$kk										= $employee_request[0]->kk;
+		$skck									= $employee_request[0]->skck;
+		$ijazah								= $employee_request[0]->ijazah;
+		$civi								= $employee_request[0]->civi;
+		$paklaring								= $employee_request[0]->paklaring;
 
-				$data_migrate = array(
+		$createdby 						= $employee_request[0]->request_empby;
+		$createdon 						= $employee_request[0]->request_empon;
+		$approved_naeby 						= $employee_request[0]->approved_naeby;
+		$approved_naeon 						= $employee_request[0]->approved_naeon;
+		$approved_nomby 						= $employee_request[0]->approved_nomby;
+		$approved_nomon 						= $employee_request[0]->approved_nomon;
 
-					'employee_id' 					=> $employee_id,
-					'username' 							=> $employee_id,
+		// $employee_id = '2'.$employee_request[0]->location_id.$employee_request[0]->department.$count_nip;
+		//NIP
+		$employee_id = '2' . $employee_request[0]->location_id . $employee_request[0]->department . sprintf("%05d", $count_nip[0]->newcount);
+		//PIN
+		$private_code = rand(100000, 999999);
+		//Pass
+		$options = array('cost' => 12);
+		$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
 
-					'first_name' 						=> $fullname,
-					'ibu_kandung' 					=> $nama_ibu,
-					'tempat_lahir' 					=> $tempat_lahir,
-					'date_of_birth' 				=> $tanggal_lahir,
-
-					'company_id' 					=> $company_id,
-					'location_id' 				=> $location_id,
-					'project_id' 					=> $project,
-					'sub_project_id' 			=> $sub_project,
-					'department_id' 			=> $department,
-					'designation_id' 			=> $posisi,
-					'gender' 							=> $gender,
-					'ethnicity_type' 			=> $agama,
-					'marital_status' 			=> $status_kawin,
-
-					'date_of_joining' 		=> $doj,
-					'contract_start' 			=> $contract_start,
-					'contract_end' 				=> $contract_end,
-					'contract_periode' 		=> $contract_periode,
-					'contact_no' 					=> $contact_no,
-					'ktp_no' 							=> $nik_ktp,
-					'alamat_ktp' 					=> $alamat_ktp,
-					'alamat_domisili' 			=> $alamat_domisili,
-					'kk_no' 								=> $no_kk,
-					'npwp_no' 							=> $npwp,
-					'email' 								=> $email,
-					'penempatan' 						=> $penempatan,
-					'hari_kerja' 						=> $hari_kerja,
-					'bank_name' 						=> $bank_id,
-					'nomor_rek' 						=> $no_rek,
-					'pemilik_rek' 					=> $pemilik_rekening,
-
-					'basic_salary' 					=> $gaji_pokok,
-					'allow_jabatan' 				=> $allow_jabatan,
-					'allow_area' 						=> $allow_area,
-					'allow_masakerja' 			=> $allow_masakerja,
-					'allow_trans_meal'			=> $allow_trans_meal,
-					'allow_trans_rent'			=> $allow_trans_rent,
-					'allow_konsumsi'				=> $allow_konsumsi,
-					'allow_transport'				=> $allow_transport,
-					'allow_comunication'		=> $allow_comunication,
-					'allow_device'					=> $allow_device,
-					'allow_residence_cost'	=> $allow_residence_cost,
-					'allow_rent'						=> $allow_rent,
-					'allow_parking'					=> $allow_parking,
-					'allow_medichine'				=> $allow_medichine,
-					'allow_akomodsasi'			=> $allow_akomodsasi,
-					'allow_kasir'						=> $allow_kasir,
-					'allow_operational'			=> $allow_operational,
-
-					'cut_start' 						=> $cut_start,
-					'cut_off'								=> $cut_off,
-					'date_payment'					=> $date_payment,
-					'filename_ktp'					=> $ktp,
-					'filename_kk'						=> $kk,
-					'filename_skck'					=> $skck,
-					'filename_isd'					=> $ijazah,
-					'filename_cv'						=> $civi,
-					'filename_paklaring'		=> $paklaring,
-
-					'user_role_id' => '2',
-					'is_active' => '1',
-					'password' => $password_hash,
-					'private_code' => $private_code,
-					'created_by' => $createdby
-				);
-
-				$iresult = $this->Employees_model->add($data_migrate);
-
-				$data = array(
-					'uniqueid' 							=> $unicode,
-					'employee_id' 					=> $employee_id,
-					'docid'									=> $docid,
-					'project' 							=> $project,
-					'sub_project'						=> $sub_project,
-					'from_date'	 						=> $contract_start,
-					'to_date' 							=> $contract_end,
-					'no_surat' 							=> $nomor_surat,
-					'no_spb' 								=> $nomor_surat_spb,
-					'waktu_kontrak' 				=> $contract_periode,
-					'company' 							=> $company_id,
-					'jabatan' 							=> $posisi,
-					'penempatan' 						=> $penempatan,
-					'hari_kerja' 						=> $hari_kerja,
-					'tgl_payment'						=> $date_payment,
-					'start_period_payment'	=> $cut_start,
-					'end_period_payment'		=> $cut_off,
-					'basic_pay' 						=> $gaji_pokok,
-					'dm_allow_grade' 				=> 'Month',
-					'allowance_grade'				=> $allow_jabatan,
-					'dm_allow_area' 				=> 'Month',
-					'allowance_area'				=> $allow_area,
-					'dm_allow_masakerja' 		=> 'Month',
-					'allowance_masakerja' 	=> $allow_masakerja,
-					'dm_allow_transmeal' 		=> 'Month',
-					'allowance_transmeal' 	=> $allow_trans_meal,
-					'dm_allow_transrent' 		=> 'Month',
-					'allowance_transrent' 	=> $allow_trans_rent,
-					'dm_allow_meal' 				=> 'Month',
-					'allowance_meal' 				=> $allow_konsumsi,
-					'dm_allow_transport' 		=> 'Month',
-					'allowance_transport' 	=> $allow_transport,
-					'dm_allow_komunikasi' 	=> 'Month',
-					'allowance_komunikasi' 	=> $allow_comunication,
-					'dm_allow_laptop' 			=> 'Month',
-					'allowance_laptop' 			=> $allow_device,
-					'dm_allow_residance' 		=> 'Month',
-					'allowance_residance' 	=> $allow_residence_cost,
-					'dm_allow_rent' 				=> 'Month',
-					'allowance_rent' 				=> $allow_rent,
-					'dm_allow_park' 				=> 'Month',
-					'allowance_park' 				=> $allow_parking,
-					'dm_allow_medicine' 		=> 'Month',
-					'allowance_medicine' 		=> $allow_medichine,
-					'dm_allow_akomodasi' 		=> 'Month',
-					'allowance_akomodasi' 	=> $allow_akomodsasi,
-					'dm_allow_kasir' 				=> 'Month',
-					'allowance_kasir' 			=> $allow_kasir,
-					'dm_allow_operation' 		=> 'Month',
-					'allowance_operation' 	=> $allow_operational,
-					'img_esign'							=> $image_name,
-
-					'request_pkwt' 					=> $createdby,
-					'request_date'					=> $createdon,
-					'approve_nae'						=> $approved_naeby,
-					'approve_nae_date'			=> $approved_naeon,
-					'approve_nom'						=> $approved_nomby,
-					'approve_nom_date'			=> $approved_nomon,
-					'approve_hrd'						=> $session['user_id'],
-					'approve_hrd_date'			=> date('Y-m-d h:i:s'),
-
-					'sign_nip'							=> '21513829',
-					'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
-					'sign_jabatan'					=> 'SM HR & GA',
-					'status_pkwt' => 1,
-					'createdon' => date('Y-m-d h:i:s'),
-					'createdby' => $session['user_id']
-				);
-
-				$xresult = $this->Pkwt_model->add_pkwt_record($data);
-
-				$data_up = array(
-					// 'nip'							=> $employee_id,
-					'migrasi' => '1',
-					'approved_hrdby' =>  $session['user_id'],
-					'approved_hrdon' => date("Y-m-d h:i:s")
-				);
-
-				$result = $this->Employees_model->update_request_employee($data_up, $id);
-			}
-
-			// $data_up = array(
-			// 	'nip' => $employee_id,
-			// 	'approved_hrdby' =>  $session['user_id'],
-			// 	'approved_hrdon' => date('Y-m-d h:i:s'),
-			// );
-
-			if ($Return['error'] != '') {
-				$this->output($Return);
-			}
-
-
-			if ($result == TRUE) {
-				$Return['result'] = $this->lang->line('xin_success_update_company');
-			} else {
-				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
-			}
-			$this->output($Return);
-			exit;
+		//PKWT ATTRIBUTE
+		if ($company_id == '2') {
+			$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+			$spb_hr = 'E-SPB-JKT/SC-HR/';
+		} else if ($company_id == '3') {
+			$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+			$spb_hr = 'E-SPB-JKT/KAC-HR/';
+		} else {
+			$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+			$spb_hr = 'E-SPB-JKT/MATA-HR/';
 		}
+
+		$count_pkwt = $this->Xin_model->count_pkwt();
+		$romawi = $this->Xin_model->tgl_pkwt();
+		$unicode = $this->Xin_model->getUniqueCode(20);
+		$nomor_surat = sprintf("%06d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+		$nomor_surat_spb = sprintf("%06d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+
+
+		$docid = date('ymdHisv');
+		$yearmonth = date('Y/m');
+		$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+		$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $yearmonth . '/' . $docid;
+		$params['data'] 	= $domain; //data yang akan di jadikan QR CODE
+		$params['level'] 	= 'H'; //H=High
+		$params['size'] 	= 10;
+		$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+
+		if ($cancel === 'YES') {
+
+			$data_up = array(
+
+				'cancel_stat' => 1,
+				'cancel_on' 	=> date("Y-m-d h:i:s"),
+				'cancel_by' 	=> $session['user_id'],
+				'cancel_ket' 	=> $this->input->post('ket_revisi')
+
+			);
+
+			$result = $this->Employees_model->update_request_employee($data_up, $id);
+		} else if ($contract_start == '' || $contract_end == '') {
+
+			$Return['error'] = 'Periode Kontrak Kosong...';
+		} else {
+
+			$data_migrate = array(
+
+				'employee_id' 					=> $employee_id,
+				'username' 							=> $employee_id,
+
+				'first_name' 						=> $fullname,
+				'ibu_kandung' 					=> $nama_ibu,
+				'tempat_lahir' 					=> $tempat_lahir,
+				'date_of_birth' 				=> $tanggal_lahir,
+
+				'company_id' 					=> $company_id,
+				'location_id' 				=> $location_id,
+				'project_id' 					=> $project,
+				'sub_project_id' 			=> $sub_project,
+				'department_id' 			=> $department,
+				'designation_id' 			=> $posisi,
+				'gender' 							=> $gender,
+				'ethnicity_type' 			=> $agama,
+				'marital_status' 			=> $status_kawin,
+
+				'date_of_joining' 		=> $doj,
+				'contract_start' 			=> $contract_start,
+				'contract_end' 				=> $contract_end,
+				'contract_periode' 		=> $contract_periode,
+				'contact_no' 					=> $contact_no,
+				'ktp_no' 							=> $nik_ktp,
+				'alamat_ktp' 					=> $alamat_ktp,
+				'alamat_domisili' 			=> $alamat_domisili,
+				'kk_no' 								=> $no_kk,
+				'npwp_no' 							=> $npwp,
+				'email' 								=> $email,
+				'penempatan' 						=> $penempatan,
+				'hari_kerja' 						=> $hari_kerja,
+				'bank_name' 						=> $bank_id,
+				'nomor_rek' 						=> $no_rek,
+				'pemilik_rek' 					=> $pemilik_rekening,
+
+				'basic_salary' 					=> $gaji_pokok,
+				'allow_jabatan' 				=> $allow_jabatan,
+				'allow_area' 						=> $allow_area,
+				'allow_masakerja' 			=> $allow_masakerja,
+				'allow_trans_meal'			=> $allow_trans_meal,
+				'allow_trans_rent'			=> $allow_trans_rent,
+				'allow_konsumsi'				=> $allow_konsumsi,
+				'allow_transport'				=> $allow_transport,
+				'allow_comunication'		=> $allow_comunication,
+				'allow_device'					=> $allow_device,
+				'allow_residence_cost'	=> $allow_residence_cost,
+				'allow_rent'						=> $allow_rent,
+				'allow_parking'					=> $allow_parking,
+				'allow_medichine'				=> $allow_medichine,
+				'allow_akomodsasi'			=> $allow_akomodsasi,
+				'allow_kasir'						=> $allow_kasir,
+				'allow_operational'			=> $allow_operational,
+
+				'cut_start' 						=> $cut_start,
+				'cut_off'								=> $cut_off,
+				'date_payment'					=> $date_payment,
+				'filename_ktp'					=> $ktp,
+				'filename_kk'						=> $kk,
+				'filename_skck'					=> $skck,
+				'filename_isd'					=> $ijazah,
+				'filename_cv'						=> $civi,
+				'filename_paklaring'		=> $paklaring,
+
+				'user_role_id' => '2',
+				'is_active' => '1',
+				'password' => $password_hash,
+				'private_code' => $private_code,
+				'created_by' => $createdby
+			);
+
+			$iresult = $this->Employees_model->add($data_migrate);
+
+			$data = array(
+				'uniqueid' 							=> $unicode,
+				'employee_id' 					=> $employee_id,
+				'docid'									=> $docid,
+				'project' 							=> $project,
+				'sub_project'						=> $sub_project,
+				'from_date'	 						=> $contract_start,
+				'to_date' 							=> $contract_end,
+				'no_surat' 							=> $nomor_surat,
+				'no_spb' 								=> $nomor_surat_spb,
+				'waktu_kontrak' 				=> $contract_periode,
+				'company' 							=> $company_id,
+				'jabatan' 							=> $posisi,
+				'penempatan' 						=> $penempatan,
+				'hari_kerja' 						=> $hari_kerja,
+				'tgl_payment'						=> $date_payment,
+				'start_period_payment'	=> $cut_start,
+				'end_period_payment'		=> $cut_off,
+				'basic_pay' 						=> $gaji_pokok,
+				'dm_allow_grade' 				=> 'Month',
+				'allowance_grade'				=> $allow_jabatan,
+				'dm_allow_area' 				=> 'Month',
+				'allowance_area'				=> $allow_area,
+				'dm_allow_masakerja' 		=> 'Month',
+				'allowance_masakerja' 	=> $allow_masakerja,
+				'dm_allow_transmeal' 		=> 'Month',
+				'allowance_transmeal' 	=> $allow_trans_meal,
+				'dm_allow_transrent' 		=> 'Month',
+				'allowance_transrent' 	=> $allow_trans_rent,
+				'dm_allow_meal' 				=> 'Month',
+				'allowance_meal' 				=> $allow_konsumsi,
+				'dm_allow_transport' 		=> 'Month',
+				'allowance_transport' 	=> $allow_transport,
+				'dm_allow_komunikasi' 	=> 'Month',
+				'allowance_komunikasi' 	=> $allow_comunication,
+				'dm_allow_laptop' 			=> 'Month',
+				'allowance_laptop' 			=> $allow_device,
+				'dm_allow_residance' 		=> 'Month',
+				'allowance_residance' 	=> $allow_residence_cost,
+				'dm_allow_rent' 				=> 'Month',
+				'allowance_rent' 				=> $allow_rent,
+				'dm_allow_park' 				=> 'Month',
+				'allowance_park' 				=> $allow_parking,
+				'dm_allow_medicine' 		=> 'Month',
+				'allowance_medicine' 		=> $allow_medichine,
+				'dm_allow_akomodasi' 		=> 'Month',
+				'allowance_akomodasi' 	=> $allow_akomodsasi,
+				'dm_allow_kasir' 				=> 'Month',
+				'allowance_kasir' 			=> $allow_kasir,
+				'dm_allow_operation' 		=> 'Month',
+				'allowance_operation' 	=> $allow_operational,
+				'img_esign'							=> $image_name,
+
+				'request_pkwt' 					=> $createdby,
+				'request_date'					=> $createdon,
+				'approve_nae'						=> $approved_naeby,
+				'approve_nae_date'			=> $approved_naeon,
+				'approve_nom'						=> $approved_nomby,
+				'approve_nom_date'			=> $approved_nomon,
+				'approve_hrd'						=> $session['user_id'],
+				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
+
+				'sign_nip'							=> '21513829',
+				'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
+				'sign_jabatan'					=> 'SM HR & GA',
+				'status_pkwt' => 1,
+				'createdon' => date('Y-m-d h:i:s'),
+				'createdby' => $session['user_id']
+			);
+
+			$xresult = $this->Pkwt_model->add_pkwt_record($data);
+
+			$data_up = array(
+				// 'nip'							=> $employee_id,
+				'migrasi' => '1',
+				'approved_hrdby' =>  $session['user_id'],
+				'approved_hrdon' => date("Y-m-d h:i:s")
+			);
+
+			$result = $this->Employees_model->update_request_employee($data_up, $id);
+		}
+
+		// $data_up = array(
+		// 	'nip' => $employee_id,
+		// 	'approved_hrdby' =>  $session['user_id'],
+		// 	'approved_hrdon' => date('Y-m-d h:i:s'),
+		// );
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+
+		if ($result == TRUE) {
+			$Return['result'] = $this->lang->line('xin_success_update_company');
+		} else {
+			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+		}
+		$this->output($Return);
+		exit;
+		//}
+	}
+
+	// Validate and update info in database
+	public function update2()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$yearmonth = date('Y/m');
+		$config['cacheable']	= true; //boolean, the default is true
+		$config['cachedir']		= './assets/'; //string, the default is application/cache/
+		$config['errorlog']		= './assets/'; //string, the default is application/logs/
+		$config['imagedir']		= './assets/images/pkwt/' . $yearmonth . '/'; //direktori penyimpanan qr code
+		$config['quality']		= true; //boolean, the default is true
+		$config['size']			= '1024'; //interger, the default is 1024
+		$config['black']		= array(224, 255, 255); // array, default is array(255,255,255)
+		$config['white']		= array(70, 130, 180); // array, default is array(0,0,0)
+		$this->ciqrcode->initialize($config);
+
+		//kalau blm ada folder path nya
+		if (!file_exists($config['imagedir'])) {
+			mkdir($config['imagedir'], 0777, true);
+		}
+
+		//if ($this->input->post('edit_type') == 'company') {
+
+		$id = $this->uri->segment(4);
+		$cancel = $this->uri->segment(5);
+
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+
+		$count_nip = $this->Xin_model->count_nip();
+		$employee_request = $this->Employees_model->read_employee_request2($id);
+
+		$fullname 				= $employee_request['fullname'];
+		$nama_ibu 				= $employee_request['nama_ibu'];
+		$tempat_lahir 			= $employee_request['tempat_lahir'];
+		$tanggal_lahir 			= $employee_request['tanggal_lahir'];
+		$contact_no 			= $employee_request['contact_no'];
+		$nik_ktp 				= $employee_request['nik_ktp'];
+		$alamat_ktp 			= $employee_request['alamat_ktp'];
+		$alamat_domisili		= $employee_request['alamat_domisili'];
+
+		$no_kk 					= $employee_request['no_kk'];
+		$npwp 					= $employee_request['npwp'];
+		$email 					= $employee_request['email'];
+		$company_id 			= $employee_request['company_id'];
+		$location_id 			= $employee_request['location_id'];
+		$project 				= $employee_request['project'];
+		$sub_project 			= $employee_request['sub_project'];
+		$department 			= $employee_request['department'];
+		$posisi 				= $employee_request['posisi'];
+
+		$gender 				= $employee_request['gender'];
+		$agama 					= $employee_request['agama'];
+		$status_kawin 			= $employee_request['status_kawin'];
+
+		$doj 					= $employee_request['doj'];
+		$contract_start			= $employee_request['contract_start'];
+		$contract_end			= $employee_request['contract_end'];
+		$contract_periode		= $employee_request['contract_periode'];
+		$penempatan 			= $employee_request['penempatan'];
+		$hari_kerja				= $employee_request['hari_kerja'];
+		$bank_id				= $employee_request['bank_id'];
+		$no_rek					= $employee_request['no_rek'];
+		$pemilik_rekening		= $employee_request['pemilik_rekening'];
+
+		$gaji_pokok				= $employee_request['gaji_pokok'];
+		$allow_jabatan			= $employee_request['allow_jabatan'];
+		$allow_area				= $employee_request['allow_area'];
+		$allow_masakerja		= $employee_request['allow_masakerja'];
+		$allow_trans_meal		= $employee_request['allow_trans_meal'];
+		$allow_trans_rent		= $employee_request['allow_trans_rent'];
+		$allow_konsumsi			= $employee_request['allow_konsumsi'];
+		$allow_transport		= $employee_request['allow_transport'];
+		$allow_comunication		= $employee_request['allow_comunication'];
+		$allow_device			= $employee_request['allow_device'];
+		$allow_residence_cost	= $employee_request['allow_residence_cost'];
+		$allow_rent				= $employee_request['allow_rent'];
+		$allow_parking			= $employee_request['allow_parking'];
+		$allow_medichine		= $employee_request['allow_medichine'];
+		$allow_akomodsasi		= $employee_request['allow_akomodsasi'];
+		$allow_kasir			= $employee_request['allow_kasir'];
+		$allow_operational		= $employee_request['allow_operational'];
+
+		$cut_start 				= $employee_request['cut_start'];
+		$cut_off				= $employee_request['cut_off'];
+		$date_payment 			= $employee_request['date_payment'];
+		$ktp					= $employee_request['ktp'];
+		$kk						= $employee_request['kk'];
+		$skck					= $employee_request['skck'];
+		$ijazah					= $employee_request['ijazah'];
+		$civi					= $employee_request['civi'];
+		$paklaring				= $employee_request['paklaring'];
+
+		$createdby 				= $employee_request['request_empby'];
+		$createdon 				= $employee_request['request_empon'];
+		$approved_naeby 		= $employee_request['approved_naeby'];
+		$approved_naeon 		= $employee_request['approved_naeon'];
+		$approved_nomby 		= $employee_request['approved_nomby'];
+		$approved_nomon 		= $employee_request['approved_nomon'];
+
+		//NIP
+		$employee_id = '2' . $employee_request['location_id'] . $employee_request['department'] . sprintf("%05d", $count_nip[0]->newcount);
+		//PIN
+		$private_code = rand(100000, 999999);
+		//Pass
+		$options = array('cost' => 12);
+		$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
+
+		//PKWT ATTRIBUTE
+		if ($company_id == '2') {
+			$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+			$spb_hr = 'E-SPB-JKT/SC-HR/';
+		} else if ($company_id == '3') {
+			$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+			$spb_hr = 'E-SPB-JKT/KAC-HR/';
+		} else {
+			$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+			$spb_hr = 'E-SPB-JKT/MATA-HR/';
+		}
+
+		$count_pkwt = $this->Xin_model->count_pkwt();
+		$romawi = $this->Xin_model->tgl_pkwt();
+		$unicode = $this->Xin_model->getUniqueCode(20);
+		$nomor_surat = sprintf("%06d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+		$nomor_surat_spb = sprintf("%06d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+
+
+		$docid = date('ymdHisv');
+		$yearmonth = date('Y/m');
+		$image_name = 'esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+		$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $yearmonth . '/' . $docid;
+		$params['data'] 	= $domain; //data yang akan di jadikan QR CODE
+		$params['level'] 	= 'H'; //H=High
+		$params['size'] 	= 10;
+		$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+
+		if ($cancel === 'YES') {
+
+			$data_up = array(
+
+				'cancel_stat' => 1,
+				'cancel_on' 	=> date("Y-m-d h:i:s"),
+				'cancel_by' 	=> $session['user_id'],
+				'cancel_ket' 	=> $this->input->post('ket_revisi')
+
+			);
+
+			$result = $this->Employees_model->update_request_employee($data_up, $id);
+		} else if ($contract_start == '' || $contract_end == '') {
+
+			$Return['error'] = 'Periode Kontrak Kosong...';
+		} else {
+
+			$data_migrate = array(
+
+				'employee_id' 					=> $employee_id,
+				'username' 							=> $employee_id,
+				'first_name' 						=> $fullname,
+				'ibu_kandung' 					=> $nama_ibu,
+				'tempat_lahir' 					=> $tempat_lahir,
+				'date_of_birth' 				=> $tanggal_lahir,
+
+				'company_id' 					=> $company_id,
+				'location_id' 				=> $location_id,
+				'project_id' 					=> $project,
+				'sub_project_id' 			=> $sub_project,
+				'department_id' 			=> $department,
+				'designation_id' 			=> $posisi,
+				'gender' 							=> $gender,
+				'ethnicity_type' 			=> $agama,
+				'marital_status' 			=> $status_kawin,
+
+				'date_of_joining' 		=> $doj,
+				'contract_start' 			=> $contract_start,
+				'contract_end' 				=> $contract_end,
+				'contract_periode' 		=> $contract_periode,
+				'contact_no' 					=> $contact_no,
+				'ktp_no' 							=> $nik_ktp,
+				'alamat_ktp' 					=> $alamat_ktp,
+				'alamat_domisili' 			=> $alamat_domisili,
+				'kk_no' 								=> $no_kk,
+				'npwp_no' 							=> $npwp,
+				'email' 								=> $email,
+				'penempatan' 						=> $penempatan,
+				'hari_kerja' 						=> $hari_kerja,
+				'bank_name' 						=> $bank_id,
+				'nomor_rek' 						=> $no_rek,
+				'pemilik_rek' 					=> $pemilik_rekening,
+
+				'basic_salary' 					=> $gaji_pokok,
+				'allow_jabatan' 				=> $allow_jabatan,
+				'allow_area' 						=> $allow_area,
+				'allow_masakerja' 			=> $allow_masakerja,
+				'allow_trans_meal'			=> $allow_trans_meal,
+				'allow_trans_rent'			=> $allow_trans_rent,
+				'allow_konsumsi'				=> $allow_konsumsi,
+				'allow_transport'				=> $allow_transport,
+				'allow_comunication'		=> $allow_comunication,
+				'allow_device'					=> $allow_device,
+				'allow_residence_cost'	=> $allow_residence_cost,
+				'allow_rent'						=> $allow_rent,
+				'allow_parking'					=> $allow_parking,
+				'allow_medichine'				=> $allow_medichine,
+				'allow_akomodsasi'			=> $allow_akomodsasi,
+				'allow_kasir'						=> $allow_kasir,
+				'allow_operational'			=> $allow_operational,
+
+				'cut_start' 						=> $cut_start,
+				'cut_off'								=> $cut_off,
+				'date_payment'					=> $date_payment,
+				'filename_ktp'					=> $ktp,
+				'filename_kk'						=> $kk,
+				'filename_skck'					=> $skck,
+				'filename_isd'					=> $ijazah,
+				'filename_cv'						=> $civi,
+				'filename_paklaring'		=> $paklaring,
+
+				'user_role_id' => '2',
+				'is_active' => '1',
+				'password' => $password_hash,
+				'private_code' => $private_code,
+				'created_by' => $createdby
+			);
+
+			$iresult = $this->Employees_model->add($data_migrate);
+
+			$data = array(
+				'uniqueid' 							=> $unicode,
+				'employee_id' 					=> $employee_id,
+				'docid'									=> $docid,
+				'project' 							=> $project,
+				'sub_project'						=> $sub_project,
+				'from_date'	 						=> $contract_start,
+				'to_date' 							=> $contract_end,
+				'no_surat' 							=> $nomor_surat,
+				'no_spb' 								=> $nomor_surat_spb,
+				'waktu_kontrak' 				=> $contract_periode,
+				'company' 							=> $company_id,
+				'jabatan' 							=> $posisi,
+				'penempatan' 						=> $penempatan,
+				'hari_kerja' 						=> $hari_kerja,
+				'tgl_payment'						=> $date_payment,
+				'start_period_payment'	=> $cut_start,
+				'end_period_payment'		=> $cut_off,
+				'basic_pay' 						=> $gaji_pokok,
+				'dm_allow_grade' 				=> 'Month',
+				'allowance_grade'				=> $allow_jabatan,
+				'dm_allow_area' 				=> 'Month',
+				'allowance_area'				=> $allow_area,
+				'dm_allow_masakerja' 		=> 'Month',
+				'allowance_masakerja' 	=> $allow_masakerja,
+				'dm_allow_transmeal' 		=> 'Month',
+				'allowance_transmeal' 	=> $allow_trans_meal,
+				'dm_allow_transrent' 		=> 'Month',
+				'allowance_transrent' 	=> $allow_trans_rent,
+				'dm_allow_meal' 				=> 'Month',
+				'allowance_meal' 				=> $allow_konsumsi,
+				'dm_allow_transport' 		=> 'Month',
+				'allowance_transport' 	=> $allow_transport,
+				'dm_allow_komunikasi' 	=> 'Month',
+				'allowance_komunikasi' 	=> $allow_comunication,
+				'dm_allow_laptop' 			=> 'Month',
+				'allowance_laptop' 			=> $allow_device,
+				'dm_allow_residance' 		=> 'Month',
+				'allowance_residance' 	=> $allow_residence_cost,
+				'dm_allow_rent' 				=> 'Month',
+				'allowance_rent' 				=> $allow_rent,
+				'dm_allow_park' 				=> 'Month',
+				'allowance_park' 				=> $allow_parking,
+				'dm_allow_medicine' 		=> 'Month',
+				'allowance_medicine' 		=> $allow_medichine,
+				'dm_allow_akomodasi' 		=> 'Month',
+				'allowance_akomodasi' 	=> $allow_akomodsasi,
+				'dm_allow_kasir' 				=> 'Month',
+				'allowance_kasir' 			=> $allow_kasir,
+				'dm_allow_operation' 		=> 'Month',
+				'allowance_operation' 	=> $allow_operational,
+				'img_esign'							=> $image_name,
+
+				'request_pkwt' 					=> $createdby,
+				'request_date'					=> $createdon,
+				'approve_nae'						=> $approved_naeby,
+				'approve_nae_date'			=> $approved_naeon,
+				'approve_nom'						=> $approved_nomby,
+				'approve_nom_date'			=> $approved_nomon,
+				'approve_hrd'						=> $session['user_id'],
+				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
+
+				'sign_nip'							=> '21513829',
+				'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
+				'sign_jabatan'					=> 'SM HR & GA',
+				'status_pkwt' => 1,
+				'createdon' => date('Y-m-d h:i:s'),
+				'createdby' => $session['user_id']
+			);
+
+			$xresult = $this->Pkwt_model->add_pkwt_record($data);
+
+			$data_up = array(
+
+				'migrasi' => '1',
+				'approved_hrdby' =>  $session['user_id'],
+				'approved_hrdon' => date("Y-m-d h:i:s")
+			);
+
+			$result = $this->Employees_model->update_request_employee($data_up, $id);
+		}
+
+		// 	if ($Return['error'] != '') {
+		// 		$this->output($Return);
+		// 	}
+
+
+		// 	if ($result == TRUE) {
+		// 		$Return['result'] = $this->lang->line('xin_success_update_company');
+		// 	} else {
+		// 		$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+		// 	}
+		// 	$this->output($Return);
+		// 	exit;
+
+		//$data['tes'] = "berhasil";
+		//$data['tes2'] = "berhasil2";
+		$data['count_nip'] = $count_nip;
+		$data['employee_request'] = $employee_request;
+		$data['fullname'] = $fullname;
+		$data['employee_id'] = $employee_id;
+		$data['private_code'] = $private_code;
+		$data['nomor_surat'] = $nomor_surat;
+		$data['nomor_surat_spb'] = $nomor_surat_spb;
+
+		$data['data_migrate'] = $data_migrate;
+
+		$data['iresult'] = $iresult;
+		$data['xresult'] = $xresult;
+		$data['result'] = $result;
+		echo json_encode($data);
+		//}
 	}
 
 
@@ -960,15 +1313,17 @@ class Employee_request_hrd extends MY_Controller
 			// );
 			$result = $this->Employees_model->update_request_employee($data_up, $id);
 
-			if ($Return['error'] != '') {
-				$this->output($Return);
-			}
+
 
 
 			if ($result == TRUE) {
 				$Return['result'] = $this->lang->line('xin_success_update_company');
 			} else {
 				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
+			}
+
+			if ($Return['error'] != '') {
+				$this->output($Return);
 			}
 			$this->output($Return);
 			//exit;

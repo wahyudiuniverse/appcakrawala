@@ -783,14 +783,8 @@ class Employees_model extends CI_Model
 		$i = 1;
 
 		foreach ($records as $record) {
-			if ($record->approved_hrdby == null) {
 
-				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $record->secid . '">Approve HRD</button>';
-			} else {
-
-				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $record->secid . '">Approved</button>';
-			}
-
+			$status_migrasi = "";
 			$editReq = '<a href="' . site_url() . 'admin/employee_request_cancelled/request_edit/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>';
 
 			$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@' . $record->secid . '">TOLAK</button>';
@@ -834,6 +828,7 @@ class Employees_model extends CI_Model
 															if (($record->sub_project != null) && ($record->sub_project != "") && ($record->sub_project != "0")) {
 																if (($record->posisi != null) && ($record->posisi != "") && ($record->posisi != "0")) {
 																	$siap_approve = "</br><button type='button' class='btn btn-xs btn-outline-info' data-toggle='modal' data-target='.edit-modal-data' data-company_id='$" . $record->secid . "'>Siap Approve</button>";
+																	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $record->secid . '">Approve HRD</button>';
 																}
 															}
 														}
@@ -1256,7 +1251,6 @@ WHERE ktp_no = ?';
 	// get single employee request
 	public function read_employee_request($id)
 	{
-
 		$sql = "SELECT * FROM xin_employee_request WHERE secid = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
@@ -1267,6 +1261,20 @@ WHERE ktp_no = ?';
 			return null;
 		}
 	}
+
+	// get single employee request 2
+	public function read_employee_request2($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employee_request');
+		$this->db->where('secid', $id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+
 
 
 	// get single employee request

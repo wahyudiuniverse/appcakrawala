@@ -102,6 +102,10 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
               $('.save').prop('disabled', false);
               Ladda.stopAll();
             } else {
+              var baseURL = "<?php echo base_url(); ?>";
+              var link_tujuan = "<?= base_url() ?>admin/employee_request_hrd/";
+              location.href = link_tujuan;
+
               // On page load: datatable
               //            var xin_table = $('#xin_table').dataTable({
               //     "bDestroy": true,
