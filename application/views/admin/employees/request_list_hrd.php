@@ -262,6 +262,7 @@
       var idsession = "<?php print($session['employee_id']); ?>";
       //alert(approve);
       $(document).ready(function() {
+        //$.fn.dataTable.moment('YYYY-MM-DD HH:mm:ss');
         var table = $('#xin_table2').DataTable({
           'processing': true,
           'serverSide': true,
@@ -269,8 +270,12 @@
           'bFilter': true,
           'serverMethod': 'post',
           'dom': 'pPlBfrtip',
+          //'columnDefs': [{
+          //  targets: 11,
+          //  type: 'date-eu'
+          //}],
           'order': [
-            [3, 'asc']
+            [11, 'desc']
           ],
           'ajax': {
             'url': '<?= base_url() ?>admin/employee_request_hrd/request_list_hrd2',
@@ -290,30 +295,35 @@
             {
               data: 'golongan_karyawan',
               "orderable": false,
-              searchable: true
+              //searchable: true
             },
             {
               data: 'nik_ktp',
-              "orderable": false
+              //"orderable": false
             },
             {
-              data: 'fullname'
+              data: 'fullname',
+              //"orderable": false,
             },
             {
-              data: 'project'
+              data: 'project',
+              //"orderable": false
             },
             {
-              data: 'sub_project'
+              data: 'sub_project',
+              //"orderable": false,
             },
             {
-              data: 'jabatan',
-              "orderable": false
+              data: 'posisi',
+              //"orderable": false
             },
             {
-              data: 'penempatan'
+              data: 'penempatan',
+              //"orderable": false,
             },
             {
-              data: 'gaji_pokok'
+              data: 'gaji_pokok',
+              //"orderable": false,
             },
             {
               data: 'periode',
@@ -324,8 +334,9 @@
               "orderable": false
             },
             {
-              data: 'tanggal_register',
-              "orderable": false
+              data: 'request_empon',
+              //type: 'date-eu'
+              //"orderable": false
             },
           ]
         });

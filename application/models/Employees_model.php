@@ -808,6 +808,7 @@ class Employees_model extends CI_Model
 			$this->db->where($kondisiBelumSiapApprove);
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
+		//$this->db->order_by('request_empon', 'desc');
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employee_request')->result();
 		$tes_query = $this->db->last_query();
@@ -890,12 +891,12 @@ class Employees_model extends CI_Model
 				//"project" => $record->project,
 				"sub_project" => $this->get_nama_sub_project($record->sub_project),
 				//"sub_project" => $record->sub_project,
-				"jabatan" => $this->get_nama_jabatan($record->posisi),
+				"posisi" => $this->get_nama_jabatan($record->posisi),
 				//"jabatan" => $record->posisi,
 				"gaji_pokok" => $record->gaji_pokok,
 				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
 				"kategori" => $this->get_nama_kategori($record->location_id),
-				"tanggal_register" => $record->request_empon
+				"request_empon" => $record->request_empon
 			);
 
 			// if ($approve == '1') {
