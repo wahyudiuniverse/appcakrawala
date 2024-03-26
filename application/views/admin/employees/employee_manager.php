@@ -70,9 +70,11 @@
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-bpjs"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_manage_employees_bpjs');?></a>
 
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; Dokumen Pribadi</a>
+
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-docpkwt"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; Dokumen PKWT</a>
 
-                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-document"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; Dokumen Pribadi</a>
+                  <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-sk"> <i class="lnr lnr-earth text-lightest"></i> &nbsp; Dokumen SK</a>
 
                   <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-baccount"> <i class="lnr lnr-apartment text-lightest"></i> &nbsp; <?php echo $this->lang->line('xin_e_details_baccount');?></a>
                   
@@ -101,12 +103,14 @@
                         }
                       ?>
 
+
                     <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DATA </strong> DIRI </span> </div>
                     <div class="card-body media align-items-center"> <img src="<?php echo $de_file;?>" alt="" class="d-block ui-w-80">
                       <div class="media-body ml-4">
                         <div class="text-big  mt-1"><label class="form-label"><?php echo $first_name;?></label></div>
                         <div class="text-big  mt-1"><label class="form-label">NIP: <?php echo $employee_id;?></label></div>
                         <div class="text-muted  mt-1"><label class="form-label"><?php echo $designation[0]->designation_name;?></label></div>
+                        <a href="https://wa.me/62<?php echo $contact_no;?>" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Whatsapp</button></a>
                       </div>
                     </div>
 

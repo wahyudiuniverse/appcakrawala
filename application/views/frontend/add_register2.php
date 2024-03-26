@@ -2,7 +2,7 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 ml-4 text-gray-800"><?= $title; ?></h1>
+    <h1 class="h3 mb-2 ml-4 text-gray-800"><br><h2>REGISTRASI KARYAWAN BARU 2024</h2><h5>CAKRAWALA GROUP</h5><br></h1>
 
     <!-- Tab Tambah Data Karyawan -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -93,6 +93,8 @@
         <!-- Testing NIK -->
         <?php //echo $karyawan; 
         ?>
+
+
 
         <li class="nav-item" role="presentation">
             <a class="nav-link <?php echo $dsb['nik'];

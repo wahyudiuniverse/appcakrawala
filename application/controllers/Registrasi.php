@@ -38,7 +38,8 @@ class Registrasi extends CI_Controller
         $nik = '';
 
         //title halaman
-        $data['title'] = 'Registrasi Karyawan';
+        $data['title'] = 'Form Pendaftaran Karyawan PT. Siprama Cakrawala';
+        // $data['title'] = '<br><h2>REGISTRASI KARYAWAN 2024</h2><h5>PT. SIPRAMA CAKRAWALA</h5><br>';
 
         //siapkan data default awal untuk dikirim ke view
         $data['halaman'] = $halaman;
@@ -121,7 +122,7 @@ class Registrasi extends CI_Controller
     {
 
         //Title halaman
-        $data['title'] = 'Registrasi Karyawan';
+        $data['title'] = 'Form Pendaftaran Karyawan PT. Siprama Cakrawala';
 
         //inisialisasi pesan error
         $data['pesan_error'] = "";
@@ -329,7 +330,8 @@ class Registrasi extends CI_Controller
     public function addRegisterPost()
     {
         //Title halaman
-        $data['title'] = 'Registrasi Karyawan';
+        $data['title'] = 'Form Pendaftaran Karyawan PT. Siprama Cakrawala';
+        // $data['title'] = '<br><h2>REGISTRASI KARYAWAN 2024</h2><h5>PT. SIPRAMA CAKRAWALA</h5><br>';
 
         //ambil parameter yg di post sebagai acuan
         $nik = $this->input->post('nik_karyawan');

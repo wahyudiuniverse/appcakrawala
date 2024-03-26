@@ -28,26 +28,28 @@ class register extends MY_Controller {
 	}
 
 	public function index() {
-		$system = $this->Xin_model->read_setting_info(1);
-		if($system[0]->module_recruitment!='true'){
-			redirect('admin/');
-		}
+		redirect('registrasi/');
+		
+		// $system = $this->Xin_model->read_setting_info(1);
+		// if($system[0]->module_recruitment!='true'){
+		// 	redirect('registrasi/');
+		// }
 
-		$data['title'] = 'FORM PENDAFTARAN KARYAWAN PT. SIPRAMA CAKRAWALA 2024';
-		$session = $this->session->userdata('c_user_id');
-		if(!empty($session)){
-			redirect('');
-		}
+		// $data['title'] = 'FORM PENDAFTARAN KARYAWAN PT. SIPRAMA CAKRAWALA 2024';
+		// $session = $this->session->userdata('c_user_id');
+		// if(!empty($session)){
+		// 	redirect('');
+		// }
 
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
-		$data['all_dept'] = $this->Xin_model->get_departments();
-		$data['all_designation'] = $this->Xin_model->get_designations();
-		$data['all_project'] = $this->Project_model->read_project_posisi();
-		$data['path_url'] = 'register_projects_sc';
-		$data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
-		// $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
-		$this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
+		// $data['all_companies'] = $this->Xin_model->get_companies();
+		// $data['all_ethnicity'] = $this->Xin_model->get_ethnicity_type();
+		// $data['all_dept'] = $this->Xin_model->get_departments();
+		// $data['all_designation'] = $this->Xin_model->get_designations();
+		// $data['all_project'] = $this->Project_model->read_project_posisi();
+		// $data['path_url'] = 'register_projects_sc';
+		// $data['subview'] = $this->load->view("frontend/hrpremium/register", $data, TRUE);
+		// // $data['subview'] = $this->load->view("frontend/hrpremium/register_stop", $data, TRUE);
+		// $this->load->view('frontend/hrpremium/job_layout/job_layout', $data); //page load
   }
 
 	// Validate and add info in database

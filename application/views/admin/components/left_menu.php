@@ -1392,6 +1392,17 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         }
         ?>
 
+        <?php
+        if (in_array('469', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Import SALTAB (New)
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
       </ul>
     </li>
   <?php

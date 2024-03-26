@@ -30,7 +30,7 @@ class Registrasi_tkhl extends CI_Controller
         $nik = '';
 
         //title halaman
-        $data['title'] = 'Registrasi Karyawan TKHL';
+        $data['title'] = '<br><h2>REGISTRASI KARYAWAN TKHL 2024</h2><h5>PT. SIPRAMA CAKRAWALA</h5><br>';
 
         //siapkan data default awal untuk dikirim ke view
         $data['halaman'] = $halaman;
@@ -102,7 +102,7 @@ class Registrasi_tkhl extends CI_Controller
     {
 
         //Title halaman
-        $data['title'] = 'Registrasi Karyawan TKHL';
+        $data['title'] = '<br><h2>REGISTRASI KARYAWAN TKHL 2024</h2><h5>PT. SIPRAMA CAKRAWALA</h5><br>';
 
         //inisialisasi pesan error
         $data['pesan_error'] = "";
@@ -310,7 +310,7 @@ class Registrasi_tkhl extends CI_Controller
     public function addRegisterPost()
     {
         //Title halaman
-        $data['title'] = 'Registrasi Karyawan TKHL';
+        $data['title'] = '<br><h2>REGISTRASI KARYAWAN TKHL 2024</h2><h5>PT. SIPRAMA CAKRAWALA</h5><br>';
 
         //ambil parameter yg di post sebagai acuan
         $nik = $this->input->post('nik_karyawan');

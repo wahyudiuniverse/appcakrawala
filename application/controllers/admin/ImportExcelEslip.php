@@ -1798,7 +1798,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">*PPH Karyawan (5%)</td>
+								<td colspan="4">*PPH Karyawan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -3009,7 +3009,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">*PPH Karyawan (5%)</td>
+								<td colspan="4">*PPH Karyawan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>

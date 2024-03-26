@@ -1918,8 +1918,6 @@ class Reports extends MY_Controller
 			}
 
 
-
-
 			$whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
 			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
