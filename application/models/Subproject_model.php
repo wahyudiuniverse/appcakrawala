@@ -49,12 +49,26 @@
 			return false;
 		}
 	}
+
+	// get single sub project by id
+	public function read_single_subproject($id)
+	{
+
+		$sql = "SELECT * FROM xin_projects_sub WHERE secid = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
 		
 	// Function to Delete selected record from table
 	public function delete_record($id){
 		$this->db->where('secid', $id);
 		$this->db->delete('xin_projects_sub');
-		
 	}
 	
 	// Function to update record in table
@@ -77,4 +91,3 @@
 		}		
 	}
 }
-?>

@@ -6246,11 +6246,16 @@ class Employees extends MY_Controller
   					<button type="button" class="btn btn-xs btn-outline-twitter">DOWNLOAD</button>
   				</a>';
 
+			$addendum =
+				'<a href="' . site_url() . 'admin/addendum/view/' . $r->uniqueid . '" target="_blank">
+						<button type="button" class="btn btn-xs btn-outline-twitter">Tambah Addendum</button>
+					</a>';
+
 			$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '" >UPLOAD</button>';
 
 
 			$data[] = array(
-				$r->no_surat,
+				$r->no_surat . "<br>" . $addendum,
 				$nama_project,
 				$designation_name,
 				$status_upload . '<br>' . $download . ' ' . $status_migrasi,
