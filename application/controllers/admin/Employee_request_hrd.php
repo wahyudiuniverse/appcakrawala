@@ -1025,7 +1025,7 @@ class Employee_request_hrd extends MY_Controller
 
 		$docid = date('ymdHisv');
 		$yearmonth = date('Y/m');
-		$image_name = 'esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+		$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
 		$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $yearmonth . '/' . $docid;
 		$params['data'] 	= $domain; //data yang akan di jadikan QR CODE
 		$params['level'] 	= 'H'; //H=High
