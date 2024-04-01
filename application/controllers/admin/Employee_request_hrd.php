@@ -908,6 +908,7 @@ class Employee_request_hrd extends MY_Controller
 		$config['black']		= array(224, 255, 255); // array, default is array(255,255,255)
 		$config['white']		= array(70, 130, 180); // array, default is array(0,0,0)
 		$this->ciqrcode->initialize($config);
+		$dirsave = './assets/images/pkwt/';
 
 		//kalau blm ada folder path nya
 		if (!file_exists($config['imagedir'])) {
@@ -1026,11 +1027,11 @@ class Employee_request_hrd extends MY_Controller
 		$docid = date('ymdHisv');
 		$yearmonth = date('Y/m');
 		$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
-		$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $yearmonth . '/' . $docid;
+		$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $docid;
 		$params['data'] 	= $domain; //data yang akan di jadikan QR CODE
 		$params['level'] 	= 'H'; //H=High
 		$params['size'] 	= 10;
-		$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+		$params['savename'] = FCPATH . $dirsave . $image_name; //simpan image QR CODE ke folder assets/images/
 		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 
 
