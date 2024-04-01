@@ -398,7 +398,7 @@ class Pkwt256 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan sebesar <b>'.$this->Xin_model->rupiah($sum_salary).'/ Hari</b></td>
+								<td colspan="20">Total Upah Harian yang didapatkan sebesar <b>'.$this->Xin_model->rupiah($pkwt[0]->basic_pay).'/ Hari</b></td>
 							</tr>
 
 							<br>
