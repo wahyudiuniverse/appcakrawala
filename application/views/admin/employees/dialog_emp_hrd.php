@@ -733,6 +733,7 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
           processData: false,
           success: function(response) {
             alert("Karyawan Berhasil di Approve");
+            Ladda.stopAll();
             // var baseURL = "<?php echo base_url(); ?>";
             // var link_tujuan = "<?= base_url() ?>admin/employee_request_hrd/";
             // location.href = link_tujuan;

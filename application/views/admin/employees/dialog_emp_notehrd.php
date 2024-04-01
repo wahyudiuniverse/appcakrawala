@@ -104,6 +104,7 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
             } else {
               var baseURL = "<?php echo base_url(); ?>";
               var link_tujuan = "<?= base_url() ?>admin/employee_request_hrd/";
+              //table.fnDraw();
               location.href = link_tujuan;
 
               // On page load: datatable
