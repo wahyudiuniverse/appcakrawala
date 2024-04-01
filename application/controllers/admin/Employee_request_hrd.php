@@ -951,6 +951,7 @@ class Employee_request_hrd extends MY_Controller
 		$gender 				= $employee_request['gender'];
 		$agama 					= $employee_request['agama'];
 		$status_kawin 			= $employee_request['status_kawin'];
+		$e_status 				= $employee_request['e_status'];
 
 		$doj 					= $employee_request['doj'];
 		$contract_start			= $employee_request['contract_start'];
@@ -1070,6 +1071,7 @@ class Employee_request_hrd extends MY_Controller
 				'gender' 							=> $gender,
 				'ethnicity_type' 			=> $agama,
 				'marital_status' 			=> $status_kawin,
+				'e_status' 					=> $e_status,
 
 				'date_of_joining' 		=> $doj,
 				'contract_start' 			=> $contract_start,
