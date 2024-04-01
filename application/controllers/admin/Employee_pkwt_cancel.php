@@ -959,7 +959,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 
 						$docid = date('ymdHisv');
-						$image_name='esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
+						$yearmonth = date('Y/m');
+						$image_name= $yearmonth.'/esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
 						$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
 						$params['data'] = $domain; //data yang akan di jadikan QR CODE
 						$params['level'] = 'H'; //H=High

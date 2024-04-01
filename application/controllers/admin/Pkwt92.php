@@ -398,7 +398,7 @@ class Pkwt92 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
+								<td colspan="20">Total Upah Harian yang didapatkan sebesar <b>'.$this->Xin_model->rupiah($sum_salary).'/ Hari</b></td>
 							</tr>
 
 
@@ -471,7 +471,7 @@ class Pkwt92 extends MY_Controller
 
 						<tr>
 							<td><br>
-							<img src="'.base_url().'assets/images/tkhl/'.$sign_qrcode.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
+							<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
 							<td><br><br><br><br><br><br><br><b><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 

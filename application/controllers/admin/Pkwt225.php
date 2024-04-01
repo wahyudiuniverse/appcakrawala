@@ -520,7 +520,7 @@ class Pkwt225 extends MY_Controller
 
 						<tr>
 							<td><br>
-							<img src="'.base_url().'assets/images/tkhl/'.$sign_qrcode.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
+							<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="80" height="80"><br><b><u>'.$sign_fullname.'</u></b></td>
 							<td><br><br><br><br><br><br><br><b><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 
