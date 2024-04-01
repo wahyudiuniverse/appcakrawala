@@ -457,7 +457,7 @@ $config['standardize_newlines'] = TRUE;
 |          for backwards compatibility purposes!
 |
 */
-$config['global_xss_filtering'] = TRUE;
+$config['global_xss_filtering'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------

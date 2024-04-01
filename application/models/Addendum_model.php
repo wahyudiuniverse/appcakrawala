@@ -17,7 +17,29 @@ class Addendum_model extends CI_Model
 
         $this->db->select('*');
         $this->db->from('xin_contract_addendum');
-        $this->db->where('no_addendum', 'template');
+        $this->db->where('id', '0');
+
+        $query = $this->db->get()->row_array();
+
+        return $query;
+    }
+
+    //hitung nomor terakhir addendum
+    function count_addendum()
+    {
+        $sql = "SELECT MAX(SUBSTRING(no_addendum, 1, 5)) + 1 AS newcount FROM xin_contract_addendum;";
+        $query = $this->db->query($sql);
+        // return $query->num_rows();
+        $res = $query->result();
+        return $res;
+    }
+
+    // get single employee
+    public function read_employee($id)
+    {
+        $this->db->select('*');
+        $this->db->from('xin_employees');
+        $this->db->where('user_id', $id);
 
         $query = $this->db->get()->row_array();
 
@@ -130,7 +152,26 @@ class Addendum_model extends CI_Model
         }
     }
 
-    //ambil nama employee
+    //add addendum
+    public function add_addendum($data)
+    {
+        //Input untuk Database
+        $dataaddendum = [
+            'pkwt_id' => $data['pkwt_id'],
+            'karyawan_id' => $data['karyawan_id'],
+            'no_addendum' => $data['no_addendum'],
+            'tgl_terbit' => $data['tgl_terbit'],
+            'isi' => $data['isi'],
+            'esign' => $data['esign'],
+            'created_by' => $data['created_by']
+        ];
+
+        $this->db->insert('xin_contract_addendum', $dataaddendum);
+
+        //return null;
+    }
+
+    //hapus addendum
     function delete_addendum($postData = null)
     {
         $id = $postData['id'];

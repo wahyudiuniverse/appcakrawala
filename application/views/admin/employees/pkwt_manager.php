@@ -19,7 +19,7 @@
 
 <div class="card mb-4">
   <!-- Section Data PKWT -->
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>DATA PKWT </strong> - <?php echo $employee[0]->first_name; ?><?php echo $lihat_pkwt; ?></span>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>DATA PKWT/TKHL </strong> - <?php echo $employee[0]->first_name; ?><?php echo $lihat_pkwt; ?></span>
     <div class="card-header-elements ml-md-auto"> </div>
   </div>
   <div id="add_form" class="add-form <?php echo $get_animate; ?>" data-parent="#accordion" style="">
@@ -47,7 +47,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">NIP di PKWT</label>
+                  <label for="nama">NIP di PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="NIP" name="nip" id="nip" type="text" value="<?php echo $pkwt[0]->employee_id; ?>">
                 </div>
               </div>
@@ -67,7 +67,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Project di PKWT</label>
+                  <label for="nama">Project di PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Project" name="project" type="text" value="<?php echo $nama_project; ?>">
                 </div>
               </div>
@@ -76,7 +76,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Sub Project di PKWT</label>
+                  <label for="nama">Sub Project di PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Sub Project" name="sub_project" type="text" value="<?php echo $nama_sub_project; ?>">
                 </div>
               </div>
@@ -85,7 +85,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Jabatan di PKWT</label>
+                  <label for="nama">Jabatan di PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Jabatan" name="jabatan" type="text" value="<?php echo $designation_name; ?>">
                 </div>
               </div>
@@ -94,7 +94,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Penempatan di PKWT</label>
+                  <label for="nama">Penempatan di PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Penempatan" name="penempatan" type="text" value="<?php echo $pkwt[0]->penempatan; ?>">
                 </div>
               </div>
@@ -105,7 +105,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Nomor PKWT</label>
+                  <label for="nama">Nomor PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Nomor PKWT" name="pkwt_number" type="text" value="<?php echo $pkwt[0]->no_surat; ?>">
                 </div>
               </div>
@@ -114,7 +114,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Tanggal PKWT</label>
+                  <label for="nama">Tanggal PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Sub Project" name="sub_project" type="text" value="<?php echo $tanggal_pkwt; ?>">
                 </div>
               </div>
@@ -123,7 +123,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label for="nama">Periode PKWT</label>
+                  <label for="nama">Periode PKWT/TKHL</label>
                   <input readonly class="form-control" placeholder="Periode PKWT" name="periode_pkwt" type="text" value="<?php echo $periode_pkwt; ?>">
                 </div>
               </div>

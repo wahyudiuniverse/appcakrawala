@@ -17,6 +17,8 @@ class Addendum extends MY_Controller
 
         $this->load->library("pagination");
         $this->load->library('secure');
+        $this->load->library('ciqrcode');
+
         $this->load->helper('string');
     }
 
@@ -31,6 +33,33 @@ class Addendum extends MY_Controller
         $data = $this->Addendum_model->get_list_addendum($postData);
 
         echo json_encode($data);
+    }
+
+    //convert tanggal jadi romawi
+    function convert_tanggal($tanggal)
+    {
+        $bulan = array(
+            1 =>   'I',
+            'II',
+            'III',
+            'IV',
+            'V',
+            'VI',
+            'VII',
+            'VIII',
+            'IX',
+            'X',
+            'XI',
+            'XII'
+        );
+
+        $pecahkan = explode('-', $tanggal);
+
+        // variabel pecahkan 0 = tahun
+        // variabel pecahkan 1 = bulan
+        // variabel pecahkan 2 = tanggal
+
+        return $bulan[(int)$pecahkan[1]] . '/' . $pecahkan[0];
     }
 
     //delete addendum
@@ -118,7 +147,7 @@ class Addendum extends MY_Controller
               </a>';
 
         $data = array(
-            'breadcrumbs' => "Manage PKWT Employee",
+            'breadcrumbs' => "Manage PKWT/TKHL Employee",
             'title' => "PKWT Manager",
         );
 
@@ -159,7 +188,7 @@ class Addendum extends MY_Controller
         }
 
         //load template addendum
-        $addendum = $this->Addendum_model->getAddendum($addendum_id);
+        $addendum = $this->Addendum_model->getAddendumTemplate();
 
         //load data employee berdasarkan NIP dari pkwt nya
         $dokumen_pkwt = '0';
@@ -216,12 +245,13 @@ class Addendum extends MY_Controller
               </a>';
 
         $data = array(
-            'breadcrumbs' => "Manage PKWT Employee",
+            'breadcrumbs' => "Manage PKWT/TKHL Employee",
             'title' => "PKWT Manager",
         );
 
         //data-data
         $data['pkwt'] = $pkwt;
+        $data['addendum'] = $addendum;
         $data['employee'] = $employee;
         $data['pesan_error'] = $pesan_error;
         $data['dokumen_pkwt'] = $dokumen_pkwt;
@@ -258,17 +288,7 @@ class Addendum extends MY_Controller
         $employee_id = $pkwt[0]->employee_id;
         $user = $this->Xin_model->read_user_by_employee_id($employee_id);
 
-        $nomorsurat                 = $pkwt[0]->no_surat;
-        $nomorspb                   = $pkwt[0]->no_spb;
-        // $sign_nip 				= $pkwt[0]->sign_nip;
-        $sign_fullname              = $pkwt[0]->sign_fullname;
-        $sign_jabatan               = $pkwt[0]->sign_jabatan;
-        $sign_qrcode                = $pkwt[0]->img_esign;
-        $pkwt_active                = $pkwt[0]->status_pkwt;
-
         $tanggalcetak               = $pkwt[0]->from_date;
-        $namalengkap                = $user[0]->first_name;
-        $tempattgllahir             = $user[0]->tempat_lahir . ', ' . $this->Xin_model->tgl_indo($user[0]->date_of_birth);
 
         $designation = $this->Xin_model->read_user_xin_designation($pkwt[0]->jabatan);
         if (!is_null($designation)) {
@@ -277,52 +297,22 @@ class Addendum extends MY_Controller
             $jabatan = '-';
         }
 
-        $alamatlengkap              = $user[0]->alamat_ktp;
-        $nomorkontak                = $user[0]->contact_no;
-        $ktp                        = $user[0]->ktp_no;
-
-        $penempatan                 = $pkwt[0]->penempatan;
-        $waktukontrak               = $pkwt[0]->waktu_kontrak;
         $tglmulaipkwt               = $pkwt[0]->from_date;
         $tglakhirpkwt               = $pkwt[0]->to_date;
-        $waktukerja                 = $pkwt[0]->hari_kerja;
 
-        $project = $this->Xin_model->read_user_xin_project($pkwt[0]->project);
+        $project = $this->Project_model->read_single_project($pkwt[0]->project);
         if (!is_null($project)) {
             $client = $project[0]->title;
         } else {
             $client = $project[0]->title;
         }
 
-        $basicpay                   = $this->Xin_model->rupiah($pkwt[0]->basic_pay);
-        $allowance_grade            = $this->Xin_model->rupiah($pkwt[0]->allowance_grade);
-        $allowance_area             = $this->Xin_model->rupiah($pkwt[0]->allowance_area);
-        $allowance_masakerja        = $this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
-        $allowance_meal             = $this->Xin_model->rupiah($pkwt[0]->allowance_meal);
-        $allowance_transport        = $this->Xin_model->rupiah($pkwt[0]->allowance_transport);
-        $allowance_rent             = $this->Xin_model->rupiah($pkwt[0]->allowance_rent);
-        $allowance_komunikasi       = $this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
-        $allowance_park             = $this->Xin_model->rupiah($pkwt[0]->allowance_park);
-        $allowance_residance        = $this->Xin_model->rupiah($pkwt[0]->allowance_residance);
-
-        $allowance_laptop           = $this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
-        $allowance_kasir            = $this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
-        $allowance_transmeal        = $this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
-        $allowance_medicine         = $this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
-        $allowance_akomodasi        = $this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
-        $allowance_operation        = $this->Xin_model->rupiah($pkwt[0]->allowance_operation);
-
-
-        $tgl_mulaiperiode_payment   = $pkwt[0]->start_period_payment;
-        $tgl_akhirperiode_payment   = $pkwt[0]->end_period_payment;
-        $tgl_payment                = $pkwt[0]->tgl_payment;
-
-        $nomorAddendum              = $nomorsurat;
-        $tanggalAddendum            = $this->Xin_model->tgl_indo($tanggalcetak);
+        $nomorAddendum              = $addendum['no_addendum'];
+        $tanggalAddendum            = $this->Xin_model->tgl_indo($addendum['tgl_terbit']);
         $namaKaryawan               = $user[0]->first_name;
         $nipKaryawan                = $user[0]->employee_id;
         $alamatKaryawan             = $user[0]->alamat_ktp;
-        $projectKaryawan            = $user[0]->project_id;
+        $projectKaryawan            = $client;
         $jabatanKaryawan            = $jabatan;
         $nikKaryawan                = $user[0]->ktp_no;
         $nomorPKWT                  = $pkwt[0]->no_surat;
@@ -391,5 +381,89 @@ class Addendum extends MY_Controller
         $mpdf->WriteHTML($html);
         $mpdf->Output(); // buka di browser
         //$mpdf->Output('filePDF.pdf','D'); // ini opsi untuk mendownload
+    }
+
+    // Save data addendum
+    public function save()
+    {
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+
+        $yearmonth = date('Y/m');
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']        = './assets/'; //string, the default is application/cache/
+        $config['errorlog']        = './assets/'; //string, the default is application/logs/
+        $config['imagedir']        = './assets/images/addendum/' . $yearmonth . '/'; //direktori penyimpanan qr code
+        $config['quality']        = true; //boolean, the default is true
+        $config['size']            = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+        $dirsave = './assets/images/addendum/';
+
+        //kalau blm ada folder path nya
+        if (!file_exists($config['imagedir'])) {
+            mkdir($config['imagedir'], 0777, true);
+        }
+
+        //ambil variable yg di post
+        $tgl_terbit = $this->input->post('tgl_terbit');
+        $pkwt_id = $this->input->post('pkwt_id');
+        $karyawan_id = $this->input->post('karyawan_id');
+        $isi = $this->input->post('isi');
+        $created_by = $this->input->post('created_by');
+
+        $employee_data = $this->Addendum_model->read_employee($karyawan_id);
+        $company_id             = $employee_data['company_id'];
+        $e_status               = $employee_data['e_status'];
+
+        //Company Section di Nomor Addendum
+        if ($company_id == '2') {
+            $company_section = 'SC';
+        } else if ($company_id == '3') {
+            $company_section = 'KAC';
+        } else {
+            $company_section = 'MATA';
+        }
+
+        //Jenis Dokumen di Nomor Addendum
+        $jenis_dokumen_section = "";
+        if ($e_status == 1) {
+            $jenis_dokumen_section = "Add-PKWT";
+        } else if ($e_status == 2) {
+            $jenis_dokumen_section = "Add-TKHL";
+        }
+
+        $count_addendum = $this->Addendum_model->count_addendum();
+        $romawi = $this->convert_tanggal($tgl_terbit);
+
+        $no_addendum = sprintf("%05d", $count_addendum[0]->newcount) . '/' . $jenis_dokumen_section . '/' . $company_section . '/' .  $romawi;
+
+        $docid = date('ymdHisv');
+        $yearmonth = date('Y/m');
+        $image_name = $yearmonth . '/esign_addendum' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+        $domain = 'https://apps-cakrawala.com/esign/addendum/' . $docid;
+        //$domain = 'https://apps-cakrawala.com/esign/addendum/' . $no_addendum;
+
+        $params['data']     = $domain; //data yang akan di jadikan QR CODE
+        $params['level']     = 'H'; //H=High
+        $params['size']     = 10;
+        $params['savename'] = FCPATH . $dirsave . $image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+        $data['pkwt_id'] = $pkwt_id;
+        $data['karyawan_id'] = $karyawan_id;
+        $data['no_addendum'] = $no_addendum;
+        $data['tgl_terbit'] = $tgl_terbit;
+        $data['isi'] = $isi;
+        $data['esign'] = $image_name;
+        $data['created_by'] = $created_by;
+
+        $this->Addendum_model->add_addendum($data);
+
+        echo json_encode($data);
     }
 }
