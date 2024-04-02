@@ -254,6 +254,12 @@ echo '</pre>';
     //alert("masuk fungsi lihat");
     window.open('<?= base_url() ?>admin/addendum/cetak/' + id, "_blank");
   }
+
+  //-----edit addendum-----
+  function editAddendum(id) {
+    //alert("masuk fungsi lihat");
+    window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
+  }
 </script>
 
 

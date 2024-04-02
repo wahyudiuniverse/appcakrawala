@@ -276,7 +276,7 @@
   </div>
 
   <!-- Section Editor -->
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>ADD NEW</strong> ADDENDUM </span>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>EDIT</strong> ADDENDUM </span>
     <div class="card-header-elements ml-md-auto"> </div>
   </div>
   <div id="add_form" class="add-form <?php echo $get_animate; ?>" data-parent="#accordion" style="">
@@ -288,7 +288,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>Tanggal Addendum</label>
-            <input class="form-control date" onkeydown="return false" placeholder="YYYY-MM-DD" name="tanggal_addendum" id="tanggal_addendum" type="text" value="">
+            <input class="form-control date" onkeydown="return false" placeholder="YYYY-MM-DD" name="tanggal_addendum" id="tanggal_addendum" type="text" value="<?php echo $addendum['tgl_terbit']; ?>">
           </div>
         </div>
 
@@ -302,7 +302,7 @@
         <div class="col-md-4">
           <div class="form-group">
             <label>&nbsp;</label>
-            <button id="tesbutton" type="button" onclick="addAddendum();" class="btn btn-xs btn-outline-twitter form-control">SAVE ADDENDUM</button>
+            <button id="tesbutton" type="button" onclick="editAddendum();" class="btn btn-xs btn-outline-twitter form-control">UPDATE ADDENDUM</button>
           </div>
         </div>
       </div>
@@ -550,19 +550,17 @@ Uncomment to load the Spanish translation
   });
 
   //-----delete addendum-----
-  function addAddendum() {
+  function editAddendum() {
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var tgl_terbit = document.getElementById("tanggal_addendum").value;
+    var id_addendum = '<?php echo $addendum['id']; ?>';
 
     //kalau tanggal terbit tidak diisi, diisi dengan tanggal hari ini
     if (tgl_terbit == "") {
       tgl_terbit = new Date().toJSON().slice(0, 10);
     }
 
-    var pkwt_id = document.getElementById("contract_id").value;
-    var karyawan_id = document.getElementById("emp_id").value;
-    var created_by = '<?php echo $session['user_id']; ?>';
     var isi = editor.getData();
 
     //testing
@@ -570,21 +568,19 @@ Uncomment to load the Spanish translation
 
     // AJAX request
     $.ajax({
-      url: '<?= base_url() ?>admin/addendum/save/',
+      url: '<?= base_url() ?>admin/addendum/update/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
         tgl_terbit: tgl_terbit,
-        pkwt_id: pkwt_id,
-        karyawan_id: karyawan_id,
-        isi: isi,
-        created_by: created_by
+        id_addendum: id_addendum,
+        isi: isi
       },
       success: function(response) {
-        alert("Berhasil add addendum");
+        alert("Berhasil edit addendum");
       },
       error: function() {
-        alert("Error add data");
+        alert("Error edit data");
       }
     });
   }

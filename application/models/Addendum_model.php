@@ -163,11 +163,27 @@ class Addendum_model extends CI_Model
             'tgl_terbit' => $data['tgl_terbit'],
             'isi' => $data['isi'],
             'esign' => $data['esign'],
+            'urutan' => $data['urutan'],
             'created_by' => $data['created_by']
         ];
 
         $this->db->insert('xin_contract_addendum', $dataaddendum);
 
+        //return null;
+    }
+
+    //update addendum
+    public function update_addendum($data)
+    {
+        //Input untuk Database
+        $dataaddendum = [
+            'tgl_terbit' => $data['tgl_terbit'],
+            'isi' => $data['isi']
+        ];
+
+        $this->db->where('id', $data['id_addendum']);
+        $this->db->update('xin_contract_addendum', $dataaddendum);
+        
         //return null;
     }
 
@@ -184,6 +200,21 @@ class Addendum_model extends CI_Model
             $this->db->delete('xin_contract_addendum');
 
             return "Sukses";
+        }
+    }
+
+    //urutan addendum
+    function urutan_addendum($karyawan_id, $pkwt_id)
+    {
+        ## Hitung Total number of records dari addendum
+        $this->db->select('count(*) as allcount');
+        $this->db->where('karyawan_id', $karyawan_id);
+        $this->db->where('pkwt_id', $pkwt_id);
+        $records = $this->db->get('xin_contract_addendum')->result();
+        if ($records[0]->allcount == 0) {
+            return 1;
+        } else {
+            return $records[0]->allcount + 1;
         }
     }
 
