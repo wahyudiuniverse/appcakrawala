@@ -46,16 +46,26 @@ class Addendum_model extends CI_Model
         return $query;
     }
 
-    //ambil data employee berdasarkan id (secid)
+    //ambil addendum berdasarkan id addendum
     public function getAddendum($id)
     {
-        //$otherdb = $this->load->database('default', TRUE);
-
         $this->db->select('*');
         $this->db->from('xin_contract_addendum');
         $this->db->where('id', $id);
 
         $query = $this->db->get()->row_array();
+
+        return $query;
+    }
+
+    //ambil addendum berdasarkan id karyawan
+    public function getAddendumbyEmployee($id)
+    {
+        $this->db->select('*');
+        $this->db->from('xin_contract_addendum');
+        $this->db->where('karyawan_id', $id);
+
+        $query = $this->db->get()->result_array();
 
         return $query;
     }
@@ -164,7 +174,8 @@ class Addendum_model extends CI_Model
             'isi' => $data['isi'],
             'esign' => $data['esign'],
             'urutan' => $data['urutan'],
-            'created_by' => $data['created_by']
+            'created_by' => $data['created_by'],
+            'created_time' => $data['created_time']
         ];
 
         $this->db->insert('xin_contract_addendum', $dataaddendum);
@@ -183,7 +194,7 @@ class Addendum_model extends CI_Model
 
         $this->db->where('id', $data['id_addendum']);
         $this->db->update('xin_contract_addendum', $dataaddendum);
-        
+
         //return null;
     }
 

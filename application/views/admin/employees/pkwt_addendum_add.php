@@ -555,6 +555,12 @@ Uncomment to load the Spanish translation
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var tgl_terbit = document.getElementById("tanggal_addendum").value;
 
+    //var created_time = new Date().toJSON().slice(0, 10);
+    var created_time = new Date().toISOString().substr(0, 19).replace('T', ' ');
+    var date0 = new Date();
+    var date = new Date().toLocaleString();
+    var date2 = new Date().toJSON();
+
     //kalau tanggal terbit tidak diisi, diisi dengan tanggal hari ini
     if (tgl_terbit == "") {
       tgl_terbit = new Date().toJSON().slice(0, 10);
@@ -566,9 +572,11 @@ Uncomment to load the Spanish translation
     var isi = editor.getData();
 
     //testing
-    //alert(tgl_terbit);
+    //alert(date0);
+    //alert(date);
+    //alert(date2);
 
-    // AJAX request
+    //AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/addendum/save/',
       method: 'post',
@@ -578,7 +586,8 @@ Uncomment to load the Spanish translation
         pkwt_id: pkwt_id,
         karyawan_id: karyawan_id,
         isi: isi,
-        created_by: created_by
+        created_by: created_by,
+        created_time: created_time
       },
       success: function(response) {
         alert("Berhasil add addendum");

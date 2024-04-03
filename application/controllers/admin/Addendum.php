@@ -531,6 +531,7 @@ class Addendum extends MY_Controller
         $karyawan_id = $this->input->post('karyawan_id');
         $isi = $this->input->post('isi');
         $created_by = $this->input->post('created_by');
+        $created_time = $this->input->post('created_time');
 
         $urutan = $this->Addendum_model->urutan_addendum($karyawan_id, $pkwt_id);
 
@@ -579,6 +580,7 @@ class Addendum extends MY_Controller
         $data['isi'] = $isi;
         $data['esign'] = $image_name;
         $data['created_by'] = $created_by;
+        $data['created_time'] = $created_time;
         $data['urutan'] = $urutan;
 
         $this->Addendum_model->add_addendum($data);

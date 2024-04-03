@@ -182,12 +182,15 @@ echo '</pre>';
   $(document).ready(function() {
     //alert("masuk javascript");
     table = $('#tabel_addendum').DataTable({
+      //"bDestroy": true,
       'processing': true,
       'serverSide': true,
       //'stateSave': true,
       'bFilter': true,
       'serverMethod': 'post',
-      'dom': 'pPlBfrtip',
+      //'dom': 'plBfrtip',
+      dom: 'lBfrtip',
+      "buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
       //'columnDefs': [{
       //  targets: 11,
       //  type: 'date-eu'
