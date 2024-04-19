@@ -162,6 +162,21 @@ class Addendum_model extends CI_Model
         }
     }
 
+    //mengisi data file upload untuk data addendum
+    public function isiFileUpload($id, $file, $time)
+    {
+        //Input untuk Database
+        $dataaddendum = [
+            "file_signed"                 => $file,
+            "file_signed_time"            => $time
+        ];
+
+        //$otherdb = $this->load->database('default', TRUE);
+
+        $this->db->where('id', $id);
+        $this->db->update('xin_contract_addendum', $dataaddendum);
+    }
+
     //add addendum
     public function add_addendum($data)
     {
@@ -174,6 +189,9 @@ class Addendum_model extends CI_Model
             'isi' => $data['isi'],
             'esign' => $data['esign'],
             'urutan' => $data['urutan'],
+            'kontrak_start_new' => $data['kontrak_start_new'],
+            'kontrak_end_new' => $data['kontrak_end_new'],
+            'periode_new' => $data['periode_new'],
             'created_by' => $data['created_by'],
             'created_time' => $data['created_time']
         ];
@@ -189,6 +207,9 @@ class Addendum_model extends CI_Model
         //Input untuk Database
         $dataaddendum = [
             'tgl_terbit' => $data['tgl_terbit'],
+            'kontrak_start_new' => $data['kontrak_start_new'],
+            'kontrak_end_new' => $data['kontrak_end_new'],
+            'periode_new' => $data['periode_new'],
             'isi' => $data['isi']
         ];
 

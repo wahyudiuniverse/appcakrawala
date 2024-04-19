@@ -51,6 +51,112 @@ $leave_user = $this->Xin_model->read_user_info($session['user_id']);
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 
+<!-- Modal -->
+<div class="modal fade" id="uploadAddendumModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
+        <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i>UPLOAD >> Dokumen Addendum</h4>
+      </div>
+
+      <?php $attributes = array('name' => 'upload_addendum_form', 'id' => 'upload_addendum_form', 'autocomplete' => 'off', 'class' => 'm-b-1'); ?>
+      <?php echo form_open_multipart('admin/profile/uploadaddendum/', $attributes); ?>
+      <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+
+        <!-- NIP -->
+        <div class="row" style="padding-top: 6px; padding-bottom: 6px;">
+          <div class="col-sm-4">
+            <div>
+              <label for="no_transaksi">NIP</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div>
+              <label for="NIP" id="nip_modal"><?php echo ': ' . $employee_id;  ?></label>
+            </div>
+          </div>
+        </div>
+
+        <input class="form-control" name="nip" type="text" value="<?php echo $employee_id; ?>" hidden>
+        <input class="form-control" id="addendum_id" name="addendum_id" type="text" value="" hidden>
+        <input class="form-control" id="file_signed_time" name="file_signed_time" type="text" value="" hidden>
+
+        <!-- Nama File -->
+        <div class="row" style="padding-top: 6px; padding-bottom: 6px;">
+          <div class="col-sm-4">
+            <div>
+              <label for="no_transaksi">Nama File</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div>
+              <label for="nama_file_modal" name="nama_file_modal" id="nama_file_modal"><?php echo ': '; ?></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nomor Dokumen -->
+        <div class="row" style="padding-top: 6px; padding-bottom: 6px;">
+          <div class="col-sm-4">
+            <div>
+              <label for="no_transaksi">Nomor Dokumen</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div>
+              <label name="nomor_dokumen_modal" id="nomor_dokumen_modal"><?php echo ': '; ?></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tanggal Upload Addendum -->
+        <div class="row" style="padding-top: 6px; padding-bottom: 6px;">
+          <div class="col-sm-4">
+            <div>
+              <label for="no_transaksi">Tanggal Upload Addendum</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div>
+              <label name="tanggal_upload_addendum_modal" id="tanggal_upload_addendum_modal"><?php echo ': '; ?></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload Dokumen Addendum -->
+        <div class="row" style="padding-top: 6px; padding-bottom: 6px;">
+          <div class="col-sm-4">
+            <div>
+              <label for="no_transaksi">Upload Dokumen Addendum</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <div>
+              <div class="form-group">
+                <fieldset class="form-group">
+                  <input type="file" class="form-control-file" id="document_file_addendum" name="document_file_addendum" accept="application/pdf">
+                  <small>Jenis File: PDF | Size MAX 3 MB</small>
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-warning save">SAVE</button>
+      </div>
+
+      <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+
+
 <div class="mb-3 sw-container tab-content">
   <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
 
@@ -1537,3 +1643,79 @@ $leave_user = $this->Xin_model->read_user_info($session['user_id']);
     background: #20c997;
   }
 </style>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#uploadAddendumModal').on('show.bs.modal', function(event) {
+      var button = $(event.relatedTarget); // Button that triggered the modal
+      var addendum_id = button.data('addendum_id'); // Extract info from data-* attributes
+      var no_addendum = button.data('no_addendum');
+      var file_signed = button.data('file_signed');
+      var file_signed_time = button.data('file_signed_time');
+      var baseURL = "<?php echo base_url(); ?>";
+      var modal = $(this);
+
+      if ((!file_signed) || (file_signed == "") || (file_signed == 0)) {
+        file_signed = "- Belum upload file yang sudah ditandatangan -";
+        modal.find('.modal-body #nama_file_modal').html(': ' + file_signed);
+      } else {
+        modal.find('.modal-body #nama_file_modal').html(': <a href="' + baseURL + 'uploads/document/addendum/' + file_signed + '" target="_blank">OPEN FILE</a>');
+      }
+      if ((!file_signed_time) || (file_signed_time == "") || (file_signed_time == 0)) {
+        file_signed_time = "- Belum upload file yang sudah ditandatangan -";
+      }
+      //var recipient = "12345";
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+
+      modal.find('.modal-title').text('UPLOAD >> Dokumen Addendum / ' + addendum_id);
+      //modal.find('.modal-body input').val(addendum_id);
+      modal.find('.modal-body #addendum_id').val(addendum_id);
+      modal.find('.modal-body #nomor_dokumen_modal').text(': ' + no_addendum);
+      modal.find('.modal-body #tanggal_upload_addendum_modal').text(': ' + file_signed_time);
+    })
+
+    $("#upload_addendum_form").submit(function(e) {
+      var today = new Date();
+      today.setHours(today.getHours() + 7);
+      var created_time = today.toISOString().substr(0, 19).replace('T', ' ');
+
+      var modal = $(this);
+      modal.find('.modal-body #file_signed_time').val(created_time);
+
+      e.preventDefault();
+      $.ajax({
+        url: '<?php echo base_url(); ?>admin/profile/uploadAddendum',
+        type: "post",
+        data: new FormData(this),
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        success: function(data) {
+          if (data == "") {
+            alert("Upload Image Berhasil.");
+            Ladda.stopAll();
+            $('#uploadAddendumModal').modal('toggle');
+
+            var xin_table_contract = $('#xin_table_contract').dataTable({
+              "bDestroy": true,
+              "ajax": {
+                url: site_url + "profile/contract/" + $('#user_id').val(),
+                type: 'GET'
+              },
+              "fnDrawCallback": function(settings) {
+                $('[data-toggle="tooltip"]').tooltip();
+              }
+            });
+          } else {
+            alert(data);
+            Ladda.stopAll();
+            $('#uploadAddendumModal').modal('toggle');
+          }
+        }
+      });
+    });
+
+  });
+</script>

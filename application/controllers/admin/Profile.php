@@ -1071,7 +1071,7 @@ class Profile extends MY_Controller
 				}
 
 				if ($addendum['file_signed'] == NULL || $addendum['file_signed'] == '') {
-					$status_upload = '<button type="button" class="btn btn-xs btn-outline-warning" style="background: #FFD950;color: black;">Blum Upload</button>';
+					$status_upload = '<button type="button" class="btn btn-xs btn-outline-warning" style="background: #FFD950;color: black;">Belum Upload</button>';
 				} else {
 					$status_upload = '<button type="button" class="btn btn-xs btn-outline-success" style="background: #5DD2A6;color: black;">Sudah Upload</button>';
 				}
@@ -1082,7 +1082,7 @@ class Profile extends MY_Controller
 						  <button type="button" class="btn btn-xs btn-outline-twitter">DOWNLOAD</button>
 					  </a>';
 
-				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".view-modal-data" data-company_id="' . $addendum['id'] . '" data-pkwt="' . $pkwt[0]->contract_id . '" >UPLOAD</button>';
+				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target="#uploadAddendumModal" data-addendum_id="' . $addendum['id'] . '" data-no_addendum="' . $addendum['no_addendum'] . '"  data-file_signed="' . $addendum['file_signed'] . '"  data-file_signed_time="' . $addendum['file_signed_time'] . '">UPLOAD</button>';
 
 
 				$data[] = array(
@@ -1103,6 +1103,62 @@ class Profile extends MY_Controller
 		);
 		echo json_encode($output);
 		exit();
+	}
+
+	// upload addendum
+	public function uploadAddendum()
+	{
+		$pesan_error = "";
+		if ($_FILES['document_file_addendum']['error'] == "0") {
+
+			//parameter untuk path dokumen
+			$yearmonth = date('Y/m');
+			$path_addendum = "./uploads/document/addendum/" . $yearmonth . '/';
+
+			//kalau blm ada folder path nya
+			if (!file_exists($path_addendum)) {
+				mkdir($path_addendum, 0777, true);
+			}
+
+			$nip_post = $this->input->post('nip');
+			$addendum_id_post = $this->input->post('addendum_id');
+			$file_signed_time_post = $this->input->post('file_signed_time');
+
+			//konfigurasi upload
+			$config['upload_path']          = $path_addendum;
+			$config['allowed_types']        = 'pdf';
+			$config['max_size']             = 3072;
+			$config['file_name']             = 'addendum_' . $nip_post . '_' . round(microtime(true));
+			$config['overwrite']             = TRUE;
+
+			//inisialisasi proses upload
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			//upload data kalau tidak ada error
+			if (!$this->upload->do_upload('document_file_addendum')) {
+				$error = array('error' => $this->upload->display_errors());
+				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
+				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$pesan_error = "Foto KTP melebihi ukuran 3 MB. Silahkan upload ulang";
+				} else {
+					$pesan_error = "Hanya menerima file berformat PDF";
+				}
+			} else {
+				//save path ktp ke database
+				$new_filename_addendum = $this->upload->data('file_name');
+				$addendum_database = $yearmonth . '/' . $new_filename_addendum;
+				$this->Addendum_model->isiFileUpload($addendum_id_post, $addendum_database, $file_signed_time_post);
+				$data = array('upload_data' => $this->upload->data());
+			}
+
+			//print_r($_FILES['document_file_addendum']);
+			echo $pesan_error;
+		} else {
+			$pesan_error = "Tidak ada file yang dipilih";
+			//print_r($_FILES['document_file_addendum']);
+			echo $pesan_error;
+		}
 	}
 
 	// employee leave - listing
@@ -1167,6 +1223,7 @@ class Profile extends MY_Controller
 		$data['title'] = $this->Xin_model->site_title();
 
 		$id = $this->input->get('company_id');
+		$tes = $this->input->get('data');
 
 		$emp = $this->Pkwt_model->get_single_pkwt($id);
 		if (!is_null($emp)) {
@@ -1190,6 +1247,7 @@ class Profile extends MY_Controller
 			'idrequest' => $id,
 			'no_surat' => $no_surat,
 			'contract_id' => $contract_id,
+			'tes' => $tes,
 			'tgl_upload_pkwt' => $upload_pkwt
 		);
 
@@ -1276,15 +1334,22 @@ class Profile extends MY_Controller
 					$allowed_pkwt =  array('pdf', 'PDF');
 					$filename_pkwt = $_FILES['document_file_pkwt']['name'];
 					$ext_pkwt = pathinfo($filename_pkwt, PATHINFO_EXTENSION);
+					$nip_post = $this->input->post('nip');
 
 					if (in_array($ext_pkwt, $allowed_pkwt)) {
 						$tmp_name_pkwt = $_FILES["document_file_pkwt"]["tmp_name"];
 						$yearmonth = date('Y/m');
-						$documentd_pkwt = "uploads/document/pkwt/" . $yearmonth . '/';
+						$documentd_pkwt = "./uploads/document/pkwt/" . $yearmonth . '/';
+
+						//kalau blm ada folder path nya
+						if (!file_exists($documentd_pkwt)) {
+							mkdir($documentd_pkwt, 0777, true);
+						}
+
 						// basename() may prevent filesystem traversal attacks;
 						// further validation/sanitation of the filename may be appropriate
 						$name = basename($_FILES["document_file_pkwt"]["name"]);
-						$newfilename_pkwt = 'pkwt_' . round(microtime(true)) . '.' . $ext_pkwt;
+						$newfilename_pkwt = 'pkwt_' . $nip_post . '_' . round(microtime(true)) . '.' . $ext_pkwt;
 						move_uploaded_file($tmp_name_pkwt, $documentd_pkwt . $newfilename_pkwt);
 						$fname_pkwt = 'https://apps-cakrawala.com/uploads/document/pkwt/' . $yearmonth . '/' . $newfilename_pkwt;
 					} else {

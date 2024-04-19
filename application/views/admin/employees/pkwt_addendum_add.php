@@ -137,12 +137,27 @@
           <tr style="background-color: #D6EEEE;">
             <td>17.</td>
             <td>-ttdkaryawan-</td>
-            <td>Ruangan tanda tangan karyawan</td>
+            <td>Space untuk tanda tangan karyawan</td>
           </tr>
           <tr>
             <td>18.</td>
             <td>-urutanAddendum-</td>
             <td>Urutan addendum ke- (Untuk PKWT/TKHL yang dipilih)</td>
+          </tr>
+          <tr style="background-color: #D6EEEE;">
+            <td>19.</td>
+            <td>-kontrakStartNew-</td>
+            <td>Perubahan Tanggal Mulai Kontrak pada PKWT/TKHL</td>
+          </tr>
+          <tr>
+            <td>20.</td>
+            <td>-kontrakEndNew-</td>
+            <td>Perubahan Tanggal Selesai Kontrak pada PKWT/TKHL</td>
+          </tr>
+          <tr style="background-color: #D6EEEE;">
+            <td>21.</td>
+            <td>-periodeKontrakNew-</td>
+            <td>Perubahan Periode dari PKWT/TKHL</td>
           </tr>
         </table>
       </div>
@@ -267,8 +282,8 @@
           </div>
 
           <!--untuk testing-->
-          <button hidden id="tesbutton" type="button" onclick="getCK5();" class="btn btn-xs btn-outline-twitter">VIEW</button>
-          <textarea hidden name="content" id="testtext"></textarea>
+          <!-- <button hidden id="tesbutton" type="button" onclick="getCK5();" class="btn btn-xs btn-outline-twitter">VIEW</button>
+          <textarea hidden name="content" id="testtext"></textarea> -->
 
         </div>
       </div>
@@ -283,8 +298,8 @@
 
     <div class="card-body">
 
-      <!--TANGGAL Addendum-->
       <div class="row">
+        <!--TANGGAL Addendum-->
         <div class="col-md-4">
           <div class="form-group">
             <label>Tanggal Addendum</label>
@@ -292,6 +307,7 @@
           </div>
         </div>
 
+        <!--Tombol List Variabel-->
         <div class="col-md-4">
           <div class="form-group">
             <label>&nbsp;</label>
@@ -299,10 +315,47 @@
           </div>
         </div>
 
+        <!--Tombol Save Addendum-->
         <div class="col-md-4">
           <div class="form-group">
             <label>&nbsp;</label>
             <button id="tesbutton" type="button" onclick="addAddendum();" class="btn btn-xs btn-outline-twitter form-control">SAVE ADDENDUM</button>
+          </div>
+        </div>
+      </div>
+
+      <!--Checkbox ganti periode pkwt/tkhl di addendum-->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <input type="checkbox" id="edit_periode" name="edit_periode" value="1" onchange="cek_ganti_periode(this)">
+            <label for="edit_periode">Perubahan periode PKWT/TKHL</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!--TANGGAL Kontrak start new-->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label hidden name="kontrak_start_new_label" id="kontrak_start_new_label">Tanggal Kontrak Start Baru</label>
+            <input class="form-control date" onkeydown="return false" placeholder="YYYY-MM-DD" name="kontrak_start_new" id="kontrak_start_new" type="text" value="<?php echo $tanggal_awal_kontrak; ?>" hidden>
+          </div>
+        </div>
+
+        <!--TANGGAL Kontrak end new-->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label hidden name="kontrak_end_new_label" id="kontrak_end_new_label">Tanggal Kontrak End Baru</label>
+            <input class="form-control date" onkeydown="return false" placeholder="YYYY-MM-DD" name="kontrak_end_new" id="kontrak_end_new" type="text" value="<?php echo $tanggal_akhir_kontrak; ?>" hidden>
+          </div>
+        </div>
+
+        <!--Periode Kontrak new-->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label hidden name="periode_new_label" id="periode_new_label">Periode Kontrak Baru (Dalam Bulan)</label>
+            <input class="form-control" placeholder="Periode Kontrak Baru" name="periode_new" id="periode_new" type="number" value="<?php echo $periode_kontrak; ?>" hidden>
           </div>
         </div>
       </div>
@@ -549,6 +602,27 @@ Uncomment to load the Spanish translation
     editor.setData(templateAddendum);
   });
 
+  //-----cek apakah checkbox di checklist-----
+  function cek_ganti_periode(obj) {
+    if ($(obj).is(":checked")) {
+      //alert("Yes checked"); //when checked
+      document.getElementById("kontrak_start_new").removeAttribute("hidden");
+      document.getElementById("kontrak_end_new").removeAttribute("hidden");
+      document.getElementById("periode_new").removeAttribute("hidden");
+      document.getElementById("kontrak_start_new_label").removeAttribute("hidden");
+      document.getElementById("kontrak_end_new_label").removeAttribute("hidden");
+      document.getElementById("periode_new_label").removeAttribute("hidden");
+    } else {
+      //alert("Not checked"); //when not checked
+      kontrak_start_new.setAttribute("hidden", "hidden");
+      kontrak_end_new.setAttribute("hidden", "hidden");
+      periode_new.setAttribute("hidden", "hidden");
+      kontrak_start_new_label.setAttribute("hidden", "hidden");
+      kontrak_end_new_label.setAttribute("hidden", "hidden");
+      periode_new_label.setAttribute("hidden", "hidden");
+    }
+  }
+
   //-----delete addendum-----
   function addAddendum() {
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
@@ -556,7 +630,9 @@ Uncomment to load the Spanish translation
     var tgl_terbit = document.getElementById("tanggal_addendum").value;
 
     //var created_time = new Date().toJSON().slice(0, 10);
-    var created_time = new Date().toISOString().substr(0, 19).replace('T', ' ');
+    var today = new Date();
+    today.setHours(today.getHours() + 7);
+    var created_time = today.toISOString().substr(0, 19).replace('T', ' ');
     var date0 = new Date();
     var date = new Date().toLocaleString();
     var date2 = new Date().toJSON();
@@ -568,6 +644,9 @@ Uncomment to load the Spanish translation
 
     var pkwt_id = document.getElementById("contract_id").value;
     var karyawan_id = document.getElementById("emp_id").value;
+    var kontrak_start_new = document.getElementById("kontrak_start_new").value;
+    var kontrak_end_new = document.getElementById("kontrak_end_new").value;
+    var periode_new = document.getElementById("periode_new").value;
     var created_by = '<?php echo $session['user_id']; ?>';
     var isi = editor.getData();
 
@@ -575,6 +654,9 @@ Uncomment to load the Spanish translation
     //alert(date0);
     //alert(date);
     //alert(date2);
+    //alert(kontrak_start_new);
+    //alert(kontrak_end_new);
+    //alert(periode_new);
 
     //AJAX request
     $.ajax({
@@ -587,7 +669,10 @@ Uncomment to load the Spanish translation
         karyawan_id: karyawan_id,
         isi: isi,
         created_by: created_by,
-        created_time: created_time
+        created_time: created_time,
+        kontrak_start_new: kontrak_start_new,
+        kontrak_end_new: kontrak_end_new,
+        periode_new: periode_new
       },
       success: function(response) {
         alert("Berhasil add addendum");

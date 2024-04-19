@@ -231,6 +231,9 @@ class Addendum extends MY_Controller
         $tanggal_awal_pkwt = $this->Xin_model->tgl_indo($pkwt[0]->from_date);
         $tanggal_akhir_pkwt = $this->Xin_model->tgl_indo($pkwt[0]->to_date);
         $periode_pkwt = $tanggal_awal_pkwt . " s/d " . $tanggal_akhir_pkwt;
+        $tanggal_awal_kontrak = $pkwt[0]->from_date;
+        $tanggal_akhir_kontrak = $pkwt[0]->to_date;
+        $periode_kontrak = $pkwt[0]->waktu_kontrak;
 
         //tombol lihat dokumen pkwt
         $lihat_pkwt =
@@ -260,6 +263,9 @@ class Addendum extends MY_Controller
         $data['designation_name'] = $designation_name;
         $data['tanggal_pkwt'] = $tanggal_pkwt;
         $data['periode_pkwt'] = $periode_pkwt;
+        $data['tanggal_awal_kontrak'] = $tanggal_awal_kontrak;
+        $data['tanggal_akhir_kontrak'] = $tanggal_akhir_kontrak;
+        $data['periode_kontrak'] = $periode_kontrak;
 
         //tombol-tombol
         $data['lihat_pkwt'] = $lihat_pkwt;
@@ -339,6 +345,9 @@ class Addendum extends MY_Controller
         $tanggal_awal_pkwt = $this->Xin_model->tgl_indo($pkwt[0]->from_date);
         $tanggal_akhir_pkwt = $this->Xin_model->tgl_indo($pkwt[0]->to_date);
         $periode_pkwt = $tanggal_awal_pkwt . " s/d " . $tanggal_akhir_pkwt;
+        $tanggal_awal_kontrak_new = $addendum['kontrak_start_new'];
+        $tanggal_akhir_kontrak_new = $addendum['kontrak_end_new'];
+        $periode_kontrak_new = $addendum['periode_new'];
 
         //tombol lihat dokumen pkwt
         $lihat_pkwt =
@@ -368,6 +377,9 @@ class Addendum extends MY_Controller
         $data['designation_name'] = $designation_name;
         $data['tanggal_pkwt'] = $tanggal_pkwt;
         $data['periode_pkwt'] = $periode_pkwt;
+        $data['tanggal_awal_kontrak_new'] = $tanggal_awal_kontrak_new;
+        $data['tanggal_akhir_kontrak_new'] = $tanggal_akhir_kontrak_new;
+        $data['periode_kontrak_new'] = $periode_kontrak_new;
 
         //tombol-tombol
         $data['lihat_pkwt'] = $lihat_pkwt;
@@ -407,6 +419,8 @@ class Addendum extends MY_Controller
 
         $tglmulaipkwt               = $pkwt[0]->from_date;
         $tglakhirpkwt               = $pkwt[0]->to_date;
+        $tglmulaipkwtbaru           = $addendum['kontrak_start_new'];
+        $tglakhirpkwtbaru           = $addendum['kontrak_end_new'];
 
         $project = $this->Project_model->read_single_project($pkwt[0]->project);
         if (!is_null($project)) {
@@ -428,8 +442,11 @@ class Addendum extends MY_Controller
         $nomorPKWT                  = $pkwt[0]->no_surat;
         $tanggalPKWT                = $this->Xin_model->tgl_indo($tanggalcetak);
         $periodeKontrak             = $pkwt[0]->waktu_kontrak . " bulan";
+        $periodeKontrakNew          = $addendum['periode_new'] . " bulan";
         $kontrakStart               = $this->Xin_model->tgl_indo($tglmulaipkwt);
         $kontrakEnd                 = $this->Xin_model->tgl_indo($tglakhirpkwt);
+        $kontrakStartNew            = $this->Xin_model->tgl_indo($tglmulaipkwtbaru);
+        $kontrakEndNew              = $this->Xin_model->tgl_indo($tglakhirpkwtbaru);
         $namaSMHR                   = $pkwt[0]->sign_fullname;
         $alamatCompany              = "Gedung Graha Krista Aulia Cakrawala Lt. 2 Jl. Andara No. 20 Pangkalan Jati Baru Cinere Depok 16513";
         $urutanAddendum             = $addendum['urutan'];
@@ -491,6 +508,9 @@ class Addendum extends MY_Controller
         $html = str_replace("-ttddigital-", $ttddigital, $html);
         $html = str_replace("-ttdkaryawan-", $ttdkaryawan, $html);
         $html = str_replace("-urutanAddendum-", $urutanAddendum, $html);
+        $html = str_replace("-periodeKontrakNew-", $periodeKontrakNew, $html);
+        $html = str_replace("-kontrakStartNew-", $kontrakStartNew, $html);
+        $html = str_replace("-kontrakEndNew-", $kontrakEndNew, $html);
 
         $mpdf->AddPage();
         $mpdf->SetFont('helvetica', 'B', 10);
@@ -532,6 +552,9 @@ class Addendum extends MY_Controller
         $isi = $this->input->post('isi');
         $created_by = $this->input->post('created_by');
         $created_time = $this->input->post('created_time');
+        $kontrak_start_new = $this->input->post('kontrak_start_new');
+        $kontrak_end_new = $this->input->post('kontrak_end_new');
+        $periode_new = $this->input->post('periode_new');
 
         $urutan = $this->Addendum_model->urutan_addendum($karyawan_id, $pkwt_id);
 
@@ -582,6 +605,9 @@ class Addendum extends MY_Controller
         $data['created_by'] = $created_by;
         $data['created_time'] = $created_time;
         $data['urutan'] = $urutan;
+        $data['kontrak_start_new'] = $kontrak_start_new;
+        $data['kontrak_end_new'] = $kontrak_end_new;
+        $data['periode_new'] = $periode_new;
 
         $this->Addendum_model->add_addendum($data);
 
@@ -601,10 +627,16 @@ class Addendum extends MY_Controller
         $tgl_terbit = $this->input->post('tgl_terbit');
         $id_addendum = $this->input->post('id_addendum');
         $isi = $this->input->post('isi');
+        $kontrak_start_new = $this->input->post('kontrak_start_new');
+        $kontrak_end_new = $this->input->post('kontrak_end_new');
+        $periode_new = $this->input->post('periode_new');
 
         $data['id_addendum'] = $id_addendum;
         $data['tgl_terbit'] = $tgl_terbit;
         $data['isi'] = $isi;
+        $data['kontrak_start_new'] = $kontrak_start_new;
+        $data['kontrak_end_new'] = $kontrak_end_new;
+        $data['periode_new'] = $periode_new;
 
         $this->Addendum_model->update_addendum($data);
 

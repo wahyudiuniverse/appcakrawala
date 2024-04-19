@@ -522,23 +522,52 @@ $(document).ready(function(){
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var company_id = button.data('company_id');
-		var modal = $(this);
-	$.ajax({
-		url : base_url+"/read/",
-		type: "GET",
-		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
-		success: function (response) {
-			if(response) {
-				$("#ajax_modal").html(response);
-			}
+		var pkwt = button.data('pkwt');
+		var tes = "";
+		if(pkwt == "1"){
+			tes = "";
+			alert("masuk js");
+		} else{
+			alert(company_id);
 		}
-		});
+		var modal = $(this);
+			$.ajax({
+				url : base_url+"/read/",
+				type: "GET",
+				data: 'jd=1&is_ajax=1&mode=modal&pkwt=cekcek&data=company&company_id='+company_id,
+				success: function (response) {
+					if(response) {
+						$("#ajax_modal").html(response);
+					}
+				}
+				});
+		//alert(company_id);
+	});
+
+	// upload addendum
+	$('.edit-modal-data2').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget);
+		var company_id = button.data('company_id');
+		var modal = $(this);
+		alert("masuk js");
+	$.ajax({
+	 	url : base_url+"/read2/",
+	 	type: "GET",
+	 	data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+	 	success: function (response) {
+	 		if(response) {
+	 			$("#ajax_modal").html(response);
+	 		}
+	 	}
+	 	});
 	});
 	
 	$('.view-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
-		var xfield_id = button.data('xfield_id');
-		var field_type = button.data('field_type');
+		// var xfield_id = button.data('xfield_id');
+		// var field_type = button.data('field_type');
+		var xfield_id = 1;
+		var field_type = 'awards';
 		var field_key = '';
 		if(field_type == 'awards'){
 			var view_info  = 'view_award';
