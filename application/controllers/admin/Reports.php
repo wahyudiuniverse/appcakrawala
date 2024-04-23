@@ -1752,7 +1752,7 @@ class Reports extends MY_Controller
 		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
 		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
 		// }
-		if(in_array('377',$role_resources_ids)) {
+		if(in_array('380',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/report_pkwt_history", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -1879,7 +1879,7 @@ class Reports extends MY_Controller
 			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Hapus</button>';
 
 
-			if($tkhl_status=='0'){
+			if($tkhl_status=='1'){
 
 				$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
 				Nama Lengkap: *'.$fullname.'*%0a

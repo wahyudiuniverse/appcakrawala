@@ -687,8 +687,8 @@ class Registrasi extends CI_Controller
                 $config['upload_path']          = $documentdktp;
                 $config['allowed_types']        = 'gif|jpg|jpeg|png|pdf';
                 $config['max_size']             = 2048;
-                $config['file_name']             = 'cv_' . $nik;
-                $config['overwrite']             = TRUE;
+                $config['file_name']            = 'cv_' . $nik;
+                $config['overwrite']            = TRUE;
 
                 //inisialisasi proses upload
                 $this->load->library('upload', $config);

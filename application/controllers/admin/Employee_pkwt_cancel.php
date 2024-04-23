@@ -271,7 +271,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'path_url' => 'emp_pkwt_edit',
 
 			'secid' => $result[0]->contract_id,
-			'employee_id' => $result[0]->employee_id,
+			'nip_edit' => $result[0]->employee_id,
 			'fullname' => strtoupper($fullname),
 			'nik_ktp' => $ktp_no,
 			'nama_ibu' => $ibu_kandung,
@@ -382,7 +382,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 					else {
 
 							$idrequest 					= $this->input->post('idrequest');
-					   	// $fullname 					= $this->input->post('fullname');
+					   	$nip_edit 					= $this->input->post('nip_edit');
 					   	// $nama_ibu						= $this->input->post('nama_ibu');
 							// $tempat_lahir 			= $this->input->post('tempat_lahir');
 							// $tanggal_lahir 			= $this->input->post('date_of_birth');
@@ -438,30 +438,46 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 			    }
 
-							$data = array(
-								// 'fullname' 						=> $fullname,
-								// 'nama_ibu' 						=> $nama_ibu,
-								// 'tempat_lahir' 				=> $tempat_lahir,
-								// 'tanggal_lahir' 			=> $tanggal_lahir,
-								// 'gender'							=> $jenis_kelamin,
-								// 'agama' 							=> $agama,
-								// 'status_kawin' 				=> $marital_status,
-								// 'nik_ktp' 						=> $nomor_ktp,
-								// 'alamat_ktp' 					=> $alamat_ktp,
-								// 'no_kk' 							=> $nomor_kk,
 
-								// 'alamat_domisili' 		=> $alamat_domisili,
-								// 'npwp' 								=> $npwp,
-								// 'contact_no' 					=> $nomor_hp,
-								// 'email' 							=> $email,
-								// 'bank_id' 						=> $bank_name,
-								// 'no_rek' 							=> $no_rek,
-								// 'pemilik_rekening' 		=> $pemilik_rekening,
+							$datax = array(
+
+								'designation_id' 							=> $jabatan,
+								'penempatan' 					=> $penempatan,
+								'basic_salary' 					=> $gaji_pokok,
+								'allow_jabatan' 			=> $tunjangan_jabatan,
+								'allow_area' 					=> $tunjangan_area,
+								'allow_masakerja' 		=> $tunjangan_masakerja,
+								'allow_konsumsi' 			=> $tunjangan_makan,
+								'allow_transport' 		=> $tunjangan_transport,
+								'allow_comunication' 	=> $tunjangan_komunikasi,
+
+								'allow_rent' 								=> $tunjangan_rental,
+								'allow_parking' 								=> $tunjangan_parkir,
+								'allow_trans_meal' 					=> $tunjangan_makan_trans,
+								'allow_residence_cost'						=> $tunjangan_tempat_tinggal,
+								'allow_device' 							=> $tunjangan_device,
+								
+								'allow_medichine' 						=> $tunjangan_kesehatan,
+								'allow_akomodsasi' 					=> $tunjangan_akomodasi,
+								'allow_kasir' 							=> $tunjangan_kasir,
+								'allow_operational' 					=> $tunjangan_operational,
+								'contract_start' 										=> $join_date_pkwt,
+								'contract_end' 											=> $pkwt_end_date,
+								'contract_periode' 								=> $waktu_kontrak,
+								'hari_kerja' 										=> $hari_kerja,
+								'cut_start' 					=> $cut_start,
+								'cut_off' 						=> $cut_off,
+								'date_payment' 				=> $date_payment,
+							);
+
+
+						$xresult = $this->Employees_model->update_record_bynip($datax,$nip_edit);
+
+							$data = array(
+
 								'project' 						=> $project,
 								'sub_project' 				=> $sub_project,
 								'jabatan' 							=> $jabatan,
-
-								// 'doj' 								=> $date_of_join,
 								'penempatan' 					=> $penempatan,
 								'basic_pay' 					=> $gaji_pokok,
 								'allowance_grade' 			=> $tunjangan_jabatan,
@@ -491,6 +507,10 @@ class Employee_pkwt_cancel extends MY_Controller {
 							);
 
 						$iresult = $this->Pkwt_model->update_pkwt_edit($data,$idrequest);
+
+
+
+						
 
 					// }
 

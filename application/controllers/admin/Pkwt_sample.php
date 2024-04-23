@@ -416,7 +416,7 @@ class Pkwt_sample extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka PIHAK KEDUA tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
+								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka <b>PIHAK KEDUA</b> tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1435,7 +1435,7 @@ class Pkwt_sample extends MY_Controller
 
 							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1610,7 +1610,7 @@ class Pkwt_sample extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_rent!="0Rp 0"){	
+				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>

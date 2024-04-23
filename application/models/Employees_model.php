@@ -143,7 +143,7 @@ class Employees_model extends CI_Model
 				WHERE datediff(current_date(),DATE_FORMAT(createdon, '%Y-%m-%d')) <=20
 				AND request_empby = '1'
 				AND project = '22'
-				AND e_status = '0'
+				AND e_status = '1'
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -159,7 +159,7 @@ class Employees_model extends CI_Model
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project
 				WHERE datediff(current_date(),DATE_FORMAT(emp.createdon, '%Y-%m-%d')) <=10
 				AND emp.request_empby = '1'
-				AND e_status = '0'
+				AND e_status IN (1,0)
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
@@ -1056,7 +1056,7 @@ class Employees_model extends CI_Model
 		$sql = 'SELECT *
 		FROM xin_employees
 		WHERE request_resign_by is not null
-		ORDER BY request_resign_date DESC;';
+		ORDER BY request_resign_date DESC LIMIT 100;';
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;
