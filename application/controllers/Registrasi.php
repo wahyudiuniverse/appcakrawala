@@ -327,6 +327,18 @@ class Registrasi extends CI_Controller
     }
 
     //Menampilkan Register tanpa parameter untuk proses POST variable
+    public function tes_API_NIK($nik)
+    {
+        $data['nik'] = $nik;
+        //menampilkan view form pengisian data
+        $this->load->view('frontend/templates/header');
+        //$this->load->view('templates/sidebar', $data);
+        $this->load->view('frontend/templates/topbar_register');
+        $this->load->view('frontend/tes_api_nik', $data);
+        $this->load->view('frontend/templates/footer');
+    }
+
+    //Menampilkan Register tanpa parameter untuk proses POST variable
     public function addRegisterPost()
     {
         //Title halaman

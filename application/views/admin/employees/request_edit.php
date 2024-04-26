@@ -406,7 +406,7 @@
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
               $file_ada = "ada";
-              $ktp='';
+              $ktp = '';
               $tesfile1 = base_url('/uploads/document/ktp/') . $ktp . "?" . $t; ?>
               <?php if ($ktp == "" || $ktp == "0") {
                 $tesfile1 = base_url('/uploads/document/ktp/') . "default.jpg";
@@ -414,6 +414,7 @@
               }
               $parameterfile1 = substr($tesfile1, -14);
               ?>
+
               <label>Foto KTP</label>
               <embed class="form-group col-md-12" id="output_ktp" type='<?php if (substr($parameterfile1, 0, 3) == "pdf") {
                                                                           echo "application/pdf";
@@ -430,7 +431,7 @@
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
               $file_ada = "ada";
-              $kk='';
+              $kk = '';
               $tesfile2 = base_url('/uploads/document/kk/') . $kk . "?" . $t; ?>
               <?php if ($kk == "" || $kk == "0") {
                 $tesfile2 = base_url('/uploads/document/kk/') . "default.jpg";
@@ -454,7 +455,7 @@
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
               $file_ada = "ada";
-              $file_npwp='';
+              $file_npwp = '';
               $tesfile3 = base_url('/uploads/document/npwp/') . $file_npwp . "?" . $t; ?>
               <?php if ($file_npwp == "" || $file_npwp == "0") {
                 $tesfile3 = base_url('/uploads/document/npwp/') . "default.jpg";
@@ -476,7 +477,7 @@
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
               $file_ada = "ada";
-              $ijazah='';
+              $ijazah = '';
               $tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t; ?>
               <?php if ($ijazah == "" || $ijazah == "0") {
                 $tesfile4 = base_url('/uploads/document/ijazah/') . "default.jpg";
@@ -500,7 +501,7 @@
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
               $file_ada = "ada";
-              $civi='';
+              $civi = '';
               $tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t; ?>
               <?php if ($civi == "" || $civi == "0") {
                 $tesfile5 = base_url('/uploads/document/cv/') . "default.jpg";
@@ -524,7 +525,7 @@
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
               $file_ada = "ada";
-              $skck='';
+              $skck = '';
               $tesfile6 = base_url('/uploads/document/skck/') . $skck . "?" . $t; ?>
               <?php if ($skck == "" || $skck == "0") {
                 $tesfile6 = base_url('/uploads/document/skck/') . "default.jpg";

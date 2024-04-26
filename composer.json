@@ -12,8 +12,12 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"mpdf/mpdf": "^8.2"
+		"mpdf/mpdf": "^8.2",
+		"phpoffice/phpspreadsheet": "^2.0"
 	},
+	"config": {
+        "platform-check": false
+    },
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
 	},
