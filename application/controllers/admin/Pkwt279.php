@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt250 extends MY_Controller 
+class Pkwt279 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -416,7 +416,7 @@ class Pkwt250 extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka PIHAK KEDUA tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
+								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka <b>PIHAK KEDUA</b> tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
 							</tr>
 				<br>
 							<tr>
@@ -515,11 +515,62 @@ class Pkwt250 extends MY_Controller
 						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak).</td>
 					</tr>
 
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+					<tr>
+						<td>3.8</td>
+						<td colspan="18">Berikut merupakan skema ketentuan pemberian gaji :</td>
+					</tr>
+
+				<br>
+					<tr>
+						<td></td>
+						<td colspan="18">
+
+									<table cellpadding="2" cellspacing="0" border="1" style="text-align: justify;">
+										<tr>
+											<td colspan="1"><b>&nbsp; No</b></td>
+											<td colspan="6"><b>&nbsp; Masa Kerja</b></td>
+											<td colspan="11"><b>&nbsp; Ketentuan Gaji</b></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp; 1.</td>
+											<td colspan="6">&nbsp; &gt; 1 Bulan</td>
+											<td colspan="11">&nbsp; Full pemberian gaji</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp; 2.</td>
+											<td colspan="6">&nbsp; &gt; 3 Minggu</td>
+											<td colspan="11">&nbsp; Prorata sesya dengan hari kerja yang sudah memiliki omzet</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp; 3.</td>
+											<td colspan="6">&nbsp; &gt; 2 Minggu</td>
+											<td colspan="11">&nbsp; Hanya dibayarkan allowance saja</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp; 4.</td>
+											<td colspan="6">&nbsp; &lt; 1 Minggu</td>
+											<td colspan="11">&nbsp; Tidak dibayarkan</td>
+										</tr>
+
+									</table>
+
+						</td>
+					</tr>
+
 				</table>
 		
-				<br>
-				<br>
-				<br>
 				<br>
 				<br>
 
@@ -635,6 +686,12 @@ class Pkwt250 extends MY_Controller
 								<td>5.6</td>
 								<td colspan="18">Dalam melaksanakan pekerjaannya, <b>PIHAK KEDUA</b> wajib memahami dan mematui pedoman/kebijakan yang telah ditentukan diperusahaan <b>PIHAK PERTAMA</b> maupun perusahaan dimana <b>PIHAK KEDUA</b> ditempatkan.</td>
 							</tr>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 				<br>
 							<tr>
 								<td>5.7</td>
@@ -861,7 +918,8 @@ class Pkwt250 extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-				<br>
+				<br><br><br><br><br><br><br>
+				<br><br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
@@ -1216,34 +1274,6 @@ class Pkwt250 extends MY_Controller
 				<br>
 				<br>			
 				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
 				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1435,7 +1465,19 @@ class Pkwt250 extends MY_Controller
 
 							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Bagi karyawan yang baru bergabung maka kontrak akan dibuatkan kemitraan dahulu selama 3 bulan, setelah 3 bulan akan dilakukan review kembali apakah karyawan tersebut dapat dilakukan PKWT 6 Bulan atau kemitraan kembali selama 3 bulan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Bagi karyawan yang sudah di PKWT dengan hasil performance under review maka status yang sebelumnya PKWT dapat diubah kembali menjadi kemitraan selama 3 bulan.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1510,7 +1552,7 @@ class Pkwt250 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

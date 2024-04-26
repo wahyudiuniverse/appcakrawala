@@ -211,6 +211,402 @@ class Reports extends MY_Controller
 	}
 
 
+	public function report_manage_employees_list() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/reports/manage_employees", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		$company_id = $this->uri->segment(4);
+		$department_id = $this->uri->segment(5);
+
+		$project_id = $this->uri->segment(6);
+		$subproject_id = $this->uri->segment(7);
+		$status_resign = $this->uri->segment(8);
+	
+
+		// $designation_id = $this->uri->segment(6);
+
+		if($project_id==0 || is_null($project_id)){
+
+			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+		}else{
+
+			$employee = $this->Reports_model->filter_employees_reports($project_id,$subproject_id,$status_resign);
+		}
+		
+		$data = array();
+
+        foreach($employee->result() as $r) {
+
+			$full_name = $r->first_name.' '.$r->last_name;
+			$company = $this->Xin_model->read_company_info($r->company_id);
+			if(!is_null($company)){
+				$comp_name = $company[0]->name;
+			} else {
+				$comp_name = '--';	
+			}
+				
+			// department
+			$department = $this->Department_model->read_department_information($r->department_id);
+			if(!is_null($department)){
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+
+			// get designation
+			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			if(!is_null($designation)){
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';	
+			}
+
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if(!is_null($project)){
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';
+			}
+
+			$subproject = $this->Project_model->read_single_subproject($r->sub_project_id);
+			if(!is_null($subproject)){
+				$subproject_name = $subproject[0]->sub_project_name;
+			} else {
+				$subproject_name = '--';
+			}
+
+			// $agama = '--';
+			$ethnicity = $this->Employees_model->read_ethnicity($r->ethnicity_type);
+			if(!is_null($ethnicity)){
+				$agama = $ethnicity[0]->type;
+			} else {
+				$agama = '--';
+			}
+
+			$banklist = $this->Xin_model->read_bank_info($r->bank_name);
+			if(!is_null($banklist)){
+				$bank_name = $banklist[0]->bank_name;
+			} else {
+				$bank_name = '--';
+			}
+
+			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
+			if(!is_null($readPkwt)){
+
+				$basicpay 		= $readPkwt[0]->basic_pay;
+				$start_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->from_date);
+				$end_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->to_date);
+				$pkwt_files 	= $readPkwt[0]->file_name;
+				$pkwt_tanggal	= $readPkwt[0]->upload_pkwt;
+
+			} else {
+
+				$basicpay = '0';
+				$start_kontrak 	= '0';
+				$end_kontrak 	= '0';
+				$pkwt_files 	= '0';
+				$pkwt_tanggal	= '-';
+			}
+
+
+			if(!is_null($r->last_edu)){
+				if($r->last_edu=='1'){
+					$education = 'Sekolah Dasar (SD)';
+				} else if($r->last_edu=='2') {
+					$education = 'Sekolah Menengah Pertama (SMP/MTS)';
+				} else if($r->last_edu=='3') {
+					$education = 'Sekolah Menengah Atas (SMA/SMK/MA)';
+				} else if($r->last_edu=='4') {
+					$education = 'Diploma (D1,D2,D3)';
+				} else if($r->last_edu=='5') {
+					$education = 'Strata 1 (S1)';
+				} else if($r->last_edu=='6') {
+					$education = 'Strata 2 (S2)';
+				} else if($r->last_edu=='7') {
+					$education = 'Strata 3 (S3)';
+				} else {
+					$education = '-';
+				}
+
+			} else {
+				$education = '--';	
+			}
+
+
+			if(!is_null($r->gender)){
+				$gender = $r->gender;
+			} else {
+				$gender = '--';	
+			}
+
+			if(!is_null($r->marital_status)){
+				if($r->marital_status=='1'){
+					$marital = 'TK/0';
+				} else if($r->last_edu=='2') {
+					$marital = 'TK/0';
+				} else if($r->last_edu=='3') {
+					$marital = 'TK/1';
+				} else if($r->last_edu=='4') {
+					$marital = 'TK/2';
+				} else if($r->last_edu=='5') {
+					$marital = 'TK/3';
+				} else if($r->last_edu=='6') {
+					$marital = 'K/0';
+				} else if($r->last_edu=='7') {
+					$marital = 'K/1';
+				} else if($r->last_edu=='8') {
+					$marital = 'K/2';
+				} else if($r->last_edu=='9') {
+					$marital = 'K/3';
+				} else {
+					$marital = '--';
+				}
+
+			} else {
+				$marital = '--';	
+			}
+
+			if($r->date_of_birth!='' || !is_null($r->date_of_birth)){
+				$dob = $this->Xin_model->tgl_indo($r->date_of_birth);
+			} else {
+				$dob = '--';	
+			}
+
+			if($r->date_of_joining!='' || !is_null($r->date_of_joining)){
+				$doj = $this->Xin_model->tgl_excel($r->date_of_joining);
+			} else {
+				$doj = '--';	
+			}
+
+			if($r->date_of_leaving!='' || !is_null($r->date_of_leaving)){
+				// $dol = $r->date_of_leaving;
+				$dol = $this->Xin_model->tgl_indo($r->date_of_leaving);
+			} else {
+				$dol = '--';	
+			}
+
+			if(!is_null($r->email)){
+				$email = $r->email;
+			} else {
+				$email = '--';	
+			}
+
+			if(!is_null($r->contact_no)){
+				$kontak = $r->contact_no;
+			} else {
+				$kontak = '--';	
+			}
+
+			if(!is_null($r->alamat_ktp)){
+				$alamat_ktp = $r->alamat_ktp;
+			} else {
+				$alamat_ktp = '--';	
+			}
+
+			if(!is_null($r->alamat_domisili)){
+				$alamat_domisili = $r->alamat_domisili;
+			} else {
+				$alamat_domisili = '--';	
+			}
+
+			if(!is_null($r->bpjs_tk_no)){
+				$bpjstk = $r->bpjs_tk_no;
+			} else {
+				$bpjstk = '--';	
+			}
+
+			if(!is_null($r->bpjs_ks_no)){
+				$bpjsks = $r->bpjs_ks_no;
+			} else {
+				$bpjsks = '--';
+			}
+
+			if(!is_null($r->ibu_kandung)){
+				$ibu = $r->ibu_kandung;
+			} else {
+				$ibu = '--';	
+			}
+
+			if(!is_null($r->penempatan)){
+				$penempatan = $r->penempatan;
+			} else {
+				$penempatan = '--';	
+			}
+
+			if(!is_null($r->tempat_lahir)){
+				$tempat_lahir = $r->tempat_lahir;
+			} else {
+				$tempat_lahir = '--';
+			}
+
+
+			if($r->password_change==0 || $r->project_id != '22'){
+					
+				$pin = $r->private_code;
+			} else {
+				$pin = '******';
+			}
+
+			if($r->filename_ktp=='0' || $r->filename_ktp== null){
+				$link_ktp = '-';
+			} else {
+				$link_ktp = '<a href="'.base_url().'uploads/document/ktp/'.$r->filename_ktp.'" target="_blank"> '.base_url().'uploads/document/ktp/'.$r->filename_ktp.'</a>';
+			}
+
+			if($r->filename_kk=='0' || $r->filename_kk== null){
+				$link_kk = '-';
+			} else {
+				$link_kk = '<a href="'.base_url().'uploads/document/kk/'.$r->filename_kk.'" target="_blank"> '.base_url().'uploads/document/kk/'.$r->filename_kk.'</a>';
+			}
+
+			if($r->filename_npwp=='0' || $r->filename_npwp== null){
+				$link_npwp = '-';
+			} else {
+				$link_npwp = '<a href="'.base_url().'uploads/document/npwp/'.$r->filename_npwp.'" target="_blank"> '.base_url().'uploads/document/npwp/'.$r->filename_npwp.'</a>';
+			}
+
+			if($r->filename_isd=='0' || $r->filename_isd== null){
+				$link_isd = '-';
+			} else {
+				$link_isd = '<a href="'.base_url().'uploads/document/ijazah/'.$r->filename_isd.'" target="_blank"> '.base_url().'uploads/document/ijazah/'.$r->filename_isd.'</a>';
+			}
+
+			if($r->filename_skck=='0' || $r->filename_skck== null){
+				$link_skck = '-';
+			} else {
+				$link_skck = '<a href="'.base_url().'uploads/document/skck/'.$r->filename_skck.'" target="_blank"> '.base_url().'uploads/document/skck/'.$r->filename_skck.'</a>';
+			}
+
+			if($r->filename_cv=='0' || $r->filename_cv== null){
+				$link_cv = '-';
+			} else {
+				$link_cv = '<a href="'.base_url().'uploads/document/cv/'.$r->filename_cv.'" target="_blank"> '.base_url().'uploads/document/cv/'.$r->filename_cv.'</a>';
+			}
+
+			if($r->filename_paklaring=='0' || $r->filename_paklaring== null){
+				$link_paklaring = '-';
+			} else {
+				$link_paklaring = '<a href="'.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'" target="_blank"> '.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'</a>';
+			}
+
+			$ktp = $r->ktp_no;
+			$kk = $r->kk_no;
+			$npwp = $r->npwp_no;
+			$nomor_rek = $r->nomor_rek;
+			// $bank_name = $r->bank_name;
+			$pemilik_rek = $r->pemilik_rek;
+
+				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+		
+				if($r->status_resign==2){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
+				} else if ($r->status_resign==3) {
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+				} else if($r->status_resign==4) {
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
+				} else if($r->status_resign==5){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
+				} else if($r->status_resign==6){
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
+				} else {
+			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
+				}
+
+
+			// if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
+			// elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
+
+			$role_resources_ids = $this->Xin_model->user_role_resource();
+
+			if(in_array('471',$role_resources_ids) || in_array('472',$role_resources_ids) || in_array('473',$role_resources_ids)) {
+				$edits = $edit.' '.$stat;
+			} else {
+				$edits = $stat;
+			}
+				
+
+			if(!is_null($pkwt_files) || $pkwt_files != 0){
+				
+				$file_pkwt = '<a href="'.$pkwt_files.'" target="_blank">
+					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"> PKWT </button>
+				</a>';
+			} else {
+				$file_pkwt = '-';	
+			}
+
+
+			$data[] = array(
+				$edits,
+				$r->employee_id,
+				strtoupper($full_name),
+				$pin,
+				$comp_name,
+				$department_name,
+				$designation_name,
+				$project_name,
+				$subproject_name,
+				$penempatan, // AREA
+				$r->region,
+				$tempat_lahir, // TEMPAT LAHIR
+				$dob,
+				$doj,
+
+				$start_kontrak,
+				$end_kontrak,
+				$basicpay,
+				$dol,
+				$gender,
+				$marital,
+				$agama, // agama
+				$email,
+				$kontak,
+				$education,
+				$alamat_ktp,
+				$alamat_domisili,
+				"'".$kk,
+				"'".$ktp,
+				$npwp,
+				$bpjstk,
+				$bpjsks,
+				$ibu,
+				$bank_name,
+				"'".$nomor_rek,
+				$pemilik_rek,
+				$link_ktp,
+				$link_kk,
+				$link_npwp,
+				$link_isd,
+				$link_skck,
+				$link_cv,
+				$link_paklaring,
+				$file_pkwt,
+				$pkwt_tanggal
+
+				// $pin
+			);
+      
+	  }
+	  $output = array(
+		   "draw" => $draw,
+			 "recordsTotal" => $employee->num_rows(),
+			 "recordsFiltered" => $employee->num_rows(),
+			 "data" => $data
+		);
+	  echo json_encode($output);
+	  exit();
+    }
+
+
 		// employees report
 	public function skk_report() {
 	
@@ -577,379 +973,6 @@ class Reports extends MY_Controller
     }
 	
 	
-	public function report_manage_employees_list() {
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/reports/manage_employees", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-		
-		$company_id = $this->uri->segment(4);
-		$department_id = $this->uri->segment(5);
-
-		$project_id = $this->uri->segment(6);
-		$subproject_id = $this->uri->segment(7);
-		$status_resign = $this->uri->segment(8);
-	
-
-		// $designation_id = $this->uri->segment(6);
-
-		if($project_id==0 || is_null($project_id)){
-
-			$employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
-		}else{
-
-			$employee = $this->Reports_model->filter_employees_reports($project_id,$subproject_id,$status_resign);
-		}
-		
-		$data = array();
-
-        foreach($employee->result() as $r) {
-
-			$full_name = $r->first_name.' '.$r->last_name;
-			$company = $this->Xin_model->read_company_info($r->company_id);
-			if(!is_null($company)){
-				$comp_name = $company[0]->name;
-			} else {
-				$comp_name = '--';	
-			}
-				
-			// department
-			$department = $this->Department_model->read_department_information($r->department_id);
-			if(!is_null($department)){
-				$department_name = $department[0]->department_name;
-			} else {
-				$department_name = '--';
-			}
-
-			// get designation
-			$designation = $this->Designation_model->read_designation_information($r->designation_id);
-			if(!is_null($designation)){
-				$designation_name = $designation[0]->designation_name;
-			} else {
-				$designation_name = '--';	
-			}
-
-			$project = $this->Project_model->read_single_project($r->project_id);
-			if(!is_null($project)){
-				$project_name = $project[0]->title;
-			} else {
-				$project_name = '--';
-			}
-
-			$subproject = $this->Project_model->read_single_subproject($r->sub_project_id);
-			if(!is_null($subproject)){
-				$subproject_name = $subproject[0]->sub_project_name;
-			} else {
-				$subproject_name = '--';
-			}
-
-			// $agama = '--';
-			$ethnicity = $this->Employees_model->read_ethnicity($r->ethnicity_type);
-			if(!is_null($ethnicity)){
-				$agama = $ethnicity[0]->type;
-			} else {
-				$agama = '--';
-			}
-
-			$banklist = $this->Xin_model->read_bank_info($r->bank_name);
-			if(!is_null($banklist)){
-				$bank_name = $banklist[0]->bank_name;
-			} else {
-				$bank_name = '--';
-			}
-
-			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
-			if(!is_null($readPkwt)){
-
-				$basicpay 		= $readPkwt[0]->basic_pay;
-				$start_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->from_date);
-				$end_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->to_date);
-				$pkwt_files 	= $readPkwt[0]->file_name;
-				$pkwt_tanggal	= $readPkwt[0]->upload_pkwt;
-
-			} else {
-
-				$basicpay = '0';
-				$start_kontrak 	= '0';
-				$end_kontrak 	= '0';
-				$pkwt_files 	= '0';
-				$pkwt_tanggal	= '-';
-			}
-
-
-			if(!is_null($r->last_edu)){
-				if($r->last_edu=='1'){
-					$education = 'Sekolah Dasar (SD)';
-				} else if($r->last_edu=='2') {
-					$education = 'Sekolah Menengah Pertama (SMP/MTS)';
-				} else if($r->last_edu=='3') {
-					$education = 'Sekolah Menengah Atas (SMA/SMK/MA)';
-				} else if($r->last_edu=='4') {
-					$education = 'Diploma (D1,D2,D3)';
-				} else if($r->last_edu=='5') {
-					$education = 'Strata 1 (S1)';
-				} else if($r->last_edu=='6') {
-					$education = 'Strata 2 (S2)';
-				} else if($r->last_edu=='7') {
-					$education = 'Strata 3 (S3)';
-				} else {
-					$education = '-';
-				}
-
-			} else {
-				$education = '--';	
-			}
-
-
-			if(!is_null($r->gender)){
-				$gender = $r->gender;
-			} else {
-				$gender = '--';	
-			}
-
-			if(!is_null($r->marital_status)){
-				$marital = $r->marital_status;
-			} else {
-				$marital = '--';	
-			}
-
-			if($r->date_of_birth!='' || !is_null($r->date_of_birth)){
-				$dob = $this->Xin_model->tgl_indo($r->date_of_birth);
-			} else {
-				$dob = '--';	
-			}
-
-			if($r->date_of_joining!='' || !is_null($r->date_of_joining)){
-				$doj = $this->Xin_model->tgl_excel($r->date_of_joining);
-			} else {
-				$doj = '--';	
-			}
-
-			if($r->date_of_leaving!='' || !is_null($r->date_of_leaving)){
-				// $dol = $r->date_of_leaving;
-				$dol = $this->Xin_model->tgl_indo($r->date_of_leaving);
-			} else {
-				$dol = '--';	
-			}
-
-			if(!is_null($r->email)){
-				$email = $r->email;
-			} else {
-				$email = '--';	
-			}
-
-			if(!is_null($r->contact_no)){
-				$kontak = $r->contact_no;
-			} else {
-				$kontak = '--';	
-			}
-
-			if(!is_null($r->alamat_ktp)){
-				$alamat_ktp = $r->alamat_ktp;
-			} else {
-				$alamat_ktp = '--';	
-			}
-
-			if(!is_null($r->alamat_domisili)){
-				$alamat_domisili = $r->alamat_domisili;
-			} else {
-				$alamat_domisili = '--';	
-			}
-
-			if(!is_null($r->bpjs_tk_no)){
-				$bpjstk = $r->bpjs_tk_no;
-			} else {
-				$bpjstk = '--';	
-			}
-
-			if(!is_null($r->bpjs_ks_no)){
-				$bpjsks = $r->bpjs_ks_no;
-			} else {
-				$bpjsks = '--';
-			}
-
-			if(!is_null($r->ibu_kandung)){
-				$ibu = $r->ibu_kandung;
-			} else {
-				$ibu = '--';	
-			}
-
-			if(!is_null($r->penempatan)){
-				$penempatan = $r->penempatan;
-			} else {
-				$penempatan = '--';	
-			}
-
-			if(!is_null($r->tempat_lahir)){
-				$tempat_lahir = $r->tempat_lahir;
-			} else {
-				$tempat_lahir = '--';
-			}
-
-
-			if($r->password_change==0 || $r->project_id != '22'){
-					
-				$pin = $r->private_code;
-			} else {
-				$pin = '******';
-			}
-
-			if($r->filename_ktp=='0' || $r->filename_ktp== null){
-				$link_ktp = '-';
-			} else {
-				$link_ktp = '<a href="'.base_url().'uploads/document/ktp/'.$r->filename_ktp.'" target="_blank"> '.base_url().'uploads/document/ktp/'.$r->filename_ktp.'</a>';
-			}
-
-			if($r->filename_kk=='0' || $r->filename_kk== null){
-				$link_kk = '-';
-			} else {
-				$link_kk = '<a href="'.base_url().'uploads/document/kk/'.$r->filename_kk.'" target="_blank"> '.base_url().'uploads/document/kk/'.$r->filename_kk.'</a>';
-			}
-
-			if($r->filename_npwp=='0' || $r->filename_npwp== null){
-				$link_npwp = '-';
-			} else {
-				$link_npwp = '<a href="'.base_url().'uploads/document/npwp/'.$r->filename_npwp.'" target="_blank"> '.base_url().'uploads/document/npwp/'.$r->filename_npwp.'</a>';
-			}
-
-			if($r->filename_isd=='0' || $r->filename_isd== null){
-				$link_isd = '-';
-			} else {
-				$link_isd = '<a href="'.base_url().'uploads/document/ijazah/'.$r->filename_isd.'" target="_blank"> '.base_url().'uploads/document/ijazah/'.$r->filename_isd.'</a>';
-			}
-
-			if($r->filename_skck=='0' || $r->filename_skck== null){
-				$link_skck = '-';
-			} else {
-				$link_skck = '<a href="'.base_url().'uploads/document/skck/'.$r->filename_skck.'" target="_blank"> '.base_url().'uploads/document/skck/'.$r->filename_skck.'</a>';
-			}
-
-			if($r->filename_cv=='0' || $r->filename_cv== null){
-				$link_cv = '-';
-			} else {
-				$link_cv = '<a href="'.base_url().'uploads/document/cv/'.$r->filename_cv.'" target="_blank"> '.base_url().'uploads/document/cv/'.$r->filename_cv.'</a>';
-			}
-
-			if($r->filename_paklaring=='0' || $r->filename_paklaring== null){
-				$link_paklaring = '-';
-			} else {
-				$link_paklaring = '<a href="'.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'" target="_blank"> '.base_url().'uploads/document/paklaring/'.$r->filename_paklaring.'</a>';
-			}
-
-			$ktp = $r->ktp_no;
-			$kk = $r->kk_no;
-			$npwp = $r->npwp_no;
-			$nomor_rek = $r->nomor_rek;
-			// $bank_name = $r->bank_name;
-			$pemilik_rek = $r->pemilik_rek;
-
-				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
-		
-				if($r->status_resign==2){
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
-				} else if ($r->status_resign==3) {
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
-				} else if($r->status_resign==4) {
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
-				} else if($r->status_resign==5){
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
-				} else if($r->status_resign==6){
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
-				} else {
-			  		$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
-				}
-
-
-			// if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
-			// elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
-
-			$role_resources_ids = $this->Xin_model->user_role_resource();
-
-			if(in_array('471',$role_resources_ids) || in_array('472',$role_resources_ids) || in_array('473',$role_resources_ids)) {
-				$edits = $edit.' '.$stat;
-			} else {
-				$edits = $stat;
-			}
-				
-
-			if(!is_null($pkwt_files) || $pkwt_files != 0){
-				
-				$file_pkwt = '<a href="'.$pkwt_files.'" target="_blank">
-					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"> PKWT </button>
-				</a>';
-			} else {
-				$file_pkwt = '-';	
-			}
-
-
-			$data[] = array(
-				$edits,
-				$r->employee_id,
-				strtoupper($full_name),
-				$pin,
-				$comp_name,
-				$department_name,
-				$designation_name,
-				$project_name,
-				$subproject_name,
-				$penempatan, // AREA
-				$r->region,
-				$tempat_lahir, // TEMPAT LAHIR
-				$dob,
-				$doj,
-
-				$start_kontrak,
-				$end_kontrak,
-				$basicpay,
-				$dol,
-				$gender,
-				$marital,
-				$agama, // agama
-				$email,
-				$kontak,
-				$education,
-				$alamat_ktp,
-				$alamat_domisili,
-				"'".$kk,
-				"'".$ktp,
-				$npwp,
-				$bpjstk,
-				$bpjsks,
-				$ibu,
-				$bank_name,
-				"'".$nomor_rek,
-				$pemilik_rek,
-				$link_ktp,
-				$link_kk,
-				$link_npwp,
-				$link_isd,
-				$link_skck,
-				$link_cv,
-				$link_paklaring,
-				$file_pkwt,
-				$pkwt_tanggal
-
-				// $pin
-			);
-      
-	  }
-	  $output = array(
-		   "draw" => $draw,
-			 "recordsTotal" => $employee->num_rows(),
-			 "recordsFiltered" => $employee->num_rows(),
-			 "data" => $data
-		);
-	  echo json_encode($output);
-	  exit();
-    }
 
 
 	// get company > departments
@@ -1752,7 +1775,7 @@ class Reports extends MY_Controller
 		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
 		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
 		// }
-		if(in_array('377',$role_resources_ids)) {
+		if(in_array('380',$role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/report_pkwt_history", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -1879,7 +1902,7 @@ class Reports extends MY_Controller
 			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Hapus</button>';
 
 
-			if($tkhl_status=='0'){
+			if($tkhl_status=='1'){
 
 				$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
 				Nama Lengkap: *'.$fullname.'*%0a

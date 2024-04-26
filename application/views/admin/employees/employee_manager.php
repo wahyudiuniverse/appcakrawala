@@ -43,6 +43,15 @@
       $name_by_deactive = '--';  
     }
 
+
+    $dokumen_skk = $this->Project_model->get_dokumen_skk('23524441');
+    if(!is_null($dokumen_skk)){
+      $idskk = $dokumen_skk[0]->secid;
+      $nip = $dokumen_skk[0]->nip;
+    } else {
+      $idskk = 0; 
+      $nip = 0; 
+    }
 // deactive_by
 
   
@@ -580,30 +589,112 @@
                       </div>
                     </div>
                   </div>
-
-                  <div class="tab-pane fade" id="account-docpkwt">
-
-                    <div class="box">
-                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> DOKUMEN PKWT </span> </div>
+                  
+                  <!-- DOKUMEN SK -->
+                  <div class="tab-pane fade" id="account-sk">
+                    <div class="box md-4" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> DOKUMEN SK</strong> (PAKLARING) </span> </div>
                       <div class="card-body">
-                        <div class="card-block">
-                          <div class="table-responsive" data-pattern="priority-columns">
-                            <table class="table table-striped table-bordered dataTable" id="xin_table_contract" style="width:100%;">
-                              <thead>
-                                <tr>
-                                  <th>No. Dokumen</th>
-                                  <th>Project</th>
-                                  <th>Jabatan</th>
-                                  <th>Status</th>
-                                </tr>
-                              </thead>
-                            </table>
-                          </div>
-                        </div>
+              
+
                       </div>
                     </div>
+                    <div class="box">
+
+                    <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN SK </strong> (PAKLARING) </span> </div>
+
+                      <div class="media-body ml-4">
+              
+                      <div class="text-big  mt-1"><label class="form-label">Tanggal Pengajuan: </label></div>
+                      <div class="text-big  mt-1"><label class="form-label"><?php echo $request_resign_date;?></label></div>
+                      </div>
+
+<br>
+                      <div class="media-body ml-4">
+                        <div class="text-big  mt-1"><label class="form-label">Approve NAE: </label></div>
+                        <?php 
+                          if(is_null($approve_resignnae)){
+                        ?>
+                          <p class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-twitter">Pending</button></p> 
+                        <?php } else {
+                        ?>
+                          <p> <button type="button" class="btn btn-xs btn-outline-success">Approved</button> <?php echo $approve_resignnae_on;?></p>
+                        <?php
+                          }
+                        ?>
+                      </div>
+
+
+
+                      <div class="media-body ml-4">
+                        <div class="text-big  mt-1"><label class="form-label">Approve NOM: </label></div>
+                        <?php 
+                          if(is_null($approve_resignnom)){
+                        ?>
+                          <p class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-twitter">Pending</button></p> 
+                        <?php } else {
+                        ?>
+                          <p> <button type="button" class="btn btn-xs btn-outline-success">Approved</button> <?php echo $approve_resignnom_on;?></p>
+                        <?php
+                          }
+                        ?>
+                      </div>
+
+
+
+                      <div class="media-body ml-4">
+                        <div class="text-big  mt-1"><label class="form-label">Approve HRD: </label></div>
+                        <?php 
+                          if(is_null($approve_resignhrd)){
+                        ?>
+                          <p class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-twitter">Pending</button></p> 
+                        <?php } else {
+                        ?>
+                          <p> <button type="button" class="btn btn-xs btn-outline-success">Approved</button> <?php echo $approve_resignhrd_on;?></p>
+                        <?php
+                          }
+                        ?>
+                      </div>
+
+
+                        <?php 
+                          if($cancel_resign_stat==0){
+
+                            if($idskk==0){
+                        ?>
+
+                        <div class="media-body ml-4">
+                        <a href="" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-warning">PAKLARING BELUM TERBIT</button></a>
+                        </div>
+                        <?php
+
+                            } else {
+                              ?>
+
+                        <div class="media-body ml-4">
+                        <a href="<?php echo site_url().'admin/skk/view/'.$idskk.'/'.$nip;?>" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">DOWNLOAD PAKLARING<?php echo $idskk;?></button></a>
+                        </div>
+
+                              <?php
+                            }
+                        ?>
+                        <?php } else {
+                        ?>
+                          <div class="media-body ml-4">
+                          <a href="#" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-danger">PAKLARING DITOLAK</button></a>
+                          </div>
+                        <?php
+                          }
+                        ?>
+
+
+
+
+
+
+                    </div>
                   </div>
-                  
+
                   <!-- DOKUMEN FOTO-->
                   <div class="tab-pane fade" id="account-document">
                    <div class="box" hidden>
@@ -1202,13 +1293,13 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="facebook_profile"><?php echo $this->lang->line('xin_e_details_fb_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_fb_profile');?>" name="facebook_link" type="text" value="<?php echo $facebook_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_fb_profile');?>" name="facebook_link" type="text" value="">
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="facebook_profile"><?php echo $this->lang->line('xin_e_details_twit_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_twit_profile');?>" name="twitter_link" type="text" value="<?php echo $twitter_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_twit_profile');?>" name="twitter_link" type="text" value="">
                                 </div>
                               </div>
                             </div>
@@ -1216,7 +1307,7 @@
                               <div class="col-md-12">
                                 <div class="form-group">
                                   <label for="twitter_profile"><?php echo $this->lang->line('xin_e_details_blogr_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_blogr_profile');?>" name="blogger_link" type="text" value="<?php echo $blogger_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_blogr_profile');?>" name="blogger_link" type="text" value="">
                                 </div>
                               </div>
                             </div>
@@ -1224,13 +1315,13 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="blogger_profile"><?php echo $this->lang->line('xin_e_details_linkd_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_linkd_profile');?>" name="linkdedin_link" type="text" value="<?php echo $linkdedin_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_linkd_profile');?>" name="linkdedin_link" type="text" value="">
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="blogger_profile"><?php echo $this->lang->line('xin_e_details_gplus_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_gplus_profile');?>" name="google_plus_link" type="text" value="<?php echo $google_plus_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_gplus_profile');?>" name="google_plus_link" type="text" value="">
                                 </div>
                               </div>
                             </div>
@@ -1238,13 +1329,13 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="linkdedin_profile"><?php echo $this->lang->line('xin_e_details_insta_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_insta_profile');?>" name="instagram_link" type="text" value="<?php echo $instagram_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_insta_profile');?>" name="instagram_link" type="text" value="">
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="linkdedin_profile"><?php echo $this->lang->line('xin_e_details_pintrst_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_pintrst_profile');?>" name="pinterest_link" type="text" value="<?php echo $pinterest_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_pintrst_profile');?>" name="pinterest_link" type="text" value="">
                                 </div>
                               </div>
                             </div>
@@ -1252,7 +1343,7 @@
                               <div class="col-md-12">
                                 <div class="form-group">
                                   <label for="linkdedin_profile"><?php echo $this->lang->line('xin_e_details_utube_profile');?></label>
-                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_utube_profile');?>" name="youtube_link" type="text" value="<?php echo $youtube_link;?>">
+                                  <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_utube_profile');?>" name="youtube_link" type="text" value="">
                                 </div>
                               </div>
                             </div>

@@ -1300,6 +1300,18 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 												else : echo '';
 												endif;
 											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "PKWT Report",
+									add_info: "Pkwt Report",
+									value: "380",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('380', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
 								}
 							]
 						},

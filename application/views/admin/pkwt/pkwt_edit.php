@@ -39,6 +39,7 @@
             <div class="col-md-6">
               <div class="row">
                 <input name="idrequest" type="hidden" value="<?php echo $secid;?>">
+                <input name="nip_edit" type="hidden" value="<?php echo $nip_edit;?>">
 
                 <!--NAMA LENGKAP-->
                 <div class="col-md-8">

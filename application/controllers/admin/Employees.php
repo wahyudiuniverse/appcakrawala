@@ -1286,27 +1286,38 @@ class Employees extends MY_Controller
 			'deactive_reason' => $result[0]->deactive_reason,
 
 
-			'all_companies' => $this->Xin_model->get_companies(),
-			'all_departments' => $this->Department_model->all_departments(),
-			'all_projects' => $this->Project_model->get_project_brand(),
+			'all_companies' 	=> $this->Xin_model->get_companies(),
+			'all_departments' 	=> $this->Department_model->all_departments(),
+			'all_projects' 		=> $this->Project_model->get_project_brand(),
 
-			// 'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
+			// 'project_list' 	=> $this->Project_model->get_project_maping($session['employee_id']),
 
-			'all_sub_projects' => $this->Project_model->get_sub_project_filter($result[0]->project_id),
-			'all_designations' => $this->Designation_model->all_designations(),
-			'all_user_roles' => $this->Roles_model->all_user_roles(),
+			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
+			'all_designations' 	=> $this->Designation_model->all_designations(),
+			'all_user_roles' 	=> $this->Roles_model->all_user_roles(),
 			'title' => $this->lang->line('header_my_profile') . ' | ' . $this->Xin_model->site_title(),
-			'facebook_link' => $result[0]->facebook_link,
-			'twitter_link' => $result[0]->twitter_link,
-			'blogger_link' => $result[0]->blogger_link,
-			'linkdedin_link' => $result[0]->linkdedin_link,
-			'google_plus_link' => $result[0]->google_plus_link,
-			'instagram_link' => $result[0]->instagram_link,
-			'pinterest_link' => $result[0]->pinterest_link,
-			'youtube_link' => $result[0]->youtube_link,
+
+			'request_resign_date' => $result[0]->request_resign_date,
+			'approve_resignnae' => $result[0]->approve_resignnae,
+			'approve_resignnae_on' => $result[0]->approve_resignnae_on,
+			
+			'approve_resignnom' => $result[0]->approve_resignnom,
+			'approve_resignnom_on' => $result[0]->approve_resignnom_on,
+			
+			'approve_resignhrd' => $result[0]->approve_resignhrd,
+			'approve_resignhrd_on' => $result[0]->approve_resignhrd_on,
+			
+			'cancel_resign_stat' => $result[0]->cancel_resign_stat,
+			'cancel_ket' => $result[0]->cancel_ket,
+			'cancel_date' => $result[0]->cancel_date,
+
 			'last_login_date' => $result[0]->last_login_date,
 			'last_login_date' => $result[0]->last_login_date,
 			'last_login_ip' => $result[0]->last_login_ip,
+
+			// 'dokumen_skk' => $this->Project_model->get_dokumen_skk($result[0]->employee_id),
+			// 'dokumen_skk' => $this->Project_model->get_dokumen_skk('23524441'),
+
 			'all_countries' => $this->Xin_model->get_countries(),
 			'all_document_types' => $this->Employees_model->all_document_types(),
 			'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),

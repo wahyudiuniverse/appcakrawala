@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt250 extends MY_Controller 
+class Pkwt280 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -416,7 +416,7 @@ class Pkwt250 extends MY_Controller
 				<br>
 							<tr>
 								<td>b.</td>
-								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka PIHAK KEDUA tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
+								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka <b>PIHAK KEDUA</b> tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1435,7 +1435,25 @@ class Pkwt250 extends MY_Controller
 
 							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Saya bersedia untuk tidak diberikan gaji maupun menuntut gaji saya apabila masa kerja saya kurang dari 1 bulan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Saya bersedia menerima gaji secara prorata apabila saya tidak memenuhi target hari kerja efektif dibulan berjalan. Jika saya berhalangan hadir tidak bekerja dengan alasan  ( SAKIT, IZIN dan/atau BERHALANGAN HADIR DALAM BENTUK APAPUN ) maka komponen yang akan diterima dihitung prorata atau sesuai dengan Hari Kerja. Adapun perhitugan nya sbb :</td>
+								<td colspan="0"></td>
+							</tr>
+							<br>
+							<tr>
+								<td ></td>
+								<td colspan="20"><b>Perhitungan Prorata</b> <b>=</b> (Total Hari Kerja Karyawan <b>/</b> Jumlah Hari Kerja 1 Bulan) <b>x</b> Gaji 1 bulan</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1509,8 +1527,8 @@ class Pkwt250 extends MY_Controller
 				$lampiran = '
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br><br><br><br>
+				
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

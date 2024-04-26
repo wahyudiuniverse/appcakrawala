@@ -304,12 +304,37 @@ ORDER BY title ASC");
 		return $query->result();
 	}
 
+
+	// public function get_dokumen_skk($nip)
+	// {
+	// 	$query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip = '$nip' LIMIT 1;");
+	// 	return $query->result();
+	// }
+
+
+	// get single employee
+	public function get_dokumen_skk($nip) {
+	
+		$sql = 'SELECT * FROM xin_qrcode_skk WHERE nip = ?';
+		// $sql = 'SELECT * FROM xin_employee_contract WHERE uniqueid = ?';
+		$binds = array($nip);
+		$query = $this->db->query($sql, $binds);
+		
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+		
+	}
+	
 	// get employees list> reports
 	public function project_list()
 	{
 
 		return $query = $this->db->query("SELECT * FROM xin_projects ORDER BY project_id DESC");
 	}
+
 
 	// get single employee by NIP
 	public function read_project_by_id($id)

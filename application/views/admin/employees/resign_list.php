@@ -151,7 +151,7 @@
                     <label for="date_of_birth">Upload Exit Clearance<i class="hrpremium-asterisk">*</i></label>
                     <br>
                     <p class="form-row"> &nbsp;&nbsp;
-                      <input type="file" id="dok_exitc" name="dok_exitc" />
+                      <input type="file" class="form-control-file" id="dok_exitc" name="dok_exitc" accept="application/pdf,image/png,image/jpg, image/jpeg"/>
                     </p>
                     </div>
                   </div>
@@ -165,7 +165,7 @@
                     <label for="date_of_birth">Upload Surat Resign<i class="hrpremium-asterisk">*</i></label>
                     <br>
                     <p class="form-row"> &nbsp;&nbsp;
-                      <input type="file" id="dok_sresign" name="dok_sresign" />
+                      <input type="file" class="form-control-file" id="dok_sresign" name="dok_sresign" accept="application/pdf,image/png,image/jpg, image/jpeg"/>
                     </p>
                     </div>
                   </div>
@@ -179,7 +179,7 @@
                     <label for="date_of_birth">Upload Surat Hand Over<i class="hrpremium-asterisk"></i></label>
                     <br>
                     <p class="form-row"> &nbsp;&nbsp;
-                      <input type="file" id="dok_sover" name="dok_sover" />
+                      <input type="file" class="form-control-file" id="dok_sover" name="dok_sover" accept="application/pdf,image/png,image/jpg, image/jpeg"/>
                     </p>
                     </div>
                   </div>
