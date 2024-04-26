@@ -87,13 +87,9 @@ class Pkwt9 extends MY_Controller
 
 		if($pkwt[0]->approve_hrd != null){
 
-				if($pkwt[0]->company==2){
 					$logo_cover = 'tcpdf_logo_sc.png';
 					$header_namae = 'PT. Siprama Cakrawala';
-				} else {
-					$logo_cover = 'tcpdf_logo_kac.png';
-					$header_namae = 'PT. Krista Aulia Cakrawala';
-				}
+	
 
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
@@ -1592,7 +1588,7 @@ class Pkwt9 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
 						</tr>';
 				}
 				

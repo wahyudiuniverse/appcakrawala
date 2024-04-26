@@ -352,27 +352,53 @@ class Employee_resign extends MY_Controller {
 					 	$Return['error'] = "Dokumen Over Hand kosong...!";
 					} 
 				
+
+
+									// if(is_uploaded_file($_FILES['dokumen_cv']['tmp_name'])) {
+									// 		//checking image type
+									// 		$allowedcv =  array('png','jpg','jpeg','pdf');
+									// 		$filenamecv = $_FILES['dokumen_cv']['name'];
+									// 		$extcv = pathinfo($filenamecv, PATHINFO_EXTENSION);
+											
+									// 		if(in_array($extcv,$allowedcv)){
+									// 			$tmp_namecv = $_FILES["dokumen_cv"]["tmp_name"];
+									// 			$yearmonth = date('Y/m');
+									// 			$documentdcv = "uploads/document/cv/".$yearmonth.'/';
+									// 			// basename() may prevent filesystem traversal attacks;
+									// 			// further validation/sanitation of the filename may be appropriate
+									// 			$name = basename($_FILES["dokumen_cv"]["name"]);
+									// 			$newfilenamecv = 'cv_'.$this->input->post('nomor_ktp').'_'.round(microtime(true)).'.'.$extcv;
+									// 			move_uploaded_file($tmp_namecv, $documentdcv.$newfilenamecv);
+									// 			$fnamecv = 'https://apps-cakrawala.com/uploads/document/cv/'.$yearmonth.'/'.$newfilenamecv;
+									// 		} else {
+									// 			$Return['error'] = 'Jenis File CV tidak diterima..';
+									// 		}
+									// }
+
+
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('pdf','PDF');
+						$yearmonth = date('Y/m');
+						$alloweda =  array('png','jpg','jpeg','pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
 						if(in_array($exta,$alloweda)){
 							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
-							$documentda = "uploads/document/";
+							$documentda = "uploads/document/exit/".$yearmonth.'/';
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
 							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
-							$fnameExit = $newfilenamea;
+							// $fnameExit = $newfilenamea;
+							$fnameExit = 'https://apps-cakrawala.com/uploads/document/exit/'.$yearmonth.'/'.$newfilenamea;
 						} else {
-							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
+							$Return['error'] = 'Jenis File CV tidak diterima..';
 						}
 					} else {
-					// $fnameExit = null;
-					$Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
+						// $fnameExit = null;
+						$Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
 					}
 
 					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
@@ -617,27 +643,54 @@ class Employee_resign extends MY_Controller {
 						$Return['error'] = $this->lang->line('xin_employee_error_dol');
 					}
 				
+
+
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('pdf');
+						$yearmonth = date('Y/m');
+						$alloweda =  array('png','jpg','jpeg','pdf');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
 						if(in_array($exta,$alloweda)){
 							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
-							$documentda = "uploads/document/";
+							$documentda = "uploads/document/exit/".$yearmonth.'/';
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
 							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
-							$fnameExit = $newfilenamea;
+							// $fnameExit = $newfilenamea;
+							$fnameExit = 'https://apps-cakrawala.com/uploads/document/exit/'.$yearmonth.'/'.$newfilenamea;
 						} else {
-							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
+							$Return['error'] = 'Jenis File CV tidak diterima..';
 						}
 					} else {
-						$fnameExit = null;
+						// $fnameExit = null;
+						$Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
 					}
+					
+					// if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
+					// 	//checking image type
+					// 	$alloweda =  array('pdf');
+					// 	$filenamea = $_FILES['dok_exitc']['name'];
+					// 	$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
+						
+					// 	if(in_array($exta,$alloweda)){
+					// 		$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
+					// 		$documentda = "uploads/document/";
+					// 		// basename() may prevent filesystem traversal attacks;
+					// 		// further validation/sanitation of the filename may be appropriate
+					// 		$name = basename($_FILES["dok_exitc"]["name"]);
+					// 		$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
+					// 		move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
+					// 		$fnameExit = $newfilenamea;
+					// 	} else {
+					// 		$Return['error'] = $this->lang->line('xin_employee_document_file_type');
+					// 	}
+					// } else {
+					// 	$fnameExit = null;
+					// }
 
 						if($Return['error']!=''){
 							$this->output($Return);

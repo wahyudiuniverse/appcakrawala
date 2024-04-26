@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt258 extends MY_Controller 
+class Pkwt284 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -389,7 +389,7 @@ class Pkwt258 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+								<td colspan="20">Karyawan mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
 							</tr>';
 
 						$tbl_2 .= '
@@ -397,35 +397,97 @@ class Pkwt258 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
+								<td colspan="20">'.$this->Xin_model->rupiah($sum_salary).'	Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
 							</tr>
 
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">Total Upah Harian yang didapatkan adalah sebesar '.$this->Xin_model->rupiah($sum_salary/$waktukerja).' dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).' / '.$waktukerja.' hari kerja</td>
+							</tr>
 
 							<br>
-							<br>
+
+
 
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
+								<td colspan="20">Berikut merupakan skema ketentuan gaji sebagai berikut :</td>
 							</tr>
+
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+									<table cellpadding="2" cellspacing="0" border="1" style="text-align: justify;">
+										<tr>
+											<td colspan="1">&nbsp;<b>No.</b></td>
+											<td colspan="5">&nbsp;<b>Masa Kerja</b></td>
+											<td colspan="12">&nbsp;<b>Ketentuan Gaji</b></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp;1.</td>
+											<td colspan="5">&nbsp;&gt;&nbsp;1 Bulan</td>
+											<td colspan="12">&nbsp;Full pemberian gaji</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp;2.</td>
+											<td colspan="5">&nbsp;&gt;&nbsp;3 Minggu</td>
+											<td colspan="12">&nbsp;Prorata sesuai dengan hari kerja yang sudah memiliki omzet</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp;3.</td>
+											<td colspan="5">&nbsp;&gt;&nbsp;2 Minggu</td>
+											<td colspan="12">&nbsp;Hanya dibayarkan allowance saja</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">&nbsp;4.</td>
+											<td colspan="5">&nbsp;&lt;&nbsp;1 Minggu	</td>
+											<td colspan="12">&nbsp;Tidak dibayarkan</td>
+										</tr>
+										<br>
+
+
+									</table>
+
+								</td>
+							</tr>
+				</table>
+								</td>
+							</tr>
+					<br>
+
+							<tr>
+								<td>6.</td>
+								<td colspan="20">Pihak perusahaan akan mendaftarkan BPJS Ketenagakerjaan untuk Mitra selama bekerja yaitu (JKK dan JKM) dan akan diberikan kompensasi untuk uang kesehatan sebesar Rp. 42.000. Maka atas dasar hal tersebut apabila Karyawan Mitra mengalami sakit disaat jam kerja atau pihak Anggota keluarga karyawan Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi karyawan Mitra dan tidak menjadi beban perusahan.</td>
+							</tr>
+
 							
 							<br>
 							<tr>
-								<td>6.</td>
+								<td>7.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 							
 							<br>
 							<tr>
-								<td>7.</td>
+								<td>8.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
 							
 							<br>
-							<br>
-							<br>
 							<tr>
-								<td>8.</td>
+								<td>9.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
 							</tr>
 

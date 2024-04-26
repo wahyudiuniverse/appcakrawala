@@ -1597,7 +1597,7 @@ class Pkwt190 extends MY_Controller
 						</tr>';
 				}
 
-				if($allowance_rent!="0Rp 0"){	
+				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>

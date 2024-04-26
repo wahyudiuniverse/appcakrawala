@@ -4,6 +4,11 @@
 	"type": "project",
 	"homepage": "https://codeigniter.com",
 	"license": "MIT",
+	"config": {
+    "platform": {
+        "php": "7.2.34"
+     }
+	},
 	"support": {
 		"forum": "http://forum.codeigniter.com/",
 		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
