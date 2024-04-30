@@ -468,9 +468,16 @@ class Employees_model extends CI_Model
 		$kategori = $postData['kategori'];
 		$approve = $postData['approve'];
 		$idsession = $postData['idsession'];
+		$filter = $postData['filter'];
 		$filterProject = "";
 		$filterGolongan = "";
 		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+			$searchQuery = " (penempatan like '%" . $filter . "%' or nik_ktp like '%" . $filter . "%' or fullname like'%" . $filter . "%' ) ";
+		}
 
 
 		$kondisiDefaultQuery = "(
@@ -570,6 +577,9 @@ class Employees_model extends CI_Model
 
 		## Fetch records
 		$this->db->select('*');
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
 		$this->db->where($kondisiDefaultQuery);
 		if ($filterProject != '') {
 			$this->db->where($filterProject);
@@ -639,6 +649,7 @@ class Employees_model extends CI_Model
 		} else if ($approve == '2') {
 			$this->db->where($kondisiBelumSiapApprove);
 		}
+		$this->db->order_by('createdon', 'desc');
 		$records = $this->db->get('xin_employee_request')->result();
 		$tes_query = $this->db->last_query();
 

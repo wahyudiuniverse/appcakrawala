@@ -11,6 +11,9 @@
  */
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Employee_request_hrd extends MY_Controller
 {
 
@@ -19,6 +22,7 @@ class Employee_request_hrd extends MY_Controller
 		parent::__construct();
 		//load the models
 		$this->load->model("Company_model");
+		$this->load->model("Register_model");
 		$this->load->model("Xin_model");
 		$this->load->model("Custom_fields_model");
 		$this->load->model("Employees_model");
@@ -93,6 +97,132 @@ class Employee_request_hrd extends MY_Controller
 		$data = $this->Employees_model->get_request_hrd2($postData);
 
 		echo json_encode($data);
+	}
+
+	public function printExcel($project_id, $golongan, $kategori, $approve, $idsession, $filter)
+	{
+		$postData = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$postData['project_id'] = $project_id;
+		$postData['golongan'] = $golongan;
+		$postData['kategori'] = $kategori;
+		$postData['approve'] = $approve;
+		$postData['idsession'] = $idsession;
+		$postData['nama_file'] = 'Data Request Karyawan';
+		if ($filter == '-no_input-') {
+			$postData['filter'] = '';
+		} else {
+			$postData['filter'] = $filter;
+		}
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Data Request Karyawan'); //nama Spreadsheet yg baru dibuat
+
+		//data satu row yg mau di isi
+		$rowArray = [
+			'JENIS DOKUMEN',
+			'NAMA',
+			'NIK -- NOTE HRD',
+			'PROJECT',
+			'SUB PROJECT',
+			'JABATAN',
+			'PENEMPATAN',
+			'GAJI POKOK',
+			'PERIODE',
+			'KATEGORI KARYAWAN',
+			'TANGGAL REGISTER'
+		];
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$rowArray,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 100; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle('A1:K1')
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('#');
+		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+		$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode('Rp #,##0');
+		//$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR);
+
+		// Get data
+		$data = $this->Employees_model->get_request_print($postData);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$data,  // The data to set
+				NULL,        // Array values with this value will not be set
+				'A2'         // Top left coordinate of the worksheet range where
+				//    we want to set these values (default is A1)
+			);
+
+		// $sheet = $spreadsheet->getActiveSheet();
+		// $sheet->setCellValue('A2', '01');
+		// $sheet->setCellValue('B2', '169');
+		// $sheet->setCellValue('C2', '=sum(A2+B2)');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+		//ob_start();
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		//$filename = 'Data Request Karyawan Baru'; // set filename for excel file to be exported
+		$filename = $postData['nama_file'];
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		// $writer->save('php://output');	// download file 
+		// //$writer->save('./absen/' . $filename . '.xlsx');	// download file 
+
+		// $xlsData = ob_get_contents();
+		// ob_end_clean();
+
+		// //$xlsData;
+
+		// $response =  array(
+		// 	'status' => TRUE,
+		// 	'file' => "data:application/vnd.ms-excel;base64," . base64_encode($xlsData)
+		// );
+
+		// echo $xlsData;
+		// die(json_encode($response));
+
+		$writer->save('php://output');
+
+		//$ret['data'] = base64_encode(ob_get_contents());
+		//ob_end_clean();
+
+		//echo $ret['data'];
 	}
 
 	public function request_list_hrd()

@@ -222,8 +222,8 @@
 <div class="row m-b-1 <?php echo $get_animate; ?>">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> Request Karyawan Baru</span> </div>
-      <div class="card-body">
+      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> Request Karyawan Baru</span><button id="button_download" class="btn btn-primary ladda-button" data-style="expand-right">Download Excel</button> </div>
+      <div class=" card-body">
         <div class="box-datatable table-responsive" id="btn-place">
           <table class="display dataTable table table-striped table-bordered" id="xin_table2" style="width:100%">
             <thead>
@@ -253,23 +253,28 @@
 
     <!-- Script data table xin_table2 -->
     <script type="text/javascript">
-      var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
-        csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-      var project_id = document.getElementById("aj_project").value;
-      var kategori = document.getElementById("kategori").value;
-      var golongan = document.getElementById("golongan").value;
-      var approve = document.getElementById("approve").value;
-      var idsession = "<?php print($session['employee_id']); ?>";
-      //alert(approve);
+      var table;
       $(document).ready(function() {
+        var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
+          csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+        var project_id = document.getElementById("aj_project").value;
+        var kategori = document.getElementById("kategori").value;
+        var golongan = document.getElementById("golongan").value;
+        var approve = document.getElementById("approve").value;
+        var idsession = "<?php print($session['employee_id']); ?>";
+        //alert(approve);
+
         //$.fn.dataTable.moment('YYYY-MM-DD HH:mm:ss');
-        var table = $('#xin_table2').DataTable({
+        table = $('#xin_table2').DataTable({
           'processing': true,
           'serverSide': true,
           'stateSave': true,
           'bFilter': true,
           'serverMethod': 'post',
           'dom': 'pPlBfrtip',
+          buttons: [
+            'copy', 'excel', 'pdf'
+          ],
           //'columnDefs': [{
           //  targets: 11,
           //  type: 'date-eu'
@@ -366,6 +371,27 @@
         //   //table.draw();
         // });
 
+
+      });
+
+      function printExcel() {
+        var project_id = document.getElementById("aj_project").value;
+        var kategori = document.getElementById("kategori").value;
+        var golongan = document.getElementById("golongan").value;
+        var approve = document.getElementById("approve").value;
+        var idsession = "<?php print($session['employee_id']); ?>";
+        var filter = $('.dataTables_filter input').val() //ambil filter search dari datatables
+
+        //alert($('.dataTables_filter input').val());
+        if(filter == ""){
+          filter = "-no_input-";
+        }
+
+        window.open('<?php echo base_url(); ?>admin/employee_request_hrd/printExcel/' + project_id + '/' + kategori + '/' + golongan + '/' + approve + '/' + idsession + '/' + filter + '/', '_blank');
+      };
+
+      document.querySelector('#button_download').addEventListener('click', function() {
+        printExcel();
       });
     </script>
 
