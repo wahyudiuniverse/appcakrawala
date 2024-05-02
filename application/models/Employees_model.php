@@ -669,11 +669,9 @@ class Employees_model extends CI_Model
 				$sambung_periode = " s/d ";
 			}
 
-			$note_HRD = "";
-			if (($record->catatan_hr == null) || ($record->catatan_hr == "")) {
-				$note_HRD = "";
-			} else {
-				$note_HRD = " -- " . $record->catatan_hr;
+			$periode = "";
+			if ($sambung_periode == " s/d ") {
+				$periode = $record->contract_start . $sambung_periode . $record->contract_end;
 			}
 
 			$status_golongan = "";
@@ -701,7 +699,7 @@ class Employees_model extends CI_Model
 														if (($record->project != null) && ($record->project != "") && ($record->project != "0")) {
 															if (($record->sub_project != null) && ($record->sub_project != "") && ($record->sub_project != "0")) {
 																if (($record->posisi != null) && ($record->posisi != "") && ($record->posisi != "0")) {
-																	$siap_approve = " -- Siap Approve";
+																	$siap_approve = " (Siap Approve)";
 																}
 															}
 														}
@@ -722,17 +720,18 @@ class Employees_model extends CI_Model
 				"golongan_karyawan" => $status_golongan,
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
 				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
-				"fullname" => $record->fullname . $siap_approve,
-				"nik_ktp" => $record->nik_ktp . $note_HRD,
-				"penempatan" => $record->penempatan,
-				"project" => $this->get_nama_project($record->project),
+				"fullname" => strtoupper($record->fullname) . $siap_approve,
+				"nik_ktp" => $record->nik_ktp,
+				"note_hrd" => $record->catatan_hr,
+				"project" => strtoupper($this->get_nama_project($record->project)),
 				//"project" => $record->project,
-				"sub_project" => $this->get_nama_sub_project($record->sub_project),
+				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project)),
 				//"sub_project" => $record->sub_project,
-				"posisi" => $this->get_nama_jabatan($record->posisi),
+				"posisi" => strtoupper($this->get_nama_jabatan($record->posisi)),
+				"penempatan" => strtoupper($record->penempatan),
 				//"jabatan" => $record->posisi,
 				"gaji_pokok" => $record->gaji_pokok,
-				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+				"periode" => $periode,
 				"kategori" => $this->get_nama_kategori($record->location_id),
 				"request_empon" => $record->request_empon
 			);

@@ -13,6 +13,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Style;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class Employee_request_hrd extends MY_Controller
 {
@@ -123,7 +129,8 @@ class Employee_request_hrd extends MY_Controller
 		$rowArray = [
 			'JENIS DOKUMEN',
 			'NAMA',
-			'NIK -- NOTE HRD',
+			'NIK',
+			'NOTE HRD',
 			'PROJECT',
 			'SUB PROJECT',
 			'JABATAN',
@@ -156,14 +163,12 @@ class Employee_request_hrd extends MY_Controller
 			->getStartColor()
 			->setARGB('BFBFBF');
 
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('#');
-		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-		$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode('Rp #,##0');
 		//$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR);
 
 		// Get data
 		$data = $this->Employees_model->get_request_print($postData);
+
+		$jumlah = count($data) + 1;
 
 		$spreadsheet->getActiveSheet()
 			->fromArray(
@@ -173,16 +178,76 @@ class Employee_request_hrd extends MY_Controller
 				//    we want to set these values (default is A1)
 			);
 
-		// $sheet = $spreadsheet->getActiveSheet();
-		// $sheet->setCellValue('A2', '01');
-		// $sheet->setCellValue('B2', '169');
-		// $sheet->setCellValue('C2', '=sum(A2+B2)');
+		//----------warna kalau ada value blank---------------
+		$redStyle = new Style(false, true);
+		$redStyle->getFill()
+			->setFillType(Fill::FILL_SOLID)
+			->getEndColor()->setARGB(Color::changeBrightness("FF0000", 0));
+		$redStyle->getFont()->setColor(new Color(Color::COLOR_WHITE));
+
+		$blueStyle = new Style(false, true);
+		$blueStyle->getFill()
+			->setFillType(Fill::FILL_SOLID)
+			->getEndColor()->setARGB(Color::changeBrightness("0000FF", 0));
+		$blueStyle->getFont()->setColor(new Color(Color::COLOR_WHITE));
+		$blueStyle->getNumberFormat()->setFormatCode('#');
+		$blueStyle->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$blueStyle->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+
+		$cellRange = 'E2:L' . $jumlah;
+		$conditionalStyles = [];
+		$wizardFactory = new Wizard($cellRange);
+		/** @var Wizard\Blanks $blanksWizard */
+		$blanksWizard = $wizardFactory->newRule(Wizard::BLANKS);
+
+		$blanksWizard->setStyle($redStyle);
+
+		$conditionalStyles[] = $blanksWizard->getConditional();
+
+		$spreadsheet->getActiveSheet()
+			->getStyle($blanksWizard->getCellRange())
+			->setConditionalStyles($conditionalStyles);
+
+		$cellWizard = $wizardFactory->newRule(Wizard::CELL_VALUE);
+
+		$cellWizard->equals(0)
+			->setStyle($redStyle);
+		$conditionalStyles[] = $cellWizard->getConditional();
+
+		$spreadsheet->getActiveSheet()
+			->getStyle($cellWizard->getCellRange())
+			->setConditionalStyles($conditionalStyles);
+
+
+		$cellRange2 = 'A2:H' . $jumlah;
+		$conditionalStyles2 = [];
+		$wizardFactory2 = new Wizard($cellRange2);
+
+		// $cellWizard2 = $wizardFactory2->newRule(Wizard::TEXT_VALUE);
+		// $cellWizard2->contains("(Siap Approve)")
+		// 	->setStyle($blueStyle);
+		// $conditionalStyles2[] = $cellWizard2->getConditional();
+
+		$cellWizard2 = $wizardFactory2->newRule(Wizard::EXPRESSION);
+
+		$cellWizard2->expression('ISNUMBER(SEARCH("(Siap Approve)", $B1))')
+			->setStyle($blueStyle);
+		$conditionalStyles2[] = $cellWizard2->getConditional();
+
+
+		$spreadsheet->getActiveSheet()
+			->getStyle($cellWizard2->getCellRange())
+			->setConditionalStyles($conditionalStyles2);
 
 		//set wrap text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('#');
+		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+		$spreadsheet->getActiveSheet()->getStyle('I')->getNumberFormat()->setFormatCode('Rp #,##0');
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
