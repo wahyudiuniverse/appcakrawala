@@ -47,7 +47,10 @@ class Esign_model extends CI_Model {
 	// get single employee
 	public function read_skk_by_doc($id) {
 	
-		$sql = 'SELECT * FROM xin_qrcode_skk WHERE doc_id = ?';
+		$sql = "SELECT skk.*, emp.first_name, emp.ktp_no
+			FROM xin_qrcode_skk skk
+			LEFT JOIN xin_employees emp ON emp.employee_id = skk.nip
+			WHERE skk.doc_id = ?"; 
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		

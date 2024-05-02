@@ -601,7 +601,7 @@ class Employee_request_hrd extends MY_Controller
 			'location_id' => $this->Location_model->read_location_information($result[0]->location_id),
 			'project' => $this->Project_model->read_project_information($result[0]->project),
 			'sub_project' => $this->Project_model->read_single_subproject($result[0]->sub_project),
-			'department' => $this->Department_model->read_department_information($result[0]->department),
+			'department' => 5,
 			'posisi' => $this->Designation_model->read_designation_information($result[0]->posisi),
 			'doj' => $result[0]->doj,
 			'contact_no' => $result[0]->contact_no,

@@ -87,6 +87,9 @@ class Esign extends MY_Controller {
 		$data['all_designation'] = $this->Xin_model->get_designations();
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['nodoc']= $srcdoc[0]->nomor_dokumen;
+		$data['emp_id'] = $srcdoc[0]->nip;
+		$data['fullname'] = $srcdoc[0]->first_name;
+		$data['ktp_no'] = $srcdoc[0]->ktp_no;
 		$data['sign_fullname']= $srcdoc[0]->sign_fullname;
 		$data['sign_nip'] = $srcdoc[0]->sign_nip;
 		$data['sign_company'] = $this->Company_model->read_company_information($srcdoc[0]->sign_company);
