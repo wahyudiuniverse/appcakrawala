@@ -614,6 +614,7 @@ class Addendum extends MY_Controller
         echo json_encode($data);
     }
 
+
     // Update data addendum
     public function update()
     {

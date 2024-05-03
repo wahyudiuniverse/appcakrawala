@@ -640,6 +640,7 @@ Uncomment to load the Spanish translation
 
     //testing
     //alert(tgl_terbit);
+    
 
     // AJAX request
     $.ajax({

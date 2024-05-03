@@ -649,6 +649,7 @@ Uncomment to load the Spanish translation
     var periode_new = document.getElementById("periode_new").value;
     var created_by = '<?php echo $session['user_id']; ?>';
     var isi = editor.getData();
+    
 
     //testing
     //alert(date0);

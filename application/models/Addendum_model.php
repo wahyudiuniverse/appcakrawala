@@ -10,6 +10,7 @@ class Addendum_model extends CI_Model
         $this->load->database();
     }
 
+
     //ambil data employee berdasarkan id (secid)
     public function getAddendumTemplate()
     {
