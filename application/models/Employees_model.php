@@ -385,6 +385,164 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nama compamy
+	function get_nama_company($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_companies');
+			$this->db->where('company_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if ($query['name'] == null) {
+				return "";
+			} else {
+				return $query['name'];
+			}
+		}
+	}
+
+	//ambil nama departement
+	function get_nama_department($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_departments');
+			$this->db->where('department_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if ($query['department_name'] == null) {
+				return "";
+			} else {
+				return $query['department_name'];
+			}
+		}
+	}
+
+	//ambil nama agama
+	function get_nama_agama($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_ethnicity_type');
+			$this->db->where('ethnicity_type_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if ($query['type'] == null) {
+				return "";
+			} else {
+				return $query['type'];
+			}
+		}
+	}
+
+	//ambil status kawin
+	function get_status_kawin($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('mt_marital');
+			$this->db->where('id_marital', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $id;
+			} else {
+				if ($query['kode'] == null) {
+					return "";
+				} else {
+					return $query['kode'];
+				}
+			}
+		}
+	}
+
+	//ambil nama bank
+	function get_nama_bank($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else if ($id == "") {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('mt_bank');
+			$this->db->where('secid', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bank_name'];
+			}
+		}
+	}
+
+	//ambil id bank
+	function get_id_bank($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else if ($id == "") {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('mt_bank');
+			$this->db->where('secid', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return substr($query['bank_code'], -3);
+			}
+		}
+	}
+
+	//ubah tanggal YYYY-MM-DD diubah jadi MM/DD/YYYY
+	function ubah_format_tanggal($tanggal_lahir)
+	{
+
+		if (($tanggal_lahir == null) || ($tanggal_lahir == "")) {
+			return "";
+		} else {
+			$tanggal_lahir_temp = explode("-", $tanggal_lahir);
+			return $tanggal_lahir_temp[2] . "-" . $tanggal_lahir_temp[1] . "-" . $tanggal_lahir_temp[0];
+		}
+	}
+
 	//mengambil semua status perkawinan
 	public function getAllMarital()
 	{
@@ -683,6 +841,24 @@ class Employees_model extends CI_Model
 				$status_golongan = "--";
 			}
 
+			$jenis_kelamin = "";
+			if (($record->gender == null) || ($record->gender == "")) {
+				$jenis_kelamin = "";
+			} else {
+				if ($record->gender == "L") {
+					$jenis_kelamin = "Laki-Laki";
+				} else if ($record->gender == "P") {
+					$jenis_kelamin = "Perempuan";
+				}
+			}
+
+			$periode_kontrak = "";
+			if (($record->contract_periode == null) || ($record->contract_periode == "") || ($record->contract_periode == "0")) {
+				$periode_kontrak = "";
+			} else {
+				$periode_kontrak = $record->contract_periode . " Bulan";
+			}
+
 			//cek kondisi siap approve
 			$siap_approve = "";
 			if (($record->gaji_pokok != null) && ($record->gaji_pokok != "") && ($record->gaji_pokok != "0")) { //cek gaji pokok
@@ -716,23 +892,41 @@ class Employees_model extends CI_Model
 			}
 
 			$data[] = array(
-				//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-				"golongan_karyawan" => $status_golongan,
-				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
-				"fullname" => strtoupper($record->fullname) . $siap_approve,
 				"nik_ktp" => $record->nik_ktp,
-				"note_hrd" => $record->catatan_hr,
+				"fullname" => strtoupper($record->fullname) . $siap_approve,
+				"nama_ibu" => strtoupper($record->nama_ibu),
+				"tempat_lahir" => strtoupper($record->tempat_lahir),
+				"tanggal_lahir" => $this->ubah_format_tanggal($record->tanggal_lahir),
+				"companies" => strtoupper($this->get_nama_company($record->company_id)),
 				"project" => strtoupper($this->get_nama_project($record->project)),
-				//"project" => $record->project,
 				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project)),
-				//"sub_project" => $record->sub_project,
+				"department" => strtoupper($this->get_nama_department($record->department)),
 				"posisi" => strtoupper($this->get_nama_jabatan($record->posisi)),
+				"jenis_kelamin" => strtoupper($jenis_kelamin),
+				"agama" => strtoupper($this->get_nama_agama($record->agama)),
+				"status_kawin" => strtoupper($this->get_status_kawin($record->status_kawin)),
+				"doj" => $this->ubah_format_tanggal($record->doj),
+				"contract_start" => $this->ubah_format_tanggal($record->contract_start),
+				"contract_end" => $this->ubah_format_tanggal($record->contract_end),
+				"contract_periode" => strtoupper($periode_kontrak),
+				"contact_no" => $record->contact_no,
+				"alamat_ktp" => strtoupper($record->alamat_ktp),
+				"alamat_domisili" => strtoupper($record->alamat_domisili),
+				"no_kk" => $record->no_kk,
+				"npwp" => strtoupper($record->npwp),
+				"email" => strtoupper($record->email),
 				"penempatan" => strtoupper($record->penempatan),
-				//"jabatan" => $record->posisi,
+				"nama_bank" => $this->get_nama_bank($record->bank_id),
+				"code_bank" => $this->get_id_bank($record->bank_id),
+				"no_rek" => $record->no_rek,
+				"pemilik_rekening" => strtoupper($record->pemilik_rekening),
 				"gaji_pokok" => $record->gaji_pokok,
-				"periode" => $periode,
-				"kategori" => $this->get_nama_kategori($record->location_id),
+				"allow_jabatan" => $record->allow_jabatan,
+				"allow_konsumsi" => $record->allow_konsumsi,
+				"allow_transport" => $record->allow_transport,
+				"allow_comunication" => $record->allow_comunication,
+				"allow_rent" => $record->allow_rent,
+				"allow_parking" => $record->allow_parking,
 				"request_empon" => $record->request_empon
 			);
 

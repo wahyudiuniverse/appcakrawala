@@ -127,18 +127,44 @@ class Employee_request_hrd extends MY_Controller
 
 		//data satu row yg mau di isi
 		$rowArray = [
-			'JENIS DOKUMEN',
-			'NAMA',
-			'NIK',
-			'NOTE HRD',
+			'KTP',
+			'FULL NAME',
+			'NAMA IBU',
+			'TEMPAT LAHIR',
+			'TANGGAL LAHIR (DD-MM-YYYY)',
+			'PT',
 			'PROJECT',
 			'SUB PROJECT',
-			'JABATAN',
-			'PENEMPATAN',
-			'GAJI POKOK',
+			'DEPARTEMEN',
+			'POSISI',
+			'GENDER',
+			'AGAMA',
+			'STATUS KAWIN',
+			'DATE OF JOIN',
+			'CONTRACT START (DD-MM-YYYY)',
+			'CONTRACT END (DD-MM-YYYY)',
 			'PERIODE',
-			'KATEGORI KARYAWAN',
-			'TANGGAL REGISTER'
+			'NO KONTAK',
+			'ALAMAT KTP',
+			'ALAMAT DOMISILI',
+			'NO KK',
+			'NO NPWP',
+			'EMAIL',
+			'PENEMPATAN',
+			'BANK NAME',
+			'BANK CODE',
+			'NO REKENING',
+			'PEMILIK REKENING',
+			'GAJI POKOK',
+			'allow_jabatan',
+			'allow_konsumsi',
+			'allow_transport',
+			'allow_comunication',
+			'allow_rent',
+			'allow_parking',
+			'TANGGAL REGISTER',
+			'BPJS TK',
+			'BPJS KES'
 		];
 
 		//isi cell dari array
@@ -157,7 +183,7 @@ class Employee_request_hrd extends MY_Controller
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle('A1:K1')
+			->getStyle('A1:AL1')
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
@@ -178,7 +204,7 @@ class Employee_request_hrd extends MY_Controller
 				//    we want to set these values (default is A1)
 			);
 
-		//----------warna kalau ada value blank---------------
+		//----------Begin conditional kalau ada value blank---------------
 		$redStyle = new Style(false, true);
 		$redStyle->getFill()
 			->setFillType(Fill::FILL_SOLID)
@@ -194,7 +220,7 @@ class Employee_request_hrd extends MY_Controller
 		$blueStyle->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$blueStyle->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
-		$cellRange = 'E2:L' . $jumlah;
+		$cellRange = 'A2:AL' . $jumlah;
 		$conditionalStyles = [];
 		$wizardFactory = new Wizard($cellRange);
 		/** @var Wizard\Blanks $blanksWizard */
@@ -217,16 +243,13 @@ class Employee_request_hrd extends MY_Controller
 		$spreadsheet->getActiveSheet()
 			->getStyle($cellWizard->getCellRange())
 			->setConditionalStyles($conditionalStyles);
+		//----------End conditional kalau ada value blank---------------
 
 
+		//---------Begin Conditional Formatting siap approve------------
 		$cellRange2 = 'A2:H' . $jumlah;
 		$conditionalStyles2 = [];
 		$wizardFactory2 = new Wizard($cellRange2);
-
-		// $cellWizard2 = $wizardFactory2->newRule(Wizard::TEXT_VALUE);
-		// $cellWizard2->contains("(Siap Approve)")
-		// 	->setStyle($blueStyle);
-		// $conditionalStyles2[] = $cellWizard2->getConditional();
 
 		$cellWizard2 = $wizardFactory2->newRule(Wizard::EXPRESSION);
 
@@ -234,20 +257,19 @@ class Employee_request_hrd extends MY_Controller
 			->setStyle($blueStyle);
 		$conditionalStyles2[] = $cellWizard2->getConditional();
 
-
 		$spreadsheet->getActiveSheet()
 			->getStyle($cellWizard2->getCellRange())
 			->setConditionalStyles($conditionalStyles2);
+		//---------End Conditional Formatting siap approve------------
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:1')
-			->getAlignment()->setWrapText(true);
+		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
 		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('#');
 		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-		$spreadsheet->getActiveSheet()->getStyle('I')->getNumberFormat()->setFormatCode('Rp #,##0');
+		$spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$spreadsheet->getActiveSheet()->getStyle('1:1')

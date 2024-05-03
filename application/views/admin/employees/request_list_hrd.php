@@ -272,9 +272,6 @@
           'bFilter': true,
           'serverMethod': 'post',
           'dom': 'pPlBfrtip',
-          buttons: [
-            'copy', 'excel', 'pdf'
-          ],
           //'columnDefs': [{
           //  targets: 11,
           //  type: 'date-eu'
@@ -383,7 +380,7 @@
         var filter = $('.dataTables_filter input').val() //ambil filter search dari datatables
 
         //alert($('.dataTables_filter input').val());
-        if(filter == ""){
+        if (filter == "") {
           filter = "-no_input-";
         }
 
