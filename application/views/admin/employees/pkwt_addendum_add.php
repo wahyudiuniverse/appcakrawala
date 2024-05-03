@@ -641,6 +641,7 @@ Uncomment to load the Spanish translation
     if (tgl_terbit == "") {
       tgl_terbit = new Date().toJSON().slice(0, 10);
     }
+    
 
     var pkwt_id = document.getElementById("contract_id").value;
     var karyawan_id = document.getElementById("emp_id").value;
@@ -649,7 +650,7 @@ Uncomment to load the Spanish translation
     var periode_new = document.getElementById("periode_new").value;
     var created_by = '<?php echo $session['user_id']; ?>';
     var isi = editor.getData();
-    
+
 
     //testing
     //alert(date0);

@@ -637,10 +637,11 @@ Uncomment to load the Spanish translation
     var kontrak_start_new = document.getElementById("kontrak_start_new").value;
     var kontrak_end_new = document.getElementById("kontrak_end_new").value;
     var periode_new = document.getElementById("periode_new").value;
+    
 
     //testing
     //alert(tgl_terbit);
-    
+
 
     // AJAX request
     $.ajax({

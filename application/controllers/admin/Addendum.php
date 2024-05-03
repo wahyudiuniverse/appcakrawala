@@ -561,6 +561,7 @@ class Addendum extends MY_Controller
         $employee_data = $this->Addendum_model->read_employee($karyawan_id);
         $company_id             = $employee_data['company_id'];
         $e_status               = $employee_data['e_status'];
+        
 
         //Company Section di Nomor Addendum
         if ($company_id == '2') {
