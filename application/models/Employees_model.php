@@ -306,12 +306,12 @@ class Employees_model extends CI_Model
 			$query = $this->db->get()->row_array();
 
 			//return $query->doc_id;
-			if ($query['doc_id'] == '1') {
+			if (empty($query)) {
+				return "";
+			} else if ($query['doc_id'] == '1') {
 				return "PKWT";
 			} else if ($query['doc_id'] == '2') {
 				return "TKHL";
-			} else {
-				return "";
 			}
 		}
 	}
@@ -330,7 +330,7 @@ class Employees_model extends CI_Model
 
 			$query = $this->db->get()->row_array();
 
-			if ($query['title'] == null) {
+			if (empty($query)) {
 				return "";
 			} else {
 				return $query['title'];
@@ -354,7 +354,7 @@ class Employees_model extends CI_Model
 			$query = $this->db->get()->row_array();
 
 			//return $query['sub_project_name'];
-			if ($query['sub_project_name'] == null) {
+			if (empty($query)) {
 				return "";
 			} else {
 				return $query['sub_project_name'];
@@ -377,7 +377,7 @@ class Employees_model extends CI_Model
 			$query = $this->db->get()->row_array();
 
 			//return $query['sub_project_name'];
-			if ($query['name'] == null) {
+			if (empty($query)) {
 				return "";
 			} else {
 				return $query['name'];
@@ -400,7 +400,7 @@ class Employees_model extends CI_Model
 			$query = $this->db->get()->row_array();
 
 			//return $query['name'];
-			if ($query['name'] == null) {
+			if (empty($query)) {
 				return "";
 			} else {
 				return $query['name'];
@@ -423,7 +423,7 @@ class Employees_model extends CI_Model
 			$query = $this->db->get()->row_array();
 
 			//return $query['name'];
-			if ($query['department_name'] == null) {
+			if (empty($query)) {
 				return "";
 			} else {
 				return $query['department_name'];
@@ -446,7 +446,7 @@ class Employees_model extends CI_Model
 			$query = $this->db->get()->row_array();
 
 			//return $query['name'];
-			if ($query['type'] == null) {
+			if (empty($query)) {
 				return "";
 			} else {
 				return $query['type'];
@@ -535,11 +535,17 @@ class Employees_model extends CI_Model
 	function ubah_format_tanggal($tanggal_lahir)
 	{
 
-		if (($tanggal_lahir == null) || ($tanggal_lahir == "")) {
+		if (empty($tanggal_lahir)) {
 			return "";
 		} else {
 			$tanggal_lahir_temp = explode("-", $tanggal_lahir);
-			return $tanggal_lahir_temp[2] . "-" . $tanggal_lahir_temp[1] . "-" . $tanggal_lahir_temp[0];
+			if (count($tanggal_lahir_temp) >= 3) {
+				if (strlen($tanggal_lahir_temp[0]) == 4) {
+					return $tanggal_lahir_temp[2] . "-" . $tanggal_lahir_temp[1] . "-" . $tanggal_lahir_temp[0];
+				}
+				return "";
+			}
+			return "";
 		}
 	}
 
@@ -556,22 +562,24 @@ class Employees_model extends CI_Model
 	//ambil nama jabatan
 	function get_nama_jabatan($id)
 	{
-		if ($id == null) {
+		if (empty($id)) {
 			return "";
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('designation_name');
 			$this->db->from('xin_designations');
 			$this->db->where('designation_id', $id);
 
 			$query = $this->db->get()->row_array();
 
 			//return $query['designation_name'];
-			if ($query['designation_name'] == null) {
-				return "";
-			} else {
-				return $query['designation_name'];
+			if (empty($query)) {
+				if (empty($query['designation_name'])) {
+					return "";
+				} else {
+					return $query['designation_name'];
+				}
 			}
 		}
 	}
@@ -812,7 +820,6 @@ class Employees_model extends CI_Model
 		$tes_query = $this->db->last_query();
 
 		$data = array();
-		$i = 1;
 
 		foreach ($records as $record) {
 
@@ -859,41 +866,16 @@ class Employees_model extends CI_Model
 				$periode_kontrak = $record->contract_periode . " Bulan";
 			}
 
-			//cek kondisi siap approve
-			$siap_approve = "";
-			if (($record->gaji_pokok != null) && ($record->gaji_pokok != "") && ($record->gaji_pokok != "0")) { //cek gaji pokok
-				if (($record->doj != null) && ($record->doj != "") && ($record->doj != "0")) { //cek join date
-					if (($record->penempatan != null) && ($record->penempatan != "") && ($record->penempatan != "0")) { //cek penempatan
-						if (($record->contract_start != null) && ($record->contract_start != "") && ($record->contract_start != "0")) { //cek start kontak
-							if (($record->contract_end != null) && ($record->contract_end != "") && ($record->contract_end != "0")) { //cek end kontrak
-								if (($record->contract_periode != null) && ($record->contract_periode != "") && ($record->contract_periode != "0")) { //cek waku kontrak
-									if (($record->cut_start != null) && ($record->cut_start != "") && ($record->cut_start != "0")) { //cek cut start
-										if (($record->cut_off != null) && ($record->cut_off != "") && ($record->cut_off != "0")) { //cek cut off
-											if (($record->date_payment != null) && ($record->date_payment != "") && ($record->date_payment != "0")) { //cek date payment
-												if (($record->hari_kerja != null) && ($record->hari_kerja != "") && ($record->hari_kerja != "0")) { //cek hari kerja
-													if (($record->company_id != null) && ($record->company_id != "") && ($record->company_id != "0")) {
-														if (($record->project != null) && ($record->project != "") && ($record->project != "0")) {
-															if (($record->sub_project != null) && ($record->sub_project != "") && ($record->sub_project != "0")) {
-																if (($record->posisi != null) && ($record->posisi != "") && ($record->posisi != "0")) {
-																	$siap_approve = " (Siap Approve)";
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
+			$nik = "";
+			if (empty($record->nik_ktp)) {
+				$nik = "";
+			} else {
+				$nik = $record->nik_ktp;
 			}
 
 			$data[] = array(
-				"nik_ktp" => $record->nik_ktp,
-				"fullname" => strtoupper($record->fullname) . $siap_approve,
+				"nik_ktp" => $nik,
+				"fullname" => strtoupper($record->fullname),
 				"nama_ibu" => strtoupper($record->nama_ibu),
 				"tempat_lahir" => strtoupper($record->tempat_lahir),
 				"tanggal_lahir" => $this->ubah_format_tanggal($record->tanggal_lahir),
@@ -929,80 +911,15 @@ class Employees_model extends CI_Model
 				"allow_parking" => $record->allow_parking,
 				"request_empon" => $record->request_empon
 			);
-
-			// if ($approve == '1') {
-			// 	if ($siap_approve != "") {
-			// 		$data[] = array(
-			// 			"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-			// 			//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-			// 			"golongan_karyawan" => $status_golongan,
-			// 			//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-			// 			"fullname" => $record->fullname . $siap_approve,
-			// 			"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-			// 			"penempatan" => $record->penempatan,
-			// 			"project" => $this->get_nama_project($record->project),
-			// 			//"project" => $record->project,
-			// 			"sub_project" => $this->get_nama_sub_project($record->sub_project),
-			// 			//"sub_project" => $record->sub_project,
-			// 			"jabatan" => $this->get_nama_jabatan($record->posisi),
-			// 			//"jabatan" => $record->posisi,
-			// 			"gaji_pokok" => $record->gaji_pokok,
-			// 			"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-			// 			"kategori" => $this->get_nama_kategori($record->location_id),
-			// 			"tanggal_register" => $record->request_empon
-			// 		);
-			// 	}
-			// } else if ($approve == '2') {
-			// 	if ($siap_approve == "") {
-			// 		$data[] = array(
-			// 			"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-			// 			//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-			// 			"golongan_karyawan" => $status_golongan,
-			// 			//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-			// 			"fullname" => $record->fullname . $siap_approve,
-			// 			"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-			// 			"penempatan" => $record->penempatan,
-			// 			"project" => $this->get_nama_project($record->project),
-			// 			//"project" => $record->project,
-			// 			"sub_project" => $this->get_nama_sub_project($record->sub_project),
-			// 			//"sub_project" => $record->sub_project,
-			// 			"jabatan" => $this->get_nama_jabatan($record->posisi),
-			// 			//"jabatan" => $record->posisi,
-			// 			"gaji_pokok" => $record->gaji_pokok,
-			// 			"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-			// 			"kategori" => $this->get_nama_kategori($record->location_id),
-			// 			"tanggal_register" => $record->request_empon
-			// 		);
-			// 	}
-			// } else {
-
-			// 	$data[] = array(
-			// 		"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
-			// 		//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-			// 		"golongan_karyawan" => $status_golongan,
-			// 		//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
-			// 		"fullname" => $record->fullname . $siap_approve,
-			// 		"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-			// 		"penempatan" => $record->penempatan,
-			// 		"project" => $this->get_nama_project($record->project),
-			// 		//"project" => $record->project,
-			// 		"sub_project" => $this->get_nama_sub_project($record->sub_project),
-			// 		//"sub_project" => $record->sub_project,
-			// 		"jabatan" => $this->get_nama_jabatan($record->posisi),
-			// 		//"jabatan" => $record->posisi,
-			// 		"gaji_pokok" => $record->gaji_pokok,
-			// 		"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-			// 		"kategori" => $this->get_nama_kategori($record->location_id),
-			// 		"tanggal_register" => $record->request_empon
-			// 	);
-			// }
-			$i++;
 		}
 
 		//print_r($this->db->last_query());
 		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
 
 		return $data;
+		//json_encode($data);
 	}
 
 	/*

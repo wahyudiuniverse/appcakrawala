@@ -119,7 +119,7 @@ class Employee_request_hrd extends MY_Controller
 		if ($filter == '-no_input-') {
 			$postData['filter'] = '';
 		} else {
-			$postData['filter'] = $filter;
+			$postData['filter'] = urldecode($filter);
 		}
 
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
@@ -193,14 +193,23 @@ class Employee_request_hrd extends MY_Controller
 
 		// Get data
 		$data = $this->Employees_model->get_request_print($postData);
+		//$data = var_dump(json_decode($data_temp, true));
+
+		if (!is_array(end($data))) {
+			$data = [$data];
+		}
 
 		$jumlah = count($data) + 1;
+
+		//var_dump($data);
 
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$data,  // The data to set
 				NULL,        // Array values with this value will not be set
-				'A2'         // Top left coordinate of the worksheet range where
+				'A2',
+				false,
+				false         // Top left coordinate of the worksheet range where
 				//    we want to set these values (default is A1)
 			);
 
@@ -208,7 +217,7 @@ class Employee_request_hrd extends MY_Controller
 		$redStyle = new Style(false, true);
 		$redStyle->getFill()
 			->setFillType(Fill::FILL_SOLID)
-			->getEndColor()->setARGB(Color::changeBrightness("FF0000", 0));
+			->getEndColor()->setARGB(Color::changeBrightness("FF0000", 0.7));
 		$redStyle->getFont()->setColor(new Color(Color::COLOR_WHITE));
 
 		$blueStyle = new Style(false, true);
@@ -247,19 +256,19 @@ class Employee_request_hrd extends MY_Controller
 
 
 		//---------Begin Conditional Formatting siap approve------------
-		$cellRange2 = 'A2:H' . $jumlah;
-		$conditionalStyles2 = [];
-		$wizardFactory2 = new Wizard($cellRange2);
+		// $cellRange2 = 'A2:H' . $jumlah;
+		// $conditionalStyles2 = [];
+		// $wizardFactory2 = new Wizard($cellRange2);
 
-		$cellWizard2 = $wizardFactory2->newRule(Wizard::EXPRESSION);
+		// $cellWizard2 = $wizardFactory2->newRule(Wizard::EXPRESSION);
 
-		$cellWizard2->expression('ISNUMBER(SEARCH("(Siap Approve)", $B1))')
-			->setStyle($blueStyle);
-		$conditionalStyles2[] = $cellWizard2->getConditional();
+		// $cellWizard2->expression('ISNUMBER(SEARCH("(Siap Approve)", $B1))')
+		// 	->setStyle($blueStyle);
+		// $conditionalStyles2[] = $cellWizard2->getConditional();
 
-		$spreadsheet->getActiveSheet()
-			->getStyle($cellWizard2->getCellRange())
-			->setConditionalStyles($conditionalStyles2);
+		// $spreadsheet->getActiveSheet()
+		// 	->getStyle($cellWizard2->getCellRange())
+		// 	->setConditionalStyles($conditionalStyles2);
 		//---------End Conditional Formatting siap approve------------
 
 		//set wrap text untuk row ke 1
@@ -275,41 +284,41 @@ class Employee_request_hrd extends MY_Controller
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-		//ob_start();
 
 		//----------------Buat File Untuk Download--------------
 		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
-		//$writer->setPreCalculateFormulas(false);
 
-		//$filename = 'Data Request Karyawan Baru'; // set filename for excel file to be exported
 		$filename = $postData['nama_file'];
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
 		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
 		header('Cache-Control: max-age=0');
 
-		// $writer->save('php://output');	// download file 
-		// //$writer->save('./absen/' . $filename . '.xlsx');	// download file 
-
-		// $xlsData = ob_get_contents();
-		// ob_end_clean();
-
-		// //$xlsData;
-
-		// $response =  array(
-		// 	'status' => TRUE,
-		// 	'file' => "data:application/vnd.ms-excel;base64," . base64_encode($xlsData)
-		// );
-
-		// echo $xlsData;
-		// die(json_encode($response));
 
 		$writer->save('php://output');
+	}
 
-		//$ret['data'] = base64_encode(ob_get_contents());
-		//ob_end_clean();
+	public function tes()
+	{
+		$postData = array();
 
-		//echo $ret['data'];
+		//variabel filter (diambil dari post ajax di view)
+		$postData['project_id'] = 0;
+		$postData['golongan'] = 0;
+		$postData['kategori'] = 0;
+		$postData['approve'] = 0;
+		$postData['idsession'] = 1;
+		$postData['nama_file'] = 'Data Request Karyawan';
+		$postData['filter'] = 'NUR FADOLI';
+		$data = $this->Employees_model->get_request_print($postData);
+
+		if (!is_array(end($data))) {
+			$data = [$data];
+		}
+
+		//echo json_encode($data);
+		print_r($data);
+		//echo $data;
 	}
 
 	public function request_list_hrd()
