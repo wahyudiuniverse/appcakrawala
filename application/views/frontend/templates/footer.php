@@ -130,6 +130,34 @@
     }
 </script>
 
+<!-- blok klik kanan dan ctrl -->
+<script>
+    $("#nik_karyawan").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+    $("#nik_karyawan").on('keydown', function(event) {
+        if (event.ctrlKey) {
+            //alert('Entered ctrl')
+            return false; //Prevent from ctrl+shift+i
+        }
+    });
+    $("#perusahaan").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+    $("#project").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+    $("#sub_project").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+    $("#jabatan").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+    $("#tanggal_lahir").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+</script>
+
 <!-- Tombol Edit Project dan Jabatan -->
 <script type="text/javascript">
     document.getElementById("edit_project_dan_jabatan").onclick = function() {
@@ -314,6 +342,9 @@
     var baseURL = "<?php echo base_url(); ?>";
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
         csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+    // alert(csrfName);
+    // alert(csrfHash);
 
     $(document).ready(function() {
 
