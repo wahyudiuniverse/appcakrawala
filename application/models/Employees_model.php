@@ -874,7 +874,7 @@ class Employees_model extends CI_Model
 			}
 
 			$data[] = array(
-				"nik_ktp" => $nik,
+				"nik_ktp" => $nik . " ",
 				"fullname" => strtoupper($record->fullname),
 				"nama_ibu" => strtoupper($record->nama_ibu),
 				"tempat_lahir" => strtoupper($record->tempat_lahir),
@@ -894,8 +894,8 @@ class Employees_model extends CI_Model
 				"contact_no" => $record->contact_no,
 				"alamat_ktp" => strtoupper($record->alamat_ktp),
 				"alamat_domisili" => strtoupper($record->alamat_domisili),
-				"no_kk" => $record->no_kk,
-				"npwp" => strtoupper($record->npwp),
+				"no_kk" => $record->no_kk . " ",
+				"npwp" => strtoupper($record->npwp) . " ",
 				"email" => strtoupper($record->email),
 				"penempatan" => strtoupper($record->penempatan),
 				"nama_bank" => $this->get_nama_bank($record->bank_id),

@@ -221,6 +221,7 @@ ORDER BY contract_id DESC LIMIT 1";
 		}
 		
 	}
+	
 
 	// get single employee
 	public function read_pkwt_info_byuniq($id) {
@@ -744,4 +745,3 @@ WHERE contract.employee_id = '$id'
 	
 	
 }
-?>

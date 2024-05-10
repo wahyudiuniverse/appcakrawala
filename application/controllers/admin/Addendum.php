@@ -432,6 +432,11 @@ class Addendum extends MY_Controller
         $nomorAddendum              = $addendum['no_addendum'];
         $ttddigital                 = "<img src='" . base_url() . "assets/images/addendum/" . $addendum["esign"] . "' width='100px'>";
         $ttdkaryawan                = "<img src='" . base_url() . "assets/images/addendum/default.png' width='100px'>";
+        $whiteSpace400x200          = "<img src='" . base_url() . "assets/images/addendum/default3.png'>";
+        $whiteSpace300x200          = "<img src='" . base_url() . "assets/images/addendum/default2.png'>";
+        $whiteSpace200x200          = "<img src='" . base_url() . "assets/images/addendum/default.png' width='200px' height='200px'>";
+        $whiteSpace100x200          = "<img src='" . base_url() . "assets/images/addendum/default.png' width='100px' height='200px'>";
+        $whiteSpace100x100          = "<img src='" . base_url() . "assets/images/addendum/default.png' width='100px' height='100px'>";
         $tanggalAddendum            = $this->Xin_model->tgl_indo($addendum['tgl_terbit']);
         $namaKaryawan               = $user[0]->first_name;
         $nipKaryawan                = $user[0]->employee_id;
@@ -511,6 +516,11 @@ class Addendum extends MY_Controller
         $html = str_replace("-periodeKontrakNew-", $periodeKontrakNew, $html);
         $html = str_replace("-kontrakStartNew-", $kontrakStartNew, $html);
         $html = str_replace("-kontrakEndNew-", $kontrakEndNew, $html);
+        $html = str_replace("-whiteSpace400x200-", $whiteSpace400x200, $html);
+        $html = str_replace("-whiteSpace300x200-", $whiteSpace300x200, $html);
+        $html = str_replace("-whiteSpace200x200-", $whiteSpace200x200, $html);
+        $html = str_replace("-whiteSpace100x200-", $whiteSpace100x200, $html);
+        $html = str_replace("-whiteSpace100x100-", $whiteSpace100x100, $html);
 
         $mpdf->AddPage();
         $mpdf->SetFont('helvetica', 'B', 10);
@@ -561,7 +571,7 @@ class Addendum extends MY_Controller
         $employee_data = $this->Addendum_model->read_employee($karyawan_id);
         $company_id             = $employee_data['company_id'];
         $e_status               = $employee_data['e_status'];
-        
+
 
         //Company Section di Nomor Addendum
         if ($company_id == '2') {
