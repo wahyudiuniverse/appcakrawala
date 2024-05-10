@@ -105,7 +105,7 @@ class Employee_request_hrd extends MY_Controller
 		echo json_encode($data);
 	}
 
-	public function printExcel($project_id, $golongan, $kategori, $approve, $idsession, $filter)
+	public function printExcel($project_id, $kategori, $golongan,  $approve, $idsession, $filter)
 	{
 		$postData = array();
 
