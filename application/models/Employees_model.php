@@ -900,7 +900,7 @@ class Employees_model extends CI_Model
 				"penempatan" => strtoupper($record->penempatan),
 				"nama_bank" => $this->get_nama_bank($record->bank_id),
 				"code_bank" => $this->get_id_bank($record->bank_id),
-				"no_rek" => $record->no_rek,
+				"no_rek" => $record->no_rek . " ",
 				"pemilik_rekening" => strtoupper($record->pemilik_rekening),
 				"gaji_pokok" => $record->gaji_pokok,
 				"allow_jabatan" => $record->allow_jabatan,
