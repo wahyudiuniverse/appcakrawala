@@ -225,7 +225,7 @@ class Employee_request_hrd extends MY_Controller
 			->setFillType(Fill::FILL_SOLID)
 			->getEndColor()->setARGB(Color::changeBrightness("0000FF", 0));
 		$blueStyle->getFont()->setColor(new Color(Color::COLOR_WHITE));
-		$blueStyle->getNumberFormat()->setFormatCode('#');
+		$blueStyle->getNumberFormat()->setFormatCode('@');
 		$blueStyle->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$blueStyle->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
@@ -275,7 +275,7 @@ class Employee_request_hrd extends MY_Controller
 		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('#');
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 		$spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');

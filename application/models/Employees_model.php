@@ -891,7 +891,7 @@ class Employees_model extends CI_Model
 				"contract_start" => $this->ubah_format_tanggal($record->contract_start),
 				"contract_end" => $this->ubah_format_tanggal($record->contract_end),
 				"contract_periode" => strtoupper($periode_kontrak),
-				"contact_no" => $record->contact_no,
+				"contact_no" => $record->contact_no . " ",
 				"alamat_ktp" => strtoupper($record->alamat_ktp),
 				"alamat_domisili" => strtoupper($record->alamat_domisili),
 				"no_kk" => $record->no_kk . " ",
