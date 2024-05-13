@@ -575,11 +575,9 @@ class Employees_model extends CI_Model
 
 			//return $query['designation_name'];
 			if (empty($query)) {
-				if (empty($query['designation_name'])) {
-					return "";
-				} else {
-					return $query['designation_name'];
-				}
+				return "";
+			} else {
+				return $query['designation_name'];
 			}
 		}
 	}
@@ -1362,7 +1360,8 @@ class Employees_model extends CI_Model
 				//"project" => $record->project,
 				"sub_project" => $this->get_nama_sub_project($record->sub_project),
 				//"sub_project" => $record->sub_project,
-				"posisi" => $this->get_nama_jabatan($record->posisi),
+				"posisi" => strtoupper($this->get_nama_jabatan($record->posisi)),
+				// "posisi" => $record->posisi,
 				//"jabatan" => $record->posisi,
 				"gaji_pokok" => $record->gaji_pokok,
 				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
