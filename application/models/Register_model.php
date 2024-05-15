@@ -145,6 +145,7 @@ class Register_model extends CI_model
         $this->db->select('*');
         $this->db->from('xin_projects_sub');
         $this->db->where('id_project', $postData['project']);
+        $this->db->where('sub_active', '1');
 
         $query = $this->db->get()->result_array();
 
@@ -301,7 +302,7 @@ class Register_model extends CI_model
             'hari_kerja'            => null,
             'gaji_pokok'            => null,
             'allow_jabatan'         => null,
-            'allow_area'            => null,   
+            'allow_area'            => null,
             'allow_masakerja'       => null,
             'allow_trans_meal'      => null,
             'allow_trans_rent'      => null,
@@ -355,7 +356,7 @@ class Register_model extends CI_model
             'hari_kerja'            => null,
             'gaji_pokok'            => null,
             'allow_jabatan'         => null,
-            'allow_area'            => null,   
+            'allow_area'            => null,
             'allow_masakerja'       => null,
             'allow_trans_meal'      => null,
             'allow_trans_rent'      => null,
