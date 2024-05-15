@@ -302,8 +302,11 @@ class Reports extends MY_Controller
 
 			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
 			if(!is_null($readPkwt)){
-
-				$basicpay 		= $readPkwt[0]->basic_pay;
+				if($r->level=="E1" || $r->level=="E2") {
+					$basicpay 		= $readPkwt[0]->basic_pay;
+				} else {
+					$basicpay 		= "******";
+				}
 				$start_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->from_date);
 				$end_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->to_date);
 				$pkwt_files 	= $readPkwt[0]->file_name;
@@ -1384,19 +1387,16 @@ class Reports extends MY_Controller
 
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-		
-		// if(in_array('139',$role_resources_ids)) {
-		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		// } else {
-		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
-		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
-		// }
-		if(in_array('112',$role_resources_ids)) {
+		// if(in_array('112',$role_resources_ids)) {
+
+		if($session['employee_id']==1 || $session['employee_id']==21300084 || $session['employee_id']==21505790) {
 			$data['subview'] = $this->load->view("admin/reports/employee_attendance", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
-			redirect('admin/dashboard');
+			redirect('admin/profile');
 		}
+		
+		// redirect('admin/dashboard');
 	}
 
 	// reports > employee attendance
@@ -1456,6 +1456,8 @@ class Reports extends MY_Controller
 	// daily attendance list > timesheet
     public function empdtwise_attendance_list()
     {
+
+		// redirect('admin/');
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');

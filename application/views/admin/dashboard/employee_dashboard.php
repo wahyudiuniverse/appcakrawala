@@ -1,6 +1,6 @@
 <?php 
 $session = $this->session->userdata('username');
-$user_info = $this->Exin_model->read_user_info($session['user_id']);
+$user_info = $this->Employees_model->read_employee_info($session['user_id']);
 $theme = $this->Xin_model->read_theme_info(1);
 if($user_info[0]->profile_picture!='' && $user_info[0]->profile_picture!='no file') {
   $lde_file = base_url().'uploads/profile/'.$user_info[0]->profile_picture;
@@ -148,7 +148,7 @@ $new_date = date('d-M-Y', $strtotime);
 <?php
 
     $session = $this->session->userdata('username');
-    $user_info = $this->Exin_model->read_user_info($session['user_id']);
+    $user_info = $this->Employees_model->read_employee_info($session['user_id']);
     $eslip_release = $this->Employees_model->read_eslip_by_nip($session['employee_id']);
 ?>
 

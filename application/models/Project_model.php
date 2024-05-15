@@ -20,6 +20,25 @@ class Project_model extends CI_Model
 	{
 		return $this->db->get("xin_projects_akses");
 	}
+
+
+	// monitoring request
+	public function list_akses_project()
+	{
+
+		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title
+			FROM xin_projects_akses pros
+			LEFT JOIN xin_employees emp ON emp.employee_id = pros.nip
+			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+			LEFT JOIN xin_projects pro ON pro.project_id = pros.project_id
+			ORDER BY pros.secid DESC
+			LIMIT 5;";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+		return $query;
+
+
+	}
 	// get all employees
 	public function all_projects_admin()
 	{

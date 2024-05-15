@@ -567,7 +567,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
 
         <?php
-        if (in_array('378', $role_resources_ids)) { ?>
+        if (in_array('327', $role_resources_ids)) { ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['emp_request_hrd_active'])) echo $arr_mod['emp_request_hrd_active']; ?>">
             <a href="<?php echo site_url('admin/employee_request_hrd/'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -625,7 +625,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
   <!-- PKWT REPORT -->
   <?php
-  if (in_array('470', $role_resources_ids)) { ?>
+  if (in_array('380', $role_resources_ids)) { ?>
     <li class="sidenav-item <?php if (!empty($arr_mod['pkwt_request_history_active'])) echo $arr_mod['pkwt_request_history_active']; ?>">
       <a href="<?php echo site_url('admin/reports/pkwt_history'); ?>" class="sidenav-link">
         <!-- <i class="sidenav-icon fa fa-calculator"></i> -->

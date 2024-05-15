@@ -283,6 +283,8 @@ class Skk extends MY_Controller {
 			$ns = str_replace('[SC-KAC]','SC',$this->input->post('nomordoc'));
 		} else if ($this->input->post('company_id')=='3'){
 			$ns = str_replace('[SC-KAC]','KAC',$this->input->post('nomordoc'));
+		} else if ($this->input->post('company_id')=='4'){
+			$ns = str_replace('[SC-KAC]','MATA',$this->input->post('nomordoc'));
 		} else {
 			$ns = $this->input->post('company_id');
 		}

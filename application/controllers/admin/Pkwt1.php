@@ -1166,7 +1166,7 @@ class Pkwt1 extends MY_Controller
 						</tr>
 
 						<tr>
-							<td>SM HR/GA</td>
+							<td>'.$sign_jabatan.'</td>
 							<td>Karyawan</td>
 						</tr>
 
