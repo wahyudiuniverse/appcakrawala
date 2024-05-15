@@ -44,7 +44,7 @@
     }
 
 
-    $dokumen_skk = $this->Project_model->get_dokumen_skk('23524441');
+    $dokumen_skk = $this->Project_model->get_dokumen_skk($employee_id);
     if(!is_null($dokumen_skk)){
       $idskk = $dokumen_skk[0]->secid;
       $nip = $dokumen_skk[0]->nip;
@@ -251,14 +251,15 @@
 
                                   <select class="form-control" name="marital_status" data-plugin="select_hrm">
                                   <option value=""></option>
-                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
-                                              <option value="K/0" <?php if($marital_status=='K/0'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
-                                              <option value="K/1" <?php if($marital_status=='K/1'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
-                                              <option value="K/2" <?php if($marital_status=='K/2'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
-                                              <option value="K/3" <?php if($marital_status=='K/3'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
-                                              <option value="TK/1" <?php if($marital_status=='TK/1'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
-                                              <option value="TK/2" <?php if($marital_status=='TK/2'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
-                                              <option value="TK/3" <?php if($marital_status=='TK/3'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
+                                              <option value="1" <?php if($marital_status=='1'):?> selected <?php endif; ?>>Single/Belum Menikah</option>
+                                              <option value="2" <?php if($marital_status=='2'):?> selected <?php endif; ?>>Janda/Duda (0 Anak)</option>
+                                              <option value="6" <?php if($marital_status=='6'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
+                                              <option value="7" <?php if($marital_status=='7'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
+                                              <option value="8" <?php if($marital_status=='8'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
+                                              <option value="9" <?php if($marital_status=='9'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
+                                              <option value="3" <?php if($marital_status=='3'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
+                                              <option value="4" <?php if($marital_status=='4'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
+                                              <option value="5" <?php if($marital_status=='5'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
                                               
                                 </select>
 
@@ -421,6 +422,87 @@
                         </div>
                       </div>
                       <?php echo form_close(); ?> </div>
+                  </div>
+
+                  <!-- KONTAK DARURAT -->
+                  <div class="tab-pane fade" id="account-docpkwt">
+                    <div class="box md-4" hidden>
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_add_new');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <?php $attributes = array('name' => 'dokumen_pkwt', 'id' => 'dokumen_pkwt', 'autocomplete' => 'off');?>
+                          <?php $hidden = array('u_basic_info' => 'UPDATE');?>
+                          <?php echo form_open('admin/employees/contract/', $attributes, $hidden);?>
+                          <?php
+                              $data_usr10 = array(
+                                    'type'  => 'hidden',
+                                    'name'  => 'user_id',
+                                    'value' => $session['employee_id'],
+                             );
+                            echo form_input($data_usr10);
+                            ?>
+
+
+                          <input class="form-control" placeholder="" name="employee_id" id="employee_id" type="text" value="<?php echo $employee_id;?>" hidden>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="account_title"><?php echo $this->lang->line('xin_e_details_acc_title');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_title');?>" name="account_title" type="text" value="" id="account_name">
+                              </div>
+                              <div class="form-group">
+                                <label for="account_number"><?php echo $this->lang->line('xin_e_details_acc_number');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_acc_number');?>" name="account_number" type="text" value="" id="account_number">
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_name');?>" name="bank_name" type="text" value="" id="bank_name">
+                              </div>
+                              <div class="form-group">
+                                <label for="bank_code"><?php echo $this->lang->line('xin_e_details_bank_code');?></label>
+                                <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_code');?>" name="bank_code" type="text" value="" id="bank_code">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="bank_branch"><?php echo $this->lang->line('xin_e_details_bank_branch');?></label>
+                              <input class="form-control" placeholder="<?php echo $this->lang->line('xin_e_details_bank_branch');?>" name="bank_branch" type="text" value="" id="bank_branch">
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="far fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
+                              </div>
+                            </div>
+                            <?php echo form_close(); ?> </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="box">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> <?php echo $this->lang->line('xin_list_all');?></strong> <?php echo $this->lang->line('xin_e_details_baccount');?> </span> </div>
+                      <div class="card-body">
+                        <div class="card-block">
+                          <div class="table-responsive" data-pattern="priority-columns">
+                            <table class="table table-striped table-bordered dataTable" id="xin_table_contract" style="width:100%;">
+                              <thead>
+                                <tr>
+                                  <th>No. Dokumen</th>
+                                  <th>Project</th>
+                                  <th>Jabatan</th>
+                                  <th>Status</th>
+                                  <th>Pkwt Report</th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <!-- BPJS-->
@@ -686,11 +768,6 @@
                         <?php
                           }
                         ?>
-
-
-
-
-
 
                     </div>
                   </div>

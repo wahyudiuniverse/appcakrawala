@@ -1194,6 +1194,7 @@ class Employees extends MY_Controller
 
 		$data = array(
 
+			'title' => 'Profile Karyawan | ' . $this->Xin_model->site_title(),
 			'breadcrumbs' => $this->lang->line('xin_manage_employees'),
 			'path_url' => 'emp_manager',
 			'user_id' => $result[0]->user_id,
@@ -1295,7 +1296,6 @@ class Employees extends MY_Controller
 			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' 	=> $this->Designation_model->all_designations(),
 			'all_user_roles' 	=> $this->Roles_model->all_user_roles(),
-			'title' => $this->lang->line('header_my_profile') . ' | ' . $this->Xin_model->site_title(),
 
 			'request_resign_date' => $result[0]->request_resign_date,
 			'approve_resignnae' => $result[0]->approve_resignnae,
@@ -1318,17 +1318,17 @@ class Employees extends MY_Controller
 			// 'dokumen_skk' => $this->Project_model->get_dokumen_skk($result[0]->employee_id),
 			// 'dokumen_skk' => $this->Project_model->get_dokumen_skk('23524441'),
 
-			'all_countries' => $this->Xin_model->get_countries(),
-			'all_document_types' => $this->Employees_model->all_document_types(),
-			'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),
-			'all_education_level' => $this->Employees_model->all_education_level(),
-			'all_qualification_language' => $this->Employees_model->all_qualification_language(),
-			'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
-			'all_contract_types' => $this->Employees_model->all_contract_types(),
-			'all_contracts' => $this->Employees_model->all_contracts(),
-			'all_office_shifts' => $this->Employees_model->all_office_shifts(),
-			'all_office_locations' => $this->Location_model->all_office_locations(),
-			'all_leave_types' => $this->Timesheet_model->all_leave_types()
+			// 'all_countries' => $this->Xin_model->get_countries(),
+			// 'all_document_types' => $this->Employees_model->all_document_types(),
+			// 'all_document_types_ready' => $this->Employees_model->all_document_types_ready($result[0]->user_id),
+			// 'all_education_level' => $this->Employees_model->all_education_level(),
+			// 'all_qualification_language' => $this->Employees_model->all_qualification_language(),
+			// 'all_qualification_skill' => $this->Employees_model->all_qualification_skill(),
+			// 'all_contract_types' => $this->Employees_model->all_contract_types(),
+			// 'all_contracts' => $this->Employees_model->all_contracts(),
+			// 'all_office_shifts' => $this->Employees_model->all_office_shifts(),
+			// 'all_office_locations' => $this->Location_model->all_office_locations(),
+			// 'all_leave_types' => $this->Timesheet_model->all_leave_types()
 
 		);
 

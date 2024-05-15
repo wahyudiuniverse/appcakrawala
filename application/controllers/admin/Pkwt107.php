@@ -539,7 +539,7 @@ class Pkwt107 extends MY_Controller
 				
 
 				</table>
-<br>
+<br><br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td >4.4</td>
@@ -571,7 +571,7 @@ class Pkwt107 extends MY_Controller
 							</tr>
 				</table>
 
-
+<br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 5<br>ETIKA PRILAKU</b>
 				</div>
@@ -630,7 +630,7 @@ class Pkwt107 extends MY_Controller
 							</tr>
 				</table>
 
-
+<br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
 				</div>
@@ -795,12 +795,12 @@ class Pkwt107 extends MY_Controller
 
 				</table>
 
-
+<br><br><br><br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 8<br>HUKUM YANG BERLAKU</b>
 				</div>
 				
-
+<br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
@@ -876,7 +876,7 @@ class Pkwt107 extends MY_Controller
 								<td colspan="20">Selama dalam hubungan kerja <b>PIHAK KEDUA</b> wajib mentaati dan melaksanakan ketentuan mengenai tata tertib, kedisiplinan dan kewajiban – kewajiban yang dibebankan kepada <b>PIHAK KEDUA</b>, sesuai dengan  ketentuan dalam peraturan perusahaan.</td>
 							</tr>
 				</table>
-				<br>
+				<br><br><br><br><br><br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
@@ -940,7 +940,12 @@ class Pkwt107 extends MY_Controller
 				$tbl_spb = '
 
 			
-				
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
 				</div>

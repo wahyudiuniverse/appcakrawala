@@ -28,7 +28,7 @@ $session = $this->session->userdata('username');
           <select class=" form-control" name="employees" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_single_employee');?>">
             <option value=""></option>
             <?php foreach($all_employees as $emp) {?>
-            <option value="<?php echo $emp->employee_id?>"><?php echo '('.$emp->employee_id.') '. $emp->first_name.' '.$emp->last_name?></option>
+            <option value="<?php echo $emp->employee_id?>"><?php echo '('.$emp->employee_id.') '. $emp->first_name?></option>
             <?php } ?>
           </select>
         </div>

@@ -203,6 +203,20 @@ class Addendum_model extends CI_Model
         //return null;
     }
 
+    //add addendum
+    public function add_addendum_new($data)
+    {
+        //Input untuk Database
+        $dataaddendum = [
+            'pkwt_id' => $data['pkwt_id'],
+            'karyawan_id' => $data['karyawan_id']
+        ];
+
+        $this->db->insert('xin_contract_addendum', $dataaddendum);
+
+        //return null;
+    }
+
     //update addendum
     public function update_addendum($data)
     {

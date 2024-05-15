@@ -873,7 +873,7 @@ class Importexceleslip extends MY_Controller
 				if($employee[0]->company_id == '2'){
 					$company_name = 'PT. SIPRAMA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_sc.png';
-				} else if ($employee[0]->company_id == '3'){
+				} else if ($employee[0]->company_id == '3') {
 					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_kac.png';
 				} else {
@@ -1034,6 +1034,12 @@ class Importexceleslip extends MY_Controller
 				$total = $eslip[0]->total;
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
+
+				if($project=='CPJF'){
+					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
+				} else {
+					$deduction_name = 'Deduction';
+				}
 	
 
 				// $pengirim = $eslip[0]->nip;
@@ -1939,7 +1945,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Deduction</td>
+								<td colspan="4">'.$deduction_name.'</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -2254,6 +2260,11 @@ class Importexceleslip extends MY_Controller
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
 	
+				if($project=='CPJF'){
+					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
+				} else {
+					$deduction_name = 'Deduction';
+				}
 
 				// $pengirim = $eslip[0]->nip;
 				  // if(!is_null($pengirim)){
@@ -3149,7 +3160,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Deduction</td>
+								<td colspan="4">'.$deduction_name.'</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>

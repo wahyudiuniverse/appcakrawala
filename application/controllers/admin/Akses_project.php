@@ -38,7 +38,7 @@ class Akses_project extends MY_Controller {
 		
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 		$data['title'] = $this->lang->line('xin_akses_project').' | '.$this->Xin_model->site_title();
-		$data['all_employees'] = $this->Xin_model->all_employees();
+		$data['all_employees'] = $this->Employees_model->get_employees_aktif();
 
 		if($user_info[0]->user_role_id==1){
 			$data['all_projects'] = $this->Project_model->all_projects_admin();
@@ -82,32 +82,35 @@ class Akses_project extends MY_Controller {
 		// 	$designation = $this->Designation_model->get_company_designations($user_info[0]->company_id);
 		// }
 
-			$aksesproject = $this->Project_model->get_akses_projects();
+			// $aksesproject = $this->Project_model->get_akses_projects();
+			$aksesproject = $this->Project_model->list_akses_project();
 
 		$data = array();
 
       foreach($aksesproject->result() as $r) {
-			 
 
       $ids = $r->secid;
       $nip = $r->nip;
-      $project_id = $r->project_id;
+      $nama_lengkap = $r->first_name;
+      $nama_posisi = $r->designation_name;
+      // $project_id = $r->project_id;
+      $project_name = $r->title;
 
-			$posisi = $this->Employees_model->read_employee_jabatan($r->nip);
-			if(!is_null($posisi)){
-				$nama_lengkap = $posisi[0]->first_name;
-				$nama_posisi = $posisi[0]->designation_name;
-			} else {
-				$nama_lengkap = '--';	
-				$nama_posisi = '--';	
-			}
+			// $posisi = $this->Employees_model->read_employee_jabatan($r->nip);
+			// if(!is_null($posisi)){
+			// 	$nama_lengkap = $posisi[0]->first_name;
+			// 	$nama_posisi = $posisi[0]->designation_name;
+			// } else {
+			// 	$nama_lengkap = '--';	
+			// 	$nama_posisi = '--';	
+			// }
 
-			$project = $this->Project_model->read_single_project($r->project_id);
-			if(!is_null($project)){
-				$project_name = $project[0]->title;
-			} else {
-				$project_name = '--';	
-			}
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
 
 			if(in_array('209',$role_resources_ids)) { // delete
 				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="'.$this->lang->line('xin_delete').'"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->secid . '"><span class="fas fa-trash-restore"></span></button></span>';
@@ -150,14 +153,17 @@ class Akses_project extends MY_Controller {
 		$system = $this->Xin_model->read_setting_info(1);
 		/* Server side PHP input validation */
 		if($this->input->post('employees')==='') {
-        	$Return['error'] = $this->lang->line('xin_error_employee_id');
+        $Return['error'] = $this->lang->line('xin_error_employee_id');
 		} else if($this->input->post('project')==='') {
-        	$Return['error'] = $this->lang->line('xin_employee_error_project');
+        $Return['error'] = $this->lang->line('xin_employee_error_project');
+		} else if($this->Employees_model->check_akses_project($this->input->post('employees'), $this->input->post('project')) > 0) {
+				$Return['error'] = "Akses project sudah ada...!";
 		}
 				
 		if($Return['error']!=''){
        		$this->output($Return);
-    	}
+    }
+
 		$data = array(
 		'nip' => $this->input->post('employees'),
 		'project_id' => $this->input->post('project'),
