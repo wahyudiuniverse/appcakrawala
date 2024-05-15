@@ -447,7 +447,7 @@ echo '</pre>';
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var templateAddendum = '<?php echo $addendum['isi']; ?>';
-    var isi_decode = decodeURI(templateAddendum);
+    var isi_decode = decodeURIComponent(templateAddendum);
     editor.setData(isi_decode);
     //editor.model.insertContent(writer.createText('The End!'));
   });
@@ -500,7 +500,7 @@ echo '</pre>';
     var periode_new = document.getElementById("periode_new").value;
     var created_by = '<?php echo $session['user_id']; ?>';
     var isi = editor.getData();
-    var isi_encode = encodeURI(isi);
+    var isi_encode = encodeURIComponent(isi);
 
 
     //testing

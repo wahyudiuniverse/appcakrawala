@@ -447,7 +447,7 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var templateAddendum = '<?php echo $addendum['isi']; ?>';
-    var isi_decode = decodeURI(templateAddendum);
+    var isi_decode = decodeURIComponent(templateAddendum);
     editor.setData(isi_decode);
   });
 
@@ -485,7 +485,7 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
     }
 
     var isi = editor.getData();
-    var isi_encode = encodeURI(isi);
+    var isi_encode = encodeURIComponent(isi);
     var kontrak_start_new = document.getElementById("kontrak_start_new").value;
     var kontrak_end_new = document.getElementById("kontrak_end_new").value;
     var periode_new = document.getElementById("periode_new").value;

@@ -495,7 +495,9 @@ class Addendum extends MY_Controller
         //$mpdf->SetHeaderMargin(5);
         //$mpdf->SetFooterMargin(10);
 
-        $html = str_replace("-nomorAddendum-", $nomorAddendum, $addendum['isi']);
+        $isi = urldecode($addendum['isi']);
+
+        $html = str_replace("-nomorAddendum-", $nomorAddendum, $isi);
         $html = str_replace("-tanggalAddendum-", $tanggalAddendum, $html);
         $html = str_replace("-namaKaryawan-", $namaKaryawan, $html);
         $html = str_replace("-nipKaryawan-", $nipKaryawan, $html);
