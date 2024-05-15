@@ -447,7 +447,8 @@ echo '</pre>';
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var templateAddendum = '<?php echo $addendum['isi']; ?>';
-    editor.setData(templateAddendum);
+    var isi_decode = decodeURI(templateAddendum);
+    editor.setData(isi_decode);
     //editor.model.insertContent(writer.createText('The End!'));
   });
 
@@ -499,10 +500,11 @@ echo '</pre>';
     var periode_new = document.getElementById("periode_new").value;
     var created_by = '<?php echo $session['user_id']; ?>';
     var isi = editor.getData();
+    var isi_encode = encodeURI(isi);
 
 
     //testing
-    //alert(date0);
+    // alert(isi_encode);
     //alert(date);
     //alert(date2);
     //alert(kontrak_start_new);
@@ -518,7 +520,7 @@ echo '</pre>';
         tgl_terbit: tgl_terbit,
         pkwt_id: pkwt_id,
         karyawan_id: karyawan_id,
-        isi: isi,
+        isi: isi_encode,
         created_by: created_by,
         created_time: created_time,
         kontrak_start_new: kontrak_start_new,

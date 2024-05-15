@@ -447,7 +447,8 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
     var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var templateAddendum = '<?php echo $addendum['isi']; ?>';
-    editor.setData(templateAddendum);
+    var isi_decode = decodeURI(templateAddendum);
+    editor.setData(isi_decode);
   });
 
   //-----cek apakah checkbox di checklist-----
@@ -484,6 +485,7 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
     }
 
     var isi = editor.getData();
+    var isi_encode = encodeURI(isi);
     var kontrak_start_new = document.getElementById("kontrak_start_new").value;
     var kontrak_end_new = document.getElementById("kontrak_end_new").value;
     var periode_new = document.getElementById("periode_new").value;
@@ -501,7 +503,7 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
         [csrfName]: csrfHash,
         tgl_terbit: tgl_terbit,
         id_addendum: id_addendum,
-        isi: isi,
+        isi: isi_encode,
         kontrak_start_new: kontrak_start_new,
         kontrak_end_new: kontrak_end_new,
         periode_new: periode_new
