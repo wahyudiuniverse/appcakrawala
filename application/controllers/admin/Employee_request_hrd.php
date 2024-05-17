@@ -706,6 +706,7 @@ class Employee_request_hrd extends MY_Controller
 			'contact_number' => $result[0]->nip,
 			'alamat_ktp' => $result[0]->alamat_ktp,
 			'penempatan' => $result[0]->penempatan,
+			'e_status' => $result[0]->e_status,
 
 			'waktu_kontrak' => $result[0]->contract_periode . ' (Bulan)',
 			'begin' => $result[0]->contract_start . ' s/d ' . $result[0]->contract_end,
@@ -1232,23 +1233,52 @@ class Employee_request_hrd extends MY_Controller
 		$options = array('cost' => 12);
 		$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
 
-		//PKWT ATTRIBUTE
-		if ($company_id == '2') {
-			$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
-			$spb_hr = 'E-SPB-JKT/SC-HR/';
-		} else if ($company_id == '3') {
-			$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
-			$spb_hr = 'E-SPB-JKT/KAC-HR/';
-		} else {
-			$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-			$spb_hr = 'E-SPB-JKT/MATA-HR/';
-		}
 
-		$count_pkwt = $this->Xin_model->count_pkwt();
-		$romawi = $this->Xin_model->tgl_pkwt();
-		$unicode = $this->Xin_model->getUniqueCode(20);
-		$nomor_surat = sprintf("%06d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
-		$nomor_surat_spb = sprintf("%06d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+						if($e_status==1){
+
+							if(strtoupper($this->input->post('company'))=='2'){
+								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+								$spb_hr = 'E-SPB-JKT/SC-HR/';
+								$companyID = '2';
+							}else if (strtoupper($this->input->post('company'))=='3'){
+								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+								$spb_hr = 'E-SPB-JKT/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+								$spb_hr = 'E-SPB-JKT/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_pkwt();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
+						} else {
+
+							if(strtoupper($this->input->post('company'))=='2'){
+								$pkwt_hr = 'KEMITRAAN/SC-HR/';
+								$spb_hr = 'KEMITRAAN/SC-HR/';
+								$companyID = '2';
+							}else if (strtoupper($this->input->post('company'))=='3'){
+								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
+								$spb_hr = 'KEMITRAAN/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'KEMITRAAN/MATA-HR/';
+								$spb_hr = 'KEMITRAAN/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_tkhl();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
+						}
 
 
 		$docid = date('ymdHisv');
@@ -1363,14 +1393,14 @@ class Employee_request_hrd extends MY_Controller
 				'to_date' 							=> $contract_end,
 				'no_surat' 							=> $nomor_surat,
 				'no_spb' 								=> $nomor_surat_spb,
-				'waktu_kontrak' 				=> $contract_periode,
+				'waktu_kontrak' 					=> $contract_periode,
 				'company' 							=> $company_id,
 				'jabatan' 							=> $posisi,
 				'penempatan' 						=> $penempatan,
 				'hari_kerja' 						=> $hari_kerja,
 				'tgl_payment'						=> $date_payment,
-				'start_period_payment'	=> $cut_start,
-				'end_period_payment'		=> $cut_off,
+				'start_period_payment'				=> $cut_start,
+				'end_period_payment'				=> $cut_off,
 				'basic_pay' 						=> $gaji_pokok,
 				'dm_allow_grade' 				=> 'Month',
 				'allowance_grade'				=> $allow_jabatan,
@@ -1418,7 +1448,8 @@ class Employee_request_hrd extends MY_Controller
 				'sign_nip'							=> '21513829',
 				'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
 				'sign_jabatan'					=> 'SM HR & GA',
-				'status_pkwt' => 1,
+							'status_pkwt' 					=> 1, //0 belum approve, 1 sudah approve
+							'contract_type_id'			=> $e_status, //1 pkwt, 2 tkhl
 				'createdon' => date('Y-m-d h:i:s'),
 				'createdby' => $session['user_id']
 			);

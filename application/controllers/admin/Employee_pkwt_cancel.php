@@ -182,6 +182,27 @@ class Employee_pkwt_cancel extends MY_Controller {
 	}
 	
 
+	 // get location > departments
+	public function get_jenis_dokumen() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'id_project' => $id
+		);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/employees/get_jenis_dok_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
 
 	public function pkwt_edit() {
 
@@ -613,6 +634,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 
 			'company' => $result[0]->company_id,
+			'e_status'		=> $result[0]->e_status,
 			'project_id' => $result[0]->project_id,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
 
@@ -899,26 +921,54 @@ class Employee_pkwt_cancel extends MY_Controller {
 					// } 
 					else {
 
-						if(strtoupper($this->input->post('company'))=='2'){
-							$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
-							$spb_hr = 'E-SPB-JKT/SC-HR/';
-							$companyID = '2';
-						}else if (strtoupper($this->input->post('company'))=='3'){
-							$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
-							$spb_hr = 'E-SPB-JKT/KAC-HR/';
-							$companyID = '3';
+						if($this->input->post('jenis_dokumen')==1){
+
+							if(strtoupper($this->input->post('company'))=='2'){
+								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+								$spb_hr = 'E-SPB-JKT/SC-HR/';
+								$companyID = '2';
+							}else if (strtoupper($this->input->post('company'))=='3'){
+								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+								$spb_hr = 'E-SPB-JKT/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+								$spb_hr = 'E-SPB-JKT/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_pkwt();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
 						} else {
-							$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-							$spb_hr = 'E-SPB-JKT/MATA-HR/';
-							$companyID = '4';
+
+							if(strtoupper($this->input->post('company'))=='2'){
+								$pkwt_hr = 'KEMITRAAN/SC-HR/';
+								$spb_hr = 'KEMITRAAN/SC-HR/';
+								$companyID = '2';
+							}else if (strtoupper($this->input->post('company'))=='3'){
+								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
+								$spb_hr = 'KEMITRAAN/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'KEMITRAAN/MATA-HR/';
+								$spb_hr = 'KEMITRAAN/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_tkhl();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
 						}
 
 
-						$count_pkwt = $this->Xin_model->count_pkwt();
-						$romawi = $this->Xin_model->tgl_pkwt();
-						$unicode = $this->Xin_model->getUniqueCode(20);
-						$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-						$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
 
 							$idrequest 					= $this->input->post('idrequest');
 							$employee_id 				= $this->input->post('employee_id');
@@ -933,8 +983,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$date_of_join 							= $this->input->post('date_of_join');
 							$penempatan 							= $this->input->post('penempatan');
 							$gaji_pokok 							= $this->input->post('gaji_pokok');
+							$jenis_dokumen			= $this->input->post('jenis_dokumen');
 
-							// $jenis_kelamin			= $this->input->post('gender');
 							// $agama 							= $this->input->post('ethnicity');
 							// $marital_status			= $this->input->post('marital_status');
 
@@ -1053,7 +1103,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'sign_nip'							=> '21513829',
 							'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
 							'sign_jabatan'					=> 'SM HR & GA',
-							'status_pkwt' => 0,
+							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
+							'contract_type_id'			=> $jenis_dokumen, //1 pkwt, 2 tkhl
 							'request_pkwt' => $session['user_id'],
 							'request_date' => date('Y-m-d h:i:s'),
 							'approve_nae' => $session['user_id'],

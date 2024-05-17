@@ -93,6 +93,17 @@ class Employees_model extends CI_Model
 		return $query->result();
 	}
 
+	// get all employees
+	public function get_employees_aktif()
+	{
+		$query = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name
+			FROM xin_employees emp
+			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+			WHERE pos.level not in ('E1','E2')
+			AND emp.status_resign = 1");
+		return $query->result();
+	}
+
 
 	public function get_empdeactive_byproject($id)
 	{
@@ -2111,6 +2122,17 @@ ORDER BY jab.designation_id ASC";
 			return null;
 		}
 	}
+	// check akses project
+	public function check_akses_project($empid, $projectid)
+	{
+
+		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ? AND project_id = ?';
+		$binds = array($empid,$projectid);
+		$query = $this->db->query($sql, $binds);
+		return $query->num_rows();
+	}
+
+
 	// check employeeID
 	public function check_employee_id($id)
 	{
@@ -2120,6 +2142,7 @@ ORDER BY jab.designation_id ASC";
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}
+
 	// check old password
 	public function check_old_password($old_password, $user_id)
 	{

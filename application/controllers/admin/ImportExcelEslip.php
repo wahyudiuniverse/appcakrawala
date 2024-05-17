@@ -350,7 +350,7 @@ class Importexceleslip extends MY_Controller
 
 				$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
 
-				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1-31 Januari 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Apr 2024 - 30 Apr 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
 
 				Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
 

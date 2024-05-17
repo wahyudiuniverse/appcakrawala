@@ -149,7 +149,7 @@ class Project_model extends CI_Model
 	public function getcomp_single_project($id)
 	{
 
-		$sql = "SELECT company_id, title FROM xin_projects WHERE project_id = ?";
+		$sql = "SELECT company_id, title, doc_id FROM xin_projects WHERE project_id = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 

@@ -400,6 +400,11 @@ class Pkwt289 extends MY_Controller
 								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
 							</tr>
 
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">Upah yang diberikan sesuai dengan absensi aktual karyawan/sesuai dengan Hari Kerja karyawan.</td>
+							</tr>
 
 							<br>
 							<br>

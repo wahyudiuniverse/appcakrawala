@@ -44,6 +44,13 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
   }
 
 
+  if($e_status==1){
+    $jenis_dokumen = 'PKWT';
+  } else if($e_status==2) {
+    $jenis_dokumen = 'TKHL';
+  } else {
+    $jenis_dokumen = 'TIDKA DIKETAHUI';
+  }
 
   ?>
   <div class="modal-header">
@@ -207,6 +214,23 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
       <div class="col-sm-4">
         <div>
           <label for="plant"><?php echo ': ' . $penempatan; ?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- JENIS DOKUMEN -->
+      <div class="col-sm-4">
+        <div>
+          <label for="jenis_dokumen">Jenis Dokumen</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': ' . $jenis_dokumen; ?></label>
         </div>
       </div>
     </div>

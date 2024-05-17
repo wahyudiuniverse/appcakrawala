@@ -196,7 +196,7 @@ echo '</pre>';
       //  type: 'date-eu'
       //}],
       'order': [
-        [2, 'desc']
+        [1, 'desc']
       ],
       'ajax': {
         'url': '<?= base_url() ?>admin/addendum/list_addendum',

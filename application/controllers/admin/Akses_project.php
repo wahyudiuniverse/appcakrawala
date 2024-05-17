@@ -140,7 +140,7 @@ class Akses_project extends MY_Controller {
           exit();
   }
 	
-	public function add_akses_project() {
+	public function add_akses_project() {	
 	
 		if($this->input->post('add_type')=='aksesproject') {
 		// Check validation for user input

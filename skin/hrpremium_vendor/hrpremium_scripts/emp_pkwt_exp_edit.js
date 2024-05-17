@@ -88,6 +88,13 @@ $(document).ready(function() {
 	});
 	
 	
+	jQuery("#aj_project").change(function(){
+		jQuery.get(base_url+"/get_jenis_dokumen/"+jQuery(this).val(), function(data, status){
+			jQuery('#jenis_dokumen').html(data);
+		});
+
+	});
+	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e) {
 		var fd = new FormData(this);

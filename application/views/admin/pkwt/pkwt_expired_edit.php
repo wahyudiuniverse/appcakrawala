@@ -118,14 +118,15 @@
 
                                   <select class="form-control" name="marital_status" data-plugin="xin_select" disabled>
                                   <option value=""></option>
-                                              <option value="TK/0" <?php if($marital_status=='TK/0'):?> selected <?php endif; ?>>Single/Janda/Duda (0 Anak)</option>
-                                              <option value="K/0" <?php if($marital_status=='K/0'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
-                                              <option value="K/1" <?php if($marital_status=='K/1'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
-                                              <option value="K/2" <?php if($marital_status=='K/2'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
-                                              <option value="K/3" <?php if($marital_status=='K/3'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
-                                              <option value="TK/1" <?php if($marital_status=='TK/1'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
-                                              <option value="TK/2" <?php if($marital_status=='TK/2'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
-                                              <option value="TK/3" <?php if($marital_status=='TK/3'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
+                                              <option value="1" <?php if($marital_status=='1'):?> selected <?php endif; ?>>Belum Menikah</option>
+                                              <option value="2" <?php if($marital_status=='2'):?> selected <?php endif; ?>>Janda/Duda (0 Anak)</option>
+                                              <option value="6" <?php if($marital_status=='6'):?> selected <?php endif; ?>>Menikah (0 Anak)</option>
+                                              <option value="7" <?php if($marital_status=='7'):?> selected <?php endif; ?>>Menikah (1 Anak)</option>
+                                              <option value="8" <?php if($marital_status=='8'):?> selected <?php endif; ?>>Menikah (2 Anak)</option>
+                                              <option value="9" <?php if($marital_status=='9'):?> selected <?php endif; ?>>Menikah (3 Anak)</option>
+                                              <option value="3" <?php if($marital_status=='3'):?> selected <?php endif; ?>>Janda/Duda (1 Anak)</option>
+                                              <option value="4" <?php if($marital_status=='4'):?> selected <?php endif; ?>>Janda/Duda (2 Anak)</option>
+                                              <option value="5" <?php if($marital_status=='5'):?> selected <?php endif; ?>>Janda/Duda (3 Anak)</option>
                                               
                                 </select>
 

@@ -1389,7 +1389,7 @@ class Reports extends MY_Controller
 
 		// if(in_array('112',$role_resources_ids)) {
 
-		if($session['employee_id']==1 || $session['employee_id']==21300084 || $session['employee_id']==21505790) {
+		if($session['employee_id']==1 || $session['employee_id']==21505790 || $session['employee_id']==21300093) {
 			$data['subview'] = $this->load->view("admin/reports/employee_attendance", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
