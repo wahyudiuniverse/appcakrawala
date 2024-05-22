@@ -315,8 +315,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Penempatan</label>
-                            <input type="text" style="text-transform: uppercase" value="<?php echo $register['penempatan']; ?>" class="form-control" id="penempatan" onkeyup="huruf(this);" name="penempatan" placeholder="Area/Penempatan Kerja" required>
+                            <label>Kota/Area Penempatan</label>
+                            <input type="text" style="text-transform: uppercase" value="<?php echo $register['penempatan']; ?>" class="form-control" id="penempatan" onkeyup="huruf(this);" name="penempatan" placeholder="Nama Kota Area/Penempatan Kerja" required>
                             <small class="form-text text-danger"><?php echo form_error('penempatan'); ?></small>
                         </div>
 
@@ -935,14 +935,14 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Selamat.
+                            <p>Selamat. <?php echo $register['fullname'];?>
                                 <br>
                                 Anda telah berhasil melakukan registrasi karyawan.
                             </p>
                         </div>
                         <div class="modal-footer">
                             <!-- https://apps-cakrawala.com/register/success/ <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                            <a href="https://apps-cakrawala.com/register/success/" role="button" class="btn btn-primary ">Ok</a>
+                            <a href="https://apps-cakrawala.com/register/success/<?php echo $register['fullname'];?>" role="button" class="btn btn-primary ">Ok</a>
                         </div>
                     </div>
                 </div>
@@ -1021,8 +1021,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Penempatan</label>
-                            <input disabled type="text" value="<?php echo $register['penempatan']; ?>" class="form-control" id="penempatan" onkeyup="huruf(this);" name="penempatan" placeholder="Area/Penempatan Kerja" required>
+                            <label>Kota/Area Penempatan</label>
+                            <input disabled type="text" value="<?php echo $register['penempatan']; ?>" class="form-control" id="penempatan" onkeyup="huruf(this);" name="penempatan" placeholder="Nama Kota/Area Penempatan Kerja" required>
                             <small class="form-text text-danger"><?php echo form_error('penempatan'); ?></small>
                         </div>
 

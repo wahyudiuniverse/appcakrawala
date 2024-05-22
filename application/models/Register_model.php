@@ -330,6 +330,7 @@ class Register_model extends CI_model
             'e_status'                => '1',
             'department'              => '5',
             'migrasi'                 => '0',
+            'location_id'             => '4',
             'approved_hrdby'          => null,
             'approved_hrdon'          => null,
             'location_id'             => '0'
@@ -384,6 +385,7 @@ class Register_model extends CI_model
             'e_status'                => '2',
             'department'              => '5',
             'migrasi'                 => '0',
+            'location_id'             => '4',
             'approved_hrdby'          => null,
             'approved_hrdon'          => null,
             'location_id'             => '0'

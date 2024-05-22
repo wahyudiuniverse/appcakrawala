@@ -56,6 +56,7 @@ class Employee_request_hrd extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
+		
 		$data['title'] = $this->lang->line('xin_request_employee') . ' | ' . $this->Xin_model->site_title();
 
 		$data['all_companies'] = $this->Xin_model->get_companies();

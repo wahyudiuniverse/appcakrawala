@@ -302,7 +302,7 @@ class Register_model_tkhl extends CI_model
             'createdby'               => '1',
             'e_status'                => '1',
             'department'              => '5',
-            'location_id'             => '0'
+            'location_id'             => '4'
         ];
 
         //$otherdb = $this->load->database('default', TRUE);

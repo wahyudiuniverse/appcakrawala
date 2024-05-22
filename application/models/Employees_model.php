@@ -166,12 +166,12 @@ class Employees_model extends CI_Model
 	public function get_monitoring_daftar()
 	{
 
-		$sql = "SELECT emp.fullname,emp.contact_no,emp.project,emp.createdon,pro.title
+		$sql = "SELECT emp.secid, emp.fullname,emp.contact_no,emp.project,emp.createdon,pro.title
 				FROM xin_employee_request emp
 				LEFT JOIN xin_projects pro ON pro.project_id = emp.project
-				WHERE datediff(current_date(),DATE_FORMAT(emp.createdon, '%Y-%m-%d')) <=10
+				WHERE datediff(current_date(),DATE_FORMAT(emp.createdon, '%Y-%m-%d')) <=7
 				AND emp.request_empby = '1'
-				AND e_status IN (1,0)
+				AND e_status IN (1,2)
 				ORDER BY secid DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

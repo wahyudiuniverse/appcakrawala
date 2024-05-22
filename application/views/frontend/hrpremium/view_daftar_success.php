@@ -22,14 +22,14 @@
 	<!-- Table -->
 	<div class="sixteen columns">
 
-		<h3 class="margin-bottom-25">Halo, <?php echo strtoupper($fullname); ?></h3>
+		<h3 class="margin-bottom-25">Halo, <?php echo strtoupper(str_replace("%20"," ",$fullname)); ?></h3>
 		<h3 class="margin-bottom-25">Data Diri Kamu Berhasil Tersimpan,</h3>
 
 
 		<table class="manage-table responsive-table">
 
 			<tr>
-				<th><i class="fa fa-file-text"></i> No.</th>
+				<th><i class="fa fa-file-text"></i> No Pendaftaran.</th>
 				<th><i class="fa fa-user"></i> Nama Lengkap</th>
 				<th><i class="fa fa-envelope"></i> Project</th>
 				<th><i class="fa fa-phone"></i> No. HP/Whatsapp</th>
@@ -39,7 +39,7 @@
 			<?php foreach($jobs->result() as $r) { ?>
   
 			<tr>
-				<td><?php echo $no;?></td>
+				<td><?php echo $r->secid;;?></td>
 				<td class="action"><?php echo $r->fullname;?></td>
 				<td class="action"><?php echo $r->title;?></td>
 				<td class="action"><?php echo str_repeat('*', MAX(4, strlen($r->contact_no)) - 4) . substr($r->contact_no, -4);?></td>
