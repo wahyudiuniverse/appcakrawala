@@ -1419,8 +1419,8 @@ class Pkwt290 extends MY_Controller
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+							<td>Tunjangan Makan dan Pulsa</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
 						</tr>';
 				}
 				

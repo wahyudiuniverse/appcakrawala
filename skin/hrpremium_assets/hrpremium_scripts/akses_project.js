@@ -47,6 +47,30 @@ $(document).ready(function() {
 		});
 	});
 	
+
+	/* projects report */
+	$("#employee_akses").submit(function(e){
+		/*Form Submit*/
+		e.preventDefault();
+		var nip = $('#aj_nip').val();
+
+		var xin_table2 = $('#xin_table').dataTable({
+			"bDestroy": true,
+			"ajax": {
+				url : base_url+"/akses_project_list/"+nip+"/",
+				// url : site_url+"akses_proje/akses_project_list/"+nip+"/",
+				type : 'GET'
+			},
+			dom: 'lBfrtip',
+			"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+			"fnDrawCallback": function(settings){
+			$('[data-toggle="tooltip"]').tooltip();          
+			}
+		});
+		toastr.success('Request Submit.');
+		xin_table2.api().ajax.reload(function(){ Ladda.stopAll(); }, true);
+	});
+	
 	/* Add data */ /*Form Submit*/
 	$("#xin-form").submit(function(e){
 	e.preventDefault();

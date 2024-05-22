@@ -1236,11 +1236,11 @@ class Employee_request_hrd extends MY_Controller
 
 						if($e_status==1){
 
-							if(strtoupper($this->input->post('company'))=='2'){
+							if(strtoupper($company_id)=='2'){
 								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
 								$spb_hr = 'E-SPB-JKT/SC-HR/';
 								$companyID = '2';
-							}else if (strtoupper($this->input->post('company'))=='3'){
+							}else if (strtoupper($company_id)=='3'){
 								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
 								$spb_hr = 'E-SPB-JKT/KAC-HR/';
 								$companyID = '3';
@@ -1258,11 +1258,11 @@ class Employee_request_hrd extends MY_Controller
 
 						} else {
 
-							if(strtoupper($this->input->post('company'))=='2'){
+							if(strtoupper($company_id)=='2'){
 								$pkwt_hr = 'KEMITRAAN/SC-HR/';
 								$spb_hr = 'KEMITRAAN/SC-HR/';
 								$companyID = '2';
-							}else if (strtoupper($this->input->post('company'))=='3'){
+							}else if (strtoupper($company_id)=='3'){
 								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
 								$spb_hr = 'KEMITRAAN/KAC-HR/';
 								$companyID = '3';

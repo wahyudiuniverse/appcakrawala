@@ -336,7 +336,7 @@
                 <!-- PENEMPATAN -->
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="penempatan"><?php echo $this->lang->line('xin_placement_area'); ?><i class="hrpremium-asterisk">*</i></label>
+                    <label for="penempatan">Kota/Area Penempatan (Sesuai RateCard)<i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_placement_area'); ?>" name="penempatan" type="text" value="<?php echo $penempatan ?>">
                   </div>
                 </div>
@@ -405,13 +405,15 @@
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
               $t = time();
-              $file_ada = "ada";
-              $ktp = '';
-              $tesfile1 = base_url('/uploads/document/ktp/') . $ktp . "?" . $t; ?>
-              <?php if ($ktp == "" || $ktp == "0") {
+              // $ktp = '';
+              if ($ktp == "" || $ktp == "0") {
                 $tesfile1 = base_url('/uploads/document/ktp/') . "default.jpg";
                 $file_ada = "";
+              } else {
+                $tesfile1 = base_url('/uploads/document/ktp/') . $ktp . "?" . $t;
+                $file_ada = "ada";
               }
+
               $parameterfile1 = substr($tesfile1, -14);
               ?>
 
@@ -429,13 +431,14 @@
             <div class="form-group col-md-2">
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-              $t = time();
-              $file_ada = "ada";
-              $kk = '';
-              $tesfile2 = base_url('/uploads/document/kk/') . $kk . "?" . $t; ?>
+              $t = time(); ?>
               <?php if ($kk == "" || $kk == "0") {
                 $tesfile2 = base_url('/uploads/document/kk/') . "default.jpg";
                 $file_ada = "";
+              } else {
+                $file_ada = "ada";
+                // $kk = '';
+                $tesfile2 = base_url('/uploads/document/kk/') . $kk . "?" . $t;
               }
               $parameterfile2 = substr($tesfile2, -14);
               ?>
@@ -453,13 +456,14 @@
             <div class="form-group col-md-2">
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-              $t = time();
-              $file_ada = "ada";
-              $file_npwp = '';
-              $tesfile3 = base_url('/uploads/document/npwp/') . $file_npwp . "?" . $t; ?>
+              $t = time(); ?>
               <?php if ($file_npwp == "" || $file_npwp == "0") {
                 $tesfile3 = base_url('/uploads/document/npwp/') . "default.jpg";
                 $file_ada = "";
+              } else {
+                $file_ada = "ada";
+                // $file_npwp = '';
+                $tesfile3 = base_url('/uploads/document/npwp/') . $file_npwp . "?" . $t;
               }
               $parameterfile3 = substr($tesfile3, -14);
               ?>
@@ -475,13 +479,14 @@
             <div class="form-group col-md-2">
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-              $t = time();
-              $file_ada = "ada";
-              $ijazah = '';
-              $tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t; ?>
+              $t = time(); ?>
               <?php if ($ijazah == "" || $ijazah == "0") {
                 $tesfile4 = base_url('/uploads/document/ijazah/') . "default.jpg";
                 $file_ada = "";
+              } else {
+                $file_ada = "ada";
+                // $ijazah = '';
+                $tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t;  
               }
               $parameterfile4 = substr($tesfile4, -14);
               ?>
@@ -499,13 +504,14 @@
             <div class="form-group col-md-2">
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-              $t = time();
-              $file_ada = "ada";
-              $civi = '';
-              $tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t; ?>
+              $t = time();?>
               <?php if ($civi == "" || $civi == "0") {
                 $tesfile5 = base_url('/uploads/document/cv/') . "default.jpg";
                 $file_ada = "";
+              } else {
+                $file_ada = "ada";
+                // $civi = '';
+                $tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t; 
               }
               $parameterfile5 = substr($tesfile5, -14);
               ?>
@@ -523,13 +529,14 @@
             <div class="form-group col-md-2">
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-              $t = time();
-              $file_ada = "ada";
-              $skck = '';
-              $tesfile6 = base_url('/uploads/document/skck/') . $skck . "?" . $t; ?>
+              $t = time(); ?>
               <?php if ($skck == "" || $skck == "0") {
                 $tesfile6 = base_url('/uploads/document/skck/') . "default.jpg";
                 $file_ada = "";
+              } else {
+                $file_ada = "ada";
+                // $skck = '';
+                $tesfile6 = base_url('/uploads/document/skck/') . $skck . "?" . $t;
               }
               $parameterfile6 = substr($tesfile6, -14);
               ?>

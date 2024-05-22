@@ -133,6 +133,7 @@ class Employees_model extends CI_Model
 		return $query->result();
 	}
 
+
 	public function get_all_employees_project()
 	{
 		$query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,month(date_of_leaving) bln_skrng
@@ -2126,7 +2127,7 @@ ORDER BY jab.designation_id ASC";
 	public function check_akses_project($empid, $projectid)
 	{
 
-		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ? AND project_id = ?';
+		$sql = 'SELECT * FROM xin_projects_akses WHERE nip = ? AND project_id = ?';
 		$binds = array($empid,$projectid);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();

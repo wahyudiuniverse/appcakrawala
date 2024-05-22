@@ -45,8 +45,7 @@ class Akses_project extends MY_Controller {
 		} else {
 			$data['all_projects'] = $this->Project_model->all_projects();
 		}
-		// $data['get_all_companies'] = $this->Xin_model->get_companies();
-		//$data['all_designations'] = $this->Designation_model->all_designations();
+		
 		$data['breadcrumbs'] = $this->lang->line('xin_akses_project');
 		$data['path_url'] = 'akses_project';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -73,17 +72,21 @@ class Akses_project extends MY_Controller {
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 		
+		$nip = $this->uri->segment(4);
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		// if($user_info[0]->user_role_id==1){
-		// 	$designation = $this->Designation_model->get_designations();
-		// } else {
-		// 	$designation = $this->Designation_model->get_company_designations($user_info[0]->company_id);
-		// }
 
-			// $aksesproject = $this->Project_model->get_akses_projects();
-			$aksesproject = $this->Project_model->list_akses_project();
+
+			if($nip=="0" || is_null($nip)){
+				$aksesproject = $this->Project_model->list_akses_project();
+				// $usermobile = $this->Usersmobile_model->user_mobile_limit();
+			}else{
+				$aksesproject = $this->Project_model->list_akses_project_nip($nip);
+				// $usermobile = $this->Usersmobile_model->user_mobile_limit_fillter($company_id, $project_id, $subproject_id);
+			}
+
+			
 
 		$data = array();
 
