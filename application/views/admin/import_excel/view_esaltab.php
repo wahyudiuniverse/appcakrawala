@@ -10,68 +10,24 @@
 if (in_array('469', $role_resources_ids)) {
 ?>
 
-  <div class="card border-blue">
-    <div class="card-header with-elements">
-      <span class="card-header-title mr-2">
-        <strong>E-SALTAB | </strong>IMPORT FILE
-      </span>
-    </div>
-
-    <?php echo form_open_multipart('/admin/importexcel/import_saltab2/');
-    ?>
-    <div class="card-body border-bottom-blue ">
-      <div class="form-row">
-        <div class="col-md-12">
-          <!-- <div class="pull-right"> -->
-          <a href="<?php echo base_url(); ?>admin/importexcel/downloadTemplateSaltab" class="btn btn-primary">
-            <i class="fa fa-download"></i>
-            Download template saltab
-          </a>
-          <!-- </div> -->
-        </div>
-        <div class="col-md-9">
-          <!-- <div id="langOpt" class="form-control"></div> -->
-        </div>
-        <!-- <button onclick="cek_isi()">Cek Isi</button> -->
-      </div>
-    </div>
-  </div>
 
   <div class="card border-blue">
+    <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>E-SALTAB | </strong>Search FILE</div>
     <div class="card-body border-bottom-blue ">
+
+      <?php echo form_open_multipart('/admin/importexcel/import_saltab2/'); ?>
 
       <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 
-      <div class="row">
-        <div class="col-md-12">
-          <div class="form-group">
-            <fieldset class="form-group">
-              <label for="file_excel">Upload File<font color="#FF0000">*</font></label>
-              <input class="form-control" type="file" id="file_excel" name="file_excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
-              <small>Please select .xlsx file (allowed file size max 5MB)</small>
-            </fieldset>
-          </div>
-        </div>
-      </div>
-
       <div class="form-row">
-        <div class="col-md-4">
+        <div class="col-md-8">
           <div class="form-group">
             <label class="form-label">Project<font color="#FF0000">*</font></label>
             <select class="form-control" data-live-search="true" name="project" id="project" data-plugin="xin_select" data-placeholder="Project" required>
-              <option value="0">Pilih Project</option>
+              <option value="">Pilih Project</option>
               <?php foreach ($all_projects as $proj) { ?>
                 <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
               <?php } ?>
-            </select>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="form-group">
-            <label class="form-label">Sub Project<font color="#FF0000">*</font></label>
-            <select class="form-control" data-live-search="true" name="sub_project" id="sub_project" data-plugin="xin_select" data-placeholder="Sub-Project" required>
-              <option value="0">--ALL--</option>
             </select>
           </div>
         </div>
@@ -100,13 +56,16 @@ if (in_array('469', $role_resources_ids)) {
         <div class="col-md mb-12">
           <div class="form-group">
             <!-- button submit -->
-            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-upload"></i> IMPORT</button>
+            <button type="submit" class="btn btn-primary btn-block"><i class="fa fa-search"></i> SEARCH</button>
           </div>
         </div>
       </div>
+
+      <?php echo form_close(); ?>
+
     </div>
   </div>
-  <?php echo form_close(); ?>
+
 
 <?php
 }
@@ -121,7 +80,7 @@ if (in_array('469', $role_resources_ids)) {
       // echo '</pre>';
       ?> -->
 <div class="card <?php echo $get_animate; ?>">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST BATCH</strong> History E-SALTAB (Belum Release)</span> </div>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>E-SALTAB | </strong>Download FILE</div>
   <div class="card-body">
     <div class="box-datatable table-responsive" id="btn-place">
       <table class="display dataTable table table-striped table-bordered" id="saltab_table2" style="width:100%">
@@ -164,94 +123,6 @@ if (in_array('469', $role_resources_ids)) {
     $('[data-plugin="xin_select"]').select2($(this).attr('data-options'));
     $('[data-plugin="xin_select"]').select2({
       width: '100%'
-    });
-
-    //$('#langOpt').multiselect();
-    // $('select[multiple]').multiselect();
-    // $('select[multiple].active.3col').multiselect({
-    //   columns: 3,
-    //   placeholder: 'Select States',
-    //   search: true,
-    //   searchOptions: {
-    //     'default': 'Search States'
-    //   },
-    //   selectAll: true
-    // });
-
-    // ms1 = $('#ms1').magicSuggest({
-    //   allowFreeEntries: false,
-    //   data: [{
-    //     id: '1',
-    //     name: 'New York'
-    //   }, {
-    //     id: '2',
-    //     name: 'Los Angeles'
-    //   }, {
-    //     id: '3',
-    //     name: 'Chicago'
-    //   }, {
-    //     id: '4',
-    //     name: 'Houston'
-    //   }, {
-    //     id: '5',
-    //     name: 'Philadelphia'
-    //   }]
-    // });
-
-    // langopt = $('#langOpt').magicSuggest({
-    //   allowFreeEntries: false,
-    //   autoSelect: true,
-    //   selectFirst: true,
-    //   data: myData,
-    //   displayField: 'alias',
-    //   valueField: 'nama_tabel',
-    //   allowDuplicates: false,
-    //   maxSelection: 90
-    // });
-
-    // //ambil variabel multi-select
-    // $(function() {
-    //   $('#fruit').change(function(e) {
-    //     var selected = $(e.target).val();
-    //     $("#tes_label").text(selected);
-    //     //alert(selected);
-    //   });
-    // });
-
-    // $(ms1).on('selectionchange', function(e, m) {
-    //   //alert("values: " + JSON.stringify(this.getValue()));
-    //   alert(JSON.stringify(this.getValue()));
-    // });
-
-    // Project Change - Sub Project (on Change)
-    $('#project').change(function() {
-      var project = $(this).val();
-
-      // AJAX request
-      $.ajax({
-        url: '<?= base_url() ?>registrasi/getSubByProject/',
-        method: 'post',
-        data: {
-          [csrfName]: csrfHash,
-          project: project
-        },
-        dataType: 'json',
-        success: function(response) {
-          //csrfName = data.csrfName;
-          //csrfHash = data.csrfHash;
-          // Remove options 
-          $('#sub_project').find('option').not(':first').remove();
-
-          // Add options
-          $(response).each(function(index, data) {
-            $('#sub_project').append('<option value="' + data['secid'] + '">' + data['sub_project_name'] + '</option>');
-          }).show();
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          alert("Status :" + xhr.status);
-          alert("responseText :" + xhr.responseText);
-        },
-      });
     });
 
     saltab_table = $('#saltab_table2').DataTable({
@@ -320,7 +191,7 @@ if (in_array('469', $role_resources_ids)) {
 
   });
 
-  //-----delete batch saltab-----
+  //-----delete addendum-----
   function deleteBatchSaltab(id) {
     // alert("masuk fungsi delete saltab. id: " + id);
     // AJAX request
@@ -343,13 +214,13 @@ if (in_array('469', $role_resources_ids)) {
     // alert("Beres Ajax. id: " + id);
   }
 
-  //-----lihat batch saltab-----
+  //-----lihat addendum-----
   function lihatBatchSaltab(id) {
     //alert("masuk fungsi lihat. id: " + id);
     window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_temporary/' + id, "_self");
   }
 
-  //-----edit batch saltab-----
+  //-----edit addendum-----
   function downloadBatchSaltab(id) {
     //alert("masuk fungsi download. id: " + id);downloadDetailSaltab
     // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");

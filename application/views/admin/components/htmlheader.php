@@ -30,6 +30,9 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/css/rtl/uikit.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/css/demo.css">
 
+  <link href="<?= base_url('vendor/jquery-magicsuggest/magicsuggest.css') ?>" rel="stylesheet" />
+
+
   <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/js/polyfills.js"></script>
 
   <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/js/material-ripple.js"></script>
@@ -48,22 +51,23 @@
   <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/js/pace.js"></script>
 
   <!-- requirement for datatables -->
-  <!-- <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet" /> -->
-  <!-- <link href="https://cdn.datatables.net/searchpanes/1.1.1/css/searchPanes.dataTables.min.css" rel="stylesheet" /> -->
   <link href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css" rel="stylesheet" />
 
 
-  <!-- <link href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css" rel="stylesheet"> -->
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script> -->
 
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
   <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-  <!-- <script src="https://cdn.datatables.net/searchpanes/1.1.1/js/dataTables.searchPanes.min.js"></script> -->
   <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 
   <script src="https://cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js" type="text/javascript"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
   <script src="https://cdn.datatables.net/plug-ins/2.0.2/sorting/datetime-moment.js"></script>
+
+
 
   <!-- jQuery Library
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
@@ -120,6 +124,8 @@
   <?php if ($this->router->fetch_method() == 'notifications') { ?>
     <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/css/pages/messages.css">
   <?php } ?>
+
+
 
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.css" />

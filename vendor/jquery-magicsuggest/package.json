@@ -1,0 +1,36 @@
+{
+  "name": "magicsuggest",
+  "version": "2.1.7",
+  "description": "MagicSuggest is a multiple selection auto-suggest input box for Bootstrap 3.",
+  "main": "magicsuggest.js",
+  "scripts": {
+    "set-version": "cross-var \"replace-in-file @VERSION@ $npm_package_version ./magicsuggest.min.js\"",
+    "compressjs": "uglifyjs ./magicsuggest.js -c --comments --source-map \"root='/', url='magicsuggest.min.js.map'\" -o ./magicsuggest.min.js",
+    "postcompressjs": "npm run set-version",
+    "build": "npm run compressjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Magicsuggest/magicsuggest.git"
+  },
+  "author": "Nicolas Bize",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Magicsuggest/magicsuggest/issues"
+  },
+  "homepage": "https://github.com/Magicsuggest/magicsuggest#readme",
+  "dependencies": {
+    "bootstrap": "~3",
+    "jquery": ">= 1.8.3"
+  },
+  "keywords": [
+    "autocomplete",
+    "bootstrap3",
+    "JQuery"
+  ],
+  "devDependencies": {
+    "cross-var": "^1.1.0",
+    "replace-in-file": "^7.0.1",
+    "uglify-js": "^3.17.4"
+  }
+}

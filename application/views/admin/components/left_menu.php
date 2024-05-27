@@ -1318,6 +1318,84 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
+  <!-- Saltab -->
+  <?php
+  if (
+    in_array('510', $role_resources_ids)
+    || in_array('511', $role_resources_ids)
+    || in_array('512', $role_resources_ids)
+    || in_array('513', $role_resources_ids)
+    || in_array('514', $role_resources_ids)
+  ) {
+  ?>
+    <li class="<?php if (!empty($arr_mod['saltab_open'])) echo $arr_mod['saltab_open']; ?> sidenav-item">
+      <a href="#" class="sidenav-link sidenav-toggle">
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>SALTAB</div>
+      </a>
+
+      <ul class="sidenav-menu">
+        <?php
+        if (in_array('511', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Import SALTAB
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('512', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Konfigurasi Import SALTAB
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('513', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/view_esaltab'); ?>"> View SALTAB
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('514', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/view_esaltab'); ?>"> Download SALTAB
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('515', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Konfigurasi Download SALTAB
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+      </ul>
+    </li>
+
+  <?php
+  }
+  ?>
 
   <!-- import modul -->
   <?php
@@ -1326,7 +1404,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     || in_array('127', $role_resources_ids)
     || in_array('109', $role_resources_ids)
     || in_array('232', $role_resources_ids)
-    || in_array('469', $role_resources_ids)
   ) {
   ?>
     <li class="<?php if (!empty($arr_mod['importexcel_open'])) echo $arr_mod['importexcel_open']; ?> sidenav-item">
@@ -1393,16 +1470,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         }
         ?>
 
-        <?php
-        if (in_array('469', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Import SALTAB (New)
-            </a>
-          </li>
-        <?php
-        }
-        ?>
+
 
       </ul>
     </li>
