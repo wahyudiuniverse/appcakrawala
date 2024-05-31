@@ -1076,6 +1076,195 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 	/*
 	* persiapan data untuk datatable pagination
+	* data list batch saltab release untuk download
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_batch_saltab_release_download($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$search_periode_from = $postData['search_periode_from'];
+		$search_periode_to = $postData['search_periode_to'];
+		//$emp_id = $postData['emp_id'];
+		//$contract_id = $postData['contract_id'];
+		//$idsession = $postData['idsession'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (project_name like '%" . $searchValue .  "%' or sub_project_name like '%" . $searchValue . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterRangeFrom = "";
+		if (($search_periode_from != null) && ($search_periode_from != "") && ($search_periode_from != '0')) {
+			$filterRangeFrom = "(
+				periode_salary >= '" . $search_periode_from . "'
+			)";
+		} else {
+			$filterRangeFrom = "";
+		}
+
+		$filterRangeTo = "";
+		if (($search_periode_to != null) && ($search_periode_to != "") && ($search_periode_to != '0')) {
+			$filterRangeTo = "(
+				periode_salary <= '" . $search_periode_to . "'
+			)";
+		} else {
+			$filterRangeTo = "";
+		}
+
+		## Kondisi Default 
+		// $kondisiDefaultQuery = "(
+		// 	karyawan_id = " . $emp_id . "
+		// AND	pkwt_id = " . $contract_id . "
+		// )";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterRangeFrom != '') {
+			$this->db->where($filterRangeFrom);
+		}
+		if ($filterRangeTo != '') {
+			$this->db->where($filterRangeTo);
+		}
+		//$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		//$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterRangeFrom != '') {
+			$this->db->where($filterRangeFrom);
+		}
+		if ($filterRangeTo != '') {
+			$this->db->where($filterRangeTo);
+		}
+		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		//$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterRangeFrom != '') {
+			$this->db->where($filterRangeFrom);
+		}
+		if ($filterRangeTo != '') {
+			$this->db->where($filterRangeTo);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$periode_salary = "";
+			if (empty($record->periode_salary) || ($record->periode_salary == "")) {
+				$periode_salary = "--";
+			} else {
+				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary);
+			}
+
+			$text_periode_from = "";
+			$text_periode_to = "";
+			$text_periode = "";
+			if (empty($record->periode_cutoff_from) || ($record->periode_cutoff_from == "")) {
+				$text_periode_from = "";
+			} else {
+				$text_periode_from = $this->Xin_model->tgl_indo($record->periode_cutoff_from);
+			}
+			if (empty($record->periode_cutoff_to) || ($record->periode_cutoff_to == "")) {
+				$text_periode_to = "";
+			} else {
+				$text_periode_to = $this->Xin_model->tgl_indo($record->periode_cutoff_to);
+			}
+			if (($text_periode_from == "") && ($text_periode_to == "")) {
+				$text_periode = "";
+			} else {
+				$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+			}
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			$view = '<button id="tesbutton" type="button" onclick="lihatBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " " . $editReq,
+				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
+				"periode_salary" => $periode_salary,
+				"periode" => $text_periode,
+				"project_name" => $record->project_name,
+				"sub_project_name" => $record->sub_project_name,
+				"total_mpp" => $record->total_mpp,
+				"upload_by" => $record->upload_by,
+				"upload_on" => $record->upload_on,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
 	* data list detail saltab
 	* 
 	* @author Fadla Qamara
@@ -1264,6 +1453,113 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$data[] = array(
 				"aksi" => $view . " " . $delete,
+				"nik" => $record->nik,
+				"nip" => $record->nip,
+				"fullname" => $record->fullname,
+				"sub_project" => $sub_project,
+				"jabatan" => $record->jabatan,
+				"area" => $record->area,
+				"hari_kerja" => $record->hari_kerja,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list detail saltab release untuk download
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_detail_saltab_release_download($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel id batch
+		$id_batch = $postData['id_batch'];
+		$data_batch = $this->get_saltab_batch_release($id_batch);
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(
+			uploadid = " . $id_batch . "
+		)";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_employees_saltab')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_employees_saltab')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_employees_saltab')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$sub_project = "";
+
+			if ($data_batch['sub_project_name'] == "-ALL-") {
+				$sub_project = $record->sub_project;
+			} else {
+				$sub_project = $data_batch['sub_project_name'];
+			}
+
+			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,

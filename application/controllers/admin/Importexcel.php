@@ -604,6 +604,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//load datatables list batch saltab release untuk download
+	public function list_batch_saltab_release_download()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab_release_download($postData);
+
+		echo json_encode($data);
+	}
+
 	//load datatables list detail saltab
 	public function list_detail_saltab()
 	{
@@ -626,6 +639,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->get_list_detail_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab release untuk download
+	public function list_detail_saltab_release_download()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab_release_download($postData);
 
 		echo json_encode($data);
 	}

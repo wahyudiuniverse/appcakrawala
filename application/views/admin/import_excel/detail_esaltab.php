@@ -233,7 +233,7 @@
         [3, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_detail_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_detail_saltab_release_download',
         data: {
           [csrfName]: csrfHash,
           id_batch: id_batch,

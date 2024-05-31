@@ -160,7 +160,7 @@ if (in_array('469', $role_resources_ids)) {
         [7, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release_download',
         data: {
           [csrfName]: csrfHash,
           project: project,
@@ -294,7 +294,7 @@ if (in_array('469', $role_resources_ids)) {
         [7, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release_download',
         data: {
           [csrfName]: csrfHash,
           project: project,
@@ -386,7 +386,7 @@ if (in_array('469', $role_resources_ids)) {
         [7, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release_download',
         data: {
           [csrfName]: csrfHash,
           project: project,
