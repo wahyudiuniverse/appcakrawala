@@ -1178,7 +1178,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 
 		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/manage_esaltab') . "'>Manage E-SALTAB</a> | Detail E-Saltab";
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/download_esaltab') . "'>Download E-SALTAB</a> | Detail E-Saltab";
 
 		$session = $this->session->userdata('username');
 
