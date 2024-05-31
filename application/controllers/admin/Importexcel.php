@@ -526,6 +526,58 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//delete batch saltab release
+	public function delete_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_saltab_release($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//release batch saltab
+	public function release_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_batch_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail saltab
+	public function delete_detail_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail saltab release
+	public function delete_detail_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_saltab_release($postData['id']);
+
+		echo json_encode($data);
+	}
+
 	//load datatables list batch saltab
 	public function list_batch_saltab()
 	{
@@ -539,7 +591,20 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
-	//load datatables list batch saltab
+	//load datatables list batch saltab release
+	public function list_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab
 	public function list_detail_saltab()
 	{
 
@@ -548,6 +613,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->get_list_detail_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab release
+	public function list_detail_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab_release($postData);
 
 		echo json_encode($data);
 	}
@@ -655,6 +733,32 @@ class ImportExcel extends MY_Controller
 		// echo "</pre>";
 	}
 
+	//mengambil Json data Detail Saltab
+	public function get_detail_saltab()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_saltab($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail Saltab
+	public function get_detail_saltab_release()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_saltab_release($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
 	public function downloadDetailSaltab($id = null)
 	{
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
@@ -673,7 +777,8 @@ class ImportExcel extends MY_Controller
 
 		$project = $data_batch_saltab['project_name'];
 		$sub_project = $data_batch_saltab['sub_project_name'];
-		$peride_saltab = $this->Xin_model->tgl_indo($data_batch_saltab['periode_saltab_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_saltab_to']);
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
 
 		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
 		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
@@ -683,15 +788,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
 		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
 
-		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode');
-		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_saltab);
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
 		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
 
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A5'
+				'A6'
 			);
 
 		//set column width jadi auto size
@@ -705,7 +814,7 @@ class ImportExcel extends MY_Controller
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A5:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
@@ -715,20 +824,117 @@ class ImportExcel extends MY_Controller
 			->fromArray(
 				$detail_saltab_fix,   // The data to set
 				NULL,
-				'A6'
+				'A7'
 			);
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('5:5')
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
 		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('5:5')
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('5:5')
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabRelease($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release($id, $gabung);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A6'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 100; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$detail_saltab_fix,   // The data to set
+				NULL,
+				'A7'
+			);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
@@ -761,6 +967,7 @@ class ImportExcel extends MY_Controller
 		$sub_project = $this->input->post('sub_project');
 		$saltab_from = $this->input->post('saltab_from');
 		$saltab_to = $this->input->post('saltab_to');
+		$periode_salary = $this->input->post('periode_salary');
 
 		//load data Project
 		$nama_project = "";
@@ -813,15 +1020,18 @@ class ImportExcel extends MY_Controller
 			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
 			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
 			$array_data  = [];
+			$array_data_final  = [];
 			$data        = [];
 			$header_tabel_saltab = $sheet_data[0];
 			$length_header = count($header_tabel_saltab);
 			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
 
 			//susun array batch saltab
 			$data_batch = array(
-				'periode_saltab_from'    => $saltab_from,
-				'periode_saltab_to'      => $saltab_to,
+				'periode_cutoff_from'    => $saltab_from,
+				'periode_cutoff_to'      => $saltab_to,
+				'periode_salary'      	 => $periode_salary,
 				'project_id'        	 => $project,
 				'project_name'        	 => $nama_project,
 				'sub_project_id'         => $sub_project,
@@ -834,8 +1044,9 @@ class ImportExcel extends MY_Controller
 
 			//susun array untuk cek apakah sudah ada data batch yg sama
 			$data_batch_cek = array(
-				'periode_saltab_from'    => $saltab_from,
-				'periode_saltab_to'      => $saltab_to,
+				'periode_cutoff_from'    => $saltab_from,
+				'periode_cutoff_to'      => $saltab_to,
+				'periode_salary'      	 => $periode_salary,
 				'project_id'        	 => $project,
 				'project_name'        	 => $nama_project,
 				'sub_project_id'         => $sub_project,
@@ -866,9 +1077,26 @@ class ImportExcel extends MY_Controller
 				$data = array();
 			}
 
-			if ($array_data != '') {
-				$this->Import_model->insert_saltab_detail($array_data);
+			if ($nama_sub_project == "-ALL-") {
+				if ($array_data != '') {
+					$this->Import_model->insert_saltab_detail($array_data);
+				}
+			} else {
+				foreach ($array_data as $array_data) {
+					$array_data['sub_project'] = $nama_sub_project;
+					$array_data_final[] = $array_data;
+				}
+				if ($array_data_final != '') {
+					$this->Import_model->insert_saltab_detail($array_data_final);
+				}
 			}
+
+			// $tes_query = $this->db->last_query();
+
+
+			// if ($array_data != '') {
+			// 	$this->Import_model->insert_saltab_detail($array_data);
+			// }
 
 			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
 
@@ -877,7 +1105,7 @@ class ImportExcel extends MY_Controller
 			// print_r($data_batch);
 			// echo '</pre>';
 			// echo '<pre>';
-			// print_r($array_data);
+			// print_r($header_tabel_saltab);
 			// echo '</pre>';
 		} else {
 			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
@@ -887,6 +1115,7 @@ class ImportExcel extends MY_Controller
 
 		//$this->view_batch_saltab_temporary($id_batch);
 		//redirect('/');
+
 		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
@@ -899,7 +1128,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 
 		$data['title'] = 'Preview E-Saltab | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "Preview E-Saltab";
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/importesaltab') . "'>Import E-SALTAB</a> | Preview E-Saltab";
 
 		$session = $this->session->userdata('username');
 
@@ -908,6 +1137,30 @@ class ImportExcel extends MY_Controller
 
 		if (!empty($session)) {
 			$data['subview'] = $this->load->view("admin/import_excel/preview_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_saltab_release($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/manage_esaltab') . "'>Manage E-SALTAB</a> | Detail E-Saltab";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/');
@@ -2008,8 +2261,31 @@ class ImportExcel extends MY_Controller
 
 	}
 
+	//manage saltab release
+	public function manage_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['title'] = 'Manage E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Manage E-SALTAB';
+		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('469', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/manage_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
 	//download saltab release
-	public function view_esaltab()
+	public function download_esaltab()
 	{
 		$session = $this->session->userdata('username');
 		if (empty($session)) {
@@ -2017,14 +2293,14 @@ class ImportExcel extends MY_Controller
 		}
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 		$data['title'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Download E-SALTAB';
 		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
 		//$data['path_url'] = 'hrpremium_download_esaltab';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if (in_array('469', $role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/view_esaltab", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/download_esaltab", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -2041,7 +2317,7 @@ class ImportExcel extends MY_Controller
 		}
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 		$data['title'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import E-SALTAB';
 		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
 		$data['path_url'] = 'hrpremium_import_esaltab';

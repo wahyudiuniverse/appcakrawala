@@ -1350,7 +1350,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('512', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Konfigurasi Import SALTAB
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/konfig_import_esaltab'); ?>"> Konfigurasi Import SALTAB
             </a>
           </li>
         <?php
@@ -1361,7 +1361,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('513', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/view_esaltab'); ?>"> View SALTAB
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/manage_esaltab'); ?>"> Manage SALTAB
             </a>
           </li>
         <?php
@@ -1372,7 +1372,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('514', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/view_esaltab'); ?>"> Download SALTAB
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/download_esaltab'); ?>"> Download SALTAB
             </a>
           </li>
         <?php
@@ -1383,7 +1383,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('515', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['esaltab_active'])) echo $arr_mod['esaltab_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importesaltab'); ?>"> Konfigurasi Download SALTAB
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/konfig_download_esaltab'); ?>"> Konfigurasi Download SALTAB
             </a>
           </li>
         <?php

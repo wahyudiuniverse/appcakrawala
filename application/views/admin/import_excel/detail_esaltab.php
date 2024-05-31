@@ -62,7 +62,7 @@
   <!-- Section Data PKWT -->
   <div class="card-header with-elements">
     <div class="col-md-6">
-      <span class="card-header-title mr-2"><strong>DATA BATCH </strong> | E-Saltab Temporary</span>
+      <span class="card-header-title mr-2"><strong>DATA BATCH </strong> | E-Saltab</span>
     </div>
     <div class="col-md-6">
       <div class="pull-right">
@@ -132,14 +132,13 @@
 
   <div class="card-header with-elements">
     <div class="col-md-6">
-      <span class="card-header-title mr-2"><strong>LIST ALL</strong> | Detail E-Saltab Temporary</span>
+      <span class="card-header-title mr-2"><strong>LIST ALL</strong> | Detail E-Saltab</span>
     </div>
 
     <div class="col-md-6">
       <div class="pull-right">
         <!-- <div class="card-header with-elements"> -->
         <span class="card-header-title mr-2">
-          <button id="button_release_all" class="btn btn-success ladda-button" data-style="expand-right">Release All</button>
           <button id="button_delete_all" class="btn btn-danger ladda-button" data-style="expand-right">Delete All</button>
         </span>
         <!-- </div> -->
@@ -234,7 +233,7 @@
         [3, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_detail_saltab',
+        'url': '<?= base_url() ?>admin/importexcel/list_detail_saltab_release',
         data: {
           [csrfName]: csrfHash,
           id_batch: id_batch,
@@ -295,7 +294,7 @@
     // alert("masuk fungsi delete detail saltab. id: " + id);
     // AJAX request
     $.ajax({
-      url: '<?= base_url() ?>admin/Importexcel/delete_detail_saltab/',
+      url: '<?= base_url() ?>admin/Importexcel/delete_detail_saltab_release/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
@@ -320,7 +319,7 @@
     var html_text = '<table class="table table-striped col-md-12"><thead class="thead-dark"><tr><th class="col-md-4">ATRIBUT</th><th class="col-md-8">VALUE</th></thead></tr>';
     // AJAX request
     $.ajax({
-      url: '<?= base_url() ?>admin/importexcel/get_detail_saltab/',
+      url: '<?= base_url() ?>admin/importexcel/get_detail_saltab_release/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
@@ -363,7 +362,7 @@
 
     // AJAX request
     $.ajax({
-      url: '<?= base_url() ?>admin/Importexcel/delete_batch_saltab/',
+      url: '<?= base_url() ?>admin/Importexcel/delete_batch_saltab_release/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
@@ -373,7 +372,7 @@
         alert("Berhasil Delete Batch Saltab");
         detail_saltab_table.ajax.reload(null, false);
 
-        window.open('<?= base_url() ?>admin/Importexcel/importesaltab/', "_self");
+        window.open('<?= base_url() ?>admin/Importexcel/manage_esaltab/', "_self");
       },
       error: function(xhr, ajaxOptions, thrownError) {
         var error_text = "Gagal Delete Batch Saltab. Status : " + xhr.status;
@@ -384,39 +383,5 @@
     });
 
     // alert("masuk fungsi delete ALL saltab. id: " + id);
-  };
-</script>
-
-<!-- Tombol Release ALL Detail Saltab -->
-<script type="text/javascript">
-  document.getElementById("button_release_all").onclick = function() {
-    var id = "<?php echo $id_batch; ?>";
-
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Importexcel/release_batch_saltab/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        id: id
-      },
-      success: function(response) {
-        alert("Berhasil Release Batch Saltab");
-        detail_saltab_table.ajax.reload(null, false);
-
-        window.open('<?= base_url() ?>admin/Importexcel/importesaltab/', "_self");
-      },
-      error: function(xhr, ajaxOptions, thrownError) {
-        var error_text = "Gagal Release Batch Saltab. Status : " + xhr.status;
-        $('.judul-modal-error').html("ERROR ! ");
-        $('.isi-modal-error').html(error_text + xhr.responseText);
-        $('#modal-error').modal('show');
-
-        // alert("Gagal Release Batch Saltab. Status : " + xhr.status);
-        // alert("responseText :" + xhr.responseText);
-      },
-    });
-
-    // alert("masuk fungsi Release ALL saltab. id: " + id);
   };
 </script>

@@ -6,50 +6,64 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
+
+
+
 <?php
 if (in_array('469', $role_resources_ids)) {
 ?>
 
   <div class="card border-blue">
-    <div class="card-header with-elements">
+    <!-- <div class="card-header with-elements">
       <span class="card-header-title mr-2">
         <strong>E-SALTAB | </strong>IMPORT FILE
       </span>
+    </div> -->
+
+    <div class="card-header with-elements">
+      <div class="col-md-6">
+        <span class="card-header-title mr-2">
+          <strong>E-SALTAB | </strong>IMPORT FILE
+        </span>
+      </div>
+
+      <div class="col-md-6">
+        <div class="pull-right">
+          <!-- <div class="card-header with-elements"> -->
+          <span class="card-header-title mr-2">
+            <a href="<?php echo base_url(); ?>admin/importexcel/downloadTemplateSaltab" class="btn btn-primary">
+              <i class="fa fa-download"></i>
+              Download template saltab
+            </a>
+          </span>
+          <!-- </div> -->
+        </div>
+      </div>
     </div>
 
     <?php echo form_open_multipart('/admin/importexcel/import_saltab2/');
     ?>
-    <div class="card-body border-bottom-blue ">
-      <div class="form-row">
-        <div class="col-md-12">
-          <!-- <div class="pull-right"> -->
-          <a href="<?php echo base_url(); ?>admin/importexcel/downloadTemplateSaltab" class="btn btn-primary">
-            <i class="fa fa-download"></i>
-            Download template saltab
-          </a>
-          <!-- </div> -->
-        </div>
-        <div class="col-md-9">
-          <!-- <div id="langOpt" class="form-control"></div> -->
-        </div>
-        <!-- <button onclick="cek_isi()">Cek Isi</button> -->
-      </div>
-    </div>
-  </div>
 
-  <div class="card border-blue">
     <div class="card-body border-bottom-blue ">
 
       <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 
-      <div class="row">
-        <div class="col-md-12">
+      <div class="form-row">
+        <div class="col-md-8">
           <div class="form-group">
             <fieldset class="form-group">
               <label for="file_excel">Upload File<font color="#FF0000">*</font></label>
               <input class="form-control" type="file" id="file_excel" name="file_excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" required>
               <small>Please select .xlsx file (allowed file size max 5MB)</small>
             </fieldset>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="form-group">
+            <!-- input periode -->
+            <label class="form-label">Tanggal Penggajian<font color="#FF0000">*</font></label>
+            <input type="text" class="form-control date" readonly name="periode_salary" id="periode_salary" placeholder="Tanggal Penggajian" required>
           </div>
         </div>
       </div>
@@ -81,14 +95,14 @@ if (in_array('469', $role_resources_ids)) {
             <div class="col-md-6">
               <div class="form-group">
                 <!-- input periode -->
-                <label class="form-label">Periode Saltab from<font color="#FF0000">*</font></label>
+                <label class="form-label">Periode Cutoff from<font color="#FF0000">*</font></label>
                 <input type="text" class="form-control date" readonly name="saltab_from" id="saltab_from" placeholder="Periode Saltab From" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <!-- input periode -->
-                <label class="form-label">Periode Saltab to<font color="#FF0000">*</font></label>
+                <label class="form-label">Periode Cutoff to<font color="#FF0000">*</font></label>
                 <input type="text" class="form-control date" readonly name="saltab_to" id="saltab_to" placeholder="Periode Saltab To" required>
               </div>
             </div>
@@ -121,14 +135,15 @@ if (in_array('469', $role_resources_ids)) {
       // echo '</pre>';
       ?> -->
 <div class="card <?php echo $get_animate; ?>">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST BATCH</strong> History E-SALTAB (Belum Release)</span> </div>
+  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST BATCH |</strong> History E-SALTAB (Belum Release)</span> </div>
   <div class="card-body">
     <div class="box-datatable table-responsive" id="btn-place">
       <table class="display dataTable table table-striped table-bordered" id="saltab_table2" style="width:100%">
         <thead>
           <tr>
             <th>Aksi</th>
-            <th>Periode Saltab</th>
+            <th>Tanggal Penggajian</th>
+            <th>Periode Cutoff</th>
             <th>Project</th>
             <th>Sub Project</th>
             <th>Total MPP</th>
@@ -269,7 +284,7 @@ if (in_array('469', $role_resources_ids)) {
       //  type: 'date-eu'
       //}],
       'order': [
-        [6, 'desc']
+        [7, 'desc']
       ],
       'ajax': {
         'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab',
@@ -289,6 +304,11 @@ if (in_array('469', $role_resources_ids)) {
       'columns': [{
           data: 'aksi',
           "orderable": false
+        },
+        {
+          data: 'tanggal_penggajian',
+          "orderable": false,
+          //searchable: true
         },
         {
           data: 'periode',
