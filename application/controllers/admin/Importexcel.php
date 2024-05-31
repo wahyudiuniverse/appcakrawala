@@ -1178,7 +1178,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 
 		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/download_esaltab') . "'>Download E-SALTAB</a> | Detail E-Saltab";
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/manage_esaltab') . "'>Manage E-SALTAB</a> | Detail E-Saltab";
 
 		$session = $this->session->userdata('username');
 
@@ -1187,6 +1187,30 @@ class ImportExcel extends MY_Controller
 
 		if (!empty($session)) {
 			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_saltab_release_download($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/download_esaltab') . "'>Download E-SALTAB</a> | Detail E-Saltab";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab_download", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/');
