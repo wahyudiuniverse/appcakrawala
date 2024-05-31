@@ -1290,7 +1290,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
-			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%') ";
+			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%' or nik like '%" . $searchValue . "%' or area like '%" . $searchValue . "%' or sub_project like '%" . $searchValue . "%' or jabatan like '%" . $searchValue . "%') ";
 		}
 
 		## Kondisi Default 
@@ -1397,7 +1397,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
-			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%') ";
+			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%' or nik like '%" . $searchValue . "%' or area like '%" . $searchValue . "%' or sub_project like '%" . $searchValue . "%' or jabatan like '%" . $searchValue . "%') ";
 		}
 
 		## Kondisi Default 
@@ -1504,7 +1504,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
-			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%') ";
+			$searchQuery = " (nip like '%" . $searchValue .  "%' or fullname like '%" . $searchValue . "%' or nik like '%" . $searchValue . "%' or area like '%" . $searchValue . "%' or sub_project like '%" . $searchValue . "%' or jabatan like '%" . $searchValue . "%') ";
 		}
 
 		## Kondisi Default 
