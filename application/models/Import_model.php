@@ -300,7 +300,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 		$data = array();
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab_temp');
+		$this->db->from('xin_saltab_temp');
 		$this->db->where('secid', $id);
 
 		$records = $this->db->get()->row_array();
@@ -324,7 +324,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 		$data = array();
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab');
+		$this->db->from('xin_saltab');
 		$this->db->where('secid', $id);
 
 		$records = $this->db->get()->row_array();
@@ -361,12 +361,12 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		$this->db->select($parameter);
-		$this->db->from('xin_employees_saltab_temp');
+		$this->db->from('xin_saltab_temp');
 		$this->db->where('uploadid', $id);
 
 		$records = $this->db->get()->result_array();
 
-		$tabel_saltab = $this->Import_model->get_saltab_table();
+		//$tabel_saltab = $this->Import_model->get_saltab_table();
 		//$paremeter = implode(",", $tabel_saltab);
 		// $jumlah_data = count($tabel_saltab);
 
@@ -386,12 +386,12 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		$this->db->select($parameter);
-		$this->db->from('xin_employees_saltab');
+		$this->db->from('xin_saltab');
 		$this->db->where('uploadid', $id);
 
 		$records = $this->db->get()->result_array();
 
-		$tabel_saltab = $this->Import_model->get_saltab_table();
+		//$tabel_saltab = $this->Import_model->get_saltab_table();
 		//$paremeter = implode(",", $tabel_saltab);
 		// $jumlah_data = count($tabel_saltab);
 
@@ -580,7 +580,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	function get_id_saltab_batch($data)
 	{
 		$this->db->order_by('upload_on', 'desc');
-		$query = $this->db->get_where('xin_employees_saltab_bulk', $data);
+		$query = $this->db->get_where('xin_saltab_bulk', $data);
 		$result = $query->row_array();
 
 		if (empty($result)) {
@@ -594,7 +594,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab_bulk');
+		$this->db->from('xin_saltab_bulk');
 		$this->db->where('id', $id);
 
 		$query = $this->db->get()->row_array();
@@ -606,7 +606,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab_bulk_release');
+		$this->db->from('xin_saltab_bulk_release');
 		$this->db->where('id', $id);
 
 		$query = $this->db->get()->row_array();
@@ -629,7 +629,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
 		// }
 
-		$this->db->insert_batch("xin_employees_saltab_temp", $data);
+		$this->db->insert_batch("xin_saltab_temp", $data);
 
 		// $tes_query = $this->db->last_query();
 		// echo "<pre>";
@@ -647,20 +647,20 @@ GROUP BY uploadid, periode, project, project_sub;';
     */
 	function insert_saltab_batch($data)
 	{
-		$this->db->replace("xin_employees_saltab_bulk", $data);
+		$this->db->replace("xin_saltab_bulk", $data);
 	}
 
 	function delete_batch_saltab($id = null)
 	{
-		$this->db->delete('xin_employees_saltab_bulk', array('id' => $id));
-		$this->db->delete('xin_employees_saltab_temp', array('uploadid' => $id));
+		$this->db->delete('xin_saltab_bulk', array('id' => $id));
+		$this->db->delete('xin_saltab_temp', array('uploadid' => $id));
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
 	}
 
 	function delete_batch_saltab_release($id = null)
 	{
-		$this->db->delete('xin_employees_saltab_bulk_release', array('id' => $id));
-		$this->db->delete('xin_employees_saltab', array('uploadid' => $id));
+		$this->db->delete('xin_saltab_bulk_release', array('id' => $id));
+		$this->db->delete('xin_saltab', array('uploadid' => $id));
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
 	}
 
@@ -670,21 +670,21 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		## Get Batch Saltab
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab_bulk');
+		$this->db->from('xin_saltab_bulk');
 		$this->db->where('id', $id);
 		$saltab_batch = $this->db->get()->result_array();
 
 		## Get Detail Saltab
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab_temp');
+		$this->db->from('xin_saltab_temp');
 		$this->db->where('uploadid', $id);
 		$saltab_detail = $this->db->get()->result_array();
 
 		## Insert Batch Saltab Release
-		$this->db->insert_batch("xin_employees_saltab_bulk_release", $saltab_batch);
+		$this->db->insert_batch("xin_saltab_bulk_release", $saltab_batch);
 
 		## Insert Batch Saltab Detail
-		$this->db->insert_batch("xin_employees_saltab", $saltab_detail);
+		$this->db->insert_batch("xin_saltab", $saltab_detail);
 
 		## Delete Batch Saltab dan Delete Detail Saltab
 		$this->delete_batch_saltab($id);
@@ -697,7 +697,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		);
 
 		$this->db->where('id', $id);
-		$this->db->update('xin_employees_saltab_bulk_release', $data);
+		$this->db->update('xin_saltab_bulk_release', $data);
 	}
 
 	//delete detail saltab temporary
@@ -706,17 +706,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//kalau delete data, update jumlah mpp pada batch
 		## Get Batch Id
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab_temp');
+		$this->db->from('xin_saltab_temp');
 		$this->db->where('secid', $id);
 		$query = $this->db->get()->row_array();
 		$id_batch = $query['uploadid'];
 
-		$this->db->delete('xin_employees_saltab_temp', array('secid' => $id));
+		$this->db->delete('xin_saltab_temp', array('secid' => $id));
 
 		## Total number of records 
 		$this->db->select('count(*) as allcount');
 		$this->db->where("uploadid", $id_batch);
-		$records = $this->db->get('xin_employees_saltab_temp')->result();
+		$records = $this->db->get('xin_saltab_temp')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Update mpp
@@ -725,7 +725,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		);
 
 		$this->db->where('id', $id_batch);
-		$this->db->update('xin_employees_saltab_bulk', $data);
+		$this->db->update('xin_saltab_bulk', $data);
 	}
 
 	//delete detail saltab release
@@ -734,17 +734,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//kalau delete data, update jumlah mpp pada batch
 		## Get Batch Id
 		$this->db->select('*');
-		$this->db->from('xin_employees_saltab');
+		$this->db->from('xin_saltab');
 		$this->db->where('secid', $id);
 		$query = $this->db->get()->row_array();
 		$id_batch = $query['uploadid'];
 
-		$this->db->delete('xin_employees_saltab', array('secid' => $id));
+		$this->db->delete('xin_saltab', array('secid' => $id));
 
 		## Total number of records 
 		$this->db->select('count(*) as allcount');
 		$this->db->where("uploadid", $id_batch);
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Update mpp
@@ -753,7 +753,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		);
 
 		$this->db->where('id', $id_batch);
-		$this->db->update('xin_employees_saltab_bulk_release', $data);
+		$this->db->update('xin_saltab_bulk_release', $data);
 	}
 
 	//ambil nama employee
@@ -821,7 +821,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		//$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_employees_saltab_bulk')->result();
+		$records = $this->db->get('xin_saltab_bulk')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
@@ -830,7 +830,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		$records = $this->db->get('xin_employees_saltab_bulk')->result();
+		$records = $this->db->get('xin_saltab_bulk')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
@@ -841,7 +841,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees_saltab_bulk')->result();
+		$records = $this->db->get('xin_saltab_bulk')->result();
 
 		#Debugging variable
 		$tes_query = $this->db->last_query();
@@ -966,7 +966,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$this->db->where($filterRangeTo);
 		}
 		//$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
@@ -984,7 +984,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
@@ -1004,7 +1004,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
 
 		#Debugging variable
 		$tes_query = $this->db->last_query();
@@ -1155,7 +1155,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$this->db->where($filterRangeTo);
 		}
 		//$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
@@ -1173,7 +1173,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
@@ -1193,7 +1193,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
 
 		#Debugging variable
 		$tes_query = $this->db->last_query();
@@ -1302,7 +1302,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_employees_saltab_temp')->result();
+		$records = $this->db->get('xin_saltab_temp')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
@@ -1311,7 +1311,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		$records = $this->db->get('xin_employees_saltab_temp')->result();
+		$records = $this->db->get('xin_saltab_temp')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
@@ -1322,7 +1322,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees_saltab_temp')->result();
+		$records = $this->db->get('xin_saltab_temp')->result();
 
 		#Debugging variable
 		$tes_query = $this->db->last_query();
@@ -1409,7 +1409,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
@@ -1418,7 +1418,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
@@ -1429,7 +1429,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 
 		#Debugging variable
 		$tes_query = $this->db->last_query();
@@ -1516,7 +1516,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
@@ -1525,7 +1525,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
@@ -1536,7 +1536,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees_saltab')->result();
+		$records = $this->db->get('xin_saltab')->result();
 
 		#Debugging variable
 		$tes_query = $this->db->last_query();
