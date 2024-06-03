@@ -284,7 +284,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$this->db->select('*');
 		$this->db->from('mt_tabel_esaltab');
-		//$this->db->limit(2147483647, 2);
+		// $this->db->limit(2147483647, 1);
 
 		$query = $this->db->get()->result_array();
 		if (empty($query)) {
@@ -766,7 +766,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		} else {
 			$this->db->select('*');
 			$this->db->from('xin_employees');
-			$this->db->where('user_id', $id);
+			$this->db->where('employee_id', $id);
 
 			$query = $this->db->get()->row_array();
 
@@ -775,6 +775,33 @@ GROUP BY uploadid, periode, project, project_sub;';
 				return "";
 			} else {
 				return $query['first_name'];
+			}
+		}
+	}
+
+	//ambil nama employee
+	function get_ktp_karyawan($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['designation_name'];
+			if (empty($query)) {
+				return "0";
+			} else {
+				if (($query['ktp_no'] == null) || ($query['ktp_no'] == "")) {
+					return "0";
+				} else {
+					return $query['ktp_no'];
+				}
 			}
 		}
 	}

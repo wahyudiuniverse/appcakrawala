@@ -1097,7 +1097,21 @@ class ImportExcel extends MY_Controller
 			for ($i = 2; $i < count($sheet_data); $i++) {
 				$data += ['uploadid' => $id_batch];
 				for ($j = 0; $j < $length_header; $j++) {
-					$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+					if ($header_tabel_saltab[$j] == "nip") {
+						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == null) || ($sheet_data[$i][$j] == "")) {
+							$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+						} else {
+							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == null) || ($sheet_data[$i][$j + 1] == "")) {
+								$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
+								$j = $j + 2;
+							} else {
+								$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+							}
+						}
+					} else {
+						$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+					}
 				}
 				$array_data[] = $data;
 				$data = array();
@@ -1105,7 +1119,7 @@ class ImportExcel extends MY_Controller
 
 			if ($nama_sub_project == "-ALL-") {
 				if ($array_data != '') {
-					$this->Import_model->insert_saltab_detail($array_data);
+					// $this->Import_model->insert_saltab_detail($array_data);
 				}
 			} else {
 				foreach ($array_data as $array_data) {
@@ -1113,11 +1127,11 @@ class ImportExcel extends MY_Controller
 					$array_data_final[] = $array_data;
 				}
 				if ($array_data_final != '') {
-					$this->Import_model->insert_saltab_detail($array_data_final);
+					// $this->Import_model->insert_saltab_detail($array_data_final);
 				}
 			}
 
-			// $tes_query = $this->db->last_query();
+			$tes_query = $this->db->last_query();
 
 
 			// if ($array_data != '') {
@@ -1128,8 +1142,14 @@ class ImportExcel extends MY_Controller
 
 			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
 			// echo '<pre>';
-			// print_r($data_batch);
+			// print_r($tes_query);
 			// echo '</pre>';
+			echo '<pre>';
+			print_r("NIK : " . $nik);
+			echo '</pre>';
+			echo '<pre>';
+			print_r($array_data_final);
+			echo '</pre>';
 			// echo '<pre>';
 			// print_r($header_tabel_saltab);
 			// echo '</pre>';
@@ -1142,7 +1162,7 @@ class ImportExcel extends MY_Controller
 		//$this->view_batch_saltab_temporary($id_batch);
 		//redirect('/');
 
-		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
 	function view_batch_saltab_temporary($id_batch = null)
