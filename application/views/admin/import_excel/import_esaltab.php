@@ -10,7 +10,7 @@
 
 
 <?php
-if (in_array('469', $role_resources_ids)) {
+if (in_array('511', $role_resources_ids)) {
 ?>
 
   <div class="card border-blue">
@@ -162,6 +162,7 @@ if (in_array('469', $role_resources_ids)) {
   var ms1;
   var langopt;
   var saltab_table;
+  var session_id = '<?php echo $session['employee_id']; ?>';
   //var myData = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia', 'Phoenix', 'San Antonio', 'San Diego', 'Dallas', 'San Jose', 'Jacksonville', "Algiers", "Annaba", "Azazga", "Batna City", "Blida", "Bordj", "Bordj Bou Arreridj", "Bougara", "Cheraga", "Chlef", "Constantine", "Djelfa", "Draria", "El Tarf", "Hussein Dey", "Illizi", "Jijel", "Kouba", "Laghouat", "Oran", "Ouargla", "Oued Smar", "Relizane", "Rouiba", "Saida", "Souk Ahras", "Tamanghasset", "Tiaret", "Tissemsilt", "Tizi", "Tizi Ouzou", "Tlemcen"];
   var myData = JSON.parse('<?php echo json_encode($tabel_saltab); ?>');
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
@@ -290,6 +291,7 @@ if (in_array('469', $role_resources_ids)) {
         'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab',
         data: {
           [csrfName]: csrfHash,
+          session_id: session_id,
           // nip: nip,
           // contract_id: contract_id,
           //idsession: idsession,

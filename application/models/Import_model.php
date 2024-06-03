@@ -803,7 +803,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//$nip = $postData['nip'];
 		//$emp_id = $postData['emp_id'];
 		//$contract_id = $postData['contract_id'];
-		//$idsession = $postData['idsession'];
+		$session_id = $postData['session_id'];
 
 		## Search 
 		$searchQuery = "";
@@ -812,21 +812,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 
 		## Kondisi Default 
-		// $kondisiDefaultQuery = "(
-		// 	karyawan_id = " . $emp_id . "
-		// AND	pkwt_id = " . $contract_id . "
-		// )";
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
 		//$kondisiDefaultQuery = "";
 
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_saltab_bulk')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
 		$this->db->select('count(*) as allcount');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
@@ -835,7 +832,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		## Fetch records
 		$this->db->select('*');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
@@ -911,7 +908,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$search_periode_to = $postData['search_periode_to'];
 		//$emp_id = $postData['emp_id'];
 		//$contract_id = $postData['contract_id'];
-		//$idsession = $postData['idsession'];
+		$session_id = $postData['session_id'];
 
 		## Search 
 		$searchQuery = "";
@@ -948,6 +945,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 
 		## Kondisi Default 
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
 		// $kondisiDefaultQuery = "(
 		// 	karyawan_id = " . $emp_id . "
 		// AND	pkwt_id = " . $contract_id . "
@@ -965,13 +963,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
 		$this->db->select('count(*) as allcount');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
@@ -989,7 +987,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		## Fetch records
 		$this->db->select('*');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
@@ -1100,7 +1098,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$search_periode_to = $postData['search_periode_to'];
 		//$emp_id = $postData['emp_id'];
 		//$contract_id = $postData['contract_id'];
-		//$idsession = $postData['idsession'];
+		$session_id = $postData['session_id'];
 
 		## Search 
 		$searchQuery = "";
@@ -1137,6 +1135,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 
 		## Kondisi Default 
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
 		// $kondisiDefaultQuery = "(
 		// 	karyawan_id = " . $emp_id . "
 		// AND	pkwt_id = " . $contract_id . "
@@ -1154,13 +1153,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecords = $records[0]->allcount;
 
 		## Total number of record with filtering
 		$this->db->select('count(*) as allcount');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
@@ -1178,7 +1177,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		## Fetch records
 		$this->db->select('*');
-		//$this->db->where($kondisiDefaultQuery);
+		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}

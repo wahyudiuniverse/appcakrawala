@@ -7,7 +7,7 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php
-if (in_array('469', $role_resources_ids)) {
+if (in_array('513', $role_resources_ids)) {
 ?>
 
 
@@ -121,6 +121,7 @@ if (in_array('469', $role_resources_ids)) {
   var ms1;
   var langopt;
   var saltab_table;
+  var session_id = '<?php echo $session['employee_id']; ?>';
   var kolom_saltab = JSON.parse('<?php echo json_encode($tabel_saltab); ?>');
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
@@ -163,6 +164,7 @@ if (in_array('469', $role_resources_ids)) {
         'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
         data: {
           [csrfName]: csrfHash,
+          session_id: session_id,
           project: project,
           search_periode_from: search_periode_from,
           search_periode_to: search_periode_to,

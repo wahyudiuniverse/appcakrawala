@@ -138,9 +138,9 @@
     <div class="col-md-6">
       <div class="pull-right">
         <!-- <div class="card-header with-elements"> -->
-        <span class="card-header-title mr-2">
+        <!-- <span class="card-header-title mr-2">
           <button id="button_delete_all" class="btn btn-danger ladda-button" data-style="expand-right">Delete All</button>
-        </span>
+        </span> -->
         <!-- </div> -->
       </div>
     </div>
