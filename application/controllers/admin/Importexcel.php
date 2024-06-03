@@ -1119,7 +1119,7 @@ class ImportExcel extends MY_Controller
 
 			if ($nama_sub_project == "-ALL-") {
 				if ($array_data != '') {
-					// $this->Import_model->insert_saltab_detail($array_data);
+					$this->Import_model->insert_saltab_detail($array_data);
 				}
 			} else {
 				foreach ($array_data as $array_data) {
@@ -1127,7 +1127,7 @@ class ImportExcel extends MY_Controller
 					$array_data_final[] = $array_data;
 				}
 				if ($array_data_final != '') {
-					// $this->Import_model->insert_saltab_detail($array_data_final);
+					$this->Import_model->insert_saltab_detail($array_data_final);
 				}
 			}
 
@@ -1144,12 +1144,12 @@ class ImportExcel extends MY_Controller
 			// echo '<pre>';
 			// print_r($tes_query);
 			// echo '</pre>';
-			echo '<pre>';
-			print_r("NIK : " . $nik);
-			echo '</pre>';
-			echo '<pre>';
-			print_r($array_data_final);
-			echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($array_data_final);
+			// echo '</pre>';
 			// echo '<pre>';
 			// print_r($header_tabel_saltab);
 			// echo '</pre>';
@@ -1162,7 +1162,7 @@ class ImportExcel extends MY_Controller
 		//$this->view_batch_saltab_temporary($id_batch);
 		//redirect('/');
 
-		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
 	function view_batch_saltab_temporary($id_batch = null)
