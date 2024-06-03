@@ -1098,17 +1098,20 @@ class ImportExcel extends MY_Controller
 				$data += ['uploadid' => $id_batch];
 				for ($j = 0; $j < $length_header; $j++) {
 					if ($header_tabel_saltab[$j] == "nip") {
-						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == null) || ($sheet_data[$i][$j] == "")) {
+						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
 							$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
 						} else {
-							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == null) || ($sheet_data[$i][$j + 1] == "")) {
+							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
 								$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
 								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
-								$j = $j + 2;
+								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
+								$j = $j + 1;
 							} else {
 								$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
 							}
 						}
+						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
 					} else {
 						$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
 					}
@@ -1118,7 +1121,7 @@ class ImportExcel extends MY_Controller
 			}
 
 			if ($nama_sub_project == "-ALL-") {
-				if ($array_data != '') {
+				if (!empty($array_data)) {
 					$this->Import_model->insert_saltab_detail($array_data);
 				}
 			} else {
@@ -1126,7 +1129,7 @@ class ImportExcel extends MY_Controller
 					$array_data['sub_project'] = $nama_sub_project;
 					$array_data_final[] = $array_data;
 				}
-				if ($array_data_final != '') {
+				if (!empty($array_data_final)) {
 					$this->Import_model->insert_saltab_detail($array_data_final);
 				}
 			}

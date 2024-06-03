@@ -631,10 +631,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$this->db->insert_batch("xin_saltab_temp", $data);
 
-		// $tes_query = $this->db->last_query();
-		// echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
+		// if (!$this->db->insert_batch("xin_employees_saltab_temp", $data)) {
+		// 	$tes_query = $this->db->last_query();
+		// 	echo "<pre>";
+		// 	print_r($tes_query);
+		// 	echo "</pre>";
+		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
+		// }
 	}
 
 	/*
