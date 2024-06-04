@@ -299,6 +299,7 @@ if (in_array('514', $role_resources_ids)) {
         'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release_download',
         data: {
           [csrfName]: csrfHash,
+          session_id: session_id,
           project: project,
           search_periode_from: search_periode_from,
           search_periode_to: search_periode_to,
@@ -391,6 +392,7 @@ if (in_array('514', $role_resources_ids)) {
         'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release_download',
         data: {
           [csrfName]: csrfHash,
+          session_id: session_id,
           project: project,
           search_periode_from: search_periode_from,
           search_periode_to: search_periode_to,
