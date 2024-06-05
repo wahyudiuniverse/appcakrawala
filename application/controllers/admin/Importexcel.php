@@ -979,6 +979,112 @@ class ImportExcel extends MY_Controller
 		//$writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
+	public function downloadDetailSaltabReleaseBPJS($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab BPJS'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header2_tabel_saltab = array(
+			'STATUS',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+			'PROJECT',
+			'SUB PROJECT',
+			'AREA',
+			'GAPOK UMK',
+			'GAPOK DIERIMA (THP)',
+			'BPJS KETENAGAKERJAAN',
+			'BPJS KESEHATAN',
+		);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_bpjs($id, $data_batch_saltab);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A6'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 100; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$detail_saltab_fix,   // The data to set
+				NULL,
+				'A7'
+			);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab BPJS - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
 	/*
     |-------------------------------------------------------------------
     | Import Excel saltab

@@ -243,11 +243,18 @@ if (in_array('514', $role_resources_ids)) {
     window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release_download/' + id, "_self");
   }
 
-  //-----edit addendum-----
+  //-----download raw data saltab-----
   function downloadBatchSaltabRelease(id) {
     //alert("masuk fungsi download. id: " + id);downloadDetailSaltab
     // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
     window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabRelease/' + id, "_self");
+  }
+
+  //-----download salab BPJS-----
+  function downloadBatchSaltabReleaseBPJS(id) {
+    //alert("masuk fungsi download. id: " + id);downloadDetailSaltab
+    // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
+    window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabReleaseBPJS/' + id, "_self");
   }
 
   // function cek_isi() {
