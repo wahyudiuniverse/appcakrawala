@@ -436,7 +436,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$record->nik,
 				$record->fullname,
 				$data_batch['project_name'],
-				$data_batch['sub_project_name'],
+				$record->sub_project,
 				$record->area,
 				$record->gaji_umk,
 				$record->total_thp,
