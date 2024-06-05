@@ -1074,7 +1074,7 @@ class ImportExcel extends MY_Controller
 		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
 		//$writer->setPreCalculateFormulas(false);
 
-		$filename = 'E-Saltab BPJS - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		$filename = 'E-Saltab BPJS - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
 		// $filename = $gabung;
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
