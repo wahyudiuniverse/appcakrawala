@@ -22,6 +22,103 @@
 <?php $employee_id = $this->Xin_model->generate_random_employeeid(); ?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode(); ?>
 
+<!-- Modal -->
+<div class="modal fade" id="verifikasiModal" tabindex="-1" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="verifikasiModalLabel">
+          <div class="judul-modal">
+            Verifikasi data
+          </div>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"> X </span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row">
+          <div class="col-md-3">NIK
+            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          </div>
+          <div class="col-md-5"><input type='text' id="nik_modal" class='form-control' placeholder='Nomor NIK KTP' value='<?php echo $ktp_no; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_nik_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_nik_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">Nama Lengkap
+            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          </div>
+          <div class="col-md-5"><input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value='<?php echo $fullname; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_nama_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_nama_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">Bank
+            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          </div>
+          <div class="col-md-5"><input type='text' id="bank_modal" class='form-control' placeholder='Bank' value='<?php echo $bank_id; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_bank_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_bank_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">Nomor Rekening
+            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          </div>
+          <div class="col-md-5"><input type='text' id="rekening_modal" class='form-control' placeholder='Nomor Rekening' value='<?php echo $nomor_rek; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_norek_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_norek_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">Pemilik Rekening
+            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          </div>
+          <div class="col-md-5"><input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value='<?php echo $pemilik_rek; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_pemilik_rek_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_pemilik_rek_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-3"><button id="button_show_ktp_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KTP</button></div>
+          <div class="col-md-3"><button id="button_show_kk_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KK</button></div>
+          <div class="col-md-3"><button id="button_show_rekening_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide Rekening</button></div>
+        </div>
+
+        <div class="isi-modal">
+          <div class="rekening-modal"></div>
+          <div class="ktp-modal"></div>
+          <div class="kk-modal"></div>
+          <div class="api-rekening-modal"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="close_modal" class="btn btn-primary ladda-button" data-style="expand-right">Close Modal</button>
+        <!-- <button type="button" class="btn btn-primary" data-dismiss="modal"> Close </button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
 <?php if (in_array('337', $role_resources_ids)) { ?>
 
   <div class="card mb-4">
@@ -486,7 +583,7 @@
               } else {
                 $file_ada = "ada";
                 // $ijazah = '';
-                $tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t;  
+                $tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t;
               }
               $parameterfile4 = substr($tesfile4, -14);
               ?>
@@ -504,14 +601,14 @@
             <div class="form-group col-md-2">
               <?php
               //untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-              $t = time();?>
+              $t = time(); ?>
               <?php if ($civi == "" || $civi == "0") {
                 $tesfile5 = base_url('/uploads/document/cv/') . "default.jpg";
                 $file_ada = "";
               } else {
                 $file_ada = "ada";
                 // $civi = '';
-                $tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t; 
+                $tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t;
               }
               $parameterfile5 = substr($tesfile5, -14);
               ?>
@@ -802,7 +899,9 @@
 
       </div>
 
-      <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
+      <div class="form-actions box-footer">
+        <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
+        <button id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
       </div>
       <?php echo form_close(); ?>
     </div>
@@ -1178,6 +1277,10 @@
 <!-- Chained Dropdown (Project - Jenis Dokumen) -->
 <script type='text/javascript'>
   // baseURL variable
+  var flag_ktp = 0;
+  var flag_kk = 0;
+  var flag_rekening = 0;
+  var flag_api_rekening = 0;
   var baseURL = "<?php echo base_url(); ?>";
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
@@ -1230,4 +1333,160 @@
 
 
   });
+</script>
+
+<!-- Tombol Show Verifikasi Data -->
+<script type="text/javascript">
+  document.getElementById("button_verifikasi").onclick = function(e) {
+    e.preventDefault();
+
+    $('#verifikasiModal').modal('show');
+  };
+</script>
+
+<!-- Tombol Show/hide KTP Modal -->
+<script type="text/javascript">
+  document.getElementById("button_show_ktp_modal").onclick = function(e) {
+    e.preventDefault();
+
+    if (flag_ktp == 0) {
+      var filektp = "<?php echo $tesfile1; ?>";
+
+      var html_text = "";
+
+      var html_text = html_text + "<div class='row'>";
+      var html_text = html_text + "<div class='form-group col-md-12'>";
+      var html_text = html_text + "<label>Foto KTP  </label>";
+      var html_text = html_text + "<button id='button_verify_bank_modal' class='btn btn-xs btn-outline-success' data-style='expand-right'>Open File</button>";
+      var html_text = html_text + "<embed class='form-group col-md-12' id='output_ktp' type='image/jpg' src='" + filektp + "'></embed>";
+      var html_text = html_text + "</div>";
+      var html_text = html_text + "</div>";
+
+      $('.ktp-modal').html(html_text);
+      flag_ktp = 1;
+    } else if (flag_ktp == 1) {
+      $('.ktp-modal').html("");
+      flag_ktp = 0;
+    }
+
+  };
+</script>
+
+<!-- Tombol Show/hide KK Modal -->
+<script type="text/javascript">
+  document.getElementById("button_show_kk_modal").onclick = function(e) {
+    e.preventDefault();
+
+    if (flag_kk == 0) {
+      var filekk = "<?php echo $tesfile2; ?>";
+
+      var html_text = "";
+
+      var html_text = html_text + "<div class='row'>";
+      var html_text = html_text + "<div class='form-group col-md-12'>";
+      var html_text = html_text + "<label>Foto KK  </label>";
+      var html_text = html_text + "<button id='button_verify_bank_modal' class='btn btn-xs btn-outline-success' data-style='expand-right'>Open File</button>";
+      var html_text = html_text + "<embed class='form-group col-md-12' id='output_ktp' type='image/jpg' src='" + filekk + "'></embed>";
+      var html_text = html_text + "</div>";
+      var html_text = html_text + "</div>";
+
+      $('.kk-modal').html(html_text);
+      flag_kk = 1;
+    } else if (flag_kk == 1) {
+      $('.kk-modal').html("");
+      flag_kk = 0;
+    }
+
+  };
+</script>
+
+<!-- Tombol Show/hide Rekening Modal -->
+<script type="text/javascript">
+  document.getElementById("button_show_rekening_modal").onclick = function(e) {
+    e.preventDefault();
+
+    if (flag_rekening == 0) {
+      var bank_id = $("#bank_modal").val();
+      // var nomor_rekening = "<?php echo $nomor_rek; ?>";
+      var nomor_rekening = $("#rekening_modal").val();
+
+      // alert(bank_id);
+      // alert(nomor_rekening);
+
+      var html_text = "";
+
+      html_text = html_text + "<div class='row'>";
+      html_text = html_text + "<div class='form-group col-md-12'>";
+      html_text = html_text + "<label>Rekening  </label>";
+      html_text = html_text + "<br>LOADING DATA ....";
+      html_text = html_text + "</div>";
+      html_text = html_text + "</div>";
+
+      $('.rekening-modal').html(html_text);
+
+      // AJAX request
+      $.ajax({
+        url: '<?= base_url() ?>registrasi/tes_API_bank/' + bank_id + "/" + nomor_rekening,
+        method: 'get',
+        success: function(response) {
+          var res = jQuery.parseJSON(response);
+          var res2 = jQuery.parseJSON(res);
+          // html_text = "";
+          if (res2['status'] == true) {
+            html_text = "";
+            html_text = html_text + "<div class='row'>";
+            html_text = html_text + "<div class='form-group col-md-12'>";
+            html_text = html_text + "<label>Rekening  </label>";
+            html_text = html_text + "<br>Pesan: " + res2['msg'] + "<br>";
+            html_text = html_text + "kode bank: " + res2['data']['bankcode'] + "<br>";
+            html_text = html_text + "nama bank: " + res2['data']['bankname'] + "<br>";
+            html_text = html_text + "nomor rekening: " + res2['data']['accountnumber'] + "<br>";
+            html_text = html_text + "nama pemilik rekening: " + res2['data']['accountname'] + "<br>";
+            html_text = html_text + "</div>";
+            html_text = html_text + "</div>";
+
+          } else {
+            html_text = "";
+            html_text = html_text + "<div class='row'>";
+            html_text = html_text + "<div class='form-group col-md-12'>";
+            html_text = html_text + "<label>Rekening  </label>";
+            html_text = html_text + "<br>Pesan: " + res2['msg'] + "<br>";
+            html_text = html_text + "</div>";
+            html_text = html_text + "</div>";
+          }
+
+          $('.rekening-modal').html(html_text);
+          flag_rekening = 1;
+        },
+        error: function(xhr, status, error) {
+          // var res = jQuery.parseJSON(response);
+          $('.rekening-modal').html("xhr.responseText");
+          flag_rekening = 1;
+        }
+      });
+    } else if (flag_rekening == 1) {
+      $('.rekening-modal').html("");
+      flag_rekening = 0;
+    }
+
+  };
+</script>
+
+<!-- Tombol Close Modal Verifikasi Data -->
+<script type="text/javascript">
+  document.getElementById("close_modal").onclick = function(e) {
+    e.preventDefault();
+
+    $('.ktp-modal').html("");
+    $('.kk-modal').html("");
+    $('.rekening-modal').html("");
+    // $('.api-rekening-modal').html("");
+    flag_ktp = 0;
+    flag_kk = 0;
+    flag_rekening = 0;
+    // flag_api_rekening = 0;
+    $('#verifikasiModal').modal('hide');
+
+    // alert("masuk fungsi verifikasi data.");
+  };
 </script>

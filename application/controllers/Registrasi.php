@@ -331,11 +331,74 @@ class Registrasi extends CI_Controller
     {
         $data['nik'] = $nik;
         //menampilkan view form pengisian data
-        $this->load->view('frontend/templates/header');
-        //$this->load->view('templates/sidebar', $data);
-        $this->load->view('frontend/templates/topbar_register');
+        // $this->load->view('frontend/templates/header');
+        // //$this->load->view('templates/sidebar', $data);
+        // $this->load->view('frontend/templates/topbar_register');
         $this->load->view('frontend/tes_api_nik', $data);
-        $this->load->view('frontend/templates/footer');
+        // $this->load->view('frontend/templates/footer');
+
+        // $curl = curl_init();
+        // //$nik = '3201293010880006';
+        // curl_setopt_array($curl, [
+        //     // 426,021000020081642
+        //     // CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=014&accountNumber=1370176121",
+        //     CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=426&accountNumber=021000020081642",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        //     CURLOPT_HTTPHEADER => [],
+        // ]);
+
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+
+        // curl_close($curl);
+
+        // if ($err) {
+        //     return "cURL Error #:" . $err;
+        // } else {
+        //     return $response;
+        // }
+    }
+
+    //Menampilkan Register tanpa parameter untuk proses POST variable
+    public function tes_API_Bank($id_bank, $no_rekening)
+    {
+        // $data['nik'] = $nik;
+        //menampilkan view form pengisian data
+        // $this->load->view('frontend/templates/header');
+        // //$this->load->view('templates/sidebar', $data);
+        // $this->load->view('frontend/templates/topbar_register');
+        // $this->load->view('frontend/tes_api_bank', $data);
+        // $this->load->view('frontend/templates/footer');
+
+        $curl = curl_init();
+        //$nik = '3201293010880006';
+        curl_setopt_array($curl, [
+            // CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=014&accountNumber=1370176121",
+            CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=" . $id_bank . "&accountNumber=" . $no_rekening,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            return "cURL Error #:" . $err;
+        } else {
+            echo json_encode($response);
+        }
     }
 
     //Menampilkan Register tanpa parameter untuk proses POST variable
@@ -699,8 +762,8 @@ class Registrasi extends CI_Controller
                 $config['upload_path']          = $documentdktp;
                 $config['allowed_types']        = 'gif|jpg|jpeg|png|pdf';
                 $config['max_size']             = 2048;
-                $config['file_name']             = 'cv_' . $nik;
-                $config['overwrite']             = TRUE;
+                $config['file_name']            = 'cv_' . $nik;
+                $config['overwrite']            = TRUE;
 
                 //inisialisasi proses upload
                 $this->load->library('upload', $config);
