@@ -53,7 +53,7 @@
           <div class="col-md-3">Nama Lengkap
             <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
           </div>
-          <div class="col-md-5"><input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value='<?php echo $fullname; ?>'></div>
+          <div class="col-md-5"><input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value="<?php echo $fullname; ?>"></div>
           <div class="col-md-4">
             <button id="button_verify_nama_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
             <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
@@ -89,7 +89,7 @@
           <div class="col-md-3">Pemilik Rekening
             <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
           </div>
-          <div class="col-md-5"><input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value='<?php echo $pemilik_rek; ?>'></div>
+          <div class="col-md-5"><input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value="<?php echo $pemilik_rek; ?>"></div>
           <div class="col-md-4">
             <button id="button_verify_pemilik_rek_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
             <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
@@ -1409,6 +1409,7 @@
       var bank_id = $("#bank_modal").val();
       // var nomor_rekening = "<?php echo $nomor_rek; ?>";
       var nomor_rekening = $("#rekening_modal").val();
+      var bank_code = "<?php echo $nomor_rek; ?>";
 
       // alert(bank_id);
       // alert(nomor_rekening);
@@ -1429,19 +1430,20 @@
         url: '<?= base_url() ?>registrasi/tes_API_bank/' + bank_id + "/" + nomor_rekening,
         method: 'get',
         success: function(response) {
+          // alert(response);
           var res = jQuery.parseJSON(response);
-          var res2 = jQuery.parseJSON(res);
+          // var res2 = jQuery.parseJSON(res);
           // html_text = "";
-          if (res2['status'] == true) {
+          if (res['status'] == true) {
             html_text = "";
             html_text = html_text + "<div class='row'>";
             html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Rekening  </label>";
-            html_text = html_text + "<br>Pesan: " + res2['msg'] + "<br>";
-            html_text = html_text + "kode bank: " + res2['data']['bankcode'] + "<br>";
-            html_text = html_text + "nama bank: " + res2['data']['bankname'] + "<br>";
-            html_text = html_text + "nomor rekening: " + res2['data']['accountnumber'] + "<br>";
-            html_text = html_text + "nama pemilik rekening: " + res2['data']['accountname'] + "<br>";
+            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
+            html_text = html_text + "kode bank: " + res['data']['bankcode'] + "<br>";
+            html_text = html_text + "nama bank: " + res['data']['bankname'] + "<br>";
+            html_text = html_text + "nomor rekening: " + res['data']['accountnumber'] + "<br>";
+            html_text = html_text + "nama pemilik rekening: " + res['data']['accountname'] + "<br>";
             html_text = html_text + "</div>";
             html_text = html_text + "</div>";
 
@@ -1450,7 +1452,7 @@
             html_text = html_text + "<div class='row'>";
             html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Rekening  </label>";
-            html_text = html_text + "<br>Pesan: " + res2['msg'] + "<br>";
+            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
             html_text = html_text + "</div>";
             html_text = html_text + "</div>";
           }

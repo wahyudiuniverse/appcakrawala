@@ -394,10 +394,15 @@ class Registrasi extends CI_Controller
 
         curl_close($curl);
 
+        $pesan = array(
+            'status' => false,
+            'msg' => "cURL Error #:" . $err,
+        );
+
         if ($err) {
-            return "cURL Error #:" . $err;
+            echo json_encode($pesan);
         } else {
-            echo json_encode($response);
+            echo $response;
         }
     }
 
