@@ -130,7 +130,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   if (
     in_array('13', $role_resources_ids)
     || in_array('7', $role_resources_ids)
-    || in_array('422', $role_resources_ids)
     || $reports_to > 0
     || $user_info[0]->user_role_id == 1
   ) {
@@ -143,23 +142,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
       </a>
 
       <ul class="sidenav-menu">
-        <?php
-        if ($user_info[0]->user_role_id == 1) {
-        ?>
-          <?php
-          if (in_array('422', $role_resources_ids)) {
-          ?>
-
-            <li class="sidenav-item <?php if (!empty($arr_mod['staff_active'])) echo $arr_mod['staff_active']; ?>">
-              <a class="sidenav-link" href="<?php echo site_url('admin/employees/staff_dashboard/'); ?>"> <?php echo $this->lang->line('hr_staff_dashboard_title'); ?>
-              </a>
-            </li>
-          <?php
-          }
-          ?>
-        <?php
-        }
-        ?>
 
         <?php
         if (in_array('13', $role_resources_ids) || $reports_to > 0) {
@@ -981,7 +963,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     || in_array('20', $role_resources_ids)
     || in_array('21', $role_resources_ids)
     || in_array('22', $role_resources_ids)
-    || in_array('23', $role_resources_ids)
   ) {
   ?>
     <li class="<?php if (!empty($arr_mod['emp_open'])) echo $arr_mod['emp_open']; ?> sidenav-item">
@@ -1078,16 +1059,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['term_active'])) echo $arr_mod['term_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/termination'); ?>"> <?php echo $this->lang->line('left_terminations'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('23', $role_resources_ids)) {
-        ?>
-          <li class="<?php if (!empty($arr_mod['emp_ex_active'])) echo $arr_mod['emp_ex_active']; ?> sidenav-item">
-            <a href="<?php echo site_url('admin/employee_exit'); ?>" class="sidenav-link"> <?php echo $this->lang->line('left_employees_exit'); ?></a>
           </li>
         <?php
         }
@@ -1223,91 +1194,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['pol_active'])) echo $arr_mod['pol_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/policy/'); ?>"> <?php echo $this->lang->line('header_policies'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-      </ul>
-    </li>
-  <?php
-  }
-  ?>
-
-  <!-- timesheet -->
-  <?php
-  if (
-    in_array('27', $role_resources_ids)
-    || in_array('423', $role_resources_ids)
-    || in_array('10', $role_resources_ids)
-    || in_array('30', $role_resources_ids)
-    || in_array('401', $role_resources_ids)
-    || in_array('261', $role_resources_ids)
-    || in_array('28', $role_resources_ids)
-  ) {
-  ?>
-    <li class="<?php if (!empty($arr_mod['attnd_open'])) echo $arr_mod['attnd_open']; ?> sidenav-item">
-      <a href="#" class="sidenav-link sidenav-toggle">
-        <i class="sidenav-icon ion ion-md-clock"></i>
-        <div><?php echo $this->lang->line('left_timesheet'); ?></div>
-      </a>
-
-      <ul class="sidenav-menu">
-        <?php
-        if (in_array('423', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['attendance_dashboard_active'])) echo $arr_mod['attendance_dashboard_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/timesheet/attendance_dashboard/'); ?>"> <?php echo $this->lang->line('hr_timesheet_dashboard_title'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('28', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['attnd_active'])) echo $arr_mod['attnd_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/timesheet/attendance/'); ?>"> <?php echo $this->lang->line('left_attendance'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('30', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['upd_attnd_active'])) echo $arr_mod['upd_attnd_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/timesheet/update_attendance/'); ?>"> <?php echo $this->lang->line('left_update_attendance'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('10', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['timesheet_active'])) echo $arr_mod['timesheet_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/timesheet/'); ?>"> <?php echo $this->lang->line('xin_month_timesheet_title'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('261', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['timecalendar_active'])) echo $arr_mod['timecalendar_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/timesheet/timecalendar/'); ?>"> <?php echo $this->lang->line('xin_acc_calendar'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('401', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['overtime_request_act'])) echo $arr_mod['overtime_request_act']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/overtime_request/'); ?>"> <?php echo $this->lang->line('xin_overtime_request'); ?> </a>
           </li>
         <?php
         }
@@ -1797,175 +1683,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
-  <!-- performance -->
-  <?php
-  if ($system[0]->module_performance == 'yes') {
-  ?>
-    <?php
-    if ($system[0]->performance_option == 'goal') :
-    ?>
-      <?php
-      if (
-        in_array('106', $role_resources_ids)
-        || in_array('107', $role_resources_ids)
-        || in_array('108', $role_resources_ids)
-      ) {
-      ?>
-        <?php
-        if (in_array('107', $role_resources_ids) && in_array('108', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/goal_tracking/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('107', $role_resources_ids) && !in_array('108', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/goal_tracking/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (!in_array('107', $role_resources_ids) && in_array('108', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/goal_tracking/type/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('xin_hr_goal_tracking_type_se'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-      <?php
-      }
-      ?>
-
-    <?php
-    elseif ($system[0]->performance_option == 'appraisal') :
-    ?>
-      <?php
-      if (
-        in_array('40', $role_resources_ids)
-        || in_array('41', $role_resources_ids)
-        || in_array('42', $role_resources_ids)
-      ) {
-      ?>
-        <?php
-        if (in_array('41', $role_resources_ids) && in_array('42', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/performance_appraisal/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (!in_array('41', $role_resources_ids) && in_array('42', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/performance_appraisal/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('41', $role_resources_ids) && !in_array('42', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/performance_indicator/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-      <?php
-      }
-      ?>
-
-    <?php
-    else :
-    ?>
-      <?php
-      if (
-        in_array('40', $role_resources_ids)
-        || in_array('41', $role_resources_ids)
-        || in_array('42', $role_resources_ids)
-      ) {
-      ?>
-        <?php
-        if (in_array('41', $role_resources_ids) && in_array('42', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/performance_appraisal/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (!in_array('41', $role_resources_ids) && in_array('42', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/performance_appraisal/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('41', $role_resources_ids) && !in_array('42', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['performance_active'])) echo $arr_mod['performance_active']; ?>">
-            <a href="<?php echo site_url('admin/performance_indicator/'); ?>" class="sidenav-link">
-              <i class="sidenav-icon fas fa-cube"></i>
-              <div><?php echo $this->lang->line('left_performance'); ?></div>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-      <?php
-      }
-      ?>
-
-    <?php
-    endif;
-    ?>
-  <?php
-  }
-  ?>
 
   <?php $hr_top_menu = explode(',', $system[0]->hr_top_menu); ?>
   <?php if ($system[0]->module_assets == 'true') { ?>
@@ -1991,15 +1708,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
       <?php } ?>
     <?php endif; ?>
   <?php } ?>
-  <?php if ($system[0]->module_inquiry == 'true') { ?>
-    <?php if (in_array('tickets', $hr_top_menu)) : ?>
-      <?php if (in_array('43', $role_resources_ids)) { ?>
-        <li class="sidenav-item"><a class="sidenav-link" href="<?php echo site_url('admin/tickets'); ?>"> <i class="fab fa-critical-role sidenav-icon"></i>
-            <div><?php echo $this->lang->line('left_tickets'); ?></div>
-          </a></li>
-      <?php } ?>
-    <?php endif; ?>
-  <?php } ?>
+
   <?php if ($system[0]->module_training == 'true') { ?>
     <?php if (in_array('training', $hr_top_menu)) : ?>
       <?php if (in_array('54', $role_resources_ids) && in_array('55', $role_resources_ids) && in_array('56', $role_resources_ids)) { ?>
@@ -2103,38 +1812,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
       <?php } ?>
     <?php endif; ?>
   <?php } ?>
-  <?php if ($system[0]->module_events == 'true') { ?>
-    <?php if (in_array('events_meetings', $hr_top_menu)) : ?>
-      <?php if (in_array('98', $role_resources_ids) && in_array('99', $role_resources_ids)) { ?>
-        <li class="sidenav-item"><a href="<?php echo site_url('admin/events') ?>" class="sidenav-link"> <i class="fas fa-calendar-alt sidenav-icon"></i>
-            <div><?php echo $this->lang->line('xin_hr_events_meetings'); ?></div>
-          </a></li>
-      <?php } ?>
-    <?php endif; ?>
-    <?php if (in_array('events', $hr_top_menu)) : ?>
-      <?php if (in_array('98', $role_resources_ids) && !in_array('99', $role_resources_ids)) { ?>
-        <li class="sidenav-item"><a href="<?php echo site_url('admin/events') ?>" class="sidenav-link"> <i class="fas fa-calendar-alt sidenav-icon"></i>
-            <div><?php echo $this->lang->line('xin_hr_events'); ?></div>
-          </a></li>
-      <?php } ?>
-    <?php endif; ?>
-    <?php if (in_array('meetings', $hr_top_menu)) : ?>
-      <?php if (!in_array('98', $role_resources_ids) && in_array('99', $role_resources_ids)) { ?>
-        <li class="sidenav-item"><a href="<?php echo site_url('admin/meetings') ?>" class="sidenav-link"> <i class="fas fa-calendar-alt sidenav-icon"></i>
-            <div><?php echo $this->lang->line('xin_hr_meetings'); ?></div>
-          </a></li>
-      <?php } ?>
-    <?php endif; ?>
-  <?php } ?>
-  <?php if ($system[0]->module_orgchart == 'true') { ?>
-    <?php if (in_array('orgchart', $hr_top_menu)) : ?>
-      <?php if (in_array('96', $role_resources_ids)) { ?>
-        <li class="sidenav-item"><a href="<?php echo site_url('admin/organization/chart') ?>" class="sidenav-link"> <i class="ion ion-ios-map sidenav-icon"></i>
-            <div><?php echo $this->lang->line('xin_org_chart_title'); ?></div>
-          </a></li>
-      <?php } ?>
-    <?php endif; ?>
-  <?php } ?>
+
   <?php if (in_array('settings', $hr_top_menu)) : ?>
     <?php if (in_array('60', $role_resources_ids)) { ?>
       <li class="sidenav-item"><a href="<?php echo site_url('admin/settings') ?>" class="sidenav-link"> <i class="fas fa-cog sidenav-icon"></i>

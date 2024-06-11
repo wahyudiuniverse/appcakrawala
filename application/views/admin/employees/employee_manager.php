@@ -56,6 +56,29 @@
 
   
   $leave_user = $this->Xin_model->read_user_info($session['user_id']);
+
+
+
+
+      $copypaste = '*C.I.S -> Employees Registration.*%0a%0a
+      Nama Lengkap: *'.$first_name.'*%0a
+      NIP: *'.$employee_id.'*%0a
+      PIN: *'.$private_code.'*%0a
+      PROJECT: *'.$project_name.'* %0a%0a
+
+      Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+      Link C.I.S : https://apps-cakrawala.com/admin%0a
+
+      Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu *My Profile* kemudian *Ubah Pin*%0a%0a
+
+      *INFO HRD di Nomor Whatsapp: 085175168275* %0a
+      *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+      
+      Terima kasih.';
+
+      $whatsapp = '<a href="https://wa.me/62'.$this->Xin_model->clean_post($contact_no).'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Send NIP</button> </a>';
+
+
 ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $get_animate = $this->Xin_model->get_content_animate();?>
@@ -120,6 +143,9 @@
                         <div class="text-big  mt-1"><label class="form-label">NIP: <?php echo $employee_id;?></label></div>
                         <div class="text-muted  mt-1"><label class="form-label"><?php echo $designation[0]->designation_name;?></label></div>
                         <a href="https://wa.me/62<?php echo $contact_no;?>" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Whatsapp</button></a>
+
+                        <?php echo $whatsapp;?>
+
                       </div>
                     </div>
 

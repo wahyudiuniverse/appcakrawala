@@ -160,6 +160,109 @@ class Employee_pkwt_cancel extends MY_Controller {
           exit();
   }
 
+
+	public function pkwt_list_appcancel2() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/pkwt/pkwt_list_appcancel", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+		
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
+		// $employee = $this->Employees_model->get_employees_request_verify();
+		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
+		$employee = $this->Pkwt_model->get_monitoring_pkwt_cancel(0);
+
+		$data = array();
+
+          foreach($employee->result() as $r) {
+			  
+				$nip = $r->employee_id;
+				$project = $r->project;
+				$jabatan = $r->jabatan;
+				$penempatan = $r->penempatan;
+				$begin_until = $r->from_date .' s/d ' . $r->to_date;
+				$basic_pay = $r->basic_pay;
+				$approve_nom = $r->approve_nom;
+				$approve_nae = $r->approve_nae;
+				$cancel_on = $r->cancel_on;
+
+				if($approve_nae=='0') {
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval NAE</button>';
+			  	
+				} else if($approve_nom=='0'){
+
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval NOM</button>';
+				} else {
+					
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Need Approval HRD</button>';
+				}
+
+			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+
+			$delete = '<button type="button" class="btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="'. $r->contract_id . '">Delete</button>';
+
+
+				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
+				if(!is_null($emp)){
+					$fullname = $emp[0]->first_name;
+				} else {
+					$fullname = '--';	
+				}
+
+				$projects = $this->Project_model->read_single_project($project);
+				if(!is_null($projects)){
+					$nama_project = $projects[0]->title;
+				} else {
+					$nama_project = '--';	
+				}
+			
+				// $department = $this->Department_model->read_department_information($r->department);
+				// if(!is_null($department)){
+				// 	$department_name = $department[0]->department_name;
+				// } else {
+				// 	$department_name = '--';	
+				// }
+
+				$designation = $this->Designation_model->read_designation_information($r->jabatan);
+				if(!is_null($designation)){
+					$designation_name = $designation[0]->designation_name;
+				} else {
+					$designation_name = '--';	
+				}
+
+			$data[] = array(
+				$status_migrasi.' '.$editReq. ' '.$delete,
+				$nip,
+				$fullname,
+				$nama_project,
+				$designation_name,
+				$penempatan,
+				$begin_until,
+				$cancel_on,
+				 // $this->Xin_model->rupiah($basic_pay),
+			);
+          }
+
+          $output = array(
+               "draw" => $draw,
+                 "recordsTotal" => $employee->num_rows(),
+                 "recordsFiltered" => $employee->num_rows(),
+                 "data" => $data
+            );
+          echo json_encode($output);
+          exit();
+  }
+
 	 // get location > departments
 	public function get_project_sub_project() {
 

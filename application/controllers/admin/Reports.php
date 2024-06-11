@@ -302,7 +302,7 @@ class Reports extends MY_Controller
 
 			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
 			if(!is_null($readPkwt)){
-				if($r->level=="E1" || $r->level=="E2") {
+				if($r->level=="D2" || $r->level=="E1" || $r->level=="E2") {
 					$basicpay 		= $readPkwt[0]->basic_pay;
 				} else {
 					$basicpay 		= "******";
@@ -355,21 +355,21 @@ class Reports extends MY_Controller
 			if(!is_null($r->marital_status)){
 				if($r->marital_status=='1'){
 					$marital = 'TK/0';
-				} else if($r->last_edu=='2') {
+				} else if($r->marital_status=='2') {
 					$marital = 'TK/0';
-				} else if($r->last_edu=='3') {
+				} else if($r->marital_status=='3') {
 					$marital = 'TK/1';
-				} else if($r->last_edu=='4') {
+				} else if($r->marital_status=='4') {
 					$marital = 'TK/2';
-				} else if($r->last_edu=='5') {
+				} else if($r->marital_status=='5') {
 					$marital = 'TK/3';
-				} else if($r->last_edu=='6') {
+				} else if($r->marital_status=='6') {
 					$marital = 'K/0';
-				} else if($r->last_edu=='7') {
+				} else if($r->marital_status=='7') {
 					$marital = 'K/1';
-				} else if($r->last_edu=='8') {
+				} else if($r->marital_status=='8') {
 					$marital = 'K/2';
-				} else if($r->last_edu=='9') {
+				} else if($r->marital_status=='9') {
 					$marital = 'K/3';
 				} else {
 					$marital = '--';
@@ -453,7 +453,7 @@ class Reports extends MY_Controller
 			}
 
 
-			if($r->password_change==0 || $r->project_id != '22'){
+			if($r->password_change==0 || $r->project_id != '22' || $r->project_id != '95'){
 					
 				$pin = $r->private_code;
 			} else {
@@ -1389,7 +1389,7 @@ class Reports extends MY_Controller
 
 		// if(in_array('112',$role_resources_ids)) {
 
-		if($session['employee_id']==1 || $session['employee_id']==21505790 || $session['employee_id']==21300093) {
+		if($session['employee_id']==1 || $session['employee_id']==21505790 || $session['employee_id']==21300093 || $session['employee_id']==21500081 ) {
 			$data['subview'] = $this->load->view("admin/reports/employee_attendance", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -1755,7 +1755,7 @@ class Reports extends MY_Controller
 
 
 	// reports > employee attendance
-	public function pkwt_history() {
+	public function pkwt_history() { 
 	
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
@@ -1773,32 +1773,33 @@ class Reports extends MY_Controller
 		
 		// if(in_array('139',$role_resources_ids)) {
 		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		// } else {
-		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
-		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
-		// }
-		if(in_array('380',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/report_pkwt_history", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
+		// } else { 
+		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all(); 
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist(); 
+		// } 
+		if(in_array('380',$role_resources_ids)) { 
+			$data['subview'] = $this->load->view("admin/reports/report_pkwt_history", $data, TRUE); 
+			$this->load->view('admin/layout/layout_main', $data); //page load 
+		} else { 
+			redirect('admin/dashboard'); 
+		} 
+	} 
 
 
-	public function read_pkwt_report() {
+	public function read_pkwt_report() { 
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
-		}
-		$data['title'] = $this->Xin_model->site_title();
-		$id = $this->input->get('company_id');
-       // $data['all_countries'] = $this->xin_model->get_countries();
+		} 
+
+		$data['title'] = $this->Xin_model->site_title(); 
+		$id = $this->input->get('company_id'); 
+       // $data['all_countries'] = $this->xin_model->get_countries(); 
 		// $result = $this->Company_model->read_company_information('2');
 		// $result = $this->Employees_model->read_employee_info($id);
-		$result = $this->Pkwt_model->read_pkwt_info_by_contractid($id);
+		$result = $this->Pkwt_model->read_pkwt_info_by_contractid($id); 
 
-		$data = array(
+		$data = array( 
 				'contract_id' => $result[0]->contract_id,
 				'no_surat' => $result[0]->no_surat,
 				'no_spb' => $result[0]->no_spb,
@@ -1873,6 +1874,7 @@ class Reports extends MY_Controller
 					$sub_project = 'pkwt'.$emp[0]->sub_project_id;
 					$nowhatsapp = $emp[0]->contact_no;
 					$tkhl_status = $emp[0]->e_status;
+					$roleid = $emp[0]->user_role_id;
 
 				} else {
 
@@ -1881,6 +1883,7 @@ class Reports extends MY_Controller
 					$sub_project = '0';
 					$nowhatsapp = '0';
 					$tkhl_status = '0';
+					$roleid = '0';
 				}
 
 				$projects = $this->Project_model->read_single_project($project);
@@ -1899,12 +1902,10 @@ class Reports extends MY_Controller
 
 			$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Approved</button>';
 
-			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT</button> </a>'; 
-
-			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Hapus</button>';
+			$view_pkwt = '<a href="'.site_url().'admin/'.$sub_project.'/view/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT'.$roleid.'</button> </a>'; 
 
 
-			if($tkhl_status=='1'){
+			if ($tkhl_status=='1') { 
 
 				$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
 				Nama Lengkap: *'.$fullname.'*%0a
@@ -1942,11 +1943,16 @@ class Reports extends MY_Controller
 				Terima kasih.';
 			}
 
-
 			$whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
 
-			$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+			// if($roleid=='1' || $roleid=='3' || $roleid=='11'){
+				$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+				$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->contract_id . '">Hapus</button>';
+			// } else {
+			// 	$editReq = '';
+			// 	$delete = '';
 
+			// }
 
 			$data[] = array (
 				$no,

@@ -98,6 +98,7 @@
 
   <!-- Conditions-->
   <?php if ($this->router->fetch_class() == 'roles') { ?>
+    <script src="https://code.jquery.com/jquery-3.2.0.min.js"></script>
     <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/kendo/kendo.common.min.css">
     <link rel="stylesheet" href="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/kendo/kendo.default.min.css">
   <?php } ?>

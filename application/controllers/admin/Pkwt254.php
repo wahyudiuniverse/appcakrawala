@@ -1416,7 +1416,7 @@ class Pkwt254 extends MY_Controller
 
 					<tr>
 						<td><br>
-					<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
+					<img src="'.base_url().'/assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
 						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 
@@ -1440,7 +1440,7 @@ class Pkwt254 extends MY_Controller
 
 					<tr>
 						<td><br>
-					<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
+					<img src="'.base_url().'/assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
 						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 

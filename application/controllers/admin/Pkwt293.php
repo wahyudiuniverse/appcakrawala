@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt288 extends MY_Controller 
+class Pkwt293 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -389,7 +389,7 @@ class Pkwt288 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+								<td colspan="20">Karyawan mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
 							</tr>';
 
 						$tbl_2 .= '
@@ -397,34 +397,34 @@ class Pkwt288 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+								<td colspan="20">Upah harian diberikan sebesar <b>'.$basicpay.'</b> / Per Hari sesuai dengan kehadiran <b>'.$waktukerja.'</b> Hari kerja dalam 1 bulan kerja</td>
 							</tr>
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_transport.' Uang Transport sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+								<td colspan="20">Uang makan diberikan sebesar <b>'.$allowance_meal.'</b> / Per Hari sesuai dengan kehadiran <b>'.$waktukerja.'</b> Hari kerja dalam 1 bulan kerja</td>
 							</tr>
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+								<td colspan="20">Uang transport diberikan sebesar <b>'.$allowance_transport.'</b> / Per Hari sesuai dengan kehadiran <b>'.$waktukerja.'</b> Hari kerja dalam 1 bulan kerja</td>
 							</tr>
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> Total Upah Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).' /'.$waktukerja.' Hari Kerja sebesar '.$this->Xin_model->rupiah($sum_salary/$waktukerja).' /Hari.</td>
+								<td colspan="20">Uang sewa motor diberikan sebesar <b>'.$allowance_rent.'</b> / Per Hari sesuai dengan kehadiran <b>'.$waktukerja.'</b> Hari kerja dalam 1 bulan kerja</td>
 							</tr>
 
 							<br>
 
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan.</td>
+								<td colspan="20">Pihak perusahaan akan mendaftarkan BPJS Ketenagakerjaan untuk Mitra selama bekerja yaitu (JKK dan JKM). Maka atas dasar hal tersebut apabila Karyawan Mitra mengalami sakit disaat jam kerja atau pihak Anggota keluarga karyawan Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi karyawan Mitra dan tidak menjadi beban perusahan.</td>
 							</tr>
-
+							
 							<br>
 							<tr>
 								<td>6.</td>
@@ -434,14 +434,12 @@ class Pkwt288 extends MY_Controller
 							<br>
 							<br>
 							<br>
-							<br>
 							<tr>
 								<td>7.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
 							
 							<br>
-							
 							<tr>
 								<td>8.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
@@ -465,7 +463,7 @@ class Pkwt288 extends MY_Controller
 							</tr>
 <br>
 							<tr>
-								<td colspan="20">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
+								<td colspan="10">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
 								<td colspan="0"></td>
 								<td colspan="0"></td>
 							</tr>

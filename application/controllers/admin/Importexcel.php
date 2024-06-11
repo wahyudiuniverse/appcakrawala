@@ -1545,7 +1545,7 @@ class ImportExcel extends MY_Controller
 
 						//parse data from csv file line by line
 						//while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-						while (($line = fgetcsv($csvFile, 1000, ',')) !== FALSE) {
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
 
 							// $options = array('cost' => 12);
 							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);

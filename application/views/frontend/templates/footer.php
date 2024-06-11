@@ -141,6 +141,15 @@
             return false; //Prevent from ctrl+shift+i
         }
     });
+    $("#penempatan").bind("contextmenu", function(e) {
+        e.preventDefault();
+    });
+    $("#penempatan").on('keydown', function(event) {
+        if (event.ctrlKey) {
+            //alert('Entered ctrl')
+            return false; //Prevent from ctrl+shift+i
+        }
+    });
     $("#perusahaan").bind("contextmenu", function(e) {
         e.preventDefault();
     });

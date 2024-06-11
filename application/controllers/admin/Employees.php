@@ -1286,12 +1286,9 @@ class Employees extends MY_Controller
 			'deactive_date' => $result[0]->deactive_date,
 			'deactive_reason' => $result[0]->deactive_reason,
 
-
 			'all_companies' 	=> $this->Xin_model->get_companies(),
 			'all_departments' 	=> $this->Department_model->all_departments(),
 			'all_projects' 		=> $this->Project_model->get_project_brand(),
-
-			// 'project_list' 	=> $this->Project_model->get_project_maping($session['employee_id']),
 
 			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' 	=> $this->Designation_model->all_designations(),
@@ -1315,7 +1312,7 @@ class Employees extends MY_Controller
 			'last_login_date' => $result[0]->last_login_date,
 			'last_login_ip' => $result[0]->last_login_ip,
 
-			// 'dokumen_skk' => $this->Project_model->get_dokumen_skk($result[0]->employee_id),
+			'private_code' => $result[0]->private_code,
 			// 'dokumen_skk' => $this->Project_model->get_dokumen_skk('23524441'),
 
 			// 'all_countries' => $this->Xin_model->get_countries(),

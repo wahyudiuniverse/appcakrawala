@@ -104,8 +104,9 @@ $session = $this->session->userdata('username');
             <option value="C1">C1</option>
             <option value="C2">C2</option>
             <option value="D1">D1</option>
-            <option value="D2" selected>D2</option>
-            <option value="D3">D3</option>
+            <option value="D2">D2</option>
+            <option value="E1" selected>E1</option>
+            <option value="E2">E2</option>
           </select>
         </div>
 

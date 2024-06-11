@@ -204,7 +204,7 @@ class Register_model extends CI_model
             "project"                => $data['project'],
             "sub_project"            => $data['sub_project'],
             "posisi"                 => $data['jabatan'],
-            "penempatan"             => strtoupper($data['penempatan'])
+            "penempatan"             => $data['penempatan']
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
