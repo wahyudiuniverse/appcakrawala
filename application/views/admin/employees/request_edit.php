@@ -38,8 +38,7 @@
       </div>
       <div class="modal-body">
         <div class="form-group row">
-          <div class="col-md-3">NIK
-            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          <div class="col-md-3">NIK <span class="icon-verify-nik"></span>
           </div>
           <div class="col-md-5"><input type='text' id="nik_modal" class='form-control' placeholder='Nomor NIK KTP' value='<?php echo $ktp_no; ?>'></div>
           <div class="col-md-4">
@@ -50,8 +49,18 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-md-3">Nama Lengkap
-            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          <div class="col-md-3">KK <span class="icon-verify-kk"></span>
+          </div>
+          <div class="col-md-5"><input type='text' id="kk_modal" class='form-control' placeholder='Nomor Kartu Keluarga' value='<?php echo $kk_no; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_kk_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_kk_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3">Nama Lengkap <span class="icon-verify-nama"></span>
           </div>
           <div class="col-md-5"><input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value="<?php echo $fullname; ?>"></div>
           <div class="col-md-4">
@@ -62,10 +71,21 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-md-3">Bank
-            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          <div class="col-md-3">Bank <span class="icon-verify-bank"></span>
           </div>
-          <div class="col-md-5"><input type='text' id="bank_modal" class='form-control' placeholder='Bank' value='<?php echo $bank_id; ?>'></div>
+          <div class="col-md-5">
+            <select name="bank_modal" id="bank_modal" class="form-control" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name'); ?>">
+              <option value=""></option>
+              <?php
+              foreach ($list_bank as $bank) {
+              ?>
+                <option value="<?php echo $bank->secid; ?>" <?php if ($bank_id == $bank->secid) : ?> selected <?php endif; ?>> <?php echo $bank->bank_name; ?></option>
+              <?php
+              }
+              ?>
+            </select>
+            <!-- <input type='text' id="bank_modal" class='form-control' placeholder='Bank' value='<?php echo $bank_id; ?>'> -->
+          </div>
           <div class="col-md-4">
             <button id="button_verify_bank_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
             <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
@@ -74,8 +94,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-md-3">Nomor Rekening
-            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          <div class="col-md-3">Nomor Rekening <span class="icon-verify-norek"></span>
           </div>
           <div class="col-md-5"><input type='text' id="rekening_modal" class='form-control' placeholder='Nomor Rekening' value='<?php echo $nomor_rek; ?>'></div>
           <div class="col-md-4">
@@ -86,8 +105,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-md-3">Pemilik Rekening
-            <img src='<?php echo base_url('/assets/icon/') . "not-verified.png"; ?>' width="20">
+          <div class="col-md-3">Pemilik Rekening <span class="icon-verify-pemilik-rek"></span>
           </div>
           <div class="col-md-5"><input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value="<?php echo $pemilik_rek; ?>"></div>
           <div class="col-md-4">
@@ -143,9 +161,10 @@
                   <div class="form-group">
                     <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name'); ?><i class="hrpremium-asterisk">*</i></label>
                     <!-- icon lock - unlock - log -->
-                    <i hidden id="lock_nama" onclick="lock_on_nama()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
+                    <!-- <i hidden id="lock_nama" onclick="lock_on_nama()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
                     <i hidden id="unlock_nama" onclick="lock_off_nama()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
-                    <i hidden id="log_nama" onclick="show_log_nama()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i>
+                    <i hidden id="log_nama" onclick="show_log_nama()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i> -->
+                    <span class="icon-verify-nama"></span>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name'); ?>" name="fullname" id="fullname" type="text" value="<?php echo $fullname; ?>">
                   </div>
                 </div>
@@ -245,9 +264,10 @@
                   <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
                     <!-- icon lock - unlock - log -->
-                    <i hidden id="lock_ktp" onclick="lock_on_ktp()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
+                    <!-- <i hidden id="lock_ktp" onclick="lock_on_ktp()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
                     <i hidden id="unlock_ktp" onclick="lock_off_ktp()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
-                    <i hidden id="log_ktp" onclick="show_log_ktp()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i>
+                    <i hidden id="log_ktp" onclick="show_log_ktp()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i> -->
+                    <span class="icon-verify-nik"></span>
                     <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" id="nomor_ktp" type="text" value="<?php echo $ktp_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
@@ -269,9 +289,10 @@
                   <div class="form-group">
                     <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
                     <!-- icon lock - unlock - log -->
-                    <i hidden id="lock_kk" onclick="lock_on_kk()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
+                    <!-- <i hidden id="lock_kk" onclick="lock_on_kk()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
                     <i hidden id="unlock_kk" onclick="lock_off_kk()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
-                    <i hidden id="log_kk" onclick="show_log_kk()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i>
+                    <i hidden id="log_kk" onclick="show_log_kk()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i> -->
+                    <span class="icon-verify-kk"></span>
                     <input class="form-control" placeholder="Nomor KK" name="nomor_kk" id="nomor_kk" type="text" value="<?php echo $kk_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
@@ -319,10 +340,10 @@
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="bank_name"><?php echo $this->lang->line('xin_e_details_bank_name'); ?><i class="hrpremium-asterisk">*</i></label>
+                    <label for="bank_name2"><?php echo $this->lang->line('xin_e_details_bank_name'); ?><i class="hrpremium-asterisk">*</i></label><span class="icon-verify-bank"></span>
 
 
-                    <select name="bank_name" id="bank_name" class="form-control" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name'); ?>">
+                    <select name="bank_name2" id="bank_name2" class="form-control" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name'); ?>">
                       <option value=""></option>
                       <?php
                       foreach ($list_bank as $bank) {
@@ -333,21 +354,23 @@
                       ?>
                     </select>
 
+                    <input hidden name="bank_name" id="bank_name" placeholder="Nomor Rekening Bank" type="text" value="<?php echo $bank_id; ?>">
+
                   </div>
                 </div>
 
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="no_rek" class="control-label"><?php echo $this->lang->line('xin_e_details_acc_number'); ?><i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor Rekening Bank" name="no_rek" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $nomor_rek; ?>">
+                    <label for="no_rek" class="control-label"><?php echo $this->lang->line('xin_e_details_acc_number'); ?><i class="hrpremium-asterisk">*</i></label><span class="icon-verify-norek"></span>
+                    <input class="form-control" placeholder="Nomor Rekening Bank" id="no_rek" name="no_rek" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="16" value="<?php echo $nomor_rek; ?>">
                   </div>
                 </div>
 
                 <!--PEMILIK REKENING-->
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="pemilik_rek" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nama Pemilik Rekening" name="pemilik_rekening" type="text" value="<?php echo $pemilik_rek; ?>">
+                    <label for="pemilik_rek" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label><span class="icon-verify-pemilik-rek"></span>
+                    <input class="form-control" placeholder="Nama Pemilik Rekening" id="pemilik_rekening" name="pemilik_rekening" type="text" value="<?php echo $pemilik_rek; ?>">
                   </div>
                 </div>
 
@@ -1330,6 +1353,11 @@
       //alert("selesai ajax");
     });
 
+    // Bank Change - isi value ke variable hidden bank_name (untuk save)
+    $('#bank_name2').change(function() {
+      var bank = $("#bank_name2").val();
+      document.getElementById("bank_name").value = bank;
+    });
 
 
   });
@@ -1462,7 +1490,14 @@
         },
         error: function(xhr, status, error) {
           // var res = jQuery.parseJSON(response);
-          $('.rekening-modal').html("xhr.responseText");
+          html_text = "";
+          html_text = html_text + "<div class='row'>";
+          html_text = html_text + "<div class='form-group col-md-12'>";
+          html_text = html_text + "<label>Rekening  </label>";
+          html_text = html_text + "<br>" + xhr.responseText;
+          html_text = html_text + "</div>";
+          html_text = html_text + "</div>";
+          $('.rekening-modal').html(html_text);
           flag_rekening = 1;
         }
       });
@@ -1490,5 +1525,234 @@
     $('#verifikasiModal').modal('hide');
 
     // alert("masuk fungsi verifikasi data.");
+  };
+</script>
+
+<!-- Tombol Verifikasi Data NIK -->
+<script type="text/javascript">
+  document.getElementById("button_verify_nik_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nik = $("#nik_modal").val();
+    var nik_lama = "<?php echo $ktp_no; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    nomor_ktp.setAttribute("readonly", "readonly");
+    nik_modal.setAttribute("readonly", "readonly");
+
+    document.getElementById("nomor_ktp").value = nik;
+
+    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi NIK di modal.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data NIK -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_nik_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nik = $("#nik_modal").val();
+    var nik_lama = "<?php echo $ktp_no; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    document.getElementById("nomor_ktp").removeAttribute("readonly");
+    document.getElementById("nik_modal").removeAttribute("readonly");
+
+    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi cancel verifikasi NIK di modal.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Verifikasi Data KK -->
+<script type="text/javascript">
+  document.getElementById("button_verify_kk_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var kk = $("#kk_modal").val();
+    var kk_lama = "<?php echo $kk_no; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    nomor_kk.setAttribute("readonly", "readonly");
+    kk_modal.setAttribute("readonly", "readonly");
+
+    document.getElementById("nomor_kk").value = kk;
+
+    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi KK di modal.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data KK -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_kk_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var kk = $("#kk_modal").val();
+    var kk_lama = "<?php echo $kk_no; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    document.getElementById("nomor_kk").removeAttribute("readonly");
+    document.getElementById("kk_modal").removeAttribute("readonly");
+
+    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi KK di modal.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Nama Lengkap -->
+<script type="text/javascript">
+  document.getElementById("button_verify_nama_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nama = $("#nama_modal").val();
+    var nama_lama = "<?php echo $fullname; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    fullname.setAttribute("readonly", "readonly");
+    nama_modal.setAttribute("readonly", "readonly");
+
+    document.getElementById("fullname").value = nama;
+
+    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi Nama di modal.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Nama Lengkap -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_nama_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nama = $("#nama_modal").val();
+    var nama_lama = "<?php echo $fullname; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    document.getElementById("fullname").removeAttribute("readonly");
+    document.getElementById("nama_modal").removeAttribute("readonly");
+
+    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi cancel verifikasi Nama di modal.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Bank -->
+<script type="text/javascript">
+  document.getElementById("button_verify_bank_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var bank = $("#bank_modal").val();
+    var bank_lama = "<?php echo $bank_id; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    $("#bank_name2").val(bank).change();
+    document.getElementById("bank_name").value = bank;
+
+    bank_modal.setAttribute("disabled", "disabled");
+    bank_name2.setAttribute("disabled", "disabled");
+
+    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi Bank di modal.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Bank -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_bank_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var bank = $("#bank_modal").val();
+    var bank_lama = "<?php echo $bank_id; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    document.getElementById("bank_modal").removeAttribute("disabled");
+    document.getElementById("bank_name").removeAttribute("disabled");
+
+    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi cancel verifikasi Bank di modal.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Nomor Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_verify_norek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var norek = $("#rekening_modal").val();
+    var norek_lama = "<?php echo $nomor_rek; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    no_rek.setAttribute("readonly", "readonly");
+    rekening_modal.setAttribute("readonly", "readonly");
+
+    document.getElementById("no_rek").value = norek;
+
+    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi Nomor Rekening di modal.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Nomor Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_norek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var norek = $("#rekening_modal").val();
+    var norek_lama = "<?php echo $nomor_rek; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    document.getElementById("no_rek").removeAttribute("readonly");
+    document.getElementById("rekening_modal").removeAttribute("readonly");
+
+    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi cancel verifikasi Nomor Rekening di modal.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Pemilik Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_verify_pemilik_rek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var pemilik_rek = $("#pemilik_rekening_modal").val();
+    var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    pemilik_rekening.setAttribute("readonly", "readonly");
+    pemilik_rekening_modal.setAttribute("readonly", "readonly");
+
+    document.getElementById("pemilik_rekening").value = pemilik_rek;
+
+    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi verifikasi Pemilik Rekening di modal.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek + "\nID Karyawan : " + id_employee);
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Pemilik Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_pemilik_rek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var pemilik_rek = $("#pemilik_rekening_modal").val();
+    var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
+    var id_employee = "<?php echo $secid; ?>";
+
+    document.getElementById("pemilik_rekening").removeAttribute("readonly");
+    document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
+
+    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+    alert("masuk fungsi cancel verifikasi Pemilik Rekening di modal.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek + "\nID Karyawan : " + id_employee);
   };
 </script>

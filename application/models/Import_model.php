@@ -459,6 +459,56 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	//get table saltab release untuk download excel BPJS
+	public function get_saltab_temp_detail_excel_release_payroll($id, $data_batch)
+	{
+		// $this->db->select($parameter);
+		$this->db->select("*");
+		// $this->db->from('xin_saltab');
+		$this->db->where('uploadid', $id);
+
+		// $records = $this->db->get()->result_array();
+		$records = $this->db->get('xin_saltab')->result();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$sub_project = "";
+
+			if ($data_batch['sub_project_name'] == "-ALL-") {
+				$sub_project = $record->sub_project;
+			} else {
+				$sub_project = $data_batch['sub_project_name'];
+			}
+
+			$data[] = array(
+				$record->status_emp,
+				$record->nip,
+				$record->nik,
+				$record->fullname,
+				$data_batch['project_name'],
+				$record->sub_project,
+				$record->area,
+				$record->total_thp,
+				$record->norek,
+				$record->nama_bank,
+				$record->pemilik_rek,
+			);
+		}
+
+		//$tabel_saltab = $this->Import_model->get_saltab_table();
+		//$paremeter = implode(",", $tabel_saltab);
+		// $jumlah_data = count($tabel_saltab);
+
+		// foreach ($records as $record) {
+
+		// 	$data[] = array(
+
+		// 	);
+		// }
+
+		return $data;
+	}
 
 	// get all employes temporary
 	public function get_eslip_preview($importid)
@@ -1316,12 +1366,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$view = '<button id="tesbutton" type="button" onclick="lihatBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Raw Data</button>';
 			$download_BPJS = '<br><button type="button" onclick="downloadBatchSaltabReleaseBPJS(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Data BPJS</button>';
+			$download_Payroll = '<br><button type="button" onclick="downloadBatchSaltabReleasePayroll(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Data Payroll</button>';
 			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $editReq . " " . $download_BPJS,
+				"aksi" => $view . " " . $editReq . " " . $download_BPJS . " " . $download_Payroll,
 				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
 				"periode_salary" => $periode_salary,
 				"periode" => $text_periode,

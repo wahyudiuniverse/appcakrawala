@@ -364,6 +364,10 @@ class Registrasi extends CI_Controller
         // }
     }
 
+    public function g($id_bank, $no_rekening)
+    {
+    }
+
     //Menampilkan Register tanpa parameter untuk proses POST variable
     public function tes_API_Bank($id_bank, $no_rekening)
     {
@@ -374,12 +378,13 @@ class Registrasi extends CI_Controller
         // $this->load->view('frontend/templates/topbar_register');
         // $this->load->view('frontend/tes_api_bank', $data);
         // $this->load->view('frontend/templates/footer');
+        $bank_code = $this->Employees_model->get_id_bank($id_bank);
 
         $curl = curl_init();
         //$nik = '3201293010880006';
         curl_setopt_array($curl, [
             // CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=014&accountNumber=1370176121",
-            CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=" . $id_bank . "&accountNumber=" . $no_rekening,
+            CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=" . $bank_code . "&accountNumber=" . $no_rekening,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
