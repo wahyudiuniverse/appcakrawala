@@ -903,6 +903,8 @@ class ImportExcel extends MY_Controller
 		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
 		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
 
+		$waktu_stamp = date("Y-m-d H:i:s");
+
 		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
 		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
 		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
@@ -919,11 +921,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
 		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
 
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A6'
+				'A8'
 			);
 
 		//set header background color
@@ -937,7 +947,7 @@ class ImportExcel extends MY_Controller
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A8:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
@@ -947,20 +957,20 @@ class ImportExcel extends MY_Controller
 			->fromArray(
 				$detail_saltab_fix,   // The data to set
 				NULL,
-				'A7'
+				'A9'
 			);
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
 		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
@@ -1009,6 +1019,8 @@ class ImportExcel extends MY_Controller
 		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
 		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
 
+		$waktu_stamp = date("Y-m-d H:i:s");
+
 		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
 		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
 		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
@@ -1025,11 +1037,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
 		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
 
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A6'
+				'A8'
 			);
 
 		//set header background color
@@ -1043,7 +1063,7 @@ class ImportExcel extends MY_Controller
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A8:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
@@ -1053,20 +1073,20 @@ class ImportExcel extends MY_Controller
 			->fromArray(
 				$detail_saltab_fix,   // The data to set
 				NULL,
-				'A7'
+				'A9'
 			);
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
 		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
@@ -1116,6 +1136,8 @@ class ImportExcel extends MY_Controller
 		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
 		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
 
+		$waktu_stamp = date("Y-m-d H:i:s");
+
 		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
 		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
 		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
@@ -1132,11 +1154,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
 		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
 
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A6'
+				'A8'
 			);
 
 		//set header background color
@@ -1150,7 +1180,7 @@ class ImportExcel extends MY_Controller
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A8:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
@@ -1160,20 +1190,20 @@ class ImportExcel extends MY_Controller
 			->fromArray(
 				$detail_saltab_fix,   // The data to set
 				NULL,
-				'A7'
+				'A9'
 			);
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
 		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('6:6')
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
