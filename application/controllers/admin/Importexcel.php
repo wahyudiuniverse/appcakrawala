@@ -748,7 +748,11 @@ class ImportExcel extends MY_Controller
 		for ($i = 0; $i < $jumlah_data; $i++) {
 			$jumlah_kolom = count($data[$i]);
 			for ($j = 0; $j < $jumlah_kolom; $j++) {
-				$data[$i][$j] = $data[$i][$j] . " ";
+				if (is_numeric($data[$i][$j])) {
+					$data[$i][$j] = round($data[$i][$j], 2) . " ";
+				} else {
+					$data[$i][$j] = $data[$i][$j] . " ";
+				}
 			}
 		}
 
