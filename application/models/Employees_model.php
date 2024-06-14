@@ -609,6 +609,21 @@ class Employees_model extends CI_Model
 		return $query;
 	}
 
+	//get validation status kolom
+	function get_valiadation_status($id, $column)
+	{
+		$this->db->select('*');
+		$this->db->from('log_employee_verification');
+		$this->db->where('id_employee_request', $id);
+		$this->db->where('kolom', $column);
+		$this->db->order_by('verified_on', 'desc');
+		$this->db->limit(1);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
 	//set Lock Kolom
 	public function setLockKolom($postData)
 	{
@@ -623,6 +638,84 @@ class Employees_model extends CI_Model
 		//$otherdb = $this->load->database('default', TRUE);
 
 		$this->db->insert('log_lock_unlock', $datalock);
+
+		//return null;
+	}
+
+	//validasi employee request
+	public function valiadsi_employee_request($postData)
+	{
+		//Input untuk Database
+		$datalock = [
+			'id_employee_request'     => $postData['id_employee_request'],
+			'kolom'      			  => $postData['kolom'],
+			'nilai_sebelum'           => $postData['nilai_sebelum'],
+			'nilai_sesudah'       	  => $postData['nilai_sesudah'],
+			'status'      			  => $postData['status'],
+			'verified_by'             => $postData['verified_by'],
+			'verified_by_id'          => $postData['verified_by_id']
+		];
+
+		//update data employee
+		if ($postData['kolom'] == "nik") {
+			$data = array(
+				'nik_ktp' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "kk") {
+			$data = array(
+				'no_kk' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "nama") {
+			$data = array(
+				'fullname' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "bank") {
+			$data = array(
+				'bank_id' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "norek") {
+			$data = array(
+				'no_rek' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "pemilik_rekening") {
+			$data = array(
+				'pemilik_rekening' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		}
+
+
+		$this->db->insert('log_employee_verification', $datalock);
+	}
+
+	//un validasi employee request
+	public function un_valiadsi_employee_request($postData)
+	{
+		//Input untuk Database
+		$datalock = [
+			'id_employee_request'     => $postData['id_employee_request'],
+			'kolom'      			  => $postData['kolom'],
+			'nilai_sebelum'           => $postData['nilai_sebelum'],
+			'nilai_sesudah'       	  => $postData['nilai_sesudah'],
+			'status'      			  => $postData['status'],
+			'verified_by'             => $postData['verified_by'],
+			'verified_by_id'          => $postData['verified_by_id']
+		];
+
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$this->db->insert('log_employee_verification', $datalock);
 
 		//return null;
 	}
@@ -2128,7 +2221,7 @@ ORDER BY jab.designation_id ASC";
 	{
 
 		$sql = 'SELECT * FROM xin_projects_akses WHERE nip = ? AND project_id = ?';
-		$binds = array($empid,$projectid);
+		$binds = array($empid, $projectid);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
 	}

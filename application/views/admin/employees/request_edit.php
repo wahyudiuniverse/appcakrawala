@@ -38,6 +38,10 @@
       </div>
       <div class="modal-body">
         <div class="form-group row">
+          <!-- <pre>
+            <?php //print_r($user_info); 
+            ?>
+          </pre><br> -->
           <div class="col-md-3">NIK <span class="icon-verify-nik"></span>
           </div>
           <div class="col-md-5"><input type='text' id="nik_modal" class='form-control' placeholder='Nomor NIK KTP' value='<?php echo $ktp_no; ?>'></div>
@@ -1064,7 +1068,7 @@
   }
 </script>
 
-<!-- SCRIPT LOCK - UNLOCK Kolom -->
+<!-- SCRIPT INITIATE VALIDATION -->
 <script type=text/javascript>
   //read variable
   var baseURL = "<?php echo base_url(); ?>";
@@ -1074,227 +1078,73 @@
   var ktp_lock = "<?php print($ktp_lock); ?>";
   var kk_lock = "<?php print($kk_lock); ?>";
   var user_id = "<?php print($session['user_id']); ?>";
+  var user_name = "<?php print($user_info['0']->first_name); ?>";
   var employee_id = "<?php print($secid); ?>";
 
-  //initiate state lock
-  if (nama_lock == 0) {
-    if (fullname.readOnly) document.getElementById("fullname").removeAttribute("readonly");
-    unlock_nama.setAttribute("hidden", "hidden");
-    if (lock_nama.hidden) document.getElementById("lock_nama").removeAttribute("hidden");
-  } else if (nama_lock == 1) {
-    fullname.setAttribute("readonly", "readonly");
-    lock_nama.setAttribute("hidden", "hidden");
-    if (unlock_nama.hidden) document.getElementById("unlock_nama").removeAttribute("hidden");
-  }
+  var nik_validation = "<?php echo $nik_validation; ?>";
+  var kk_validation = "<?php print($kk_validation); ?>";
+  var nama_validation = "<?php print($nama_validation); ?>";
+  var bank_validation = "<?php print($bank_validation); ?>";
+  var norek_validation = "<?php print($norek_validation); ?>";
+  var pemilik_rekening_validation = "<?php print($pemilik_rekening_validation); ?>";
 
-  if (ktp_lock == 0) {
+  //initiate state validation
+  if (nik_validation == 0) {
+    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
     if (nomor_ktp.readOnly) document.getElementById("nomor_ktp").removeAttribute("readonly");
-    unlock_ktp.setAttribute("hidden", "hidden");
-    if (lock_ktp.hidden) document.getElementById("lock_ktp").removeAttribute("hidden");
-  } else if (ktp_lock == 1) {
+    if (nik_modal.readOnly) document.getElementById("nik_modal").removeAttribute("readonly");
+  } else if (nik_validation == 1) {
     nomor_ktp.setAttribute("readonly", "readonly");
-    lock_ktp.setAttribute("hidden", "hidden");
-    if (unlock_ktp.hidden) document.getElementById("unlock_ktp").removeAttribute("hidden");
+    nik_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
   }
-
-  if (kk_lock == 0) {
+  if (kk_validation == 0) {
+    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
     if (nomor_kk.readOnly) document.getElementById("nomor_kk").removeAttribute("readonly");
-    unlock_kk.setAttribute("hidden", "hidden");
-    if (lock_kk.hidden) document.getElementById("lock_kk").removeAttribute("hidden");
-  } else if (kk_lock == 1) {
+    if (kk_modal.readOnly) document.getElementById("kk_modal").removeAttribute("readonly");
+  } else if (kk_validation == 1) {
     nomor_kk.setAttribute("readonly", "readonly");
-    lock_kk.setAttribute("hidden", "hidden");
-    if (unlock_kk.hidden) document.getElementById("unlock_kk").removeAttribute("hidden");
+    kk_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (nama_validation == 0) {
+    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (fullname.readOnly) document.getElementById("fullname").removeAttribute("readonly");
+    if (nama_modal.readOnly) document.getElementById("nama_modal").removeAttribute("readonly");
+  } else if (nama_validation == 1) {
+    fullname.setAttribute("readonly", "readonly");
+    nama_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (bank_validation == 0) {
+    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (bank_name2.disabled) document.getElementById("bank_name2").removeAttribute("disabled");
+    if (bank_modal.disabled) document.getElementById("bank_modal").removeAttribute("disabled");
+  } else if (bank_validation == 1) {
+    bank_modal.setAttribute("disabled", "disabled");
+    bank_name2.setAttribute("disabled", "disabled");
+    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (norek_validation == 0) {
+    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (no_rek.readOnly) document.getElementById("no_rek").removeAttribute("readonly");
+    if (rekening_modal.readOnly) document.getElementById("rekening_modal").removeAttribute("readonly");
+  } else if (norek_validation == 1) {
+    no_rek.setAttribute("readonly", "readonly");
+    rekening_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (pemilik_rekening_validation == 0) {
+    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (pemilik_rekening.readOnly) document.getElementById("pemilik_rekening").removeAttribute("readonly");
+    if (pemilik_rekening_modal.readOnly) document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
+  } else if (pemilik_rekening_validation == 1) {
+    pemilik_rekening.setAttribute("readonly", "readonly");
+    pemilik_rekening_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
   }
 
-  //-----Lock - Unlock kolom nama-----
-  function lock_on_nama() {
-    var nama_kolom = "fullname";
-    var status = "1";
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        employee_id: employee_id,
-        nama_kolom: nama_kolom,
-        status: status,
-        user_id: user_id
-      },
-      success: function(response) {
-        fullname.setAttribute("readonly", "readonly");
-        lock_nama.setAttribute("hidden", "hidden");
-        if (unlock_nama.hidden) document.getElementById("unlock_nama").removeAttribute("hidden");
-        alert("Berhasil Mengunci Kolom Nama");
-      }
-    });
-  }
-
-  function lock_off_nama() {
-    var nama_kolom = "fullname";
-    var status = "0";
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        employee_id: employee_id,
-        nama_kolom: nama_kolom,
-        status: status,
-        user_id: user_id
-      },
-      success: function(response) {
-        if (fullname.readOnly) document.getElementById("fullname").removeAttribute("readonly");
-        unlock_nama.setAttribute("hidden", "hidden");
-        if (lock_nama.hidden) document.getElementById("lock_nama").removeAttribute("hidden");
-        alert("Berhasil Membuka Kunci Kolom Nama");
-      }
-    });
-  }
-
-  $("#lock_nama").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-  $("#unlock_nama").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-  $("#log_nama").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-
-  //-----Lock - Unlock kolom KTP-----
-  function lock_on_ktp() {
-    var nama_kolom = "ktp";
-    var status = "1";
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        employee_id: employee_id,
-        nama_kolom: nama_kolom,
-        status: status,
-        user_id: user_id
-      },
-      success: function(response) {
-        nomor_ktp.setAttribute("readonly", "readonly");
-        lock_ktp.setAttribute("hidden", "hidden");
-        if (unlock_ktp.hidden) document.getElementById("unlock_ktp").removeAttribute("hidden");
-        alert("Berhasil Mengunci Kolom KTP");
-      }
-    });
-  }
-
-  function lock_off_ktp() {
-    var nama_kolom = "ktp";
-    var status = "0";
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        employee_id: employee_id,
-        nama_kolom: nama_kolom,
-        status: status,
-        user_id: user_id
-      },
-      success: function(response) {
-        if (nomor_ktp.readOnly) document.getElementById("nomor_ktp").removeAttribute("readonly");
-        unlock_ktp.setAttribute("hidden", "hidden");
-        if (lock_ktp.hidden) document.getElementById("lock_ktp").removeAttribute("hidden");
-        alert("Berhasil Membuka Kunci Kolom KTP");
-      }
-    });
-  }
-
-  $("#lock_ktp").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-  $("#unlock_ktp").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-  $("#log_ktp").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-
-  //-----Lock - Unlock kolom KK-----
-  function lock_on_kk() {
-    var nama_kolom = "kk";
-    var status = "1";
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        employee_id: employee_id,
-        nama_kolom: nama_kolom,
-        status: status,
-        user_id: user_id
-      },
-      success: function(response) {
-        nomor_kk.setAttribute("readonly", "readonly");
-        lock_kk.setAttribute("hidden", "hidden");
-        if (unlock_kk.hidden) document.getElementById("unlock_kk").removeAttribute("hidden");
-        alert("Berhasil Mengunci Kolom KK");
-      }
-    });
-  }
-
-  function lock_off_kk() {
-    var nama_kolom = "kk";
-    var status = "0";
-    // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_request_cancelled/setLockKolom/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        employee_id: employee_id,
-        nama_kolom: nama_kolom,
-        status: status,
-        user_id: user_id
-      },
-      success: function(response) {
-        if (nomor_kk.readOnly) document.getElementById("nomor_kk").removeAttribute("readonly");
-        unlock_kk.setAttribute("hidden", "hidden");
-        if (lock_kk.hidden) document.getElementById("lock_kk").removeAttribute("hidden");
-        alert("Berhasil Membuka Kunci Kolom KK");
-      }
-    });
-  }
-
-  $("#lock_kk").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-  $("#unlock_kk").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
-  $("#log_kk").hover(function() {
-    $(this).css('cursor', 'pointer');
-  }, function() {
-    $(this).css('cursor', 'auto');
-  });
+  // alert(nik_validation);
 </script>
 
 <!-- Chained Dropdown (Project - Jenis Dokumen) -->
@@ -1307,8 +1157,6 @@
   var baseURL = "<?php echo base_url(); ?>";
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-
-  //id="aj_project" name="project_id"
 
   $(document).ready(function() {
 
@@ -1327,19 +1175,8 @@
         },
         dataType: 'json',
         success: function(response) {
-          //csrfName = data.csrfName;
-          //csrfHash = data.csrfHash;
-          //alert("doc id =" + data);
-
-
-          // Remove options 
-          //$('#jenis_dokumen').remove();
-
           // Add options
           $.each(response, function(index, data) {
-            //$('#e_status').append('<input class="form-control" readonly placeholder="Nama Ibu" name="e_status" id="e_status" type="text" value="' + data['doc_id'] + '">');
-            //alert("ajax sukses");
-            //alert(data);
             document.getElementById("e_status").value = data['doc_id'];
             if (data['doc_id'] == 1) {
               document.getElementById("jenis_dokumen").value = "PKWT";
@@ -1536,15 +1373,41 @@
     var nik = $("#nik_modal").val();
     var nik_lama = "<?php echo $ktp_no; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "nik";
+    var status = "1";
 
-    nomor_ktp.setAttribute("readonly", "readonly");
-    nik_modal.setAttribute("readonly", "readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nik_lama,
+        nilai_sesudah: nik,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        nomor_ktp.setAttribute("readonly", "readonly");
+        nik_modal.setAttribute("readonly", "readonly");
 
-    document.getElementById("nomor_ktp").value = nik;
+        document.getElementById("nomor_ktp").value = nik;
 
-    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        alert("Berhasil melakukan verifikasi NIK.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi NIK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
 
-    alert("masuk fungsi verifikasi NIK di modal.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik + "\nID Karyawan : " + id_employee);
   };
 </script>
 
@@ -1556,13 +1419,40 @@
     var nik = $("#nik_modal").val();
     var nik_lama = "<?php echo $ktp_no; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "nik";
+    var status = "0";
 
-    document.getElementById("nomor_ktp").removeAttribute("readonly");
-    document.getElementById("nik_modal").removeAttribute("readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nik_lama,
+        nilai_sesudah: nik,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("nomor_ktp").removeAttribute("readonly");
+        document.getElementById("nik_modal").removeAttribute("readonly");
 
-    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi cancel verifikasi NIK di modal.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan cancel verifikasi NIK.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan cancel verifikasi NIK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1574,15 +1464,41 @@
     var kk = $("#kk_modal").val();
     var kk_lama = "<?php echo $kk_no; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "kk";
+    var status = "1";
 
-    nomor_kk.setAttribute("readonly", "readonly");
-    kk_modal.setAttribute("readonly", "readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: kk_lama,
+        nilai_sesudah: kk,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        nomor_kk.setAttribute("readonly", "readonly");
+        kk_modal.setAttribute("readonly", "readonly");
 
-    document.getElementById("nomor_kk").value = kk;
+        document.getElementById("nomor_kk").value = kk;
 
-    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        alert("Berhasil melakukan verifikasi KK.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi KK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
 
-    alert("masuk fungsi verifikasi KK di modal.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk + "\nID Karyawan : " + id_employee);
   };
 </script>
 
@@ -1594,13 +1510,39 @@
     var kk = $("#kk_modal").val();
     var kk_lama = "<?php echo $kk_no; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "kk";
+    var status = "0";
 
-    document.getElementById("nomor_kk").removeAttribute("readonly");
-    document.getElementById("kk_modal").removeAttribute("readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: kk_lama,
+        nilai_sesudah: kk,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("nomor_kk").removeAttribute("readonly");
+        document.getElementById("kk_modal").removeAttribute("readonly");
 
-    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        alert("Berhasil melakukan cancel verifikasi KK.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi KK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
 
-    alert("masuk fungsi verifikasi KK di modal.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk + "\nID Karyawan : " + id_employee);
   };
 </script>
 
@@ -1612,15 +1554,42 @@
     var nama = $("#nama_modal").val();
     var nama_lama = "<?php echo $fullname; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "nama";
+    var status = "1";
 
-    fullname.setAttribute("readonly", "readonly");
-    nama_modal.setAttribute("readonly", "readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nama_lama,
+        nilai_sesudah: nama,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        fullname.setAttribute("readonly", "readonly");
+        nama_modal.setAttribute("readonly", "readonly");
 
-    document.getElementById("fullname").value = nama;
+        document.getElementById("fullname").value = nama;
 
-    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi verifikasi Nama di modal.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan verifikasi Nama.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nama.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1632,13 +1601,40 @@
     var nama = $("#nama_modal").val();
     var nama_lama = "<?php echo $fullname; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "nama";
+    var status = "0";
 
-    document.getElementById("fullname").removeAttribute("readonly");
-    document.getElementById("nama_modal").removeAttribute("readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nama_lama,
+        nilai_sesudah: nama,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("fullname").removeAttribute("readonly");
+        document.getElementById("nama_modal").removeAttribute("readonly");
 
-    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi cancel verifikasi Nama di modal.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan cancel verifikasi Nama.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nama.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1650,16 +1646,43 @@
     var bank = $("#bank_modal").val();
     var bank_lama = "<?php echo $bank_id; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "bank";
+    var status = "1";
 
-    $("#bank_name2").val(bank).change();
-    document.getElementById("bank_name").value = bank;
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: bank_lama,
+        nilai_sesudah: bank,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        $("#bank_name2").val(bank).change();
+        document.getElementById("bank_name").value = bank;
 
-    bank_modal.setAttribute("disabled", "disabled");
-    bank_name2.setAttribute("disabled", "disabled");
+        bank_modal.setAttribute("disabled", "disabled");
+        bank_name2.setAttribute("disabled", "disabled");
 
-    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi verifikasi Bank di modal.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan verifikasi Bank.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Bank.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1671,13 +1694,40 @@
     var bank = $("#bank_modal").val();
     var bank_lama = "<?php echo $bank_id; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "bank";
+    var status = "0";
 
-    document.getElementById("bank_modal").removeAttribute("disabled");
-    document.getElementById("bank_name").removeAttribute("disabled");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: bank_lama,
+        nilai_sesudah: bank,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("bank_modal").removeAttribute("disabled");
+        document.getElementById("bank_name2").removeAttribute("disabled");
 
-    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi cancel verifikasi Bank di modal.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan cancel verifikasi Bank.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Bank.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1689,15 +1739,42 @@
     var norek = $("#rekening_modal").val();
     var norek_lama = "<?php echo $nomor_rek; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "norek";
+    var status = "1";
 
-    no_rek.setAttribute("readonly", "readonly");
-    rekening_modal.setAttribute("readonly", "readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: norek_lama,
+        nilai_sesudah: norek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        no_rek.setAttribute("readonly", "readonly");
+        rekening_modal.setAttribute("readonly", "readonly");
 
-    document.getElementById("no_rek").value = norek;
+        document.getElementById("no_rek").value = norek;
 
-    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi verifikasi Nomor Rekening di modal.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan verifikasi Nomor Rekening.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nomor Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1709,13 +1786,40 @@
     var norek = $("#rekening_modal").val();
     var norek_lama = "<?php echo $nomor_rek; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "norek";
+    var status = "0";
 
-    document.getElementById("no_rek").removeAttribute("readonly");
-    document.getElementById("rekening_modal").removeAttribute("readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: norek_lama,
+        nilai_sesudah: norek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("no_rek").removeAttribute("readonly");
+        document.getElementById("rekening_modal").removeAttribute("readonly");
 
-    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi cancel verifikasi Nomor Rekening di modal.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan cancel verifikasi Nomor Rekening.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nomor Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1727,15 +1831,42 @@
     var pemilik_rek = $("#pemilik_rekening_modal").val();
     var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "pemilik_rekening";
+    var status = "1";
 
-    pemilik_rekening.setAttribute("readonly", "readonly");
-    pemilik_rekening_modal.setAttribute("readonly", "readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: pemilik_rek_lama,
+        nilai_sesudah: pemilik_rek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        pemilik_rekening.setAttribute("readonly", "readonly");
+        pemilik_rekening_modal.setAttribute("readonly", "readonly");
 
-    document.getElementById("pemilik_rekening").value = pemilik_rek;
+        document.getElementById("pemilik_rekening").value = pemilik_rek;
 
-    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi verifikasi Pemilik Rekening di modal.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan verifikasi Pemilik Rekening.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Pemilik Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>
 
@@ -1747,12 +1878,39 @@
     var pemilik_rek = $("#pemilik_rekening_modal").val();
     var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
     var id_employee = "<?php echo $secid; ?>";
+    var nama_kolom = "pemilik_rekening";
+    var status = "0";
 
-    document.getElementById("pemilik_rekening").removeAttribute("readonly");
-    document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: pemilik_rek_lama,
+        nilai_sesudah: pemilik_rek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("pemilik_rekening").removeAttribute("readonly");
+        document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
 
-    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
 
-    alert("masuk fungsi cancel verifikasi Pemilik Rekening di modal.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek + "\nID Karyawan : " + id_employee);
+        alert("Berhasil melakukan cancel verifikasi Pemilik Rekening.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Pemilik Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
 </script>

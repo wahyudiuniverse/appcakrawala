@@ -210,6 +210,28 @@ class employee_request_cancelled extends MY_Controller
 		//echo "data berhasil masuk";
 	}
 
+	//mengambil Json data validasi employee request
+	public function valiadsi_employee_request()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Employees_model->valiadsi_employee_request($postData);
+		echo json_encode($data);
+		//echo "data berhasil masuk";
+	}
+
+	//mengambil Json data validasi employee request
+	public function un_valiadsi_employee_request()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Employees_model->un_valiadsi_employee_request($postData);
+		echo json_encode($data);
+		//echo "data berhasil masuk";
+	}
+
 	public function request_edit()
 	{
 
@@ -248,6 +270,51 @@ class employee_request_cancelled extends MY_Controller
 			$kk_lock = "0";
 		} else {
 			$kk_lock = $kk_lock_query['status'];
+		}
+
+
+		//cek status validation ke database
+		$nik_validation = "0";
+		$nik_validation_query = $this->Employees_model->get_valiadation_status($id, 'nik');
+		if (is_null($nik_validation_query)) {
+			$nik_validation = "0";
+		} else {
+			$nik_validation = $nik_validation_query['status'];
+		}
+		$kk_validation = "0";
+		$kk_validation_query = $this->Employees_model->get_valiadation_status($id, 'kk');
+		if (is_null($kk_validation_query)) {
+			$kk_validation = "0";
+		} else {
+			$kk_validation = $kk_validation_query['status'];
+		}
+		$nama_validation = "0";
+		$nama_validation_query = $this->Employees_model->get_valiadation_status($id, 'nama');
+		if (is_null($nama_validation_query)) {
+			$nama_validation = "0";
+		} else {
+			$nama_validation = $nama_validation_query['status'];
+		}
+		$bank_validation = "0";
+		$bank_validation_query = $this->Employees_model->get_valiadation_status($id, 'bank');
+		if (is_null($bank_validation_query)) {
+			$bank_validation = "0";
+		} else {
+			$bank_validation = $bank_validation_query['status'];
+		}
+		$norek_validation = "0";
+		$norek_validation_query = $this->Employees_model->get_valiadation_status($id, 'norek');
+		if (is_null($norek_validation_query)) {
+			$norek_validation = "0";
+		} else {
+			$norek_validation = $norek_validation_query['status'];
+		}
+		$pemilik_rekening_validation = "0";
+		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($id, 'pemilik_rekening');
+		if (is_null($pemilik_rekening_validation_query)) {
+			$pemilik_rekening_validation = "0";
+		} else {
+			$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
 		}
 
 		$department = $this->Department_model->read_department_information($result[0]->department);
@@ -417,6 +484,13 @@ class employee_request_cancelled extends MY_Controller
 		$data['ktp_lock'] = $ktp_lock;
 		$data['kk_lock'] = $kk_lock;
 
+		$data['nik_validation'] = $nik_validation;
+		$data['kk_validation'] = $kk_validation;
+		$data['nama_validation'] = $nama_validation;
+		$data['bank_validation'] = $bank_validation;
+		$data['norek_validation'] = $norek_validation;
+		$data['pemilik_rekening_validation'] = $pemilik_rekening_validation;
+
 		$data['subview'] = $this->load->view("admin/employees/request_edit", $data, TRUE);
 		// }
 
@@ -526,6 +600,8 @@ class employee_request_cancelled extends MY_Controller
 			$date_payment 							= $this->input->post('date_payment');
 			$location_id 						= $this->input->post('location_id');
 
+			$option_gaji 						= $this->input->post('gaji_pokok_option');
+
 			$company = $this->Project_model->getcomp_single_project($this->input->post('project_id'));
 			if (!is_null($company)) {
 				$company_id = $company[0]->company_id;
@@ -582,6 +658,9 @@ class employee_request_cancelled extends MY_Controller
 				'allow_akomodsasi' 		=> str_replace(".", "", $tunjangan_akomodasi),
 				'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
 				'allow_operational' 	=> str_replace(".", "", $tunjangan_operational),
+
+				'dm_allow_jabatan' => $option_gaji,
+
 				'contract_start' 			=> $join_date_pkwt,
 				'contract_end' 				=> $pkwt_end_date,
 
