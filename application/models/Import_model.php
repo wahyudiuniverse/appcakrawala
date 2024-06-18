@@ -474,11 +474,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		foreach ($records as $record) {
 			$sub_project = "";
-
 			if ($data_batch['sub_project_name'] == "-ALL-") {
 				$sub_project = $record->sub_project;
 			} else {
 				$sub_project = $data_batch['sub_project_name'];
+			}
+
+			$nomor_rekening = "";
+			if (strtoupper($record->status_hold) == "HOLD") {
+				$nomor_rekening = "";
+			} else {
+				$nomor_rekening = $record->norek;
 			}
 
 			$data[] = array(
@@ -487,12 +493,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$record->nik,
 				$record->fullname,
 				$data_batch['project_name'],
-				$record->sub_project,
+				$sub_project,
 				$record->area,
 				$record->total_thp,
-				$record->norek,
+				$nomor_rekening,
 				$record->nama_bank,
 				$record->pemilik_rek,
+				$record->status_hold
 			);
 		}
 

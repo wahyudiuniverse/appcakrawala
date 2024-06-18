@@ -750,7 +750,13 @@ class ImportExcel extends MY_Controller
 			for ($j = 0; $j < $jumlah_kolom; $j++) {
 				if (is_numeric($data[$i][$j])) {
 					// $data[$i][$j] = "NUMERIC";
-					$data[$i][$j] = round($data[$i][$j]) . " ";
+					if ($data[$i][$j] <= 100000000) {
+						// $data[$i][$j] = "NUMERIC kecil";
+						$data[$i][$j] = round($data[$i][$j]) . " ";
+					} else {
+						// $data[$i][$j] = "NUMERIC besar";
+						$data[$i][$j] = $data[$i][$j] . " ";
+					}
 				} else {
 					// $data[$i][$j] = "NOT NUMERIC";
 					$data[$i][$j] = $data[$i][$j] . " ";
@@ -1131,6 +1137,7 @@ class ImportExcel extends MY_Controller
 			'NOMOR REKENING',
 			'NAMA BANK',
 			'PEMILIK REKENING',
+			'STATUS HOLD',
 			'STATUS VERIFIKASI',
 		);
 
