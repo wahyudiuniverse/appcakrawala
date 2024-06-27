@@ -383,6 +383,10 @@ class Xin_model extends CI_Model
 			$arr['man_employees_active'] = 'active';
 			$arr['emp_manage_open'] = 'open';
 			return $arr;
+		} else if ($mClass == 'reports' && $mMethod == 'manage_client') {
+			$arr['man_client_active'] = 'active';
+			$arr['emp_manage_open'] = 'open';
+			return $arr;
 		} else if ($mClass == 'importexcel' && $mMethod == 'bpjs') {
 			$arr['bpjs_employees_active'] = 'active';
 			$arr['bpjs_employees_open'] = 'open';
@@ -422,10 +426,6 @@ class Xin_model extends CI_Model
 		} else if ($mClass == 'importexcel' && $mMethod == 'importpkwt') {
 			$arr['pkwt_import_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';
-			return $arr;
-		} else if ($mClass == 'importexcel' && $mMethod == 'importnewemployees') {
-			$arr['imp_new_employee_active'] = 'active';
-			$arr['importexcel_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'importexcel' && $mMethod == 'importratecard') {
 			$arr['ratecard_active'] = 'active';
@@ -751,13 +751,13 @@ class Xin_model extends CI_Model
 			$arr['pkwt_request_cancel_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';
 			return $arr;
-		} else if ($mClass == 'reports' && $mMethod == 'pkwt_history') {
-			$arr['pkwt_request_history_active'] = 'active';
-			//$arr['pkwt_request_open'] = 'open';
-			return $arr;
 		} else if ($mClass == 'employee_pkwt_history') {
 			$arr['resign_req_nae_active'] = 'active';
 			$arr['pkwt_request_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'reports' && $mMethod == 'pkwt_history') {
+			$arr['report_active'] = 'active';
+			$arr['report_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'employee_resign') {
 			$arr['resign_req_emp_active'] = 'active';

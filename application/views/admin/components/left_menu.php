@@ -445,16 +445,15 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
   <!-- MANAGE EMP -->
   <?php
-  if (in_array('327', $role_resources_ids) || in_array('470', $role_resources_ids) || in_array('490', $role_resources_ids)) {
+  if ( in_array('470', $role_resources_ids) ) {
   ?>
     <li class="<?php if (!empty($arr_mod['emp_manage_open'])) echo $arr_mod['emp_manage_open']; ?> sidenav-item">
       <a href="#" class="sidenav-link sidenav-toggle">
         <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div><?php echo $this->lang->line('xin_manage_employees'); ?></div>
+        <div>Database</div>
       </a>
 
       <ul class="sidenav-menu">
-
 
         <?php
         if (in_array('470', $role_resources_ids)) { ?>
@@ -462,7 +461,20 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
             <a href="<?php echo site_url('admin/reports/manage_employees'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-              <div><?php echo $this->lang->line('xin_database'); ?></div>
+              <div>Karyawan</div>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('470', $role_resources_ids)) { ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['man_client_active'])) echo $arr_mod['man_client_active']; ?>">
+            <a href="<?php echo site_url('admin/reports/#'); ?>" class="sidenav-link">
+              <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+              <div>Klien</div>
             </a>
           </li>
         <?php
@@ -491,7 +503,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     <li class="<?php if (!empty($arr_mod['emp_request_open'])) echo $arr_mod['emp_request_open']; ?> sidenav-item">
       <a href="#" class="sidenav-link sidenav-toggle">
         <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div>Karyawan Baru</div>
+        <div>Daftar Karyawan Baru</div>
       </a>
 
       <ul class="sidenav-menu">
@@ -554,7 +566,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
             <a href="<?php echo site_url('admin/employee_request_hrd/'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-              <div>KARYAWAN PKWT</div>
+              <div>Karyawan Baru</div>
             </a>
           </li>
         <?php
@@ -605,19 +617,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
-  <!-- PKWT REPORT -->
-  <?php
-  if (in_array('380', $role_resources_ids)) { ?>
-    <li class="sidenav-item <?php if (!empty($arr_mod['pkwt_request_history_active'])) echo $arr_mod['pkwt_request_history_active']; ?>">
-      <a href="<?php echo site_url('admin/reports/pkwt_history'); ?>" class="sidenav-link">
-        <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-        <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div>PKWT REPORT</div>
-      </a>
-    </li>
-  <?php
-  }
-  ?>
 
 
   <!-- PERPANJANGAN PKWT -->
@@ -790,6 +789,55 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
+
+  <!-- REPORT PKWT, REPORT ADDENDUM -->
+  <?php
+  if (
+    in_array('380', $role_resources_ids) ||
+    in_array('379', $role_resources_ids) ||
+    in_array('377', $role_resources_ids)
+  ) {
+  ?>
+    <li class="<?php if (!empty($arr_mod['report_open'])) echo $arr_mod['report_open']; ?> sidenav-item">
+      <a href="#" class="sidenav-link sidenav-toggle">
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>Laporan Admin</div>
+      </a>
+
+      <ul class="sidenav-menu">
+
+        <?php
+        if (in_array('380', $role_resources_ids)) { ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['report_active'])) echo $arr_mod['report_active']; ?>">
+            <a href="<?php echo site_url('admin/reports/pkwt_history/'); ?>" class="sidenav-link">
+              <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+              <div>Laporan PKWT</div>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+
+        <?php
+        if (in_array('505', $role_resources_ids)) { ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['pkwt_request_hrd_active'])) echo $arr_mod['pkwt_request_hrd_active']; ?>">
+            <a href="<?php echo site_url('admin/employee_pkwt_aphrd'); ?>" class="sidenav-link">
+              <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+              <div>Laporan TKHL</div>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+      </ul>
+    </li>
+  <?php
+  }
+  ?>
 
 
 
@@ -1288,7 +1336,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   if (
     in_array('126', $role_resources_ids)
     || in_array('127', $role_resources_ids)
-    || in_array('109', $role_resources_ids)
     || in_array('232', $role_resources_ids)
   ) {
   ?>
@@ -1306,17 +1353,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['employees_active'])) echo $arr_mod['employees_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/'); ?>"> <?php echo $this->lang->line('xin_import_excl_employee'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('109', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['imp_new_employee_active'])) echo $arr_mod['imp_new_employee_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importnewemployees'); ?>"> <?php echo $this->lang->line('xin_import_new_employee'); ?>
             </a>
           </li>
         <?php

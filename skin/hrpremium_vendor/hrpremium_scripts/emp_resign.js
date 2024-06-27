@@ -105,11 +105,12 @@ $(document).ready(function() {
 			jQuery('#ket_ajax').html(data);			
 		});
 	});
-					//get project
+			
+		//get resign date
 	jQuery("#aj_ktp").change(function(){
 		var p_id = jQuery(this).val();
 		jQuery.get(base_url+"/get_rdate/"+p_id, function(data, status){
-			jQuery('#rdate_ajax').html(data);			
+			jQuery('#resign_ajax').html(data);			
 		});
 	});
 

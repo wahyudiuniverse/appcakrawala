@@ -98,10 +98,10 @@
 
               </div>
 
-              <div class="row">
+              <div class="row" id="ktp_ajax">
                 <!-- KTP RESIGN -->
                 <div class="col-md-4">
-                  <div class="form-group" id="ktp_ajax">
+                  <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="">
                   </div>
@@ -109,9 +109,9 @@
 
                 <!--TANGGAL RESIGN-->
                 <div class="col-md-4">
-                  <div class="form-group">
+                  <div class="form-group" id="resign_ajax">
                   <label for="date_of_birth">Tanggal Berakhir<i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
+                  <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="x">
                   </div>
                 </div>
 
@@ -128,7 +128,6 @@
                     </select>
                   </div>
                 </div>
-
 
               </div>
 

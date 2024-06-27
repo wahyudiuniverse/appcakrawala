@@ -2135,6 +2135,8 @@ class Employees extends MY_Controller
 				'deactive_reason' => $reasonDeactive,
 				'deactive_date' => date('Y-m-d h:i:s'),
 				'deactive_by' => $this->input->post('session_by'),
+				'request_resign_date' => date('Y-m-d h:i:s'),
+				'date_resign_request' => $this->input->post('tanggal_resign'),
 				'user_role_id' => $userRole,
 
 				// 'company_id' => $this->input->post('company_id'),

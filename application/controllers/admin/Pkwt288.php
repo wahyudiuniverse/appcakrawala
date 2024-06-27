@@ -434,16 +434,75 @@ class Pkwt288 extends MY_Controller
 							<br>
 							<br>
 							<br>
-							<br>
 							<tr>
 								<td>7.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
 							
 							<br>
-							
 							<tr>
 								<td>8.</td>
+								<td colspan="20">Sistem no Trec no Pay, artinya absensi yang diakui dan menjadi perhitungan penggajian adalah yang tercatat di aplikasi Trec (tanpa kecuali).</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>9.</td>
+								<td colspan="20">Durasi kerja yang dihitung adalah dari mulai check in pertama di distributor dan check out terakhir kembali di distributor</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>10.</td>
+								<td colspan="20">Check in dan check out absensi di lakukan di distributor dan di setiap toko yang dikunjungi</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>11.</td>
+								<td colspan="20">Target Call untuk Motoris adalah 30 toko per hari.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>12.</td>
+								<td colspan="20">Target effective calls untuk Motoris adalah 20 toko per hari.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>13.</td>
+								<td colspan="20">Target penjualan untuk SPG dan motoris adalah 240pcs  atau 10 karton per hari dengan minimal pembelian (Dropsize) 3 pcs per toko.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>14.</td>
+								<td colspan="20">Durasi kunjungan per toko minimal 5 menit  .. dikunci dari sistem Trec (waktu yang cukup untuk melakukan approaching ke calon konsumen untuk menawarkan, menjelaskan kelebihan dan menutup penjualan).</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>15.</td>
+								<td colspan="20">Durasi perjalanan antar toko dan durasi kunjungan di toko akan dimonitor sebagai bahan validasi dari total durasi kerja per hari.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>16.</td>
+								<td colspan="20">Evaluasi terhadap performance Motoris dilakukan setiap 3 hari.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>17.</td>
+								<td colspan="20">Seluruh pencatatan kehadiran dan penjualan yang diakui adalah yg tercatat di aplikasi TRec dan tervalidasi keabsahannya.</td>
+							</tr>
+
+							<br>
+							
+							<tr>
+								<td>18.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
 							</tr>
 

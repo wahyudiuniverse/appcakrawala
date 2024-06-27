@@ -3,7 +3,7 @@
 
                   <div class="form-group">
                   <label for="date_of_birth">Tanggal Berakhir<i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="<?php echo substr($result[0]->deactive_date,0,10);?>">
+                  <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="<?php echo $result[0]->date_resign_request;?>">
                   </div>
 
 

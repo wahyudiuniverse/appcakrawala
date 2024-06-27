@@ -63,7 +63,7 @@ if (in_array('511', $role_resources_ids)) {
           <div class="form-group">
             <!-- input periode -->
             <label class="form-label">Tanggal Penggajian<font color="#FF0000">*</font></label>
-            <input type="text" class="form-control date" readonly name="periode_salary" id="periode_salary" placeholder="Tanggal Penggajian" required>
+            <input type="text" class="form-control date" name="periode_salary" id="periode_salary" placeholder="Tanggal Penggajian" required>
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@ if (in_array('511', $role_resources_ids)) {
           <div class="form-group">
             <label class="form-label">Project<font color="#FF0000">*</font></label>
             <select class="form-control" data-live-search="true" name="project" id="project" data-plugin="xin_select" data-placeholder="Project" required>
-              <option value="0">Pilih Project</option>
+              <option value="">Pilih Project</option>
               <?php foreach ($all_projects as $proj) { ?>
                 <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
               <?php } ?>
@@ -96,14 +96,14 @@ if (in_array('511', $role_resources_ids)) {
               <div class="form-group">
                 <!-- input periode -->
                 <label class="form-label">Periode Cutoff from<font color="#FF0000">*</font></label>
-                <input type="text" class="form-control date" readonly name="saltab_from" id="saltab_from" placeholder="Periode Saltab From" required>
+                <input type="text" class="form-control date" name="saltab_from" id="saltab_from" placeholder="Periode Saltab From" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
                 <!-- input periode -->
                 <label class="form-label">Periode Cutoff to<font color="#FF0000">*</font></label>
-                <input type="text" class="form-control date" readonly name="saltab_to" id="saltab_to" placeholder="Periode Saltab To" required>
+                <input type="text" class="form-control date" name="saltab_to" id="saltab_to" placeholder="Periode Saltab To" required>
               </div>
             </div>
           </div>
@@ -134,6 +134,7 @@ if (in_array('511', $role_resources_ids)) {
       // print_r($tabel_saltab);
       // echo '</pre>';
       ?> -->
+
 <div class="card <?php echo $get_animate; ?>">
   <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST BATCH |</strong> History E-SALTAB (Belum Release)</span> </div>
   <div class="card-body">

@@ -1831,7 +1831,7 @@ WHERE ktp_no = ?';
 	public function read_employee_info_by_nik($id)
 	{
 
-		$sql = 'SELECT * FROM xin_employees WHERE employee_id = ? AND user_id not in (1)';
+		$sql = "SELECT *, DATE_FORMAT(date_resign_request, '%Y-%m-%d') AS tanggal_resign FROM xin_employees WHERE employee_id = ? AND user_id not in (1)";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 

@@ -22,19 +22,19 @@ $(document).ready(function(){
 	$('[data-plugin="select_hrm"]').select2({ width:'100%' });
 
 			//get project
-	jQuery("#aj_ktp").change(function(){
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_ktp/"+p_id, function(data, status){
-			jQuery('#ktp_ajax').html(data);			
-		});
-	});
+	// jQuery("#aj_ktp").change(function(){
+	// 	var p_id = jQuery(this).val();
+	// 	jQuery.get(base_url+"/get_ktp/"+p_id, function(data, status){
+	// 		jQuery('#ktp_ajax').html(data);			
+	// 	});
+	// });
 
 	// get departments
-	jQuery("#aj_ktp").change(function(){
-		jQuery.get(base_url+"/get_info/"+jQuery(this).val(), function(data, status){
-			jQuery('#info_ajax').html(data);
-		});
-	});
+	// jQuery("#aj_ktp").change(function(){
+	// 	jQuery.get(base_url+"/get_info/"+jQuery(this).val(), function(data, status){
+	// 		jQuery('#info_ajax').html(data);
+	// 	});
+	// });
 
 	// // get departments
 	// jQuery("#aj_ktp").change(function(){

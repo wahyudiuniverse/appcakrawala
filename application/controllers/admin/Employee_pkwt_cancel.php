@@ -651,13 +651,13 @@ class Employee_pkwt_cancel extends MY_Controller {
 			// }
 	}
 
-
 	public function pkwt_expired_edit() {
 
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
 		}
+
 		$id = $this->uri->segment(4);
 		$edit_approve = $this->uri->segment(5);
 		// $id = '5700';
@@ -670,9 +670,9 @@ class Employee_pkwt_cancel extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 
-
 		$emp_info = $this->Employees_model->read_employee_information_nip($result[0]->employee_id);
-		if(!is_null($emp_info)){
+		if(!is_null($emp_info)) {
+
 		  $fullname = $emp_info[0]->first_name;
 		  $ibu_kandung = $emp_info[0]->ibu_kandung;
 		  $ktp_no = $emp_info[0]->ktp_no;
@@ -690,36 +690,73 @@ class Employee_pkwt_cancel extends MY_Controller {
 		  $ethnicity_type = $emp_info[0]->ethnicity_type;
 		  $marital_status = $emp_info[0]->marital_status;
 
-		  $fullname = $emp_info[0]->first_name;
-		  $fullname = $emp_info[0]->first_name;
 		} else {
+
 		  $fullname = '--';
 		  $ibu_kandung = '--';
 		  $ktp_no = '--';
 		  $tempat_lahir = '--';
 		  $date_of_birth = '--';
+
 		}
 
-		// $company = $this->Xin_model->read_company_info($result[0]->company_id);
-		// if(!is_null($company)){
-		//   $company_name = $company[0]->name;
-		// } else {
-		//   $company_name = '--';
-		// }
 
-		// $department = $this->Department_model->read_department_information($result[0]->department);
-		// if(!is_null($department)){
-		// 	$department_name = $department[0]->department_name;
-		// } else {
-		// 	$department_name = '--';	
-		// }
+		$pkwt_info = $this->Pkwt_model->read_pkwt_last_bynip($result[0]->employee_id);
+		if(!is_null($pkwt_info)) {
+			$contract_start = $pkwt_info[0]->from_date;
+			$contract_end = $pkwt_info[0]->to_date;
+			$contract_periode = $pkwt_info[0]->waktu_kontrak;
+			$hari_kerja = $pkwt_info[0]->hari_kerja;
+			$cut_start = $pkwt_info[0]->start_period_payment;
+			$cut_off = $pkwt_info[0]->end_period_payment;
+			$date_payment 				= $pkwt_info[0]->tgl_payment;
+			$basic_salary 				= $pkwt_info[0]->basic_pay;
+			$allow_jabatan 				= $pkwt_info[0]->allowance_grade;
+			$allow_area 					= $pkwt_info[0]->allowance_area;
+			$allow_masakerja 			= $pkwt_info[0]->allowance_masakerja;
+			$allow_konsumsi 			= $pkwt_info[0]->allowance_meal;
+			$allow_transport 			= $pkwt_info[0]->allowance_transport;
+			$allow_rent 					= $pkwt_info[0]->allowance_rent;
+			$allow_comunication 	= $pkwt_info[0]->allowance_komunikasi;
+			$allow_parking 				= $pkwt_info[0]->allowance_park;
+			$allow_residence_cost = $pkwt_info[0]->allowance_residance;
+			$allow_device 				= $pkwt_info[0]->allowance_laptop;
+			$allow_kasir 					= $pkwt_info[0]->allowance_kasir;
+			$allow_trans_meal 		= $pkwt_info[0]->allowance_transmeal;
+			$allow_trans_rent 		= $pkwt_info[0]->allowance_transrent;
+			$allow_medichine 			= $pkwt_info[0]->allowance_medicine;
+			$allow_akomodsasi 		= $pkwt_info[0]->allowance_akomodasi;
+			$allow_operational 		= $pkwt_info[0]->allowance_operation;
 
-		// $designation = $this->Designation_model->read_designation_information($result[0]->posisi);
-		// if(!is_null($designation)){
-		// 	$edesignation_name = $designation[0]->designation_name;
-		// } else {
-		// 	$edesignation_name = '--';	
-		// }
+		} else {
+			$contract_start = '';
+			$contract_end = '';
+			$contract_periode = '';
+			$hari_kerja = '';
+			$cut_start = '';
+			$cut_off = '';
+			$date_payment = '';
+			$basic_salary = '';
+			$date_payment 				= '';
+			$basic_salary 				= '';
+			$allow_jabatan 				= '';
+			$allow_area 					= '';
+			$allow_masakerja 			= '';
+			$allow_konsumsi 			= '';
+			$allow_transport 			= '';
+			$allow_rent 					= '';
+			$allow_comunication 	= '';
+			$allow_parking 				= '';
+			$allow_residence_cost = '';
+			$allow_device 				= '';
+			$allow_kasir 					= '';
+			$allow_trans_meal 		= '';
+			$allow_trans_rent 		= '';
+			$allow_medichine 			= '';
+			$allow_akomodsasi 		= '';
+			$allow_operational 		= '';
+		}
+
 
 		$data = array(
 
@@ -761,14 +798,14 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'contact_no' => $contact_no,
 			'email' => $email,
 
-			'contract_start' => $result[0]->contract_start,
-			'contract_end' => $result[0]->contract_end,
-			'contract_periode' => $result[0]->contract_periode,
-			'hari_kerja' => $result[0]->hari_kerja,
-			'cut_start' => $result[0]->cut_start,
-			'cut_off' => $result[0]->cut_off,
-			'date_payment' => $result[0]->date_payment,
-			'basic_salary' => $result[0]->basic_salary,
+			'contract_start' => $contract_start,
+			'contract_end' => $contract_end,
+			'contract_periode' => $contract_periode,
+			'hari_kerja' => $hari_kerja,
+			'cut_start' => $cut_start,
+			'cut_off' => $cut_off,
+			'date_payment' => $date_payment,
+			'basic_salary' => $basic_salary,
 			'allow_jabatan' => $result[0]->allow_jabatan,
 			'allow_area' => $result[0]->allow_area,
 			'allow_masakerja' => $result[0]->allow_masakerja,

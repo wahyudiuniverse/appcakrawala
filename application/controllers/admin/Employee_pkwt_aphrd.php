@@ -404,7 +404,6 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				);
 			} else {
 
-
 				$data_up = array(
 
 					'status_pkwt	' => 1,

@@ -253,6 +253,21 @@ ORDER BY contract_id DESC LIMIT 1";
 		
 	}
 
+	public function read_pkwt_last_bynip($nip)
+	{
+
+		$sql = "SELECT * FROM xin_employee_contract WHERE employee_id = ? ORDER BY contract_id DESC LIMIT 1";
+		// $sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ?';
+		$binds = array($nip);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get single employee
 	public function read_info_ratecard($proj,$posi,$area) {
 	
@@ -472,6 +487,7 @@ ORDER BY contract_id DESC LIMIT 1";
 			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 			WHERE emp.status_employee = 1
 			AND emp.status_resign = 1
+			AND emp.project_id NOT IN (22,95)
 			AND pos.level NOT IN ('A','A1','B1','B2')
 			AND emp.employee_id not in (1,1024)) exp
 		WHERE exp.all_name LIKE '%$key%'";
