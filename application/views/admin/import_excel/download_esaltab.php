@@ -181,7 +181,7 @@ if (in_array('514', $role_resources_ids)) {
         },
         {
           data: 'periode_salary',
-          "orderable": false,
+          // "orderable": false,
           //searchable: true
         },
         {

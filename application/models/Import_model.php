@@ -803,11 +803,11 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Delete Batch Saltab dan Delete Detail Saltab
 		$this->delete_batch_saltab($id);
 
-		## Update mpp
+		## Update data release
 		$data = array(
-			'upload_on' => null,
-			'upload_by' => $this->get_nama_karyawan($session['employee_id']),
-			'upload_by_id' => $session['employee_id'],
+			'release_on' => null,
+			'release_by' => $this->get_nama_karyawan($session['employee_id']),
+			'release_by_id' => $session['employee_id'],
 		);
 
 		$this->db->where('id', $id);
@@ -999,7 +999,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$data[] = array(
 				"aksi" => $view . " " . $editReq . " " . $delete,
-				"tanggal_penggajian" => $this->Xin_model->tgl_indo($record->periode_salary),
+				"periode_salary" => $this->Xin_model->tgl_indo($record->periode_salary),
 				"periode" => $this->Xin_model->tgl_indo($record->periode_cutoff_from) . " s/d " . $this->Xin_model->tgl_indo($record->periode_cutoff_to),
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
@@ -1724,5 +1724,93 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//die;
 
 		return $response;
+	}
+
+	//request_open_import
+	public function insert_request_open_import($postData)
+	{
+		$this->db->insert('log_request_open_saltab', $postData);
+	}
+
+	//request_open_import
+	public function cek_request_open_import($postData)
+	{
+		$this->db->select('*');
+		$this->db->from('log_request_open_saltab',);
+		$this->db->where($postData);
+		$this->db->order_by('request_on', 'DESC');
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//request_open_import
+	public function update_request_open_import($postData)
+	{
+		$this->db->select('*');
+		$this->db->from('log_request_open_saltab',);
+		$this->db->where($postData);
+		$this->db->order_by('request_on', 'DESC');
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		if (empty($query)) {
+			//do nothing
+		} else {
+			$data = array(
+				'status' => "3",
+			);
+
+			$this->db->where('id', $query['id']);
+			$this->db->update('log_request_open_saltab', $data);
+		}
+	}
+
+	//request_open_import_manual
+	public function cek_request_open_import_manual($project_id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_saltab_lock_import',);
+		$this->db->where("project_id = " . $project_id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+
+	// get single project by id
+	public function read_single_project($id)
+	{
+
+		$sql = "SELECT CONCAT('[ ',priority,' ] ',title) title FROM xin_projects WHERE project_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// get single sub project by id
+	public function read_single_subproject($id)
+	{
+
+		$sql = "SELECT * FROM xin_projects_sub WHERE secid = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
 	}
 }

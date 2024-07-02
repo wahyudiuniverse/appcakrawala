@@ -1337,6 +1337,19 @@ class ImportExcel extends MY_Controller
 
 			$id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
 
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			$data_batch_cek_request_open = array(
+				'periode_saltab_from'    => $saltab_from,
+				'periode_saltab_to'      => $saltab_to,
+				'tanggal_gajian'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+			);
+
+			$this->Import_model->update_request_open_import($data_batch_cek_request_open);
+
 			if ($id_batch_awal != "") {
 				$this->Import_model->delete_batch_saltab($id_batch_awal);
 			}
@@ -2920,6 +2933,172 @@ class ImportExcel extends MY_Controller
 		}
 
 		redirect('admin/Importexceleslip?upid=' . $uploadid);
+	}
+
+	//mengambil Json data validasi employee request
+	public function request_open_import()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($postData['project_id']);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($postData['sub_project_id'] == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($postData['sub_project_id']);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		//Input untuk Database
+		$datarequest = [
+			'request_by_id'     	=> $postData['employee_id'],
+			'request_by_name'       => $postData['request_by_name'],
+			'request_on'      		=> $postData['tgl_request'],
+			'tanggal_gajian'        => $postData['tgl_gajian'],
+			'project_id'       	  	=> $postData['project_id'],
+			'project_name'       	=> $nama_project,
+			'sub_project_id'      	=> $postData['sub_project_id'],
+			'sub_project_name'      => $nama_sub_project,
+			'periode_saltab_from'   => $postData['periode_saltab_from'],
+			'periode_saltab_to'     => $postData['periode_saltab_to'],
+			'note'          		=> $postData['note_open'],
+			'status'          		=> '1',
+		];
+
+		// get data 
+		$data = $this->Import_model->insert_request_open_import($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'pesan' 	=> "Gagal",
+			);
+		} else {
+			$response = array(
+				'pesan' 	=> "Berhasil",
+				'data'		=> $data,
+			);
+		}
+
+		//echo "data berhasil masuk";
+		echo json_encode($response);
+		echo "<pre>";
+		print_r($response);
+		echo "</pre>";
+	}
+
+	//mengambil Json data validasi employee request
+	public function cek_request_open_import()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek Request ACC
+		$datarequest = [
+			'tanggal_gajian'        => $postData['tgl_gajian'],
+			'project_id'       	  	=> $postData['project_id'],
+			'sub_project_id'      	=> $postData['sub_project_id'],
+			'periode_saltab_from'   => $postData['periode_saltab_from'],
+			'periode_saltab_to'     => $postData['periode_saltab_to']
+		];
+
+		// get data 
+		$data = $this->Import_model->cek_request_open_import($datarequest);
+
+		//cek pengaturan lock manual
+		$project_id = $postData['project_id'];
+
+		//cek pengaturan lock otomatis
+		$jam_sekarang = $postData['jam_sekarang'];
+
+		if (empty($data)) {
+			//cek pengaturan lock manual
+			$project_id = $postData['project_id'];
+			$data2 = $this->Import_model->cek_request_open_import_manual($project_id);
+
+			if (empty($data2)) {
+				//cek pengaturan lock otomatis
+				$jam_sekarang = $postData['jam_sekarang'];
+
+				if ($jam_sekarang >= 12) {
+					$response = array(
+						'status'	=> "100",
+						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Tidak Diset. Jam lebih dari 12",
+					);
+				} else {
+					$response = array(
+						'status'	=> "101",
+						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Tidak Diset. Jam blm 12",
+					);
+				}
+			} else {
+				if ($jam_sekarang >= $data2['jam']) {
+					$response = array(
+						'status'	=> "102",
+						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Diset. Jam melebihi angka yang di set",
+						'data'		=> $data2,
+					);
+				} else {
+					$response = array(
+						'status'	=> "103",
+						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Diset. Jam tidak melebihi angka yang di set",
+						'data'		=> $data2,
+					);
+				}
+			}
+		} else {
+			if ($data['status'] == 1) {
+				$response = array(
+					'status'	=> "104",
+					'pesan' 	=> "LOCK IMPORT. Ada Request Blm ACC. Tidak Boleh Request",
+					'data'		=> $data,
+				);
+			} else if ($data['status'] == 0) {
+				$response = array(
+					'status'	=> "105",
+					'pesan' 	=> "OPEN IMPORT. Ada Request dan di ACC",
+					'data'		=> $data,
+				);
+			} else if ($data['status'] == 2) {
+				$response = array(
+					'status'	=> "106",
+					'pesan' 	=> "LOCK IMPORT. Ada Request dan ditolak. Boleh request ulang",
+					'data'		=> $data,
+				);
+			} else {
+				$response = array(
+					'status'	=> "107",
+					'pesan' 	=> "LOCK IMPORT. Ada Request dan berhasil upload. Boleh request ulang",
+					'data'		=> $data,
+				);
+			}
+		}
+
+		// //echo "data berhasil masuk";
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
 	}
 
 	/**
