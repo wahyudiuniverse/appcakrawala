@@ -23,9 +23,11 @@ $emp = $this->Employees_model->read_employee_info_by_nik($user_info[0]->employee
         if(!is_null($emp)){
           $fullname = $emp[0]->first_name;
           $sub_project = 'pkwt'.$emp[0]->sub_project_id;
+          $designation_id = $emp[0]->designation_id;
         } else {
           $fullname = '--'; 
           $sub_project = '0';
+          $designation_id = '0';
         }
 
 
@@ -451,6 +453,31 @@ $new_date = date('d-M-Y', $strtotime);
   <?php
   }
   ?>
+
+  <?php
+  if($designation_id=='735'){
+    ?>
+
+  <div class="col-sm-6 col-xl-4">
+  <a href="<?php echo site_url('/uploads/document/offering/'.$user_info[0]->employee_id.'.pdf');?>" target="_blank">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small">DOWNLOAD</div>
+            <div class="text-large">OFFERING LETTER SL-BA</div>
+            <div class="text-muted small">PT. Paragon Technology and Innovation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </div>
+  <?php
+  }
+  ?>
+
 </div>
 <div class="row mt-3">
 
