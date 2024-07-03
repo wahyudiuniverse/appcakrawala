@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class Addendum extends MY_Controller
 {
     public function __construct()
@@ -31,6 +35,19 @@ class Addendum extends MY_Controller
 
         // Get data
         $data = $this->Addendum_model->get_list_addendum($postData);
+
+        echo json_encode($data);
+    }
+
+    //load datatables list addendum
+    public function list_report_addendum()
+    {
+
+        // POST data
+        $postData = $this->input->post();
+
+        // Get data
+        $data = $this->Addendum_model->get_list_report_addendum($postData);
 
         echo json_encode($data);
     }
@@ -653,6 +670,271 @@ class Addendum extends MY_Controller
         $data['periode_new'] = $periode_new;
 
         $this->Addendum_model->update_addendum($data);
+
+        echo json_encode($data);
+    }
+
+    // report addendum
+    public function report_addendum()
+    {
+
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+        $data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+        $data['title'] = 'Report Addendum | ' . $this->Xin_model->site_title();
+        $data['breadcrumbs'] = 'Report Addendum';
+        // $data['all_projects'] = $this->Project_model->get_projects();
+        $data['path_url'] = 'hrpremium_import_esaltab';
+        // $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+        $role_resources_ids = $this->Xin_model->user_role_resource();
+        if (in_array('520', $role_resources_ids)) {
+            // $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+            $data['subview'] = $this->load->view("admin/employees/report_addendum", $data, TRUE);
+            $this->load->view('admin/layout/layout_main', $data); //page load
+        } else {
+            redirect('admin/dashboard');
+        }
+    }
+
+    //download template addendum
+    public function downloadTemplateAddendum()
+    {
+        $spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+        $spreadsheet->getActiveSheet()->setTitle('Addendum Data Seed'); //nama Spreadsheet yg baru dibuat
+
+        $header = array(
+            'nip',
+            'id_pkwt',
+            'tanggal_terbit',
+            'isi'
+        );
+
+        $jumlah_data = count($header);
+
+        //isi cell dari array
+        $spreadsheet->getActiveSheet()
+            ->fromArray(
+                $header,   // The data to set
+                NULL,
+                'A1'
+            );
+
+        //set column width jadi auto size
+        for ($i = 1; $i <= $jumlah_data; $i++) {
+            $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+        }
+
+        //set header background color
+        $maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+        $maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getStyle("A1:{$maxDataColumn}{$maxDataRow}")
+            ->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB('BFBFBF');
+
+        //set wrap text untuk row ke 1
+        $spreadsheet->getActiveSheet()->getStyle('1:1')
+            ->getAlignment()->setWrapText(true);
+
+        //set vertical dan horizontal alignment text untuk row ke 1
+        $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+        //set vertical dan horizontal alignment text untuk row ke 1
+        $spreadsheet->getActiveSheet()->getStyle('1:1')
+            ->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        $spreadsheet->getActiveSheet()->getStyle('1:1')
+            ->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+        //----------------Buat File Untuk Download--------------
+        $writer = new Xlsx($spreadsheet); // instantiate Xlsx
+        //$writer->setPreCalculateFormulas(false);
+
+        $filename = 'Template Import Addendum'; // set filename for excel file to be exported
+
+        header('Content-Type: application/vnd.ms-excel'); // generate excel file
+        header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');    // download file 
+        //$writer->save('./absen/tes2.xlsx');	// download file 
+    }
+
+    /*
+    |-------------------------------------------------------------------
+    | Import Excel saltab
+    |-------------------------------------------------------------------
+    |
+    */
+    function import_addendum()
+    {
+        $this->load->helper('file');
+
+        /* Allowed MIME(s) File */
+        $file_mimes = array(
+            'application/octet-stream',
+            'application/vnd.ms-excel',
+            'application/x-csv',
+            'text/x-csv',
+            'text/csv',
+            'application/csv',
+            'application/excel',
+            'application/vnd.msexcel',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+
+        if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+            $array_file = explode('.', $_FILES['file_excel']['name']);
+            $extension  = end($array_file);
+
+            if ('csv' == $extension) {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+            } else {
+                $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            }
+
+            $spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+            $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+            $array_data  = [];
+            $data        = [];
+            $header_tabel_saltab = $sheet_data[0];
+            $length_header = count($header_tabel_saltab);
+
+
+            //susun array saltab detail
+            for ($i = 1; $i < count($sheet_data); $i++) {
+                for ($j = 0; $j < $length_header; $j++) {
+                    $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+                }
+                $this->save_import($data);
+                $array_data[] = $data;
+                $data = array();
+            }
+
+            echo '<pre>';
+            print_r($array_data);
+            echo '</pre>';
+        } else {
+            // $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+            print_r("gagal import");
+            print_r($_FILES['file_excel']['name']);
+        }
+
+        // redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+    }
+
+    public function save_import2($data)
+    {
+        $yearmonth = date('Y-m-d H:i:s');
+        echo '<script language="javascript">';
+        echo 'alert("Warning! The role you are to going delete has some employees.\nIsi addendum:' .  $yearmonth . '")';
+        echo '</script>';
+    }
+
+    // Save data addendum
+    public function save_import($data)
+    {
+        $session = $this->session->userdata('username');
+        if (empty($session)) {
+            redirect('admin/');
+        }
+
+        $yearmonth = date('Y/m');
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']        = './assets/'; //string, the default is application/cache/
+        $config['errorlog']        = './assets/'; //string, the default is application/logs/
+        $config['imagedir']        = './assets/images/addendum/' . $yearmonth . '/'; //direktori penyimpanan qr code
+        $config['quality']        = true; //boolean, the default is true
+        $config['size']            = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+        $dirsave = './assets/images/addendum/';
+
+        //kalau blm ada folder path nya
+        if (!file_exists($config['imagedir'])) {
+            mkdir($config['imagedir'], 0777, true);
+        }
+
+        //ambil variable yg di post
+        $nip = $data['nip'];
+        $tgl_terbit = $data['tanggal_terbit'];
+        $pkwt_id = $data['id_pkwt'];
+        $isi = $data['isi'];
+
+        //assingn variable sisanya
+        $contract_data = $this->Addendum_model->getContract($pkwt_id);
+        $employee_data = $this->Addendum_model->read_employee_by_nip($nip);
+
+        $karyawan_id = $employee_data['user_id'];
+        $created_by = $session['user_id'];
+        $created_time = date('Y-m-d H:i:s');
+        $kontrak_start_new = $contract_data['from_date'];
+        $kontrak_end_new = $contract_data['to_date'];
+        $periode_new = $contract_data['waktu_kontrak'];
+
+        $urutan = $this->Addendum_model->urutan_addendum($karyawan_id, $pkwt_id);
+
+        // $employee_data = $this->Addendum_model->read_employee($karyawan_id);
+        $company_id             = $employee_data['company_id'];
+        $e_status               = $employee_data['e_status'];
+
+
+        //Company Section di Nomor Addendum
+        if ($company_id == '2') {
+            $company_section = 'SC';
+        } else if ($company_id == '3') {
+            $company_section = 'KAC';
+        } else {
+            $company_section = 'MATA';
+        }
+
+        //Jenis Dokumen di Nomor Addendum
+        $jenis_dokumen_section = "";
+        if ($e_status == 1) {
+            $jenis_dokumen_section = "Add-PKWT";
+        } else if ($e_status == 2) {
+            $jenis_dokumen_section = "Add-TKHL";
+        }
+
+        $count_addendum = $this->Addendum_model->count_addendum();
+        $romawi = $this->convert_tanggal($tgl_terbit);
+
+        $no_addendum = sprintf("%05d", $count_addendum[0]->newcount) . '/' . $jenis_dokumen_section . '/' . $company_section . '/' .  $romawi;
+
+        $docid = date('ymdHisv');
+        $yearmonth = date('Y/m');
+        $image_name = $yearmonth . '/esign_addendum' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+        $domain = 'https://apps-cakrawala.com/esign/addendum/' . $docid;
+        //$domain = 'https://apps-cakrawala.com/esign/addendum/' . $no_addendum;
+
+        $params['data']     = $domain; //data yang akan di jadikan QR CODE
+        $params['level']     = 'H'; //H=High
+        $params['size']     = 10;
+        $params['savename'] = FCPATH . $dirsave . $image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+        $data['pkwt_id'] = $pkwt_id;
+        $data['karyawan_id'] = $karyawan_id;
+        $data['no_addendum'] = $no_addendum;
+        $data['tgl_terbit'] = $tgl_terbit;
+        $data['isi'] = $isi;
+        $data['esign'] = $image_name;
+        $data['created_by'] = $created_by;
+        $data['created_time'] = $created_time;
+        $data['urutan'] = $urutan;
+        $data['kontrak_start_new'] = $kontrak_start_new;
+        $data['kontrak_end_new'] = $kontrak_end_new;
+        $data['periode_new'] = $periode_new;
+
+        $this->Addendum_model->add_addendum($data);
 
         echo json_encode($data);
     }

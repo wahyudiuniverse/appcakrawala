@@ -9,7 +9,7 @@ class Addendum_model extends CI_Model
         parent::__construct();
         $this->load->database();
     }
-    
+
 
 
     //ambil data employee berdasarkan id (secid)
@@ -42,6 +42,30 @@ class Addendum_model extends CI_Model
         $this->db->select('*');
         $this->db->from('xin_employees');
         $this->db->where('user_id', $id);
+
+        $query = $this->db->get()->row_array();
+
+        return $query;
+    }
+
+    // get single employee by NIP
+    public function read_employee_by_nip($id)
+    {
+        $this->db->select('*');
+        $this->db->from('xin_employees');
+        $this->db->where('employee_id', $id);
+
+        $query = $this->db->get()->row_array();
+
+        return $query;
+    }
+
+    //ambil kontrak berdasarkan id kontrak
+    public function getContract($id)
+    {
+        $this->db->select('*');
+        $this->db->from('xin_employee_contract');
+        $this->db->where('contract_id', $id);
 
         $query = $this->db->get()->row_array();
 
@@ -323,6 +347,104 @@ class Addendum_model extends CI_Model
         ## Fetch records
         $this->db->select('*');
         $this->db->where($kondisiDefaultQuery);
+        if ($searchQuery != '') {
+            $this->db->where($searchQuery);
+        }
+        $this->db->order_by($columnName, $columnSortOrder);
+        $this->db->limit($rowperpage, $start);
+        $records = $this->db->get('xin_contract_addendum')->result();
+
+        #Debugging variable
+        //$tes_query = $this->db->last_query();
+
+        $data = array();
+
+        foreach ($records as $record) {
+            // $addendum_id = $this->secure->encrypt_url($record->id);
+            // $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+            $view = '<button id="tesbutton" type="button" onclick="lihatAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+            $editReq = '<button type="button" onclick="editAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
+            $delete = '<button type="button" onclick="deleteAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+            // $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+            $data[] = array(
+                "aksi" => $view . " " . $editReq . " " . $delete,
+                "no_addendum" => $record->no_addendum,
+                "tgl_terbit" => $record->tgl_terbit,
+                "created_by" => $this->get_nama_karyawan($record->created_by),
+            );
+        }
+
+        ## Response
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordwithFilter,
+            "aaData" => $data
+        );
+        //print_r($this->db->last_query());
+        //die;
+
+        return $response;
+    }
+
+    /*
+	* persiapan data untuk datatable pagination
+	* data list report addendum
+	* 
+	* @author Fadla Qamara
+	*/
+    function get_list_report_addendum($postData = null)
+    {
+
+        $response = array();
+
+        ## Read value
+        $draw = $postData['draw'];
+        $start = $postData['start'];
+        $rowperpage = $postData['length']; // Rows display per page
+        $columnIndex = $postData['order'][0]['column']; // Column index
+        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
+        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+        $searchValue = $postData['search']['value']; // Search value
+
+        //variabel filter (diambil dari post ajax di view)
+        $idsession = $postData['idsession'];
+
+
+        ## Search 
+        $searchQuery = "";
+        if ($searchValue != '') {
+            $searchQuery = " (no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
+        }
+
+        ## Kondisi Default 
+        // $kondisiDefaultQuery = "(
+        // 	karyawan_id = " . $emp_id . "
+        // AND	pkwt_id = " . $contract_id . "
+        // )";
+
+
+        ## Total number of records without filtering
+        $this->db->select('count(*) as allcount');
+        // $this->db->where($kondisiDefaultQuery);
+        $records = $this->db->get('xin_contract_addendum')->result();
+        $totalRecords = $records[0]->allcount;
+
+        ## Total number of record with filtering
+        $this->db->select('count(*) as allcount');
+        // $this->db->where($kondisiDefaultQuery);
+        if ($searchQuery != '') {
+            $this->db->where($searchQuery);
+        }
+        $records = $this->db->get('xin_contract_addendum')->result();
+        $totalRecordwithFilter = $records[0]->allcount;
+
+        ## Fetch records
+        $this->db->select('*');
+        // $this->db->where($kondisiDefaultQuery);
         if ($searchQuery != '') {
             $this->db->where($searchQuery);
         }

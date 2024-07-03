@@ -92,6 +92,22 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
+  <!-- Import Addendum -->
+  <?php
+  if (in_array('520', $role_resources_ids)) {
+  ?>
+
+    <li class="sidenav-item <?php if (!empty($arr_mod['profile_active'])) echo $arr_mod['profile_active']; ?>">
+      <a href="<?php echo site_url('admin/addendum/report_addendum'); ?>" class="sidenav-link">
+        <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>Report Addendum</div>
+      </a>
+    </li>
+  <?php
+  }
+  ?>
+
 
   <!-- CEK NIP -->
   <?php
@@ -445,7 +461,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
   <!-- MANAGE EMP -->
   <?php
-  if ( in_array('470', $role_resources_ids) ) {
+  if (in_array('470', $role_resources_ids)) {
   ?>
     <li class="<?php if (!empty($arr_mod['emp_manage_open'])) echo $arr_mod['emp_manage_open']; ?> sidenav-item">
       <a href="#" class="sidenav-link sidenav-toggle">
