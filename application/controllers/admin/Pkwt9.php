@@ -1588,7 +1588,7 @@ class Pkwt9 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
 						</tr>';
 				}
 				

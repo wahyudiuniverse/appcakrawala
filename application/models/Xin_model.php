@@ -192,7 +192,30 @@ class Xin_model extends CI_Model
 			$arr['sub_departments_active'] = 'active';
 			$arr['adm_open'] = 'open';
 			return $arr;
-		} else if ($mClass == 'company' && $mMethod == 'official_documents') {
+		} else if ($mClass == 'importexcel' && $mMethod == 'importesaltab') {
+			$arr['import_esaltab_active'] = 'active';
+			$arr['saltab_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'importexcel' && $mMethod == 'konfig_import_esaltab') {
+			$arr['conf_esaltab_active'] = 'active';
+			$arr['saltab_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'importexcel' && $mMethod == 'manage_esaltab') {
+			$arr['manage_esaltab_active'] = 'active';
+			$arr['saltab_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'importexcel' && $mMethod == 'download_esaltab') {
+			$arr['download_esaltab_active'] = 'active';
+			$arr['saltab_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'importexcel' && $mMethod == 'konfig_download_esaltab') {
+			$arr['konfig_download_esaltab_active'] = 'active';
+			$arr['saltab_open'] = 'open';
+			return $arr;
+		}
+
+
+		else if ($mClass == 'company' && $mMethod == 'official_documents') {
 			$arr['official_documents_active'] = 'active';
 			$arr['files_open'] = 'open';
 			return $arr;
