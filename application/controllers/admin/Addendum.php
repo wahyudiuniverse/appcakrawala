@@ -827,7 +827,7 @@ class Addendum extends MY_Controller
             print_r($_FILES['file_excel']['name']);
         }
 
-        // redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+        redirect('admin/addendum/report_addendum/');
     }
 
     public function save_import2($data)

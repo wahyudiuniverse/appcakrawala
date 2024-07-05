@@ -459,7 +459,7 @@ $new_date = date('d-M-Y', $strtotime);
     ?>
 
   <div class="col-sm-6 col-xl-4">
-  <a href="<?php echo site_url('/uploads/document/offering/'.$user_info[0]->employee_id.'.pdf');?>" target="_blank">
+  <a href="<?php echo site_url('/uploads/document/offering/sl-ba/'.$user_info[0]->employee_id.'.pdf');?>" target="_blank">
     <div class="card mb-4">
       <div class="card-body">
         <div class="d-flex align-items-center">
@@ -467,6 +467,30 @@ $new_date = date('d-M-Y', $strtotime);
           <div class="ml-4">
             <div class="text-muted small">DOWNLOAD</div>
             <div class="text-large">OFFERING LETTER SL-BA</div>
+            <div class="text-muted small">PT. Paragon Technology and Innovation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </div>
+  <?php
+  }
+  ?>
+
+  <?php
+  if($designation_id=='736'){
+    ?>
+
+  <div class="col-sm-6 col-xl-4">
+  <a href="<?php echo site_url('/uploads/document/offering/sl-non-ba/'.$user_info[0]->employee_id.'.pdf');?>" target="_blank">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small">DOWNLOAD</div>
+            <div class="text-large">OFFERING LETTER SL-NON BA</div>
             <div class="text-muted small">PT. Paragon Technology and Innovation</div>
           </div>
         </div>

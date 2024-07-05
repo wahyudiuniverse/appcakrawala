@@ -92,21 +92,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
-  <!-- Import Addendum -->
-  <?php
-  if (in_array('520', $role_resources_ids)) {
-  ?>
-
-    <li class="sidenav-item <?php if (!empty($arr_mod['profile_active'])) echo $arr_mod['profile_active']; ?>">
-      <a href="<?php echo site_url('admin/addendum/report_addendum'); ?>" class="sidenav-link">
-        <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
-        <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div>Report Addendum</div>
-      </a>
-    </li>
-  <?php
-  }
-  ?>
 
 
   <!-- CEK NIP -->
@@ -836,13 +821,14 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
 
 
+
         <?php
-        if (in_array('505', $role_resources_ids)) { ?>
+        if (in_array('520', $role_resources_ids)) { ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['pkwt_request_hrd_active'])) echo $arr_mod['pkwt_request_hrd_active']; ?>">
-            <a href="<?php echo site_url('admin/employee_pkwt_aphrd'); ?>" class="sidenav-link">
+            <a href="<?php echo site_url('admin/addendum/report_addendum'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
-              <div>Laporan TKHL</div>
+              <div>Laporan Adendum</div>
             </a>
           </li>
         <?php

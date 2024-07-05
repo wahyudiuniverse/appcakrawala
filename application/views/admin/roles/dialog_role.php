@@ -1666,6 +1666,123 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 					]
 				},
 
+
+				//LAPORAN ADMIN
+				{
+					id: "",
+					class: "role-checkbox-modal custom-control-input",
+					text: "Laporan Admin",
+					add_info: "",
+					check: "<?php if (isset($_GET['role_id'])) {
+								if (in_array('486', $role_resources_ids)) : echo 'checked';
+								else : echo '';
+								endif;
+							} ?>",
+					value: "486",
+					items: [
+
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Laporan PKWT",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('486', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>",
+							add_info: "<?php echo $this->lang->line('xin_create_edit_view_delete'); ?>",
+							value: "486",
+							items: [{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "<?php echo $this->lang->line('xin_role_enable'); ?>",
+									add_info: "<?php echo $this->lang->line('xin_role_enable'); ?>",
+									value: "487",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('487', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "<?php echo $this->lang->line('xin_role_add'); ?>",
+									add_info: "<?php echo $this->lang->line('xin_role_add'); ?>",
+									value: "488",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('488', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "<?php echo $this->lang->line('xin_role_edit'); ?>",
+									add_info: "<?php echo $this->lang->line('xin_role_add'); ?>",
+									value: "488",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('488', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "<?php echo $this->lang->line('xin_role_delete'); ?>",
+									add_info: "<?php echo $this->lang->line('xin_role_add'); ?>",
+									value: "489",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('489', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								}
+							]
+						},
+
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "<?php echo $this->lang->line('xin_sk_report'); ?>",
+							add_info: "Lapran Adendum",
+							value: "520",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('520', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>",
+							items: [{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "<?php echo $this->lang->line('xin_role_enable'); ?>",
+									add_info: "<?php echo $this->lang->line('xin_role_enable'); ?>",
+									value: "520",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('520', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "Import Adendum",
+									add_info: "<?php echo $this->lang->line('xin_role_add'); ?>",
+									value: "521 ",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('521 ', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								}
+							]
+						}
+					]
+				},
+
 				// ORGANIZATION
 				{
 					id: "",

@@ -1958,7 +1958,7 @@ class Reports extends MY_Controller
 				$no,
 				$view_pkwt. ' '.$editReq.' '.$delete,
 				$r->employee_id,
-				$fullname.'<br>'.$whatsapp,
+				$fullname.'#<br>'.$whatsapp,
 				$nama_project,
 				$designation_name,
 				$penempatan,
