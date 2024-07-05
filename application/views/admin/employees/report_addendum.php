@@ -114,8 +114,11 @@ if (in_array('521', $role_resources_ids)) {
         <thead>
           <tr>
             <th>Aksi</th>
+            <th>(NIP) Nama</th>
+            <th>Project - Jabatan</th>
+            <th>Nomor Kontrak</th>
             <th>Nomor Addendum</th>
-            <th>Tanggal Terbit</th>
+            <th>Tanggal Terbit Addendum (YYYY-MM-DD)</th>
             <th>Dibuat Oleh</th>
           </tr>
         </thead>
@@ -131,6 +134,7 @@ if (in_array('521', $role_resources_ids)) {
   var langopt;
   var tabel_addendum;
   var session_id = '<?php echo $session['employee_id']; ?>';
+  var pesan = '<?php echo $pesan; ?>';
   //var myData = ['New York', 'Los Angeles', 'Chicago', 'Houston', 'Philadelphia', 'Phoenix', 'San Antonio', 'San Diego', 'Dallas', 'San Jose', 'Jacksonville', "Algiers", "Annaba", "Azazga", "Batna City", "Blida", "Bordj", "Bordj Bou Arreridj", "Bougara", "Cheraga", "Chlef", "Constantine", "Djelfa", "Draria", "El Tarf", "Hussein Dey", "Illizi", "Jijel", "Kouba", "Laghouat", "Oran", "Ouargla", "Oued Smar", "Relizane", "Rouiba", "Saida", "Souk Ahras", "Tamanghasset", "Tiaret", "Tissemsilt", "Tizi", "Tizi Ouzou", "Tlemcen"];
   // var myData = JSON.parse('<?php //echo json_encode($tabel_saltab); 
                               ?>');
@@ -140,7 +144,14 @@ if (in_array('521', $role_resources_ids)) {
 
   $(document).ready(function() {
 
-    // var idsession = "<?php print($session['employee_id']); ?>";
+    // var idsession = "<?php //print($session['employee_id']); 
+                        ?>";
+
+    if (pesan == "") {
+
+    } else {
+      alert(pesan);
+    }
 
     // baseURL variable
     var baseURL = "<?php echo base_url(); ?>";
@@ -170,7 +181,7 @@ if (in_array('521', $role_resources_ids)) {
       //  type: 'date-eu'
       //}],
       'order': [
-        [1, 'desc']
+        [4, 'desc']
       ],
       'ajax': {
         'url': '<?= base_url() ?>admin/addendum/list_report_addendum',
@@ -183,6 +194,21 @@ if (in_array('521', $role_resources_ids)) {
       'columns': [{
           data: 'aksi',
           //"orderable": false
+        },
+        {
+          data: 'first_name',
+          //"orderable": false,
+          //searchable: true
+        },
+        {
+          data: 'title',
+          //"orderable": false,
+          //searchable: true
+        },
+        {
+          data: 'no_surat',
+          //"orderable": false,
+          //searchable: true
         },
         {
           data: 'no_addendum',
@@ -221,7 +247,7 @@ if (in_array('521', $role_resources_ids)) {
       },
       success: function(response) {
         alert("Berhasil Delete Addendum");
-        table.ajax.reload(null, false);
+        tabel_addendum.ajax.reload(null, false);
       },
       error: function() {
         alert("Gagal Delete Addendum");

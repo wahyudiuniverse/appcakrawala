@@ -675,7 +675,7 @@ class Addendum extends MY_Controller
     }
 
     // report addendum
-    public function report_addendum()
+    public function report_addendum($pesan = "")
     {
 
         $session = $this->session->userdata('username');
@@ -685,6 +685,7 @@ class Addendum extends MY_Controller
         $data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
         $data['title'] = 'Report Addendum | ' . $this->Xin_model->site_title();
         $data['breadcrumbs'] = 'Report Addendum';
+        $data['pesan'] = urldecode($pesan);
         // $data['all_projects'] = $this->Project_model->get_projects();
         $data['path_url'] = 'hrpremium_import_esaltab';
         // $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
@@ -775,6 +776,7 @@ class Addendum extends MY_Controller
     function import_addendum()
     {
         $this->load->helper('file');
+        $pesan = "";
 
         /* Allowed MIME(s) File */
         $file_mimes = array(
@@ -818,23 +820,25 @@ class Addendum extends MY_Controller
                 $data = array();
             }
 
-            echo '<pre>';
-            print_r($array_data);
-            echo '</pre>';
+            // echo '<pre>';
+            // print_r($array_data);
+            // echo '</pre>';
+            // echo "<script>alert('Berhasil import addendum');</script>";
+            $pesan = "Berhasil Import Addendum";
         } else {
             // $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
-            print_r("gagal import");
-            print_r($_FILES['file_excel']['name']);
+            $pesan = "Gagal Import Addendum";
+            // print_r($_FILES['file_excel']['name']);
         }
 
-        redirect('admin/addendum/report_addendum/');
+        redirect('admin/addendum/report_addendum/' . $pesan);
     }
 
-    public function save_import2($data)
+    public function save_import2()
     {
-        $yearmonth = date('Y-m-d H:i:s');
+        // $yearmonth = date('Y-m-d H:i:s');
         echo '<script language="javascript">';
-        echo 'alert("Warning! The role you are to going delete has some employees.\nIsi addendum:' .  $yearmonth . '")';
+        echo 'alert("Berhasil Import Addendum")';
         echo '</script>';
     }
 
@@ -936,6 +940,6 @@ class Addendum extends MY_Controller
 
         $this->Addendum_model->add_addendum($data);
 
-        echo json_encode($data);
+        // echo json_encode($data);
     }
 }

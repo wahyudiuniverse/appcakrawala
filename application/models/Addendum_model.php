@@ -417,7 +417,7 @@ class Addendum_model extends CI_Model
         ## Search 
         $searchQuery = "";
         if ($searchValue != '') {
-            $searchQuery = " (no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
+            $searchQuery = " (designation_name like '%" . $searchValue .  "%' or priority like '%" . $searchValue .  "%' or title like '%" . $searchValue .  "%' or xin_employees.employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue .  "%' or no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
         }
 
         ## Kondisi Default 
@@ -430,7 +430,13 @@ class Addendum_model extends CI_Model
         ## Total number of records without filtering
         $this->db->select('count(*) as allcount');
         // $this->db->where($kondisiDefaultQuery);
-        $records = $this->db->get('xin_contract_addendum')->result();
+        // $records = $this->db->get('xin_contract_addendum')->result();
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
+        $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+        $this->db->join('xin_employee_contract', 'xin_employee_contract.employee_id = xin_employees.employee_id');
+        $this->db->from('xin_contract_addendum');
+        $records = $this->db->get()->result();
         $totalRecords = $records[0]->allcount;
 
         ## Total number of record with filtering
@@ -439,21 +445,43 @@ class Addendum_model extends CI_Model
         if ($searchQuery != '') {
             $this->db->where($searchQuery);
         }
-        $records = $this->db->get('xin_contract_addendum')->result();
+        // $records = $this->db->get('xin_contract_addendum')->result();
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
+        $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+        $this->db->join('xin_employee_contract', 'xin_employee_contract.employee_id = xin_employees.employee_id');
+        $this->db->from('xin_contract_addendum');
+        $records = $this->db->get()->result();
         $totalRecordwithFilter = $records[0]->allcount;
 
         ## Fetch records
-        $this->db->select('*');
+        // $this->db->select('*');
+        $this->db->select('xin_contract_addendum.id');
+        $this->db->select('xin_employees.first_name');
+        $this->db->select('xin_employees.employee_id');
+        $this->db->select('xin_projects.title');
+        $this->db->select('xin_projects.priority');
+        $this->db->select('xin_contract_addendum.no_addendum');
+        $this->db->select('xin_contract_addendum.tgl_terbit');
+        $this->db->select('xin_contract_addendum.created_by');
+        $this->db->select('xin_designations.designation_name');
+        $this->db->select('xin_employee_contract.no_surat');
         // $this->db->where($kondisiDefaultQuery);
         if ($searchQuery != '') {
             $this->db->where($searchQuery);
         }
+        $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
+        $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+        $this->db->join('xin_employee_contract', 'xin_employee_contract.employee_id = xin_employees.employee_id');
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
-        $records = $this->db->get('xin_contract_addendum')->result();
+        // $records = $this->db->get('xin_contract_addendum')->result();
+        $this->db->from('xin_contract_addendum');
+        $records = $this->db->get()->result();
 
         #Debugging variable
-        //$tes_query = $this->db->last_query();
+        $tes_query = $this->db->last_query();
 
         $data = array();
 
@@ -469,6 +497,9 @@ class Addendum_model extends CI_Model
 
             $data[] = array(
                 "aksi" => $view . " " . $editReq . " " . $delete,
+                "first_name" => "<strong>(" . $record->employee_id . ")</strong> " . $record->first_name,
+                "title" => "<strong>(" . $record->priority . ") " . $record->title . "</strong> - " . $record->designation_name,
+                "no_surat" => $record->no_surat,
                 "no_addendum" => $record->no_addendum,
                 "tgl_terbit" => $record->tgl_terbit,
                 "created_by" => $this->get_nama_karyawan($record->created_by),
