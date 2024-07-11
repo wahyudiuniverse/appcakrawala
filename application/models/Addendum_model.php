@@ -421,6 +421,8 @@ class Addendum_model extends CI_Model
         }
 
         ## Kondisi Default 
+        $kondisiDefaultQuery = "(xin_employees.employee_id in (SELECT distinct(`employee_id`) FROM `xin_employee_contract` order by `createdon` desc)";
+        // $kondisiDefaultQuery = "(xin_employees.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
         // $kondisiDefaultQuery = "(
         // 	karyawan_id = " . $emp_id . "
         // AND	pkwt_id = " . $contract_id . "
@@ -434,7 +436,7 @@ class Addendum_model extends CI_Model
         $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
         $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
         $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-        $this->db->join('xin_employee_contract', 'xin_employee_contract.employee_id = xin_employees.employee_id');
+        $this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
         $this->db->from('xin_contract_addendum');
         $records = $this->db->get()->result();
         $totalRecords = $records[0]->allcount;
@@ -449,7 +451,7 @@ class Addendum_model extends CI_Model
         $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
         $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
         $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-        $this->db->join('xin_employee_contract', 'xin_employee_contract.employee_id = xin_employees.employee_id');
+        $this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
         $this->db->from('xin_contract_addendum');
         $records = $this->db->get()->result();
         $totalRecordwithFilter = $records[0]->allcount;
@@ -473,7 +475,7 @@ class Addendum_model extends CI_Model
         $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
         $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
         $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-        $this->db->join('xin_employee_contract', 'xin_employee_contract.employee_id = xin_employees.employee_id');
+        $this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
         $this->db->order_by($columnName, $columnSortOrder);
         $this->db->limit($rowperpage, $start);
         // $records = $this->db->get('xin_contract_addendum')->result();
