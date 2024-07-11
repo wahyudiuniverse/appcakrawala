@@ -345,7 +345,7 @@ class Employees_model extends CI_Model
 			if (empty($query)) {
 				return "";
 			} else {
-				return $query['title'];
+				return "[" . $query['priority'] . "] " . $query['title'];
 			}
 			//return $query['title'];
 		}
@@ -462,6 +462,223 @@ class Employees_model extends CI_Model
 				return "";
 			} else {
 				return $query['type'];
+			}
+		}
+	}
+
+	//ambil id jabatan
+	function get_id_jabatan($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['designation_id'];
+			}
+		}
+	}
+
+	//ambil level jabatan
+	function get_level($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_designations');
+			$this->db->where('designation_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['level'];
+			}
+		}
+	}
+
+	//ambil link pkwt
+	function get_link_pkwt($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(contract_id)');
+			$this->db->select('file_name');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['file_name'];
+			}
+		}
+	}
+
+	//ambil tanggal upload pkwt lengkap
+	function get_tanggal_pkwt($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(contract_id)');
+			$this->db->select('upload_pkwt');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['upload_pkwt'];
+			}
+		}
+	}
+
+	//ambil nama kontak darurat
+	function get_nama_kontak_darurat($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('employee_request_nik', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['nama'];
+			}
+		}
+	}
+
+	//ambil nomor kontak darurat
+	function get_nomor_kontak_darurat($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('employee_request_nik', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['no_kontak'];
+			}
+		}
+	}
+
+	//ambil hubunan kontak darurat
+	function get_hubungan_kontak_darurat($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('employee_request_nik', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $this->get_nama_hubungan_kontak_darurat($query['hubungan']);
+			}
+		}
+	}
+
+	//ambil hubunan kontak darurat
+	function get_nama_hubungan_kontak_darurat($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('mt_family_relation');
+			$this->db->where('secid', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['name'];
+			}
+		}
+	}
+
+	//ambil nama pendidikan
+	function get_nama_pendidikan($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_qualification_education_level');
+			$this->db->where('education_level_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['name'];
 			}
 		}
 	}
@@ -721,7 +938,7 @@ class Employees_model extends CI_Model
 	}
 
 	/*
-	* persiapan data untuk datatable pagination
+	* persiapan data export excel
 	* data request employee yang belum diapprove HRD dan belum ditolak HRD
 	* 
 	* @author Fadla Qamara
@@ -1024,6 +1241,7 @@ class Employees_model extends CI_Model
 		return $data;
 		//json_encode($data);
 	}
+
 
 	/*
 	* persiapan data untuk datatable pagination
@@ -1554,6 +1772,548 @@ class Employees_model extends CI_Model
 		//die;
 
 		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list employees
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_employees($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$status = $postData['status'];
+		$session_id = $postData['session_id'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterSubProject = "";
+		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+			$filterSubProject = "(
+				sub_project_id = '" . $sub_project . "'
+			)";
+		} else {
+			$filterSubProject = "";
+		}
+
+		$filterStatus = "";
+		if (($status != null) && ($status != "") && ($status != '0')) {
+			$filterStatus = "(
+				status_resign = '" . $status . "'
+			)";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+		// $kondisiDefaultQuery = "(
+		// 	karyawan_id = " . $emp_id . "
+		// AND	pkwt_id = " . $contract_id . "
+		// )";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$this->db->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$this->db->where($filterStatus);
+		}
+		$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_employees')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$this->db->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$this->db->where($filterStatus);
+		}
+		$records = $this->db->get('xin_employees')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		// $this->db->select('xin_employees.user_id');
+		// $this->db->select('xin_employees.first_name');
+		// $this->db->select('xin_employees.employee_id');
+		// $this->db->select('xin_employees.status_resign');
+		// $this->db->select('xin_employees.contract_start');
+		// $this->db->select('xin_employees.contract_end');
+		// $this->db->select('xin_employees.penempatan');
+		// $this->db->select('xin_employees.project_id');
+		// $this->db->select('xin_employees.sub_project_id');
+		// $this->db->select('xin_employees.designation_id');
+		// $this->db->select('xin_projects.title');
+		// $this->db->select('xin_projects.priority');
+		// $this->db->select('xin_designations.designation_name');
+		// $this->db->select('xin_projects_sub.sub_project_name');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$this->db->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$this->db->where($filterStatus);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_employees')->result();
+
+		#Debugging variable
+		// $tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$text_periode_from = "";
+			$text_periode_to = "";
+			$text_periode = "";
+			if (empty($record->contract_start) || ($record->contract_start == "")) {
+				$text_periode_from = "";
+			} else {
+				$text_periode_from = $this->Xin_model->tgl_indo($record->contract_start);
+			}
+			if (empty($record->contract_end) || ($record->contract_end == "")) {
+				$text_periode_to = "";
+			} else {
+				$text_periode_to = $this->Xin_model->tgl_indo($record->contract_end);
+			}
+			if (($text_periode_from == "") && ($text_periode_to == "")) {
+				$text_periode = "";
+			} else {
+				$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+			}
+
+			$text_resign = "";
+			if (empty($record->status_resign) || ($record->status_resign == "")) {
+				$text_resign = "";
+			} else if ($record->status_resign == "1") {
+				$text_resign = " - [AKTIF]";
+			} else if ($record->status_resign == "2") {
+				$text_resign = " - [RESIGN]";
+			} else if ($record->status_resign == "3") {
+				$text_resign = " - [BLACKLIST]";
+			} else if ($record->status_resign == "4") {
+				$text_resign = " - [END CONTRACT]";
+			} else if ($record->status_resign == "5") {
+				$text_resign = " - [DEACTIVE]";
+			} else {
+				$text_resign = "";
+			}
+
+			//cek komparasi string
+			// $teskomparasi_1 = "A";
+			// $teskomparasi_2 = "C2";
+			// $hasilkomparasi = "";
+
+			// if ($teskomparasi_2 < $teskomparasi_1) {
+			// 	$hasilkomparasi = "2 lebih kecil";
+			// } else {
+			// 	$hasilkomparasi = "2 lebih besar";
+			// }
+
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view,
+				"employee_id" => $record->employee_id . $text_resign,
+				"first_name" => strtoupper($record->first_name),
+				"project" => strtoupper($this->get_nama_project($record->project_id)),
+				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
+				"jabatan" => strtoupper($this->get_nama_jabatan($record->designation_id)),
+				"penempatan" => strtoupper($record->penempatan),
+				"periode" => $text_periode,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data export excel
+	* data request employee yang belum diapprove HRD dan belum ditolak HRD
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_employee_print($postData = null)
+	{
+
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$status = $postData['status'];
+		$filter = $postData['filter'];
+		$session_id = $postData['session_id'];
+
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterSubProject = "";
+		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+			$filterSubProject = "(
+				sub_project_id = '" . $sub_project . "'
+			)";
+		} else {
+			$filterSubProject = "";
+		}
+
+		$filterStatus = "";
+		if (($status != null) && ($status != "") && ($status != '0')) {
+			$filterStatus = "(
+				status_resign = '" . $status . "'
+			)";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(xin_employees.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+
+		## Fetch records
+		$this->db->select('*');
+		// $this->db->select('xin_employees.user_id');
+		// $this->db->select('xin_employees.first_name');
+		// $this->db->select('xin_employees.employee_id');
+		// $this->db->select('xin_employees.company_id');
+		// $this->db->select('xin_companies.name as company_name');
+		// $this->db->select('xin_employees.department_id');
+		// $this->db->select('xin_departments.department_name');
+		// $this->db->select('xin_employees.status_resign');
+		// $this->db->select('xin_employees.contract_start');
+		// $this->db->select('xin_employees.contract_end');
+		// $this->db->select('xin_employees.penempatan');
+		// $this->db->select('xin_employees.project_id');
+		// $this->db->select('xin_employees.sub_project_id');
+		// $this->db->select('xin_employees.designation_id');
+		// $this->db->select('xin_employees.region');
+		// $this->db->select('xin_employees.tempat_lahir');
+		// $this->db->select('xin_employees.date_of_birth');
+		// $this->db->select('xin_employees.date_of_joining');
+		// $this->db->select('xin_employees.contract_start');
+		// $this->db->select('xin_employees.contract_end');
+		// $this->db->select('xin_employees.basic_salary');
+		// $this->db->select('xin_employees.date_of_leaving');
+		// $this->db->select('xin_employees.gender');
+		// $this->db->select('xin_employees.marital_status');
+		// $this->db->select('xin_employees.ethnicity_type');
+		// $this->db->select('xin_employees.email');
+		// $this->db->select('xin_employees.contact_no');
+		// $this->db->select('xin_employees.last_edu');
+		// $this->db->select('xin_projects.title');
+		// $this->db->select('xin_projects.priority');
+		// $this->db->select('xin_designations.designation_name');
+		// $this->db->select('xin_projects_sub.sub_project_name');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$this->db->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$this->db->where($filterStatus);
+		}
+		// $this->db->join('xin_companies', 'xin_companies.company_id = xin_employees.company_id');
+		// $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+		// $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+		// $this->db->join('xin_projects_sub', 'xin_projects_sub.secid = xin_employees.sub_project_id');
+		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$records = $this->db->get('xin_employees')->result();
+		$tes_query = $this->db->last_query();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$text_periode_from = "";
+			$text_periode_to = "";
+			$text_periode = "";
+			if (empty($record->contract_start) || ($record->contract_start == "")) {
+				$text_periode_from = "";
+			} else {
+				$text_periode_from = $this->Xin_model->tgl_indo($record->contract_start);
+			}
+			if (empty($record->contract_end) || ($record->contract_end == "")) {
+				$text_periode_to = "";
+			} else {
+				$text_periode_to = $this->Xin_model->tgl_indo($record->contract_end);
+			}
+			if (($text_periode_from == "") && ($text_periode_to == "")) {
+				$text_periode = "";
+			} else {
+				$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+			}
+
+			$text_resign = "";
+			if (empty($record->status_resign) || ($record->status_resign == "")) {
+				$text_resign = "";
+			} else if ($record->status_resign == "1") {
+				$text_resign = "AKTIF";
+			} else if ($record->status_resign == "2") {
+				$text_resign = "RESIGN";
+			} else if ($record->status_resign == "3") {
+				$text_resign = "BLACKLIST";
+			} else if ($record->status_resign == "4") {
+				$text_resign = "END CONTRACT";
+			} else if ($record->status_resign == "5") {
+				$text_resign = "DEACTIVE";
+			} else {
+				$text_resign = "";
+			}
+
+			$text_marital = "";
+			if (empty($record->marital_status) || ($record->marital_status == "")) {
+				$text_marital = "-";
+			} else if ($record->marital_status == "1") {
+				$text_marital = "TK/0";
+			} else if ($record->marital_status == "2") {
+				$text_marital = "TK/0";
+			} else if ($record->marital_status == "3") {
+				$text_marital = "TK/1";
+			} else if ($record->marital_status == "4") {
+				$text_marital = "TK/2";
+			} else if ($record->marital_status == "5") {
+				$text_marital = "TK/3";
+			} else if ($record->marital_status == "6") {
+				$text_marital = "K/0";
+			} else if ($record->marital_status == "7") {
+				$text_marital = "K/1";
+			} else if ($record->marital_status == "8") {
+				$text_marital = "K/2";
+			} else if ($record->marital_status == "9") {
+				$text_marital = "K/3";
+			} else {
+				$text_marital = "-";
+			}
+
+			$text_ktp = "";
+			if (empty($record->filename_ktp) || ($record->filename_ktp == "") || ($record->filename_ktp == "0")) {
+				$text_ktp = "-";
+			} else {
+				$text_ktp = base_url() . "uploads/document/ktp/" . $record->filename_ktp;
+			}
+
+			$text_kk = "";
+			if (empty($record->filename_kk) || ($record->filename_kk == "") || ($record->filename_kk == "0")) {
+				$text_kk = "-";
+			} else {
+				$text_kk = base_url() . "uploads/document/kk/" . $record->filename_kk;
+			}
+
+			$text_npwp = "";
+			if (empty($record->filename_npwp) || ($record->filename_npwp == "") || ($record->filename_npwp == "0")) {
+				$text_npwp = "-";
+			} else {
+				$text_npwp = base_url() . "uploads/document/npwp/" . $record->filename_npwp;
+			}
+
+			$text_ijazah = "";
+			if (empty($record->filename_isd) || ($record->filename_isd == "") || ($record->filename_isd == "0")) {
+				$text_ijazah = "-";
+			} else {
+				$text_ijazah = base_url() . "uploads/document/ijazah/" . $record->filename_isd;
+			}
+
+			$text_skck = "";
+			if (empty($record->filename_skck) || ($record->filename_skck == "") || ($record->filename_skck == "0")) {
+				$text_skck = "-";
+			} else {
+				$text_skck = base_url() . "uploads/document/skck/" . $record->filename_skck;
+			}
+
+			$text_cv = "";
+			if (empty($record->filename_cv) || ($record->filename_cv == "") || ($record->filename_cv == "0")) {
+				$text_cv = "-";
+			} else {
+				$text_cv = base_url() . "uploads/document/cv/" . $record->filename_cv;
+			}
+
+			$text_paklaring = "";
+			if (empty($record->filename_paklaring) || ($record->filename_paklaring == "") || ($record->filename_paklaring == "0")) {
+				$text_paklaring = "-";
+			} else {
+				$text_paklaring = base_url() . "uploads/document/" . $record->filename_paklaring;
+			}
+
+			$text_gaji = "";
+			$id_jabatan_user = $this->get_id_jabatan($session_id);
+			$level_record = $this->get_level($record->designation_id);
+			$level_user = $this->get_level($id_jabatan_user);
+
+			if (empty($level_user) || $level_user == "") {
+				$level_user = "Z9";
+			} else {
+				if (strlen($level_user) == 1) {
+					$level_user = $level_user . "0";
+				}
+			}
+
+			if (empty($level_record) || $level_record == "") {
+				$level_record = "Z9";
+			} else {
+				if (strlen($level_record) == 1) {
+					$level_record = $level_record . "0";
+				}
+			}
+			if ($level_record <= $level_user) {
+				$text_gaji = "**********";
+			} else {
+				$text_gaji = $record->basic_salary . " ";
+			}
+
+			// if ("B" >= "D2") {
+			// 	$text_gaji = "**********";
+			// } else {
+			// 	$text_gaji = $record->basic_salary . " ";
+			// }
+
+			$data[] = array(
+				"status" => $text_resign,
+				"nip" => $record->employee_id,
+				"nama" => strtoupper($record->first_name),
+				"company_name" => strtoupper($this->get_nama_company($record->company_id)),
+				"department_name" => strtoupper($this->get_nama_department($record->department_id)),
+				"jabatan" => strtoupper($this->get_nama_jabatan($record->designation_id)),
+				"project" => strtoupper($this->get_nama_project($record->project_id)),
+				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
+				"area" => strtoupper($record->penempatan),
+				"region" => strtoupper($record->region),
+				"tempat_lahir" => strtoupper($record->tempat_lahir),
+				"date_of_birth" => $this->Xin_model->tgl_indo($record->date_of_birth),
+				"date_of_joining" => $this->Xin_model->tgl_indo($record->date_of_joining),
+				"contract_start" => $this->Xin_model->tgl_indo($record->contract_start),
+				"contract_end" => $this->Xin_model->tgl_indo($record->contract_end),
+				"basic_salary" => $text_gaji,
+				"date_of_leaving" => $this->Xin_model->tgl_indo($record->date_of_leaving),
+				"gender" => $record->gender,
+				"text_marital" => $text_marital,
+				"agama" => strtoupper($this->get_nama_agama($record->ethnicity_type)),
+				"email" => strtoupper($record->email),
+				"contact_no" => $record->contact_no,
+				"pendidikan" => strtoupper($this->get_nama_pendidikan($record->last_edu)),
+				"alamat_ktp" => strtoupper($record->alamat_ktp),
+				"alamat_domisili" => strtoupper($record->alamat_domisili),
+				"no_kk" => $record->kk_no . " ",
+				"no_ktp" => $record->ktp_no . " ",
+				"no_npwp" => $record->npwp_no . " ",
+				"bpjs_tk" => $record->bpjs_tk_no . " ",
+				"bpjs_ks" => $record->bpjs_ks_no . " ",
+				"nama_ibu" => strtoupper($record->ibu_kandung),
+				"nama_kontak" => strtoupper($this->get_nama_kontak_darurat($record->ktp_no)),
+				"hubungan_kontak" => strtoupper($this->get_hubungan_kontak_darurat($record->ktp_no)),
+				"nomor_kontak" => $this->get_nomor_kontak_darurat($record->ktp_no) . " ",
+				"nama_bank" => strtoupper($this->get_nama_bank($record->bank_name)),
+				"no_rekening" => $record->nomor_rek . " ",
+				"pemilik_rekening" => strtoupper($record->pemilik_rek),
+				"foto_ktp" => $text_ktp,
+				"foto_kk" => $text_kk,
+				"foto_npwp" => $text_npwp,
+				"foto_ijazah" => $text_ijazah,
+				"foto_skck" => $text_skck,
+				"foto_cv" => $text_cv,
+				"foto_paklaring" => $text_paklaring,
+				"dokumen_pkwt" => $this->get_link_pkwt($record->employee_id),
+				"tanggal_pkwt" => $this->get_tanggal_pkwt($record->employee_id),
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		//print_r($this->db->last_query());
+		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
+
+		return $data;
+		//json_encode($data);
 	}
 
 

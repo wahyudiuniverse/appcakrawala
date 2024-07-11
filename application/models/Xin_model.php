@@ -212,10 +212,7 @@ class Xin_model extends CI_Model
 			$arr['konfig_download_esaltab_active'] = 'active';
 			$arr['saltab_open'] = 'open';
 			return $arr;
-		}
-
-
-		else if ($mClass == 'company' && $mMethod == 'official_documents') {
+		} else if ($mClass == 'company' && $mMethod == 'official_documents') {
 			$arr['official_documents_active'] = 'active';
 			$arr['files_open'] = 'open';
 			return $arr;
@@ -4778,33 +4775,36 @@ ORDER BY `expiry_date`");
 
 	function tgl_indo($tanggal)
 	{
+		if (($tanggal == "") || ($tanggal == "0") || empty($tanggal)) {
+			return "";
+		} else {
+			// $input = '06/10/2011 19:00:02';
+			$timetodate = strtotime($tanggal);
+			$date = date('Y-m-d', $timetodate);
 
-		// $input = '06/10/2011 19:00:02';
-		$timetodate = strtotime($tanggal);
-		$date = date('Y-m-d', $timetodate);
 
+			$bulan = array(
+				1 =>   'Januari',
+				'Februari',
+				'Maret',
+				'April',
+				'Mei',
+				'Juni',
+				'Juli',
+				'Agustus',
+				'September',
+				'Oktober',
+				'November',
+				'Desember'
+			);
+			$pecahkan = explode('-', $date);
 
-		$bulan = array(
-			1 =>   'Januari',
-			'Februari',
-			'Maret',
-			'April',
-			'Mei',
-			'Juni',
-			'Juli',
-			'Agustus',
-			'September',
-			'Oktober',
-			'November',
-			'Desember'
-		);
-		$pecahkan = explode('-', $date);
+			// variabel pecahkan 0 = tanggal
+			// variabel pecahkan 1 = bulan
+			// variabel pecahkan 2 = tahun
 
-		// variabel pecahkan 0 = tanggal
-		// variabel pecahkan 1 = bulan
-		// variabel pecahkan 2 = tahun
-
-		return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+			return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+		}
 	}
 
 
