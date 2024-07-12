@@ -1746,8 +1746,8 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 						{
 							id: "",
 							class: "role-checkbox-modal custom-control-input",
-							text: "<?php echo $this->lang->line('xin_sk_report'); ?>",
-							add_info: "Lapran Adendum",
+							text: "Lapran Adendum",
+							add_info: "Addendum Report",
 							value: "520",
 							check: "<?php if (isset($_GET['role_id'])) {
 										if (in_array('520', $role_resources_ids)) : echo 'checked';

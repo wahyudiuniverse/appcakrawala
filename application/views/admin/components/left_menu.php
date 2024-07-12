@@ -824,7 +824,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
         <?php
         if (in_array('520', $role_resources_ids)) { ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['pkwt_request_hrd_active'])) echo $arr_mod['pkwt_request_hrd_active']; ?>">
+          <li class="sidenav-item <?php if (!empty($arr_mod['report_active'])) echo $arr_mod['report_active']; ?>">
             <a href="<?php echo site_url('admin/addendum/report_addendum'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>

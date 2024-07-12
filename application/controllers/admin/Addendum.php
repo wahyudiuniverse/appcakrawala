@@ -482,9 +482,12 @@ class Addendum extends MY_Controller
         if ($pkwt[0]->company == 2) {
             $logo_cover = 'tcpdf_logo_sc.png';
             $header_namae = 'PT. Siprama Cakrawala';
-        } else {
+        } else if ($pkwt[0]->company == 3) {
             $logo_cover = 'tcpdf_logo_kac.png';
             $header_namae = 'PT. Krista Aulia Cakrawala';
+        } else {
+            $logo_cover = 'tcpdf_logo_mata.png';
+            $header_namae = 'PT. Mata Cakrawala';
         }
         $header_html = '
         <table>

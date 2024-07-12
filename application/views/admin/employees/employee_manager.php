@@ -939,7 +939,7 @@
           
                           <div class="form-group">
                             <div class="card-body media align-items-center"> 
-                                <a href="<?php echo $filename_cv;?>" target="_blank"><?php echo $filename_cv; ?></a>
+                                <a href="<?php echo base_url().'uploads/document/cv/'.$filename_cv;?>" target="_blank"><?php echo $filename_cv; ?></a>
                               <div class="media-body ml-4"></div>
                             </div>
                           </div>

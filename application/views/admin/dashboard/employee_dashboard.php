@@ -22,10 +22,12 @@ $pkwtinfo = $this->Pkwt_model->get_single_pkwt_by_userid($user_info[0]->employee
 $emp = $this->Employees_model->read_employee_info_by_nik($user_info[0]->employee_id);
         if(!is_null($emp)){
           $fullname = $emp[0]->first_name;
+          $projectid = $emp[0]->project_id;
           $sub_project = 'pkwt'.$emp[0]->sub_project_id;
           $designation_id = $emp[0]->designation_id;
         } else {
           $fullname = '--'; 
+          $projectid = '0';
           $sub_project = '0';
           $designation_id = '0';
         }
@@ -454,8 +456,35 @@ $new_date = date('d-M-Y', $strtotime);
   }
   ?>
 
+
   <?php
-  if($designation_id=='735'){
+  if($projectid=='61' && $designation_id=='165'){
+    ?>
+
+
+  <div class="col-sm-6 col-xl-4">
+  <a href="<?php echo site_url('/uploads/document/offering/dokumen-insentif-spv.pdf');?>" target="_blank">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small">DOWNLOAD</div>
+            <div class="text-large">DOKUMEN INSENTIF SPV</div>
+            <div class="text-muted small">PT. Paragon Technology and Innovation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </div>
+
+  <?php
+  }
+  ?>
+
+  <?php
+  if($projectid=='61' && $designation_id=='735'){
     ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -474,12 +503,31 @@ $new_date = date('d-M-Y', $strtotime);
     </div>
     </a>
   </div>
+
+
+  <div class="col-sm-6 col-xl-4">
+  <a href="<?php echo site_url('/uploads/document/offering/dokumen-insentif-sl-ba.pdf');?>" target="_blank">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small">DOWNLOAD</div>
+            <div class="text-large">DOKUMEN INSENTIF SL-BA</div>
+            <div class="text-muted small">PT. Paragon Technology and Innovation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </div>
+
   <?php
   }
   ?>
 
   <?php
-  if($designation_id=='736'){
+  if($projectid=='61' && $designation_id=='736'){
     ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -498,6 +546,25 @@ $new_date = date('d-M-Y', $strtotime);
     </div>
     </a>
   </div>
+
+
+  <div class="col-sm-6 col-xl-4">
+  <a href="<?php echo site_url('/uploads/document/offering/dokumen-insentif-sl-non-ba.pdf');?>" target="_blank">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small">DOWNLOAD</div>
+            <div class="text-large">DOKUMEN INSENTIF SL-NON BA</div>
+            <div class="text-muted small">PT. Paragon Technology and Innovation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </a>
+  </div>
+
   <?php
   }
   ?>

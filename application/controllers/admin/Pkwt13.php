@@ -1690,7 +1690,7 @@ class Pkwt13 extends MY_Controller
 						</tr>';
 				}
 
-				$lampiran .= '	
+				$lampiran .= '		
 
 						<br>
 						<tr>
