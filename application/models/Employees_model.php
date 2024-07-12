@@ -1964,6 +1964,32 @@ class Employees_model extends CI_Model
 			// 	$hasilkomparasi = "2 lebih besar";
 			// }
 
+			$text_pin = "";
+			$id_jabatan_user = $this->get_id_jabatan($session_id);
+			$level_record = $this->get_level($record->designation_id);
+			$level_user = $this->get_level($id_jabatan_user);
+
+			if (empty($level_user) || $level_user == "") {
+				$level_user = "Z9";
+			} else {
+				if (strlen($level_user) == 1) {
+					$level_user = $level_user . "0";
+				}
+			}
+
+			if (empty($level_record) || $level_record == "") {
+				$level_record = "Z9";
+			} else {
+				if (strlen($level_record) == 1) {
+					$level_record = $level_record . "0";
+				}
+			}
+			if ($level_record <= $level_user) {
+				$text_pin = "**********";
+			} else {
+				$text_pin = $record->private_code . " ";
+			}
+
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
@@ -1982,6 +2008,7 @@ class Employees_model extends CI_Model
 				"jabatan" => strtoupper($this->get_nama_jabatan($record->designation_id)),
 				"penempatan" => strtoupper($record->penempatan),
 				"periode" => $text_periode,
+				"pin" => $text_pin,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}

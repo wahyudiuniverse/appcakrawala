@@ -129,6 +129,7 @@
                 <th>Jabatan</th>
                 <th>Penempatan</th>
                 <th>Periode Kontrak</th>
+                <th>PIN</th>
               </tr>
             </thead>
           </table>
@@ -216,6 +217,10 @@
         },
         {
           data: 'periode',
+          "orderable": false,
+        },
+        {
+          data: 'pin',
           "orderable": false,
         },
       ]
@@ -308,6 +313,10 @@
             data: 'periode',
             "orderable": false,
           },
+          {
+            data: 'pin',
+            "orderable": false,
+          },
         ]
       }).on('search.dt', () => eventFired('Search'));
 
@@ -318,9 +327,6 @@
     // alert(project);
     // alert(sub_project);
     // alert(status);
-
-
-
   };
 </script>
 
