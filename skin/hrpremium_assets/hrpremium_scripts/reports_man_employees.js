@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
@@ -29,12 +31,22 @@ $(document).ready(function() {
 	});
 		
 		//get project
-	jQuery("#aj_project").change(function(){
-		var p_id = jQuery(this).val();
-		jQuery.get(base_url+"/get_subprojects/"+p_id, function(data, status){
-			jQuery('#subproject_ajax').html(data);			
-		});
-	});
+	// jQuery("#aj_project").change(function(){
+	// 	var searchVal = $('#tabel_employees_filter').find('input').val();
+	// 	var p_id = jQuery(this).val();
+
+	// 	if ((searchVal == "") && (p_id == "0")) {
+	// 		$('#button_download_data').attr("hidden", true);
+			
+	// 	  } else {
+	// 		$('#button_download_data').attr("hidden", false);
+	// 		jQuery.get(base_url+"/get_subprojects/"+p_id, function(data, status){
+	// 			jQuery('#subproject_ajax').html(data);			
+	// 		});
+	// 	  }
+
+		
+	// });
 	/* projects report */
 	$("#employee_reports").submit(function(e){
 		/*Form Submit*/

@@ -1803,7 +1803,9 @@ class Employees_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
-			$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%') ";
+			if (strlen($searchValue) >= 3) {
+				$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%') ";
+			}
 		}
 
 		## Filter
@@ -2001,6 +2003,8 @@ class Employees_model extends CI_Model
 	* persiapan data export excel
 	* data request employee yang belum diapprove HRD dan belum ditolak HRD
 	* 
+	* @input array of variable from post
+	* @return array of employee data
 	* @author Fadla Qamara
 	*/
 	function get_employee_print($postData = null)

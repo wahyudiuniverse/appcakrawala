@@ -93,7 +93,7 @@
           <div class="pull-right">
             <!-- <div class="card-header with-elements"> -->
             <span class="card-header-title mr-2">
-              <button id="button_download_data" class="btn btn-success" data-style="expand-right">Download Data</button>
+              <button hidden id="button_download_data" class="btn btn-success" data-style="expand-right">Download Data</button>
             </span>
           </div>
         </div>
@@ -156,7 +156,7 @@
       //"bDestroy": true,
       'processing': true,
       'serverSide': true,
-      //'stateSave': true,
+      'stateSave': true,
       'bFilter': true,
       'serverMethod': 'post',
       //'dom': 'plBfrtip',
@@ -219,7 +219,7 @@
           "orderable": false,
         },
       ]
-    });
+    }).on('search.dt', () => eventFired('Search'));
   });
 </script>
 
@@ -234,81 +234,92 @@
     var sub_project = document.getElementById("aj_sub_project").value;
     var status = document.getElementById("status").value;
 
+    var searchVal = $('#tabel_employees_filter').find('input').val();
+
+    if ((searchVal == "") && (project == "0")) {
+      $('#button_download_data').attr("hidden", true);
+
+    } else {
+      $('#button_download_data').attr("hidden", false);
+
+      employee_table = $('#tabel_employees').DataTable({
+        //"bDestroy": true,
+        'processing': true,
+        'serverSide': true,
+        'stateSave': true,
+        'bFilter': true,
+        'serverMethod': 'post',
+        //'dom': 'plBfrtip',
+        'dom': 'lfrtip',
+        //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+        //'columnDefs': [{
+        //  targets: 11,
+        //  type: 'date-eu'
+        //}],
+        'order': [
+          [2, 'asc']
+        ],
+        'ajax': {
+          'url': '<?= base_url() ?>admin/reports/list_employees',
+          data: {
+            [csrfName]: csrfHash,
+            session_id: session_id,
+            project: project,
+            sub_project: sub_project,
+            status: status,
+            //base_url_catat: base_url_catat
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+            alert("Status :" + xhr.status);
+            alert("responseText :" + xhr.responseText);
+          },
+        },
+        'columns': [{
+            data: 'aksi',
+            "orderable": false
+          },
+          {
+            data: 'employee_id',
+            // "orderable": false,
+            //searchable: true
+          },
+          {
+            data: 'first_name',
+            // "orderable": false,
+            //searchable: true
+          },
+          {
+            data: 'project',
+            "orderable": false
+          },
+          {
+            data: 'sub_project',
+            "orderable": false,
+          },
+          {
+            data: 'jabatan',
+            "orderable": false,
+          },
+          {
+            data: 'penempatan',
+            //"orderable": false,
+          },
+          {
+            data: 'periode',
+            "orderable": false,
+          },
+        ]
+      }).on('search.dt', () => eventFired('Search'));
+
+      $('#tombol_filter').attr("disabled", false);
+      $('#tombol_filter').removeAttr("data-loading");
+    }
+
     // alert(project);
     // alert(sub_project);
     // alert(status);
 
-    employee_table = $('#tabel_employees').DataTable({
-      //"bDestroy": true,
-      'processing': true,
-      'serverSide': true,
-      //'stateSave': true,
-      'bFilter': true,
-      'serverMethod': 'post',
-      //'dom': 'plBfrtip',
-      'dom': 'lfrtip',
-      //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
-      //'columnDefs': [{
-      //  targets: 11,
-      //  type: 'date-eu'
-      //}],
-      'order': [
-        [2, 'asc']
-      ],
-      'ajax': {
-        'url': '<?= base_url() ?>admin/reports/list_employees',
-        data: {
-          [csrfName]: csrfHash,
-          session_id: session_id,
-          project: project,
-          sub_project: sub_project,
-          status: status,
-          //base_url_catat: base_url_catat
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          alert("Status :" + xhr.status);
-          alert("responseText :" + xhr.responseText);
-        },
-      },
-      'columns': [{
-          data: 'aksi',
-          "orderable": false
-        },
-        {
-          data: 'employee_id',
-          // "orderable": false,
-          //searchable: true
-        },
-        {
-          data: 'first_name',
-          // "orderable": false,
-          //searchable: true
-        },
-        {
-          data: 'project',
-          "orderable": false
-        },
-        {
-          data: 'sub_project',
-          "orderable": false,
-        },
-        {
-          data: 'jabatan',
-          "orderable": false,
-        },
-        {
-          data: 'penempatan',
-          //"orderable": false,
-        },
-        {
-          data: 'periode',
-          "orderable": false,
-        },
-      ]
-    });
 
-    $('#tombol_filter').attr("disabled", false);
-    $('#tombol_filter').removeAttr("data-loading");
 
   };
 </script>
@@ -342,4 +353,36 @@
     //alert("masuk fungsi lihat. id: " + id);
     window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
   }
+
+  // employee_table.on('search.dt', function() {
+  //   alert("ada search");
+  // });
+
+  function eventFired(type) {
+    var searchVal = $('#tabel_employees_filter').find('input').val();
+    var project = document.getElementById("aj_project").value;
+    // alert(searchVal.length);
+
+    if ((searchVal.length <= 2) && (project == "0")) {
+      $('#button_download_data').attr("hidden", true);
+    } else {
+      $('#button_download_data').attr("hidden", false);
+    }
+    // let n = document.querySelector('#demo_info');
+    // n.innerHTML +=
+    //   '<div>' + type + ' event - ' + new Date().getTime() + '</div>';
+    // n.scrollTop = n.scrollHeight;
+
+  }
+
+  jQuery("#aj_project").change(function() {
+
+    var p_id = jQuery(this).val();
+
+    jQuery.get(base_url + "/get_subprojects/" + p_id, function(data, status) {
+      jQuery('#subproject_ajax').html(data);
+    });
+
+
+  });
 </script>
