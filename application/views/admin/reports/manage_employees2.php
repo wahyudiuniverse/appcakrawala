@@ -7,6 +7,7 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 
+
 <!-- SECTION FILTER -->
 <div class="card border-blue">
   <div class="card-header with-elements">
@@ -208,8 +209,8 @@
           "orderable": false,
         },
         {
-          data: 'jabatan',
-          "orderable": false,
+          data: 'designation_name',
+          // "orderable": false,
         },
         {
           data: 'penempatan',
@@ -302,8 +303,8 @@
             "orderable": false,
           },
           {
-            data: 'jabatan',
-            "orderable": false,
+            data: 'designation_name',
+            // "orderable": false,
           },
           {
             data: 'penempatan',

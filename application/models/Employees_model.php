@@ -1804,7 +1804,7 @@ class Employees_model extends CI_Model
 		$searchQuery = "";
 		if ($searchValue != '') {
 			if (strlen($searchValue) >= 3) {
-				$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%') ";
+				$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%' or designation_name like '%" . $searchValue . "%') ";
 			}
 		}
 
@@ -1856,6 +1856,7 @@ class Employees_model extends CI_Model
 			$this->db->where($filterStatus);
 		}
 		$this->db->where($kondisiDefaultQuery);
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$totalRecords = $records[0]->allcount;
 
@@ -1874,6 +1875,7 @@ class Employees_model extends CI_Model
 		if ($filterStatus != '') {
 			$this->db->where($filterStatus);
 		}
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
@@ -1907,6 +1909,7 @@ class Employees_model extends CI_Model
 			$this->db->where($filterStatus);
 		}
 		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_employees')->result();
 
@@ -1994,18 +1997,19 @@ class Employees_model extends CI_Model
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
 			$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
 			$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view,
+				"aksi" => $view . "<br>" . $viewDocs,
 				"employee_id" => $record->employee_id . $text_resign,
 				"first_name" => strtoupper($record->first_name),
 				"project" => strtoupper($this->get_nama_project($record->project_id)),
 				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
-				"jabatan" => strtoupper($this->get_nama_jabatan($record->designation_id)),
+				"designation_name" => strtoupper($record->designation_name),
 				"penempatan" => strtoupper($record->penempatan),
 				"periode" => $text_periode,
 				"pin" => $text_pin,
