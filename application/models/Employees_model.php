@@ -2004,7 +2004,7 @@ class Employees_model extends CI_Model
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . "<br>" . $viewDocs,
+				"aksi" => $view,
 				"employee_id" => $record->employee_id . $text_resign,
 				"first_name" => strtoupper($record->first_name),
 				"project" => strtoupper($this->get_nama_project($record->project_id)),
@@ -2057,7 +2057,7 @@ class Employees_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($filter != '') {
-			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%') ";
+			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%' or xin_designations.designation_name like '%" . $filter . "%') ";
 		}
 
 		## Filter
@@ -2143,6 +2143,7 @@ class Employees_model extends CI_Model
 		// $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
 		// $this->db->join('xin_projects_sub', 'xin_projects_sub.secid = xin_employees.sub_project_id');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$tes_query = $this->db->last_query();
 
@@ -2297,7 +2298,7 @@ class Employees_model extends CI_Model
 				"nama" => strtoupper($record->first_name),
 				"company_name" => strtoupper($this->get_nama_company($record->company_id)),
 				"department_name" => strtoupper($this->get_nama_department($record->department_id)),
-				"jabatan" => strtoupper($this->get_nama_jabatan($record->designation_id)),
+				"jabatan" => strtoupper($record->designation_name),
 				"project" => strtoupper($this->get_nama_project($record->project_id)),
 				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 				"area" => strtoupper($record->penempatan),

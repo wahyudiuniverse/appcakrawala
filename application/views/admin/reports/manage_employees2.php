@@ -7,6 +7,53 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 
+<div class="modal fade" id="dokumenModal" tabindex="-1" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Dokumen Karyawan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+        <div class="form-group row">
+          <!-- <pre>
+            <?php //print_r($user_info); 
+            ?>
+          </pre><br> -->
+          <div class="col-md-3">NIK <span class="icon-verify-nik"></span>
+          </div>
+          <div class="col-md-5"><input type='text' id="nik_modal" class='form-control' placeholder='Nomor NIK KTP' value='<?php echo $ktp_no; ?>'></div>
+          <div class="col-md-4">
+            <button id="button_verify_nik_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
+            <?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
+              <button id="button_unverify_nik_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
+            <?php } ?>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-md-3"><button id="button_show_ktp_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KTP</button></div>
+          <div class="col-md-3"><button id="button_show_kk_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KK</button></div>
+          <div class="col-md-3"><button id="button_show_rekening_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide Rekening</button></div>
+        </div>
+
+        <div class="isi-modal">
+          <div class="rekening-modal"></div>
+          <div class="ktp-modal"></div>
+          <div class="kk-modal"></div>
+          <div class="api-rekening-modal"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="close_modal" class="btn btn-primary ladda-button" data-style="expand-right">Close Modal</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- SECTION FILTER -->
 <div class="card border-blue">
@@ -355,10 +402,18 @@
 
   };
 
-  //-----lihat addendum-----
+  //-----lihat employee-----
   function viewEmployee(id) {
     //alert("masuk fungsi lihat. id: " + id);
     window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
+  }
+
+  //-----lihat dokumen employee-----
+  function viewDocumentEmployee(id) {
+    //alert("masuk fungsi lihat. id: " + id);
+    $('#dokumenModal').appendTo("body").modal('show');
+    // $('#dokumenModal').modal('show');
+    // window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
   }
 
   // employee_table.on('search.dt', function() {
