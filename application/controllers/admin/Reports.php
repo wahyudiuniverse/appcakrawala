@@ -3118,7 +3118,6 @@ class Reports extends MY_Controller
 		for ($i = 1; $i <= $length_array; $i++) {
 			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
-
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
@@ -3128,10 +3127,21 @@ class Reports extends MY_Controller
 			->getStartColor()
 			->setARGB('BFBFBF');
 
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
 		//$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR);
 
 		// Get data
 		$data = $this->Employees_model->get_employee_print($postData);
+		$length_data = count($data);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 2])->setvalueExplicit($data[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
 		//$data = var_dump(json_decode($data_temp, true));
 
 		// if (!is_array(end($data))) {
@@ -3142,25 +3152,25 @@ class Reports extends MY_Controller
 
 		//var_dump($data);
 
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$data,  // The data to set
-				NULL,        // Array values with this value will not be set
-				'A2',
-				false,
-				false         // Top left coordinate of the worksheet range where
-				//    we want to set these values (default is A1)
-			);
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data,  // The data to set
+		// 		NULL,        // Array values with this value will not be set
+		// 		'A2',
+		// 		false,
+		// 		false         // Top left coordinate of the worksheet range where
+		// 		//    we want to set these values (default is A1)
+		// 	);
 
 
 		//set wrap text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-		$spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');
+		// $spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 		$spreadsheet->getActiveSheet()->getStyle('1:1')
