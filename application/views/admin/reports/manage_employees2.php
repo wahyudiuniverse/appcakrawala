@@ -171,13 +171,13 @@
               <tr>
                 <th>Aksi</th>
                 <th>NIP - Status</th>
+                <th>PIN</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
                 <th>Sub Project</th>
                 <th>Jabatan</th>
                 <th>Penempatan</th>
                 <th>Periode Kontrak</th>
-                <th>PIN</th>
               </tr>
             </thead>
           </table>
@@ -216,7 +216,7 @@
       //  type: 'date-eu'
       //}],
       'order': [
-        [2, 'asc']
+        [3, 'asc']
       ],
       'ajax': {
         'url': '<?= base_url() ?>admin/reports/list_employees',
@@ -243,6 +243,10 @@
           //searchable: true
         },
         {
+          data: 'pincode',
+          "orderable": false,
+        },
+        {
           data: 'first_name',
           // "orderable": false,
           //searchable: true
@@ -265,10 +269,6 @@
         },
         {
           data: 'periode',
-          "orderable": false,
-        },
-        {
-          data: 'pin',
           "orderable": false,
         },
       ]
@@ -310,7 +310,7 @@
         //  type: 'date-eu'
         //}],
         'order': [
-          [2, 'asc']
+          [3, 'asc']
         ],
         'ajax': {
           'url': '<?= base_url() ?>admin/reports/list_employees',
@@ -337,6 +337,10 @@
             //searchable: true
           },
           {
+            data: 'pincode',
+            "orderable": false,
+          },
+          {
             data: 'first_name',
             // "orderable": false,
             //searchable: true
@@ -359,10 +363,6 @@
           },
           {
             data: 'periode',
-            "orderable": false,
-          },
-          {
-            data: 'pin',
             "orderable": false,
           },
         ]

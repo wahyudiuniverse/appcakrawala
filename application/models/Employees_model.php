@@ -2012,7 +2012,7 @@ class Employees_model extends CI_Model
 				"designation_name" => strtoupper($record->designation_name),
 				"penempatan" => strtoupper($record->penempatan),
 				"periode" => $text_periode,
-				"pin" => $text_pin,
+				"pincode" => $text_pin,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
