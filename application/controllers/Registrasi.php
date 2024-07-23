@@ -412,6 +412,49 @@ class Registrasi extends CI_Controller
     }
 
     //Menampilkan Register tanpa parameter untuk proses POST variable
+    public function tes_API_Bank2($id_bank, $no_rekening)
+    {
+        // $data['nik'] = $nik;
+        //menampilkan view form pengisian data
+        // $this->load->view('frontend/templates/header');
+        // //$this->load->view('templates/sidebar', $data);
+        // $this->load->view('frontend/templates/topbar_register');
+        // $this->load->view('frontend/tes_api_bank', $data);
+        // $this->load->view('frontend/templates/footer');
+        // $bank_code = $this->Employees_model->get_id_bank($id_bank);
+
+        $curl = curl_init();
+        //$nik = '3201293010880006';
+        curl_setopt_array($curl, [
+            // CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=014&accountNumber=1370176121",
+            CURLOPT_URL => "https://api-rekening.lfourr.com/getBankAccount?bankCode=" . $id_bank . "&accountNumber=" . $no_rekening,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => [],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        $pesan = array(
+            'status' => false,
+            'msg' => "cURL Error #:" . $err,
+        );
+
+        if ($err) {
+            echo json_encode($pesan);
+        } else {
+            echo $response;
+        }
+    }
+
+    //Menampilkan Register tanpa parameter untuk proses POST variable
     public function addRegisterPost()
     {
         //Title halaman

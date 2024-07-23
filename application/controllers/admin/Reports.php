@@ -3059,6 +3059,7 @@ class Reports extends MY_Controller
 		$rowArray = [
 			'STATUS',
 			'NIP',
+			'PIN',
 			'NAMA LENGKAP',
 			'PERUSAHAAN/PT',
 			'DEPARTMENT',

@@ -201,78 +201,80 @@
     var search_periode_from = "";
     var search_periode_to = "";
 
-    employee_table = $('#tabel_employees').DataTable({
-      //"bDestroy": true,
-      'processing': true,
-      'serverSide': true,
-      'stateSave': true,
-      'bFilter': true,
-      'serverMethod': 'post',
-      //'dom': 'plBfrtip',
-      'dom': 'lfrtip',
-      //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
-      //'columnDefs': [{
-      //  targets: 11,
-      //  type: 'date-eu'
-      //}],
-      'order': [
-        [3, 'asc']
-      ],
-      'ajax': {
-        'url': '<?= base_url() ?>admin/reports/list_employees',
-        data: {
-          [csrfName]: csrfHash,
-          session_id: session_id,
-          project: project,
-          sub_project: sub_project,
-          status: status,
-          //base_url_catat: base_url_catat
-        },
-        error: function(xhr, ajaxOptions, thrownError) {
-          alert("Status :" + xhr.status);
-          alert("responseText :" + xhr.responseText);
-        },
-      },
-      'columns': [{
-          data: 'aksi',
-          "orderable": false
-        },
-        {
-          data: 'employee_id',
-          // "orderable": false,
-          //searchable: true
-        },
-        {
-          data: 'pincode',
-          "orderable": false,
-        },
-        {
-          data: 'first_name',
-          // "orderable": false,
-          //searchable: true
-        },
-        {
-          data: 'project',
-          "orderable": false
-        },
-        {
-          data: 'sub_project',
-          "orderable": false,
-        },
-        {
-          data: 'designation_name',
-          // "orderable": false,
-        },
-        {
-          data: 'penempatan',
-          //"orderable": false,
-        },
-        {
-          data: 'periode',
-          "orderable": false,
-        },
-      ]
-    }).on('search.dt', () => eventFired('Search'));
+    employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
+
+    // employee_table = $('#tabel_employees').DataTable({
+    //   //"bDestroy": true,
+    //   'processing': true,
+    //   'serverSide': true,
+    //   // 'stateSave': true,
+    //   'bFilter': true,
+    //   'serverMethod': 'post',
+    //   //'dom': 'plBfrtip',
+    //   'dom': 'lfrtip',
+    //   //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+    //   //'columnDefs': [{
+    //   //  targets: 11,
+    //   //  type: 'date-eu'
+    //   //}],
+    //   'order': [
+    //     [3, 'asc']
+    //   ],
+    //   'ajax': {
+    //     'url': '<?= base_url() ?>admin/reports/list_employees',
+    //     data: {
+    //       [csrfName]: csrfHash,
+    //       session_id: session_id,
+    //       project: project,
+    //       sub_project: sub_project,
+    //       status: status,
+    //       //base_url_catat: base_url_catat
+    //     },
+    //     error: function(xhr, ajaxOptions, thrownError) {
+    //       alert("Status :" + xhr.status);
+    //       alert("responseText :" + xhr.responseText);
+    //     },
+    //   },
+    //   'columns': [{
+    //       data: 'aksi',
+    //       "orderable": false
+    //     },
+    //     {
+    //       data: 'employee_id',
+    //       // "orderable": false,
+    //       //searchable: true
+    //     },
+    //     {
+    //       data: 'pincode',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'first_name',
+    //       // "orderable": false,
+    //       //searchable: true
+    //     },
+    //     {
+    //       data: 'project',
+    //       "orderable": false
+    //     },
+    //     {
+    //       data: 'sub_project',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'designation_name',
+    //       // "orderable": false,
+    //     },
+    //     {
+    //       data: 'penempatan',
+    //       //"orderable": false,
+    //     },
+    //     {
+    //       data: 'periode',
+    //       "orderable": false,
+    //     },
+    //   ]
+    // }).on('search.dt', () => eventFired('Search'));
   });
 </script>
 
@@ -299,7 +301,7 @@
         //"bDestroy": true,
         'processing': true,
         'serverSide': true,
-        'stateSave': true,
+        // 'stateSave': true,
         'bFilter': true,
         'serverMethod': 'post',
         //'dom': 'plBfrtip',
@@ -423,11 +425,92 @@
   function eventFired(type) {
     var searchVal = $('#tabel_employees_filter').find('input').val();
     var project = document.getElementById("aj_project").value;
+    var sub_project = document.getElementById("aj_sub_project").value;
+    var status = document.getElementById("status").value;
     // alert(searchVal.length);
 
     if ((searchVal.length <= 2) && (project == "0")) {
       $('#button_download_data').attr("hidden", true);
     } else {
+      // employee_table.destroy();
+
+      // employee_table = $('#tabel_employees').DataTable({
+      //   //"bDestroy": true,
+      //   'processing': true,
+      //   'serverSide': true,
+      //   // 'stateSave': true,
+      //   'bFilter': true,
+      //   'serverMethod': 'post',
+      //   //'dom': 'plBfrtip',
+      //   'dom': 'lfrtip',
+      //   //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+      //   //'columnDefs': [{
+      //   //  targets: 11,
+      //   //  type: 'date-eu'
+      //   //}],
+      //   'order': [
+      //     [3, 'asc']
+      //   ],
+      //   'ajax': {
+      //     'url': '<?= base_url() ?>admin/reports/list_employees',
+      //     data: {
+      //       [csrfName]: csrfHash,
+      //       session_id: session_id,
+      //       project: project,
+      //       sub_project: sub_project,
+      //       status: status,
+      //       //base_url_catat: base_url_catat
+      //     },
+      //     error: function(xhr, ajaxOptions, thrownError) {
+      //       alert("Status :" + xhr.status);
+      //       alert("responseText :" + xhr.responseText);
+      //     },
+      //   },
+      //   'columns': [{
+      //       data: 'aksi',
+      //       "orderable": false
+      //     },
+      //     {
+      //       data: 'employee_id',
+      //       // "orderable": false,
+      //       //searchable: true
+      //     },
+      //     {
+      //       data: 'pincode',
+      //       "orderable": false,
+      //     },
+      //     {
+      //       data: 'first_name',
+      //       // "orderable": false,
+      //       //searchable: true
+      //     },
+      //     {
+      //       data: 'project',
+      //       "orderable": false
+      //     },
+      //     {
+      //       data: 'sub_project',
+      //       "orderable": false,
+      //     },
+      //     {
+      //       data: 'designation_name',
+      //       // "orderable": false,
+      //     },
+      //     {
+      //       data: 'penempatan',
+      //       //"orderable": false,
+      //     },
+      //     {
+      //       data: 'periode',
+      //       "orderable": false,
+      //     },
+      //   ]
+      // }).on('search.dt', () => eventFired('Search'));
+
+      // $('#tabel_employees_filter').find('input').val(searchVal);
+
+      // employee_table.ajax.reload(null, false);
+
       $('#button_download_data').attr("hidden", false);
     }
     // let n = document.querySelector('#demo_info');

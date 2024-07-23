@@ -2286,6 +2286,32 @@ class Employees_model extends CI_Model
 				$text_gaji = $record->basic_salary . " ";
 			}
 
+			$text_pin = "";
+			$id_jabatan_user = $this->get_id_jabatan($session_id);
+			$level_record = $this->get_level($record->designation_id);
+			$level_user = $this->get_level($id_jabatan_user);
+
+			if (empty($level_user) || $level_user == "") {
+				$level_user = "Z9";
+			} else {
+				if (strlen($level_user) == 1) {
+					$level_user = $level_user . "0";
+				}
+			}
+
+			if (empty($level_record) || $level_record == "") {
+				$level_record = "Z9";
+			} else {
+				if (strlen($level_record) == 1) {
+					$level_record = $level_record . "0";
+				}
+			}
+			if ($level_record <= $level_user) {
+				$text_pin = "**********";
+			} else {
+				$text_pin = $record->private_code . " ";
+			}
+
 			// if ("B" >= "D2") {
 			// 	$text_gaji = "**********";
 			// } else {
@@ -2345,6 +2371,7 @@ class Employees_model extends CI_Model
 			$data[] = array(
 				$text_resign,
 				$record->employee_id,
+				$text_pin,
 				trim(strtoupper($record->first_name), " "),
 				// strtoupper($record->first_name),
 				strtoupper($this->get_nama_company($record->company_id)),
