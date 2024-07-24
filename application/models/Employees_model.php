@@ -1804,7 +1804,7 @@ class Employees_model extends CI_Model
 		$searchQuery = "";
 		if ($searchValue != '') {
 			if (strlen($searchValue) >= 3) {
-				$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%' or designation_name like '%" . $searchValue . "%') ";
+				$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%' or designation_name like '%" . $searchValue . "%' or ktp_no like '%" . $searchValue . "%') ";
 			}
 		}
 
@@ -2006,6 +2006,7 @@ class Employees_model extends CI_Model
 			$data[] = array(
 				"aksi" => $view,
 				"employee_id" => $record->employee_id . $text_resign,
+				"ktp_no" => $record->ktp_no,
 				"first_name" => strtoupper($record->first_name),
 				"project" => strtoupper($this->get_nama_project($record->project_id)),
 				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
@@ -2372,6 +2373,7 @@ class Employees_model extends CI_Model
 				$text_resign,
 				$record->employee_id,
 				$text_pin,
+				$record->ktp_no,
 				trim(strtoupper($record->first_name), " "),
 				// strtoupper($record->first_name),
 				strtoupper($this->get_nama_company($record->company_id)),

@@ -3060,6 +3060,7 @@ class Reports extends MY_Controller
 			'STATUS',
 			'NIP',
 			'PIN',
+			'NIK',
 			'NAMA LENGKAP',
 			'PERUSAHAAN/PT',
 			'DEPARTMENT',
@@ -3122,7 +3123,7 @@ class Reports extends MY_Controller
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle('A1:AT1')
+			->getStyle('A1:AV1')
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()

@@ -172,6 +172,7 @@
                 <th>Aksi</th>
                 <th>NIP - Status</th>
                 <th>PIN</th>
+                <th>NIK</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
                 <th>Sub Project</th>
@@ -312,7 +313,7 @@
         //  type: 'date-eu'
         //}],
         'order': [
-          [3, 'asc']
+          [4, 'asc']
         ],
         'ajax': {
           'url': '<?= base_url() ?>admin/reports/list_employees',
@@ -341,6 +342,11 @@
           {
             data: 'pincode',
             "orderable": false,
+          },
+          {
+            data: 'ktp_no',
+            // "orderable": false,
+            //searchable: true
           },
           {
             data: 'first_name',

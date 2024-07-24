@@ -668,6 +668,8 @@ class ImportExcel extends MY_Controller
 		$jumlah_data = count($header_tabel_saltab);
 		//$tes = print_r($tabel_saltab);
 
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
 		//isi cell dari array
 		$spreadsheet->getActiveSheet()
 			->fromArray(
@@ -684,7 +686,7 @@ class ImportExcel extends MY_Controller
 			);
 
 		//set column width jadi auto size
-		for ($i = 1; $i <= 100; $i++) {
+		for ($i = 1; $i <= $jumlah_data; $i++) {
 			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
 
