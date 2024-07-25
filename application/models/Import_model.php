@@ -419,12 +419,73 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		foreach ($records as $record) {
-			$sub_project = "";
+			$tempat_lahir = "";
+			$tanggal_lahir = "";
+			$nama_ibu = "";
+			$jenis_kelamin = "";
+			$status_pernikahan = "";
+			$alamat = "";
+			$contract_start = "";
+			$contract_end = "";
 
-			if ($data_batch['sub_project_name'] == "-ALL-") {
-				$sub_project = $record->sub_project;
-			} else {
-				$sub_project = $data_batch['sub_project_name'];
+			if ((!empty($record->nip)) || ($record->nip != "") || ($record->nip != "0")) {
+				$this->db->select('tempat_lahir,date_of_birth,ibu_kandung,gender,alamat_ktp,marital_status');
+				$this->db->from('xin_employees');
+				$this->db->where('employee_id', $record->nip);
+
+				$query = $this->db->get()->row_array();
+
+				if (!empty($query)) {
+					$tempat_lahir = $query['tempat_lahir'];
+					$tanggal_lahir = $query['date_of_birth'];
+					$nama_ibu = $query['ibu_kandung'];
+					$jenis_kelamin = $query['gender'];
+					$alamat = $query['alamat_ktp'];
+
+					if (empty($query['marital_status']) || ($query['marital_status'] == "")) {
+						$status_pernikahan = "-";
+					} else if ($query['marital_status'] == "1") {
+						$status_pernikahan = "TK/0";
+					} else if ($query['marital_status'] == "2") {
+						$status_pernikahan = "TK/0";
+					} else if ($query['marital_status'] == "3") {
+						$status_pernikahan = "TK/1";
+					} else if ($query['marital_status'] == "4") {
+						$status_pernikahan = "TK/2";
+					} else if ($query['marital_status'] == "5") {
+						$status_pernikahan = "TK/3";
+					} else if ($query['marital_status'] == "6") {
+						$status_pernikahan = "K/0";
+					} else if ($query['marital_status'] == "7") {
+						$status_pernikahan = "K/1";
+					} else if ($query['marital_status'] == "8") {
+						$status_pernikahan = "K/2";
+					} else if ($query['marital_status'] == "9") {
+						$status_pernikahan = "K/3";
+					} else {
+						$status_pernikahan = "-";
+					}
+				}
+
+				$this->db->select('max(to_date)');
+				$this->db->select('from_date');
+				$this->db->from('xin_employee_contract');
+				$this->db->where('employee_id', $record->nip);
+				$query2 = $this->db->get()->row_array();
+				if (!empty($query)) {
+					$contract_start = $query2['from_date'];
+					$contract_end = $query2['max(to_date)'];
+				}
+				// $tes_query = $this->db->last_query();
+				// $contract_start = $tes_query;
+			}
+			$this->db->select('*');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $record->nip);
+
+			$query = $this->db->get()->row_array();
+
+			if (!empty($query)) {
 			}
 
 			$bpjs_ketenagakerjaan = $record->bpjs_tk_deduction_jkk_jkm + $record->bpjs_tk_deduction_jht + $record->jaminan_pensiun_deduction + $record->bpjs_tk + $record->jaminan_pensiun;
@@ -439,6 +500,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($data_batch['project_name']), " "),
 				trim(strtoupper($record->sub_project), " "),
 				trim(strtoupper($record->area), " "),
+				trim(strtoupper($tempat_lahir), " "),
+				$tanggal_lahir,
+				trim(strtoupper($nama_ibu), " "),
+				trim(strtoupper($jenis_kelamin), " "),
+				trim(strtoupper($status_pernikahan), " "),
+				trim(strtoupper($alamat), " "),
+				$contract_start,
+				$contract_end,
 				round($record->gaji_umk),
 				round($record->total_thp),
 				round($bpjs_ketenagakerjaan),
