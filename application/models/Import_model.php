@@ -431,17 +431,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$bpjs_kesehatan = $record->bpjs_ks_deduction + $record->bpjs_ks;
 
 			$data[] = array(
-				$record->status_emp,
+				// trim(strtoupper($detail_saltab[$i][$j]), " ")
+				trim(strtoupper($record->status_emp), " "),
 				$record->nip,
 				$record->nik,
-				$record->fullname,
-				$data_batch['project_name'],
-				$record->sub_project,
-				$record->area,
-				$record->gaji_umk,
-				$record->total_thp,
-				$bpjs_ketenagakerjaan,
-				$bpjs_kesehatan,
+				trim(strtoupper($record->fullname), " "),
+				trim(strtoupper($data_batch['project_name']), " "),
+				trim(strtoupper($record->sub_project), " "),
+				trim(strtoupper($record->area), " "),
+				round($record->gaji_umk),
+				round($record->total_thp),
+				round($bpjs_ketenagakerjaan),
+				round($bpjs_kesehatan),
 			);
 		}
 

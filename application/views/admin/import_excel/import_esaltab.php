@@ -371,7 +371,6 @@ if (in_array('511', $role_resources_ids)) {
     });
 
 
-
   });
 
   //-----delete batch saltab-----

@@ -1011,6 +1011,9 @@ class ImportExcel extends MY_Controller
 		$tabel_saltab = $this->Import_model->get_saltab_table();
 		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
 
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
 		$header2_tabel_saltab = array(
 			'STATUS',
 			'NIP',
@@ -1025,8 +1028,10 @@ class ImportExcel extends MY_Controller
 			'BPJS KESEHATAN',
 		);
 
+		$length_array = count($header2_tabel_saltab);
+
 		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_bpjs($id, $data_batch_saltab);
-		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
 
 		$project = $data_batch_saltab['project_name'];
 		$sub_project = $data_batch_saltab['sub_project_name'];
@@ -1055,47 +1060,60 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
 		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
 
-		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Download Time (Y-m-d)');
-		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
 		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
 
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A8'
+				'A9'
 			);
 
 		//set header background color
 		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
 		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
 
-		//set column width jadi auto size
-		for ($i = 1; $i <= 100; $i++) {
-			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
-		}
+
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A8:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
 			->setARGB('BFBFBF');
 
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$detail_saltab_fix,   // The data to set
-				NULL,
-				'A9'
-			);
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A9'
+		// 	);
 
 		//set wrap text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('8:8')
 			->getAlignment()->setWrapText(true);
 
-		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
 
 		//set vertical dan horizontal alignment text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('8:8')
