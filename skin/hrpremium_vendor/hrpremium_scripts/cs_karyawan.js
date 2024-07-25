@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"customerservices/report_employees_list/0/0/0/",
+            url : site_url+"customerservices/cs_list/0/0/0/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -34,18 +34,20 @@ $(document).ready(function() {
 			jQuery('#subproject_ajax').html(data);			
 		});
 	});
+
 	/* projects report */
-	$("#employee_reports").submit(function(e){
+	$("#employee_cs").submit(function(e){
 		/*Form Submit*/
 		e.preventDefault();
 		var company_id = $('#aj_company').val();
 		var department_id = $('#aj_department').val();
-		var project_id = $('#aj_project').val();
+		// var project_id = $('#aj_project').val();
+		var project_id = '22';
 		var subproject_id = $('#aj_subproject').val();
 		var xin_table2 = $('#xin_table').dataTable({
 			"bDestroy": true,
 			"ajax": {
-				url : site_url+"customerservices/report_employees_list/"+project_id+"/"+subproject_id+"/"+"0/",
+				url : site_url+"customerservices/cs_list/"+project_id+"/"+subproject_id+"/"+"0/",
 				type : 'GET'
 			},
 			dom: 'lBfrtip',

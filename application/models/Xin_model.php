@@ -779,7 +779,11 @@ class Xin_model extends CI_Model
 			$arr['report_active'] = 'active';
 			$arr['report_open'] = 'open';
 			return $arr;
-		} else if ($mClass == 'employee_resign') {
+		} else if ($mClass == 'addendum' && $mMethod == 'report_addendum') {
+            $arr['report_active'] = 'active';
+            $arr['report_open'] = 'open';
+            return $arr;
+        } else if ($mClass == 'employee_resign') {
 			$arr['resign_req_emp_active'] = 'active';
 			$arr['resign_req_resign'] = 'open';
 			return $arr;

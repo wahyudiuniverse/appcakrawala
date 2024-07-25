@@ -76,94 +76,8 @@ class Customerservices extends MY_Controller
 		}
 	}
 	
-	// employees report
-	public function employees() {
+
 	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data['title'] = $this->lang->line('xin_hr_report_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
-		$data['path_url'] = 'reports_employees';
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['all_departments'] = $this->Department_model->all_departments();
-		if(in_array('139',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			$data['all_projects'] = $this->Project_model->get_project_exist();
-		}
-
-		$data['all_designations'] = $this->Designation_model->all_designations();
-		if(in_array('117',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/employees", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-	
-		// employees report
-	public function manage_employees() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data['title'] = $this->lang->line('xin_manage_employees').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_manage_employees');
-		$data['path_url'] = 'reports_man_employees';
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['all_departments'] = $this->Department_model->all_departments();
-		if(in_array('139',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			$data['all_projects'] = $this->Project_model->get_project_exist();
-		}
-
-		$data['all_designations'] = $this->Designation_model->all_designations();
-		if(in_array('470',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/manage_employees", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-		// employees report
-	public function bpjs_employees() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
-		
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data['title'] = $this->lang->line('xin_emp_bpjs').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_emp_bpjs');
-		$data['path_url'] = 'reports_bpjs_employees';
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$data['all_departments'] = $this->Department_model->all_departments();
-
-		if(in_array('139',$role_resources_ids)) {
-			$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		} else {
-			$data['all_projects'] = $this->Project_model->get_project_exist();
-		}
-
-		$data['all_designations'] = $this->Designation_model->all_designations();
-		if(in_array('476',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/bpjs_employees", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
 
 
 
@@ -274,9 +188,7 @@ class Customerservices extends MY_Controller
 		$length = intval($this->input->get("length"));
 	 }
 	 
-	 
-
-	public function report_employees_list() {
+	public function cs_list() { 
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
@@ -295,16 +207,17 @@ class Customerservices extends MY_Controller
 		// $status_resign = $this->uri->segment(6);
 
 		$project_id = $this->uri->segment(4);
+		// $project_id = '22';
 		$subproject_id = $this->uri->segment(5);
 		$status_resign = $this->uri->segment(6);
 
 	
 
-		if($project_id==0 || is_null($project_id)){
-			$employee = $this->Reports_model->filter_employees_reports_null($project_id,$subproject_id,$status_resign);
-		}else{
+		// if($project_id==0 || is_null($project_id)){
+		// 	$employee = $this->Reports_model->filter_employees_reports_null($project_id,$subproject_id,$status_resign);
+		// }else{
 			$employee = $this->Reports_model->filter_employees_reports($project_id,$subproject_id,$status_resign);
-		}
+		// }
 		
 		$data = array();
 
@@ -471,7 +384,7 @@ class Customerservices extends MY_Controller
 						
 			$data[] = array(
 				$stat,
-				$r->employee_id,
+				$project_id,
 				$full_name,
 				$whatsapp,
 				$department_name,

@@ -1054,12 +1054,14 @@ class Employee_pkwt_cancel extends MY_Controller {
 					if($this->input->post('gaji_pokok')=='') {
 						$Return['error'] = 'Gaji Pokok Kosong..!';
 					} 
+
+						// $Return['error'] = 'Gaji Pokok Kosong..!';
 					// else if ($this->input->post('nama_ibu')=='') {
 					// 	$Return['error'] = 'Nama Ibu Kandung Kosong..!';
 					// } else if ($this->input->post('tempat_lahir')=='') {
 					// 	$Return['error'] = 'Tempat Lahir Kosong..!';
 					// } 
-					else {
+					else { // true start
 
 						if($this->input->post('jenis_dokumen')==1){
 
@@ -1106,7 +1108,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
 
 						}
-
 
 
 
@@ -1168,8 +1169,15 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$by_exp_pkwt			= $session['user_id'];
 
 
-						$docid = date('ymdHisv');
-						$yearmonth = date('Y/m');
+								$docid = date('ymdHisv');
+								$yearmonth = date('Y/m');
+
+								$dirpkwt = $config['imagedir'].$yearmonth.'/';
+ 								//kalau blm ada folder path nya
+                if (!file_exists($dirpkwt)) {
+                    mkdir($dirpkwt, 0777, true);
+                }
+
 						$image_name= $yearmonth.'/esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
 						$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
 						$params['data'] = $domain; //data yang akan di jadikan QR CODE
@@ -1178,14 +1186,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 						$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 						
-
-				// $pkwt_down = array(
-
-				// 'status_pkwt	' => 0
-
-				// );
-
-				// $resultx = $this->Pkwt_model->update_pkwt_status($pkwt_down,$employee_id);
 
 						$data = array(
 							'uniqueid' 							=> $unicode,
@@ -1240,9 +1240,9 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'allowance_operation' 	=> $tunjangan_operational,
 							'img_esign'							=> $image_name,
 
-							'sign_nip'							=> '21513829',
-							'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
-							'sign_jabatan'					=> 'SM HR & GA',
+							'sign_nip'							=> '21300033',
+							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+							'sign_jabatan'					=> 'HR & GA MANAGER',
 							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
 							'contract_type_id'			=> $jenis_dokumen, //1 pkwt, 2 tkhl
 							'request_pkwt' => $session['user_id'],
@@ -1257,25 +1257,23 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 					$iresult = $this->Pkwt_model->add_pkwt_record($data);
 
-
-
-
-
-				}
-
-
+						
 				if ($iresult == TRUE) {
 					$Return['result'] = $fullname.' PENGAJUAN PKWT EXPIRED berhasil..';
 				} else {
 					$Return['error'] = $this->lang->line('xin_error_msg');
 				}
+
+				} //end start
 				
-				// $Return['result'] = $idrequest.' Permintaan Karyawan Baru berhasil di Ubah..';
+
+
+				//$Return['result'] = 'Permintaan Karyawan Baru berhasil di Ubah..';
 
 				$this->output($Return);
 				exit;
-			// }
-	}
+			
+		}
 
 	public function read() {
 		$session = $this->session->userdata('username');

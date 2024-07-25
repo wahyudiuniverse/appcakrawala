@@ -322,6 +322,10 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'basic_pay' => $result[0]->basic_pay,
 				'dm_allow_grade' => $result[0]->dm_allow_grade,
 				'allowance_grade' => $result[0]->allowance_grade,
+
+				'dm_allow_area' => $result[0]->dm_allow_area,
+				'allowance_area' => $result[0]->allowance_area,
+
 				'dm_allow_masakerja' => $result[0]->dm_allow_masakerja,
 				'allowance_masakerja' => $result[0]->allowance_masakerja,
 				'dm_allow_meal' => $result[0]->dm_allow_meal,
@@ -344,6 +348,11 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'allowance_transmeal' => $result[0]->allowance_transmeal,
 				'dm_allow_medicine' => $result[0]->dm_allow_medicine,
 				'allowance_medicine' => $result[0]->allowance_medicine,
+				'dm_allow_akomodasi' => $result[0]->dm_allow_akomodasi,
+				'allowance_akomodasi' => $result[0]->allowance_akomodasi,
+				'dm_allow_operation' => $result[0]->dm_allow_operation,
+				'allowance_operation' => $result[0]->allowance_operation,
+				
 
 				'request_by' => $this->Employees_model->read_employee_info($result[0]->request_pkwt),
 				'request_date' => $result[0]->request_date,
@@ -406,6 +415,9 @@ class Employee_pkwt_aphrd extends MY_Controller {
 
 				$data_up = array(
 
+					'sign_nip'	=>'21300033',
+					'sign_fullname' =>'SISKYLA KHAIRANA PRITIGARINI',	
+					'sign_jabatan' =>'HR & GA MANAGER',
 					'status_pkwt	' => 1,
 					'approve_hrd' =>  $session['user_id'],
 					'approve_hrd_date' => date("Y-m-d h:i:s")

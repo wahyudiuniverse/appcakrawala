@@ -35,6 +35,7 @@ $(document).ready(function(){
 			jQuery('#info_ajax').html(data);
 		});
 	});
+
 					//get project
 	jQuery("#aj_ktp").change(function(){
 		var p_id = jQuery(this).val();
@@ -42,7 +43,7 @@ $(document).ready(function(){
 			jQuery('#ket_ajax').html(data);			
 		});
 	});
-	
+
 					//get project
 	jQuery("#aj_ktp").change(function(){
 		var p_id = jQuery(this).val();
@@ -50,24 +51,6 @@ $(document).ready(function(){
 			jQuery('#rdate_ajax').html(data);			
 		});
 	});
-	// // get departments
-	// jQuery("#aj_ktp").change(function(){
-	// 	jQuery.get(base_url+"/get_pkwt_kontrak/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#pkwt_kontrak_ajax').html(data);
-	// 	});
-	// });
-	// // get departments
-	// jQuery("#aj_ktp").change(function(){
-	// 	jQuery.get(base_url+"/get_pkwt_begin/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#pkwt_begin_ajax').html(data);
-	// 	});
-	// });
-	// // get departments
-	// jQuery("#aj_ktp").change(function(){
-	// 	jQuery.get(base_url+"/get_info_pkwt/"+jQuery(this).val(), function(data, status){
-	// 		jQuery('#info_ajax').html(data);
-	// 	});
-	// });
 
 });
 </script>

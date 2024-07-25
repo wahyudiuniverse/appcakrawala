@@ -2994,6 +2994,24 @@ ORDER BY jab.designation_id ASC";
 		}
 	}
 
+	// get single employee by NIP
+	public function read_saltab_by_id($id)
+	{
+
+		$sql = "SELECT bulk.periode_cutoff_from, bulk.periode_cutoff_to, bulk.periode_salary, bulk.project_name, saltab.* 
+				FROM xin_saltab saltab
+				LEFT JOIN xin_saltab_bulk_release bulk ON bulk.id = saltab.uploadid
+				WHERE secid = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+	
 
 	public function read_employee_information_nip($nip)
 	{

@@ -636,9 +636,9 @@ class Employee_pkwt extends MY_Controller {
 							'allowance_operation' 	=> $allow_operational,
 							'img_esign'							=> $image_name,
 
-							'sign_nip'							=> '21513829',
-							'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
-							'sign_jabatan'					=> 'SM HR & GA',
+							'sign_nip'							=> '21300033',
+							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+							'sign_jabatan'					=> 'HR & GA MANAGER',
 							'status_pkwt' => 0,
 							'request_pkwt' => $session['user_id'],
 							'request_date' => date('Y-m-d h:i:s'),

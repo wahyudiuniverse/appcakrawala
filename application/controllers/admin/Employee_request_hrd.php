@@ -1076,9 +1076,9 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'						=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-				'sign_nip'							=> '21513829',
-				'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
-				'sign_jabatan'					=> 'SM HR & GA',
+				'sign_nip'							=> '21300033',
+				'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+				'sign_jabatan'					=> 'HR & GA MANAGER',
 				'status_pkwt' => 1,
 				'createdon' => date('Y-m-d h:i:s'),
 				'createdby' => $session['user_id']
@@ -1446,9 +1446,9 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'						=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-				'sign_nip'							=> '21513829',
-				'sign_fullname'					=> 'TATOK PURHANDONO SETYAWAN',
-				'sign_jabatan'					=> 'SM HR & GA',
+				'sign_nip'							=> '21300033',
+				'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+				'sign_jabatan'					=> 'HR & GA MANAGER',
 							'status_pkwt' 					=> 1, //0 belum approve, 1 sudah approve
 							'contract_type_id'			=> $e_status, //1 pkwt, 2 tkhl
 				'createdon' => date('Y-m-d h:i:s'),

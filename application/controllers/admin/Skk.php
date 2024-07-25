@@ -274,8 +274,17 @@ class Skk extends MY_Controller {
 				$sign_fullname = 'Asti Prastista';
 				$sign_nip = '21500006';
 			} else {
-				$sign_fullname = 'TATOK PURHANDONO SETYAWAN';
-				$sign_nip = '21513829';
+
+				$lastT = new DateTime(date("2024-07-20"));
+
+					if($resign_date<$lastT){
+						$sign_fullname = 'TATOK PURHANDONO SETYAWAN';
+						$sign_nip = '21513829';
+					} else {
+						$sign_fullname = 'SISKYLA KHAIRANA PRITIGARINI';
+						$sign_nip = '21300033';
+					}
+
 			}
 		}
 

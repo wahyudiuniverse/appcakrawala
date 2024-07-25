@@ -52,7 +52,7 @@ if($e_status==1){
                 <!--NAMA LENGKAP-->
                 <div class="col-md-8">
                   <div class="form-group">
-                    <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name');?><i class="hrpremium-asterisk">*</i></label>
+                    <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name').'APPROVE';?><i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="fullname" type="text" value="<?php echo $fullname; ?>">
                   </div>
                 </div>
@@ -520,6 +520,7 @@ if($e_status==1){
                       <option value="8" <?php if($contract_periode=='8'):?> selected <?php endif; ?>>8 (Bulan)</option>
                       <option value="9" <?php if($contract_periode=='9'):?> selected <?php endif; ?>>9 (Bulan)</option>
                       <option value="10" <?php if($contract_periode=='10'):?> selected <?php endif; ?>>10 (Bulan)</option>
+                      <option value="11" <?php if($contract_periode=='10'):?> selected <?php endif; ?>>11 (Bulan)</option>
                       <option value="12" <?php if($contract_periode=='12'):?> selected <?php endif; ?>>12 (Bulan)</option>
                     </select>
                   </div>

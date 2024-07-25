@@ -235,17 +235,28 @@ class Pkwt254 extends MY_Controller
 					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
 					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
 					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
+					$dm_allow_meal =	$pkwt[0]->dm_allow_meal;
+
 					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
+					$dm_allow_transport =	$pkwt[0]->dm_allow_transport;
+
 					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
+					$dm_allow_rent =	$pkwt[0]->dm_allow_rent;
+
 					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
+					$dm_allow_komunikasi =	$pkwt[0]->dm_allow_komunikasi;
+
 					$allowance_park =	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
 					$allowance_residance =	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
 					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
+					$dm_allow_laptop =	$pkwt[0]->dm_allow_laptop;
+					
 					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
 					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$dm_allow_operation =	$pkwt[0]->dm_allow_operation;
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -1550,7 +1561,7 @@ class Pkwt254 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per '.$dm_allow_meal.'</td>
 						</tr>';
 				}
 
@@ -1559,7 +1570,7 @@ class Pkwt254 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per '.$dm_allow_transport.'</td>
 						</tr>';
 				}
 				
@@ -1568,7 +1579,7 @@ class Pkwt254 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_rent.',- Per '.$dm_allow_rent.'</td>
 						</tr>';
 				}
 
@@ -1577,7 +1588,7 @@ class Pkwt254 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_komunikasi.',- Per '.$dm_allow_komunikasi.'</td>
 						</tr>';
 				}
 
@@ -1604,7 +1615,7 @@ class Pkwt254 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Laptop</td>
-							<td colspan="3"> : '.$allowance_laptop.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_laptop.',- Per '.$dm_allow_laptop.'</td>
 						</tr>';
 				}
 
@@ -1652,7 +1663,7 @@ class Pkwt254 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Operasional</td>
-							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_operation.',- Per '.$dm_allow_operation.'</td>
 						</tr>';
 				}
 

@@ -12,8 +12,9 @@
                 <!--TANGGAL RESIGN-->
                 <div class="col-md-4">
                   <div class="form-group" id="resign_ajax">
-                  <label for="date_of_birth">Tanggal Berakhir<i class="hrpremium-asterisk">*</i></label>
+                  <label for="date_of_birth">Tanggal BerakhirA<i class="hrpremium-asterisk">*</i></label>
                   <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="<?php echo $result[0]->tanggal_resign;?>">
+                  
                   </div>
                 </div>
 
