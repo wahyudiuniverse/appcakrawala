@@ -186,7 +186,6 @@ if (in_array('511', $role_resources_ids)) {
   </div>
 </div>
 
-
 <script>
   //global variable
   var ms1;
@@ -371,6 +370,7 @@ if (in_array('511', $role_resources_ids)) {
     });
 
 
+
   });
 
   //-----delete batch saltab-----
@@ -478,7 +478,7 @@ if (in_array('511', $role_resources_ids)) {
       //do nothing. Jalankan proses validasi form. Munculkan pesan untuk isi field kosong
     } else {
       //cek boleh import?
-      if (tgl_gajian == hari_ini) {
+      if (tgl_gajian <= hari_ini) {
         // alert("tanggal sama");
         e.preventDefault(); //stop post value
 
@@ -531,16 +531,17 @@ if (in_array('511', $role_resources_ids)) {
             $('#requestOpenModal').appendTo("body").modal('show');
           }
         });
-      } else if (tgl_gajian < hari_ini) {
-        e.preventDefault(); //stop post value
+      } 
+      // else if (tgl_gajian < hari_ini) {
+      //   e.preventDefault(); //stop post value
         
-        kondisi = "Tidak bisa backdate. Tanggal penggajian sudah lewat.<br><small>Waktu server: " + hari_ini2 + "</small><br><br>";
-        $('.pesan-modal').html(kondisi + html_text);
-        $('.pesan-request-modal').html("");
-        $('#button_request').attr("hidden", true);
-        $('#note_open').attr("readonly", true);
-        $('#requestOpenModal').appendTo("body").modal('show');
-      }
+      //   kondisi = "Tidak bisa backdate. Tanggal penggajian sudah lewat.<br><small>Waktu server: " + hari_ini2 + "</small><br><br>";
+      //   $('.pesan-modal').html(kondisi + html_text);
+      //   $('.pesan-request-modal').html("");
+      //   $('#button_request').attr("hidden", true);
+      //   $('#note_open').attr("readonly", true);
+      //   $('#requestOpenModal').appendTo("body").modal('show');
+      // }
     }
 
   };
