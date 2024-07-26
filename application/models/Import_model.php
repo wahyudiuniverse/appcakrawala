@@ -1568,7 +1568,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_temp2/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
-			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			$delete = '<button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
@@ -1676,7 +1676,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_final/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
-			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			$delete = '<button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
@@ -1789,7 +1789,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . "<br>" . $esaltab,
+				"aksi" => $view . " " . $esaltab,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
