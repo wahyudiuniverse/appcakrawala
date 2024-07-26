@@ -579,7 +579,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($data_batch['project_name']), " "),
 				trim(strtoupper($sub_project), " "),
 				trim(strtoupper($record->area), " "),
-				round($record->total_thp,2),
+				round($record->total_thp, 2),
 				$nomor_rekening,
 				trim(strtoupper($record->nama_bank), " "),
 				trim(strtoupper($record->pemilik_rek), " "),
@@ -1567,12 +1567,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_temp2/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
 			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $delete,
+				"aksi" => $view . " " . $esaltab . " "  . $delete,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
@@ -1674,12 +1675,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_final/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
 			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $delete,
+				"aksi" => $view . " " . $esaltab . " " . $delete,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
@@ -1781,12 +1783,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_final/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
 			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view,
+				"aksi" => $view . "<br>" . $esaltab,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
