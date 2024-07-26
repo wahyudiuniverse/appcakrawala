@@ -51,14 +51,14 @@ if (in_array('514', $role_resources_ids)) {
             <div class="col-md-6">
               <div class="form-group periode-from">
                 <!-- input periode -->
-                <label class="form-label">Search Periode Salary from</label>
+                <label class="form-label">Search Tanggal Penggajian from</label>
                 <input type="text" class="form-control date" readonly name="search_periode_from" id="search_periode_from" placeholder="Periode From" required>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group periode-to">
                 <!-- input periode -->
-                <label class="form-label">Search Periode Salary to</label>
+                <label class="form-label">Search Tanggal Penggajian to</label>
                 <input type="text" class="form-control date" readonly name="search_periode_to" id="search_periode_to" placeholder="Periode To" required>
               </div>
             </div>
@@ -101,13 +101,13 @@ if (in_array('514', $role_resources_ids)) {
         <thead>
           <tr>
             <th>Aksi</th>
-            <th>Periode Salary</th>
+            <th>Tanggal Penggajian</th>
             <th>Periode Cutoff</th>
             <th>Project</th>
             <th>Sub Project</th>
             <th>Total MPP</th>
-            <th>Release by</th>
-            <th>Release on</th>
+            <th>Finalize by</th>
+            <th>Finalize on</th>
           </tr>
         </thead>
       </table>

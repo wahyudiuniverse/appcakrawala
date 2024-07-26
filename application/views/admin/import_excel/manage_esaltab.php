@@ -101,13 +101,13 @@ if (in_array('513', $role_resources_ids)) {
         <thead>
           <tr>
             <th>Aksi</th>
-            <th>Periode Salary</th>
+            <th>Tanggal Penggajian</th>
             <th>Periode Cutoff</th>
             <th>Project</th>
             <th>Sub Project</th>
             <th>Total MPP</th>
-            <th>Release by</th>
-            <th>Release on</th>
+            <th>Finalize by</th>
+            <th>Finalize on</th>
           </tr>
         </thead>
       </table>

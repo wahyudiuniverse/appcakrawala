@@ -139,7 +139,7 @@
       <div class="pull-right">
         <!-- <div class="card-header with-elements"> -->
         <span class="card-header-title mr-2">
-          <button id="button_release_all" class="btn btn-success ladda-button" data-style="expand-right">Release All</button>
+          <button id="button_release_all" class="btn btn-success ladda-button" data-style="expand-right">Finalize All</button>
           <button id="button_delete_all" class="btn btn-danger ladda-button" data-style="expand-right">Delete All</button>
         </span>
         <!-- </div> -->

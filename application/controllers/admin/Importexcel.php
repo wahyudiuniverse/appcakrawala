@@ -809,7 +809,7 @@ class ImportExcel extends MY_Controller
 
 		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
 		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
-		$jumlah_data = count($header_tabel_saltab);
+		$length_array = count($header_tabel_saltab);
 		$gabung = implode(",", $header_tabel_saltab);
 
 		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel($id, $gabung);
@@ -844,7 +844,7 @@ class ImportExcel extends MY_Controller
 			);
 
 		//set column width jadi auto size
-		for ($i = 1; $i <= 100; $i++) {
+		for ($i = 1; $i <= $length_array; $i++) {
 			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
 
@@ -860,12 +860,22 @@ class ImportExcel extends MY_Controller
 			->getStartColor()
 			->setARGB('BFBFBF');
 
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$detail_saltab_fix,   // The data to set
-				NULL,
-				'A7'
-			);
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 7])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
 
 		//set wrap text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('6:6')
@@ -901,16 +911,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
 		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
 
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
 		$tabel_saltab = $this->Import_model->get_saltab_table();
 		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
 
 		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
 		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
-		$jumlah_data = count($header_tabel_saltab);
+		$length_array = count($header_tabel_saltab);
 		$gabung = implode(",", $header_tabel_saltab);
 
 		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release($id, $gabung);
-		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
 
 		$project = $data_batch_saltab['project_name'];
 		$sub_project = $data_batch_saltab['sub_project_name'];
@@ -939,15 +952,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
 		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
 
-		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Download Time (Y-m-d)');
-		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
 		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
 
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A8'
+				'A9'
 			);
 
 		//set header background color
@@ -955,36 +972,43 @@ class ImportExcel extends MY_Controller
 		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
 
 		//set column width jadi auto size
-		for ($i = 1; $i <= 100; $i++) {
+		for ($i = 1; $i <= $length_array; $i++) {
 			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A8:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
 			->setARGB('BFBFBF');
 
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$detail_saltab_fix,   // The data to set
-				NULL,
-				'A9'
-			);
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('8:8')
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
-
-		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('8:8')
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('8:8')
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
@@ -992,7 +1016,7 @@ class ImportExcel extends MY_Controller
 		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
 		//$writer->setPreCalculateFormulas(false);
 
-		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
 		// $filename = $gabung;
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
@@ -1150,6 +1174,9 @@ class ImportExcel extends MY_Controller
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
 		$spreadsheet->getActiveSheet()->setTitle('E-Saltab Payroll'); //nama Spreadsheet yg baru dibuat
 
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
 		$tabel_saltab = $this->Import_model->get_saltab_table();
 		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
 
@@ -1169,8 +1196,10 @@ class ImportExcel extends MY_Controller
 			'STATUS VERIFIKASI',
 		);
 
+		$length_array = count($header2_tabel_saltab);
+
 		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_payroll($id, $data_batch_saltab);
-		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
 
 		$project = $data_batch_saltab['project_name'];
 		$sub_project = $data_batch_saltab['sub_project_name'];
@@ -1199,15 +1228,19 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
 		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
 
-		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Download Time (Y-m-d)');
-		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
 		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
 
 		$spreadsheet->getActiveSheet()
 			->fromArray(
 				$header2_tabel_saltab,   // The data to set
 				NULL,
-				'A8'
+				'A9'
 			);
 
 		//set header background color
@@ -1215,36 +1248,47 @@ class ImportExcel extends MY_Controller
 		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
 
 		//set column width jadi auto size
-		for ($i = 1; $i <= 100; $i++) {
+		for ($i = 1; $i <= $length_array; $i++) {
 			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
 
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle("A8:{$maxDataColumn}{$maxDataRow}")
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()
 			->setARGB('BFBFBF');
 
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$detail_saltab_fix,   // The data to set
-				NULL,
-				'A9'
-			);
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		// echo "<pre>";
+		// print_r($detail_saltab);
+		// echo "</pre>";
 
 		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('8:8')
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
 			->getAlignment()->setWrapText(true);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
-
-		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('8:8')
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
 			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('8:8')
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
 
@@ -1260,7 +1304,7 @@ class ImportExcel extends MY_Controller
 		header('Cache-Control: max-age=0');
 
 		$writer->save('php://output');	// download file 
-		//$writer->save('./absen/tes2.xlsx');	// download file 
+		// $writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
 	/*

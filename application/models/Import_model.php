@@ -366,6 +366,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$records = $this->db->get()->result_array();
 
+		$data = array();
+
+		foreach ($records as $row) {
+			$new_row = array_values($row);
+			array_push($data, $new_row);
+		}
+
 		//$tabel_saltab = $this->Import_model->get_saltab_table();
 		//$paremeter = implode(",", $tabel_saltab);
 		// $jumlah_data = count($tabel_saltab);
@@ -377,7 +384,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// 	);
 		// }
 
-		return $records;
+		return $data;
 	}
 
 	//get table saltab release untuk download excel
@@ -391,6 +398,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$records = $this->db->get()->result_array();
 
+		$data = array();
+
+		foreach ($records as $row) {
+			$new_row = array_values($row);
+			array_push($data, $new_row);
+		}
+
 		//$tabel_saltab = $this->Import_model->get_saltab_table();
 		//$paremeter = implode(",", $tabel_saltab);
 		// $jumlah_data = count($tabel_saltab);
@@ -402,7 +416,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// 	);
 		// }
 
-		return $records;
+		return $data;
 	}
 
 	//get table saltab release untuk download excel BPJS
@@ -558,18 +572,19 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			$data[] = array(
-				$record->status_emp,
+				trim(strtoupper($record->status_emp), " "),
 				$record->nip,
 				$record->nik,
-				$record->fullname,
-				$data_batch['project_name'],
-				$sub_project,
-				$record->area,
-				$record->total_thp,
+				trim(strtoupper($record->fullname), " "),
+				trim(strtoupper($data_batch['project_name']), " "),
+				trim(strtoupper($sub_project), " "),
+				trim(strtoupper($record->area), " "),
+				round($record->total_thp,2),
 				$nomor_rekening,
-				$record->nama_bank,
-				$record->pemilik_rek,
-				$record->status_hold
+				trim(strtoupper($record->nama_bank), " "),
+				trim(strtoupper($record->pemilik_rek), " "),
+				trim(strtoupper($record->status_hold), " "),
+				"",
 			);
 		}
 
