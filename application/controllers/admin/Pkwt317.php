@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt214 extends MY_Controller 
+class Pkwt317 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -446,44 +446,53 @@ class Pkwt214 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="1" style="text-align: justify;">
 							<tr>
 								<td style="text-align: center;"><b>No</b></td>
-								<td  style="text-align: center" colspan="18"><b>Jobdesk Admin Cakrawala</b></td>
+								<td  style="text-align: center" colspan="18"><b>Jobdesk SPV Cakrawala</b></td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">1</td>
-								<td colspan="18">Bertanggung jawab terhadap database karyawan (merekap database personil masuk-keluar, perpanjangan kontrak, termasuk segala kebutuhan terkait kelengkapan berkas new hire maupun personil non active baik regular maupun freelance).</td>
+								<td colspan="18">Connecting Parama & Cakrawala / Melakukan koordinasi yang dibutuhkan dengan leader DC maupun HRDC Parama agar bisnis proses Ecommerce Kediri dapat berjalan dengan lancar.</td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">2</td>
-								<td colspan="18">Membantu SPV Cakrawala untuk persiapan freelance pada setiap event (mempersiapkan undangan, proses training (rekap dan absensi training), hingga memastikan kelancaran pemenuhan personil pada saat event.</td>
+								<td colspan="18">Merencanakan persiapan kegiatan event bulanan.</td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">3</td>
-								<td colspan="18">Menginput dan merekap database termasuk absensi freelance harian pada setiap event.</td>
+								<td colspan="18">Membantu Area Manager Cakrawala dalam melakukan pemenuhan kebutuhan personil Cakrawala untuk Parama (baik regular maupun freelance).</td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">4</td>
-								<td colspan="18">Membantu mempersiapkan keperluan personil/freelance baru join (termasuk kebutuhan finger print, memastikan kelengkapan kerja lengkap, dst).</td>
+								<td colspan="18">Membuat jadwal kerja personil Cakrawala.</td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">5</td>
-								<td colspan="18">Membuat jadwal shifting personil cakrawala setiap bulan (all personil termasuk freelance pada saat event).</td>
+								<td colspan="18">Melakukan kontrol dan evaluasi terkait dengan jobdesk personil Cakrawala yang telah diberikan.</td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">6</td>
-								<td colspan="18">Membantu SPV dalam melakukan proses administrasi dan dokumentasi terkait dengan proses managing people journey Personil Cakrawala.</td>
+								<td colspan="18">Melakukan managing people journey para personel Cakrawala (seperti : kapan personil masuk, pernah mendapatkan training apa saja, posisi apa saja dan bagaimana performanya baik personil pkwt maupun freelance).</td>
 							</tr>
 
 							<tr>
 								<td style="text-align: center;">7</td>
-								<td colspan="18">Bertanggung jawab terhadap persiapan tarikan data absensi (termasuk lembur) setiap periode untuk keperluan penggajian personil cakrawala (baik regular maupun freelance).</td>
+								<td colspan="18">Handling issue dan masalah.</td>
 							</tr>
 
+							<tr>
+								<td style="text-align: center;">8</td>
+								<td colspan="18">Memastikan proses administrasi personil cakrawala (regular maupun freelance) lancar.</td>
+							</tr>
+
+							<tr>
+								<td style="text-align: center;">9</td>
+								<td colspan="18">Menjalankan project lain yang diberikan oleh Parama.</td>
+							</tr>
 							</table>
 								</td>
 							</tr>

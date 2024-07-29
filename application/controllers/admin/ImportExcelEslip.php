@@ -2072,9 +2072,16 @@ class Importexceleslip extends MY_Controller
 		$idsaltab = $this->uri->segment(5);
 		// $employee_id = $this->uri->segment(5);
 
+
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
 		$employee = $this->Employees_model->read_employee_info_by_nik($employee_id);
 		$eslip = $this->Employees_model->read_saltab_by_id($idsaltab);
+
+
+		if(empty($employee) || $employee_id== 0){
+			redirect('admin/');
+		}
+
 
 		if($session['user_id']!=1){
 
