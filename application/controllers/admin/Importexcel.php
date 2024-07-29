@@ -2685,13 +2685,36 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 		$data['title'] = 'Manage E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Manage E-SALTAB';
-		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
 		//$data['path_url'] = 'hrpremium_download_esaltab';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if (in_array('513', $role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/import_excel/manage_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//konfigurasi import saltab
+	public function konfig_import_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['title'] = 'Konfigurasi Import E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Konfigurasi Import E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('512', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/manage_import_esaltab", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -2708,7 +2731,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 		$data['title'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Download E-SALTAB';
-		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
 		//$data['path_url'] = 'hrpremium_download_esaltab';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -2732,7 +2755,7 @@ class ImportExcel extends MY_Controller
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['title'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Import E-SALTAB';
-		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
 		$data['path_url'] = 'hrpremium_import_esaltab';
 		$role_resources_ids = $this->Xin_model->user_role_resource();

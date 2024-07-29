@@ -1382,8 +1382,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$this->db->where($filterRangeTo);
 		}
 		$this->db->where($kondisiDefaultQuery);
-		$records = $this->db->get('xin_saltab_bulk_release')->result();
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
+		// $this->db->group_by(array("periode_salary", "project_id","sub_project_id", "periode_cutoff_to","periode_cutoff_from"));
+		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 		$totalRecords = $records[0]->allcount;
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
 
 		## Total number of record with filtering
 		$this->db->select('count(*) as allcount');
@@ -1400,11 +1406,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		$records = $this->db->get('xin_saltab_bulk_release')->result();
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
+		// $this->db->group_by(array("periode_salary", "project_id","sub_project_id", "periode_cutoff_to","periode_cutoff_from"));
+		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
 
 		## Fetch records
-		$this->db->select('*');
+		$this->db->select('a.*');
 		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
@@ -1418,13 +1426,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
+		// $this->db->group_by(array("periode_salary", "project_id","sub_project_id", "periode_cutoff_to","periode_cutoff_from"));
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_saltab_bulk_release')->result();
+		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 
-		#Debugging variable
-		$tes_query = $this->db->last_query();
-		//print_r($tes_query);
+		
 
 		$data = array();
 
