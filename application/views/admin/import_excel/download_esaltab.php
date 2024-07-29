@@ -122,7 +122,7 @@ if (in_array('514', $role_resources_ids)) {
   var langopt;
   var saltab_table;
   var session_id = '<?php echo $session['employee_id']; ?>';
-  var kolom_saltab = JSON.parse('<?php echo json_encode($tabel_saltab); ?>');
+  // var kolom_saltab = JSON.parse('<?php //echo json_encode($tabel_saltab); ?>');
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
