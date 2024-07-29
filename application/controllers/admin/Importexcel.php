@@ -912,7 +912,7 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		$tabel_saltab = $this->Import_model->get_saltab_table();
 		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
@@ -1036,7 +1036,7 @@ class ImportExcel extends MY_Controller
 		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		$header2_tabel_saltab = array(
 			'STATUS',
@@ -1175,7 +1175,7 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setTitle('E-Saltab Payroll'); //nama Spreadsheet yg baru dibuat
 
 		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
 		$tabel_saltab = $this->Import_model->get_saltab_table();
 		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
@@ -2729,7 +2729,7 @@ class ImportExcel extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['title'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Import E-SALTAB';
 		$data['tabel_saltab'] = $this->Import_model->get_saltab_table();

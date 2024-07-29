@@ -154,6 +154,7 @@ $new_date = date('d-M-Y', $strtotime);
     $session = $this->session->userdata('username');
     $user_info = $this->Employees_model->read_employee_info($session['user_id']);
     $eslip_release = $this->Employees_model->read_eslip_by_nip($session['employee_id']);
+    $eslip_saltab = $this->Employees_model->read_saltab_by_nip($session['employee_id']);
 ?>
 
 <div class="row mt-6">
@@ -570,6 +571,85 @@ $new_date = date('d-M-Y', $strtotime);
   ?>
 
 </div>
+
+
+<!-- NEW E-SLIP SALTAB -->
+
+<div class="row mt-3">
+
+<!-- ESLIP STATUS -->
+<?php
+  if(!is_null($eslip_saltab)){
+    foreach($eslip_saltab->result() as $r) {
+
+    if($doc_ktp==0 || $doc_kk==0 || $doc_ijazah==0 || $doc_cv==0) {
+?>
+
+
+  <div class="col-sm-6 col-xl-4">
+    <div class="card mb-4">
+      <a href="#">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?>  <p style="color: #F00;">(Selesaikan Unggah Dokumen Secara Lengkap)</p></div>
+            <p style="font-size: 18px;"><?php echo $r->periode_cutoff_from;?></p>
+          </div>
+        </div>
+      </div>
+      </a>
+    </div>
+  </div>
+
+<?php
+    } else {
+?>
+
+  <div class="col-sm-6 col-xl-4">
+    <div class="card mb-4">
+      <a href="<?php echo site_url().'admin/importexceleslip/eslip_final/'.$r->nip.'/'.$r->secid; ?>" target="_blank">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
+            <p style="font-size: 18px;"><?php echo $r->periode_cutoff_from;?></p>
+          </div>
+        </div>
+      </div>
+      </a>
+    </div>
+  </div>
+<?php
+    }
+
+?>
+
+
+<?php
+    }
+
+  } else {
+?>
+  <div class="col-sm-6 col-xl-4">
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ion ion-ios-paper display-4 text-info"></div>
+          <div class="ml-4">
+            <div class="text-muted small"><?php echo $this->lang->line('xin_eslip');?></div>
+            <div class="text-large">Tidak Ditemukan..!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php
+  }
+?>
+</div>
+
 <div class="row mt-3">
 
 
