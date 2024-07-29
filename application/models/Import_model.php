@@ -888,11 +888,9 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Delete Batch Saltab dan Delete Detail Saltab
 		$this->delete_batch_saltab($id);
 
-		$waktu_stamp = date("Y-m-d H:i:s");
-
 		## Update data release
 		$data = array(
-			'release_on' => $waktu_stamp,
+			'release_on' => null,
 			'release_by' => $this->get_nama_karyawan($session['employee_id']),
 			'release_by_id' => $session['employee_id'],
 		);
