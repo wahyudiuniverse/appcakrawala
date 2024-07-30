@@ -54,6 +54,23 @@ class Project_model extends CI_Model
 		return $query;
 	}
 
+
+	// monitoring request
+	public function list_project_posisi()
+	{
+
+		$sql = "SELECT mappos.secid,mappos.project_id, CONCAT('[',pro.priority,']', ' ', pro.title) AS title, mappos.sub_project, prosub.sub_project_name, prosub.sub_active, mappos.posisi, pos.designation_name
+			FROM xin_projects_posisi mappos
+			LEFT JOIN xin_projects_sub prosub ON prosub.secid = mappos.sub_project
+			LEFT JOIN xin_projects pro ON pro.project_id = prosub.id_project
+			LEFT JOIN xin_designations pos ON pos.designation_id = mappos.posisi
+			ORDER BY mappos.secid DESC
+			LIMIT 10;";
+		// $binds = array(1,$cid);
+		$query = $this->db->query($sql);
+		return $query;
+	}
+
 	// get all employees
 	public function all_projects_admin()
 	{
@@ -68,6 +85,12 @@ class Project_model extends CI_Model
 		return $query->result();
 	}
 
+	// get all employees
+	public function all_jabatan()
+	{
+		$query = $this->db->query("SELECT designation_id, CONCAT('[',level,']', ' ', designation_name) as designation_name  FROM xin_designations");
+		return $query->result();
+	}
 
 	// get all employees
 	public function get_project_emprequest()
@@ -370,6 +393,16 @@ ORDER BY title ASC");
 	}
 
 
+	// get all employees
+	public function get_sub_project_aktif()
+	{
+		$query = $this->db->query("SELECT psub.secid, CONCAT('[',pro.priority,']', ' ', pro.title,' - ', psub.sub_project_name) as title_sub
+			FROM `xin_projects_sub` psub
+			LEFT JOIN xin_projects pro ON pro.project_id = psub.id_project
+			WHERE psub.sub_active=1");
+		return $query->result();
+	}	
+
 	// get single employee by NIP
 	public function read_project_by_id($id)
 	{
@@ -453,6 +486,17 @@ ORDER BY title ASC");
 	}
 
 
+	// check akses project
+	public function check_mapping_posisi($subproject, $posisi)
+	{
+
+		$sql = 'SELECT * FROM xin_projects_posisi WHERE sub_project = ? AND posisi = ?';
+		$binds = array($subproject, $posisi);
+		$query = $this->db->query($sql, $binds);
+		return $query->num_rows();
+	}
+
+
 	// Function to add record in table
 	public function add($data)
 	{
@@ -468,6 +512,17 @@ ORDER BY title ASC");
 	public function add_akses_project($data)
 	{
 		$this->db->insert('xin_projects_akses', $data);
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// Function to add record in table
+	public function add_mapping_posisi($data)
+	{
+		$this->db->insert('xin_projects_posisi', $data);
 		if ($this->db->affected_rows() > 0) {
 			return true;
 		} else {

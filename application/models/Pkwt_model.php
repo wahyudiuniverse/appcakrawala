@@ -409,7 +409,7 @@ ORDER BY contract_id DESC LIMIT 1";
  	// monitoring request
 	public function report_pkwt_history_null($empID) {
 		$today_date = date('Y-m-d');
-		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, sub_project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE date_format(approve_hrd_date, '%Y-%m-%d') = '$today_date' 
 			AND approve_nom !=0
@@ -424,7 +424,7 @@ ORDER BY contract_id DESC LIMIT 1";
  	// monitoring request
 	public function report_pkwt_history_all($empID,$datefrom,$enddate) {
 
-		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, sub_project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
 			AND approve_hrd != 0
@@ -440,7 +440,7 @@ ORDER BY contract_id DESC LIMIT 1";
  	// monitoring request
 	public function report_pkwt_history($empID,$project_id,$datefrom,$enddate) {
 
-		$sql = "SELECT uniqueid, contract_id, employee_id, project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
+		$sql = "SELECT uniqueid, contract_id, employee_id, project, sub_project, jabatan, penempatan, from_date, to_date, approve_hrd_date, file_name
 			FROM xin_employee_contract
 			WHERE approve_nom !=0
 			AND approve_hrd != 0

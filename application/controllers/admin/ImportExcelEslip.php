@@ -855,9 +855,9 @@ class Importexceleslip extends MY_Controller
 		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
 		$employee = $this->Employees_model->read_employee_info_by_nik($vnip);
 
-		if($session['user_id'] != $employee[0]->user_id) {
-			redirect('admin/');
-		}
+		// if($session['user_id'] != $employee[0]->user_id) {
+		// 	redirect('admin/');
+		// }
 
 		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
 				if(!is_null($designation)){
@@ -1615,7 +1615,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="2">Deduction</td>
+								<td colspan="2"></td>
 								<td colspan="0"></td>
 								<td colspan="0" align="right"></td>
 								<td colspan="6" align="right"></td>
@@ -3327,12 +3327,11 @@ class Importexceleslip extends MY_Controller
 
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
 		$employee = $this->Employees_model->read_employee_info_by_nik($employee_id);
-		$eslip = $this->Employees_model->read_saltab_by_id($idsaltab);
+		$eslip = $this->Employees_model->read_saltab_temp_by_id($idsaltab);
 
-		if($session['user_id'] != $employee[0]->user_id) {
-			redirect('admin/');
-		}
-
+		// if($session['user_id'] != $employee[0]->user_id) {
+		// 	redirect('admin/');
+		// }
 
 			$project = $this->Project_model->getcomp_single_project($employee[0]->project_id);
 			if(!is_null($project)){
@@ -3348,11 +3347,7 @@ class Importexceleslip extends MY_Controller
 					$jabatan = '--';	
 				}
 
-		// if($eslip[0]->status_kirim==1){
-			// $bMargin = $this->getBreakMargin();
-			// $bMargi = $this->getBreakMargin();
-
-				if($employee[0]->company_id == '2') {
+			if($employee[0]->company_id == '2') {
 					$company_name = 'PT. SIPRAMA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_sc.png';
 				} else if ($employee[0]->company_id == '3') {
@@ -3448,7 +3443,7 @@ class Importexceleslip extends MY_Controller
 
 			if(!is_null($eslip)){
 
-				if($eslip[0]->nip == $employee[0]->employee_id) {
+				// if($eslip[0]->nip == $employee[0]->employee_id) {
 				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
 
 				$nip = $eslip[0]->nip;
@@ -3565,9 +3560,9 @@ class Importexceleslip extends MY_Controller
 				  // }
 
 
-				} else {
-					redirect('admin/');
-				}
+				// } else {
+				// 	redirect('admin/');
+				// }
 				
 			} else {
 				redirect('admin/');

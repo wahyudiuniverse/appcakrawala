@@ -127,6 +127,7 @@
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
+                <th>Sub Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
                 <th>Waktu Kontrak</th>

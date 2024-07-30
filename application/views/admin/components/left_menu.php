@@ -1159,36 +1159,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
 
         <?php
-        if (in_array('6', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['loc_active'])) echo $arr_mod['loc_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/location/'); ?>"> <?php echo $this->lang->line('xin_locations'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('3', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['dep_active'])) echo $arr_mod['dep_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/department/'); ?>"> <?php echo $this->lang->line('left_department'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('4', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['des_active'])) echo $arr_mod['des_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/designation/'); ?>"> <?php echo $this->lang->line('left_designation'); ?> </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
         if (in_array('44', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['project_active'])) echo $arr_mod['project_active']; ?>">
@@ -1208,6 +1178,25 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         }
         ?>
 
+        <?php
+        if (in_array('4', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['des_active'])) echo $arr_mod['des_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/designation/'); ?>"> Posisi/Jabatan </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('3', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['mapposisi_active'])) echo $arr_mod['mapposisi_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/project_posisi/'); ?>"> Mapping Project-Posisi </a>
+          </li>
+        <?php
+        }
+        ?>
 
         <?php
         if (in_array('207', $role_resources_ids)) {

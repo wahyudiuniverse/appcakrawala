@@ -443,7 +443,7 @@ class Pkwt287 extends MY_Controller
 								<td colspan="1">c.</td>
 								<td colspan="20">Mencemarkan nama baik perusahaan.</td>
 							</tr>
-<br>
+						<br>
 							<tr>
 								<td colspan="10">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
 								<td colspan="0"></td>

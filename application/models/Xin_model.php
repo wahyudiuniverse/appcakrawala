@@ -147,8 +147,8 @@ class Xin_model extends CI_Model
 			$arr['com_active'] = 'active';
 			$arr['adm_open'] = 'open';
 			return $arr;
-		} else if ($mClass == 'location') {
-			$arr['loc_active'] = 'active';
+		} else if ($mClass == 'project_posisi') {
+			$arr['mapposisi_active'] = 'active';
 			$arr['adm_open'] = 'open';
 			return $arr;
 			//adm=>policy

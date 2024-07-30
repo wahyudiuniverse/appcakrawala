@@ -1903,12 +1903,14 @@ class Reports extends MY_Controller
 
 			$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 			if (!is_null($emp)) {
+
 				$pin = $emp[0]->private_code;
 				$fullname = $emp[0]->first_name;
 				$sub_project = 'pkwt' . $emp[0]->sub_project_id;
 				$nowhatsapp = $emp[0]->contact_no;
 				$tkhl_status = $emp[0]->e_status;
 				$roleid = $emp[0]->user_role_id;
+
 			} else {
 
 				$pin = '--';
@@ -1924,6 +1926,13 @@ class Reports extends MY_Controller
 				$nama_project = $projects[0]->title;
 			} else {
 				$nama_project = '--';
+			}
+
+			$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
+			if (!is_null($subprojects)) {
+				$nama_subproject = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_subproject = '--';
 			}
 
 			$designation = $this->Designation_model->read_designation_information($r->jabatan);
@@ -1993,6 +2002,7 @@ class Reports extends MY_Controller
 				$r->employee_id,
 				$fullname . '#<br>' . $whatsapp,
 				$nama_project,
+				$nama_subproject,
 				$designation_name,
 				$penempatan,
 				$begin_until,
