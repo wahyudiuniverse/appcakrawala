@@ -270,7 +270,7 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE npro.doc_id
 
 	public function get_project_exist_all()
 	{
-		$query = $this->db->query("SELECT distinct(emp.project_id) AS project_id, proj.title 
+		$query = $this->db->query("SELECT distinct(emp.project_id) AS project_id, CONCAT('[ ',proj.priority,' ] ',proj.title) title 
 		FROM xin_employees emp
 		LEFT JOIN xin_projects proj ON proj.project_id=emp.project_id
 		WHERE emp.project_id NOT IN (0)

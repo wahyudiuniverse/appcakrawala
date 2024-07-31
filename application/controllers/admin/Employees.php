@@ -1192,6 +1192,13 @@ class Employees extends MY_Controller
 			$edesignation_name = '--';
 		}
 
+
+			if($result[0]->approve_resignnae=='' || $result[0]->approve_resignnae==null){
+				$status_pengajuan_paklaring = 'Paklaring Belum diajukan';
+			} else {
+				$status_pengajuan_paklaring = $result[0]->request_resign_date;
+			}
+
 		$data = array(
 
 			'title' => 'Profile Karyawan | ' . $this->Xin_model->site_title(),
@@ -1293,8 +1300,8 @@ class Employees extends MY_Controller
 			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' 	=> $this->Designation_model->all_designations(),
 			'all_user_roles' 	=> $this->Roles_model->all_user_roles(),
+			'request_resign_date' => $status_pengajuan_paklaring,
 
-			'request_resign_date' => $result[0]->request_resign_date,
 			'approve_resignnae' => $result[0]->approve_resignnae,
 			'approve_resignnae_on' => $result[0]->approve_resignnae_on,
 			

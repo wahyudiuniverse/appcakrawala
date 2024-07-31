@@ -275,7 +275,7 @@ class Skk extends MY_Controller {
 				$sign_nip = '21500006';
 			} else {
 
-				$lastT = new DateTime(date("2024-07-20"));
+				$lastT = new DateTime(date("2024-07-19"));
 
 					if($resign_date<$lastT){
 						$sign_fullname = 'TATOK PURHANDONO SETYAWAN';
@@ -313,7 +313,7 @@ class Skk extends MY_Controller {
 		'qr_code' => $image_name,
 		'sign_nip' => $sign_nip,
 		'sign_fullname' => $sign_fullname,
-		'sign_jabatan' => 'Senior Manager HR-GA',
+		'sign_jabatan' => 'HR-GA Manager',
 		'sign_company' => $this->input->post('company_id'),
 
 		'createdby' => 1,

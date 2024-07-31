@@ -479,6 +479,81 @@ class Reports_model extends CI_Model {
 
 	}
 
+
+	// get employees list> reports
+	public function filter_dokumen_sk_null($project_id,$sub_project_id,$status_resign) {
+		
+
+		return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip in('99') ORDER BY secid DESC");
+
+		// 0-0-0-0-0
+		//   if($company_id==0 && $department_id==0 && $project_id==0 && $sub_project_id==0 && $status_resign==0) {
+		//  	 return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip in('99') ORDER BY secid DESC");
+		// // 1-0-0-0-0
+		//   } else if($company_id!=0 && $department_id==0 && $project_id!=0 && $sub_project_id==0 && $status_resign==0) {
+		//  	  $sql = "SELECT skk.*, emp.company_id, emp.project_id, emp.designation_id 
+		// 				FROM xin_qrcode_skk skk
+		// 				LEFT JOIN xin_employees emp ON emp.employee_id = skk.nip 
+		// 				WHERE skk.nip not in('0') 
+		// 				AND emp.company_id = ?
+		// 				AND emp.project_id = ?
+		// 				ORDER BY skk.secid DESC";
+		// 	  $binds = array($company_id, $project_id);
+		// 	  $query = $this->db->query($sql, $binds);
+		// 	  return $query;
+		// // 1-1-0-0-0
+		  // }	else {
+
+
+
+
+
+		// return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip not in('0') ORDER BY secid DESC LIMIT 500");
+		// }
+
+
+	}
+
+
+	// get employees list> reports
+	public function filter_dokumen_sk_project($project_id,$sub_project_id,$status_resign) {
+		
+
+		return $query = $this->db->query("SELECT skk.*, emp.company_id, emp.project_id, emp.designation_id 
+		 				FROM xin_qrcode_skk skk
+		 				LEFT JOIN xin_employees emp ON emp.employee_id = skk.nip 
+		 				WHERE skk.nip not in('0') 
+		 				AND emp.project_id = $project_id
+		 				ORDER BY skk.secid DESC");
+
+		// 0-0-0-0-0
+		//   if($company_id==0 && $department_id==0 && $project_id==0 && $sub_project_id==0 && $status_resign==0) {
+		//  	 return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip in('99') ORDER BY secid DESC");
+		// // 1-0-0-0-0
+		//   } else if($company_id!=0 && $department_id==0 && $project_id!=0 && $sub_project_id==0 && $status_resign==0) {
+		//  	  $sql = "SELECT skk.*, emp.company_id, emp.project_id, emp.designation_id 
+		// 				FROM xin_qrcode_skk skk
+		// 				LEFT JOIN xin_employees emp ON emp.employee_id = skk.nip 
+		// 				WHERE skk.nip not in('0') 
+		// 				AND emp.company_id = ?
+		// 				AND emp.project_id = ?
+		// 				ORDER BY skk.secid DESC";
+		// 	  $binds = array($company_id, $project_id);
+		// 	  $query = $this->db->query($sql, $binds);
+		// 	  return $query;
+		// // 1-1-0-0-0
+		  // }	else {
+
+
+
+
+
+		// return $query = $this->db->query("SELECT * FROM xin_qrcode_skk WHERE nip not in('0') ORDER BY secid DESC LIMIT 500");
+		// }
+
+
+	}
+
 		// get employees att reports
 	public function filter_report_emp_att_null() {
 

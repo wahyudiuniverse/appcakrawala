@@ -1036,6 +1036,7 @@ class Reports extends MY_Controller
 		$length = intval($this->input->get("length"));
 	}
 
+	// LIST PAKLARING
 	public function report_skk_list()
 	{
 
@@ -1051,25 +1052,22 @@ class Reports extends MY_Controller
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 
-		$company_id = $this->uri->segment(4);
-		$department_id = $this->uri->segment(5);
-
-		$project_id = $this->uri->segment(6);
-		$subproject_id = $this->uri->segment(7);
-		$status_resign = $this->uri->segment(8);
+		$project_id 		= $this->uri->segment(4);
+		$subproject_id 		= $this->uri->segment(5);
+		$status_resign 		= $this->uri->segment(6);
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		// $designation_id = $this->uri->segment(6);
 
 
-		if ($company_id == 0 || is_null($company_id)) {
+		if ($project_id == 0 || is_null($project_id)) {
 			// $employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
 
-			$esign = $this->Reports_model->filter_esign_reports_null($company_id, $department_id, $project_id, $subproject_id, $status_resign);
+			$esign = $this->Reports_model->filter_dokumen_sk_null($project_id, $subproject_id, $status_resign);
 		} else {
 			// $employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
 
-			$esign = $this->Reports_model->filter_esign_reports_null($company_id, $department_id, $project_id, $subproject_id, $status_resign);
+			$esign = $this->Reports_model->filter_dokumen_sk_project($project_id, $subproject_id, $status_resign);
 		}
 
 		$data = array();

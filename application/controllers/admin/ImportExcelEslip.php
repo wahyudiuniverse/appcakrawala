@@ -2252,7 +2252,9 @@ class Importexceleslip extends MY_Controller
 				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
 				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
 				$bpjs_jp_deduction = $eslip[0]->jaminan_pensiun_deduction;
+
 				$pendapatan = $eslip[0]->total_1;
+				
 				$bpjs_tk = $eslip[0]->bpjs_tk;
 				$bpjs_ks = $eslip[0]->bpjs_ks;
 				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;

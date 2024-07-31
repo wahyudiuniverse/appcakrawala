@@ -75,6 +75,26 @@ class Esign_model extends CI_Model {
 		}
 	}
 
+
+	// get single employee
+	public function read_addendum_by_doc($id) {
+		  $query = $this->db->query("SELECT addm.id, addm.pkwt_id, addm.no_addendum, contr.no_surat, contr.company, addm.created_time, emp.ktp_no, contr.employee_id, emp.first_name, contr.sign_nip, contr.sign_fullname
+FROM xin_contract_addendum addm
+LEFT JOIN xin_employee_contract contr ON contr.contract_id = addm.pkwt_id
+LEFT JOIN xin_employees emp ON emp.employee_id = contr.employee_id
+WHERE esign like '%$id%';");
+		// $sql = "SELECT * FROM xin_contract_addendum WHERE esign like '%?%';";
+		// $binds = array($id);
+		// $query = $this->db->query($sql, $binds);
+		
+		// if ($query->num_rows() > 0) {
+		// 	return $query->result();
+		// } else {
+		// 	return null;
+		// }
+		return $query->result();
+	}
+
 	public function get_all_employees_resign()
 	{
 	  $query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, date_of_leaving,month(date_of_leaving) bln_skrng

@@ -1703,13 +1703,18 @@ class Pkwt250 extends MY_Controller
 						</tr>';
 				}
 
-				$lampiran .= '	
-					<br>
-						<tr>
-							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
-							<td></td>
-						</tr>
+				if($employee_id!='24528295'){
 
+					$lampiran .= '	
+						<br>
+							<tr>
+								<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
+								<td></td>
+							</tr>';
+
+				}
+
+				$lampiran .= '	
 					</table>
 
 					</td>
