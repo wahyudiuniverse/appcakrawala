@@ -2284,7 +2284,7 @@ class Employees_model extends CI_Model
 			if ($level_record <= $level_user) {
 				$text_gaji = "**********";
 			} else {
-				$text_gaji = $record->basic_salary . " ";
+				$text_gaji = $record->basic_salary;
 			}
 
 			$text_pin = "";
@@ -2310,7 +2310,7 @@ class Employees_model extends CI_Model
 			if ($level_record <= $level_user) {
 				$text_pin = "**********";
 			} else {
-				$text_pin = $record->private_code . " ";
+				$text_pin = $record->private_code;
 			}
 
 			// if ("B" >= "D2") {
