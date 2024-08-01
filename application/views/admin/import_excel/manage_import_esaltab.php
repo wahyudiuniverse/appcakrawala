@@ -15,28 +15,30 @@ if (in_array('512', $role_resources_ids)) {
 
   <!-- Modal -->
   <div class="modal fade" id="requestOpenModal" tabindex="-1" role="dialog" aria-labelledby="requestOpenModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-danger">
+        <!-- <div class="modal-header bg-danger"> -->
+        <div class="modal-header">
           <h5 class="modal-title" id="requestOpenModalLabel">
             <div class="judul-modal">
-              <img src='<?php echo base_url('/assets/icon/warning.png'); ?>' width='30'>
-              <font color="#FFFFFF"> Import Periode Saltab Dikunci </font>
+              Messages
               <!-- <img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'> -->
             </div>
           </h5>
           <button type="button" name="button_close2" id="button_close2" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">
-              <font color="#FFFFFF"> x </font>
+              x
             </span>
           </button>
         </div>
         <div class="modal-body">
           <div class="pesan-modal"></div>
-          <div class="pesan-request-modal"></div>
+          <div class="detail-modal"></div>
         </div>
         <div class="modal-footer">
-          <button type="button" name="button_request" id="button_request" class="btn btn-primary"> Request Open </button>
+          <div class="button-modal"></div>
+          <button type="button" name="button_accept" id="button_accept" class="btn btn-success"> Accept </button>
+          <button type="button" name="button_reject" id="button_reject" class="btn btn-danger"> Reject </button>
           <button type="button" name="button_close" id="button_close" class="btn btn-secondary" data-dismiss="modal"> Close </button>
         </div>
       </div>
@@ -59,6 +61,7 @@ if (in_array('512', $role_resources_ids)) {
       </div>
     </div>
 
+    
     <div class="card-body border-bottom-blue ">
 
       <?php echo form_open_multipart('/admin/importexcel/import_saltab2/'); ?>
@@ -314,17 +317,109 @@ if (in_array('512', $role_resources_ids)) {
     // alert("Beres Ajax. id: " + id);
   }
 
-  //-----lihat addendum-----
+  //-----open modal untuk accept request-----
   function acceptRequest(id) {
-    alert("masuk fungsi accept. id: " + id);
+    $('#button_accept').attr("hidden", false);
+    $('#button_reject').attr("hidden", true);
+    $('.pesan-modal').html("Apakah anda yakin untuk membuka kunci import saltab ini?<br>");
+    $('.detail-modal').html('<input type="hidden" id="id_modal" name="id_modal" value="' + id + '">');
+    // $('.button-modal').html('<button type="button" name="button_accept" id="button_accept" class="btn btn-success"> Accept </button>');
+    $('#requestOpenModal').appendTo("body").modal('show');
+    // alert("masuk fungsi accept. id: " + id);
     // window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release/' + id, "_self");
   }
 
-  //-----edit addendum-----
+  //-----open modal untuk reject request-----
   function rejectRequest(id) {
-    alert("masuk fungsi reject. id: " + id);
+    $('#button_accept').attr("hidden", true);
+    $('#button_reject').attr("hidden", false);
+    $('.pesan-modal').html("Apakah anda yakin untuk membatalkan permintaan buka kunci import saltab ini?<br>");
+    $('.detail-modal').html('<input type="hidden" id="id_modal" name="id_modal" value="' + id + '">');
+    // $('.button-modal').html('<button type="button" name="button_reject" id="button_reject" class="btn btn-danger"> Reject </button>');
+    $('#requestOpenModal').appendTo("body").modal('show');
+    // alert("masuk fungsi reject. id: " + id);
     // window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabRelease/' + id, "_self");
   }
+</script>
+
+<!-- Tombol Accept Request -->
+<script type="text/javascript">
+  document.getElementById("button_accept").onclick = function(e) {
+    var id_modal = $("#id_modal").val();
+
+    var employee_id = '<?php echo $session['employee_id']; ?>';
+    var user_name = "<?php print($user_info['0']->first_name); ?>";
+
+    var hari_ini = new Date().toJSON().slice(0, 10);
+    var waktu_sekarang = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
+    var tgl_request = hari_ini + " " + waktu_sekarang;
+
+
+    $.ajax({
+      url: '<?= base_url() ?>admin/Importexcel/accept_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id: id_modal,
+        request_by: employee_id,
+        request_name: user_name,
+        request_on: tgl_request,
+      },
+      success: function(response) {
+        alert("Berhasil Accept Request");
+        saltab_table.ajax.reload(null, false);
+        $('#requestOpenModal').appendTo("body").modal('hide');
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert("Gagal Accept Request. Status : " + xhr.status);
+        alert("responseText :" + xhr.responseText);
+        $('#requestOpenModal').appendTo("body").modal('hide');
+      },
+    });
+
+    // alert("ACCEPT "+id_modal);
+
+  };
+</script>
+
+<!-- Tombol Reject Request -->
+<script type="text/javascript">
+  document.getElementById("button_reject").onclick = function(e) {
+    var id_modal = $("#id_modal").val();
+
+    var employee_id = '<?php echo $session['employee_id']; ?>';
+    var user_name = "<?php print($user_info['0']->first_name); ?>";
+
+    var hari_ini = new Date().toJSON().slice(0, 10);
+    var waktu_sekarang = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
+    var tgl_request = hari_ini + " " + waktu_sekarang;
+
+
+    $.ajax({
+      url: '<?= base_url() ?>admin/Importexcel/reject_request/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id: id_modal,
+        request_by: employee_id,
+        request_name: user_name,
+        request_on: tgl_request,
+      },
+      success: function(response) {
+        alert("Berhasil Reject Request");
+        saltab_table.ajax.reload(null, false);
+        $('#requestOpenModal').appendTo("body").modal('hide');
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert("Gagal Reject Request. Status : " + xhr.status);
+        alert("responseText :" + xhr.responseText);
+        $('#requestOpenModal').appendTo("body").modal('hide');
+      },
+    });
+
+    // alert("ACCEPT "+id_modal);
+
+  };
 </script>
 
 <!-- Tombol Search Batch Saltab -->

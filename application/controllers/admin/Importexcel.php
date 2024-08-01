@@ -539,6 +539,32 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//accept request open lock saltab
+	public function accept_request()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->accept_request($postData);
+
+		echo json_encode($data);
+	}
+
+	//reject request open lock saltab
+	public function reject_request()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->reject_request($postData);
+
+		echo json_encode($data);
+	}
+
 	//release batch saltab
 	public function release_batch_saltab()
 	{

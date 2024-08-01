@@ -863,6 +863,34 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
 	}
 
+	function accept_request($postData = null)
+	{
+		$this->db->set('status', "0");
+		$this->db->set('accept_by_id', $postData['id']);
+		$this->db->set('accept_by_name', $postData['request_name']);
+		$this->db->set('accept_on', $postData['request_on']);
+		$this->db->where('id', $postData['id']);
+		$this->db->update('log_request_open_saltab');
+
+		// $this->db->delete('xin_saltab_bulk_release', array('id' => $id));
+		// $this->db->delete('xin_saltab', array('uploadid' => $id));
+		// $this->db->replace("xin_employees_saltab_bulk", $data);
+	}
+
+	function reject_request($postData = null)
+	{
+		$this->db->set('status', "2");
+		$this->db->set('accept_by_id', $postData['id']);
+		$this->db->set('accept_by_name', $postData['request_name']);
+		$this->db->set('accept_on', $postData['request_on']);
+		$this->db->where('id', $postData['id']);
+		$this->db->update('log_request_open_saltab');
+
+		// $this->db->delete('xin_saltab_bulk_release', array('id' => $id));
+		// $this->db->delete('xin_saltab', array('uploadid' => $id));
+		// $this->db->replace("xin_employees_saltab_bulk", $data);
+	}
+
 	function release_batch_saltab($id = null)
 	{
 		$session = $this->session->userdata('username');
