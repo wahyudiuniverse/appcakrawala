@@ -1432,7 +1432,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 
-		
+
 
 		$data = array();
 
@@ -1910,5 +1910,222 @@ GROUP BY uploadid, periode, project, project_sub;';
 		} else {
 			return null;
 		}
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list request open import saltab
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_request_open_import_saltab($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$status = $postData['status'];
+		$search_periode_from = $postData['search_periode_from'];
+		$search_periode_to = $postData['search_periode_to'];
+		//$emp_id = $postData['emp_id'];
+		//$contract_id = $postData['contract_id'];
+		$session_id = $postData['session_id'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (project_name like '%" . $searchValue .  "%' or sub_project_name like '%" . $searchValue . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterRangeFrom = "";
+		if (($search_periode_from != null) && ($search_periode_from != "") && ($search_periode_from != '0')) {
+			$filterRangeFrom = "(
+				tanggal_gajian >= '" . $search_periode_from . "'
+			)";
+		} else {
+			$filterRangeFrom = "";
+		}
+
+		$filterRangeTo = "";
+		if (($search_periode_to != null) && ($search_periode_to != "") && ($search_periode_to != '0')) {
+			$filterRangeTo = "(
+				tanggal_gajian <= '" . $search_periode_to . "'
+			)";
+		} else {
+			$filterRangeTo = "";
+		}
+
+		## Kondisi Default AND status = "
+		$kondisi_status = "";
+		if ($status == "0") {
+			$kondisi_status = "";
+		} else if ($status == "1") {
+			$kondisi_status = "and status = 1";
+		} else if ($status == "2") {
+			$kondisi_status = "and (status = 0 or status = 3)";
+		} else if ($status == "3") {
+			$kondisi_status = "and status = 2";
+		}
+
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ") " . $kondisi_status;
+		// $kondisiDefaultQuery = "(
+		// 	karyawan_id = " . $emp_id . "
+		// AND	pkwt_id = " . $contract_id . "
+		// )";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterRangeFrom != '') {
+			$this->db->where($filterRangeFrom);
+		}
+		if ($filterRangeTo != '') {
+			$this->db->where($filterRangeTo);
+		}
+		$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('log_request_open_saltab')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterRangeFrom != '') {
+			$this->db->where($filterRangeFrom);
+		}
+		if ($filterRangeTo != '') {
+			$this->db->where($filterRangeTo);
+		}
+		$records = $this->db->get('log_request_open_saltab')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterRangeFrom != '') {
+			$this->db->where($filterRangeFrom);
+		}
+		if ($filterRangeTo != '') {
+			$this->db->where($filterRangeTo);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('log_request_open_saltab')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$periode_salary = "";
+			if (empty($record->tanggal_gajian) || ($record->tanggal_gajian == "")) {
+				$periode_salary = "--";
+			} else {
+				$periode_salary = $this->Xin_model->tgl_indo($record->tanggal_gajian);
+			}
+
+			$text_periode_from = "";
+			$text_periode_to = "";
+			$text_periode = "";
+			if (empty($record->periode_saltab_from) || ($record->periode_saltab_from == "")) {
+				$text_periode_from = "";
+			} else {
+				$text_periode_from = $this->Xin_model->tgl_indo($record->periode_saltab_from);
+			}
+			if (empty($record->periode_saltab_to) || ($record->periode_saltab_to == "")) {
+				$text_periode_to = "";
+			} else {
+				$text_periode_to = $this->Xin_model->tgl_indo($record->periode_saltab_to);
+			}
+			if (($text_periode_from == "") && ($text_periode_to == "")) {
+				$text_periode = "";
+			} else {
+				$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+			}
+
+			$text_status = "";
+			$accept_button = "";
+			$reject_button = "";
+			if ($record->status == "1") {
+				$text_status = "<font color='#0000FF'>REQUESTED</font>";
+				$accept_button = '<button id="tesbutton" type="button" onclick="acceptRequest(' . $record->id . ')" class="btn btn-xs btn-outline-success" >ACCEPT</button>';
+				// $editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+				$reject_button = '<br><button type="button" onclick="rejectRequest(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >REJECT</button>';
+			} else if ($record->status == "2") {
+				$text_status = "<font color='#FF0000'>REJECTED</font>";
+			} else if ($record->status == "3") {
+				$text_status = "<font color='#006600'>ACCEPTED and UPLOADED</font>";
+			} else if ($record->status == "0") {
+				$text_status = "<font color='#006600'>ACCEPTED and NOT UPLOADED</font>";
+			} else {
+				$text_status = "-";
+			}
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $accept_button . " " . $reject_button,
+				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
+				"tanggal_gajian" => $periode_salary,
+				"periode" => $text_periode,
+				"project_name" => $record->project_name,
+				"sub_project_name" => $record->sub_project_name,
+				"note" => $record->note,
+				"request_by_name" => $record->request_by_name,
+				"request_on" => $record->request_on,
+				"status" => $text_status,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
 	}
 }

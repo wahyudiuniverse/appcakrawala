@@ -7,9 +7,41 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php
-if (in_array('513', $role_resources_ids)) {
+if (in_array('512', $role_resources_ids)) {
 ?>
+  <!-- <div style="position:relative;padding-bottom:56.25%;">
+    <iframe style="width:100%;height:100%;position:absolute;left:0px;top:0px;" width="100%" height="100%" src="https://www.youtube.com/embed/0Rwu6qPlAyc?si=jpXNTkGQw0qAY4Lh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div> -->
 
+  <!-- Modal -->
+  <div class="modal fade" id="requestOpenModal" tabindex="-1" role="dialog" aria-labelledby="requestOpenModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-danger">
+          <h5 class="modal-title" id="requestOpenModalLabel">
+            <div class="judul-modal">
+              <img src='<?php echo base_url('/assets/icon/warning.png'); ?>' width='30'>
+              <font color="#FFFFFF"> Import Periode Saltab Dikunci </font>
+              <!-- <img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'> -->
+            </div>
+          </h5>
+          <button type="button" name="button_close2" id="button_close2" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">
+              <font color="#FFFFFF"> x </font>
+            </span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="pesan-modal"></div>
+          <div class="pesan-request-modal"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" name="button_request" id="button_request" class="btn btn-primary"> Request Open </button>
+          <button type="button" name="button_close" id="button_close" class="btn btn-secondary" data-dismiss="modal"> Close </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="card border-blue">
     <div class="card-header with-elements">
@@ -34,7 +66,7 @@ if (in_array('513', $role_resources_ids)) {
       <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 
       <div class="form-row">
-        <div class="col-md-6">
+        <div class="col-md-3">
           <div class="form-group project-option">
             <label class="form-label">Project</label>
             <select class="form-control" data-live-search="true" name="project" id="project" data-plugin="xin_select" data-placeholder="Project" required>
@@ -42,6 +74,18 @@ if (in_array('513', $role_resources_ids)) {
               <?php foreach ($all_projects as $proj) { ?>
                 <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
               <?php } ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group status-option">
+            <label class="form-label">Status</label>
+            <select class="form-control" name="status" id="status" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status'); ?>">
+              <option value="1">REQUESTED</option>
+              <option value="2">ACCEPTED</option>
+              <option value="3">REJECTED</option>
+              <option value="0">--ALL--</option>
             </select>
           </div>
         </div>
@@ -81,39 +125,65 @@ if (in_array('513', $role_resources_ids)) {
   </div>
 
 
+  <!-- <div id="ms1" class="form-control"></div> -->
+  <!-- <div id="langOpt" class="form-control"></div> -->
+
+  <!-- <?php
+        // echo '<pre>';
+        // print_r($tabel_saltab);
+        // echo '</pre>';
+        ?> -->
+  <div class="card <?php echo $get_animate; ?>">
+    <div class="card-header with-elements">
+      <div class="col-md-6">
+        <span class="card-header-title mr-2"><strong>E-SALTAB | </strong>DATA LIST BATCH</span>
+      </div>
+      <div class="col-md-6">
+        <div class="pull-right">
+          <!-- <div class="card-header with-elements"> -->
+          <span class="card-header-title mr-2">
+            <!-- <input type="radio" class="btn-check" name="options-outlined" id="primary-outlined" autocomplete="off" value="1" checked>
+            <label class="btn btn-outline-primary" for="primary-outlined">REQUESTED</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" value="2">
+            <label class="btn btn-outline-success" for="success-outlined">ACCEPTED</label>
+
+            <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off" value="3">
+            <label class="btn btn-outline-danger" for="danger-outlined">REJECTED</label> -->
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="box-datatable table-responsive" id="btn-place">
+        <table class="display dataTable table table-striped table-bordered" id="saltab_table2" style="width:100%">
+          <thead>
+            <tr>
+              <th>Aksi</th>
+              <th>Tanggal Penggajian</th>
+              <th>Periode Cutoff</th>
+              <th>Project</th>
+              <th>Sub Project</th>
+              <th>Alasan Request</th>
+              <th>Request by</th>
+              <th>Request on</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<?php
+} else {
+?>
+  <h1>FORBIDDEN. Anda tidak berhak mengkases fungsi ini</h1>
+  <img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>'>
+
 <?php
 }
 ?>
-
-<!-- <div id="ms1" class="form-control"></div> -->
-<!-- <div id="langOpt" class="form-control"></div> -->
-
-<!-- <?php
-      // echo '<pre>';
-      // print_r($tabel_saltab);
-      // echo '</pre>';
-      ?> -->
-<div class="card <?php echo $get_animate; ?>">
-  <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>E-SALTAB | </strong>DATA LIST BATCH</div>
-  <div class="card-body">
-    <div class="box-datatable table-responsive" id="btn-place">
-      <table class="display dataTable table table-striped table-bordered" id="saltab_table2" style="width:100%">
-        <thead>
-          <tr>
-            <th>Aksi</th>
-            <th>Tanggal Penggajian</th>
-            <th>Periode Cutoff</th>
-            <th>Project</th>
-            <th>Sub Project</th>
-            <th>Total MPP</th>
-            <th>Finalize by</th>
-            <th>Finalize on</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-  </div>
-</div>
 
 
 <script>
@@ -122,7 +192,8 @@ if (in_array('513', $role_resources_ids)) {
   var langopt;
   var saltab_table;
   var session_id = '<?php echo $session['employee_id']; ?>';
-  // var kolom_saltab = JSON.parse('<?php //echo json_encode($tabel_saltab); ?>');
+  // var kolom_saltab = JSON.parse('<?php //echo json_encode($tabel_saltab); 
+                                    ?>');
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
@@ -135,6 +206,7 @@ if (in_array('513', $role_resources_ids)) {
     var baseURL = "<?php echo base_url(); ?>";
 
     var project = document.getElementById("project").value;
+    var status = document.getElementById("status").value;
     var search_periode_from = document.getElementById("search_periode_from").value;
     var search_periode_to = document.getElementById("search_periode_to").value;
 
@@ -161,11 +233,12 @@ if (in_array('513', $role_resources_ids)) {
         [7, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_open_import_batch_saltab',
         data: {
           [csrfName]: csrfHash,
           session_id: session_id,
           project: project,
+          status: status,
           search_periode_from: search_periode_from,
           search_periode_to: search_periode_to,
           //base_url_catat: base_url_catat
@@ -180,7 +253,7 @@ if (in_array('513', $role_resources_ids)) {
           "orderable": false
         },
         {
-          data: 'periode_salary',
+          data: 'tanggal_gajian',
           // "orderable": false,
           //searchable: true
         },
@@ -198,15 +271,19 @@ if (in_array('513', $role_resources_ids)) {
           //"orderable": false,
         },
         {
-          data: 'total_mpp',
+          data: 'note',
           "orderable": false,
         },
         {
-          data: 'upload_by',
+          data: 'request_by_name',
           //"orderable": false,
         },
         {
-          data: 'upload_on',
+          data: 'request_on',
+          //"orderable": false,
+        },
+        {
+          data: 'status',
           //"orderable": false,
         },
       ]
@@ -238,23 +315,16 @@ if (in_array('513', $role_resources_ids)) {
   }
 
   //-----lihat addendum-----
-  function lihatBatchSaltabRelease(id) {
-    //alert("masuk fungsi lihat. id: " + id);
-    window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release/' + id, "_self");
+  function acceptRequest(id) {
+    alert("masuk fungsi accept. id: " + id);
+    // window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release/' + id, "_self");
   }
 
   //-----edit addendum-----
-  function downloadBatchSaltabRelease(id) {
-    //alert("masuk fungsi download. id: " + id);downloadDetailSaltab
-    // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
-    window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabRelease/' + id, "_self");
+  function rejectRequest(id) {
+    alert("masuk fungsi reject. id: " + id);
+    // window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabRelease/' + id, "_self");
   }
-
-  // function cek_isi() {
-  //   var isi = langopt.getValue();
-  //   //alert("tes");
-  //   alert("Isi pilihan: " + isi);
-  // }
 </script>
 
 <!-- Tombol Search Batch Saltab -->
@@ -270,6 +340,7 @@ if (in_array('513', $role_resources_ids)) {
     // Ladda.stopAll();
 
     var project = document.getElementById("project").value;
+    var status = document.getElementById("status").value;
     var search_periode_from = document.getElementById("search_periode_from").value;
     var search_periode_to = document.getElementById("search_periode_to").value;
 
@@ -296,11 +367,12 @@ if (in_array('513', $role_resources_ids)) {
         [7, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_open_import_batch_saltab',
         data: {
           [csrfName]: csrfHash,
           session_id: session_id,
           project: project,
+          status: status,
           search_periode_from: search_periode_from,
           search_periode_to: search_periode_to,
           //base_url_catat: base_url_catat
@@ -315,8 +387,8 @@ if (in_array('513', $role_resources_ids)) {
           "orderable": false
         },
         {
-          data: 'periode_salary',
-          "orderable": false,
+          data: 'tanggal_gajian',
+          // "orderable": false,
           //searchable: true
         },
         {
@@ -333,15 +405,19 @@ if (in_array('513', $role_resources_ids)) {
           //"orderable": false,
         },
         {
-          data: 'total_mpp',
+          data: 'note',
           "orderable": false,
         },
         {
-          data: 'upload_by',
+          data: 'request_by_name',
           //"orderable": false,
         },
         {
-          data: 'upload_on',
+          data: 'request_on',
+          //"orderable": false,
+        },
+        {
+          data: 'status',
           //"orderable": false,
         },
       ]
@@ -361,8 +437,10 @@ if (in_array('513', $role_resources_ids)) {
     document.getElementById("search_periode_from").value = "";
     document.getElementById("search_periode_to").value = "";
     $("div.project-option select").val("0").change();
+    $("div.status-option select").val("1").change();
 
     var project = document.getElementById("project").value;
+    var status = document.getElementById("status").value;
     var search_periode_from = document.getElementById("search_periode_from").value;
     var search_periode_to = document.getElementById("search_periode_to").value;
 
@@ -389,11 +467,12 @@ if (in_array('513', $role_resources_ids)) {
         [7, 'desc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab_release',
+        'url': '<?= base_url() ?>admin/importexcel/list_open_import_batch_saltab',
         data: {
           [csrfName]: csrfHash,
           session_id: session_id,
           project: project,
+          status: status,
           search_periode_from: search_periode_from,
           search_periode_to: search_periode_to,
           //base_url_catat: base_url_catat
@@ -408,8 +487,8 @@ if (in_array('513', $role_resources_ids)) {
           "orderable": false
         },
         {
-          data: 'periode_salary',
-          "orderable": false,
+          data: 'tanggal_gajian',
+          // "orderable": false,
           //searchable: true
         },
         {
@@ -426,15 +505,19 @@ if (in_array('513', $role_resources_ids)) {
           //"orderable": false,
         },
         {
-          data: 'total_mpp',
+          data: 'note',
           "orderable": false,
         },
         {
-          data: 'upload_by',
+          data: 'request_by_name',
           //"orderable": false,
         },
         {
-          data: 'upload_on',
+          data: 'request_on',
+          //"orderable": false,
+        },
+        {
+          data: 'status',
           //"orderable": false,
         },
       ]

@@ -604,6 +604,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//load datatables list open import batch saltab
+	public function list_open_import_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_request_open_import_saltab($postData);
+
+		echo json_encode($data);
+	}
+
 	//load datatables list batch saltab release untuk download
 	public function list_batch_saltab_release_download()
 	{
@@ -2682,7 +2695,7 @@ class ImportExcel extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['title'] = 'Manage E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Manage E-SALTAB';
 		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
@@ -2705,7 +2718,7 @@ class ImportExcel extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['title'] = 'Konfigurasi Import E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Konfigurasi Import E-SALTAB';
 		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
@@ -2728,7 +2741,7 @@ class ImportExcel extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['title'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'Download E-SALTAB';
 		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
