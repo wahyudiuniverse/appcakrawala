@@ -311,7 +311,7 @@ class Employees_model extends CI_Model
 		} else if ($proj_id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('doc_id');
 			$this->db->from('xin_projects');
 			$this->db->where('project_id', $proj_id);
 
@@ -336,7 +336,8 @@ class Employees_model extends CI_Model
 		} else if ($proj_id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('priority');
+			$this->db->select('title');
 			$this->db->from('xin_projects');
 			$this->db->where('project_id', $proj_id);
 
@@ -359,7 +360,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('sub_project_name');
 			$this->db->from('xin_projects_sub');
 			$this->db->where('secid', $id);
 
@@ -382,7 +383,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('name');
 			$this->db->from('mt_employee_category');
 			$this->db->where('id', $id);
 
@@ -405,7 +406,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('name');
 			$this->db->from('xin_companies');
 			$this->db->where('company_id', $id);
 
@@ -428,7 +429,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('department_name');
 			$this->db->from('xin_departments');
 			$this->db->where('department_id', $id);
 
@@ -451,7 +452,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('type');
 			$this->db->from('xin_ethnicity_type');
 			$this->db->where('ethnicity_type_id', $id);
 
@@ -474,7 +475,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('designation_id');
 			$this->db->from('xin_employees');
 			$this->db->where('employee_id', $id);
 			// $this->db->order_by('createdon', 'desc');
@@ -499,7 +500,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('level');
 			$this->db->from('xin_designations');
 			$this->db->where('designation_id', $id);
 			// $this->db->order_by('createdon', 'desc');
@@ -576,7 +577,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('nama');
 			$this->db->from('xin_employee_emergency');
 			$this->db->where('employee_request_nik', $id);
 
@@ -599,7 +600,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('no_kontak');
 			$this->db->from('xin_employee_emergency');
 			$this->db->where('employee_request_nik', $id);
 
@@ -622,7 +623,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('hubungan');
 			$this->db->from('xin_employee_emergency');
 			$this->db->where('employee_request_nik', $id);
 
@@ -645,7 +646,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('name');
 			$this->db->from('mt_family_relation');
 			$this->db->where('secid', $id);
 
@@ -668,7 +669,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('name');
 			$this->db->from('xin_qualification_education_level');
 			$this->db->where('education_level_id', $id);
 
@@ -691,7 +692,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('kode');
 			$this->db->from('mt_marital');
 			$this->db->where('id_marital', $id);
 
@@ -720,7 +721,7 @@ class Employees_model extends CI_Model
 		} else if ($id == "") {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('bank_name');
 			$this->db->from('mt_bank');
 			$this->db->where('secid', $id);
 
@@ -745,7 +746,7 @@ class Employees_model extends CI_Model
 		} else if ($id == "") {
 			return "";
 		} else {
-			$this->db->select('*');
+			$this->db->select('bank_code');
 			$this->db->from('mt_bank');
 			$this->db->where('secid', $id);
 
@@ -2093,39 +2094,51 @@ class Employees_model extends CI_Model
 		$kondisiDefaultQuery = "(xin_employees.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
 
 		## Fetch records
-		$this->db->select('*');
-		// $this->db->select('xin_employees.user_id');
-		// $this->db->select('xin_employees.first_name');
-		// $this->db->select('xin_employees.employee_id');
-		// $this->db->select('xin_employees.company_id');
-		// $this->db->select('xin_companies.name as company_name');
-		// $this->db->select('xin_employees.department_id');
-		// $this->db->select('xin_departments.department_name');
-		// $this->db->select('xin_employees.status_resign');
-		// $this->db->select('xin_employees.contract_start');
-		// $this->db->select('xin_employees.contract_end');
-		// $this->db->select('xin_employees.penempatan');
-		// $this->db->select('xin_employees.project_id');
-		// $this->db->select('xin_employees.sub_project_id');
-		// $this->db->select('xin_employees.designation_id');
-		// $this->db->select('xin_employees.region');
-		// $this->db->select('xin_employees.tempat_lahir');
-		// $this->db->select('xin_employees.date_of_birth');
-		// $this->db->select('xin_employees.date_of_joining');
-		// $this->db->select('xin_employees.contract_start');
-		// $this->db->select('xin_employees.contract_end');
-		// $this->db->select('xin_employees.basic_salary');
-		// $this->db->select('xin_employees.date_of_leaving');
-		// $this->db->select('xin_employees.gender');
-		// $this->db->select('xin_employees.marital_status');
-		// $this->db->select('xin_employees.ethnicity_type');
-		// $this->db->select('xin_employees.email');
-		// $this->db->select('xin_employees.contact_no');
-		// $this->db->select('xin_employees.last_edu');
-		// $this->db->select('xin_projects.title');
-		// $this->db->select('xin_projects.priority');
-		// $this->db->select('xin_designations.designation_name');
-		// $this->db->select('xin_projects_sub.sub_project_name');
+		// $this->db->select('*');
+		$this->db->select('xin_employees.employee_id');
+		$this->db->select('xin_employees.status_resign');
+		$this->db->select('xin_employees.private_code');
+		$this->db->select('xin_employees.ktp_no');
+		$this->db->select('xin_employees.first_name');
+		$this->db->select('xin_employees.company_id');
+		$this->db->select('xin_employees.department_id');
+		$this->db->select('xin_employees.designation_id');
+		$this->db->select('xin_designations.designation_name');
+		$this->db->select('xin_employees.project_id');
+		$this->db->select('xin_employees.sub_project_id');
+		$this->db->select('xin_employees.penempatan');
+		$this->db->select('xin_employees.region');
+		$this->db->select('xin_employees.tempat_lahir');
+		$this->db->select('xin_employees.date_of_birth');
+		$this->db->select('xin_employees.date_of_joining');
+		$this->db->select('xin_employees.contract_start');
+		$this->db->select('xin_employees.contract_end');
+		$this->db->select('xin_employees.basic_salary');
+		$this->db->select('xin_employees.date_of_leaving');
+		$this->db->select('xin_employees.gender');
+		$this->db->select('xin_employees.marital_status');
+		$this->db->select('xin_employees.ethnicity_type');
+		$this->db->select('xin_employees.email');
+		$this->db->select('xin_employees.contact_no');
+		$this->db->select('xin_employees.last_edu');
+		$this->db->select('xin_employees.alamat_ktp');
+		$this->db->select('xin_employees.alamat_domisili');
+		$this->db->select('xin_employees.kk_no');
+		$this->db->select('xin_employees.npwp_no');
+		$this->db->select('xin_employees.bpjs_tk_no');
+		$this->db->select('xin_employees.bpjs_ks_no');
+		$this->db->select('xin_employees.ibu_kandung');
+		$this->db->select('xin_employees.bank_name');
+		$this->db->select('xin_employees.nomor_rek');
+		$this->db->select('xin_employees.pemilik_rek');
+		$this->db->select('xin_employees.filename_ktp');
+		$this->db->select('xin_employees.filename_kk');
+		$this->db->select('xin_employees.filename_npwp');
+		$this->db->select('xin_employees.filename_isd');
+		$this->db->select('xin_employees.filename_skck');
+		$this->db->select('xin_employees.filename_cv');
+		$this->db->select('xin_employees.filename_paklaring');
+		
 		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
@@ -2288,9 +2301,6 @@ class Employees_model extends CI_Model
 			}
 
 			$text_pin = "";
-			$id_jabatan_user = $this->get_id_jabatan($session_id);
-			$level_record = $this->get_level($record->designation_id);
-			$level_user = $this->get_level($id_jabatan_user);
 
 			if (empty($level_user) || $level_user == "") {
 				$level_user = "Z9";
