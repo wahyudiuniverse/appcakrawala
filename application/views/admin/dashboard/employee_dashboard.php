@@ -614,7 +614,7 @@ $new_date = date('d-M-Y', $strtotime);
           <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
             <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
-            <p style="font-size: 18px;"><?php echo $r->periode_cutoff_from;?></p>
+            <p style="font-size: 18px;"><?php echo $r->periode_cutoff_from.' - '.$r->periode_cutoff_to;?></p>
           </div>
         </div>
       </div>

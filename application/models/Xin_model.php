@@ -2304,7 +2304,7 @@ class Xin_model extends CI_Model
 	// get all employees status
 	public function all_employees_status()
 	{
-		$query = $this->db->query("SELECT * from xin_employees");
+		$query = $this->db->query("SELECT * from xin_employees LIMIT 2");
 		return $query;
 	}
 

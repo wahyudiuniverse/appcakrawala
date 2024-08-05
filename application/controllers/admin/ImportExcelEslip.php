@@ -2232,7 +2232,7 @@ class Importexceleslip extends MY_Controller
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_vitamin;
+				$allow_vitamin = $eslip[0]->allow_medicine;
 				$allow_grooming = $eslip[0]->allow_grooming;
 				$allow_others = $eslip[0]->allow_others;
 				$allow_operation = $eslip[0]->allow_operation;
@@ -3471,7 +3471,7 @@ class Importexceleslip extends MY_Controller
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_vitamin;
+				$allow_vitamin = $eslip[0]->allow_medicine;
 				$allow_grooming = $eslip[0]->allow_grooming;
 				$allow_others = $eslip[0]->allow_others;
 				$allow_operation = $eslip[0]->allow_operation;

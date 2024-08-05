@@ -104,12 +104,13 @@ class Subproject extends MY_Controller
     	$sid = $r->secid;
     	$subproject_name = $r->sub_project_name;
     	$project_name = $r->id_project;
+			$status_active = $r->sub_active;
 
 				$projects = $this->Project_model->read_single_project($r->id_project);
 				if(!is_null($projects)){
 					$nama_project = $projects[0]->title;
 				} else {
-					$nama_project = '--';	
+					$nama_project = '--';
 				}
 			
 			if(in_array('134',$role_resources_ids)) { //edit
@@ -130,6 +131,7 @@ class Subproject extends MY_Controller
 				$combhr,
 				$sid,
 				$subproject_name,
+				$status_active,
 				$nama_project,
 		   );
 

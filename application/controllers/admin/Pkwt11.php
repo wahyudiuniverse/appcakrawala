@@ -507,9 +507,29 @@ class Pkwt11 extends MY_Controller
 						<td>3.7</td>
 						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak).</td>
 					</tr>
+
+				<br>
+					<tr>
+						<td>3.8</td>
+						<td colspan="18">Pada masa kontrak awal selama 3 bulan, <b>PIHAK KEDUA</b> hanya akan menerima gaji tanpa insentif.</td>
+					</tr>
+
+
+				<br>
+					<tr>
+						<td>3.9</td>
+						<td colspan="18">Apabila setelah kontrak awal selama 3 bulan secara evaluasi kinerja <b>PIHAK KEDUA</b> tidak sesuai dengan KPI perusahaan, maka kontrak <b>PIHAK KEDUA</b> tidak akan diperpanjang.</td>
+					</tr>
+
+				<br>
+					<tr>
+						<td>3.10</td>
+						<td colspan="18">Apabila setelah kontrak awal selama 3 bulan <b>PIHAK KEDUA</b> memiliki kinerja yang sesuai dengan KPI perusahaan maka <b>PIHAK KEDUA</b> akan menerima insentif terhitung sejak kontrak di bulan ke 4.</td>
+					</tr>
+
 				</table>
-				<br>
-				<br>
+				<br><br><br>
+				<br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
@@ -634,7 +654,7 @@ class Pkwt11 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br>
+				<br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -795,11 +815,6 @@ class Pkwt11 extends MY_Controller
 
 				</table>
 
-<br>
-<br>
-<br>
-<br>
-<br>
 <br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -967,14 +982,6 @@ class Pkwt11 extends MY_Controller
 
 				<br>
 				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
 								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
@@ -1045,7 +1052,7 @@ class Pkwt11 extends MY_Controller
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
 							</tr>			
 				</table>
 
@@ -1084,7 +1091,7 @@ class Pkwt11 extends MY_Controller
 				</table>
 
 
-				<br>
+				<br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
@@ -1222,11 +1229,6 @@ class Pkwt11 extends MY_Controller
 				<br>
 				<br>
 				<br>		
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 				<br>
 				<br>
@@ -1598,7 +1600,7 @@ class Pkwt11 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1671,7 +1673,7 @@ class Pkwt11 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport-Rental</td>
-							<td colspan="3"> : '.$allowance_transrent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transrent.',- Per Hari</td>
 						</tr>';
 				}
 
