@@ -346,6 +346,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 				'allowance_kasir' => $result[0]->allowance_kasir,
 				'dm_allow_transmeal' => $result[0]->dm_allow_transmeal,
 				'allowance_transmeal' => $result[0]->allowance_transmeal,
+				'allowance_transrent' => $result[0]->allowance_transrent,
 				'dm_allow_medicine' => $result[0]->dm_allow_medicine,
 				'allowance_medicine' => $result[0]->allowance_medicine,
 				'dm_allow_akomodasi' => $result[0]->dm_allow_akomodasi,

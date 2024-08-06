@@ -306,26 +306,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 <?php } ?>
  
-<!-- TUNJANGAN TRANSPORT-MAKAN -->
-<?php if($allowance_transmeal!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Transport-Makan</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_transmeal). ' /'.$dm_allow_transmeal;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
+ <!-- TUNJANGAN MEAL -->
 <?php if($allowance_meal!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
@@ -345,6 +326,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 <?php } ?>
 
+<!-- TUNJANGAN TRANSPORT -->
 <?php if($allowance_transport!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
@@ -358,6 +340,26 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <div class="col-sm-4">
         <div>
           <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_transport). ' /'.$dm_allow_transport;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
+<!-- TUNJANGAN RENTAL -->
+<?php if($allowance_rent!="0") {?>
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Tunjangan Sewa</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_rent). ' /'.$dm_allow_rent;?></label>
         </div>
       </div>
     </div>
@@ -384,20 +386,20 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 <?php } ?>
 
-<!-- TUNJANGAN DEVICE/LAPTOP -->
-<?php if($allowance_laptop!="0") {?>
+<!-- TUNJANGAN PARKIR -->
+<?php if($allowance_park!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- APPROVED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">Tunjangan Laptop</label>
+          <label for="no_transaksi">Tunjangan Parkir</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_laptop). ' /'.$dm_allow_laptop;?></label>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_park). ' /'.$dm_allow_park;?></label>
         </div>
       </div>
     </div>
@@ -424,39 +426,80 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 <?php } ?>
 
-<?php if($allowance_rent!="0") {?>
+<!-- TUNJANGAN DEVICE/LAPTOP -->
+<?php if($allowance_laptop!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- APPROVED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">Tunjangan Sewa</label>
+          <label for="no_transaksi">Tunjangan Laptop</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_rent). ' /'.$dm_allow_rent;?></label>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_laptop). ' /'.$dm_allow_laptop;?></label>
         </div>
       </div>
     </div>
   </div>
 <?php } ?>
 
-<!-- TUNJANGAN PARKIR -->
-<?php if($allowance_park!="0") {?>
+<!-- TUNJANGAN KASIR -->
+<?php if($allowance_kasir!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- APPROVED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">Tunjangan Parkir</label>
+          <label for="no_transaksi">Tunjangan Kasir</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_park). ' /'.$dm_allow_park;?></label>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_kasir). ' /'.$dm_allow_kasir;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
+<!-- TUNJANGAN TRANSPORT-MAKAN -->
+<?php if($allowance_transmeal!="0") {?>
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Tunjangan Transport-Makan</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_transmeal). ' /'.$dm_allow_transmeal;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php } ?>
+
+<!-- TUNJANGAN TRANSPORT-RENTAL -->
+<?php if($allowance_transrent!="0") {?>
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- APPROVED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi">Tunjangan Transport-Rental</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_transrent). ' /'.$dm_allow_transrent;?></label>
         </div>
       </div>
     </div>
@@ -484,7 +527,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 <?php } ?>
 
 <!-- TUNJANGAN AKOMODASI -->
-<?php if($allowance_medicine!="0") {?>
+<?php if($allowance_akomodasi!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -503,28 +546,8 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 <?php } ?>
 
-<!-- TUNJANGAN KASIR -->
-<?php if($allowance_kasir!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Kasir</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_kasir). ' /'.$dm_allow_kasir;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
 <!-- TUNJANGAN OPERATIONAL -->
-<?php if($allowance_kasir!="0") {?>
+<?php if($allowance_operation!="0") {?>
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
@@ -536,12 +559,21 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_operation). ' /'.$dm_allow_kasir;?></label>
+          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_operation). ' /'.$dm_allow_operation;?></label>
         </div>
       </div>
     </div>
   </div>
 <?php } ?>
+
+
+
+
+
+
+
+
+
 
 <!-- FOTO KTP -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">

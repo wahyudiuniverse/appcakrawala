@@ -389,9 +389,36 @@
             });
         });
 
-        // Project Change - Jabatan
-        $('#project').change(function() {
-            var project = $(this).val();
+        // // Project Change - Jabatan
+        // $('#project').change(function() {
+        //     var project = $(this).val();
+
+        //     // AJAX request
+        //     $.ajax({
+        //         url: '<?= base_url() ?>registrasi/getJabatanByProject/',
+        //         method: 'post',
+        //         data: {
+        //             [csrfName]: csrfHash,
+        //             project: project
+        //         },
+        //         dataType: 'json',
+        //         success: function(response) {
+
+        //             // Remove options
+        //             $('#jabatan').find('option').not(':first').remove();
+
+        //             // Add options
+        //             $.each(response, function(index, data) {
+        //                 $('#jabatan').append('<option value="' + data['designation_id'] + '">' + data['designation_name'] + '</option>');
+        //             });
+        //         }
+        //     });
+        // });
+
+
+        // Sub Change - Jabatan
+        $('#sub_project').change(function() {
+            var sproject = $(this).val();
 
             // AJAX request
             $.ajax({
@@ -399,7 +426,7 @@
                 method: 'post',
                 data: {
                     [csrfName]: csrfHash,
-                    project: project
+                    sproject: sproject
                 },
                 dataType: 'json',
                 success: function(response) {

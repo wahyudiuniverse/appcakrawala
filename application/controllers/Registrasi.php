@@ -155,13 +155,14 @@ class Registrasi extends CI_Controller
         //untuk testing
         $data_company = $data['cek_company'];
         $data_project = is_null($data_diri) ? "" : $data_diri['project'];
+        $data_subproject = is_null($data_diri) ? "" : $data_diri['sub_project'];
         //data project
         $temp_project = $this->input->post('project');
         $data['projects'] = $this->register->getProjectByCompany($data_company);
         //data sub project
         $data['sub_projects'] = $this->register->getSubByProject($data_project);
         //data jabatan
-        $data['jabatan'] = $this->register->getJabatanByProject($data_project);
+        $data['jabatan'] = $this->register->getJabatanByProject($data_subproject);
         //data agama
         $data['agama'] = $this->register->getAllAgama();
         //data marital
@@ -473,17 +474,19 @@ class Registrasi extends CI_Controller
         $data_diri = $data['register'];
         $data_company = is_null($data_diri) ? "" : $data_diri['company_id'];
         $data_project = is_null($data_diri) ? "" : $data_diri['project'];
+        $data_subproject = is_null($data_diri) ? "" : $data_diri['sub_project'];
 
         $companies_temp = $this->register->getAllCompany();
         $data['companies'] = is_null($companies_temp) ? "" : $companies_temp;
         //$data['projects'] = $this->register->getProjectByCompany($data_company);
         $temp_project = $this->input->post('project');
+        // $temp_subproject = $this->input->post('sub_project');
 
         $data['projects'] = $this->register->getProjectByCompany($data_company);
         //data sub project
         $data['sub_projects'] = $this->register->getSubByProject($data_project);
         //data jabatan
-        $data['jabatan'] = $this->register->getJabatanByProject($data_project);
+        $data['jabatan'] = $this->register->getJabatanByProject($data_subproject);
         //data agama
         $data['agama'] = $this->register->getAllAgama();
         //data marital

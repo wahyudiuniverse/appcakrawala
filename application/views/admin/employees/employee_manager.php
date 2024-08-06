@@ -384,7 +384,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                               <label for="projects"><?php echo $this->lang->line('xin_projects');?><i class="hrpremium-asterisk"></i></label>
-                              <select class="form-control" id="aj_project" name="project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                              <select class="form-control" id="aj_project" name="project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>" disabled>
                                 <option value=""></option>
                                 <?php foreach($all_projects as $projects) {?>
                                 <option value="<?php echo $projects->project_id?>" <?php if($project_id==$projects->project_id):?> selected <?php endif;?>><?php echo $projects->title?></option>
@@ -393,7 +393,6 @@
                                 </div>
                               </div>
                             </div>
-
 
                             <div class="row">
                               <div class="col-md-6">

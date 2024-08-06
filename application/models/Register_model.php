@@ -174,7 +174,7 @@ class Register_model extends CI_model
         $this->db->select('*');
         $this->db->from('xin_projects_posisi');
         $this->db->join('xin_designations', 'xin_designations.designation_id=xin_projects_posisi.posisi');
-        $this->db->where('project_id', $id);
+        $this->db->where('sub_project', $id);
 
         $query = $this->db->get()->result_array();
 
@@ -189,7 +189,7 @@ class Register_model extends CI_model
         $this->db->select('*');
         $this->db->from('xin_projects_posisi');
         $this->db->join('xin_designations', 'xin_designations.designation_id=xin_projects_posisi.posisi');
-        $this->db->where('project_id', $postData['project']);
+        $this->db->where('sub_project', $postData['sproject']);
 
         $query = $this->db->get()->result_array();
 
