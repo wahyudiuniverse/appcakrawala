@@ -866,7 +866,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	function accept_request($postData = null)
 	{
 		$this->db->set('status', "0");
-		$this->db->set('accept_by_id', $postData['id']);
+		$this->db->set('accept_by_id', $postData['request_by']);
 		$this->db->set('accept_by_name', $postData['request_name']);
 		$this->db->set('accept_on', $postData['request_on']);
 		$this->db->where('id', $postData['id']);

@@ -312,9 +312,9 @@
         //  targets: 11,
         //  type: 'date-eu'
         //}],
-        'order': [
-          [4, 'asc']
-        ],
+        // 'order': [
+        //   [4, 'asc']
+        // ],
         'ajax': {
           'url': '<?= base_url() ?>admin/reports/list_employees',
           data: {
@@ -336,7 +336,7 @@
           },
           {
             data: 'employee_id',
-            // "orderable": false,
+            "orderable": false,
             //searchable: true
           },
           {
@@ -345,12 +345,12 @@
           },
           {
             data: 'ktp_no',
-            // "orderable": false,
+            "orderable": false,
             //searchable: true
           },
           {
             data: 'first_name',
-            // "orderable": false,
+            "orderable": false,
             //searchable: true
           },
           {
@@ -363,11 +363,11 @@
           },
           {
             data: 'designation_name',
-            // "orderable": false,
+            "orderable": false,
           },
           {
             data: 'penempatan',
-            //"orderable": false,
+            "orderable": false,
           },
           {
             data: 'periode',

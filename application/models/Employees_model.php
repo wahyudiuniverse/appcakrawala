@@ -1801,223 +1801,231 @@ class Employees_model extends CI_Model
 		$status = $postData['status'];
 		$session_id = $postData['session_id'];
 
-		## Search 
-		$searchQuery = "";
-		if ($searchValue != '') {
-			if (strlen($searchValue) >= 3) {
-				$searchQuery = " (employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue . "%' or designation_name like '%" . $searchValue . "%' or ktp_no like '%" . $searchValue . "%') ";
+		if ($project != "0") {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' or xin_employees.first_name like '%" . $searchValue . "%' or xin_designations.designation_name like '%" . $searchValue . "%' or xin_employees.ktp_no like '%" . $searchValue . "%') ";
+				}
 			}
-		}
 
-		## Filter
-		$filterProject = "";
-		if (($project != null) && ($project != "") && ($project != '0')) {
-			$filterProject = "(
-				project_id = " . $project . "
-			)";
-		} else {
+			## Filter
 			$filterProject = "";
-		}
+			if (($project != null) && ($project != "") && ($project != '0')) {
+				$filterProject = "xin_employees.project_id = '" . $project . "'";
+			} else {
+				$filterProject = "";
+			}
 
-		$filterSubProject = "";
-		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
-			$filterSubProject = "(
-				sub_project_id = '" . $sub_project . "'
-			)";
-		} else {
 			$filterSubProject = "";
-		}
+			if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+				$filterSubProject = "xin_employees.sub_project_id = '" . $sub_project . "'";
+			} else {
+				$filterSubProject = "";
+			}
 
-		$filterStatus = "";
-		if (($status != null) && ($status != "") && ($status != '0')) {
-			$filterStatus = "(
-				status_resign = '" . $status . "'
-			)";
-		} else {
 			$filterStatus = "";
-		}
+			if (($status != null) && ($status != "") && ($status != '0')) {
+				$filterStatus = "xin_employees.status_resign = '" . $status . "'";
+			} else {
+				$filterStatus = "";
+			}
 
-		## Kondisi Default 
-		$kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
-		// $kondisiDefaultQuery = "(
-		// 	karyawan_id = " . $emp_id . "
-		// AND	pkwt_id = " . $contract_id . "
-		// )";
-		//$kondisiDefaultQuery = "";
+			## Kondisi Default 
+			// $kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+			// $kondisiDefaultQuery = "(
+			// 	karyawan_id = " . $emp_id . "
+			// AND	pkwt_id = " . $contract_id . "
+			// )";
+			$kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
 
-		## Total number of records without filtering
-		$this->db->select('count(*) as allcount');
-		if ($filterProject != '') {
-			$this->db->where($filterProject);
-		}
-		if ($filterSubProject != '') {
-			$this->db->where($filterSubProject);
-		}
-		if ($filterStatus != '') {
-			$this->db->where($filterStatus);
-		}
-		$this->db->where($kondisiDefaultQuery);
-		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-		$records = $this->db->get('xin_employees')->result();
-		$totalRecords = $records[0]->allcount;
+			## Total number of records without filtering
+			$this->db->select('count(*) as allcount');
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$this->db->where($filterSubProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			$this->db->where($kondisiDefaultQuery);
+			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_employees')->result();
+			$totalRecords = $records[0]->allcount;
 
-		## Total number of record with filtering
-		$this->db->select('count(*) as allcount');
-		$this->db->where($kondisiDefaultQuery);
-		if ($searchQuery != '') {
-			$this->db->where($searchQuery);
-		}
-		if ($filterProject != '') {
-			$this->db->where($filterProject);
-		}
-		if ($filterSubProject != '') {
-			$this->db->where($filterSubProject);
-		}
-		if ($filterStatus != '') {
-			$this->db->where($filterStatus);
-		}
-		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-		$records = $this->db->get('xin_employees')->result();
-		$totalRecordwithFilter = $records[0]->allcount;
+			## Total number of record with filtering
+			$this->db->select('count(*) as allcount');
+			$this->db->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$this->db->where($filterSubProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_employees')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
 
-		## Fetch records
-		$this->db->select('*');
-		// $this->db->select('xin_employees.user_id');
-		// $this->db->select('xin_employees.first_name');
-		// $this->db->select('xin_employees.employee_id');
-		// $this->db->select('xin_employees.status_resign');
-		// $this->db->select('xin_employees.contract_start');
-		// $this->db->select('xin_employees.contract_end');
-		// $this->db->select('xin_employees.penempatan');
-		// $this->db->select('xin_employees.project_id');
-		// $this->db->select('xin_employees.sub_project_id');
-		// $this->db->select('xin_employees.designation_id');
-		// $this->db->select('xin_projects.title');
-		// $this->db->select('xin_projects.priority');
-		// $this->db->select('xin_designations.designation_name');
-		// $this->db->select('xin_projects_sub.sub_project_name');
-		$this->db->where($kondisiDefaultQuery);
-		if ($searchQuery != '') {
-			$this->db->where($searchQuery);
-		}
-		if ($filterProject != '') {
-			$this->db->where($filterProject);
-		}
-		if ($filterSubProject != '') {
-			$this->db->where($filterSubProject);
-		}
-		if ($filterStatus != '') {
-			$this->db->where($filterStatus);
-		}
-		$this->db->order_by($columnName, $columnSortOrder);
-		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-		$this->db->limit($rowperpage, $start);
-		$records = $this->db->get('xin_employees')->result();
+			## Fetch records
+			// $this->db->select('*');
+			$this->db->select('xin_employees.user_id');
+			$this->db->select('xin_employees.employee_id');
+			$this->db->select('xin_employees.status_resign');
+			$this->db->select('xin_employees.ktp_no');
+			$this->db->select('xin_employees.first_name');
+			$this->db->select('xin_employees.project_id');
+			$this->db->select('xin_employees.sub_project_id');
+			$this->db->select('xin_employees.designation_id');
+			// $this->db->select('xin_designations.designation_id');
+			$this->db->select('xin_designations.designation_name');
+			$this->db->select('xin_employees.penempatan');
+			$this->db->select('b.from_date');
+			$this->db->select('b.to_date');
+			$this->db->select('xin_employees.contract_start');
+			$this->db->select('xin_employees.contract_end');
+			$this->db->select('xin_employees.private_code');
+			// $this->db->select('xin_projects.priority');
+			// $this->db->select('xin_designations.designation_name');
+			$this->db->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$this->db->where($filterSubProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			// $this->db->order_by($columnName, $columnSortOrder);
+			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+			// $this->db->join('(select max(contract_id), employee_id from xin_employee_contract group by employee_id) b', 'b.employee_id = xin_employees.employee_id', 'inner');
+			$this->db->limit($rowperpage, $start);
+			$records = $this->db->get('xin_employees')->result();
 
-		#Debugging variable
-		// $tes_query = $this->db->last_query();
-		//print_r($tes_query);
+			#Debugging variable
+			$tes_query = $this->db->last_query();
+			//print_r($tes_query);
 
-		$data = array();
+			$data = array();
 
-		foreach ($records as $record) {
-			$text_periode_from = "";
-			$text_periode_to = "";
-			$text_periode = "";
-			if (empty($record->contract_start) || ($record->contract_start == "")) {
+			foreach ($records as $record) {
 				$text_periode_from = "";
-			} else {
-				$text_periode_from = $this->Xin_model->tgl_indo($record->contract_start);
-			}
-			if (empty($record->contract_end) || ($record->contract_end == "")) {
 				$text_periode_to = "";
-			} else {
-				$text_periode_to = $this->Xin_model->tgl_indo($record->contract_end);
-			}
-			if (($text_periode_from == "") && ($text_periode_to == "")) {
 				$text_periode = "";
-			} else {
-				$text_periode = $text_periode_from . " s/d " . $text_periode_to;
-			}
-
-			$text_resign = "";
-			if (empty($record->status_resign) || ($record->status_resign == "")) {
-				$text_resign = "";
-			} else if ($record->status_resign == "1") {
-				$text_resign = " - [AKTIF]";
-			} else if ($record->status_resign == "2") {
-				$text_resign = " - [RESIGN]";
-			} else if ($record->status_resign == "3") {
-				$text_resign = " - [BLACKLIST]";
-			} else if ($record->status_resign == "4") {
-				$text_resign = " - [END CONTRACT]";
-			} else if ($record->status_resign == "5") {
-				$text_resign = " - [DEACTIVE]";
-			} else {
-				$text_resign = "";
-			}
-
-			//cek komparasi string
-			// $teskomparasi_1 = "A";
-			// $teskomparasi_2 = "C2";
-			// $hasilkomparasi = "";
-
-			// if ($teskomparasi_2 < $teskomparasi_1) {
-			// 	$hasilkomparasi = "2 lebih kecil";
-			// } else {
-			// 	$hasilkomparasi = "2 lebih besar";
-			// }
-
-			$text_pin = "";
-			$id_jabatan_user = $this->get_id_jabatan($session_id);
-			$level_record = $this->get_level($record->designation_id);
-			$level_user = $this->get_level($id_jabatan_user);
-
-			if (empty($level_user) || $level_user == "") {
-				$level_user = "Z9";
-			} else {
-				if (strlen($level_user) == 1) {
-					$level_user = $level_user . "0";
+				if (empty($record->from_date) || ($record->from_date == "")) {
+					$text_periode_from = "";
+				} else {
+					$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
 				}
-			}
-
-			if (empty($level_record) || $level_record == "") {
-				$level_record = "Z9";
-			} else {
-				if (strlen($level_record) == 1) {
-					$level_record = $level_record . "0";
+				if (empty($record->to_date) || ($record->to_date == "")) {
+					$text_periode_to = "";
+				} else {
+					$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
 				}
+				if (($text_periode_from == "") && ($text_periode_to == "")) {
+					$text_periode = "";
+				} else {
+					$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+				}
+
+				$text_resign = "";
+				if (empty($record->status_resign) || ($record->status_resign == "")) {
+					$text_resign = "";
+				} else if ($record->status_resign == "1") {
+					$text_resign = " - [AKTIF]";
+				} else if ($record->status_resign == "2") {
+					$text_resign = " - [RESIGN]";
+				} else if ($record->status_resign == "3") {
+					$text_resign = " - [BLACKLIST]";
+				} else if ($record->status_resign == "4") {
+					$text_resign = " - [END CONTRACT]";
+				} else if ($record->status_resign == "5") {
+					$text_resign = " - [DEACTIVE]";
+				} else {
+					$text_resign = "";
+				}
+
+				//cek komparasi string
+				// $teskomparasi_1 = "A";
+				// $teskomparasi_2 = "C2";
+				// $hasilkomparasi = "";
+
+				// if ($teskomparasi_2 < $teskomparasi_1) {
+				// 	$hasilkomparasi = "2 lebih kecil";
+				// } else {
+				// 	$hasilkomparasi = "2 lebih besar";
+				// }
+
+				$text_pin = "";
+				$id_jabatan_user = $this->get_id_jabatan($session_id);
+				$level_record = $this->get_level($record->designation_id);
+				$level_user = $this->get_level($id_jabatan_user);
+
+				if (empty($level_user) || $level_user == "") {
+					$level_user = "Z9";
+				} else {
+					if (strlen($level_user) == 1) {
+						$level_user = $level_user . "0";
+					}
+				}
+
+				if (empty($level_record) || $level_record == "") {
+					$level_record = "Z9";
+				} else {
+					if (strlen($level_record) == 1) {
+						$level_record = $level_record . "0";
+					}
+				}
+				if ($level_record <= $level_user) {
+					$text_pin = "**********";
+				} else {
+					$text_pin = $record->private_code;
+				}
+
+				// $addendum_id = $this->secure->encrypt_url($record->id);
+				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+				$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+				$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
+				$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+				$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+				$data[] = array(
+					"aksi" => $view,
+					"employee_id" => $record->employee_id . $text_resign,
+					"ktp_no" => $record->ktp_no,
+					"first_name" => strtoupper($record->first_name),
+					"project" => strtoupper($this->get_nama_project($record->project_id)),
+					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
+					"designation_name" => strtoupper($record->designation_name),
+					"penempatan" => strtoupper($record->penempatan),
+					"periode" => $text_periode,
+					"pincode" => $text_pin,
+					// $this->get_nama_karyawan($record->upload_by)
+				);
 			}
-			if ($level_record <= $level_user) {
-				$text_pin = "**********";
-			} else {
-				$text_pin = $record->private_code . " ";
-			}
-
-			// $addendum_id = $this->secure->encrypt_url($record->id);
-			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
-
-			$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-			$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
-			$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
-			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
-
-			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-
-			$data[] = array(
-				"aksi" => $view,
-				"employee_id" => $record->employee_id . $text_resign,
-				"ktp_no" => $record->ktp_no,
-				"first_name" => strtoupper($record->first_name),
-				"project" => strtoupper($this->get_nama_project($record->project_id)),
-				"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
-				"designation_name" => strtoupper($record->designation_name),
-				"penempatan" => strtoupper($record->penempatan),
-				"periode" => $text_periode,
-				"pincode" => $text_pin,
-				// $this->get_nama_karyawan($record->upload_by)
-			);
+		} else{
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
 		}
+
+
 
 		## Response
 		$response = array(
@@ -2138,7 +2146,11 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.filename_skck');
 		$this->db->select('xin_employees.filename_cv');
 		$this->db->select('xin_employees.filename_paklaring');
-		
+		$this->db->select('b.from_date');
+		$this->db->select('b.to_date');
+		$this->db->select('b.file_name');
+		$this->db->select('b.upload_pkwt');
+
 		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
@@ -2158,6 +2170,7 @@ class Employees_model extends CI_Model
 		// $this->db->join('xin_projects_sub', 'xin_projects_sub.secid = xin_employees.sub_project_id');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		$this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$tes_query = $this->db->last_query();
 
@@ -2167,15 +2180,15 @@ class Employees_model extends CI_Model
 			$text_periode_from = "";
 			$text_periode_to = "";
 			$text_periode = "";
-			if (empty($record->contract_start) || ($record->contract_start == "")) {
+			if (empty($record->from_date) || ($record->from_date == "")) {
 				$text_periode_from = "";
 			} else {
-				$text_periode_from = $this->Xin_model->tgl_indo($record->contract_start);
+				$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
 			}
-			if (empty($record->contract_end) || ($record->contract_end == "")) {
+			if (empty($record->to_date) || ($record->to_date == "")) {
 				$text_periode_to = "";
 			} else {
-				$text_periode_to = $this->Xin_model->tgl_indo($record->contract_end);
+				$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
 			}
 			if (($text_periode_from == "") && ($text_periode_to == "")) {
 				$text_periode = "";
@@ -2275,6 +2288,7 @@ class Employees_model extends CI_Model
 			}
 
 			$text_gaji = "";
+			$text_pin = "";
 			$id_jabatan_user = $this->get_id_jabatan($session_id);
 			$level_record = $this->get_level($record->designation_id);
 			$level_user = $this->get_level($id_jabatan_user);
@@ -2296,30 +2310,9 @@ class Employees_model extends CI_Model
 			}
 			if ($level_record <= $level_user) {
 				$text_gaji = "**********";
-			} else {
-				$text_gaji = $record->basic_salary;
-			}
-
-			$text_pin = "";
-
-			if (empty($level_user) || $level_user == "") {
-				$level_user = "Z9";
-			} else {
-				if (strlen($level_user) == 1) {
-					$level_user = $level_user . "0";
-				}
-			}
-
-			if (empty($level_record) || $level_record == "") {
-				$level_record = "Z9";
-			} else {
-				if (strlen($level_record) == 1) {
-					$level_record = $level_record . "0";
-				}
-			}
-			if ($level_record <= $level_user) {
 				$text_pin = "**********";
 			} else {
+				$text_gaji = $record->basic_salary;
 				$text_pin = $record->private_code;
 			}
 
@@ -2396,8 +2389,8 @@ class Employees_model extends CI_Model
 				strtoupper($record->tempat_lahir),
 				$this->Xin_model->tgl_indo($record->date_of_birth),
 				$this->Xin_model->tgl_indo($record->date_of_joining),
-				$this->Xin_model->tgl_indo($record->contract_start),
-				$this->Xin_model->tgl_indo($record->contract_end),
+				$this->Xin_model->tgl_indo($record->from_date),
+				$this->Xin_model->tgl_indo($record->to_date),
 				$text_gaji,
 				$this->Xin_model->tgl_indo($record->date_of_leaving),
 				$record->gender,
@@ -2427,8 +2420,9 @@ class Employees_model extends CI_Model
 				$text_skck,
 				$text_cv,
 				$text_paklaring,
-				$this->get_link_pkwt($record->employee_id),
-				$this->get_tanggal_pkwt($record->employee_id),
+				$record->file_name,
+				$record->upload_pkwt,
+				// $this->get_tanggal_pkwt($record->upload_pkwt),
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
@@ -3044,7 +3038,7 @@ ORDER BY jab.designation_id ASC";
 			return null;
 		}
 	}
-	
+
 	// get single employee by NIP
 	public function read_saltab_temp_by_id($id)
 	{
