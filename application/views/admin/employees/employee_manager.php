@@ -359,7 +359,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                                   <label for="pt">Perusahaan / PT</label>
-                              <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_companies');?>">
+                              <select class="form-control" name="company_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_companies');?>" disabled>
                                 <option value=""></option>
                                 <?php foreach($all_companies as $company) {?>
                                 <option value="<?php echo $company->company_id?>" <?php if($company_id==$company->company_id):?> selected <?php endif;?>><?php echo $company->name?></option>
@@ -370,15 +370,6 @@
                             </div>
 
                                   <input class="form-control" placeholder="" name="user_id" type="text" value="<?php echo $user_id;?>" hidden>
-
-                            <div class="row">
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                  <label for="department">Department</label>
-                                  <input class="form-control" placeholder="" name="twitter_link" type="text" value="<?php echo $department_name;?>" disabled>
-                                </div>
-                              </div>
-                            </div>
 
                             <div class="row">
                               <div class="col-md-6">
@@ -398,7 +389,7 @@
                               <div class="col-md-6">
                                 <div class="form-group">
                               <label for="projects">Sub Project<i class="hrpremium-asterisk"></i></label>
-                              <select class="form-control" id="aj_project" name="sub_project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
+                              <select class="form-control" id="aj_sproject" name="sub_project_id" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_projects');?>">
                                 <option value=""></option>
                                 <?php foreach($all_sub_projects as $sbpro) {?>
                                 <option value="<?php echo $sbpro->secid?>" <?php if($sub_project_id==$sbpro->secid):?> selected <?php endif;?>><?php echo $sbpro->sub_project_name?></option>

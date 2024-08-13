@@ -1189,7 +1189,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
 
         <?php
-        if (in_array('3', $role_resources_ids)) {
+        if (in_array('207', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['mapposisi_active'])) echo $arr_mod['mapposisi_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/project_posisi/'); ?>"> Mapping Project-Posisi </a>

@@ -2042,8 +2042,6 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			// $fname = strtolower($fname);
-			// $pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
 			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
@@ -2211,7 +2209,7 @@ class Importexceleslip extends MY_Controller
 
 				$nip = $eslip[0]->nip;
 				$namalengkap = $employee[0]->first_name;
-				$periode = $this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_from);
+				$periode = $this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_from).' - '.$this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_to);
 				$jabatan = $jabatan;
 				$project = $project_name;
 				$area = $eslip[0]->area;
@@ -3297,8 +3295,6 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			// $fname = strtolower($fname);
-			// $pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
 			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
@@ -4534,8 +4530,6 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			// $fname = strtolower($fname);
-			// $pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
 			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
@@ -5749,13 +5743,11 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			// $fname = strtolower($fname);
-			// $pay_month = strtolower(date("F Y"));
 			//Close and output PDF document
 			ob_start();
-			// $pdf->Output('eslip_'.strtoupper($namalengkap).'_'.$periode.'.pdf', 'I');
-			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
-			ob_end_flush();
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				ob_end_flush();
 
 		// } else {
 		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';

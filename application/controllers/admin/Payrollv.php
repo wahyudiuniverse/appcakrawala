@@ -1547,14 +1547,11 @@ class Payroll extends MY_Controller {
 						</table>';
 		$pdf->writeHTML($tbl, true, false, false, false, '');		
 		// Close and output PDF document
-		// This method has several options, check the source code documentation for more information.
-		$fname = strtolower($fname);
-		$pay_month = strtolower(date("F Y", strtotime($payment[0]->salary_month)));
-		//Close and output PDF document
-		ob_start();
-		$pdf->Output('payslip_'.$fname.'_'.$pay_month.'.pdf', 'I');
-		ob_end_flush();
-		//$pdf->Output('payslip_'.$fname.'_'.$pay_month.'.pdf', 'D');
+		
+				ob_start();
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				ob_end_flush();
 		
 	 }
 	 	 	

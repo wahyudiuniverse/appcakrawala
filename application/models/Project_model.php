@@ -268,6 +268,21 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE npro.doc_id
 		}
 	}
 
+	// get single project by id
+	public function read_project_by_subproject($idsub)
+	{
+
+		$sql = "SELECT * FROM xin_projects_sub WHERE secid = ? LIMIT 1";
+		$binds = array($idsub);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	public function get_project_exist_all()
 	{
 		$query = $this->db->query("SELECT distinct(emp.project_id) AS project_id, CONCAT('[ ',proj.priority,' ] ',proj.title) title 

@@ -1582,7 +1582,7 @@ class Employees extends MY_Controller
 			} else if ($this->input->post('project_id') === '') {
 				$Return['error'] = 'PROJECT masih kosong...';
 			} else if ($this->input->post('company_id') === '') {
-				$Return['error'] = 'COMPANY masih kosong';
+				$Return['error'] = 'PERUSAHAAN masih kosong';
 			} else if ($this->input->post('sub_project_id') === '') {
 				$Return['error'] = 'SUB PROJECT masih kosong';
 			}
@@ -1609,12 +1609,10 @@ class Employees extends MY_Controller
 			}
 
 			$data = array(
+				'sub_project_id' => $this->input->post('sub_project_id'),
+				'designation_id' => $this->input->post('designation_id'),
 				'penempatan' => $this->input->post('penempatan'),
 				'date_of_joining' => $this->input->post('tanggal_bergabung'),
-				'designation_id' => $this->input->post('designation_id'),
-				'project_id' => $this->input->post('project_id'),
-				'company_id' => $this->input->post('company_id'),
-				'sub_project_id' => $this->input->post('sub_project_id'),
 				// 'ktp_no' => $this->input->post('ktp_no'),
 				// 'kk_no' => $this->input->post('kk_no'),
 				// 'npwp_no' => $this->input->post('npwp_no'),
@@ -3325,12 +3323,11 @@ class Employees extends MY_Controller
 		}
 
 
-		$fname = strtolower($fname);
-		$pay_month = strtolower(date("F Y"));
 		//Close and output PDF document
 		ob_start();
-		$pdf->Output('payslip_' . $fname . '_' . $pay_month . '.pdf', 'I');
-		ob_end_flush();
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				ob_end_flush();
 	}
 
 	public function employees_cards_list()

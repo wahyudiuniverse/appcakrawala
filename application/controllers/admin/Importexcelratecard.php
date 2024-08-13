@@ -1578,12 +1578,10 @@ class Importexcelratecard extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			$fname = strtolower($fname);
-			$pay_month = strtolower(date("F Y"));
-			//Close and output PDF document
-			ob_start();
-			$pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			ob_end_flush();
+				ob_start();
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				ob_end_flush();
 
 		// } else {
 		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';
@@ -2489,12 +2487,10 @@ class Importexcelratecard extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
-			$fname = strtolower($fname);
-			$pay_month = strtolower(date("F Y"));
-			//Close and output PDF document
-			ob_start();
-			$pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			ob_end_flush();
+				ob_start();
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				ob_end_flush();
 
 		// } else {
 		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';

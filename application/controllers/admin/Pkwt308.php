@@ -1521,7 +1521,7 @@ class Pkwt308 extends MY_Controller
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Operasional</td>
+							<td>Tunjangan Insentive</td>
 							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
 						</tr>';
 				}

@@ -2836,6 +2836,7 @@ WHERE ktp_no = ?';
 			FROM xin_saltab saltab
 			LEFT JOIN xin_saltab_bulk_release bulk ON bulk.id = saltab.uploadid
 			WHERE uploadid IN (SELECT MAX(id) FROM xin_saltab_bulk_release GROUP BY project_id)
+			AND DATE_FORMAT(bulk.eslip_release, '%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d')
 			AND nip = ?
 			ORDER BY bulk.id DESC LIMIT 6";
 		$binds = array($id);

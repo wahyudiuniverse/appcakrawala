@@ -45,7 +45,7 @@ class Project_posisi extends MY_Controller {
 		// } else {
 		// 	$data['all_projects'] = $this->Project_model->all_projects();
 		// }
-		
+
 		$data['breadcrumbs'] = 'Mapping Project Posisi';
 		$data['path_url'] = 'project_posisi';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -158,10 +158,22 @@ class Project_posisi extends MY_Controller {
        		$this->output($Return);
     }
 
+
+			$aProject = $this->Project_model->read_project_by_subproject($this->input->post('sub_project'));
+			if (!is_null($aProject)) {
+				$idproject = $aProject[0]->id_project;
+			} else {
+				$idproject = '0';
+			}
+
+
+
 		$data = array(
-		'sub_project' => $this->input->post('sub_project'),
-		'posisi' => $this->input->post('posisi'),
+			'project_id' => $idproject,
+			'sub_project' => $this->input->post('sub_project'),
+			'posisi' => $this->input->post('posisi'),
 		);
+		
 		$result = $this->Project_model->add_mapping_posisi($data);
 		if ($result == TRUE) {
 			$Return['result'] = 'Berhasil membuat mapping posisi baru...';
@@ -197,6 +209,7 @@ class Project_posisi extends MY_Controller {
 		if($Return['error']!=''){
        		$this->output($Return);
     }
+
 
 		$data = array(
 		'nip' => $this->input->post('employees'),
