@@ -58,18 +58,45 @@ $(document).ready(function(){
 	$('.edit-modal-data').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var company_id = button.data('company_id');
+		var pkwt = button.data('pkwt');
+		var tes = "";
+		// if(pkwt == "1"){
+		// 	tes = "";
+		// 	alert("masuk js");
+		// } else{
+		// 	alert(company_id);
+		// }
 		var modal = $(this);
-	$.ajax({
-		url : base_url+"/read/",
-		type: "GET",
-		data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
-		success: function (response) {
-			if(response) {
-				$("#ajax_modal").html(response);
-			}
-		}
-		});
+			$.ajax({
+				url : base_url+"/read/",
+				type: "GET",
+				data: 'jd=1&is_ajax=1&mode=modal&pkwt=cekcek&data=company&company_id='+company_id,
+				success: function (response) {
+					if(response) {
+						$("#ajax_modal").html(response);
+					}
+				}
+				});
+		//alert(company_id);
 	});
+	
+
+	// edit
+	// $('.edit-modal-data').on('show.bs.modal', function (event) {
+	// 	var button = $(event.relatedTarget);
+	// 	var company_id = button.data('company_id');
+	// 	var modal = $(this);
+	// $.ajax({
+	// 	url : base_url+"/read/",
+	// 	type: "GET",
+	// 	data: 'jd=1&is_ajax=1&mode=modal&data=company&company_id='+company_id,
+	// 	success: function (response) {
+	// 		if(response) {
+	// 			$("#ajax_modal").html(response);
+	// 		}
+	// 	}
+	// 	});
+	// });
 	
    // Month & Year
 	$('.ln_month_year').datepicker({

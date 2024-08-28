@@ -527,12 +527,12 @@ class Pkwt215 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
+								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>4.2</td>
-								<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat  mengikat.</td>
+								<td colspan="18">Jam kerja normal adalah 8 (delapan) jam kerja untuk 1 (satu) hari kerja dan 40 (empat puluh) jam kerja untuk 1 (satu) minggu dengan 5 (lima) hari kerja dalam 7 (tujuh) hari kalender.</td>
 							</tr>
 				<br>
 							<tr>
@@ -543,6 +543,11 @@ class Pkwt215 extends MY_Controller
 				<br>
 							<tr>
 								<td>4.4</td>
+								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
+							</tr>
+				<br>
+							<tr>
+								<td>4.5</td>
 								<td colspan="18">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
 							</tr>
 <br>
@@ -573,7 +578,7 @@ class Pkwt215 extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="0"></td>
-								<td colspan="15">•	Hari Senin – Jumat 7 Jam Kerja.</td>
+								<td colspan="15">•	Hari Senin – Sabtu 	7 Jam Kerja.</td>
 							</tr>
 
 							<tr>
@@ -658,7 +663,7 @@ class Pkwt215 extends MY_Controller
 							</tr>
 				</table>
 
-<br><br><br><br><br><br>
+<br><br><br><br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
 				</div>
@@ -1432,6 +1437,30 @@ class Pkwt215 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran, apabila tidak melakukan absensi tanpa aplikasi Trec maka diberlakukan “No Trec No Pay”.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 (delapan) jam per hari berlaku selama 6 hari kerja, terkecuali untuk Team Leader (TL) pada hari sabtu, durasi kerja yang dihitung adalah 5 (lima) jam per hari.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Saya selaku TL,SPG dan MD bersedia untuk direview apabila dalam waktu periode 3 bulan bekerja terdapat izin tidak masuk bekerja disetiap bulan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya apabila terjadi selisih ataupun kecurangan terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
+								<td colspan="0"></td>
+							</tr>
 				</table>
 
 				<br><br>
@@ -1503,8 +1532,7 @@ class Pkwt215 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br>
-				<br>
+				<br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1698,13 +1726,6 @@ class Pkwt215 extends MY_Controller
 				}
 
 				$lampiran .= '	
-
-					<br>
-						<tr>
-							<td colspan="20">Note: Rincian gaji diatas belum termasuk potongan BPJS Kesehatan & Ketenagakerjaan maupun PPH21.</td>
-							<td></td>
-						</tr>
-						
 					</table>
 
 					</td>
@@ -1800,9 +1821,6 @@ class Pkwt215 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
-				//Close and output PDF document
 				ob_start();
 				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');

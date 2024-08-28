@@ -1437,6 +1437,30 @@ class Pkwt210 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran, apabila tidak melakukan absensi tanpa aplikasi Trec maka diberlakukan “No Trec No Pay”.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 (delapan) jam per hari berlaku selama 6 hari kerja, terkecuali untuk Team Leader (TL) pada hari sabtu, durasi kerja yang dihitung adalah 5 (lima) jam per hari.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Saya selaku TL,SPG dan MD bersedia untuk direview apabila dalam waktu periode 3 bulan bekerja terdapat izin tidak masuk bekerja disetiap bulan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya apabila terjadi selisih ataupun kecurangan terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
+								<td colspan="0"></td>
+							</tr>
 				</table>
 
 				<br><br>
@@ -1508,8 +1532,7 @@ class Pkwt210 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br>
-				<br>
+				<br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1798,9 +1821,6 @@ class Pkwt210 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
-				//Close and output PDF document
 				ob_start();
 				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');

@@ -67,7 +67,7 @@
             <div class="col-md mb-3">
 
             <label class="form-label">Projects</label>
-              <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
+              <select class="form-control" name="project_id" id="aj_project" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
                   <option value="0">--ALL--</option>
                 <?php foreach($all_projects as $proj) {?>
                   <option value="<?php echo $proj->project_id;?>"> <?php echo $proj->title;?></option>

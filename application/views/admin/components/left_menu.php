@@ -1328,6 +1328,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     in_array('126', $role_resources_ids)
     || in_array('127', $role_resources_ids)
     || in_array('232', $role_resources_ids)
+    || in_array('469', $role_resources_ids)
   ) {
   ?>
     <li class="<?php if (!empty($arr_mod['importexcel_open'])) echo $arr_mod['importexcel_open']; ?> sidenav-item">

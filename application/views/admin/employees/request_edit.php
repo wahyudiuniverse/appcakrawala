@@ -6,7 +6,8 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
-<?php $system = $this->Xin_model->read_setting_info(1); ?>
+<?php $system = $this->Xin_model->read_setting_info(1); 
+      $sub_project_id = $sub_project; ?>
 <?php $count_emp_request_cancel = $this->Xin_model->count_emp_request_cancel($session['employee_id']); ?>
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae($session['employee_id']); ?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom($session['employee_id']); ?>
@@ -408,7 +409,7 @@
                   <select class="form-control" id="project_sub_project" name="sub_project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects'); ?>">
                     <option value=""></option>
                     <?php foreach ($sub_project_list as $sbproject) { ?>
-                      <option value="<?php echo $sbproject->secid ?>" <?php if ($sub_project == $sbproject->secid) : ?> selected <?php endif; ?>><?php echo $sbproject->sub_project_name ?></option>
+                      <option value="<?php echo $sbproject->secid ?>" <?php if ($sub_project_id == $sbproject->secid) : ?> selected <?php endif; ?>><?php echo $sbproject->sub_project_name ?></option>
                     <?php } ?>
                   </select>
 

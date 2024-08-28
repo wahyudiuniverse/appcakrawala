@@ -31,7 +31,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 <hr class="border-light m-0 mb-3">
 <div class="row m-b-1 <?php echo $get_animate;?>">
   <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
-  <?php if(in_array('240',$role_resources_ids)) {?>
+  <?php if(in_array('488',$role_resources_ids)) {?>
   <div class="col-md-3">
     <div class="card">
       <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_add_new');?></strong> SKK</span>

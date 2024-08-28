@@ -70,6 +70,12 @@ class Pkwt183 extends MY_Controller
 
 
 	public function view() {
+
+		$session = $this->session->userdata('username');
+		if(empty($session)){ 
+			redirect('admin/');
+		}
+		
 		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);

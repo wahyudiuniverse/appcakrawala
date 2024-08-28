@@ -1619,7 +1619,6 @@ class Pkwt175 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

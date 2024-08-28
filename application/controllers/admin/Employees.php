@@ -6265,7 +6265,9 @@ class Employees extends MY_Controller
 						<button type="button" class="btn btn-xs btn-outline-twitter">Tambah Addendum</button>
 					</a>';
 
-			$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '" >UPLOAD</button>';
+			// $status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '" >UPLOAD</button>';
+
+			$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '" data-pkwt="1" >UPLOAD</button>';
 
 
 			$data[] = array(
@@ -6275,6 +6277,15 @@ class Employees extends MY_Controller
 				$status_upload . '<br>' . $download . ' ' . $status_migrasi,
 				$r->approve_hrd_date,
 			);
+
+
+			// $data[] = array(
+			// 	$r->no_surat . "<br>",
+			// 	$nama_project,
+			// 	$designation_name,
+			// 	$status_upload . '<br>' . $download . ' ' . $status_migrasi
+			// );
+			
 		}
 
 		$output = array(

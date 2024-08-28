@@ -96,12 +96,12 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 
       <input name="dexitc" type="text" value="<?php echo $file_name;?>" hidden>
 
-      <div class="col-sm-4" hidden>
+      <div class="col-sm-4" <?php if (!in_array('378', $role_resources_ids)) {?>hidden<?php;}?>>
         <div>
           <label for="penempatan">Pilih Dokumen PKWT</label>
         </div>
       </div>
-      <div class="col-sm-4" hidden>
+      <div class="col-sm-4" <?php if (!in_array('378', $role_resources_ids)) {?>hidden<?php;}?>>
         <div>
 
                           <div class="form-group">
@@ -115,7 +115,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 
     </div>
   </div>
-
 
 
   <div class="modal-footer">

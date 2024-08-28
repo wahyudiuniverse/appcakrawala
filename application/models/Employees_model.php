@@ -2722,6 +2722,22 @@ WHERE ktp_no = ?';
 		}
 	}
 
+
+	// get single employee by NIP
+	public function read_employee_info_eslip($id)
+	{
+
+		$sql = "SELECT * FROM xin_employees WHERE employee_id = ? AND user_id not in (1)";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// get single employee by NIK KTP
 	public function read_employee_info_by_nik_ktp($id)
 	{
@@ -2836,7 +2852,7 @@ WHERE ktp_no = ?';
 			FROM xin_saltab saltab
 			LEFT JOIN xin_saltab_bulk_release bulk ON bulk.id = saltab.uploadid
 			WHERE uploadid IN (SELECT MAX(id) FROM xin_saltab_bulk_release GROUP BY project_id)
-			AND DATE_FORMAT(bulk.eslip_release, '%Y-%m-%d') < DATE_FORMAT(NOW(),'%Y-%m-%d')
+			AND DATE_FORMAT(bulk.eslip_release, '%Y-%m-%d') <= DATE_FORMAT(NOW(),'%Y-%m-%d')
 			AND nip = ?
 			ORDER BY bulk.id DESC LIMIT 6";
 		$binds = array($id);

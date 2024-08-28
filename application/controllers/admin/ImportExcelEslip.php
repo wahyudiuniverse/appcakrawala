@@ -2072,21 +2072,24 @@ class Importexceleslip extends MY_Controller
 
 
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$employee = $this->Employees_model->read_employee_info_by_nik($employee_id);
+		$employee = $this->Employees_model->read_employee_info_eslip($employee_id);
 		$eslip = $this->Employees_model->read_saltab_by_id($idsaltab);
+		// $this->Employees_model->check_akses_project($this->input->post('employees'), $this->input->post('project')) > 0
+		// $check_akses_project = $this->Employees_model->read_akses_project($session['employee_id'],$employee[0]->project_id);
 
 
 		if(empty($employee) || $employee_id== 0){
 			redirect('admin/');
 		}
-
+		// $checkap = $this->Employees_model->check_akses_project($session['employee_id'], $employee[0]->project_id)
 
 		if($session['user_id']!=1){
 
-			if($session['user_id'] != $employee[0]->user_id ) {
-				redirect('admin/');
+			if($session['user_id'] != $employee[0]->user_id){
+				if($this->Employees_model->check_akses_project($session['employee_id'], $employee[0]->project_id)==0){
+					redirect('admin/');
+				}
 			}
-
 		}
 
 
@@ -2245,7 +2248,12 @@ class Importexceleslip extends MY_Controller
 				$bonus = $eslip[0]->bonus;
 				$uuck = $eslip[0]->uuck;
 				$thr = $eslip[0]->thr;
+				$adjustment_bruto = $eslip[0]->adjustment_bruto;
+				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
 
+				$deduction_bruto = $eslip[0]->deduction_bruto;
+				$deduction_so_bruto = $eslip[0]->deduction_so_bruto;
+				$potongan_kpi_bruto = $eslip[0]->potongan_kpi_bruto;
 				$bpjs_tk_deduction_jkk_jkm = $eslip[0]->bpjs_tk_deduction_jkk_jkm;
 				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
 				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
@@ -2413,8 +2421,6 @@ class Importexceleslip extends MY_Controller
 							</tr>
 						</table>
 					</td>
-
-
 				</tr>
 
 			</table>
@@ -2834,7 +2840,7 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
-			if($thr!=0){	
+			if($thr!=0){
 			$tbl_2 .= '
 				<tr>
 					<td>
@@ -2849,7 +2855,38 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 				
+			if($adjustment_bruto!=0){
 			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_dlk_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment DLK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			$tbl_2 .= '
+
 			</table>
 
 			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -2857,14 +2894,62 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="2">Deduction</td>
+								<td colspan="2"><u><i>Deduction</u></i></td>
 								<td colspan="0"></td>
 								<td colspan="0" align="right"></td>
 								<td colspan="6" align="right"></td>
 							</tr>
 						</table>
 					</td>
-				</tr>
+				</tr>';
+
+
+			if($deduction_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Deduction</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_so_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Deduction SO</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_so_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($potongan_kpi_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Potongan KPI</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_kpi_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			$tbl_2 .= '
 
 				<tr>
 					<td>
@@ -3324,9 +3409,12 @@ class Importexceleslip extends MY_Controller
 		// $employee_id = $this->uri->segment(5);
 
 		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$employee = $this->Employees_model->read_employee_info_by_nik($employee_id);
+		$employee = $this->Employees_model->read_employee_info_eslip($employee_id);
 		$eslip = $this->Employees_model->read_saltab_temp_by_id($idsaltab);
 
+		if(empty($employee)){
+			redirect('https://apps-cakrawala.com/eslip_notfound'); 
+		}
 		// if($session['user_id'] != $employee[0]->user_id) {
 		// 	redirect('admin/');
 		// }
@@ -3446,7 +3534,7 @@ class Importexceleslip extends MY_Controller
 
 				$nip = $eslip[0]->nip;
 				$namalengkap = $employee[0]->first_name;
-				$periode = $this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_from);
+				$periode = $this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_from).' - '.$this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_to);
 				$jabatan = $jabatan;
 				$project = $project_name;
 				$area = $eslip[0]->area;
@@ -3482,7 +3570,12 @@ class Importexceleslip extends MY_Controller
 				$bonus = $eslip[0]->bonus;
 				$uuck = $eslip[0]->uuck;
 				$thr = $eslip[0]->thr;
+				$adjustment_bruto = $eslip[0]->adjustment_bruto;
+				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
 
+				$deduction_bruto = $eslip[0]->deduction_bruto;
+				$deduction_so_bruto = $eslip[0]->deduction_so_bruto;
+				$potongan_kpi_bruto = $eslip[0]->potongan_kpi_bruto;
 				$bpjs_tk_deduction_jkk_jkm = $eslip[0]->bpjs_tk_deduction_jkk_jkm;
 				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
 				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
@@ -3564,7 +3657,6 @@ class Importexceleslip extends MY_Controller
 				
 			} else {
 				redirect('admin/');
-
 			}
 
 
@@ -4069,7 +4161,7 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
-			if($thr!=0){	
+			if($thr!=0){
 			$tbl_2 .= '
 				<tr>
 					<td>
@@ -4084,7 +4176,38 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 				
+			if($adjustment_bruto!=0){
 			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_dlk_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment DLK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			$tbl_2 .= '
+
 			</table>
 
 			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -4092,14 +4215,62 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="2">Deduction</td>
+								<td colspan="2"><u><i>Deduction</u></i></td>
 								<td colspan="0"></td>
 								<td colspan="0" align="right"></td>
 								<td colspan="6" align="right"></td>
 							</tr>
 						</table>
 					</td>
-				</tr>
+				</tr>';
+
+
+			if($deduction_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Deduction</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_so_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Deduction SO</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_so_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($potongan_kpi_bruto!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Potongan KPI</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_kpi_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			$tbl_2 .= '
 
 				<tr>
 					<td>
@@ -5743,11 +5914,12 @@ class Importexceleslip extends MY_Controller
 			$lampiran = '';
 			$pdf->writeHTML($lampiran, true, false, false, false, '');
 		
+
 			//Close and output PDF document
 			ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
-				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
-				ob_end_flush();
+			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
+			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
+			ob_end_flush();
 
 		// } else {
 		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';

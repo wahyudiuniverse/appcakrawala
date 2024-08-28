@@ -1786,9 +1786,6 @@ class Pkwt300 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
 
-			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
