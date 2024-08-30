@@ -711,6 +711,33 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil status kawin
+	function get_status_kawin_nama($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('nama');
+			$this->db->from('mt_marital');
+			$this->db->where('id_marital', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $id;
+			} else {
+				if ($query['nama'] == null) {
+					return "";
+				} else {
+					return $query['nama'];
+				}
+			}
+		}
+	}
+
 	//ambil nama bank
 	function get_nama_bank($id)
 	{
@@ -2019,7 +2046,7 @@ class Employees_model extends CI_Model
 					// $this->get_nama_karyawan($record->upload_by)
 				);
 			}
-		} else{
+		} else {
 			$totalRecords = 0;
 			$totalRecordwithFilter = 0;
 			$data = array();
@@ -5241,4 +5268,223 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//   $query = $this->db->query("SELECT * from xin_countries");
 	//  	  return $query->result();
 	// }
+
+	//ambil data jabatan berdasarkan sub project untuk Json
+	public function getJabatanBySubProject($postData)
+	{
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$this->db->select('*');
+		$this->db->from('xin_projects_posisi');
+		$this->db->join('xin_designations', 'xin_designations.designation_id=xin_projects_posisi.posisi');
+		$this->db->where('sub_project', $postData['sub_project']);
+
+		$query = $this->db->get()->result_array();
+
+		return $query;
+	}
+
+	//ambil PIN employee
+	public function get_pin($postData)
+	{
+		$this->db->select('first_name,employee_id,private_code');
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil jabatan employee
+	public function get_jabatan($postData)
+	{
+		$this->db->select('first_name,employee_id,designation_id');
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//update PIN employee
+	public function update_pin($postData)
+	{
+		$this->db->set('private_code', $postData['pin_baru']);
+		$this->db->set('password', $postData['password_hash']);
+		$this->db->set('username', $postData['employee_id']);
+		$this->db->where('employee_id', $postData['employee_id']);
+		$this->db->update('xin_employees');
+	}
+
+	//ambil data diri employee
+	public function get_data_diri($postData)
+	{
+		$this->db->select('first_name');
+		$this->db->select('gender');
+		$this->db->select('tempat_lahir');
+		$this->db->select('date_of_birth');
+		$this->db->select('last_edu');
+		$this->db->select('ethnicity_type');
+		$this->db->select('marital_status');
+		$this->db->select('tinggi_badan');
+		$this->db->select('berat_badan');
+		$this->db->select('blood_group');
+
+		$this->db->select('ktp_no');
+		$this->db->select('kk_no');
+		$this->db->select('npwp_no');
+		$this->db->select('contact_no');
+		$this->db->select('email');
+		$this->db->select('ibu_kandung');
+		$this->db->select('alamat_ktp');
+		$this->db->select('alamat_domisili');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data project employee
+	public function get_data_project($postData)
+	{
+		$this->db->select('sub_project_id');
+		$this->db->select('designation_id');
+		$this->db->select('penempatan');
+		$this->db->select('location_id');
+		$this->db->select('date_of_joining');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data kontak employee
+	public function get_data_kontak($postData)
+	{
+		$this->db->select('ktp_no');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		$this->db->select('*');
+
+		$this->db->from('xin_employee_emergency',);
+		$this->db->where('employee_request_nik', $query['ktp_no']);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data diri employee
+	public function save_data_diri($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		//fetch data terbaru
+		$this->db->select('first_name');
+		$this->db->select('gender');
+		$this->db->select('tempat_lahir');
+		$this->db->select('date_of_birth');
+		$this->db->select('last_edu');
+		$this->db->select('ethnicity_type');
+		$this->db->select('marital_status');
+		$this->db->select('tinggi_badan');
+		$this->db->select('berat_badan');
+		$this->db->select('blood_group');
+		$this->db->select('ktp_no');
+		$this->db->select('kk_no');
+		$this->db->select('npwp_no');
+		$this->db->select('contact_no');
+		$this->db->select('email');
+		$this->db->select('ibu_kandung');
+		$this->db->select('alamat_ktp');
+		$this->db->select('alamat_domisili');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data project employee
+	public function save_project($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		//fetch data terbaru
+		$this->db->select('sub_project_id');
+		$this->db->select('designation_id');
+		$this->db->select('penempatan');
+		$this->db->select('location_id');
+		$this->db->select('date_of_joining');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data kontak employee
+	public function save_kontak($postData, $nip)
+	{
+		$this->db->select('ktp_no');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		//update data
+		$this->db->where('employee_request_nik', $query['ktp_no']);
+		$this->db->update('xin_employee_emergency', $postData);
+
+		//fetch data terbaru
+		$this->db->select('*');
+
+		$this->db->from('xin_employee_emergency',);
+		$this->db->where('employee_request_nik', $query['ktp_no']);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
 }

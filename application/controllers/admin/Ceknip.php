@@ -87,7 +87,7 @@ class ceknip extends MY_Controller {
 			  
 			  $full_name = $r->first_name;
 			  $nik = $r->ktp_no;
-			  $ename = '<a href="'.site_url().'admin/employees/emp_edit/'.$r->employee_id.'" class="d-block text-primary" target="_blank">'.$r->employee_id.'</a>'; 
+			  $ename = '<a href="'.site_url().'admin/employees/emp_view/'.$r->employee_id.'" class="d-block text-primary" target="_blank">'.$r->employee_id.'</a>'; 
 
 				if(!is_null($r->private_code)){
 					$pin = $r->private_code;

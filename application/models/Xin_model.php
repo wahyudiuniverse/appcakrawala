@@ -4357,10 +4357,32 @@ ORDER BY `expiry_date`");
 	}
 
 
-	// get all education level
+	// get all ethnicity level
 	public function get_ethnicity_type_result()
 	{
 		$query = $this->db->query("SELECT * from xin_ethnicity_type");
+		return $query->result();
+	}
+	
+
+	// get all education level
+	public function get_all_education()
+	{
+		$query = $this->db->query("SELECT * from xin_qualification_education_level");
+		return $query->result();
+	}
+
+	// get all marital
+	public function get_all_marital()
+	{
+		$query = $this->db->query("SELECT * from mt_marital");
+		return $query->result();
+	}
+
+	// get all family relation
+	public function get_all_family_relation()
+	{
+		$query = $this->db->query("SELECT * from mt_family_relation");
 		return $query->result();
 	}
 

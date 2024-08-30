@@ -1193,11 +1193,11 @@ class Employees extends MY_Controller
 		}
 
 
-			if($result[0]->approve_resignnae=='' || $result[0]->approve_resignnae==null){
-				$status_pengajuan_paklaring = 'Paklaring Belum diajukan';
-			} else {
-				$status_pengajuan_paklaring = $result[0]->request_resign_date;
-			}
+		if ($result[0]->approve_resignnae == '' || $result[0]->approve_resignnae == null) {
+			$status_pengajuan_paklaring = 'Paklaring Belum diajukan';
+		} else {
+			$status_pengajuan_paklaring = $result[0]->request_resign_date;
+		}
 
 		$data = array(
 
@@ -1304,13 +1304,13 @@ class Employees extends MY_Controller
 
 			'approve_resignnae' => $result[0]->approve_resignnae,
 			'approve_resignnae_on' => $result[0]->approve_resignnae_on,
-			
+
 			'approve_resignnom' => $result[0]->approve_resignnom,
 			'approve_resignnom_on' => $result[0]->approve_resignnom_on,
-			
+
 			'approve_resignhrd' => $result[0]->approve_resignhrd,
 			'approve_resignhrd_on' => $result[0]->approve_resignhrd_on,
-			
+
 			'cancel_resign_stat' => $result[0]->cancel_resign_stat,
 			'cancel_ket' => $result[0]->cancel_ket,
 			'cancel_date' => $result[0]->cancel_date,
@@ -3325,9 +3325,9 @@ class Employees extends MY_Controller
 
 		//Close and output PDF document
 		ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
-				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
-				ob_end_flush();
+		// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+		$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
+		ob_end_flush();
 	}
 
 	public function employees_cards_list()
@@ -6285,7 +6285,7 @@ class Employees extends MY_Controller
 			// 	$designation_name,
 			// 	$status_upload . '<br>' . $download . ' ' . $status_migrasi
 			// );
-			
+
 		}
 
 		$output = array(
@@ -8160,5 +8160,785 @@ class Employees extends MY_Controller
 		);
 		echo json_encode($output);
 		exit();
+	}
+
+	public function emp_view()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$id = $this->uri->segment(4);
+		// $id = '5700';
+		$result = $this->Employees_model->read_employee_info_by_nik($id);
+		if (is_null($result)) {
+			redirect('admin/employees');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
+
+		// company info
+		$company = $this->Xin_model->read_company_info($result[0]->company_id);
+		if (!is_null($company)) {
+			$company_name = $company[0]->name;
+		} else {
+			$company_name = '--';
+		}
+
+		$department = $this->Department_model->read_department_information($result[0]->department_id);
+		if (!is_null($department)) {
+			$department_name = $department[0]->department_name;
+		} else {
+			$department_name = '--';
+		}
+
+		$projects = $this->Project_model->read_single_project($result[0]->project_id);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		$subprojects = $this->Project_model->read_single_subproject($result[0]->sub_project_id);
+		if (!is_null($subprojects)) {
+			$nama_subproject = $subprojects[0]->sub_project_name;
+		} else {
+			$nama_subproject = '--';
+		}
+
+		// get designation
+		$designation = $this->Designation_model->read_designation_information($result[0]->designation_id);
+		if (!is_null($designation)) {
+			$edesignation_name = $designation[0]->designation_name;
+		} else {
+			$edesignation_name = '--';
+		}
+
+		//kategori karyawan
+		if ((is_null($result[0]->location_id)) || ($result[0]->location_id == "") || ($result[0]->location_id == "0")) {
+			$kategori = '--';
+		} else if ($result[0]->location_id == "1") {
+			$kategori = 'INHOUSE';
+		} else if ($result[0]->location_id == "2") {
+			$kategori = 'AREA';
+		} else if ($result[0]->location_id == "3") {
+			$kategori = 'RATECARD';
+		} else if ($result[0]->location_id == "4") {
+			$kategori = 'MAGANG';
+		} else if ($result[0]->location_id == "5") {
+			$kategori = 'FREELANCE';
+		} else {
+			$kategori = '--';
+		}
+
+		//jenis kelamin
+		if ((is_null($result[0]->gender)) || ($result[0]->gender == "") || ($result[0]->gender == "0")) {
+			$gender_name = '--';
+		} else if ($result[0]->gender == "L") {
+			$gender_name = 'LAKI-LAKI';
+		} else if ($result[0]->gender == "P") {
+			$gender_name = 'PEREMPUAN';
+		} else {
+			$gender_name = '--';
+		}
+
+		//dokumen buku rekening
+		if ((is_null($result[0]->filename_rek)) || ($result[0]->filename_rek == "") || ($result[0]->filename_rek == "0")) {
+			$filename_rek = '-tidak ada data- <button hidden id="button_open_buku_tabungan" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open Buku Tabungan</button>';
+		} else {
+			$filename_rek = '<button id="button_open_buku_tabungan" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open Buku Tabungan</button>';
+		}
+
+		//dokumen ktp
+		if ((is_null($result[0]->filename_ktp)) || ($result[0]->filename_ktp == "") || ($result[0]->filename_ktp == "0")) {
+			$filename_ktp = '-tidak ada data- <button hidden id="button_open_ktp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KTP</button>';
+		} else {
+			$filename_ktp = $result[0]->ktp_no . ' <button id="button_open_ktp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KTP</button>';
+		}
+
+		//dokumen kk
+		if ((is_null($result[0]->filename_kk)) || ($result[0]->filename_kk == "") || ($result[0]->filename_kk == "0")) {
+			$filename_kk = '-tidak ada data- <button hidden id="button_open_kk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KK</button>';
+		} else {
+			$filename_kk = $result[0]->kk_no . ' <button id="button_open_kk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KK</button>';
+		}
+
+		//dokumen npwp
+		if ((is_null($result[0]->filename_npwp)) || ($result[0]->filename_npwp == "") || ($result[0]->filename_npwp == "0")) {
+			$filename_npwp = '-tidak ada data- <button hidden id="button_open_npwp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open NPWP</button>';
+		} else {
+			$filename_npwp = $result[0]->npwp_no . ' <button id="button_open_npwp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open NPWP</button>';
+		}
+
+		//dokumen cv
+		if ((is_null($result[0]->filename_cv)) || ($result[0]->filename_cv == "") || ($result[0]->filename_cv == "0")) {
+			$filename_cv = '-tidak ada data- <button hidden id="button_open_cv" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open CV</button>';
+		} else {
+			$filename_cv = '<button id="button_open_cv" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open CV</button>';
+		}
+
+		//dokumen skck
+		if ((is_null($result[0]->filename_skck)) || ($result[0]->filename_skck == "") || ($result[0]->filename_skck == "0")) {
+			$filename_skck = '-tidak ada data- <button hidden id="button_open_skck" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open SKCK</button>';
+		} else {
+			$filename_skck = '<button id="button_open_skck" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open SKCK</button>';
+		}
+
+		//dokumen ijazah
+		if ((is_null($result[0]->filename_isd)) || ($result[0]->filename_isd == "") || ($result[0]->filename_isd == "0")) {
+			$filename_isd = '-tidak ada data- <button hidden id="button_open_ijazah" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Ijazah</button>';
+		} else {
+			$filename_isd = '<button id="button_open_ijazah" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Ijazah</button>';
+		}
+
+		//dokumen paklaring
+		if ((is_null($result[0]->filename_paklaring)) || ($result[0]->filename_paklaring == "") || ($result[0]->filename_paklaring == "0")) {
+			$filename_paklaring = '-tidak ada data- <button hidden id="button_open_paklaring" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Paklaring</button>';
+		} else {
+			$filename_paklaring = '<button id="button_open_paklaring" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Paklaring</button>';
+		}
+
+		//BPJS Kesehatan
+		if ((is_null($result[0]->bpjs_ks_no)) || ($result[0]->bpjs_ks_no == "") || ($result[0]->bpjs_ks_no == "0")) {
+			$bpjs_ks_no = '-tidak ada data- <button hidden id="button_open_bpjs_ks" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+		} else {
+			$bpjs_ks_no = $result[0]->bpjs_ks_no . ' <button id="button_open_bpjs_ks" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+		}
+
+		//BPJS Ketenagakerjaan
+		if ((is_null($result[0]->bpjs_tk_no)) || ($result[0]->bpjs_tk_no == "") || ($result[0]->bpjs_tk_no == "0")) {
+			$bpjs_tk_no = '-tidak ada data- <button hidden id="button_open_bpjs_tk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+		} else {
+			$bpjs_tk_no = $result[0]->bpjs_tk_no . ' <button id="button_open_bpjs_tk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+		}
+
+		if ($result[0]->approve_resignnae == '' || $result[0]->approve_resignnae == null) {
+			$status_pengajuan_paklaring = 'Paklaring Belum diajukan';
+		} else {
+			$status_pengajuan_paklaring = $result[0]->request_resign_date;
+		}
+
+		$data = array(
+			//Pages Attributes
+			'title' => 'Profile Karyawan | ' . $this->Xin_model->site_title(),
+			'breadcrumbs' => $this->lang->line('xin_manage_employees'),
+			// 'path_url' => 'emp_manager',
+
+			//Card Profile
+			'user_id' => $result[0]->user_id,
+			'username' => $result[0]->username,
+			'employee_id' => $result[0]->employee_id,
+			'profile_picture' => $result[0]->profile_picture,
+			'private_code' => $result[0]->private_code,
+
+			//Data Diri
+			'first_name' => strtoupper($result[0]->first_name),
+			'gender' => $result[0]->gender,
+			'gender_name' => $gender_name,
+			'tempat_lahir' => strtoupper($result[0]->tempat_lahir),
+			'date_of_birth' => $this->Xin_model->tgl_indo($result[0]->date_of_birth),
+			'last_edu_name' => strtoupper($this->Employees_model->get_nama_pendidikan($result[0]->last_edu)),
+			'last_edu' => $result[0]->last_edu,
+			'ethnicity_type' => $result[0]->ethnicity_type,
+			'ethnicity_name' => strtoupper($this->Employees_model->get_nama_agama($result[0]->ethnicity_type)),
+			'marital_status_name' => strtoupper("[ " . $this->Employees_model->get_status_kawin($result[0]->marital_status) . " ] " . $this->Employees_model->get_status_kawin_nama($result[0]->marital_status)),
+			'marital_status' => $result[0]->marital_status,
+			'tinggi_badan' => $result[0]->tinggi_badan,
+			'berat_badan' => $result[0]->berat_badan,
+			'blood_group' => $result[0]->blood_group,
+			'ktp_no' => $result[0]->ktp_no,
+			'kk_no' => $result[0]->kk_no,
+			'npwp_no' => $result[0]->npwp_no,
+			'contact_no' => $result[0]->contact_no,
+			'email' => strtoupper($result[0]->email),
+			'ibu_kandung' => strtoupper($result[0]->ibu_kandung),
+			'alamat_ktp' => strtoupper($result[0]->alamat_ktp),
+			'alamat_domisili' => strtoupper($result[0]->alamat_domisili),
+
+			//Posisi Jabatan
+			'company_id' => $result[0]->company_id,
+			'company_name' => strtoupper($company_name),
+			'department_id' => $result[0]->department_id,
+			'department_name' => strtoupper($department_name),
+			'project_id' => $result[0]->project_id,
+			'project_name' => strtoupper($nama_project),
+			'sub_project_id' => $result[0]->sub_project_id,
+			'nama_subproject' => strtoupper($nama_subproject),
+			'designation_id' => $result[0]->designation_id,
+			'designation_name' => strtoupper($edesignation_name),
+			'penempatan' => strtoupper($result[0]->penempatan),
+			'kategori' => strtoupper($kategori),
+			'date_of_joining' => $result[0]->date_of_joining,
+			'date_of_joining_name' => $this->Xin_model->tgl_indo($result[0]->date_of_joining),
+
+			//Kontak Darurat
+			'nama_kontak_darurat' => strtoupper($this->Employees_model->get_nama_kontak_darurat($result[0]->ktp_no)),
+			'hubungan_kontak_darurat' => strtoupper($this->Employees_model->get_hubungan_kontak_darurat($result[0]->ktp_no)),
+			// 'hubungan_kontak_darurat_id' => $this->Employees_model->get_data_kontak($result[0]->ktp_no),
+			'nomor_kontak_darurat' => $this->Employees_model->get_nomor_kontak_darurat($result[0]->ktp_no),
+
+			//Rekening Bank
+			'nomor_rek' => $result[0]->nomor_rek,
+			'filename_rek' => $filename_rek,
+			'pemilik_rek' => strtoupper($result[0]->pemilik_rek),
+			'bank_name' => strtoupper("[ " . $this->Employees_model->get_id_bank($result[0]->bank_name) . " ] " . $this->Employees_model->get_nama_bank($result[0]->bank_name)),
+
+			//Dokumen Pribadi
+			'display_ktp' => $filename_ktp,
+			'filename_ktp' => $result[0]->filename_ktp,
+			'display_kk' => $filename_kk,
+			'filename_kk' => $result[0]->filename_kk,
+			'display_npwp' => $filename_npwp,
+			'filename_npwp' => $result[0]->filename_npwp,
+			'display_cv' => $filename_cv,
+			'filename_cv' => $result[0]->filename_cv,
+			'display_skck' => $filename_skck,
+			'filename_skck' => $result[0]->filename_skck,
+			'display_isd' => $filename_isd,
+			'filename_isd' => $result[0]->filename_isd,
+			'display_filename_paklaring' => $filename_paklaring,
+			'filename_paklaring' => $result[0]->filename_paklaring,
+			'display_bpjs_tk_no' => $bpjs_tk_no,
+			'bpjs_tk_no' => $result[0]->bpjs_tk_no,
+			'bpjs_tk_status' => $result[0]->bpjs_tk_status,
+			'display_bpjs_ks_no' => $bpjs_ks_no,
+			'bpjs_ks_no' => $result[0]->bpjs_ks_no,
+			'bpjs_ks_status' => $result[0]->bpjs_ks_status,
+
+
+			'filename_pkwt' => $result[0]->filename_pkwt,
+			'list_bank' => $this->Xin_model->get_bank_code(),
+			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
+			'location_id' => $result[0]->location_id,
+			'role_id' => $result[0]->user_role_id,
+
+			'user_role_id' => $result[0]->user_role_id,
+			'date_of_leaving' => $result[0]->date_of_leaving,
+			'wages_type' => $result[0]->wages_type,
+			'is_active' => $result[0]->is_active,
+
+			'contract_start' => $result[0]->contract_start,
+			'contract_end' => $result[0]->contract_end,
+			'contract_periode' => $result[0]->contract_periode,
+			'hari_kerja' => $result[0]->hari_kerja,
+			'cut_start' => $result[0]->cut_start,
+			'cut_off' => $result[0]->cut_off,
+			'date_payment' => $result[0]->date_payment,
+			'basic_salary' => $result[0]->basic_salary,
+			'allow_jabatan' => $result[0]->allow_jabatan,
+			'allow_area' => $result[0]->allow_area,
+			'allow_masakerja' => $result[0]->allow_masakerja,
+			'allow_trans_meal' => $result[0]->allow_trans_meal,
+			'allow_trans_rent' => $result[0]->allow_trans_rent,
+			'allow_konsumsi' => $result[0]->allow_konsumsi,
+			'allow_transport' => $result[0]->allow_transport,
+			'allow_comunication' => $result[0]->allow_comunication,
+			'allow_device' => $result[0]->allow_device,
+			'allow_residence_cost' => $result[0]->allow_residence_cost,
+			'allow_rent' => $result[0]->allow_rent,
+			'allow_parking' => $result[0]->allow_parking,
+			'allow_medichine' => $result[0]->allow_medichine,
+
+			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
+			'allow_kasir' => $result[0]->allow_kasir,
+			'allow_operational' => $result[0]->allow_operational,
+
+			'status_employee' => $result[0]->status_employee,
+			'deactive_by' => $result[0]->deactive_by,
+			'deactive_date' => $result[0]->deactive_date,
+			'deactive_reason' => $result[0]->deactive_reason,
+
+			'all_family_relation' 	=> $this->Xin_model->get_all_family_relation(),
+			'all_companies' 		=> $this->Xin_model->get_companies(),
+			'all_education' 		=> $this->Xin_model->get_all_education(),
+			'all_marital' 			=> $this->Xin_model->get_all_marital(),
+			'all_departments' 		=> $this->Department_model->all_departments(),
+			'all_projects' 			=> $this->Project_model->get_project_brand(),
+
+			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
+			'all_designations' 	=> $this->Designation_model->all_designations(),
+			'all_user_roles' 	=> $this->Roles_model->all_user_roles(),
+			'request_resign_date' => $status_pengajuan_paklaring,
+
+			'approve_resignnae' => $result[0]->approve_resignnae,
+			'approve_resignnae_on' => $result[0]->approve_resignnae_on,
+
+			'approve_resignnom' => $result[0]->approve_resignnom,
+			'approve_resignnom_on' => $result[0]->approve_resignnom_on,
+
+			'approve_resignhrd' => $result[0]->approve_resignhrd,
+			'approve_resignhrd_on' => $result[0]->approve_resignhrd_on,
+
+			'cancel_resign_stat' => $result[0]->cancel_resign_stat,
+			'cancel_ket' => $result[0]->cancel_ket,
+			'cancel_date' => $result[0]->cancel_date,
+
+			'last_login_date' => $result[0]->last_login_date,
+			'last_login_date' => $result[0]->last_login_date,
+			'last_login_ip' => $result[0]->last_login_ip,
+
+		);
+
+		$data['subview'] = $this->load->view("admin/employees/employee_manager2", $data, TRUE);
+
+		$this->load->view('admin/layout/layout_main', $data); //page load
+	}
+
+	//mengambil Json data Jabatan berdasarkan projectnya
+    public function getJabatanBySubProject()
+    {
+        $postData = $this->input->post();
+
+        // get data 
+        $data = $this->Employees_model->getJabatanBySubProject($postData);
+
+		//variabel cek data
+		$datacek = [
+			'employee_id'        	=> $postData['nip']
+		];
+
+		$data2 = $this->Employees_model->get_jabatan($datacek);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			if (empty($data2)) {
+				$response = array(
+					'status'	=> "200",
+					'pesan' 	=> "Berhasil Fetch Data",
+					'parameter'	=> "",
+					'data'		=> $data,
+				);
+			} else {
+				$response = array(
+					'status'	=> "200",
+					'pesan' 	=> "Berhasil Fetch Data",
+					'parameter'	=> $data2["designation_id"],
+					'data'		=> $data,
+				);
+			}
+			
+		}
+
+        echo json_encode($response);
+    }
+
+	//mengambil Json data pin employee
+	public function get_pin()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data 
+		$data = $this->Employees_model->get_pin($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			if ((empty($data["private_code"])) || ($data["private_code"] == "")) {
+				$response = array(
+					'status'	=> "202",
+					'pesan' 	=> "Karyawan ini belum memiliki PIN",
+				);
+			} else {
+				$response = array(
+					'status'	=> "200",
+					'pesan' 	=> "Berhasil Fetch Data",
+					'data'		=> $data,
+				);
+			}
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//ganti data pin employee
+	public function ganti_pin()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		$options = array('cost' => 12);
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        	=> $postData['nip'],
+			'pin_lama'        		=> $postData['pin_lama'],
+			'pin_baru'        		=> $postData['pin_baru'],
+			'konfirmasi_pin_baru'   => $postData['konfirmasi_pin_baru'],
+			'password_hash'   		=> password_hash($postData['pin_baru'], PASSWORD_BCRYPT, $options),
+		];
+
+		//variabel cek data
+		$datacek = [
+			'employee_id'        	=> $postData['nip']
+		];
+
+		// get data untuk cek pin lama
+		$data = $this->Employees_model->get_pin($datacek);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			if ((empty($data["private_code"])) || ($data["private_code"] == "")) {
+				//update PIN
+				$this->Employees_model->update_pin($datarequest);
+
+				//data response PIN
+				$data2 = $this->Employees_model->get_pin($datacek);
+				$response = array(
+					'status'	=> "200",
+					'pesan' 	=> "Berhasil Ubah PIN",
+					'data'		=> $data2,
+				);
+			} else {
+				if ($datarequest["pin_lama"] == $data["private_code"]) {
+					//update PIN
+					$this->Employees_model->update_pin($datarequest);
+
+					//data response PIN
+					$data2 = $this->Employees_model->get_pin($datacek);
+					$response = array(
+						'status'	=> "200",
+						'pesan' 	=> "Berhasil Ubah PIN",
+						'data'		=> $data2,
+					);
+				} else {
+					$response = array(
+						'status'	=> "202",
+						'pesan' 	=> "PIN Lama Anda Salah",
+						'data'		=> $data,
+					);
+				}
+			}
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data diri employee
+	public function get_data_diri()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_diri($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data project employee
+	public function get_data_project()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_project($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data kontak employee
+	public function get_data_kontak()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_kontak($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save data diri employee
+	public function save_data_diri()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'first_name'        => strtoupper($postData['nama_lengkap']),
+			'gender'        	=> $postData['jenis_kelamin'],
+			'tempat_lahir'      => strtoupper($postData['tempat_lahir']),
+			'date_of_birth'     => $postData['tanggal_lahir'],
+			'last_edu'        	=> $postData['pendidikan_terakhir'],
+			'ethnicity_type'    => $postData['agama'],
+			'marital_status'    => $postData['status_kawin'],
+			'tinggi_badan'      => $postData['tinggi_badan'],
+			'berat_badan'       => $postData['berat_badan'],
+			'blood_group'       => $postData['golongan_darah'],
+			'ktp_no'        	=> $postData['no_ktp'],
+			'kk_no'        		=> $postData['no_kk'],
+			'npwp_no'        	=> $postData['no_npwp'],
+			'contact_no'        => $postData['no_hp'],
+			'email'        		=> strtoupper($postData['email']),
+			'ibu_kandung'       => strtoupper($postData['ibu_kandung']),
+			'alamat_ktp'        => strtoupper($postData['alamat_ktp']),
+			'alamat_domisili'   => strtoupper($postData['alamat_domisili']),
+		];
+
+		// save data diri
+		$data = $this->Employees_model->save_data_diri($datarequest,$postData['nip']);
+
+		//jenis kelamin
+		if ((is_null($data['gender'])) || ($data['gender'] == "") || ($data['gender'] == "0")) {
+			$gender_name = '--';
+		} else if ($data['gender'] == "L") {
+			$gender_name = 'LAKI-LAKI';
+		} else if ($data['gender'] == "P") {
+			$gender_name = 'PEREMPUAN';
+		} else {
+			$gender_name = '--';
+		}
+
+		//Susun variabel untuk update element di view
+		$datahasil = [
+			'first_name'        => $data['first_name'],
+			'gender'        	=> $gender_name,
+			'tempat_lahir'      => $data['tempat_lahir'],
+			'date_of_birth'     => $this->Xin_model->tgl_indo($data['date_of_birth']),
+			'last_edu'        	=> strtoupper($this->Employees_model->get_nama_pendidikan($data['last_edu'])),
+			'ethnicity_type'    => strtoupper($this->Employees_model->get_nama_agama($data['ethnicity_type'])),
+			'marital_status'    => strtoupper("[ " . $this->Employees_model->get_status_kawin($data['marital_status']) . " ] " . $this->Employees_model->get_status_kawin_nama($data['marital_status'])),
+			'tinggi_badan'      => $data['tinggi_badan'],
+			'berat_badan'       => $data['berat_badan'],
+			'blood_group'       => $data['blood_group'],
+			'ktp_no'        	=> $data['ktp_no'],
+			'kk_no'        		=> $data['kk_no'],
+			'npwp_no'        	=> $data['npwp_no'],
+			'contact_no'        => $data['contact_no'],
+			'email'        		=> $data['email'],
+			'ibu_kandung'       => $data['ibu_kandung'],
+			'alamat_ktp'        => $data['alamat_ktp'],
+			'alamat_domisili'   => $data['alamat_domisili'],
+		];
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Save Data",
+				'data'		=> $datahasil,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save data project employee
+	public function save_project()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'sub_project_id'    => $postData['sub_project'],
+			'designation_id'    => $postData['jabatan'],
+			'penempatan'     	=> $postData['penempatan'],
+			'location_id'       => $postData['kategori'],
+			'date_of_joining'   => $postData['date_of_join'],
+		];
+
+		// save data diri
+		$data = $this->Employees_model->save_project($datarequest,$postData['nip']);
+
+		//Susun variabel untuk update element di view
+		$datahasil = [
+			'sub_project_id'      	=> strtoupper($this->Employees_model->get_nama_sub_project($data['sub_project_id'])),
+			'designation_id'       	=> strtoupper($this->Employees_model->get_nama_jabatan($data['designation_id'])),
+			'penempatan'       		=> strtoupper($data['penempatan']),
+			'location_id'        	=> strtoupper($this->Employees_model->get_nama_kategori($data['location_id'])),
+			'date_of_joining'       => $this->Xin_model->tgl_indo($data['date_of_joining']),
+		];
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Save Data",
+				'data'		=> $datahasil,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save data kontak employee
+	public function save_kontak()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'nip'    		=> $postData['nip'],
+			'nama'   		=> strtoupper($postData['nama_kontak']),
+			'hubungan'     	=> $postData['hubungan'],
+			'no_kontak'  	=> $postData['nomor_kontak'],
+		];
+
+		// save data diri
+		$data = $this->Employees_model->save_kontak($datarequest,$postData['nip']);
+
+		//Susun variabel untuk update element di view
+		$datahasil = [
+			//Kontak Darurat
+			'nama'      		=> strtoupper($data['nama']),
+			'hubungan'       	=> strtoupper($this->Employees_model->get_nama_hubungan_kontak_darurat($data['hubungan'])),
+			'no_kontak'       	=> $data['no_kontak'],
+		];
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Save Data",
+				'data'		=> $datahasil,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
 	}
 }
