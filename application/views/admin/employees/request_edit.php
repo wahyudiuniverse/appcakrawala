@@ -930,7 +930,9 @@
 
       <div class="form-actions box-footer">
         <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
+        <?php if (in_array('1012', $role_resources_ids)) { ?>
         <button id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
+        <?php } ?>
       </div>
       <?php echo form_close(); ?>
     </div>

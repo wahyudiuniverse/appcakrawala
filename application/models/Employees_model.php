@@ -1698,13 +1698,66 @@ class Employees_model extends CI_Model
 				}
 			}
 
+			//cek status verifikasi
+			$nik_validation = "0";
+			$nik_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'nik');
+			if (is_null($nik_validation_query)) {
+				$nik_validation = "0";
+			} else {
+				$nik_validation = $nik_validation_query['status'];
+			}
+			$kk_validation = "0";
+			$kk_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'kk');
+			if (is_null($kk_validation_query)) {
+				$kk_validation = "0";
+			} else {
+				$kk_validation = $kk_validation_query['status'];
+			}
+			$nama_validation = "0";
+			$nama_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'nama');
+			if (is_null($nama_validation_query)) {
+				$nama_validation = "0";
+			} else {
+				$nama_validation = $nama_validation_query['status'];
+			}
+			$bank_validation = "0";
+			$bank_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'bank');
+			if (is_null($bank_validation_query)) {
+				$bank_validation = "0";
+			} else {
+				$bank_validation = $bank_validation_query['status'];
+			}
+			$norek_validation = "0";
+			$norek_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'norek');
+			if (is_null($norek_validation_query)) {
+				$norek_validation = "0";
+			} else {
+				$norek_validation = $norek_validation_query['status'];
+			}
+			$pemilik_rekening_validation = "0";
+			$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'pemilik_rekening');
+			if (is_null($pemilik_rekening_validation_query)) {
+				$pemilik_rekening_validation = "0";
+			} else {
+				$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+			}
+
+			$status_verifikasi = "";
+			if (
+				($nik_validation == "1") && ($kk_validation == "1") && ($nama_validation == "1") &&
+				($bank_validation == "1") && ($norek_validation == "1") && ($pemilik_rekening_validation == "1")
+			) {
+				$url_icon_verifikasi = base_url('/assets/icon/verified.png');
+				$status_verifikasi = " <img src='" . $url_icon_verifikasi . "' width='20'>";
+			}
+
 			$data[] = array(
 				"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
 				//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
 				"golongan_karyawan" => $status_golongan,
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
 				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
-				"fullname" => $record->fullname . $siap_approve,
+				"fullname" => $record->fullname . $status_verifikasi . $siap_approve,
 				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
 				"penempatan" => $record->penempatan,
 				"project" => $this->get_nama_project($record->project),
@@ -5398,6 +5451,80 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
+	//ambil data rekening employee
+	public function get_data_rekening($postData)
+	{
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data buku tabungan employee
+	public function get_data_buku_tabungan($postData)
+	{
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data dokumen pribadi employee
+	public function get_data_dokumen_pribadi($postData)
+	{
+		$this->db->select('filename_ktp');
+		$this->db->select('filename_kk');
+		$this->db->select('filename_npwp');
+		$this->db->select('filename_cv');
+		$this->db->select('filename_skck');
+		$this->db->select('filename_isd');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data rekening employee
+	public function get_data_kontrak($postData)
+	{
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->result_array();
+
+		return $query;
+	}
+
 	//save data diri employee
 	public function save_data_diri($postData, $nip)
 	{
@@ -5480,6 +5607,52 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		$this->db->from('xin_employee_emergency',);
 		$this->db->where('employee_request_nik', $query['ktp_no']);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data project employee
+	public function save_rekening($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		//fetch data terbaru
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data project employee
+	public function save_file_rekening($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		//fetch data terbaru
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
 
