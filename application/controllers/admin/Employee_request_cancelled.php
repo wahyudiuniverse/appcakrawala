@@ -432,7 +432,9 @@ class employee_request_cancelled extends MY_Controller
 
 			//variabel dokumen
 			'ktp'  => $result[0]->ktp,
+			'tipe_ktp' => substr($result[0]->ktp, 0, 3),
 			'kk'  => $result[0]->kk,
+			'tipe_kk' => substr($result[0]->kk, 0, 3),
 			'file_npwp'  => $result[0]->file_npwp,
 			'skck'  => $result[0]->skck,
 			'ijazah'  => $result[0]->ijazah,

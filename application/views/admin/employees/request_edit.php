@@ -1219,13 +1219,15 @@ $sub_project_id = $sub_project; ?>
     e.preventDefault();
 
     if (flag_ktp == 0) {
-      var filektp = "<?php echo $parameterfile1; ?>";
-      var tipe_file = filekk.substr(-3, 3);
+      var filektp = "<?php echo $tesfile1; ?>";
+      var tipe_file = "<?php echo $tipe_ktp; ?>";
       var atribut = "";
       var height = '';
       var d = new Date();
       var time = d.getTime();
       filektp = filektp + "?" + time;
+
+      // alert(filektp);
 
       if (tipe_file == "pdf") {
         atribut = "application/pdf";
@@ -1260,8 +1262,8 @@ $sub_project_id = $sub_project; ?>
     e.preventDefault();
 
     if (flag_kk == 0) {
-      var filekk = "<?php echo $parameterfile2; ?>";
-      var tipe_file = filekk.substr(-3, 3);
+      var filekk = "<?php echo $tesfile2; ?>";
+      var tipe_file = "<?php echo $tipe_kk; ?>";
       var atribut = "";
       var height = '';
       var d = new Date();
