@@ -6,8 +6,8 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
-<?php $system = $this->Xin_model->read_setting_info(1); 
-      $sub_project_id = $sub_project; ?>
+<?php $system = $this->Xin_model->read_setting_info(1);
+$sub_project_id = $sub_project; ?>
 <?php $count_emp_request_cancel = $this->Xin_model->count_emp_request_cancel($session['employee_id']); ?>
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae($session['employee_id']); ?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom($session['employee_id']); ?>
@@ -931,7 +931,7 @@
       <div class="form-actions box-footer">
         <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
         <?php if (in_array('1012', $role_resources_ids)) { ?>
-        <button id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
+          <button id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
         <?php } ?>
       </div>
       <?php echo form_close(); ?>
@@ -1219,7 +1219,20 @@
     e.preventDefault();
 
     if (flag_ktp == 0) {
-      var filektp = "<?php echo $tesfile1; ?>";
+      var filektp = "<?php echo $parameterfile1; ?>";
+      var tipe_file = filekk.substr(-3, 3);
+      var atribut = "";
+      var height = '';
+      var d = new Date();
+      var time = d.getTime();
+      filektp = filektp + "?" + time;
+
+      if (tipe_file == "pdf") {
+        atribut = "application/pdf";
+        height = 'height="300px"';
+      } else {
+        atribut = "image/jpg";
+      }
 
       var html_text = "";
 
@@ -1227,7 +1240,7 @@
       var html_text = html_text + "<div class='form-group col-md-12'>";
       var html_text = html_text + "<label>Foto KTP  </label>";
       var html_text = html_text + "<button id='button_verify_bank_modal' class='btn btn-xs btn-outline-success' data-style='expand-right'>Open File</button>";
-      var html_text = html_text + "<embed class='form-group col-md-12' id='output_ktp' type='image/jpg' src='" + filektp + "'></embed>";
+      var html_text = html_text + "<embed " + atribut + " class='form-group col-md-12' id='output_ktp' type='" + atribut + "' src='" + filektp + "'></embed>";
       var html_text = html_text + "</div>";
       var html_text = html_text + "</div>";
 
@@ -1247,7 +1260,20 @@
     e.preventDefault();
 
     if (flag_kk == 0) {
-      var filekk = "<?php echo $tesfile2; ?>";
+      var filekk = "<?php echo $parameterfile2; ?>";
+      var tipe_file = filekk.substr(-3, 3);
+      var atribut = "";
+      var height = '';
+      var d = new Date();
+      var time = d.getTime();
+      filekk = filekk + "?" + time;
+
+      if (tipe_file == "pdf") {
+        atribut = "application/pdf";
+        height = 'height="300px"';
+      } else {
+        atribut = "image/jpg";
+      }
 
       var html_text = "";
 
@@ -1255,7 +1281,7 @@
       var html_text = html_text + "<div class='form-group col-md-12'>";
       var html_text = html_text + "<label>Foto KK  </label>";
       var html_text = html_text + "<button id='button_verify_bank_modal' class='btn btn-xs btn-outline-success' data-style='expand-right'>Open File</button>";
-      var html_text = html_text + "<embed class='form-group col-md-12' id='output_ktp' type='image/jpg' src='" + filekk + "'></embed>";
+      var html_text = html_text + "<embed " + height + " class='form-group col-md-12' id='output_ktp' type='" + atribut + "' src='" + filekk + "'></embed>";
       var html_text = html_text + "</div>";
       var html_text = html_text + "</div>";
 
