@@ -1157,6 +1157,7 @@ class Employee_request_hrd extends MY_Controller
 		$count_nip = $this->Xin_model->count_nip();
 		$employee_request = $this->Employees_model->read_employee_request2($id);
 
+		$verification_id 		= $employee_request['secid'];
 		$fullname 				= $employee_request['fullname'];
 		$nama_ibu 				= $employee_request['nama_ibu'];
 		$tempat_lahir 			= $employee_request['tempat_lahir'];
@@ -1312,6 +1313,7 @@ class Employee_request_hrd extends MY_Controller
 
 			$data_migrate = array(
 
+				'verification_id'			=> $verification_id,
 				'employee_id' 					=> $employee_id,
 				'username' 							=> $employee_id,
 				'first_name' 						=> $fullname,
