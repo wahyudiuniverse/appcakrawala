@@ -202,11 +202,11 @@ if (in_array('513', $role_resources_ids)) {
           "orderable": false,
         },
         {
-          data: 'upload_by',
+          data: 'release_by',
           //"orderable": false,
         },
         {
-          data: 'upload_on',
+          data: 'release_on',
           //"orderable": false,
         },
       ]
@@ -337,11 +337,11 @@ if (in_array('513', $role_resources_ids)) {
           "orderable": false,
         },
         {
-          data: 'upload_by',
+          data: 'release_by',
           //"orderable": false,
         },
         {
-          data: 'upload_on',
+          data: 'release_on',
           //"orderable": false,
         },
       ]
@@ -430,11 +430,11 @@ if (in_array('513', $role_resources_ids)) {
           "orderable": false,
         },
         {
-          data: 'upload_by',
+          data: 'release_by',
           //"orderable": false,
         },
         {
-          data: 'upload_on',
+          data: 'release_on',
           //"orderable": false,
         },
       ]

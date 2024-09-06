@@ -1309,8 +1309,8 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
 				"total_mpp" => $record->total_mpp,
-				"upload_by" => $record->upload_by,
-				"upload_on" => $record->upload_on,
+				"release_by" => $record->release_by,
+				"release_by" => $record->release_on,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
@@ -1509,8 +1509,8 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
 				"total_mpp" => $record->total_mpp,
-				"upload_by" => $record->upload_by,
-				"upload_on" => $record->upload_on,
+				"release_by" => $record->release_by,
+				"release_on" => $record->release_on,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
