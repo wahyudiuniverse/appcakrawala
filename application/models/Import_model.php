@@ -513,6 +513,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($record->fullname), " "),
 				trim(strtoupper($data_batch['project_name']), " "),
 				trim(strtoupper($record->sub_project), " "),
+				trim(strtoupper($record->jabatan), " "),
 				trim(strtoupper($record->area), " "),
 				trim(strtoupper($tempat_lahir), " "),
 				$tanggal_lahir,

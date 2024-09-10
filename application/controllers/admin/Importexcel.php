@@ -1084,6 +1084,7 @@ class ImportExcel extends MY_Controller
 			'NAMA LENGKAP',
 			'PROJECT',
 			'SUB PROJECT',
+			'JABATAN',
 			'AREA',
 			'TEMPAT LAHIR',
 			'TANGGAL LAHIR (Y-m-d)',
