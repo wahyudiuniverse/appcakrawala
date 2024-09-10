@@ -1311,7 +1311,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"sub_project_name" => $record->sub_project_name,
 				"total_mpp" => $record->total_mpp,
 				"release_by" => $record->release_by,
-				"release_by" => $record->release_on,
+				"release_on" => $record->release_on,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
