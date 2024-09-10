@@ -111,6 +111,7 @@ class Employees_model extends CI_Model
 		FROM xin_employees 
 		WHERE is_active = 1 
 		AND status_resign in (2,3,4,5)
+		AND approve_resignhrd is null
 		AND project_id = '$id'
 		ORDER BY date_of_leaving DESC;");
 		return $query->result();
@@ -706,33 +707,6 @@ class Employees_model extends CI_Model
 					return "";
 				} else {
 					return $query['kode'];
-				}
-			}
-		}
-	}
-
-	//ambil status kawin
-	function get_status_kawin_nama($id)
-	{
-		if ($id == null) {
-			return "";
-		} else if ($id == 0) {
-			return "";
-		} else {
-			$this->db->select('nama');
-			$this->db->from('mt_marital');
-			$this->db->where('id_marital', $id);
-
-			$query = $this->db->get()->row_array();
-
-			//return $query['name'];
-			if (empty($query)) {
-				return $id;
-			} else {
-				if ($query['nama'] == null) {
-					return "";
-				} else {
-					return $query['nama'];
 				}
 			}
 		}
@@ -1698,6 +1672,7 @@ class Employees_model extends CI_Model
 				}
 			}
 
+
 			//cek status verifikasi
 			$nik_validation = "0";
 			$nik_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'nik');
@@ -1757,6 +1732,7 @@ class Employees_model extends CI_Model
 				"golongan_karyawan" => $status_golongan,
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
 				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
+				// "fullname" => $record->fullname . $siap_approve,
 				"fullname" => $record->fullname . $status_verifikasi . $siap_approve,
 				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
 				"penempatan" => $record->penempatan,
@@ -2099,7 +2075,7 @@ class Employees_model extends CI_Model
 					// $this->get_nama_karyawan($record->upload_by)
 				);
 			}
-		} else {
+		} else{
 			$totalRecords = 0;
 			$totalRecordwithFilter = 0;
 			$data = array();
@@ -2910,7 +2886,7 @@ WHERE ktp_no = ?';
 	public function read_eslip_by_nip($id)
 	{
 
-		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? ORDER BY secid DESC LIMIT 6';
+		$sql = 'SELECT * FROM xin_employees_eslip WHERE nip = ? ORDER BY secid DESC LIMIT 3';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 
@@ -2927,11 +2903,10 @@ WHERE ktp_no = ?';
 	{
 
 		$sql = "
-			
-			SELECT saltab.*, bulk.periode_cutoff_from, bulk.periode_cutoff_to 
+			SELECT  bulk.periode_cutoff_from, bulk.periode_cutoff_to, bulk.eslip_release, bulk.project_id, bulk.project_name, bulk.total_mpp, saltab.* 
 			FROM xin_saltab saltab
 			LEFT JOIN xin_saltab_bulk_release bulk ON bulk.id = saltab.uploadid
-			WHERE uploadid IN (SELECT MAX(id) FROM xin_saltab_bulk_release GROUP BY project_id)
+			WHERE bulk.eslip_release is not null
 			AND DATE_FORMAT(bulk.eslip_release, '%Y-%m-%d') <= DATE_FORMAT(NOW(),'%Y-%m-%d')
 			AND nip = ?
 			ORDER BY bulk.id DESC LIMIT 6";
@@ -5277,6 +5252,33 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	}
 
 
+	//ambil status kawin
+	function get_status_kawin_nama($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('nama');
+			$this->db->from('mt_marital');
+			$this->db->where('id_marital', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $id;
+			} else {
+				if ($query['nama'] == null) {
+					return "";
+				} else {
+					return $query['nama'];
+				}
+			}
+		}
+	}
+
 	// get all my team employes > not super admin
 	public function get_all_employees_active()
 	{
@@ -5322,6 +5324,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//  	  return $query->result();
 	// }
 
+	
 	//ambil data jabatan berdasarkan sub project untuk Json
 	public function getJabatanBySubProject($postData)
 	{
@@ -5450,6 +5453,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		return $query;
 	}
+
+
 
 	//ambil data rekening employee
 	public function get_data_rekening($postData)
@@ -5615,6 +5620,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
+	
 	//save data project employee
 	public function save_rekening($postData, $nip)
 	{

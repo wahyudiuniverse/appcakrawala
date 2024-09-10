@@ -119,6 +119,8 @@ class Esign extends MY_Controller {
 
 		$data['sign_fullname']= $srcdoc[0]->sign_fullname;
 		$data['sign_nip'] = $srcdoc[0]->sign_nip;
+		$data['emp_id'] = $srcdoc[0]->employee_id;
+		$data['fullname'] = $srcdoc[0]->first_name;
 		
 		$data['sign_company'] = $this->Company_model->read_company_information($srcdoc[0]->company);
 		$data['release_date']= $this->Xin_model->tgl_indo(substr($srcdoc[0]->approve_hrd_date,0,10));

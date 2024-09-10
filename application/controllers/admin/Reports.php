@@ -2185,13 +2185,6 @@ class Reports extends MY_Controller
 
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-
-		// if(in_array('139',$role_resources_ids)) {
-		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
-		// } else {
-		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all();
-		// 	$data['all_projects'] = $this->Project_model->get_project_exist();
-		// }
 		if (in_array('377', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/report_pkwt_expired", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -2274,12 +2267,12 @@ class Reports extends MY_Controller
 				$nama_project = '--';
 			}
 
-			$subprojects = $this->Project_model->read_single_subproject($r->sub_project_id);
-			if (!is_null($projects)) {
-				$nama_subproject = $subprojects[0]->sub_project_name;
-			} else {
-				$nama_subproject = '--';
-			}
+			// $subprojects = $this->Project_model->read_single_subproject($r->sub_project_id);
+			// if (!is_null($projects)) {
+			// 	$nama_subproject = $subprojects[0]->sub_project_name;
+			// } else {
+			// 	$nama_subproject = '--';
+			// }
 
 			$designation = $this->Designation_model->read_designation_information($r->designation_id);
 			if (!is_null($designation)) {
@@ -2323,7 +2316,7 @@ class Reports extends MY_Controller
 				$nip,
 				$fullname,
 				$nama_project,
-				$nama_subproject,
+				'$nama_subproject',
 				$designation_name,
 				$penempatan,
 				$last_contract

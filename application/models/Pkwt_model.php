@@ -509,7 +509,7 @@ ORDER BY contract_id DESC LIMIT 1";
 		WHERE emp.status_employee = 1 
 		AND emp.status_resign = 1 
 		AND emp.employee_id not in (1,1024)
-		AND pkwt.to_date < now() + INTERVAL 21 day
+		AND pkwt.to_date < now() + INTERVAL 90 day
       --  AND pkwt.approve_hrd = 0
 		AND emp.project_id = '$project'
 		AND pos.level NOT IN ('A','A1','B1','B2')

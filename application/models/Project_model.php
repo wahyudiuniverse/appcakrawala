@@ -289,7 +289,7 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE npro.doc_id
 		FROM xin_employees emp
 		LEFT JOIN xin_projects proj ON proj.project_id=emp.project_id
 		WHERE emp.project_id NOT IN (0)
-		AND emp.status_employee = 1
+		AND emp.status_employee = 0
 		ORDER BY proj.title");
 		return $query->result();
 	}

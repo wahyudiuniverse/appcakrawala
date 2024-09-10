@@ -3024,41 +3024,6 @@ class Importexceleslip extends MY_Controller
 			}
 
 
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
 
 
 			$tbl_2 .= '
@@ -3348,6 +3313,42 @@ class Importexceleslip extends MY_Controller
 			</table>
 			<br>';
 
+			if($adjustment!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			if($adjustment_dlk!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment DLK</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+			
 			$tbl_2 .= '
 			<br><br>
 
@@ -4345,42 +4346,6 @@ class Importexceleslip extends MY_Controller
 			}
 
 
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
 
 			$tbl_2 .= '
 			<br><br>
@@ -4668,6 +4633,44 @@ class Importexceleslip extends MY_Controller
 			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
 			</table>
 			<br>';
+
+
+
+			if($adjustment!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			if($adjustment_dlk!=0){
+			$tbl_2 .= '
+
+			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><i>Adjustment DLK</i></td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
 
 			$tbl_2 .= '
 			<br><br>
