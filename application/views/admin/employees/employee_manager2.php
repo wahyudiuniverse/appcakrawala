@@ -1084,49 +1084,53 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         ?>
                       </pre> -->
 
-                      <?php foreach ($all_sk as $sk): ?>
-                        <div class="card-header with-elements" style="background-color:#c0ebbc;"> <span class="card-header-title mr-2"> <strong> PAKLARING. Periode: <?php echo $sk['join_date']; ?> - <?php echo $sk['resign_date']; ?></strong></span> </div>
-                        <div class="col-md-6">
-                          <table class="table table-striped">
-                            <tbody>
-                              <tr>
-                                <th scope="row" style="width: 30%">Nomor Dokumen</th>
-                                <td><?php echo $sk['nomor_dokumen']; ?></td>
-                              </tr>
-                              <tr>
-                                <th scope="row" style="width: 30%">Tanggal Terbit</th>
-                                <td><?php echo $sk['createdon']; ?></td>
-                              </tr>
-                              <tr>
-                                <th scope="row" style="width: 30%">Action</th>
-                                <td>
-                                  <button onclick="lihat_sk(<?php echo $sk['secid']; ?>,<?php echo $sk['nip']; ?>)" class="btn btn-sm btn-outline-primary mr-1 my-1">Lihat SK</button>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <div class="col-md-6">
-                          <table class="table table-striped">
-                            <tbody>
-                              <tr>
-                                <th scope="row" style="width: 30%">QR Code</th>
-                                <td>
-                                  <img src='<?= base_url() ?>assets/images/<?php echo $sk['qr_code']; ?>' width='150px'>
-                                  <?php //echo $sk['button_open']; 
-                                  ?>
-                                  <?php //echo $sk['button_upload']; 
-                                  ?>
-                                  <?php //echo $sk['button_lihat']; 
-                                  ?>
-                                  <?php //echo $sk['button_hapus']; 
-                                  ?>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      <?php endforeach; ?>
+                      <?php if (!is_null($all_sk)) {
+                        foreach ($all_sk->result_array() as $sk): ?>
+                          <div class="card-header with-elements" style="background-color:#c0ebbc;"> <span class="card-header-title mr-2"> <strong> PAKLARING. Periode: <?php echo $sk['join_date']; ?> - <?php echo $sk['resign_date']; ?></strong></span> </div>
+                          <div class="col-md-6">
+                            <table class="table table-striped">
+                              <tbody>
+                                <tr>
+                                  <th scope="row" style="width: 30%">Nomor Dokumen</th>
+                                  <td><?php echo $sk['nomor_dokumen']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row" style="width: 30%">Tanggal Terbit</th>
+                                  <td><?php echo $sk['createdon']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row" style="width: 30%">Action</th>
+                                  <td>
+                                    <button onclick="lihat_sk(<?php echo $sk['secid']; ?>,<?php echo $sk['nip']; ?>)" class="btn btn-sm btn-outline-primary mr-1 my-1">Lihat SK</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-md-6">
+                            <table class="table table-striped">
+                              <tbody>
+                                <tr>
+                                  <th scope="row" style="width: 30%">QR Code</th>
+                                  <td>
+                                    <img src='<?= base_url() ?>assets/images/<?php echo $sk['qr_code']; ?>' width='150px'>
+                                    <?php //echo $sk['button_open']; 
+                                    ?>
+                                    <?php //echo $sk['button_upload']; 
+                                    ?>
+                                    <?php //echo $sk['button_lihat']; 
+                                    ?>
+                                    <?php //echo $sk['button_hapus']; 
+                                    ?>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        <?php endforeach;
+                      } else { ?>
+                        <div class="card-header with-elements" style="background-color:#c0ebbc;"> <span class="card-header-title mr-2"> <strong> BELUM ADA DATA </strong></span> </div>
+                      <?php } ?>
 
                     </div>
                     <!-- <hr class="border-light m-0">

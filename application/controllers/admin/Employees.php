@@ -8487,7 +8487,7 @@ class Employees extends MY_Controller
 			'all_contract'			=> $this->Employees_model->get_data_kontrak($result[0]->employee_id,$result[0]->user_id),
 			'all_addendum'			=> $this->Employees_model->get_data_addendum($result[0]->user_id),
 			'all_eslip'				=> $this->Employees_model->read_saltab_by_nip2($result[0]->employee_id),
-			'all_sk'				=> $this->Esign_model->read_skk_by_nip($result[0]->employee_id)->result_array(),
+			'all_sk'				=> $this->Esign_model->read_skk_by_nip($result[0]->employee_id),
 
 			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' 	=> $this->Designation_model->all_designations(),
