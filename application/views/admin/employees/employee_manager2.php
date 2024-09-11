@@ -193,28 +193,28 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                   <tr>
                     <td><strong>Nomor KTP</strong></td>
                     <td>
-                      <input id='ktp_no_modal' name='ktp_no_modal' type='number' class='form-control' placeholder='Nomor KTP' value=''>
+                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='ktp_no_modal' name='ktp_no_modal' type='number' class='form-control' placeholder='Nomor KTP' value=''>
                       <span id='pesan_ktp_no_modal'></span>
                     </td>
                   </tr>
                   <tr>
                     <td><strong>Nomor KK</strong></td>
                     <td>
-                      <input id='kk_no_modal' name='kk_no_modal' type='number' class='form-control' placeholder='Nomor KK' value=''>
+                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='kk_no_modal' name='kk_no_modal' type='number' class='form-control' placeholder='Nomor KK' value=''>
                       <span id='pesan_kk_no_modal'></span>
                     </td>
                   </tr>
                   <tr>
                     <td><strong>Nomor NPWP</strong></td>
                     <td>
-                      <input id='npwp_no_modal' name='npwp_no_modal' type='number' class='form-control' placeholder='Nomor NPWP' value=''>
+                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='npwp_no_modal' name='npwp_no_modal' type='number' class='form-control' placeholder='Nomor NPWP' value=''>
                       <span id='pesan_npwp_no_modal'></span>
                     </td>
                   </tr>
                   <tr>
                     <td><strong>Nomor HP/Whatasapp</strong></td>
                     <td>
-                      <input id='contact_no_modal' name='contact_no_modal' type='number' class='form-control' placeholder='Nomor HP/Whatsapp' value=''>
+                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='contact_no_modal' name='contact_no_modal' type='number' class='form-control' placeholder='Nomor HP/Whatsapp' value=''>
                       <span id='pesan_contact_no_modal'></span>
                     </td>
                   </tr>
@@ -228,14 +228,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                   <tr>
                     <td><strong>Nama Ibu Kandung</strong></td>
                     <td>
-                      <input id='ibu_kandung_modal' name='ibu_kandung_modal' type='text' class='form-control' placeholder='Nama Ibu Kandung' value=''>
+                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='ibu_kandung_modal' name='ibu_kandung_modal' type='text' class='form-control' placeholder='Nama Ibu Kandung' value=''>
                       <span id='pesan_ibu_kandung_modal'></span>
                     </td>
                   </tr>
                   <tr>
                     <td><strong>Alamat KTP</strong></td>
                     <td>
-                      <textarea id="alamat_ktp_modal" name="alamat_ktp_modal" class='form-control' placeholder='Alamat KTP' rows="4"></textarea>
+                      <textarea <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id="alamat_ktp_modal" name="alamat_ktp_modal" class='form-control' placeholder='Alamat KTP' rows="4"></textarea>
                       <span id='pesan_alamat_ktp_modal'></span>
                     </td>
                   </tr>
@@ -426,6 +426,191 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   </div>
 </div>
 
+<!-- MODAL EDIT REKENING BANK -->
+<div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editRekeningModalLabel">Edit Rekening Bank</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="isi-modal-edit-rekening">
+          <div class="container" id="container_modal_rekening">
+            <?php $attributes = array('name' => 'rekening_form', 'id' => 'rekening_form', 'autocomplete' => 'off', 'class' => 'm-b-1'); ?>
+            <?php echo form_open_multipart('admin/profile/uploadaddendum/', $attributes); ?>
+            <div class="row">
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr>
+                    <td style='width:25%'><strong>Nama Bank</strong></td>
+                    <td style='width:75%'>
+                      <select class="form-control" id="nama_bank" name="nama_bank" data-plugin="select_modal_rekening" data-placeholder="Pilih Bank">
+                        <option value="">Pilih Hubungan</option>
+                        <?php foreach ($list_bank as $bank): ?>
+                          <option value="<?php echo $bank->secid; ?>"><?php echo strtoupper($bank->bank_name); ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                      <span id='pesan_nama_bank'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Nomor Rekening</strong></td>
+                    <td>
+                      <input id='nomor_rekening' name='nomor_rekening' type='text' class='form-control' placeholder='Nomor Rekening' value=''>
+                      <span id='pesan_nomor_rekening'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Pemilik Rekening</strong></td>
+                    <td>
+                      <input id='pemilik_rekening' name='pemilik_rekening' type='text' class='form-control' placeholder='Pemilik Rekening' value=''>
+                      <span id='pesan_pemilik_rekening'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Foto Buku Rekening</strong></td>
+                    <td>
+                      <div id="file_buku_tabungan_kosong" class="mb-2">BELUM ADA DATA. SILAHKAN UPLOAD FOTO BUKU TABUNGAN</div>
+                      <div id="file_buku_tabungan_isi" class="mb-2">
+                        <button id="button_open_buku_tabungan" type="button" onclick="open_buku_tabungan(<?php echo $employee_id; ?>)" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Open Buku Tabungan</button>
+                        <button id="button_open_upload_buku_tabungan" type="button" onclick="open_upload_buku_tabungan()" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Upload Buku Tabungan</button>
+                      </div>
+                      <div id="form_upload_buku_tabungan" class="form-group">
+                        <fieldset class="form-group">
+                          <input type="file" class="form-control-file" id="buku_rekening" name="buku_rekening" accept="application/pdf, image/png, image/jpg, image/jpeg">
+                          <small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>
+                        </fieldset>
+                      </div>
+                      <!-- <input class="form-control" type="file" id="buku_rekening" name="buku_rekening" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"> -->
+                      <span id='pesan_buku_rekening'></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-modal-edit-rekening"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <button id='button_save_rekening' name='button_save_rekening' type='submit' class='btn btn-primary'>Save Rekening</button>
+      </div>
+
+      <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL UPLOAD DOKUMEN PRIBADI -->
+<div class="modal fade" id="uploadDokumenModal" tabindex="-1" role="dialog" aria-labelledby="uploadDokumenModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadDokumenModalLabel"><span id="judul_modal_upload_dokumen">Upload Dokumen Pribadi</span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="isi-modal-upload-dokumen">
+          <div class="container" id="container_modal_upload_dokumen">
+            <?php $attributes = array('name' => 'dokumen_form', 'id' => 'dokumen_form', 'autocomplete' => 'off', 'class' => 'm-b-1'); ?>
+            <?php echo form_open_multipart('admin/profile/uploadaddendum/', $attributes); ?>
+            <div class="row">
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr>
+                    <!-- <td style='width:25%'><strong id="label_upload_dokumen">Foto Buku Rekening</strong></td> -->
+                    <td style='width:100%'>
+                      <strong>
+                        <div id="file_dokumen_kosong" class="mb-2">SILAHKAN UPLOAD FOTO BUKU TABUNGAN</div>
+                      </strong>
+                      <!-- <div id="file_dokumen_isi" class="mb-2">
+                        <button id="button_open_dokumen" type="button" onclick="open_buku_tabungan(<?php echo $employee_id; ?>)" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Open Buku Tabungan</button>
+                        <button id="button_open_upload_dokumen" type="button" onclick="open_upload_buku_tabungan()" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Upload Buku Tabungan</button>
+                      </div> -->
+                      <div id="input_upload_dokumen" class="form-group">
+                        <fieldset class="form-group">
+                          <input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">
+                          <small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>
+                        </fieldset>
+                      </div>
+                      <!-- <input class="form-control" type="file" id="buku_rekening" name="buku_rekening" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"> -->
+                      <span id='pesan_upload_dokumen'></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-modal-upload-dokumen"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <span id='button_upload_dokumen'><button type='button' onclick='open_buku_tabungan(<?php echo $employee_id; ?>)' class='btn btn-primary'>Save Dokumen</button></span>
+      </div>
+
+      <?php echo form_close(); ?>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDIT BPJS -->
+<div class="modal fade" id="editBPJSModal" tabindex="-1" role="dialog" aria-labelledby="editBPJSModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editBPJSModalLabel">Edit BPJS</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="isi-modal-edit-bpjs">
+          <div class="container" id="container_modal_bpjs">
+            <div class="row">
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr>
+                    <td style='width:25%'><strong>Nomor BPJS Kesehatan</strong></td>
+                    <td style='width:75%'>
+                      <input id='no_bpjs_ks_modal' name='no_bpjs_ks_modal' type='text' class='form-control' placeholder='Nomor BPJS Kesehatan' value=''>
+                      <span id='pesan_no_bpjs_ks_modal'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Nomor BPJS Ketenagakerjaan</strong></td>
+                    <td>
+                      <input id='no_bpjs_tk_modal' name='no_bpjs_tk_modal' type='text' class='form-control' placeholder='Nomor BPJS Ketenagakerjaan' value=''>
+                      <span id='pesan_no_bpjs_tk_modal'></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-modal-edit-bpjs"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <button id='button_save_bpjs' name='button_save_bpjs' type='button' class='btn btn-primary'>Save Nomor BPJS</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- CARD DATA -->
 <div class="row <?php echo $get_animate; ?>">
   <div class="col-12">
@@ -433,7 +618,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       <div class="card-body">
         <div class="row">
           <div class="col-3 col-md-2 col-auto text-center align-self-center">
-            <img src="<?php echo $de_file; ?>" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80">
+            <span id="foto_profile"><img src="<?php echo $de_file; ?>" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></span>
             <br>
             <button id="button_ubah_foto" class="btn btn-sm btn-white ladda-button mx-0" data-style="expand-right">Ubah Foto</button>
           </div>
@@ -445,8 +630,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
               <div class="mt-1" id="jabatan_name_card">JABATAN: <?php echo $designation_name; ?></div>
               <div class="mt-1" id="kategori_name_card">KATEGORI: <?php echo $kategori; ?></div>
               <div class="mt-3">
-                <button id="button_verifikasi" class="btn btn-sm btn-white ladda-button mx-0" data-style="expand-right">Verifikasi Data</button>
-                <button id="button_download_resume" class="btn btn-sm btn-white ladda-button mx-1" data-style="expand-right">Download Resume</button>
+                <?php if (in_array('1000', $role_resources_ids)) { ?>
+                  <button id="button_verifikasi" class="btn btn-sm btn-white ladda-button mr-1" data-style="expand-right">Verifikasi Data</button>
+                <?php } ?>
+                <button id="button_download_resume" class="btn btn-sm btn-white ladda-button mx-0" data-style="expand-right">Download Resume</button>
               </div>
             </div>
           </div>
@@ -485,10 +672,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                   <a class="nav-link" id="dokumen-kontrak-tab" data-toggle="tab" href="#dokumen-kontrak" role="tab" aria-controls="dokumen-kontrak" aria-selected="false"><i class="ion ion-ios-filing"></i> &nbsp; Dokumen Kontrak</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="project-jabatan-tab" data-toggle="tab" href="#project-jabatan" role="tab" aria-controls="project-jabatan" aria-selected="false"><i class="ion ion-ios-document"></i> &nbsp; Dokumen SK</a>
+                  <a class="nav-link" id="dokumen-sk-tab" data-toggle="tab" href="#dokumen-sk" role="tab" aria-controls="dokumen-sk" aria-selected="false"><i class="ion ion-ios-document"></i> &nbsp; Dokumen SK</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="project-jabatan-tab" data-toggle="tab" href="#project-jabatan" role="tab" aria-controls="project-jabatan" aria-selected="false"><i class="ion ion-logo-usd"></i> &nbsp; E-SLIP</a>
+                  <a class="nav-link" id="dokumen-eslip-tab" data-toggle="tab" href="#dokumen-eslip" role="tab" aria-controls="dokumen-eslip" aria-selected="false"><i class="ion ion-logo-usd"></i> &nbsp; E-SLIP</a>
                 </li>
               </ul>
 
@@ -563,8 +750,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                               <th scope="row">Nomor HP/Whatsapp</th>
                               <td>
                                 <span id="nomor_kontak_tabel"><?php echo $contact_no; ?></span>
-                                <button id="button_send_whatsapp" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Send Whatsapp</button>
-                                <button id="button_send_pin" class="btn btn-sm btn-outline-primary mx-0">Send PIN</button>
+                                <?php if (in_array('1003', $role_resources_ids)) { ?>
+                                  <button id="button_send_whatsapp" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Send Whatsapp</button>
+                                <?php } ?>
+                                <?php if (in_array('1002', $role_resources_ids)) { ?>
+                                  <button id="button_send_pin" class="btn btn-sm btn-outline-primary mx-0">Send PIN</button>
+                                <?php } ?>
                               </td>
                             </tr>
                             <tr>
@@ -587,12 +778,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         </table>
                       </div>
                     </div>
-                    <hr class="border-light m-0">
-                    <div class="row">
-                      <div class="col-12 my-3">
-                        <button id="button_edit_data_diri" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                    <?php if (in_array('1001', $role_resources_ids)) { ?>
+                      <hr class="border-light m-0">
+                      <div class="row">
+                        <div class="col-12 my-3">
+                          <button id="button_edit_data_diri" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                        </div>
                       </div>
-                    </div>
+                    <?php } ?>
 
                   </div>
                   <!-- END TAB DATA DIRI -->
@@ -647,12 +840,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       </div>
 
                     </div>
-                    <hr class="border-light m-0">
-                    <div class="row">
-                      <div class="col-12 my-3">
-                        <button id="button_edit_project" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                    <?php if (in_array('1005', $role_resources_ids)) { ?>
+                      <hr class="border-light m-0">
+                      <div class="row">
+                        <div class="col-12 my-3">
+                          <button id="button_edit_project" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                        </div>
                       </div>
-                    </div>
+                    <?php } ?>
 
                   </div>
                   <!-- END TAB POSISI/JABATAN -->
@@ -688,12 +883,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       </div>
 
                     </div>
-                    <hr class="border-light m-0">
-                    <div class="row">
-                      <div class="col-12 my-3">
-                        <button id="button_edit_kontak_darurat" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                    <?php if (in_array('1006', $role_resources_ids)) { ?>
+                      <hr class="border-light m-0">
+                      <div class="row">
+                        <div class="col-12 my-3">
+                          <button id="button_edit_kontak_darurat" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                        </div>
                       </div>
-                    </div>
+                    <?php } ?>
 
                   </div>
                   <!-- END TAB KONTAK DARURAT -->
@@ -708,15 +905,15 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                           <tbody>
                             <tr>
                               <th scope="row" style="width: 30%">Nama Bank</th>
-                              <td><?php echo $bank_name; ?></td>
+                              <td id="nama_bank_tabel"><?php echo $bank_name; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Nomor Rekening</th>
-                              <td><?php echo $nomor_rek; ?></td>
+                              <td id="nomor_rekening_table"><?php echo $nomor_rek; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Nama Pemilik Rekening</th>
-                              <td><?php echo $pemilik_rek; ?></td>
+                              <td id="pemilik_rekening_tabel"><?php echo $pemilik_rek; ?></td>
                             </tr>
                           </tbody>
                         </table>
@@ -726,19 +923,21 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                           <tbody>
                             <tr>
                               <th scope="row" style="width: 30%">Foto Buku Tabungan</th>
-                              <td><?php echo $filename_rek; ?></td>
+                              <td id="buku_rekening_tabel"><?php echo $filename_rek; ?></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
 
                     </div>
-                    <hr class="border-light m-0">
-                    <div class="row">
-                      <div class="col-12 my-3">
-                        <button id="button_edit_rekening" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                    <?php if (in_array('1007', $role_resources_ids)) { ?>
+                      <hr class="border-light m-0">
+                      <div class="row">
+                        <div class="col-12 my-3">
+                          <button id="button_edit_rekening" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                        </div>
                       </div>
-                    </div>
+                    <?php } ?>
 
                   </div>
                   <!-- END TAB REKENING BANK -->
@@ -787,11 +986,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         <table class="table table-striped">
                           <tbody>
                             <tr>
-                              <th scope="row" style="width: 30%">BPJS Kesehatan</th>
+                              <th scope="row" style="width: 30%">Nomor BPJS Kesehatan</th>
                               <td><?php echo $display_bpjs_ks_no; ?></td>
                             </tr>
                             <tr>
-                              <th scope="row">BPJS Ketenagakerjaan</th>
+                              <th scope="row">Nomor BPJS Ketenagakerjaan</th>
                               <td><?php echo $display_bpjs_tk_no; ?></td>
                             </tr>
                           </tbody>
@@ -799,12 +998,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       </div>
 
                     </div>
-                    <hr class="border-light m-0">
+                    <!-- <hr class="border-light m-0">
                     <div class="row">
                       <div class="col-12 my-3">
                         <button id="button_edit_dokumen_pribadi" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Upload Dokumen</button>
                       </div>
-                    </div>
+                    </div> -->
 
                   </div>
                   <!-- END TAB DOKUMEN PRIBADI -->
@@ -814,44 +1013,55 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                   <div class="tab-pane fade" id="dokumen-kontrak" role="tabpanel" aria-labelledby="dokumen-kontrak-tab">
                     <div class="row">
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> </div>
+                      <!-- <pre>
+                        <?php //print_r($all_contract); 
+                        ?>
+                      </pre> -->
 
-                      <div class="card-header with-elements" style="background-color:#e1e1e1;"> <span class="card-header-title mr-2"> <strong> KONTRAK. Periode: 1 Agustus 2024 - 31 Desember 2024</strong></span> </div>
-                      <div class="col-md-6">
-                        <table class="table table-striped">
-                          <tbody>
-                            <tr>
-                              <th scope="row" style="width: 30%">Nomor Dokumen</th>
-                              <td><?php echo $filename_ktp; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Project</th>
-                              <td><?php echo $filename_kk; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Sub Project</th>
-                              <td><?php echo $filename_npwp; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Jabatan</th>
-                              <td><?php echo $filename_cv; ?></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                      <div class="col-md-6">
-                        <table class="table table-striped">
-                          <tbody>
-                            <tr>
-                              <th scope="row" style="width: 30%">Tanggal Terbit</th>
-                              <td><?php echo $bpjs_ks_no; ?></td>
-                            </tr>
-                            <tr>
-                              <th scope="row">Status</th>
-                              <td><?php echo $bpjs_tk_no; ?></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      <?php foreach ($all_contract as $kontrak): ?>
+                        <div class="card-header with-elements" <?php echo ($kontrak['jenis_dokumen'] == "ADDENDUM" ? 'style="background-color:#c0ebbc;"' : 'style="background-color:#bcbeeb;"'); ?>> <span class="card-header-title mr-2"> <strong> <?php echo $kontrak['jenis_dokumen']; ?>. Periode: <?php echo $kontrak['periode_start']; ?> - <?php echo $kontrak['periode_end']; ?></strong></span> </div>
+                        <div class="col-md-6">
+                          <table class="table table-striped">
+                            <tbody>
+                              <tr>
+                                <th scope="row" style="width: 30%">Nomor Dokumen</th>
+                                <td><?php echo $kontrak['nomor_surat']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Project</th>
+                                <td><?php echo $kontrak['project']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Sub Project</th>
+                                <td><?php echo $kontrak['sub_project']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="row">Jabatan</th>
+                                <td><?php echo $kontrak['jabatan']; ?></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-6">
+                          <table class="table table-striped">
+                            <tbody>
+                              <tr>
+                                <th scope="row" style="width: 30%">Tanggal Terbit</th>
+                                <td><?php echo $kontrak['tanggal_terbit']; ?></td>
+                              </tr>
+                              <tr>
+                                <!-- <th scope="row">Status</th> -->
+                                <td colspan="2">
+                                  <?php echo $kontrak['button_open']; ?>
+                                  <?php echo $kontrak['button_upload']; ?>
+                                  <?php echo $kontrak['button_lihat']; ?>
+                                  <?php echo $kontrak['button_hapus']; ?>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      <?php endforeach; ?>
 
                     </div>
                     <!-- <hr class="border-light m-0">
@@ -863,6 +1073,137 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
                   </div>
                   <!-- END TAB DOKUMEN KONTRAK -->
+
+                  <!-- TAB DOKUMEN SK -->
+                  <!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
+                  <div class="tab-pane fade" id="dokumen-sk" role="tabpanel" aria-labelledby="dokumen-sk-tab">
+                    <div class="row">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN SK</strong></span> </div>
+                      <!-- <pre>
+                        <?php //print_r($all_sk);
+                        ?>
+                      </pre> -->
+
+                      <?php foreach ($all_sk as $sk): ?>
+                        <div class="card-header with-elements" style="background-color:#c0ebbc;"> <span class="card-header-title mr-2"> <strong> PAKLARING. Periode: <?php echo $sk['join_date']; ?> - <?php echo $sk['resign_date']; ?></strong></span> </div>
+                        <div class="col-md-6">
+                          <table class="table table-striped">
+                            <tbody>
+                              <tr>
+                                <th scope="row" style="width: 30%">Nomor Dokumen</th>
+                                <td><?php echo $sk['nomor_dokumen']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="row" style="width: 30%">Tanggal Terbit</th>
+                                <td><?php echo $sk['createdon']; ?></td>
+                              </tr>
+                              <tr>
+                                <th scope="row" style="width: 30%">Action</th>
+                                <td>
+                                  <button onclick="lihat_sk(<?php echo $sk['secid']; ?>,<?php echo $sk['nip']; ?>)" class="btn btn-sm btn-outline-primary mr-1 my-1">Lihat SK</button>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-6">
+                          <table class="table table-striped">
+                            <tbody>
+                              <tr>
+                                <th scope="row" style="width: 30%">QR Code</th>
+                                <td>
+                                  <img src='<?= base_url() ?>assets/images/<?php echo $sk['qr_code']; ?>' width='150px'>
+                                  <?php //echo $sk['button_open']; 
+                                  ?>
+                                  <?php //echo $sk['button_upload']; 
+                                  ?>
+                                  <?php //echo $sk['button_lihat']; 
+                                  ?>
+                                  <?php //echo $sk['button_hapus']; 
+                                  ?>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      <?php endforeach; ?>
+
+                    </div>
+                    <!-- <hr class="border-light m-0">
+                    <div class="row">
+                      <div class="col-12 my-3">
+                        <button id="button_edit_dokumen_kontrak" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Upload Dokumen</button>
+                      </div>
+                    </div> -->
+
+                  </div>
+                  <!-- END TAB DOKUMEN SK -->
+
+                  <!-- TAB DOKUMEN ESLIP -->
+                  <!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
+                  <div class="tab-pane fade" id="dokumen-eslip" role="tabpanel" aria-labelledby="dokumen-eslip-tab">
+                    <div class="row">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN E-Slip</strong></span> </div>
+                      <!-- <pre>
+                        <?php //print_r($all_sk); 
+                        ?>
+                      </pre> -->
+
+                      <?php if (empty($all_eslip)) { ?>
+                        <div class="card-header with-elements" style="background-color:#e1e1e1;"> <span class="card-header-title mr-2"> <strong> Belum ada data </strong></span> </div>
+                      <?php } else { ?>
+                        <?php foreach ($all_eslip as $eslip): ?>
+                          <div class="card-header with-elements" style="background-color:#e1e1e1;"> <span class="card-header-title mr-2"> <strong> e-SLIP. Periode: <?php echo $eslip['cutoff_start']; ?> - <?php echo $eslip['cutoff_end']; ?></strong></span> </div>
+                          <div class="col-md-6">
+                            <table class="table table-striped">
+                              <tbody>
+                                <tr>
+                                  <th scope="row" style="width: 30%">NIP</th>
+                                  <td><?php echo $eslip['nip']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Nama</th>
+                                  <td><?php echo $eslip['nama']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Project</th>
+                                  <td><?php echo $eslip['project']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row">Jabatan</th>
+                                  <td><?php echo $eslip['jabatan']; ?></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-md-6">
+                            <table class="table table-striped">
+                              <tbody>
+                                <tr>
+                                  <th scope="row" style="width: 30%">Tanggal Penggajian</th>
+                                  <td><?php echo $eslip['tanggal_penggajian']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th>Action</th>
+                                  <td><?php echo $eslip['button_lihat']; ?></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        <?php endforeach; ?>
+
+                      <?php } ?>
+
+                    </div>
+                    <!-- <hr class="border-light m-0">
+                    <div class="row">
+                      <div class="col-12 my-3">
+                        <button id="button_edit_dokumen_kontrak" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Upload Dokumen</button>
+                      </div>
+                    </div> -->
+
+                  </div>
+                  <!-- END TAB DOKUMEN ESLIP -->
 
                 </div>
 
@@ -894,35 +1235,39 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   }
 </style>
 
-<!-- GLOBAL VARIABLE -->
 <script type="text/javascript">
   $(document).ready(function() {
+    //-- GLOBAL VARIABLE --
     // $('[data-plugin="select_modal"]').select2($(this).attr("data-options"));
     $('[data-plugin="select_modal"]').select2({
       width: "100%",
       dropdownParent: $("#container_modal")
     });
-
     $('[data-plugin="select_modal_project"]').select2({
       width: "100%",
       dropdownParent: $("#container_modal_project")
     });
-
     $('[data-plugin="select_modal_kontak"]').select2({
       width: "100%",
       dropdownParent: $("#container_modal_kontak")
+    });
+    $('[data-plugin="select_modal_rekening"]').select2({
+      width: "100%",
+      dropdownParent: $("#container_modal_rekening")
+    });
+    $('[data-plugin="select_modal_upload_dokumen"]').select2({
+      width: "100%",
+      dropdownParent: $("#container_modal_upload_dokumen")
+    });
+    $('[data-plugin="select_modal_bpjs"]').select2({
+      width: "100%",
+      dropdownParent: $("#container_modal_bpjs")
     });
 
     // Sub Change - Jabatan
     $('#sub_project_modal').change(function() {
       var nip = "<?php echo $employee_id; ?>";
       var sub_project = $("#sub_project_modal").val();
-      // var jabatan = "<?php //echo $designation_id; 
-                        ?>";
-
-      //-----testing-----
-      // alert("sub project berubah");
-      // alert(jabatan);
 
       // AJAX request
       $.ajax({
@@ -962,6 +1307,127 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           });
         }
       });
+    });
+
+    //save data Rekneing
+    $('#rekening_form').submit(function(event) {
+      event.preventDefault();
+      var nip = "<?php echo $employee_id; ?>";
+      var form = document.getElementById('rekening_form');
+      var formData = new FormData(form);
+      formData.append('nip', nip);
+
+      var nama_bank = $("#nama_bank option:selected").val();
+      var nomor_rekening = $("#nomor_rekening").val();
+      var pemilik_rekening = $("#pemilik_rekening").val();
+
+      //-------testing-------
+      // alert(pemilik_rekening);
+      // alert("masuk button save Data Diri");
+      // alert('Server Time: '+ getServerTime());
+      // alert('Locale Time: '+ new Date(getServerTime()));
+
+      //-------cek apakah ada yang tidak diisi-------
+      var pesan_nama_bank = "";
+      var pesan_nomor_rekening = "";
+      var pesan_pemilik_rekening = "";
+      if (nama_bank == "") {
+        pesan_nama_bank = "<small style='color:#FF0000;'>Bank tidak boleh kosong</small>";
+        $('#nama_bank').focus();
+      }
+      if (nomor_rekening == "") {
+        pesan_nomor_rekening = "<small style='color:#FF0000;'>Nomor rekening tidak boleh kosong</small>";
+        $('#nomor_rekening').focus();
+      }
+      if (pemilik_rekening == "") {
+        pesan_pemilik_rekening = "<small style='color:#FF0000;'>Nama pemilik rekening tidak boleh kosong</small>";
+        $('#pemilik_rekening').focus();
+      }
+      $('#pesan_nama_bank').html(pesan_nama_bank);
+      $('#pesan_nomor_rekening').html(pesan_nomor_rekening);
+      $('#pesan_pemilik_rekening').html(pesan_pemilik_rekening);
+
+      //cek isi form data
+      // var html_text_formdata = "";
+      // for (var pair of formData.entries()) { // Display the key/value pairs
+      //   html_text_formdata = html_text_formdata + pair[0] + ', ' + pair[1] + '\n';
+      // }
+      // alert(html_text_formdata);
+
+      //-------action-------
+      if (
+        (pesan_nama_bank != "") || (pesan_nomor_rekening != "") || (pesan_pemilik_rekening != "")
+      ) { //kalau ada input kosong 
+        alert("Tidak boleh ada input kosong");
+        setTimeout(() => {
+          $('#button_save_rekening').attr("disabled", false);
+          $('#button_save_rekening').removeAttr("data-loading");
+        }, 10);
+
+      } else { //kalau semua terisi
+        $.ajax({
+          url: '<?= base_url() ?>admin/Employees/save_rekening/',
+          method: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          beforeSend: function() {
+            // $('#editRekeningModal').modal('show');
+            $('.info-modal-edit-rekening').attr("hidden", false);
+            $('.isi-modal-edit-rekening').attr("hidden", true);
+            $('.info-modal-edit-rekening').html(uploading_html_text);
+            $('#button_save_rekening').attr("hidden", true);
+          },
+          success: function(response) {
+            var res = jQuery.parseJSON(response);
+
+            if (res['status'] == "200") { //sukses tanpa upload file
+              // $("#ethnicity_modal").val(res['data']['ethnicity_type']).change();
+              $('.info-modal-edit-rekening').html(success_html_text);
+              $('.info-modal-edit-rekening').attr("hidden", false);
+              $('.isi-modal-edit-rekening').attr("hidden", true);
+              $('#button_save_rekening').attr("hidden", true);
+              $('#button_save_rekening').attr("disabled", false);
+              $('#button_save_rekening').removeAttr("data-loading");
+            } else if (res['status'] == "201") { //sukses dengan upload file
+              $('.info-modal-edit-rekening').html(success_html_text);
+              $('.info-modal-edit-rekening').attr("hidden", false);
+              $('.isi-modal-edit-rekening').attr("hidden", true);
+              $('#button_save_rekening').attr("hidden", true);
+              $('#button_save_rekening').attr("disabled", false);
+              $('#button_save_rekening').removeAttr("data-loading");
+            } else if (res['status'] == "202") { //upload file error
+              $('#pesan_buku_rekening').html("<small style='color:#FF0000;'>" + res['pesan_error'] + "</small>");
+              $("#buku_rekening").val("");
+              $('.info-modal-edit-rekening').attr("hidden", true);
+              $('.isi-modal-edit-rekening').attr("hidden", false);
+              $('#button_save_rekening').attr("hidden", false);
+              $('#button_save_rekening').attr("disabled", false);
+              $('#button_save_rekening').removeAttr("data-loading");
+            } else { //another error (unspecified)
+              $('.info-modal-edit-rekening').html(res['pesan_error']);
+              $('.info-modal-edit-rekening').attr("hidden", false);
+              $('.isi-modal-edit-rekening').attr("hidden", true);
+              $('#button_save_rekening').attr("hidden", true);
+              $('#button_save_rekening').attr("disabled", false);
+              $('#button_save_rekening').removeAttr("data-loading");
+            }
+
+            // alert('Your form has been sent successfully.');
+          },
+          error: function(xhr, status, error) {
+            html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+            html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+            // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+            $('.info-modal-edit-rekening').html(html_text); //coba pake iframe
+            $('.isi-modal-edit-rekening').attr("hidden", true);
+            $('.info-modal-edit-rekening').attr("hidden", false);
+            $('#button_save_rekening').attr("hidden", true);
+            $('#button_save_rekening').attr("disabled", false);
+            $('#button_save_rekening').removeAttr("data-loading");
+          }
+        });
+      }
 
     });
 
@@ -975,6 +1441,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   loading_html_text = loading_html_text + '<img src="' + loading_image + '" alt="" width="100px">';
   loading_html_text = loading_html_text + '<h2>LOADING...</h2>';
   loading_html_text = loading_html_text + '</div>';
+
+  var uploading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+  var uploading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+  uploading_html_text = uploading_html_text + '<img src="' + uploading_image + '" alt="" width="100px">';
+  uploading_html_text = uploading_html_text + '<h2>PROCESSING...</h2>';
+  uploading_html_text = uploading_html_text + '</div>';
 
   var success_image = "<?php echo base_url('assets/icon/ceklis_hijau.png'); ?>";
   var success_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
@@ -1236,12 +1708,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Download Resume -->
 <script type="text/javascript">
   document.getElementById("button_download_resume").onclick = function(e) {
-    // var html_text = '<iframe src="http://localhost/appcakrawala/admin/addendum/cetak/268" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
-    // $('.modal-title').html("Download Resume");
-    // $('.isi-modal').html(html_text);
-    // $('#button_save_pin').attr("hidden", true);
-    // $('#editModal').appendTo("body").modal('show');
-    alert("Under Construction. Masuk button download resume");
+    var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/2024/09/rekening_20509590.pdf" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
+    $('.judul-modal').html("Download Resume");
+    $('.isi-modal').html(html_text);
+    $('#button_save_pin').attr("hidden", true);
+    $('#editModal').appendTo("body").modal('show');
+    // alert("Under Construction. Masuk button download resume");
   };
 </script>
 
@@ -1321,7 +1793,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         }
       },
       error: function(xhr, status, error) {
-        html_text = "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
         // html_text = "Gagal fetch data. Kode error: " + xhr.status;
         $('.info-modal-edit-data-diri').html(html_text); //coba pake iframe
         $('.isi-modal-edit-data-diri').attr("hidden", true);
@@ -1555,7 +2028,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           }
         },
         error: function(xhr, status, error) {
-          html_text = "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+          html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+          html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
           // html_text = "Gagal fetch data. Kode error: " + xhr.status;
           $('.info-modal-edit-data-diri').html(html_text); //coba pake iframe
           $('.isi-modal-edit-data-diri').attr("hidden", true);
@@ -1620,7 +2094,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         }
       },
       error: function(xhr, status, error) {
-        html_text = "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
         // html_text = "Gagal fetch data. Kode error: " + xhr.status;
         $('.info-modal-edit-project').html(html_text); //coba pake iframe
         $('.isi-modal-edit-project').attr("hidden", true);
@@ -1738,7 +2213,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           }
         },
         error: function(xhr, status, error) {
-          html_text = "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+          html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+          html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
           // html_text = "Gagal fetch data. Kode error: " + xhr.status;
           $('.info-modal-edit-project').html(html_text); //coba pake iframe
           $('.isi-modal-edit-project').attr("hidden", true);
@@ -1798,7 +2274,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         }
       },
       error: function(xhr, status, error) {
-        html_text = "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
         // html_text = "Gagal fetch data. Kode error: " + xhr.status;
         $('.info-modal-edit-kontak').html(html_text); //coba pake iframe
         $('.isi-modal-edit-kontak').attr("hidden", true);
@@ -1831,15 +2308,15 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var pesan_hubungan_modal = "";
     var pesan_nomor_kontak_modal = "";
     if (nama_kontak_modal == "") {
-      pesan_nama_kontak_modal = "<small style='color:#FF0000;'>Sub Project tidak boleh kosong</small>";
+      pesan_nama_kontak_modal = "<small style='color:#FF0000;'>Nama kontak darurat tidak boleh kosong</small>";
       $('#nama_kontak_modal').focus();
     }
     if (hubungan_modal == "") {
-      pesan_hubungan_modal = "<small style='color:#FF0000;'>Jabatan tidak boleh kosong</small>";
+      pesan_hubungan_modal = "<small style='color:#FF0000;'>Hubungan kontak darurat tidak boleh kosong</small>";
       $('#hubungan_modal').focus();
     }
     if (nomor_kontak_modal == "") {
-      pesan_nomor_kontak_modal = "<small style='color:#FF0000;'>Penempatan tidak boleh kosong</small>";
+      pesan_nomor_kontak_modal = "<small style='color:#FF0000;'>Nomor kontak darurat tidak boleh kosong</small>";
       $('#nomor_kontak_modal').focus();
     }
     $('#pesan_nama_kontak_modal').html(pesan_nama_kontak_modal);
@@ -1894,7 +2371,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           }
         },
         error: function(xhr, status, error) {
-          html_text = "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+          html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+          html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
           // html_text = "Gagal fetch data. Kode error: " + xhr.status;
           $('.info-modal-edit-kontak').html(html_text); //coba pake iframe
           $('.isi-modal-edit-kontak').attr("hidden", true);
@@ -1911,57 +2389,823 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Edit Rekening Bank -->
 <script type="text/javascript">
   document.getElementById("button_edit_rekening").onclick = function(e) {
-    alert("Under Construction. masuk button edit Rekening Bank");
+    var nip = "<?php echo $employee_id; ?>";
+    //var buka_buku_tabungan = '<button id="button_open_buku_tabungan" type="button" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Open Buku Tabungan</button>';
+    // alert();
+
+    //inisialisasi pesan
+    $('#pesan_nama_bank').html("");
+    $('#pesan_nomor_rekening').html("");
+    $('#pesan_pemilik_rekening').html("");
+    $('#pesan_buku_rekening').html("");
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_rekening/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('#editRekeningModal').modal('show');
+        $('.info-modal-edit-rekening').attr("hidden", false);
+        $('.isi-modal-edit-rekening').attr("hidden", true);
+        $('.info-modal-edit-rekening').html(loading_html_text);
+        $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#nama_bank').val(res['data']['bank_name']).change();
+          $("#nomor_rekening").val(res['data']['nomor_rek']);
+          $('#pemilik_rekening').val(res['data']['pemilik_rek']);
+
+          if ((res['data']['filename_rek'] == null) || (res['data']['filename_rek'] == "") || (res['data']['filename_rek'] == "0")) {
+            $('#file_buku_tabungan_kosong').attr("hidden", false);
+            $('#file_buku_tabungan_isi').attr("hidden", true);
+            $('#form_upload_buku_tabungan').attr("hidden", false);
+          } else {
+            $('#file_buku_tabungan_kosong').attr("hidden", true);
+            $('#file_buku_tabungan_isi').attr("hidden", false);
+            $('#button_open_upload_buku_tabungan').attr("hidden", false);
+            $('#form_upload_buku_tabungan').attr("hidden", true);
+          }
+
+          $('.isi-modal-edit-rekening').attr("hidden", false);
+          $('.info-modal-edit-rekening').attr("hidden", true);
+          $('#button_save_rekening').attr("hidden", false);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-edit-rekening').html(html_text);
+          $('.isi-modal-edit-rekening').attr("hidden", true);
+          $('.info-modal-edit-rekening').attr("hidden", false);
+          $('#button_save_rekening').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-edit-rekening').html(html_text); //coba pake iframe
+        $('.isi-modal-edit-rekening').attr("hidden", true);
+        $('.info-modal-edit-rekening').attr("hidden", false);
+        $('#button_save_rekening').attr("hidden", true);
+      }
+    });
+
   };
 </script>
 
 <!-- Tombol Open Buku Tabungan -->
 <script type="text/javascript">
-  document.getElementById("button_open_buku_tabungan").onclick = function(e) {
-    alert("Under Construction. masuk button Open Buku Tabungan");
-  };
+  function open_buku_tabungan(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_buku_tabungan/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File Buku Tabungan");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_rek'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/rekening/' + nama_file + '"></embed>';
+
+          // var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/' + res['data']['filename_rek'] + '" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+
+  function open_upload_buku_tabungan(nip) {
+    $('#form_upload_buku_tabungan').attr("hidden", false);
+    $('#button_open_upload_buku_tabungan').attr("hidden", true);
+  }
 </script>
 
 <!-- Tombol Open KTP -->
 <script type="text/javascript">
-  document.getElementById("button_open_ktp").onclick = function(e) {
-    alert("Under Construction. masuk button Open KTP");
-  };
+  function open_ktp(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File KTP");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_ktp'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/ktp/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Upload KTP -->
+<script type="text/javascript">
+  function upload_ktp(nip) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "ktp";
+    var button_save_ktp = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save KTP</button>";
+    // alert();
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload KTP");
+    $('#label_upload_dokumen').html("Foto KTP");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO KTP");
+    $('#button_upload_dokumen').html(button_save_ktp);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
+</script>
+
+<!-- Tombol Save Dokumen -->
+<script type="text/javascript">
+  function save_dokumen(nip, jenis_dokumen) {
+    var form = document.getElementById('dokumen_form');
+    var formData = new FormData(form);
+    formData.append('nip', nip);
+    formData.append('jenis_dokumen', jenis_dokumen);
+
+    $('#pesan_upload_dokumen').html("");
+
+    //-------testing-------
+    // alert("masuk button save");
+    // alert('Server Time: '+ getServerTime());
+    // alert('Locale Time: '+ new Date(getServerTime()));
+
+    //cek isi form data
+    // var html_text_formdata = "";
+    // for (var pair of formData.entries()) { // Display the key/value pairs
+    //   html_text_formdata = html_text_formdata + pair[0] + ', ' + pair[1] + '\n';
+    // }
+    // alert(html_text_formdata);
+
+    //-------action-------
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/save_dokumen/',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      beforeSend: function() {
+        // $('#editRekeningModal').modal('show');
+        $('.info-modal-upload-dokumen').attr("hidden", false);
+        $('.isi-modal-upload-dokumen').attr("hidden", true);
+        $('.info-modal-upload-dokumen').html(uploading_html_text);
+        $('#button_upload_dokumen').attr("hidden", true);
+      },
+      success: function(response) {
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") { //sukses upload file
+          $('.info-modal-upload-dokumen').html(success_html_text);
+          $('.info-modal-upload-dokumen').attr("hidden", false);
+          $('.isi-modal-upload-dokumen').attr("hidden", true);
+          $('#button_upload_dokumen').attr("hidden", true);
+          $('#button_upload_dokumen').attr("disabled", false);
+          $('#button_upload_dokumen').removeAttr("data-loading");
+        } else if (res['status'] == "201") { //upload file error
+          $('#pesan_upload_dokumen').html("<small style='color:#FF0000;'>" + res['pesan_error'] + "</small>");
+          $("#file_dokumen").val("");
+          $('.info-modal-upload-dokumen').attr("hidden", true);
+          $('.isi-modal-upload-dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("disabled", false);
+          $('#button_upload_dokumen').removeAttr("data-loading");
+        } else { //another error (unspecified)
+          $('#pesan_upload_dokumen').html("<small style='color:#FF0000;'>" + res['pesan_error'] + "</small>");
+          $('.info-modal-upload-dokumen').attr("hidden", true);
+          $('.isi-modal-upload-dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("disabled", false);
+          $('#button_upload_dokumen').removeAttr("data-loading");
+        }
+
+        // alert('Your form has been sent successfully.');
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-upload-dokumen').html(html_text); //coba pake iframe
+        $('.isi-modal-upload-dokumen').attr("hidden", true);
+        $('.info-modal-upload-dokumen').attr("hidden", false);
+        $('#button_upload_dokumen').attr("hidden", true);
+        $('#button_upload_dokumen').attr("disabled", false);
+        $('#button_upload_dokumen').removeAttr("data-loading");
+      }
+    });
+
+  }
 </script>
 
 <!-- Tombol Open KK -->
 <script type="text/javascript">
-  document.getElementById("button_open_kk").onclick = function(e) {
-    alert("Under Construction. masuk button Open KK");
-  };
+  function open_kk(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File KK");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_kk'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/kk/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Upload KK -->
+<script type="text/javascript">
+  function upload_kk(nip) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "kk";
+    var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save KK</button>";
+    // alert();
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload Kartu Keluarga");
+    $('#label_upload_dokumen').html("Foto KK");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO KK");
+    $('#button_upload_dokumen').html(button_save);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
 </script>
 
 <!-- Tombol Open NPWP -->
 <script type="text/javascript">
-  document.getElementById("button_open_npwp").onclick = function(e) {
-    alert("Under Construction. masuk button Open NPWP");
-  };
+  function open_npwp(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File NPWP");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_npwp'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/npwp/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Upload NPWP -->
+<script type="text/javascript">
+  function upload_npwp(nip) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "npwp";
+    var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save NPWP</button>";
+    // alert();
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload NPWP");
+    $('#label_upload_dokumen').html("Foto NPWP");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO NPWP");
+    $('#button_upload_dokumen').html(button_save);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
 </script>
 
 <!-- Tombol Open CV -->
 <script type="text/javascript">
-  document.getElementById("button_open_cv").onclick = function(e) {
-    alert("Under Construction. masuk button Open CV");
-  };
+  function open_cv(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File NPWP");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_cv'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/cv/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Upload CV -->
+<script type="text/javascript">
+  function upload_cv(nip) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "cv";
+    var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save CV</button>";
+    // alert();
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload CV");
+    $('#label_upload_dokumen').html("Foto CV");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO CV");
+    $('#button_upload_dokumen').html(button_save);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
 </script>
 
 <!-- Tombol Open SKCK -->
 <script type="text/javascript">
-  document.getElementById("button_open_skck").onclick = function(e) {
-    alert("Under Construction. masuk button Open SKCK");
-  };
+  function open_skck(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File NPWP");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_skck'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/skck/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Upload SKCK -->
+<script type="text/javascript">
+  function upload_skck(nip) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "skck";
+    var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save SKCK</button>";
+    // alert();
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload SKCK");
+    $('#label_upload_dokumen').html("Foto SKCK");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO SKCK");
+    $('#button_upload_dokumen').html(button_save);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
 </script>
 
 <!-- Tombol Open Ijazah -->
 <script type="text/javascript">
-  document.getElementById("button_open_ijazah").onclick = function(e) {
-    alert("Under Construction. masuk button Open Ijazah");
-  };
+  function open_ijazah(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File NPWP");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['filename_isd'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+          var tes = nama_file.substr(-14);
+
+          // alert(nama_file);
+          // alert(tes);
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/ijazah/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Upload Ijazah -->
+<script type="text/javascript">
+  function upload_ijazah(nip) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "ijazah";
+    var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save Ijazah</button>";
+    // alert();
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload Ijazah");
+    $('#label_upload_dokumen').html("Foto Ijazah");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO IJAZAH");
+    $('#button_upload_dokumen').html(button_save);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
+</script>
+
+<!-- Tombol Lihat E-Slip -->
+<script type="text/javascript">
+  function lihat_eslip(secid, nip) {
+    //testing
+    // alert(secid);
+    // alert(nip);
+
+    var link_eslip = '<?= base_url() ?>admin/Importexceleslip/eslip_final/' + nip + '/' + secid;
+    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+
+    $('.judul-modal').html("Download E-Slip");
+    $('.isi-modal').html(html_text);
+    $('#button_save_pin').attr("hidden", true);
+    $('#editModal').appendTo("body").modal('show');
+
+  }
+</script>
+
+<!-- Tombol Lihat E-Slip -->
+<script type="text/javascript">
+  function lihat_sk(secid, nip) {
+    //testing
+    // alert(secid);
+    // alert(nip);
+
+    var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
+    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+
+    $('.judul-modal').html("Download E-Slip");
+    $('.isi-modal').html(html_text);
+    $('#button_save_pin').attr("hidden", true);
+    $('#editModal').appendTo("body").modal('show');
+
+  }
+</script>
+
+<!-- Tombol Update BPJS KS -->
+<script type="text/javascript">
+  function update_bpjs(nip) {
+    //testing
+    // alert(secid);
+    // alert(nip);
+
+    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+
+    // $('.judul-modal').html("Download E-Slip");
+    // $('.isi-modal').html(html_text);
+    // $('#button_save_pin').attr("hidden", true);
+    $('#editBPJSModal').appendTo("body").modal('show');
+
+  }
 </script>
 
 <!-- Tombol Open Paklaring -->
@@ -1970,24 +3214,24 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     alert("masuk button Open Paklaring");
   };
 </script> -->
-
-<!-- Tombol Open BPJS Kesehatan -->
+<!-- 
+Tombol Open BPJS Kesehatan
 <script type="text/javascript">
   document.getElementById("button_open_bpjs_ks").onclick = function(e) {
     alert("Under Construction. masuk button Open Kartu BPJS Kesehatan");
   };
-</script>
+</script> -->
 
 <!-- Tombol Open BPJS Ketenagakerjaan -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   document.getElementById("button_open_bpjs_tk").onclick = function(e) {
     alert("Under Construction. masuk button Open Kartu BPJS Ketenagakerjaan");
   };
-</script>
+</script> -->
 
 <!-- Tombol Edit Dokumen Pribadi -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   document.getElementById("button_edit_dokumen_pribadi").onclick = function(e) {
     alert("Under Construction. masuk button edit Dokumen Pribadi");
   };
-</script>
+</script> -->

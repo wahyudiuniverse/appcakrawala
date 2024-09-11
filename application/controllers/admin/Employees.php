@@ -42,6 +42,7 @@ class Employees extends MY_Controller
 		$this->load->model("Events_model");
 		$this->load->model("Meetings_model");
 		$this->load->model('Exin_model');
+		$this->load->model('Esign_model');
 		$this->load->model('Pkwt_model');
 		$this->load->library("pagination");
 		//$this->load->library('Pdf');
@@ -8169,6 +8170,7 @@ class Employees extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
+
 		$id = $this->uri->segment(4);
 		// $id = '5700';
 		$result = $this->Employees_model->read_employee_info_by_nik($id);
@@ -8244,74 +8246,100 @@ class Employees extends MY_Controller
 			$gender_name = '--';
 		}
 
+		//role id untuk upload dokumen
+		if (in_array('1008', $role_resources_ids)) {
+			$button_upload_ktp = '<button id="button_upload_ktp" onclick="upload_ktp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+			$button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+			$button_upload_npwp = '<button id="button_upload_npwp" onclick="upload_npwp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload NPWP</button>';
+			$button_upload_cv = '<button id="button_upload_cv" onclick="upload_cv(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload CV</button>';
+			$button_upload_skck = '<button id="button_upload_skck" onclick="upload_skck(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload SKCK</button>';
+			$button_upload_ijazah = '<button id="button_upload_ijazah" onclick="upload_ijazah(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload Ijazah</button>';
+		} else {
+			$button_upload_ktp = '';
+			$button_upload_kk = '';
+			$button_upload_npwp = '';
+			$button_upload_cv = '';
+			$button_upload_skck = '';
+			$button_upload_ijazah = '';
+		}
+
+		//role id untuk update nomor bpjs
+		if (in_array('1009', $role_resources_ids)) {
+			$button_update_bpjs_ks = '<button id="button_upload_ktp" onclick="update_bpjs(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS KS</button>';
+			$button_update_bpjs_tk = '<button id="button_upload_kk" onclick="update_bpjs(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS TK</button>';
+		} else {
+			$button_update_bpjs_ks = '';
+			$button_update_bpjs_tk = '';
+		}
+
 		//dokumen buku rekening
 		if ((is_null($result[0]->filename_rek)) || ($result[0]->filename_rek == "") || ($result[0]->filename_rek == "0")) {
-			$filename_rek = '-tidak ada data- <button hidden id="button_open_buku_tabungan" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open Buku Tabungan</button>';
+			$filename_rek = '-tidak ada data-';
 		} else {
-			$filename_rek = '<button id="button_open_buku_tabungan" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open Buku Tabungan</button>';
+			$filename_rek = '<button id="button_open_buku_tabungan" onclick="open_buku_tabungan(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Open Buku Tabungan</button>';
 		}
 
 		//dokumen ktp
 		if ((is_null($result[0]->filename_ktp)) || ($result[0]->filename_ktp == "") || ($result[0]->filename_ktp == "0")) {
-			$filename_ktp = '-tidak ada data- <button hidden id="button_open_ktp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KTP</button>';
+			$filename_ktp = '-tidak ada data- <button id="button_upload_ktp" onclick="upload_ktp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
 		} else {
-			$filename_ktp = $result[0]->ktp_no . ' <button id="button_open_ktp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KTP</button>';
+			$filename_ktp = '<button id="button_open_ktp" onclick="open_ktp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>' . $button_upload_ktp;
 		}
 
 		//dokumen kk
 		if ((is_null($result[0]->filename_kk)) || ($result[0]->filename_kk == "") || ($result[0]->filename_kk == "0")) {
-			$filename_kk = '-tidak ada data- <button hidden id="button_open_kk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KK</button>';
+			$filename_kk = '-tidak ada data- <button id="button_upload_kk" onclick="upload_kk(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
 		} else {
-			$filename_kk = $result[0]->kk_no . ' <button id="button_open_kk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open KK</button>';
+			$filename_kk = '<button id="button_open_kk" onclick="open_kk(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KK</button>' . $button_upload_kk;
 		}
 
 		//dokumen npwp
 		if ((is_null($result[0]->filename_npwp)) || ($result[0]->filename_npwp == "") || ($result[0]->filename_npwp == "0")) {
-			$filename_npwp = '-tidak ada data- <button hidden id="button_open_npwp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open NPWP</button>';
+			$filename_npwp = '-tidak ada data- <button id="button_upload_npwp" onclick="upload_npwp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload NPWP</button>';
 		} else {
-			$filename_npwp = $result[0]->npwp_no . ' <button id="button_open_npwp" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Open NPWP</button>';
+			$filename_npwp = '<button id="button_open_npwp" onclick="open_npwp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open NPWP</button>' . $button_upload_npwp;
 		}
 
 		//dokumen cv
 		if ((is_null($result[0]->filename_cv)) || ($result[0]->filename_cv == "") || ($result[0]->filename_cv == "0")) {
-			$filename_cv = '-tidak ada data- <button hidden id="button_open_cv" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open CV</button>';
+			$filename_cv = '-tidak ada data- <button id="button_upload_cv" onclick="upload_cv(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload CV</button>';
 		} else {
-			$filename_cv = '<button id="button_open_cv" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open CV</button>';
+			$filename_cv = '<button id="button_open_cv" onclick="open_cv(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open CV</button>' . $button_upload_cv;
 		}
 
 		//dokumen skck
 		if ((is_null($result[0]->filename_skck)) || ($result[0]->filename_skck == "") || ($result[0]->filename_skck == "0")) {
-			$filename_skck = '-tidak ada data- <button hidden id="button_open_skck" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open SKCK</button>';
+			$filename_skck = '-tidak ada data- <button id="button_upload_skck" onclick="upload_skck(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload SKCK</button>';
 		} else {
-			$filename_skck = '<button id="button_open_skck" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open SKCK</button>';
+			$filename_skck = '<button id="button_open_skck" onclick="open_skck(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open SKCK</button>' . $button_upload_skck;
 		}
 
 		//dokumen ijazah
 		if ((is_null($result[0]->filename_isd)) || ($result[0]->filename_isd == "") || ($result[0]->filename_isd == "0")) {
-			$filename_isd = '-tidak ada data- <button hidden id="button_open_ijazah" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Ijazah</button>';
+			$filename_isd = '-tidak ada data- <button id="button_upload_ijazah" onclick="upload_ijazah(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload Ijazah</button>';
 		} else {
-			$filename_isd = '<button id="button_open_ijazah" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Ijazah</button>';
+			$filename_isd = '<button id="button_open_ijazah" onclick="open_ijazah(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open Ijazah</button>' . $button_upload_ijazah;
 		}
 
 		//dokumen paklaring
 		if ((is_null($result[0]->filename_paklaring)) || ($result[0]->filename_paklaring == "") || ($result[0]->filename_paklaring == "0")) {
-			$filename_paklaring = '-tidak ada data- <button hidden id="button_open_paklaring" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Paklaring</button>';
+			$filename_paklaring = '-tidak ada data-';
 		} else {
-			$filename_paklaring = '<button id="button_open_paklaring" class="btn btn-sm btn-outline-primary ladda-button mx-0" data-style="expand-right">Open Paklaring</button>';
+			$filename_paklaring = '<button id="button_open_paklaring" onclick="open_paklaring(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open Paklaring</button>';
 		}
 
 		//BPJS Kesehatan
 		if ((is_null($result[0]->bpjs_ks_no)) || ($result[0]->bpjs_ks_no == "") || ($result[0]->bpjs_ks_no == "0")) {
-			$bpjs_ks_no = '-tidak ada data- <button hidden id="button_open_bpjs_ks" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+			$bpjs_ks_no = '-tidak ada data-' . $button_update_bpjs_ks;
 		} else {
-			$bpjs_ks_no = $result[0]->bpjs_ks_no . ' <button id="button_open_bpjs_ks" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+			$bpjs_ks_no = $result[0]->bpjs_ks_no . $button_update_bpjs_ks;
 		}
 
 		//BPJS Ketenagakerjaan
 		if ((is_null($result[0]->bpjs_tk_no)) || ($result[0]->bpjs_tk_no == "") || ($result[0]->bpjs_tk_no == "0")) {
-			$bpjs_tk_no = '-tidak ada data- <button hidden id="button_open_bpjs_tk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+			$bpjs_tk_no = '-tidak ada data-' . $button_update_bpjs_tk;
 		} else {
-			$bpjs_tk_no = $result[0]->bpjs_tk_no . ' <button id="button_open_bpjs_tk" class="btn btn-sm btn-outline-primary ladda-button mx-3" data-style="expand-right">Cetak Kartu</button>';
+			$bpjs_tk_no = $result[0]->bpjs_tk_no . $button_update_bpjs_tk;
 		}
 
 		if ($result[0]->approve_resignnae == '' || $result[0]->approve_resignnae == null) {
@@ -8456,6 +8484,10 @@ class Employees extends MY_Controller
 			'all_marital' 			=> $this->Xin_model->get_all_marital(),
 			'all_departments' 		=> $this->Department_model->all_departments(),
 			'all_projects' 			=> $this->Project_model->get_project_brand(),
+			'all_contract'			=> $this->Employees_model->get_data_kontrak($result[0]->employee_id,$result[0]->user_id),
+			'all_addendum'			=> $this->Employees_model->get_data_addendum($result[0]->user_id),
+			'all_eslip'				=> $this->Employees_model->read_saltab_by_nip2($result[0]->employee_id),
+			'all_sk'				=> $this->Esign_model->read_skk_by_nip($result[0]->employee_id)->result_array(),
 
 			'all_sub_projects' 	=> $this->Project_model->get_sub_project_filter($result[0]->project_id),
 			'all_designations' 	=> $this->Designation_model->all_designations(),
@@ -8487,12 +8519,12 @@ class Employees extends MY_Controller
 	}
 
 	//mengambil Json data Jabatan berdasarkan projectnya
-    public function getJabatanBySubProject()
-    {
-        $postData = $this->input->post();
+	public function getJabatanBySubProject()
+	{
+		$postData = $this->input->post();
 
-        // get data 
-        $data = $this->Employees_model->getJabatanBySubProject($postData);
+		// get data 
+		$data = $this->Employees_model->getJabatanBySubProject($postData);
 
 		//variabel cek data
 		$datacek = [
@@ -8522,11 +8554,10 @@ class Employees extends MY_Controller
 					'data'		=> $data,
 				);
 			}
-			
 		}
 
-        echo json_encode($response);
-    }
+		echo json_encode($response);
+	}
 
 	//mengambil Json data pin employee
 	public function get_pin()
@@ -8757,6 +8788,117 @@ class Employees extends MY_Controller
 		// echo "</pre>";
 	}
 
+	//mengambil Json data rekening employee
+	public function get_data_rekening()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_rekening($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data buku tabungan employee
+	public function get_data_buku_tabungan()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_buku_tabungan($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data dokumen pribadi employee
+	public function get_data_dokumen_pribadi()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_dokumen_pribadi($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
 	//save data diri employee
 	public function save_data_diri()
 	{
@@ -8790,7 +8932,7 @@ class Employees extends MY_Controller
 		];
 
 		// save data diri
-		$data = $this->Employees_model->save_data_diri($datarequest,$postData['nip']);
+		$data = $this->Employees_model->save_data_diri($datarequest, $postData['nip']);
 
 		//jenis kelamin
 		if ((is_null($data['gender'])) || ($data['gender'] == "") || ($data['gender'] == "0")) {
@@ -8864,7 +9006,7 @@ class Employees extends MY_Controller
 		];
 
 		// save data diri
-		$data = $this->Employees_model->save_project($datarequest,$postData['nip']);
+		$data = $this->Employees_model->save_project($datarequest, $postData['nip']);
 
 		//Susun variabel untuk update element di view
 		$datahasil = [
@@ -8913,7 +9055,7 @@ class Employees extends MY_Controller
 		];
 
 		// save data diri
-		$data = $this->Employees_model->save_kontak($datarequest,$postData['nip']);
+		$data = $this->Employees_model->save_kontak($datarequest, $postData['nip']);
 
 		//Susun variabel untuk update element di view
 		$datahasil = [
@@ -8940,5 +9082,259 @@ class Employees extends MY_Controller
 		// echo "<pre>";
 		// print_r($response);
 		// echo "</pre>";
+	}
+
+	// save data rekening employee
+	public function save_rekening()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+		$status = "";
+		$datahasil;
+
+		//Cek variabel post
+		$datarequest = [
+			'pemilik_rek'  => strtoupper($postData['pemilik_rekening']),
+			'bank_name'     	=> $postData['nama_bank'],
+			'nomor_rek'  	=> $postData['nomor_rekening'],
+		];
+
+		$pesan_error = "";
+		if ($_FILES['buku_rekening']['error'] == "0") {
+
+			//parameter untuk path dokumen
+			$yearmonth = date('Y/m');
+			$path_rekening = "./uploads/document/rekening/" . $yearmonth . '/';
+
+			//kalau blm ada folder path nya
+			if (!file_exists($path_rekening)) {
+				mkdir($path_rekening, 0777, true);
+			}
+
+			//konfigurasi upload
+			$config['upload_path']          = $path_rekening;
+			$config['allowed_types']        = 'pdf|jpeg|jpg|png';
+			$config['max_size']             = 5120;
+			$config['file_name']             = 'rekening_' . $postData['nip'];
+			$config['overwrite']             = TRUE;
+
+			//inisialisasi proses upload
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			//upload data kalau tidak ada error
+			if (!$this->upload->do_upload('buku_rekening')) {
+				$error = array('error' => $this->upload->display_errors());
+				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
+				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$pesan_error = "Foto Rekening melebihi ukuran 5 MB. Silahkan upload ulang";
+				} else {
+					$pesan_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+				}
+
+				$status = "202";
+
+				$datarequest = [
+					'employee_id'        => $postData['nip']
+				];
+
+				$datahasil = $this->Employees_model->get_data_rekening($datarequest);
+			} else {
+				//save path ktp ke database
+				$new_filename_rekening = $this->upload->data('file_name');
+				$rekening_database = $yearmonth . '/' . $new_filename_rekening;
+				$data_file = array(
+					'filename_rek'		=> $rekening_database,
+				);
+				$datahasil = $this->Employees_model->save_file_rekening($data_file, $postData['nip']);
+				$data = array('upload_data' => $this->upload->data());
+
+				// save data rekening
+				$datahasil = $this->Employees_model->save_rekening($datarequest, $postData['nip']);
+
+				if (empty($datahasil)) {
+					$status = "300";
+				} else {
+					$status = "201";
+				}
+			}
+
+			//print_r($_FILES['document_file_addendum']);
+			// echo $pesan_error;
+		} else {
+			$pesan_error = "Tidak ada file yang dipilih";
+
+			// save data rekening
+			$datahasil = $this->Employees_model->save_rekening($datarequest, $postData['nip']);
+
+			if (empty($datahasil)) {
+				$status = "300";
+			} else {
+				$status = "200";
+			}
+			//print_r($_FILES['document_file_addendum']);
+			// echo $pesan_error;
+		}
+
+		$response = array(
+			'status'		=> $status, //200 = sukses tanpa file, 201 = sukses dengan file, 202 = sukses dengan error file, 300 = error
+			'pesan' 		=> "Berhasil Save Data",
+			'pesan_error' 	=> $pesan_error,
+			'data'			=> $datahasil,
+		);
+
+		echo json_encode($response);
+	}
+
+	// save upload dokumen employee
+	public function save_dokumen()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		//ambil variabel post
+		$postData = $this->input->post();
+		$nip = $postData['nip'];
+		$jenis_dokumen = $postData['jenis_dokumen'];
+		$status = "";
+		$datahasil;
+
+		//Cek variabel post
+		// $datarequest = [
+		// 	'pemilik_rek'  => strtoupper($postData['pemilik_rekening']),
+		// 	'bank_name'     	=> $postData['nama_bank'],
+		// 	'nomor_rek'  	=> $postData['nomor_rekening'],
+		// ];
+
+		$pesan_error = "";
+		if ($_FILES['file_dokumen']['error'] == "0") {
+
+			//parameter untuk path dokumen
+			$yearmonth = date('Y/m');
+			if ($jenis_dokumen == "ktp") {
+				$path_dokumen = "./uploads/document/ktp/" . $yearmonth . '/';
+			} else if ($jenis_dokumen == "cv") {
+				$path_dokumen = "./uploads/document/cv/" . $yearmonth . '/';
+			} else if ($jenis_dokumen == "ijazah") {
+				$path_dokumen = "./uploads/document/ijazah/" . $yearmonth . '/';
+			} else if ($jenis_dokumen == "kk") {
+				$path_dokumen = "./uploads/document/kk/" . $yearmonth . '/';
+			} else if ($jenis_dokumen == "npwp") {
+				$path_dokumen = "./uploads/document/npwp/" . $yearmonth . '/';
+			} else if ($jenis_dokumen == "skck") {
+				$path_dokumen = "./uploads/document/skck/" . $yearmonth . '/';
+			} else {
+				$path_dokumen = "./uploads/document/unspecified/" . $yearmonth . '/';
+			}
+
+			//kalau blm ada folder path nya
+			if (!file_exists($path_dokumen)) {
+				mkdir($path_dokumen, 0777, true);
+			}
+
+			//konfigurasi upload
+			$config['upload_path']          = $path_dokumen;
+			$config['allowed_types']        = 'pdf|jpeg|jpg|png';
+			$config['max_size']             = 5120;
+			if ($jenis_dokumen == "ktp") {
+				$config['file_name'] = 'ktp_' . $nip;
+			} else if ($jenis_dokumen == "cv") {
+				$config['file_name'] = 'cv_' . $nip;
+			} else if ($jenis_dokumen == "ijazah") {
+				$config['file_name'] = 'ijazah_' . $nip;
+			} else if ($jenis_dokumen == "kk") {
+				$config['file_name'] = 'kk_' . $nip;
+			} else if ($jenis_dokumen == "npwp") {
+				$config['file_name'] = 'npwp_' . $nip;
+			} else if ($jenis_dokumen == "skck") {
+				$config['file_name'] = 'skck_' . $nip;
+			} else {
+				$config['file_name'] = 'unspecified' . $nip;
+			}
+			$config['overwrite']             = TRUE;
+
+			//inisialisasi proses upload
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			//upload data kalau tidak ada error
+			if (!$this->upload->do_upload('file_dokumen')) {
+				$error = array('error' => $this->upload->display_errors());
+				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
+				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$pesan_error = "Foto Dokumen melebihi ukuran 5 MB. Silahkan upload ulang";
+				} else {
+					$pesan_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+				}
+
+				$status = "201";
+
+				$datarequest = [
+					'employee_id'        => $postData['nip']
+				];
+
+				$datahasil = null;
+			} else {
+				//save path ktp ke database
+				$new_filename_dokumen = $this->upload->data('file_name');
+				$dokumen_database = $yearmonth . '/' . $new_filename_dokumen;
+				if ($jenis_dokumen == "ktp") {
+					$data_file = array('filename_ktp' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "cv") {
+					$data_file = array('filename_cv' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "ijazah") {
+					$data_file = array('filename_isd' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "kk") {
+					$data_file = array('filename_kk' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "npwp") {
+					$data_file = array('filename_npwp' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "skck") {
+					$data_file = array('filename_skck' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else {
+					$data_file = array();
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+					// $config['file_name'] = 'unspecified' . $nip;
+				}
+				// $data_file = array('filename_rek' => $dokumen_database);
+				// $datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				$data = array('upload_data' => $this->upload->data());
+
+				// save data rekening
+				// $datahasil = $this->Employees_model->save_rekening($datarequest, $postData['nip']);
+
+				$status = "200";
+			}
+
+			//print_r($_FILES['document_file_addendum']);
+			// echo $pesan_error;
+		} else {
+			$pesan_error = "Tidak ada file yang dipilih";
+			$datahasil = null;
+
+			$status = "300";
+			//print_r($_FILES['document_file_addendum']);
+			// echo $pesan_error;
+		}
+
+		$response = array(
+			'status'		=> $status, //300 = tidak ada file yang dipiih
+			'pesan' 		=> "Berhasil Save Data",
+			'pesan_error' 	=> $pesan_error,
+			'data'			=> $datahasil,
+		);
+
+		echo json_encode($response);
 	}
 }

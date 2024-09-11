@@ -2920,6 +2920,47 @@ WHERE ktp_no = ?';
 		}
 	}
 
+	// get saltab by NIP v.2
+	public function read_saltab_by_nip2($id)
+	{
+
+		$sql = "
+			
+			SELECT saltab.secid, saltab.nip, saltab.fullname, saltab.jabatan, bulk.periode_cutoff_from, bulk.periode_cutoff_to, bulk.periode_salary, bulk.project_name  
+			FROM xin_saltab saltab
+			LEFT JOIN xin_saltab_bulk_release bulk ON bulk.id = saltab.uploadid
+			WHERE bulk.eslip_release is not null
+			AND DATE_FORMAT(bulk.eslip_release, '%Y-%m-%d') <= DATE_FORMAT(NOW(),'%Y-%m-%d')
+			AND nip = ?
+			ORDER BY bulk.id DESC LIMIT 6";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+
+			$data = array();
+
+			foreach ($result as $record) {
+				$data[] = array(
+					"id_eslip" => $record['secid'],
+					"nip" => $record['nip'],
+					"nama" => strtoupper($record['fullname']),
+					"cutoff_start" => $this->Xin_model->tgl_indo($record['periode_cutoff_from']),
+					"cutoff_end" => $this->Xin_model->tgl_indo($record['periode_cutoff_to']),
+					"project" => strtoupper($record['project_name']),
+					"jabatan" => strtoupper($record['jabatan']),
+					"tanggal_penggajian" => $this->Xin_model->tgl_indo($record['periode_salary']),
+					"button_lihat" => '<button onclick="lihat_eslip(' . $record['secid'] . ',' . $record['nip'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat e-Slip</button>',
+				);
+			}
+		} else {
+			$data = null;
+		}
+
+		return $data;
+	}
+
 	// get all my team employes > not super admin
 	public function get_employees_my_team($cid)
 	{
@@ -5513,17 +5554,98 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
-	//ambil data rekening employee
-	public function get_data_kontrak($postData)
+	//ambil data kontrak+addendum employee
+	public function get_data_kontrak($nip, $karyawan_id)
 	{
-		$this->db->select('bank_name');
-		$this->db->select('nomor_rek');
-		$this->db->select('pemilik_rek');
-		$this->db->select('filename_rek');
+		// get data kontrak
+		$this->db->select('uniqueid');
+		$this->db->select('from_date');
+		$this->db->select('to_date');
+		$this->db->select('no_surat');
+		$this->db->select('project');
+		$this->db->select('sub_project');
+		$this->db->select('jabatan');
 
-		$this->db->from('xin_employees',);
-		$this->db->where($postData);
-		// $this->db->where($searchQuery);
+		$this->db->from('xin_employee_contract');
+		$this->db->where('cancel_stat', "0");
+		$this->db->where('employee_id', $nip);
+
+		$query = $this->db->get()->result_array();
+
+		// get data addendum
+		$this->db->select('id');
+		$this->db->select('kontrak_start_new');
+		$this->db->select('kontrak_end_new');
+		$this->db->select('no_addendum');
+		$this->db->select('tgl_terbit');
+		$this->db->select('xin_employee_contract.project');
+		$this->db->select('xin_employee_contract.sub_project');
+		$this->db->select('xin_employee_contract.jabatan');
+
+
+		$this->db->from('xin_contract_addendum');
+		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id', 'left');
+		$this->db->where('xin_contract_addendum.cancel_stat', "0");
+		$this->db->where('karyawan_id', $karyawan_id);
+
+		$query2 = $this->db->get()->result_array();
+
+		$data = array();
+
+		foreach ($query as $record) {
+			$data[] = array(
+				"jenis_dokumen" => "KONTRAK",
+				"nomor_surat" => $record['no_surat'],
+				"periode_start" => $this->Xin_model->tgl_indo($record['from_date']),
+				"periode_end" => $this->Xin_model->tgl_indo($record['to_date']),
+				"project" => strtoupper($this->get_nama_project($record['project'])),
+				"sub_project" => strtoupper($this->get_nama_sub_project($record['sub_project'])),
+				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
+				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['from_date']),
+				"button_open" => '<button onclick="open_kontrak(' . $record['uniqueid'] . ',' .$record['sub_project']. ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
+				"button_upload" => '<button onclick="upload_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
+				"button_lihat" => '<button onclick="lihat_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
+				"button_hapus" => '<button onclick="hapus_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>',
+			);
+		}
+
+		foreach ($query2 as $record) {
+			$data[] = array(
+				"jenis_dokumen" => "ADDENDUM",
+				"nomor_surat" => $record['no_addendum'],
+				"periode_start" => $this->Xin_model->tgl_indo($record['kontrak_start_new']),
+				"periode_end" => $this->Xin_model->tgl_indo($record['kontrak_end_new']),
+				"project" => strtoupper($this->get_nama_project($record['project'])),
+				"sub_project" => strtoupper($this->get_nama_sub_project($record['sub_project'])),
+				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
+				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['tgl_terbit']),
+				"button_open" => '<button onclick="open_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
+				"button_upload" => '<button onclick="upload_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
+				"button_lihat" => '<button onclick="lihat_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
+				"button_hapus" => '<button onclick="hapus_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>',
+			);
+		}
+
+		array_multisort(array_column($data, "tanggal_terbit"), SORT_DESC, $data);
+
+		return $data;
+	}
+
+	//ambil data addendum employee
+	public function get_data_addendum($karyawan_id)
+	{
+		// $this->db->select('*');no_surat
+		$this->db->select('kontrak_start_new');
+		$this->db->select('kontrak_end_new');
+		$this->db->select('no_addendum');
+		$this->db->select('tgl_terbit');
+		$this->db->select('xin_employee_contract.project');
+		$this->db->select('xin_employee_contract.sub_project');
+		$this->db->select('xin_employee_contract.jabatan');
+
+		$this->db->from('xin_contract_addendum');
+		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id', 'left');
+		$this->db->where('karyawan_id', $karyawan_id);
 
 		$query = $this->db->get()->result_array();
 
@@ -5652,6 +5774,29 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->update('xin_employees', $postData);
 
 		//fetch data terbaru
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
+		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data project employee
+	public function save_file_dokumen($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		// //fetch data terbaru
 		$this->db->select('bank_name');
 		$this->db->select('nomor_rek');
 		$this->db->select('pemilik_rek');
