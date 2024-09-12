@@ -939,6 +939,84 @@ class Employees_model extends CI_Model
 		//return null;
 	}
 
+	//validasi employee request
+	public function valiadsi_employee_existing($postData)
+	{
+		//Input untuk Database
+		$datalock = [
+			'id_employee_request'     => $postData['id_employee_request'],
+			'kolom'      			  => $postData['kolom'],
+			'nilai_sebelum'           => $postData['nilai_sebelum'],
+			'nilai_sesudah'       	  => $postData['nilai_sesudah'],
+			'status'      			  => $postData['status'],
+			'verified_by'             => $postData['verified_by'],
+			'verified_by_id'          => $postData['verified_by_id']
+		];
+
+		//update data employee
+		if ($postData['kolom'] == "nik") {
+			$data = array(
+				'ktp_no' => $postData['nilai_sesudah']
+			);
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "kk") {
+			$data = array(
+				'kk_no' => $postData['nilai_sesudah']
+			);
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "nama") {
+			$data = array(
+				'first_name' => $postData['nilai_sesudah']
+			);
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "bank") {
+			$data = array(
+				'bank_name' => $postData['nilai_sesudah']
+			);
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "norek") {
+			$data = array(
+				'nomor_rek' => $postData['nilai_sesudah']
+			);
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "pemilik_rekening") {
+			$data = array(
+				'pemilik_rek' => $postData['nilai_sesudah']
+			);
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}
+
+
+		$this->db->insert('log_employee_verification', $datalock);
+	}
+
+	//un validasi employee request
+	public function un_valiadsi_employee_existing($postData)
+	{
+		//Input untuk Database
+		$datalock = [
+			'id_employee_request'     => $postData['id_employee_request'],
+			'kolom'      			  => $postData['kolom'],
+			'nilai_sebelum'           => $postData['nilai_sebelum'],
+			'nilai_sesudah'       	  => $postData['nilai_sesudah'],
+			'status'      			  => $postData['status'],
+			'verified_by'             => $postData['verified_by'],
+			'verified_by_id'          => $postData['verified_by_id']
+		];
+
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$this->db->insert('log_employee_verification', $datalock);
+
+		//return null;
+	}
+
 	/*
 	* persiapan data export excel
 	* data request employee yang belum diapprove HRD dan belum ditolak HRD
@@ -2075,7 +2153,7 @@ class Employees_model extends CI_Model
 					// $this->get_nama_karyawan($record->upload_by)
 				);
 			}
-		} else{
+		} else {
 			$totalRecords = 0;
 			$totalRecordwithFilter = 0;
 			$data = array();
@@ -5365,7 +5443,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//  	  return $query->result();
 	// }
 
-	
+
 	//ambil data jabatan berdasarkan sub project untuk Json
 	public function getJabatanBySubProject($postData)
 	{
@@ -5441,6 +5519,10 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('ibu_kandung');
 		$this->db->select('alamat_ktp');
 		$this->db->select('alamat_domisili');
+
+		$this->db->select('bank_name');
+		$this->db->select('nomor_rek');
+		$this->db->select('pemilik_rek');
 
 		$this->db->from('xin_employees',);
 		$this->db->where($postData);
@@ -5543,6 +5625,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('filename_skck');
 		$this->db->select('filename_isd');
 		$this->db->select('filename_rek');
+		$this->db->select('profile_picture');
 
 		$this->db->from('xin_employees',);
 		$this->db->where($postData);
@@ -5602,7 +5685,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"sub_project" => strtoupper($this->get_nama_sub_project($record['sub_project'])),
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['from_date']),
-				"button_open" => '<button onclick="open_kontrak(' . $record['uniqueid'] . ',' .$record['sub_project']. ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
+				"button_open" => '<button onclick="open_kontrak(\'' . $record['uniqueid'] . '\',' . $record['sub_project'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
 				"button_upload" => '<button onclick="upload_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => '<button onclick="hapus_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>',
@@ -5742,7 +5825,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
-	
+
 	//save data project employee
 	public function save_rekening($postData, $nip)
 	{
@@ -5797,10 +5880,14 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->update('xin_employees', $postData);
 
 		// //fetch data terbaru
-		$this->db->select('bank_name');
-		$this->db->select('nomor_rek');
-		$this->db->select('pemilik_rek');
+		$this->db->select('filename_ktp');
+		$this->db->select('filename_kk');
+		$this->db->select('filename_npwp');
+		$this->db->select('filename_cv');
+		$this->db->select('filename_skck');
+		$this->db->select('filename_isd');
 		$this->db->select('filename_rek');
+		$this->db->select('profile_picture');
 
 		$this->db->from('xin_employees',);
 		$this->db->where('employee_id', $nip);

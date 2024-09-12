@@ -8348,6 +8348,59 @@ class Employees extends MY_Controller
 			$status_pengajuan_paklaring = $result[0]->request_resign_date;
 		}
 
+		//cek status validation ke database
+		$id_verification = $result[0]->verification_id;
+		$nik_validation = "0";
+		$nik_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'nik');
+		if (is_null($nik_validation_query)) {
+			$nik_validation = "0";
+		} else {
+			$nik_validation = $nik_validation_query['status'];
+		}
+		$kk_validation = "0";
+		$kk_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'kk');
+		if (is_null($kk_validation_query)) {
+			$kk_validation = "0";
+		} else {
+			$kk_validation = $kk_validation_query['status'];
+		}
+		$nama_validation = "0";
+		$nama_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'nama');
+		if (is_null($nama_validation_query)) {
+			$nama_validation = "0";
+		} else {
+			$nama_validation = $nama_validation_query['status'];
+		}
+		$bank_validation = "0";
+		$bank_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'bank');
+		if (is_null($bank_validation_query)) {
+			$bank_validation = "0";
+		} else {
+			$bank_validation = $bank_validation_query['status'];
+		}
+		$norek_validation = "0";
+		$norek_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'norek');
+		if (is_null($norek_validation_query)) {
+			$norek_validation = "0";
+		} else {
+			$norek_validation = $norek_validation_query['status'];
+		}
+		$pemilik_rekening_validation = "0";
+		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'pemilik_rekening');
+		if (is_null($pemilik_rekening_validation_query)) {
+			$pemilik_rekening_validation = "0";
+		} else {
+			$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+		}
+
+		//verification id
+		$actual_verification_id = "";
+		if ((is_null($result[0]->verification_id)) || ($result[0]->verification_id == "") || ($result[0]->verification_id == "0")) {
+			$actual_verification_id = "e_" . $result[0]->user_id;
+		} else {
+			$actual_verification_id = $result[0]->verification_id;
+		}
+
 		$data = array(
 			//Pages Attributes
 			'title' => 'Profile Karyawan | ' . $this->Xin_model->site_title(),
@@ -8360,6 +8413,7 @@ class Employees extends MY_Controller
 			'employee_id' => $result[0]->employee_id,
 			'profile_picture' => $result[0]->profile_picture,
 			'private_code' => $result[0]->private_code,
+			'verification_id' => $actual_verification_id,
 
 			//Data Diri
 			'first_name' => strtoupper($result[0]->first_name),
@@ -8409,6 +8463,7 @@ class Employees extends MY_Controller
 
 			//Rekening Bank
 			'nomor_rek' => $result[0]->nomor_rek,
+			'id_bank' => $result[0]->bank_name,
 			'filename_rek' => $filename_rek,
 			'pemilik_rek' => strtoupper($result[0]->pemilik_rek),
 			'bank_name' => strtoupper("[ " . $this->Employees_model->get_id_bank($result[0]->bank_name) . " ] " . $this->Employees_model->get_nama_bank($result[0]->bank_name)),
@@ -8512,6 +8567,14 @@ class Employees extends MY_Controller
 			'last_login_ip' => $result[0]->last_login_ip,
 
 		);
+
+		//variabel untuk inisialisasi varifikasi
+		$data['nik_validation'] = $nik_validation;
+		$data['kk_validation'] = $kk_validation;
+		$data['nama_validation'] = $nama_validation;
+		$data['bank_validation'] = $bank_validation;
+		$data['norek_validation'] = $norek_validation;
+		$data['pemilik_rekening_validation'] = $pemilik_rekening_validation;
 
 		$data['subview'] = $this->load->view("admin/employees/employee_manager2", $data, TRUE);
 
@@ -9095,6 +9158,7 @@ class Employees extends MY_Controller
 		$postData = $this->input->post();
 		$status = "";
 		$datahasil;
+		$nama_bank_read = "";
 
 		//Cek variabel post
 		$datarequest = [
@@ -9143,6 +9207,7 @@ class Employees extends MY_Controller
 				];
 
 				$datahasil = $this->Employees_model->get_data_rekening($datarequest);
+				$nama_bank_read = strtoupper("[ " . $this->Employees_model->get_id_bank($datahasil['bank_name']) . " ] " . $this->Employees_model->get_nama_bank($datahasil['bank_name']));
 			} else {
 				//save path ktp ke database
 				$new_filename_rekening = $this->upload->data('file_name');
@@ -9161,6 +9226,7 @@ class Employees extends MY_Controller
 				} else {
 					$status = "201";
 				}
+				$nama_bank_read = strtoupper("[ " . $this->Employees_model->get_id_bank($datahasil['bank_name']) . " ] " . $this->Employees_model->get_nama_bank($datahasil['bank_name']));
 			}
 
 			//print_r($_FILES['document_file_addendum']);
@@ -9178,6 +9244,7 @@ class Employees extends MY_Controller
 			}
 			//print_r($_FILES['document_file_addendum']);
 			// echo $pesan_error;
+			$nama_bank_read = strtoupper("[ " . $this->Employees_model->get_id_bank($datahasil['bank_name']) . " ] " . $this->Employees_model->get_nama_bank($datahasil['bank_name']));
 		}
 
 		$response = array(
@@ -9185,6 +9252,7 @@ class Employees extends MY_Controller
 			'pesan' 		=> "Berhasil Save Data",
 			'pesan_error' 	=> $pesan_error,
 			'data'			=> $datahasil,
+			'nama_bank_read'=> $nama_bank_read,
 		);
 
 		echo json_encode($response);
@@ -9219,18 +9287,44 @@ class Employees extends MY_Controller
 			$yearmonth = date('Y/m');
 			if ($jenis_dokumen == "ktp") {
 				$path_dokumen = "./uploads/document/ktp/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'ktp_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
 			} else if ($jenis_dokumen == "cv") {
 				$path_dokumen = "./uploads/document/cv/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'cv_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
 			} else if ($jenis_dokumen == "ijazah") {
 				$path_dokumen = "./uploads/document/ijazah/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'ijazah_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
 			} else if ($jenis_dokumen == "kk") {
 				$path_dokumen = "./uploads/document/kk/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'kk_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
 			} else if ($jenis_dokumen == "npwp") {
 				$path_dokumen = "./uploads/document/npwp/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'npwp_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
 			} else if ($jenis_dokumen == "skck") {
 				$path_dokumen = "./uploads/document/skck/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'skck_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "foto") {
+				$path_dokumen = "./uploads/profile/" . $yearmonth . '/';
+				$tipe_dokumen = 'jpeg|jpg|png';
+				$nama_file = 'foto_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PNG, JPEG dan JPG";
 			} else {
 				$path_dokumen = "./uploads/document/unspecified/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'unspecified' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
 			}
 
 			//kalau blm ada folder path nya
@@ -9240,24 +9334,10 @@ class Employees extends MY_Controller
 
 			//konfigurasi upload
 			$config['upload_path']          = $path_dokumen;
-			$config['allowed_types']        = 'pdf|jpeg|jpg|png';
+			$config['allowed_types']        = $tipe_dokumen;
 			$config['max_size']             = 5120;
-			if ($jenis_dokumen == "ktp") {
-				$config['file_name'] = 'ktp_' . $nip;
-			} else if ($jenis_dokumen == "cv") {
-				$config['file_name'] = 'cv_' . $nip;
-			} else if ($jenis_dokumen == "ijazah") {
-				$config['file_name'] = 'ijazah_' . $nip;
-			} else if ($jenis_dokumen == "kk") {
-				$config['file_name'] = 'kk_' . $nip;
-			} else if ($jenis_dokumen == "npwp") {
-				$config['file_name'] = 'npwp_' . $nip;
-			} else if ($jenis_dokumen == "skck") {
-				$config['file_name'] = 'skck_' . $nip;
-			} else {
-				$config['file_name'] = 'unspecified' . $nip;
-			}
-			$config['overwrite']             = TRUE;
+			$config['file_name'] 			= $nama_file;
+			$config['overwrite']            = TRUE;
 
 			//inisialisasi proses upload
 			$this->load->library('upload', $config);
@@ -9268,9 +9348,9 @@ class Employees extends MY_Controller
 				$error = array('error' => $this->upload->display_errors());
 				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
 				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
-					$pesan_error = "Foto Dokumen melebihi ukuran 5 MB. Silahkan upload ulang";
+					$pesan_error = "Dokumen melebihi ukuran 5 MB. Silahkan upload ulang";
 				} else {
-					$pesan_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+					$pesan_error = $pesan_format_error;
 				}
 
 				$status = "201";
@@ -9301,6 +9381,185 @@ class Employees extends MY_Controller
 					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
 				} else if ($jenis_dokumen == "skck") {
 					$data_file = array('filename_skck' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "foto") {
+					$data_file = array('profile_picture' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else {
+					$data_file = array();
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+					// $config['file_name'] = 'unspecified' . $nip;
+				}
+				// $data_file = array('filename_rek' => $dokumen_database);
+				// $datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				$data = array('upload_data' => $this->upload->data());
+
+				// save data rekening
+				// $datahasil = $this->Employees_model->save_rekening($datarequest, $postData['nip']);
+
+				$status = "200";
+			}
+
+			//print_r($_FILES['document_file_addendum']);
+			// echo $pesan_error;
+		} else {
+			$pesan_error = "Tidak ada file yang dipilih";
+			$datahasil = null;
+
+			$status = "300";
+			//print_r($_FILES['document_file_addendum']);
+			// echo $pesan_error;
+		}
+
+		$response = array(
+			'status'		=> $status, //300 = tidak ada file yang dipiih
+			'pesan' 		=> "Berhasil Save Data",
+			'pesan_error' 	=> $pesan_error,
+			'data'			=> $datahasil,
+			'time'			=> time(),
+		);
+
+		echo json_encode($response);
+	}
+
+	// save upload dokumen employee
+	public function save_kontrak()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		//ambil variabel post
+		$postData = $this->input->post();
+		$nip = $postData['nip'];
+		$jenis_dokumen = $postData['jenis_dokumen'];
+		$status = "";
+		$datahasil;
+
+		//Cek variabel post
+		// $datarequest = [
+		// 	'pemilik_rek'  => strtoupper($postData['pemilik_rekening']),
+		// 	'bank_name'     	=> $postData['nama_bank'],
+		// 	'nomor_rek'  	=> $postData['nomor_rekening'],
+		// ];
+
+		$pesan_error = "";
+		if ($_FILES['file_dokumen']['error'] == "0") {
+
+			//parameter untuk path dokumen
+			$yearmonth = date('Y/m');
+			if ($jenis_dokumen == "ktp") {
+				$path_dokumen = "./uploads/document/ktp/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'ktp_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "cv") {
+				$path_dokumen = "./uploads/document/cv/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'cv_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "ijazah") {
+				$path_dokumen = "./uploads/document/ijazah/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'ijazah_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "kk") {
+				$path_dokumen = "./uploads/document/kk/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'kk_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "npwp") {
+				$path_dokumen = "./uploads/document/npwp/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'npwp_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "skck") {
+				$path_dokumen = "./uploads/document/skck/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'skck_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			} else if ($jenis_dokumen == "kontrak") {
+				$path_dokumen = "./uploads/document/pkwt/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf';
+				$t = time();
+				$nama_file = 'kontrak_' . $nip . '_' . $t;
+				$pesan_format_error = "Hanya menerima file berformat PDF";
+			} else if ($jenis_dokumen == "addendum") {
+				$path_dokumen = "./uploads/document/addendum/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf';
+				$t = time();
+				$nama_file = 'addendum_' . $nip . '_' . $t;
+				$pesan_format_error = "Hanya menerima file berformat PDF";
+			} else if ($jenis_dokumen == "foto") {
+				$path_dokumen = "./uploads/profile/" . $yearmonth . '/';
+				$tipe_dokumen = 'jpeg|jpg|png';
+				$nama_file = 'foto_' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PNG, JPEG dan JPG";
+			} else {
+				$path_dokumen = "./uploads/document/unspecified/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf|jpeg|jpg|png';
+				$nama_file = 'unspecified' . $nip;
+				$pesan_format_error = "Hanya menerima file berformat PDF, PNG, JPEG dan JPG";
+			}
+
+			//kalau blm ada folder path nya
+			if (!file_exists($path_dokumen)) {
+				mkdir($path_dokumen, 0777, true);
+			}
+
+			//konfigurasi upload
+			$config['upload_path']          = $path_dokumen;
+			$config['allowed_types']        = $tipe_dokumen;
+			$config['max_size']             = 5120;
+			$config['file_name'] 			= $nama_file;
+			$config['overwrite']            = TRUE;
+
+			//inisialisasi proses upload
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			//upload data kalau tidak ada error
+			if (!$this->upload->do_upload('file_dokumen')) {
+				$error = array('error' => $this->upload->display_errors());
+				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
+				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$pesan_error = "Dokumen melebihi ukuran 5 MB. Silahkan upload ulang";
+				} else {
+					$pesan_error = $pesan_format_error;
+				}
+
+				$status = "201";
+
+				$datarequest = [
+					'employee_id'        => $postData['nip']
+				];
+
+				$datahasil = null;
+			} else {
+				//save path ktp ke database
+				$new_filename_dokumen = $this->upload->data('file_name');
+				$dokumen_database = $yearmonth . '/' . $new_filename_dokumen;
+				if ($jenis_dokumen == "ktp") {
+					$data_file = array('filename_ktp' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "cv") {
+					$data_file = array('filename_cv' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "ijazah") {
+					$data_file = array('filename_isd' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "kk") {
+					$data_file = array('filename_kk' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "npwp") {
+					$data_file = array('filename_npwp' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "skck") {
+					$data_file = array('filename_skck' => $dokumen_database);
+					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
+				} else if ($jenis_dokumen == "foto") {
+					$data_file = array('profile_picture' => $dokumen_database);
 					$datahasil = $this->Employees_model->save_file_dokumen($data_file, $postData['nip']);
 				} else {
 					$data_file = array();
@@ -9336,5 +9595,27 @@ class Employees extends MY_Controller
 		);
 
 		echo json_encode($response);
+	}
+
+	//mengambil Json data validasi employee request
+	public function valiadsi_employee_existing()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Employees_model->valiadsi_employee_existing($postData);
+		echo json_encode($data);
+		//echo "data berhasil masuk";
+	}
+
+	//mengambil Json data validasi employee request
+	public function un_valiadsi_employee_existing()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Employees_model->un_valiadsi_employee_existing($postData);
+		echo json_encode($data);
+		//echo "data berhasil masuk";
 	}
 }

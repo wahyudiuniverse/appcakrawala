@@ -8,7 +8,8 @@
 <!-- FOTO PROFILE -->
 <?php
 if ($profile_picture != '' && $profile_picture != 'no file') {
-  $de_file = base_url() . 'uploads/profile/' . $profile_picture;
+  $t = time();
+  $de_file = base_url() . 'uploads/profile/' . $profile_picture . '?' . $t;
 } else {
   if ($gender == 'L') {
     $de_file = base_url() . 'uploads/profile/default_male.jpg';
@@ -20,6 +21,150 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- NAMA LENGKAP -->
 <?php $full_name = $user[0]->first_name . ' ' . $user[0]->last_name; ?>
+
+<!-- MODAL UNTUK VERIFIKASI -->
+<div class="modal fade" id="verifikasiModal" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="verifikasiModalLabel">
+          <div class="judul-modal-verifikasi">Verifikasi data</div>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="isi-modal-verifikasi">
+          <div class="container" id="container_modal_verifikasi">
+            <div class="row">
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr>
+                    <td style='width:20%'><strong>NIK <span class="icon-verify-nik"></span></strong></td>
+                    <td style='width:50%'>
+                      <input type='text' id="nik_modal" class='form-control' placeholder='Nomor NIK KTP' value='<?php echo $ktp_no; ?>'>
+                      <span id='pesan_nik_verifikasi_modal'></span>
+                    </td>
+                    <td style='width:30%'>
+                      <button id="button_verify_nik_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                        <button id="button_unverify_nik_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='width:20%'><strong>KK <span class="icon-verify-kk"></span></strong></td>
+                    <td style='width:50%'>
+                      <input type='text' id="kk_modal" class='form-control' placeholder='Nomor Kartu Keluarga' value='<?php echo $kk_no; ?>'>
+                      <span id='pesan_kk_verifikasi_modal'></span>
+                    </td>
+                    <td style='width:30%'>
+                      <button id="button_verify_kk_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                        <button id="button_unverify_kk_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='width:20%'><strong>Nama Lengkap <span class="icon-verify-nama"></span></strong></td>
+                    <td style='width:50%'>
+                      <input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value="<?php echo $first_name; ?>">
+                      <span id='pesan_nama_verifikasi_modal'></span>
+                    </td>
+                    <td style='width:30%'>
+                      <button id="button_verify_nama_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                        <button id="button_unverify_nama_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='width:20%'><strong>Bank <span class="icon-verify-bank"></span></strong></td>
+                    <td style='width:50%'>
+                      <select name="bank_modal" id="bank_modal" class="form-control" data-plugin="select_modal_verifikasi" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name'); ?>">
+                        <option value=""></option>
+                        <?php
+                        foreach ($list_bank as $bank) {
+                        ?>
+                          <option value="<?php echo $bank->secid; ?>" <?php if ($id_bank == $bank->secid) : ?> selected <?php endif; ?>> <?php echo $bank->bank_name; ?></option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                      <span id='pesan_bank_verifikasi_modal'></span>
+                    </td>
+                    <td style='width:30%'>
+                      <button id="button_verify_bank_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                        <button id="button_unverify_bank_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='width:20%'><strong>Nomor Rekening <span class="icon-verify-norek"></span></strong></td>
+                    <td style='width:50%'>
+                      <input type='text' id="rekening_modal" class='form-control' placeholder='Nomor Rekening' value='<?php echo $nomor_rek; ?>'>
+                      <span id='pesan_norek_verifikasi_modal'></span>
+                    </td>
+                    <td style='width:30%'>
+                      <button id="button_verify_norek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                        <button id="button_unverify_norek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style='width:20%'><strong>Pemilik Rekening <span class="icon-verify-pemilik-rek"></span></strong></td>
+                    <td style='width:50%'>
+                      <input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value="<?php echo $pemilik_rek; ?>">
+                      <span id='pesan_pemilik_rekening_verifikasi_modal'></span>
+                    </td>
+                    <td style='width:30%'>
+                      <button id="button_verify_pemilik_rek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                        <button id="button_unverify_pemilik_rek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+                      <?php } ?>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr class="text-center align-self-center">
+                    <td style='width:33.33%'>
+                      <button id="button_show_ktp_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KTP</button>
+                    </td>
+                    <td style='width:33.33%'>
+                      <button id="button_show_kk_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KK</button>
+                    </td>
+                    <td style='width:33.33%'>
+                      <button id="button_show_rekening_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide Rekening</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="row">
+              <div class="rekening-modal col-md-12"></div>
+              <div class="ktp-modal col-md-12"></div>
+              <div class="kk-modal col-md-12"></div>
+              <div class="api-rekening-modal col-md-12"></div>
+            </div>
+          </div>
+        </div>
+        <div class="info-modal-verifikasi">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type='button' id="close_modal" class='btn btn-secondary' data-dismiss='modal'>Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- MODAL UNTUK EDIT -->
 <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -88,7 +233,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
               <table class="table table-striped col-md-12">
                 <tbody>
                   <tr>
-                    <td style='width:25%'><strong>Nama Lengkap</strong></td>
+                    <td style='width:25%'><strong>Nama Lengkap <span class="icon-verify-nama"></span></strong></td>
                     <td style='width:75%'>
                       <input id='first_name_modal' name='first_name_modal' type='text' class='form-control' placeholder='Nama Lengkap' value=''>
                       <span id='pesan_first_name_modal'></span>
@@ -191,14 +336,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                   </tr>
                   <tr>
-                    <td><strong>Nomor KTP</strong></td>
+                    <td><strong>Nomor KTP <span class="icon-verify-nik"></span></strong></td>
                     <td>
                       <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='ktp_no_modal' name='ktp_no_modal' type='number' class='form-control' placeholder='Nomor KTP' value=''>
                       <span id='pesan_ktp_no_modal'></span>
                     </td>
                   </tr>
                   <tr>
-                    <td><strong>Nomor KK</strong></td>
+                    <td><strong>Nomor KK <span class="icon-verify-kk"></span></strong></td>
                     <td>
                       <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='kk_no_modal' name='kk_no_modal' type='number' class='form-control' placeholder='Nomor KK' value=''>
                       <span id='pesan_kk_no_modal'></span>
@@ -445,26 +590,27 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
               <table class="table table-striped col-md-12">
                 <tbody>
                   <tr>
-                    <td style='width:25%'><strong>Nama Bank</strong></td>
+                    <td style='width:25%'><strong>Nama Bank <span class="icon-verify-bank"></span></strong></td>
                     <td style='width:75%'>
-                      <select class="form-control" id="nama_bank" name="nama_bank" data-plugin="select_modal_rekening" data-placeholder="Pilih Bank">
-                        <option value="">Pilih Hubungan</option>
+                      <select class="form-control" id="nama_bank2" name="nama_bank2" data-plugin="select_modal_rekening" data-placeholder="Pilih Bank">
+                        <option value="">Pilih Bank</option>
                         <?php foreach ($list_bank as $bank): ?>
                           <option value="<?php echo $bank->secid; ?>"><?php echo strtoupper($bank->bank_name); ?></option>
                         <?php endforeach; ?>
                       </select>
                       <span id='pesan_nama_bank'></span>
+                      <input hidden name="nama_bank" id="nama_bank" placeholder="Nomor Rekening Bank" type="text" value="">
                     </td>
                   </tr>
                   <tr>
-                    <td><strong>Nomor Rekening</strong></td>
+                    <td><strong>Nomor Rekening <span class="icon-verify-norek"></span></strong></td>
                     <td>
                       <input id='nomor_rekening' name='nomor_rekening' type='text' class='form-control' placeholder='Nomor Rekening' value=''>
                       <span id='pesan_nomor_rekening'></span>
                     </td>
                   </tr>
                   <tr>
-                    <td><strong>Pemilik Rekening</strong></td>
+                    <td><strong>Pemilik Rekening <span class="icon-verify-pemilik-rek"></span></strong></td>
                     <td>
                       <input id='pemilik_rekening' name='pemilik_rekening' type='text' class='form-control' placeholder='Pemilik Rekening' value=''>
                       <span id='pesan_pemilik_rekening'></span>
@@ -618,13 +764,13 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       <div class="card-body">
         <div class="row">
           <div class="col-3 col-md-2 col-auto text-center align-self-center">
-            <span id="foto_profile"><img src="<?php echo $de_file; ?>" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></span>
+            <span id="foto_profile"><button onclick="open_foto_profil(<?php echo $employee_id; ?>)" type='button' class='btn btn-primary'><img src="<?php echo $de_file; ?>" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></button></span>
             <br>
             <button id="button_ubah_foto" class="btn btn-sm btn-white ladda-button mx-0" data-style="expand-right">Ubah Foto</button>
           </div>
           <div class="col-9 col-md-10 col-auto">
             <div class="ml-3">
-              <div class="text-big mt-1" id="nama_lengkap_card"><?php echo $first_name; ?></div>
+              <div class="text-big mt-1"><span id="nama_lengkap_card"><?php echo $first_name; ?></span> <span class="icon-verify-nama"></span></div>
               <div class="mt-1">NIP: <?php echo $employee_id; ?> <button id="button_ganti_pin" class="btn btn-sm btn-white ladda-button mx-1" data-style="expand-right">Ganti PIN</button><button id="button_show_pin" class="btn btn-sm btn-white ladda-button mx-1" data-style="expand-right">Show PIN</button></div>
               <div class="mt-1">PROJECT: <?php echo $project_name; ?></div>
               <div class="mt-1" id="jabatan_name_card">JABATAN: <?php echo $designation_name; ?></div>
@@ -689,7 +835,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         <table class="table table-striped">
                           <tbody>
                             <tr>
-                              <th scope="row" style="width: 30%">Nama Lengkap</th>
+                              <th scope="row" style="width: 30%">Nama Lengkap <span class="icon-verify-nama"></span></th>
                               <td id="nama_lengkap_tabel"><?php echo $first_name; ?></td>
                             </tr>
                             <tr>
@@ -735,11 +881,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         <table class="table table-striped">
                           <tbody>
                             <tr>
-                              <th scope="row" style="width: 30%">Nomor KTP</th>
+                              <th scope="row" style="width: 30%">Nomor KTP <span class="icon-verify-nik"></span></th>
                               <td id="nomor_ktp_tabel"><?php echo $ktp_no; ?></td>
                             </tr>
                             <tr>
-                              <th scope="row">Nomor KK</th>
+                              <th scope="row">Nomor KK <span class="icon-verify-kk"></span></th>
                               <td id="nomor_kk_tabel"><?php echo $kk_no; ?></td>
                             </tr>
                             <tr>
@@ -904,15 +1050,15 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         <table class="table table-striped">
                           <tbody>
                             <tr>
-                              <th scope="row" style="width: 30%">Nama Bank</th>
+                              <th scope="row" style="width: 30%">Nama Bank <span class="icon-verify-bank"></span></th>
                               <td id="nama_bank_tabel"><?php echo $bank_name; ?></td>
                             </tr>
                             <tr>
-                              <th scope="row">Nomor Rekening</th>
+                              <th scope="row">Nomor Rekening <span class="icon-verify-norek"></span></th>
                               <td id="nomor_rekening_table"><?php echo $nomor_rek; ?></td>
                             </tr>
                             <tr>
-                              <th scope="row">Nama Pemilik Rekening</th>
+                              <th scope="row">Nama Pemilik Rekening <span class="icon-verify-pemilik-rek"></span></th>
                               <td id="pemilik_rekening_tabel"><?php echo $pemilik_rek; ?></td>
                             </tr>
                           </tbody>
@@ -951,11 +1097,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         <table class="table table-striped">
                           <tbody>
                             <tr>
-                              <th scope="row" style="width: 30%">Dokumen KTP</th>
+                              <th scope="row" style="width: 30%">Dokumen KTP <span class="icon-verify-nik"></span></th>
                               <td><?php echo $display_ktp; ?></td>
                             </tr>
                             <tr>
-                              <th scope="row">Dokumen KK</th>
+                              <th scope="row">Dokumen KK <span class="icon-verify-kk"></span></th>
                               <td><?php echo $display_kk; ?></td>
                             </tr>
                             <tr>
@@ -1239,6 +1385,76 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   }
 </style>
 
+<!-- SCRIPT INITIATE VALIDATION -->
+<script type=text/javascript>
+  //read variable
+
+  var nik_validation = "<?php echo $nik_validation; ?>";
+  var kk_validation = "<?php print($kk_validation); ?>";
+  var nama_validation = "<?php print($nama_validation); ?>";
+  var bank_validation = "<?php print($bank_validation); ?>";
+  var norek_validation = "<?php print($norek_validation); ?>";
+  var pemilik_rekening_validation = "<?php print($pemilik_rekening_validation); ?>";
+
+  //initiate state validation
+  if (nik_validation == 0) {
+    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (ktp_no_modal.readOnly) document.getElementById("ktp_no_modal").removeAttribute("readonly");
+    if (nik_modal.readOnly) document.getElementById("nik_modal").removeAttribute("readonly");
+  } else if (nik_validation == 1) {
+    ktp_no_modal.setAttribute("readonly", "readonly");
+    nik_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (kk_validation == 0) {
+    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (kk_no_modal.readOnly) document.getElementById("kk_no_modal").removeAttribute("readonly");
+    if (kk_modal.readOnly) document.getElementById("kk_modal").removeAttribute("readonly");
+  } else if (kk_validation == 1) {
+    kk_no_modal.setAttribute("readonly", "readonly");
+    kk_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (nama_validation == 0) {
+    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (first_name_modal.readOnly) document.getElementById("first_name_modal").removeAttribute("readonly");
+    if (nama_modal.readOnly) document.getElementById("nama_modal").removeAttribute("readonly");
+  } else if (nama_validation == 1) {
+    first_name_modal.setAttribute("readonly", "readonly");
+    nama_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (bank_validation == 0) {
+    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (nama_bank2.disabled) document.getElementById("nama_bank2").removeAttribute("disabled");
+    if (bank_modal.disabled) document.getElementById("bank_modal").removeAttribute("disabled");
+  } else if (bank_validation == 1) {
+    bank_modal.setAttribute("disabled", "disabled");
+    nama_bank2.setAttribute("disabled", "disabled");
+    $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (norek_validation == 0) {
+    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (nomor_rekening.readOnly) document.getElementById("nomor_rekening").removeAttribute("readonly");
+    if (rekening_modal.readOnly) document.getElementById("rekening_modal").removeAttribute("readonly");
+  } else if (norek_validation == 1) {
+    nomor_rekening.setAttribute("readonly", "readonly");
+    rekening_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+  if (pemilik_rekening_validation == 0) {
+    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+    if (pemilik_rekening.readOnly) document.getElementById("pemilik_rekening").removeAttribute("readonly");
+    if (pemilik_rekening_modal.readOnly) document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
+  } else if (pemilik_rekening_validation == 1) {
+    pemilik_rekening.setAttribute("readonly", "readonly");
+    pemilik_rekening_modal.setAttribute("readonly", "readonly");
+    $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+  }
+
+  // alert(nik_validation);
+</script>
+
 <script type="text/javascript">
   $(document).ready(function() {
     //-- GLOBAL VARIABLE --
@@ -1266,6 +1482,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('[data-plugin="select_modal_bpjs"]').select2({
       width: "100%",
       dropdownParent: $("#container_modal_bpjs")
+    });
+    $('[data-plugin="select_modal_verifikasi"]').select2({
+      width: "100%",
+      dropdownParent: $("#container_modal_verifikasi")
     });
 
     // Sub Change - Jabatan
@@ -1311,6 +1531,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           });
         }
       });
+    });
+
+    // Bank Change - isi value ke variable hidden bank_name (untuk save)
+    $('#nama_bank2').change(function() {
+      var bank = $("#nama_bank2").val();
+      var nama_bank = $("#nama_bank2 option:selected").text();
+      document.getElementById("nama_bank").value = bank;
+      // document.getElementById("bank_name").value = nama_bank;
     });
 
     //save data Rekneing
@@ -1387,6 +1615,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
             if (res['status'] == "200") { //sukses tanpa upload file
               // $("#ethnicity_modal").val(res['data']['ethnicity_type']).change();
+              $('#nama_bank_tabel').html(res['nama_bank_read']);
+              $('#nomor_rekening_table').html(res['data']['nomor_rek']);
+              $('#pemilik_rekening_tabel').html(res['data']['pemilik_rek']);
               $('.info-modal-edit-rekening').html(success_html_text);
               $('.info-modal-edit-rekening').attr("hidden", false);
               $('.isi-modal-edit-rekening').attr("hidden", true);
@@ -1394,6 +1625,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
               $('#button_save_rekening').attr("disabled", false);
               $('#button_save_rekening').removeAttr("data-loading");
             } else if (res['status'] == "201") { //sukses dengan upload file
+              $('#nama_bank_tabel').html(res['nama_bank_read']);
+              $('#nomor_rekening_table').html(res['data']['nomor_rek']);
+              $('#pemilik_rekening_tabel').html(res['data']['pemilik_rek']);
               $('.info-modal-edit-rekening').html(success_html_text);
               $('.info-modal-edit-rekening').attr("hidden", false);
               $('.isi-modal-edit-rekening').attr("hidden", true);
@@ -1440,6 +1674,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <script type="text/javascript">
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+  var flag_ktp = 0;
+  var flag_kk = 0;
+  var flag_rekening = 0;
+  var flag_api_rekening = 0;
+  var baseURL = "<?php echo base_url(); ?>";
+
+  var user_id = "<?php print($session['user_id']); ?>";
+  var user_name = "<?php print($user['0']->first_name); ?>";
+
   var loading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
   var loading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
   loading_html_text = loading_html_text + '<img src="' + loading_image + '" alt="" width="100px">';
@@ -1468,7 +1712,32 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Ubah Foto -->
 <script type="text/javascript">
   document.getElementById("button_ubah_foto").onclick = function(e) {
-    alert("Under Construction. Masuk button ubah foto");
+    // alert("Under Construction. Masuk button ubah foto");
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "foto";
+    var button_save_foto = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save Foto</button>";
+    // alert(jenis_dokumen);
+
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload Foto");
+    $('#label_upload_dokumen').html("File Foto");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO");
+    $('#input_upload_dokumen').html(input_upload);
+    $('#button_upload_dokumen').html(button_save_foto);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
   };
 </script>
 
@@ -1705,7 +1974,303 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Verifikasi -->
 <script type="text/javascript">
   document.getElementById("button_verifikasi").onclick = function(e) {
-    alert("Under Construction. Masuk button verifikasi");
+    // alert("Under Construction. Masuk button verifikasi");
+    var nip = "<?php echo $employee_id; ?>";
+
+    //inisialisasi pesan
+    $('#pesan_nik_verifikasi_modal').html("");
+    $('#pesan_kk_verifikasi_modal').html("");
+    $('#pesan_nama_verifikasi_modal').html("");
+    $('#pesan_bank_verifikasi_modal').html("");
+    $('#pesan_norek_verifikasi_modal').html("");
+    $('#pesan_pemilik_rekening_verifikasi_modal').html("");
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_diri/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.info-modal-verifkasi').attr("hidden", false);
+        $('.isi-modal-verifkasi').attr("hidden", true);
+        $('.info-modal-verifkasi').html(loading_html_text);
+        $('#verifikasiModal').modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#nik_modal').val(res['data']['ktp_no']);
+          $("#kk_modal").val(res['data']['kk_no']);
+          $('#nama_modal').val(res['data']['first_name']);
+          $("#bank_modal").val(res['data']['bank_name']).change();
+          $('#rekening_modal').val(res['data']['nomor_rek']);
+          $('#pemilik_rekening_modal').val(res['data']['pemilik_rek']);
+
+          $('.isi-modal-verifkasi').attr("hidden", false);
+          $('.info-modal-verifkasi').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-verifkasi').html(html_text);
+          $('.isi-modal-verifkasi').attr("hidden", true);
+          $('.info-modal-verifkasi').attr("hidden", false);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-verifkasi').html(html_text); //coba pake iframe
+        $('.isi-modal-verifkasi').attr("hidden", true);
+        $('.info-modal-verifkasi').attr("hidden", false);
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Show/hide KTP Modal -->
+<script type="text/javascript">
+  document.getElementById("button_show_ktp_modal").onclick = function(e) {
+    // e.preventDefault();
+    var nip = '<?php echo $employee_id; ?>';
+
+    if (flag_ktp == 0) {
+      // AJAX untuk ambil data buku tabungan employee terupdate
+      $.ajax({
+        url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+        method: 'post',
+        data: {
+          [csrfName]: csrfHash,
+          nip: nip,
+        },
+        beforeSend: function() {
+          $('.ktp-modal').html(loading_html_text);
+        },
+        success: function(response) {
+
+          var res = jQuery.parseJSON(response);
+
+          if (res['status'] == "200") {
+            var nama_file = res['data']['filename_ktp'];
+            var tipe_file = nama_file.substr(-3, 3);
+            var atribut = "";
+            var height = '';
+            var d = new Date();
+            var time = d.getTime();
+            nama_file = nama_file + "?" + time;
+
+            if (tipe_file == "pdf") {
+              atribut = "application/pdf";
+              height = 'height="500px"';
+            } else {
+              atribut = "image/jpg";
+            }
+            
+            var html_text = "<div class='row'>";
+            // html_text = html_text + "<div class='form-group col-md-12'>";
+            html_text = html_text + "<label>Foto KTP  </label>";
+            html_text = html_text + '<embed width="100%" ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/ktp/' + nama_file + '"></embed>';
+            // html_text = html_text + "</div>";
+            html_text = html_text + "</div>";
+
+            $('.ktp-modal').html(html_text);
+            flag_ktp = 1;
+          } else {
+            html_text = res['pesan'];
+            $('.ktp-modal').html(html_text);
+            flag_ktp = 1;
+          }
+        },
+        error: function(xhr, status, error) {
+          html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+          html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+          // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+          $('.ktp-modal').html(html_text); //coba pake iframe
+          flag_ktp = 1;
+        }
+      });
+
+    } else if (flag_ktp == 1) {
+      $('.ktp-modal').html("");
+      flag_ktp = 0;
+    }
+
+  };
+</script>
+
+<!-- Tombol Show/hide KK Modal -->
+<script type="text/javascript">
+  document.getElementById("button_show_kk_modal").onclick = function(e) {
+    // e.preventDefault();
+    var nip = '<?php echo $employee_id; ?>';
+
+    if (flag_kk == 0) {
+      // AJAX untuk ambil data buku tabungan employee terupdate
+      $.ajax({
+        url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+        method: 'post',
+        data: {
+          [csrfName]: csrfHash,
+          nip: nip,
+        },
+        beforeSend: function() {
+          $('.kk-modal').html(loading_html_text);
+        },
+        success: function(response) {
+
+          var res = jQuery.parseJSON(response);
+
+          if (res['status'] == "200") {
+            var nama_file = res['data']['filename_kk'];
+            var tipe_file = nama_file.substr(-3, 3);
+            var atribut = "";
+            var height = '';
+            var d = new Date();
+            var time = d.getTime();
+            nama_file = nama_file + "?" + time;
+
+            if (tipe_file == "pdf") {
+              atribut = "application/pdf";
+              height = 'height="500px"';
+            } else {
+              atribut = "image/jpg";
+            }
+            
+            var html_text = "<div class='row'>";
+            // html_text = html_text + "<div class='form-group col-md-12'>";
+            html_text = html_text + "<label>Foto KK  </label>";
+            html_text = html_text + '<embed width="100%" ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/kk/' + nama_file + '"></embed>';
+            // html_text = html_text + "</div>";
+            html_text = html_text + "</div>";
+
+            $('.kk-modal').html(html_text);
+            flag_kk = 1;
+          } else {
+            html_text = res['pesan'];
+            $('.kk-modal').html(html_text);
+            flag_kk = 1;
+          }
+        },
+        error: function(xhr, status, error) {
+          html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+          html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+          // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+          $('.kk-modal').html(html_text); //coba pake iframe
+          flag_kk = 1;
+        }
+      });
+
+    } else if (flag_kk == 1) {
+      $('.kk-modal').html("");
+      flag_kk = 0;
+    }
+
+  };
+</script>
+
+<!-- Tombol Show/hide Rekening Modal -->
+<script type="text/javascript">
+  document.getElementById("button_show_rekening_modal").onclick = function(e) {
+    e.preventDefault();
+
+    if (flag_rekening == 0) {
+      var bank_id = $("#bank_modal").val();
+      // var nomor_rekening = "<?php echo $nomor_rek; ?>";
+      var nomor_rekening = $("#rekening_modal").val();
+      var bank_code = "<?php echo $nomor_rek; ?>";
+
+      // alert(bank_id);
+      // alert(nomor_rekening);
+
+      var html_text = "";
+
+      // html_text = html_text + "<div class='row'>";
+      // html_text = html_text + "<div class='form-group col-md-12'>";
+      // html_text = html_text + "<label>Rekening  </label>";
+      // html_text = html_text + "<br>LOADING DATA ....";
+      // html_text = html_text + "</div>";
+      // html_text = html_text + "</div>";
+
+      // $('.rekening-modal').html(html_text);
+      $('.rekening-modal').html(loading_html_text);
+
+      // AJAX request
+      $.ajax({
+        url: '<?= base_url() ?>registrasi/tes_API_bank/' + bank_id + "/" + nomor_rekening,
+        method: 'get',
+        success: function(response) {
+          // alert(response);
+          var res = jQuery.parseJSON(response);
+          // var res2 = jQuery.parseJSON(res);
+          // html_text = "";
+          if (res['status'] == true) {
+            html_text = "";
+            html_text = html_text + "<div class='row'>";
+            html_text = html_text + "<div class='form-group col-md-12'>";
+            html_text = html_text + "<label>Rekening  </label>";
+            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
+            html_text = html_text + "kode bank: " + res['data']['bankcode'] + "<br>";
+            html_text = html_text + "nama bank: " + res['data']['bankname'] + "<br>";
+            html_text = html_text + "nomor rekening: " + res['data']['accountnumber'] + "<br>";
+            html_text = html_text + "nama pemilik rekening: " + res['data']['accountname'] + "<br>";
+            html_text = html_text + "</div>";
+            html_text = html_text + "</div>";
+
+          } else {
+            html_text = "";
+            html_text = html_text + "<div class='row'>";
+            html_text = html_text + "<div class='form-group col-md-12'>";
+            html_text = html_text + "<label>Rekening  </label>";
+            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
+            html_text = html_text + "</div>";
+            html_text = html_text + "</div>";
+          }
+
+          $('.rekening-modal').html(html_text);
+          flag_rekening = 1;
+        },
+        error: function(xhr, status, error) {
+          // var res = jQuery.parseJSON(response);
+          html_text = "";
+          html_text = html_text + "<div class='row'>";
+          html_text = html_text + "<div class='form-group col-md-12'>";
+          html_text = html_text + "<label>Rekening  </label>";
+          html_text = html_text + "<br>" + xhr.responseText;
+          html_text = html_text + "</div>";
+          html_text = html_text + "</div>";
+          $('.rekening-modal').html(html_text);
+          flag_rekening = 1;
+        }
+      });
+    } else if (flag_rekening == 1) {
+      $('.rekening-modal').html("");
+      flag_rekening = 0;
+    }
+
+  };
+</script>
+
+<!-- Tombol Close Modal Verifikasi Data -->
+<script type="text/javascript">
+  document.getElementById("close_modal").onclick = function(e) {
+    e.preventDefault();
+
+    $('.ktp-modal').html("");
+    $('.kk-modal').html("");
+    $('.rekening-modal').html("");
+    // $('.api-rekening-modal').html("");
+    flag_ktp = 0;
+    flag_kk = 0;
+    flag_rekening = 0;
+    // flag_api_rekening = 0;
+    $('#verifikasiModal').modal('hide');
+
+    // alert("masuk fungsi verifikasi data.");
   };
 </script>
 
@@ -2000,6 +2565,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           if (res['status'] == "200") {
             //update nilai terbaru di halaman profile
             $('#nama_lengkap_tabel').html(res['data']['first_name']);
+            $('#nama_lengkap_card').html(res['data']['first_name']);
             $('#gender_name_tabel').html(res['data']['gender']);
             $('#tempat_lahir_tabel').html(res['data']['tempat_lahir']);
             $('#tanggal_lahir_tabel').html(res['data']['date_of_birth']);
@@ -2423,7 +2989,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") {
-          $('#nama_bank').val(res['data']['bank_name']).change();
+          $('#nama_bank2').val(res['data']['bank_name']).change();
+          $('#nama_bank').val(res['data']['bank_name']);
           $("#nomor_rekening").val(res['data']['nomor_rek']);
           $('#pemilik_rekening').val(res['data']['pemilik_rek']);
 
@@ -2601,10 +3168,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var button_save_ktp = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save KTP</button>";
     // alert();
 
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
     //inisialisasi pesan
     $('#judul_modal_upload_dokumen').html("Upload KTP");
     $('#label_upload_dokumen').html("Foto KTP");
     $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO KTP");
+    $('#input_upload_dokumen').html(input_upload);
     $('#button_upload_dokumen').html(button_save_ktp);
 
     $("#file_dokumen").val("");
@@ -2659,6 +3232,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") { //sukses upload file
+          var file_foto_profile = '<?= base_url() ?>uploads/profile/' + res['data']['profile_picture'] + '?' + res['time'];
+          var foto_profile_html = '<button onclick="open_foto_profil(' + nip + ')" type="button" class="btn btn-primary"><img src="' + file_foto_profile + '" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></button>';
+          $('#foto_profile').html(foto_profile_html);
           $('.info-modal-upload-dokumen').html(success_html_text);
           $('.info-modal-upload-dokumen').attr("hidden", false);
           $('.isi-modal-upload-dokumen').attr("hidden", true);
@@ -2773,10 +3349,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save KK</button>";
     // alert();
 
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
     //inisialisasi pesan
     $('#judul_modal_upload_dokumen').html("Upload Kartu Keluarga");
     $('#label_upload_dokumen').html("Foto KK");
     $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO KK");
+    $('#input_upload_dokumen').html(input_upload);
     $('#button_upload_dokumen').html(button_save);
 
     $("#file_dokumen").val("");
@@ -2864,10 +3446,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save NPWP</button>";
     // alert();
 
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
     //inisialisasi pesan
     $('#judul_modal_upload_dokumen').html("Upload NPWP");
     $('#label_upload_dokumen').html("Foto NPWP");
     $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO NPWP");
+    $('#input_upload_dokumen').html(input_upload);
     $('#button_upload_dokumen').html(button_save);
 
     $("#file_dokumen").val("");
@@ -2955,10 +3543,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save CV</button>";
     // alert();
 
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
     //inisialisasi pesan
     $('#judul_modal_upload_dokumen').html("Upload CV");
     $('#label_upload_dokumen').html("Foto CV");
     $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO CV");
+    $('#input_upload_dokumen').html(input_upload);
     $('#button_upload_dokumen').html(button_save);
 
     $("#file_dokumen").val("");
@@ -3046,10 +3640,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save SKCK</button>";
     // alert();
 
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
     //inisialisasi pesan
     $('#judul_modal_upload_dokumen').html("Upload SKCK");
     $('#label_upload_dokumen').html("Foto SKCK");
     $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO SKCK");
+    $('#input_upload_dokumen').html(input_upload);
     $('#button_upload_dokumen').html(button_save);
 
     $("#file_dokumen").val("");
@@ -3141,10 +3741,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var button_save = "<button onclick='save_dokumen(" + nip + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Save Ijazah</button>";
     // alert();
 
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf, image/png, image/jpg, image/jpeg">';
+    input_upload = input_upload + '<small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
     //inisialisasi pesan
     $('#judul_modal_upload_dokumen').html("Upload Ijazah");
     $('#label_upload_dokumen').html("Foto Ijazah");
     $('#file_dokumen_kosong').html("SILAHKAN UPLOAD FOTO IJAZAH");
+    $('#input_upload_dokumen').html(input_upload);
     $('#button_upload_dokumen').html(button_save);
 
     $("#file_dokumen").val("");
@@ -3155,6 +3761,75 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('#button_upload_dokumen').attr("disabled", false);
     $('#button_upload_dokumen').removeAttr("data-loading");
     $('#uploadDokumenModal').modal('show');
+
+  }
+</script>
+
+<!-- Tombol Open Foto Profile -->
+<script type="text/javascript">
+  function open_foto_profil(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("Foto Profil");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var nama_file = res['data']['profile_picture'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+          var tes = nama_file.substr(-14);
+
+          // alert(nama_file);
+          // alert(tes);
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/profile/' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
 
   }
 </script>
@@ -3177,7 +3852,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   }
 </script>
 
-<!-- Tombol Lihat E-Slip -->
+<!-- Tombol Lihat SK -->
 <script type="text/javascript">
   function lihat_sk(secid, nip) {
     //testing
@@ -3187,7 +3862,42 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
     var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
-    $('.judul-modal').html("Download E-Slip");
+    $('.judul-modal').html("Lihat SK");
+    $('.isi-modal').html(html_text);
+    $('#button_save_pin').attr("hidden", true);
+    $('#editModal').appendTo("body").modal('show');
+
+  }
+</script>
+
+<!-- Tombol Lihat Kontrak -->
+<script type="text/javascript">
+  function open_kontrak(uniqueid, sub_project) {
+    //testing
+    // alert(uniqueid);
+    // alert(sub_project);
+
+    var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
+    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+
+    $('.judul-modal').html("Lihat Draft Kontrak");
+    $('.isi-modal').html(html_text);
+    $('#button_save_pin').attr("hidden", true);
+    $('#editModal').appendTo("body").modal('show');
+
+  }
+</script>
+
+<!-- Tombol Lihat Addendum -->
+<script type="text/javascript">
+  function open_addendum(id) {
+    //testing
+    // alert(id);
+
+    var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
+    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+
+    $('.judul-modal').html("Lihat Draft Addendum");
     $('.isi-modal').html(html_text);
     $('#button_save_pin').attr("hidden", true);
     $('#editModal').appendTo("body").modal('show');
@@ -3212,30 +3922,587 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   }
 </script>
 
-<!-- Tombol Open Paklaring -->
-<!-- <script type="text/javascript">
-  document.getElementById("button_open_paklaring").onclick = function(e) {
-    alert("masuk button Open Paklaring");
-  };
-</script> -->
-<!-- 
-Tombol Open BPJS Kesehatan
+<!-- Tombol Verifikasi Data NIK -->
 <script type="text/javascript">
-  document.getElementById("button_open_bpjs_ks").onclick = function(e) {
-    alert("Under Construction. masuk button Open Kartu BPJS Kesehatan");
-  };
-</script> -->
+  document.getElementById("button_verify_nik_modal").onclick = function(e) {
+    e.preventDefault();
+    // alert("masuk verify nik");
 
-<!-- Tombol Open BPJS Ketenagakerjaan -->
-<!-- <script type="text/javascript">
-  document.getElementById("button_open_bpjs_tk").onclick = function(e) {
-    alert("Under Construction. masuk button Open Kartu BPJS Ketenagakerjaan");
-  };
-</script> -->
+    var nik = $("#nik_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var nik_lama = "<?php echo $ktp_no; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "nik";
+    var status = "1";
 
-<!-- Tombol Edit Dokumen Pribadi -->
-<!-- <script type="text/javascript">
-  document.getElementById("button_edit_dokumen_pribadi").onclick = function(e) {
-    alert("Under Construction. masuk button edit Dokumen Pribadi");
+    // alert(id_employee);
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nik_lama,
+        nilai_sesudah: nik,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        ktp_no_modal.setAttribute("readonly", "readonly");
+        nik_modal.setAttribute("readonly", "readonly");
+
+        document.getElementById("ktp_no_modal").value = nik;
+        $('#nomor_ktp_tabel').html(nik);
+
+        $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        alert("Berhasil melakukan verifikasi NIK.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi NIK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
   };
-</script> -->
+</script>
+
+<!-- Tombol Cancel Verifikasi Data NIK -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_nik_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nik = $("#nik_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var nik_lama = "<?php echo $ktp_no; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "nik";
+    var status = "0";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nik_lama,
+        nilai_sesudah: nik,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("ktp_no_modal").removeAttribute("readonly");
+        document.getElementById("nik_modal").removeAttribute("readonly");
+
+        $('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan cancel verifikasi NIK.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan cancel verifikasi NIK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Verifikasi Data KK -->
+<script type="text/javascript">
+  document.getElementById("button_verify_kk_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var kk = $("#kk_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var kk_lama = "<?php echo $kk_no; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "kk";
+    var status = "1";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: kk_lama,
+        nilai_sesudah: kk,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        kk_no_modal.setAttribute("readonly", "readonly");
+        kk_modal.setAttribute("readonly", "readonly");
+
+        document.getElementById("kk_no_modal").value = kk;
+        $('#nomor_kk_tabel').html(kk);
+
+        $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+        alert("Berhasil melakukan verifikasi KK.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi KK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data KK -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_kk_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var kk = $("#kk_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var kk_lama = "<?php echo $kk_no; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "kk";
+    var status = "0";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: kk_lama,
+        nilai_sesudah: kk,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("kk_no_modal").removeAttribute("readonly");
+        document.getElementById("kk_modal").removeAttribute("readonly");
+
+        $('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+        alert("Berhasil melakukan cancel verifikasi KK.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi KK.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Nama Lengkap -->
+<script type="text/javascript">
+  document.getElementById("button_verify_nama_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nama = $("#nama_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var nama_lama = "<?php echo $first_name; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "nama";
+    var status = "1";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nama_lama,
+        nilai_sesudah: nama,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        first_name_modal.setAttribute("readonly", "readonly");
+        nama_modal.setAttribute("readonly", "readonly");
+
+        document.getElementById("first_name_modal").value = nama;
+        $('#nama_lengkap_card').html(nama);
+        $('#nama_lengkap_tabel').html(nama);
+
+        $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan verifikasi Nama.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nama.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Nama Lengkap -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_nama_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var nama = $("#nama_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var nama_lama = "<?php echo $first_name; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "nama";
+    var status = "0";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: nama_lama,
+        nilai_sesudah: nama,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("first_name_modal").removeAttribute("readonly");
+        document.getElementById("nama_modal").removeAttribute("readonly");
+
+        $('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan cancel verifikasi Nama.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nama.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Bank -->
+<script type="text/javascript">
+  document.getElementById("button_verify_bank_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var bank = $("#bank_modal").val();
+    var bank_name = $("#bank_modal option:selected").text();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var bank_lama = "<?php echo $id_bank; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "bank";
+    var status = "1";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: bank_lama,
+        nilai_sesudah: bank,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        $("#nama_bank2").val(bank).change();
+        document.getElementById("nama_bank").value = bank;
+
+        bank_modal.setAttribute("disabled", "disabled");
+        nama_bank2.setAttribute("disabled", "disabled");
+        $('#nama_bank_tabel').html(bank_name);
+
+        $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan verifikasi Bank.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Bank.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Bank -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_bank_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var bank = $("#bank_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var bank_lama = "<?php echo $id_bank; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "bank";
+    var status = "0";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: bank_lama,
+        nilai_sesudah: bank,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("bank_modal").removeAttribute("disabled");
+        document.getElementById("nama_bank2").removeAttribute("disabled");
+
+        $('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan cancel verifikasi Bank.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Bank.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Nomor Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_verify_norek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var norek = $("#rekening_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var norek_lama = "<?php echo $nomor_rek; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "norek";
+    var status = "1";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: norek_lama,
+        nilai_sesudah: norek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        nomor_rekening.setAttribute("readonly", "readonly");
+        rekening_modal.setAttribute("readonly", "readonly");
+
+        document.getElementById("nomor_rekening").value = norek;
+        $('#nomor_rekening_table').html(norek);
+
+        $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan verifikasi Nomor Rekening.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nomor Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Nomor Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_norek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var norek = $("#rekening_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var norek_lama = "<?php echo $nomor_rek; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "norek";
+    var status = "0";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: norek_lama,
+        nilai_sesudah: norek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("nomor_rekening").removeAttribute("readonly");
+        document.getElementById("rekening_modal").removeAttribute("readonly");
+
+        $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan cancel verifikasi Nomor Rekening.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Nomor Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Verifikasi Data Pemilik Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_verify_pemilik_rek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var pemilik_rek = $("#pemilik_rekening_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "pemilik_rekening";
+    var status = "1";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: pemilik_rek_lama,
+        nilai_sesudah: pemilik_rek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        pemilik_rekening.setAttribute("readonly", "readonly");
+        pemilik_rekening_modal.setAttribute("readonly", "readonly");
+
+        document.getElementById("pemilik_rekening").value = pemilik_rek;
+        $('#pemilik_rekening_tabel').html(pemilik_rek);
+
+        $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan verifikasi Pemilik Rekening.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Pemilik Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Cancel Verifikasi Data Pemilik Rekening -->
+<script type="text/javascript">
+  document.getElementById("button_unverify_pemilik_rek_modal").onclick = function(e) {
+    e.preventDefault();
+
+    var pemilik_rek = $("#pemilik_rekening_modal").val();
+    var employee_id = "<?php echo $employee_id; ?>";
+    var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
+    var id_employee = "<?php echo $verification_id; ?>";
+    var nama_kolom = "pemilik_rekening";
+    var status = "0";
+
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        employee_id: employee_id,
+        id_employee_request: id_employee,
+        kolom: nama_kolom,
+        nilai_sebelum: pemilik_rek_lama,
+        nilai_sesudah: pemilik_rek,
+        status: status,
+        verified_by: user_name,
+        verified_by_id: user_id,
+      },
+      success: function(response) {
+        document.getElementById("pemilik_rekening").removeAttribute("readonly");
+        document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
+
+        $('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+        alert("Berhasil melakukan cancel verifikasi Pemilik Rekening.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek);
+      },
+      error: function(xhr, status, error) {
+        // var res = jQuery.parseJSON(response);
+        html_text = "Gagal melakukan verifikasi Pemilik Rekening.\n";
+        html_text = html_text + "Error :\n";
+        html_text = html_text + xhr.responseText;
+        alert(html_text)
+      }
+    });
+
+  };
+</script>
