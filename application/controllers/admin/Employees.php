@@ -8456,10 +8456,10 @@ class Employees extends MY_Controller
 			'date_of_joining_name' => $this->Xin_model->tgl_indo($result[0]->date_of_joining),
 
 			//Kontak Darurat
-			'nama_kontak_darurat' => strtoupper($this->Employees_model->get_nama_kontak_darurat($result[0]->ktp_no)),
-			'hubungan_kontak_darurat' => strtoupper($this->Employees_model->get_hubungan_kontak_darurat($result[0]->ktp_no)),
+			'nama_kontak_darurat' => strtoupper($this->Employees_model->get_nama_kontak_darurat2($result[0]->ktp_no, $result[0]->employee_id)),
+			'hubungan_kontak_darurat' => strtoupper($this->Employees_model->get_hubungan_kontak_darurat2($result[0]->ktp_no, $result[0]->employee_id)),
 			// 'hubungan_kontak_darurat_id' => $this->Employees_model->get_data_kontak($result[0]->ktp_no),
-			'nomor_kontak_darurat' => $this->Employees_model->get_nomor_kontak_darurat($result[0]->ktp_no),
+			'nomor_kontak_darurat' => $this->Employees_model->get_nomor_kontak_darurat2($result[0]->ktp_no, $result[0]->employee_id),
 
 			//Rekening Bank
 			'nomor_rek' => $result[0]->nomor_rek,

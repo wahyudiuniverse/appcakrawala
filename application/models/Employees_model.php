@@ -593,6 +593,30 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nama kontak darurat2
+	function get_nama_kontak_darurat2($id, $nip)
+	{
+		if (($id == null) || ($nip == null)) {
+			return "";
+		} else if (($id == 0) || ($nip == 0)) {
+			return "";
+		} else {
+			$this->db->select('nama');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('nip', $nip);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $this->get_nama_kontak_darurat($id);
+				// return "";
+			} else {
+				return $query['nama'];
+			}
+		}
+	}
+
 	//ambil nomor kontak darurat
 	function get_nomor_kontak_darurat($id)
 	{
@@ -616,6 +640,29 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nomor kontak darurat2
+	function get_nomor_kontak_darurat2($id, $nip)
+	{
+		if (($id == null) || ($nip == null)) {
+			return "";
+		} else if (($id == 0) || ($nip == 0)) {
+			return "";
+		} else {
+			$this->db->select('no_kontak');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('nip', $nip);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $this->get_nomor_kontak_darurat($id);
+			} else {
+				return $query['no_kontak'];
+			}
+		}
+	}
+
 	//ambil hubunan kontak darurat
 	function get_hubungan_kontak_darurat($id)
 	{
@@ -633,6 +680,29 @@ class Employees_model extends CI_Model
 			//return $query['name'];
 			if (empty($query)) {
 				return "";
+			} else {
+				return $this->get_nama_hubungan_kontak_darurat($query['hubungan']);
+			}
+		}
+	}
+
+	//ambil hubunan kontak darurat2
+	function get_hubungan_kontak_darurat2($id, $nip)
+	{
+		if (($id == null) || ($nip == null)) {
+			return "";
+		} else if (($id == 0) || ($nip == 0)) {
+			return "";
+		} else {
+			$this->db->select('hubungan');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('nip', $nip);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $this->get_hubungan_kontak_darurat($id);
 			} else {
 				return $this->get_nama_hubungan_kontak_darurat($query['hubungan']);
 			}
@@ -3611,6 +3681,21 @@ ORDER BY jab.designation_id ASC";
 	{
 		$this->db->where('secid', $id);
 		if ($this->db->update('xin_employee_request', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// Function to update kontak darurat
+	public function update_kontak_darurat($nik_ktp, $employee_id)
+	{
+		$data = array(
+			'nip' => $employee_id,
+		);
+
+		$this->db->where('employee_request_nik', $nik_ktp);
+		if ($this->db->update('xin_employee_emergency', $data)) {
 			return true;
 		} else {
 			return false;

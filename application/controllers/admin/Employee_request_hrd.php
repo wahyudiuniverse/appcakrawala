@@ -56,7 +56,7 @@ class Employee_request_hrd extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
-		
+
 		$data['title'] = $this->lang->line('xin_request_employee') . ' | ' . $this->Xin_model->site_title();
 
 		$data['all_companies'] = $this->Xin_model->get_companies();
@@ -1158,6 +1158,10 @@ class Employee_request_hrd extends MY_Controller
 		$employee_request = $this->Employees_model->read_employee_request2($id);
 
 		$verification_id 		= $employee_request['secid'];
+		$last_edu				= $employee_request['last_edu'];
+		$tinggi_badan			= $employee_request['tinggi_badan'];
+		$berat_badan			= $employee_request['berat_badan'];
+		$golongan_darah			= $employee_request['golongan_darah'];
 		$fullname 				= $employee_request['fullname'];
 		$nama_ibu 				= $employee_request['nama_ibu'];
 		$tempat_lahir 			= $employee_request['tempat_lahir'];
@@ -1236,51 +1240,49 @@ class Employee_request_hrd extends MY_Controller
 		$password_hash = password_hash($private_code, PASSWORD_BCRYPT, $options);
 
 
-						if($e_status==1){
+		if ($e_status == 1) {
 
-							if(strtoupper($company_id)=='2'){
-								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
-								$spb_hr = 'E-SPB-JKT/SC-HR/';
-								$companyID = '2';
-							}else if (strtoupper($company_id)=='3'){
-								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
-								$spb_hr = 'E-SPB-JKT/KAC-HR/';
-								$companyID = '3';
-							} else {
-								$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-								$spb_hr = 'E-SPB-JKT/MATA-HR/';
-								$companyID = '4';
-							}
+			if (strtoupper($company_id) == '2') {
+				$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+				$spb_hr = 'E-SPB-JKT/SC-HR/';
+				$companyID = '2';
+			} else if (strtoupper($company_id) == '3') {
+				$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+				$spb_hr = 'E-SPB-JKT/KAC-HR/';
+				$companyID = '3';
+			} else {
+				$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+				$spb_hr = 'E-SPB-JKT/MATA-HR/';
+				$companyID = '4';
+			}
 
-							$count_pkwt = $this->Xin_model->count_pkwt();
-							$romawi = $this->Xin_model->tgl_pkwt();
-							$unicode = $this->Xin_model->getUniqueCode(20);
-							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+			$count_pkwt = $this->Xin_model->count_pkwt();
+			$romawi = $this->Xin_model->tgl_pkwt();
+			$unicode = $this->Xin_model->getUniqueCode(20);
+			$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+			$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+		} else {
 
-						} else {
+			if (strtoupper($company_id) == '2') {
+				$pkwt_hr = 'KEMITRAAN/SC-HR/';
+				$spb_hr = 'KEMITRAAN/SC-HR/';
+				$companyID = '2';
+			} else if (strtoupper($company_id) == '3') {
+				$pkwt_hr = 'KEMITRAAN/KAC-HR/';
+				$spb_hr = 'KEMITRAAN/KAC-HR/';
+				$companyID = '3';
+			} else {
+				$pkwt_hr = 'KEMITRAAN/MATA-HR/';
+				$spb_hr = 'KEMITRAAN/MATA-HR/';
+				$companyID = '4';
+			}
 
-							if(strtoupper($company_id)=='2'){
-								$pkwt_hr = 'KEMITRAAN/SC-HR/';
-								$spb_hr = 'KEMITRAAN/SC-HR/';
-								$companyID = '2';
-							}else if (strtoupper($company_id)=='3'){
-								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
-								$spb_hr = 'KEMITRAAN/KAC-HR/';
-								$companyID = '3';
-							} else {
-								$pkwt_hr = 'KEMITRAAN/MATA-HR/';
-								$spb_hr = 'KEMITRAAN/MATA-HR/';
-								$companyID = '4';
-							}
-
-							$count_pkwt = $this->Xin_model->count_tkhl();
-							$romawi = $this->Xin_model->tgl_pkwt();
-							$unicode = $this->Xin_model->getUniqueCode(20);
-							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
-
-						}
+			$count_pkwt = $this->Xin_model->count_tkhl();
+			$romawi = $this->Xin_model->tgl_pkwt();
+			$unicode = $this->Xin_model->getUniqueCode(20);
+			$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+			$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+		}
 
 
 		$docid = date('ymdHisv');
@@ -1314,159 +1316,170 @@ class Employee_request_hrd extends MY_Controller
 			$data_migrate = array(
 
 				'verification_id'			=> $verification_id,
-				'employee_id' 					=> $employee_id,
-				'username' 							=> $employee_id,
-				'first_name' 						=> $fullname,
-				'ibu_kandung' 					=> $nama_ibu,
-				'tempat_lahir' 					=> $tempat_lahir,
-				'date_of_birth' 				=> $tanggal_lahir,
+				'last_edu'					=> $last_edu,
+				'employee_id' 				=> $employee_id,
+				'username' 					=> $employee_id,
+				'first_name' 				=> $fullname,
+				'ibu_kandung' 				=> $nama_ibu,
+				'tempat_lahir' 				=> $tempat_lahir,
+				'date_of_birth' 			=> $tanggal_lahir,
+				'blood_group' 				=> $golongan_darah,
+				'tinggi_badan' 				=> $tinggi_badan,
+				'berat_badan' 				=> $berat_badan,
 
-				'company_id' 					=> $company_id,
+				'company_id' 				=> $company_id,
 				'location_id' 				=> $location_id,
-				'project_id' 					=> $project,
+				'project_id' 				=> $project,
 				'sub_project_id' 			=> $sub_project,
 				'department_id' 			=> $department,
 				'designation_id' 			=> $posisi,
-				'gender' 							=> $gender,
+				'gender' 					=> $gender,
 				'ethnicity_type' 			=> $agama,
 				'marital_status' 			=> $status_kawin,
 				'e_status' 					=> $e_status,
 
-				'date_of_joining' 		=> $doj,
+				'date_of_joining' 			=> $doj,
 				'contract_start' 			=> $contract_start,
 				'contract_end' 				=> $contract_end,
-				'contract_periode' 		=> $contract_periode,
-				'contact_no' 					=> $contact_no,
-				'ktp_no' 							=> $nik_ktp,
-				'alamat_ktp' 					=> $alamat_ktp,
+				'contract_periode' 			=> $contract_periode,
+				'contact_no' 				=> $contact_no,
+				'ktp_no' 					=> $nik_ktp,
+				'alamat_ktp' 				=> $alamat_ktp,
 				'alamat_domisili' 			=> $alamat_domisili,
-				'kk_no' 								=> $no_kk,
-				'npwp_no' 							=> $npwp,
-				'email' 								=> $email,
-				'penempatan' 						=> $penempatan,
-				'hari_kerja' 						=> $hari_kerja,
-				'bank_name' 						=> $bank_id,
-				'nomor_rek' 						=> $no_rek,
-				'pemilik_rek' 					=> $pemilik_rekening,
+				'kk_no' 					=> $no_kk,
+				'npwp_no' 					=> $npwp,
+				'email' 					=> $email,
+				'penempatan' 				=> $penempatan,
+				'hari_kerja' 				=> $hari_kerja,
+				'bank_name' 				=> $bank_id,
+				'nomor_rek' 				=> $no_rek,
+				'pemilik_rek' 				=> $pemilik_rekening,
 
-				'basic_salary' 					=> $gaji_pokok,
-				'allow_jabatan' 				=> $allow_jabatan,
-				'allow_area' 						=> $allow_area,
+				'basic_salary' 				=> $gaji_pokok,
+				'allow_jabatan' 			=> $allow_jabatan,
+				'allow_area' 				=> $allow_area,
 				'allow_masakerja' 			=> $allow_masakerja,
 				'allow_trans_meal'			=> $allow_trans_meal,
 				'allow_trans_rent'			=> $allow_trans_rent,
-				'allow_konsumsi'				=> $allow_konsumsi,
-				'allow_transport'				=> $allow_transport,
+				'allow_konsumsi'			=> $allow_konsumsi,
+				'allow_transport'			=> $allow_transport,
 				'allow_comunication'		=> $allow_comunication,
-				'allow_device'					=> $allow_device,
-				'allow_residence_cost'	=> $allow_residence_cost,
-				'allow_rent'						=> $allow_rent,
-				'allow_parking'					=> $allow_parking,
-				'allow_medichine'				=> $allow_medichine,
+				'allow_device'				=> $allow_device,
+				'allow_residence_cost'		=> $allow_residence_cost,
+				'allow_rent'				=> $allow_rent,
+				'allow_parking'				=> $allow_parking,
+				'allow_medichine'			=> $allow_medichine,
 				'allow_akomodsasi'			=> $allow_akomodsasi,
-				'allow_kasir'						=> $allow_kasir,
+				'allow_kasir'				=> $allow_kasir,
 				'allow_operational'			=> $allow_operational,
 
-				'cut_start' 						=> $cut_start,
-				'cut_off'								=> $cut_off,
-				'date_payment'					=> $date_payment,
-				'filename_ktp'					=> $ktp,
-				'filename_kk'						=> $kk,
-				'filename_skck'					=> $skck,
-				'filename_isd'					=> $ijazah,
-				'filename_cv'						=> $civi,
+				'cut_start' 				=> $cut_start,
+				'cut_off'					=> $cut_off,
+				'date_payment'				=> $date_payment,
+				'filename_ktp'				=> $ktp,
+				'filename_kk'				=> $kk,
+				'filename_skck'				=> $skck,
+				'filename_isd'				=> $ijazah,
+				'filename_cv'				=> $civi,
 				'filename_paklaring'		=> $paklaring,
 
-				'user_role_id' => '2',
-				'is_active' => '1',
-				'password' => $password_hash,
-				'private_code' => $private_code,
-				'created_by' => $createdby
+				'user_role_id' 				=> '2',
+				'is_active' 				=> '1',
+				'password' 					=> $password_hash,
+				'private_code' 				=> $private_code,
+				'created_by' 				=> $createdby
 			);
 
 			$iresult = $this->Employees_model->add($data_migrate);
 
 			$data = array(
-				'uniqueid' 							=> $unicode,
-				'employee_id' 					=> $employee_id,
-				'docid'									=> $docid,
-				'project' 							=> $project,
-				'sub_project'						=> $sub_project,
-				'from_date'	 						=> $contract_start,
-				'to_date' 							=> $contract_end,
-				'no_surat' 							=> $nomor_surat,
-				'no_spb' 								=> $nomor_surat_spb,
-				'waktu_kontrak' 					=> $contract_periode,
-				'company' 							=> $company_id,
-				'jabatan' 							=> $posisi,
-				'penempatan' 						=> $penempatan,
-				'hari_kerja' 						=> $hari_kerja,
-				'tgl_payment'						=> $date_payment,
-				'start_period_payment'				=> $cut_start,
-				'end_period_payment'				=> $cut_off,
-				'basic_pay' 						=> $gaji_pokok,
-				'dm_allow_grade' 				=> 'Month',
-				'allowance_grade'				=> $allow_jabatan,
-				'dm_allow_area' 				=> 'Month',
-				'allowance_area'				=> $allow_area,
+				'uniqueid' 					=> $unicode,
+				'employee_id' 				=> $employee_id,
+				'docid'						=> $docid,
+				'project' 					=> $project,
+				'sub_project'				=> $sub_project,
+				'from_date'	 				=> $contract_start,
+				'to_date' 					=> $contract_end,
+				'no_surat' 					=> $nomor_surat,
+				'no_spb' 					=> $nomor_surat_spb,
+				'waktu_kontrak' 			=> $contract_periode,
+				'company' 					=> $company_id,
+				'jabatan' 					=> $posisi,
+				'penempatan' 				=> $penempatan,
+				'hari_kerja' 				=> $hari_kerja,
+				'tgl_payment'				=> $date_payment,
+				'start_period_payment'		=> $cut_start,
+				'end_period_payment'		=> $cut_off,
+				'basic_pay' 				=> $gaji_pokok,
+				'dm_allow_grade' 			=> 'Month',
+				'allowance_grade'			=> $allow_jabatan,
+				'dm_allow_area' 			=> 'Month',
+				'allowance_area'			=> $allow_area,
 				'dm_allow_masakerja' 		=> 'Month',
-				'allowance_masakerja' 	=> $allow_masakerja,
+				'allowance_masakerja' 		=> $allow_masakerja,
 				'dm_allow_transmeal' 		=> 'Month',
-				'allowance_transmeal' 	=> $allow_trans_meal,
+				'allowance_transmeal' 		=> $allow_trans_meal,
 				'dm_allow_transrent' 		=> 'Month',
-				'allowance_transrent' 	=> $allow_trans_rent,
-				'dm_allow_meal' 				=> 'Month',
-				'allowance_meal' 				=> $allow_konsumsi,
+				'allowance_transrent' 		=> $allow_trans_rent,
+				'dm_allow_meal' 			=> 'Month',
+				'allowance_meal' 			=> $allow_konsumsi,
 				'dm_allow_transport' 		=> 'Month',
-				'allowance_transport' 	=> $allow_transport,
-				'dm_allow_komunikasi' 	=> 'Month',
-				'allowance_komunikasi' 	=> $allow_comunication,
+				'allowance_transport' 		=> $allow_transport,
+				'dm_allow_komunikasi' 		=> 'Month',
+				'allowance_komunikasi' 		=> $allow_comunication,
 				'dm_allow_laptop' 			=> 'Month',
 				'allowance_laptop' 			=> $allow_device,
 				'dm_allow_residance' 		=> 'Month',
-				'allowance_residance' 	=> $allow_residence_cost,
-				'dm_allow_rent' 				=> 'Month',
-				'allowance_rent' 				=> $allow_rent,
-				'dm_allow_park' 				=> 'Month',
-				'allowance_park' 				=> $allow_parking,
+				'allowance_residance' 		=> $allow_residence_cost,
+				'dm_allow_rent' 			=> 'Month',
+				'allowance_rent' 			=> $allow_rent,
+				'dm_allow_park' 			=> 'Month',
+				'allowance_park' 			=> $allow_parking,
 				'dm_allow_medicine' 		=> 'Month',
 				'allowance_medicine' 		=> $allow_medichine,
 				'dm_allow_akomodasi' 		=> 'Month',
-				'allowance_akomodasi' 	=> $allow_akomodsasi,
-				'dm_allow_kasir' 				=> 'Month',
+				'allowance_akomodasi' 		=> $allow_akomodsasi,
+				'dm_allow_kasir' 			=> 'Month',
 				'allowance_kasir' 			=> $allow_kasir,
 				'dm_allow_operation' 		=> 'Month',
-				'allowance_operation' 	=> $allow_operational,
-				'img_esign'							=> $image_name,
+				'allowance_operation' 		=> $allow_operational,
+				'img_esign'					=> $image_name,
 
-				'request_pkwt' 					=> $createdby,
-				'request_date'					=> $createdon,
-				'approve_nae'						=> $approved_naeby,
+				'request_pkwt' 				=> $createdby,
+				'request_date'				=> $createdon,
+				'approve_nae'				=> $approved_naeby,
 				'approve_nae_date'			=> $approved_naeon,
-				'approve_nom'						=> $approved_nomby,
+				'approve_nom'				=> $approved_nomby,
 				'approve_nom_date'			=> $approved_nomon,
-				'approve_hrd'						=> $session['user_id'],
+				'approve_hrd'				=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-				'sign_nip'							=> '21300033',
-				'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-				'sign_jabatan'					=> 'HR & GA MANAGER',
-							'status_pkwt' 					=> 1, //0 belum approve, 1 sudah approve
-							'contract_type_id'			=> $e_status, //1 pkwt, 2 tkhl
-				'createdon' => date('Y-m-d h:i:s'),
-				'createdby' => $session['user_id']
+				'sign_nip'					=> '21300033',
+				'sign_fullname'				=> 'SISKYLA KHAIRANA PRITIGARINI',
+				'sign_jabatan'				=> 'HR & GA MANAGER',
+				'status_pkwt' 				=> 1, //0 belum approve, 1 sudah approve
+				'contract_type_id'			=> $e_status, //1 pkwt, 2 tkhl
+				'createdon' 				=> date('Y-m-d h:i:s'),
+				'createdby' 				=> $session['user_id']
 			);
 
 			$xresult = $this->Pkwt_model->add_pkwt_record($data);
 
 			$data_up = array(
-
 				'migrasi' => '1',
 				'approved_hrdby' =>  $session['user_id'],
 				'approved_hrdon' => date("Y-m-d h:i:s")
 			);
 
 			$result = $this->Employees_model->update_request_employee($data_up, $id);
+
+			//update data emergency contact
+			if ((empty($nik_ktp)) || ($nik_ktp == "") || ($nik_ktp == "0") || (empty($employee_id)) || ($employee_id == "") || ($employee_id == "0")) {
+				//do nothing
+				$result_emergency_contract = false;
+			} else {
+				$result_emergency_contract = $this->Employees_model->update_kontak_darurat($nik_ktp, $employee_id);
+			}
 		}
 
 		// 	if ($Return['error'] != '') {
@@ -1497,6 +1510,7 @@ class Employee_request_hrd extends MY_Controller
 		$data['iresult'] = $iresult;
 		$data['xresult'] = $xresult;
 		$data['result'] = $result;
+		$data['result_emergency_contract'] = $result_emergency_contract;
 		echo json_encode($data);
 		//}
 	}

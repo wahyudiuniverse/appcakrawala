@@ -260,6 +260,7 @@ class Register_model extends CI_model
         $datakaryawan = [
             "fullname"                => strtoupper($data['nama_karyawan']),
             "tempat_lahir"            => $data['tempat_lahir'],
+            "golongan_darah"          => $data['golongan_darah'],
             "tanggal_lahir"           => $data['tanggal_lahir'],
             "alamat_ktp"              => $data['alamat_ktp'],
             "alamat_domisili"         => $data['alamat_domisili'],

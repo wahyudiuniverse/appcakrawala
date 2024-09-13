@@ -2,7 +2,10 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 ml-4 text-gray-800"><br><h2>REGISTRASI KARYAWAN BARU 2024</h2><h5>CAKRAWALA GROUP</h5><br></h1>
+    <h1 class="h3 mb-2 ml-4 text-gray-800"><br>
+        <h2>REGISTRASI KARYAWAN BARU 2024</h2>
+        <h5>CAKRAWALA GROUP</h5><br>
+    </h1>
 
     <!-- Tab Tambah Data Karyawan -->
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -493,6 +496,26 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Golongan Darah</label>
+                            <select class="form-control" id="golongan_darah" name="golongan_darah" data-plugin="select_modal" data-placeholder="Golongan Darah">
+                                <option value="">Pilih Golongan Darah</option>
+                                <option value="A" <?php if ($register['golongan_darah'] == 'A'): ?> selected="selected" <?php endif; ?>>A</option>
+                                <option value="A+" <?php if ($register['golongan_darah'] == 'A+'): ?> selected="selected" <?php endif; ?>>A+</option>
+                                <option value="A-" <?php if ($register['golongan_darah'] == 'A-'): ?> selected="selected" <?php endif; ?>>A-</option>
+                                <option value="B" <?php if ($register['golongan_darah'] == 'B'): ?> selected="selected" <?php endif; ?>>B</option>
+                                <option value="B+" <?php if ($register['golongan_darah'] == 'B+'): ?> selected="selected" <?php endif; ?>>B+</option>
+                                <option value="B-" <?php if ($register['golongan_darah'] == 'B-'): ?> selected="selected" <?php endif; ?>>B-</option>
+                                <option value="AB" <?php if ($register['golongan_darah'] == 'AB'): ?> selected="selected" <?php endif; ?>>AB</option>
+                                <option value="AB+" <?php if ($register['golongan_darah'] == 'AB+'): ?> selected="selected" <?php endif; ?>>AB+</option>
+                                <option value="AB-" <?php if ($register['golongan_darah'] == 'AB-'): ?> selected="selected" <?php endif; ?>>AB-</option>
+                                <option value="O" <?php if ($register['golongan_darah'] == 'O'): ?> selected="selected" <?php endif; ?>>O</option>
+                                <option value="O+" <?php if ($register['golongan_darah'] == 'O+'): ?> selected="selected" <?php endif; ?>>O+</option>
+                                <option value="O-" <?php if ($register['golongan_darah'] == 'O-'): ?> selected="selected" <?php endif; ?>>O-</option>
+                            </select>
+                            <small class="form-text text-danger"><?php echo form_error('status_pernikahan'); ?></small>
+                        </div>
+
+                        <div class="form-group">
                             <label>Perusahaan Tempat Kerja Sebelumnya</label>
                             <input type="text" value="<?php echo $register['last_company']; ?>" class="form-control" id="last_company" name="last_company" placeholder="Perusahaan Tempat Kerja Sebelumnya" required>
                             <small class="form-text text-danger"><?php echo form_error('last_company'); ?></small>
@@ -935,14 +958,14 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p>Selamat. <?php echo $register['fullname'];?>
+                            <p>Selamat. <?php echo $register['fullname']; ?>
                                 <br>
                                 Anda telah berhasil melakukan registrasi karyawan.
                             </p>
                         </div>
                         <div class="modal-footer">
                             <!-- https://apps-cakrawala.com/register/success/ <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                            <a href="https://apps-cakrawala.com/register/success/<?php echo $register['fullname'];?>" role="button" class="btn btn-primary ">Ok</a>
+                            <a href="https://apps-cakrawala.com/register/success/<?php echo $register['fullname']; ?>" role="button" class="btn btn-primary ">Ok</a>
                         </div>
                     </div>
                 </div>
@@ -1158,6 +1181,26 @@
                             <label>Berat Badan (kg)</label>
                             <input disabled type="text" value="<?php echo $register['berat_badan']; ?>" class="form-control" maxlength="16" id="berat_badan" onkeyup="angka(this);" name="berat_badan" placeholder="Berat Badan (kg)" required>
                             <small class="form-text text-danger"><?php echo form_error('berat_badan'); ?></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Golongan Darah</label>
+                            <select disabled class="form-control" id="golongan_darah" name="golongan_darah" data-plugin="select_modal" data-placeholder="Golongan Darah">
+                                <option value="">Pilih Golongan Darah</option>
+                                <option value="A" <?php if ($register['golongan_darah'] == 'A'): ?> selected="selected" <?php endif; ?>>A</option>
+                                <option value="A+" <?php if ($register['golongan_darah'] == 'A+'): ?> selected="selected" <?php endif; ?>>A+</option>
+                                <option value="A-" <?php if ($register['golongan_darah'] == 'A-'): ?> selected="selected" <?php endif; ?>>A-</option>
+                                <option value="B" <?php if ($register['golongan_darah'] == 'B'): ?> selected="selected" <?php endif; ?>>B</option>
+                                <option value="B+" <?php if ($register['golongan_darah'] == 'B+'): ?> selected="selected" <?php endif; ?>>B+</option>
+                                <option value="B-" <?php if ($register['golongan_darah'] == 'B-'): ?> selected="selected" <?php endif; ?>>B-</option>
+                                <option value="AB" <?php if ($register['golongan_darah'] == 'AB'): ?> selected="selected" <?php endif; ?>>AB</option>
+                                <option value="AB+" <?php if ($register['golongan_darah'] == 'AB+'): ?> selected="selected" <?php endif; ?>>AB+</option>
+                                <option value="AB-" <?php if ($register['golongan_darah'] == 'AB-'): ?> selected="selected" <?php endif; ?>>AB-</option>
+                                <option value="O" <?php if ($register['golongan_darah'] == 'O'): ?> selected="selected" <?php endif; ?>>O</option>
+                                <option value="O+" <?php if ($register['golongan_darah'] == 'O+'): ?> selected="selected" <?php endif; ?>>O+</option>
+                                <option value="O-" <?php if ($register['golongan_darah'] == 'O-'): ?> selected="selected" <?php endif; ?>>O-</option>
+                            </select>
+                            <small class="form-text text-danger"><?php echo form_error('status_pernikahan'); ?></small>
                         </div>
 
                         <div class="form-group">
