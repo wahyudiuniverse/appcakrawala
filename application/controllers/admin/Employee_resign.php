@@ -82,7 +82,7 @@ class Employee_resign extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_monitoring_rsign();
+		$employee = $this->Employees_model->get_monitoring_rsign($session['employee_id']);
 		$no=0;
 		$data = array();
 

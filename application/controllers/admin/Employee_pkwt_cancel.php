@@ -667,6 +667,15 @@ class Employee_pkwt_cancel extends MY_Controller {
 			redirect('admin/');
 		}
 
+
+			$proDok = $this->Project_model->cek_jenis_dokumen($result[0]->project_id);
+			if (!is_null($proDok)) {
+				$document_id = $proDok[0]->doc_id;
+			} else {
+				$document_id = 0;
+			}
+
+		// $document_id = $this->Project_model->cek_jenis_dokumen($result[0]->project_id);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 
@@ -772,9 +781,9 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'tempat_lahir' => $tempat_lahir,
 			'tanggal_lahir' => $date_of_birth,
 
-
 			'company' => $result[0]->company_id,
-			'e_status'		=> $result[0]->e_status,
+			'e_status'		=> $document_id,
+			// 'e_status'		=> $result[0]->project_id,
 			'project_id' => $result[0]->project_id,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
 

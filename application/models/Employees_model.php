@@ -2709,30 +2709,32 @@ class Employees_model extends CI_Model
 	}
 
 	// monitoring request
-	public function get_monitoring_rsign()
+	public function get_monitoring_rsign($empID)
 	{
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 		FROM xin_employees
 		WHERE request_resign_by is not null
-		ORDER BY request_resign_date DESC LIMIT 100;';
-		// $binds = array(1,$cid);
+	    AND project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+		ORDER BY request_resign_date DESC LIMIT 50;";
+
 		$query = $this->db->query($sql);
 		return $query;
 	}
 
 	// monitoring request
-	public function get_monitoring_rsign_cancel()
+	public function get_monitoring_rsign_cancel($empID)
 	{
 
-		$sql = 'SELECT *
+		$sql = "SELECT *
 		FROM xin_employees
-		WHERE request_resign_by NOT IN ("NULL","0")	
-		-- AND approve_resignnae NOT IN ("NULL","0")
-		-- AND approve_resignnom NOT IN ("NULL","0")
+		WHERE request_resign_by NOT IN ('NULL','0')	
+		-- AND approve_resignnae NOT IN ('NULL','0')
+		-- AND approve_resignnom NOT IN ('NULL','0')
 		AND approve_resignhrd IS NULL
 		AND cancel_resign_stat = 1
-		ORDER BY request_resign_date DESC;';
+	    AND project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+		ORDER BY request_resign_date DESC;";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;

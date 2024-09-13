@@ -12,9 +12,9 @@
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom($session['employee_id']);?>
 <?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']);?>
 <?php
-if($e_status==1){
+if($e_status=='1'){
   $dokname = 'PKWT';
-} else if ($e_status==2){
+} else if ($e_status=='2'){
   $dokname = 'TKHL';
 } else {
   $dokname = 'TIDAK DIKETAHUI';

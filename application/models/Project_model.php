@@ -400,6 +400,33 @@ ORDER BY title ASC");
 		
 	}
 	
+	// check email
+	// public function cek_jenis_dokumen($id)
+	// {
+
+	// 	$sql = "SELECT doc_id FROM xin_projects WHERE project_id = ?";
+	// 	$binds = array($id);
+	// 	$query = $this->db->query($sql, $binds);
+	// 	return $query->num_rows();
+	// }
+
+
+	// get single project by id
+	public function cek_jenis_dokumen($id)
+	{
+
+		$sql = "SELECT doc_id FROM xin_projects WHERE project_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+
 	// get employees list> reports
 	public function project_list()
 	{

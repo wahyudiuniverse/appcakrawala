@@ -73,7 +73,7 @@ class Employee_resign_cancelled extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		// $employee = $this->Employees_model->get_monitoring_rsign_nae();
-		$employee = $this->Employees_model->get_monitoring_rsign_cancel();
+		$employee = $this->Employees_model->get_monitoring_rsign_cancel($session['employee_id']);
 
 		$data = array();
 
