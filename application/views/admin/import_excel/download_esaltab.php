@@ -240,7 +240,7 @@ if (in_array('514', $role_resources_ids)) {
   //-----lihat addendum-----
   function lihatBatchSaltabRelease(id) {
     //alert("masuk fungsi lihat. id: " + id);
-    window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release_download/' + id, "_self");
+    window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release_download/' + id, "_blank");
   }
 
   //-----download raw data saltab-----

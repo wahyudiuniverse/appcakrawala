@@ -81,6 +81,22 @@ class Pkwt216 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+		// SPG
+		if ($pkwt[0]->jabatan=='395') {
+			redirect('admin/pkwt216spg/view/'.$pkwt[0]->uniqueid);
+
+		// TL
+		} else if ($pkwt[0]->jabatan=='212') {
+			redirect('admin/pkwt216tl/view/'.$pkwt[0]->uniqueid);
+
+		// MD
+		} else if ($pkwt[0]->jabatan=='130') {
+			redirect('admin/pkwt216md/view/'.$pkwt[0]->uniqueid);
+
+		}
+		
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);

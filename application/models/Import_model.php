@@ -1473,6 +1473,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary);
 			}
 
+			if (empty($record->eslip_release) || ($record->eslip_release == "")) {
+				$eslip_release = "";
+			} else {
+				$eslip_release = "<p>&#x2705;</p>";
+			}
+
+
 			$text_periode_from = "";
 			$text_periode_to = "";
 			$text_periode = "";
@@ -1505,7 +1512,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$data[] = array(
 				"aksi" => $view . " " . $editReq . " " . $download_BPJS . " " . $download_Payroll,
 				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
-				"periode_salary" => $periode_salary,
+				"periode_salary" => $periode_salary.' '.$eslip_release,
 				"periode" => $text_periode,
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
