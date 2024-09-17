@@ -551,7 +551,7 @@ class Registrasi extends CI_Controller
                     $cek_employee = is_null($cek_nik_employee) ? "" : $cek_nik_employee['status_resign'];
                     $data['cek_resign'] = $cek_employee;
                     //kalau status resign 2 (RESIGN), 4 (END CONTRACT), 5 (DEACTIVE), cek nik di tabel employee request
-                    if (($cek_employee == "2") || ($cek_employee == "4") || ($cek_employee == "5")) {
+                    if (($cek_employee == "2") || ($cek_employee == "4") || ($cek_employee == "5") || ($cek_employee == "6")) {
                         if ($cek_nik == "") { //kalau tidak ada juga di tabel employee request
                             //save data nik baru
                             $this->register->createEmployee($nik);
