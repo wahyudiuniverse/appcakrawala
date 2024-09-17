@@ -482,6 +482,7 @@ if (in_array('514', $role_resources_ids)) {
   function releaseEslip(id) {
     //inisialisasi pesan
     $('#pesan_tanggal_terbit_eslip_modal').html("");
+    $('#tanggal_terbit_eslip_modal').val("");
 
     // AJAX untuk ambil data employee terupdate
     $.ajax({
@@ -511,7 +512,6 @@ if (in_array('514', $role_resources_ids)) {
           $("#total_mpp_modal").html(res['data']['total_mpp']);
           $('#finalize_by_modal').html(res['data']['release_by']);
           $('#id_batch_saltab').val(id);
-          $('#tanggal_terbit_eslip_modal').val("");
           $('#value_tanggal_penggajian_modal').val(res['data']['periode_salary']);
           $('#pesan_tanggal_terbit_eslip_modal').html("<small style='color:#FF0000;'>Jika tanggal terbit tidak diisi, akan diisi dengan tanggal penggajian secara otomatis</small>");
 
