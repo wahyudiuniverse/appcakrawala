@@ -874,7 +874,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$tanggal_terbit = $postdata['tanggal_terbit'];
 		}
 		$eslip_release_by = $postdata['release_by'];
-		$eslip_release_on = date("Y-m-d h:i:s");
+		$eslip_release_on = date("Y-m-d H:i:s");
 
 		$this->db->set('eslip_release', $tanggal_terbit);
 		$this->db->set('eslip_release_by', $eslip_release_by);

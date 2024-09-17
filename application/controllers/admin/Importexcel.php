@@ -3325,11 +3325,12 @@ class ImportExcel extends MY_Controller
 		} else {
 			$full_name = "";
 			$user = $this->Xin_model->read_user_info($data['eslip_release_by']);
-			if (empty($user)){
+			if (empty($user)) {
 				$full_name = "";
 			} else {
 				$full_name = strtoupper($user[0]->first_name);
 			}
+			$eslip_release_on_array = explode(" ", $data['eslip_release_on']);
 			$data2 = array(
 				'tanggal_penggajian'	=> $this->Xin_model->tgl_indo($data['periode_salary']),
 				'periode_salary'		=> $data['periode_salary'],
@@ -3340,7 +3341,8 @@ class ImportExcel extends MY_Controller
 				'periode_cutoff'		=> $this->Xin_model->tgl_indo($data['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data['periode_cutoff_to']),
 				'tanggal_terbit'		=> $this->Xin_model->tgl_indo($data['eslip_release']),
 				'eslip_release_by'		=> $full_name,
-				'eslip_release_on'		=> $this->Xin_model->tgl_indo($data['eslip_release_on']),
+				'eslip_release_on'		=> $eslip_release_on_array[1],
+				'eslip_release_on'		=> $this->Xin_model->tgl_indo($data['eslip_release_on']) . " " . $eslip_release_on_array[1],
 			);
 
 			$response = array(
