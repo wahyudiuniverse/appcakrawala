@@ -539,6 +539,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//release eslip batch saltab release
+	public function release_eslip_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_eslip_batch_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
 	//accept request open lock saltab
 	public function accept_request()
 	{
@@ -3284,5 +3297,59 @@ class ImportExcel extends MY_Controller
 
 		// Return the new filename
 		return $gzFilename;
+	}
+
+	//mengambil Json data eslip release
+	public function get_data_eslip_release()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id'        => $postData['id']
+		];
+
+		// get data rekening
+		$data = $this->Import_model->get_data_eslip_release($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$full_name = "";
+			$user = $this->Xin_model->read_user_info($data['eslip_release_by']);
+			if (empty($user)){
+				$full_name = "";
+			} else {
+				$full_name = strtoupper($user[0]->first_name);
+			}
+			$data2 = array(
+				'tanggal_penggajian'	=> $this->Xin_model->tgl_indo($data['periode_salary']),
+				'periode_salary'		=> $data['periode_salary'],
+				'release_by'			=> $data['release_by'],
+				'sub_project_name'		=> $data['sub_project_name'],
+				'project_name'			=> $data['project_name'],
+				'total_mpp'				=> $data['total_mpp'],
+				'periode_cutoff'		=> $this->Xin_model->tgl_indo($data['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data['periode_cutoff_to']),
+				'tanggal_terbit'		=> $this->Xin_model->tgl_indo($data['eslip_release']),
+				'eslip_release_by'		=> $full_name,
+				'eslip_release_on'		=> $this->Xin_model->tgl_indo($data['eslip_release_on']),
+			);
+
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data2,
+			);
+		}
+
+		echo json_encode($response);
 	}
 }

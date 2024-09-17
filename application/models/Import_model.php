@@ -864,6 +864,25 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
 	}
 
+	function release_eslip_batch_saltab_release($postdata = null)
+	{
+		// $session = $this->session->userdata('username');
+		$tanggal_penggajian = $postdata['tanggal_penggajian'];
+		if ((empty($postdata['tanggal_terbit'])) || ($postdata['tanggal_terbit'] == "")) {
+			$tanggal_terbit = $tanggal_penggajian;
+		} else {
+			$tanggal_terbit = $postdata['tanggal_terbit'];
+		}
+		$eslip_release_by = $postdata['release_by'];
+		$eslip_release_on = date("Y-m-d h:i:s");
+
+		$this->db->set('eslip_release', $tanggal_terbit);
+		$this->db->set('eslip_release_by', $eslip_release_by);
+		$this->db->set('eslip_release_on', $eslip_release_on);
+		$this->db->where('id', $postdata['id']);
+		$this->db->update('xin_saltab_bulk_release');
+	}
+
 	function accept_request($postData = null)
 	{
 		$this->db->set('status', "0");
@@ -1337,6 +1356,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	*/
 	function get_list_batch_saltab_release_download($postData = null)
 	{
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		$response = array();
 
@@ -1473,11 +1493,11 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary);
 			}
 
-			if (empty($record->eslip_release) || ($record->eslip_release == "")) {
-				$eslip_release = "";
-			} else {
-				$eslip_release = "<p>&#x2705;</p>";
-			}
+			// if (empty($record->eslip_release) || ($record->eslip_release == "")) {
+			// 	$eslip_release = "";
+			// } else {
+			// 	$eslip_release = "<p>&#x2705;</p>";
+			// }
 
 
 			$text_periode_from = "";
@@ -1498,6 +1518,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 			} else {
 				$text_periode = $text_periode_from . " s/d " . $text_periode_to;
 			}
+
+			//cek apakah sudah release eslip
+			$release_eslip = "<span style='color:#FF0000;'>Belum Release Eslip</span>";
+			if (empty($record->eslip_release) || ($record->eslip_release == "")) {
+				if (in_array('1100', $role_resources_ids)) {
+					$release_eslip = $release_eslip . '<button type="button" onclick="releaseEslip(' . $record->id . ')" class="btn btn-xs btn-outline-primary ml-1 mt-1" >Release Eslip</button>';
+				}
+			} else {
+				$release_eslip = "Tanggal terbit: " . $this->Xin_model->tgl_indo($record->eslip_release);
+				$release_eslip = $release_eslip . '<button type="button" onclick="detailReleaseEslip(' . $record->id . ')" class="btn btn-xs btn-outline-success ml-1 mt-1" >Detail Eslip</button>';
+			}
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
@@ -1507,18 +1538,20 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$download_Payroll = '<br><button type="button" onclick="downloadBatchSaltabReleasePayroll(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Data Payroll</button>';
 			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
+
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
 				"aksi" => $view . " " . $editReq . " " . $download_BPJS . " " . $download_Payroll,
 				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
-				"periode_salary" => $periode_salary.' '.$eslip_release,
+				"periode_salary" => $periode_salary,
 				"periode" => $text_periode,
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
 				"total_mpp" => $record->total_mpp,
 				"release_by" => $record->release_by,
 				"release_on" => $record->release_on,
+				"release_eslip" => $release_eslip,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
@@ -2163,5 +2196,20 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//die;
 
 		return $response;
+	}
+
+	//ambil data eslip release
+	public function get_data_eslip_release($postData)
+	{
+		$this->db->select('*');
+
+		$this->db->from('xin_saltab_bulk_release',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
 	}
 }
