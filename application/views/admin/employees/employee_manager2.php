@@ -1098,27 +1098,27 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                           <tbody>
                             <tr>
                               <th scope="row" style="width: 30%">Dokumen KTP <span class="icon-verify-nik"></span></th>
-                              <td><?php echo $display_ktp; ?></td>
+                              <td id="dokumen_ktp_tabel"><?php echo $display_ktp; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Dokumen KK <span class="icon-verify-kk"></span></th>
-                              <td><?php echo $display_kk; ?></td>
+                              <td id="dokumen_kk_tabel"><?php echo $display_kk; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Dokumen NPWP</th>
-                              <td><?php echo $display_npwp; ?></td>
+                              <td id="dokumen_npwp_tabel"><?php echo $display_npwp; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Dokumen CV</th>
-                              <td><?php echo $display_cv; ?></td>
+                              <td id="dokumen_cv_tabel"><?php echo $display_cv; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Dokumen SKCK</th>
-                              <td><?php echo $display_skck; ?></td>
+                              <td id="dokumen_skck_tabel"><?php echo $display_skck; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Dokumen Ijazah</th>
-                              <td><?php echo $display_isd; ?></td>
+                              <td id="dokumen_ijazah_tabel"><?php echo $display_isd; ?></td>
                             </tr>
                             <!-- <tr>
                               <th scope="row">Dokumen Paklaring (SK Kerja)</th>
@@ -1133,11 +1133,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                           <tbody>
                             <tr>
                               <th scope="row" style="width: 30%">Nomor BPJS Kesehatan</th>
-                              <td><?php echo $display_bpjs_ks_no; ?></td>
+                              <td id="dokumen_bpjs_ks_tabel"><?php echo $display_bpjs_ks_no; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Nomor BPJS Ketenagakerjaan</th>
-                              <td><?php echo $display_bpjs_tk_no; ?></td>
+                              <td id="dokumen_bpjs_tk_tabel"><?php echo $display_bpjs_tk_no; ?></td>
                             </tr>
                           </tbody>
                         </table>
@@ -1437,9 +1437,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
     if (nomor_rekening.readOnly) document.getElementById("nomor_rekening").removeAttribute("readonly");
     if (rekening_modal.readOnly) document.getElementById("rekening_modal").removeAttribute("readonly");
+    $('#button_open_upload_buku_tabungan').attr("hidden", false);
   } else if (norek_validation == 1) {
     nomor_rekening.setAttribute("readonly", "readonly");
     rekening_modal.setAttribute("readonly", "readonly");
+    $('#button_open_upload_buku_tabungan').attr("hidden", true);
     $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
   }
   if (pemilik_rekening_validation == 0) {
@@ -1624,7 +1626,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
               $('#button_save_rekening').attr("hidden", true);
               $('#button_save_rekening').attr("disabled", false);
               $('#button_save_rekening').removeAttr("data-loading");
-            } else if (res['status'] == "201") { //sukses dengan upload file
+            } else if (res['status'] == "201") { //sukses dengan upload file 301088
+              $('#buku_rekening_tabel').html(res['open_buku_tabungan']);
               $('#nama_bank_tabel').html(res['nama_bank_read']);
               $('#nomor_rekening_table').html(res['data']['nomor_rek']);
               $('#pemilik_rekening_tabel').html(res['data']['pemilik_rek']);
@@ -2070,7 +2073,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             } else {
               atribut = "image/jpg";
             }
-            
+
             var html_text = "<div class='row'>";
             // html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Foto KTP  </label>";
@@ -2140,7 +2143,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             } else {
               atribut = "image/jpg";
             }
-            
+
             var html_text = "<div class='row'>";
             // html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Foto KK  </label>";
@@ -3001,7 +3004,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             $('#file_buku_tabungan_kosong').attr("hidden", true);
             $('#file_buku_tabungan_isi').attr("hidden", false);
-            $('#button_open_upload_buku_tabungan').attr("hidden", false);
+            if (res['validation'] == "1") {
+              $('#button_open_upload_buku_tabungan').attr("hidden", true);
+            } else {
+              $('#button_open_upload_buku_tabungan').attr("hidden", false);
+            }
             $('#form_upload_buku_tabungan').attr("hidden", true);
           }
 
@@ -3232,8 +3239,26 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") { //sukses upload file
-          var file_foto_profile = '<?= base_url() ?>uploads/profile/' + res['data']['profile_picture'] + '?' + res['time'];
+          //update foto profile
+          var file_foto_profile = "";
+          if ((res['data']['profile_picture'] == null) || (res['data']['profile_picture'] == '') || (res['data']['profile_picture'] == 'no file')) {
+            if (res['data']['gender'] == 'L') {
+              file_foto_profile = '<?= base_url() ?>uploads/profile/default_male.jpg' + '?' + res['time'];
+            } else {
+              file_foto_profile = '<?= base_url() ?>uploads/profile/default_female.jpg' + '?' + res['time'];
+            }
+          } else {
+            file_foto_profile = '<?= base_url() ?>uploads/profile/' + res['data']['profile_picture'] + '?' + res['time'];
+          }
           var foto_profile_html = '<button onclick="open_foto_profil(' + nip + ')" type="button" class="btn btn-primary"><img src="' + file_foto_profile + '" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></button>';
+
+          $('#dokumen_ktp_tabel').html(res['button_upload_ktp']);
+          $('#dokumen_kk_tabel').html(res['button_upload_kk']);
+          $('#dokumen_npwp_tabel').html(res['button_upload_npwp']);
+          $('#dokumen_cv_tabel').html(res['button_upload_cv']);
+          $('#dokumen_skck_tabel').html(res['button_upload_skck']);
+          $('#dokumen_ijazah_tabel').html(res['button_upload_ijazah']);
+
           $('#foto_profile').html(foto_profile_html);
           $('.info-modal-upload-dokumen').html(success_html_text);
           $('.info-modal-upload-dokumen').attr("hidden", false);
@@ -3781,29 +3806,28 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
-
-        // $('#editRekeningModal').modal('show');
-        // $('.info-modal-edit-rekening').attr("hidden", false);
-        // $('.isi-modal-edit-rekening').attr("hidden", true);
-        // $('.info-modal-edit-rekening').html(loading_html_text);
-        // $('#button_save_rekening').attr("hidden", true);
       },
       success: function(response) {
 
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") {
-          var nama_file = res['data']['profile_picture'];
+          var nama_file = "";
+          if ((res['data']['profile_picture'] == null) || (res['data']['profile_picture'] == '') || (res['data']['profile_picture'] == 'no file')) {
+            if (res['data']['gender'] == 'L') {
+              nama_file = 'default_male.jpg';
+            } else {
+              nama_file = 'default_female.jpg';
+            }
+          } else {
+            nama_file = res['data']['profile_picture'];
+          }
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
           var height = '';
           var d = new Date();
           var time = d.getTime();
           nama_file = nama_file + "?" + time;
-          var tes = nama_file.substr(-14);
-
-          // alert(nama_file);
-          // alert(tes);
 
           if (tipe_file == "pdf") {
             atribut = "application/pdf";
@@ -3908,18 +3932,65 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Update BPJS KS -->
 <script type="text/javascript">
   function update_bpjs(nip) {
-    //testing
-    // alert(secid);
-    // alert(nip);
+    var nip = "<?php echo $employee_id; ?>";
 
-    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+    //inisialisasi pesan
+    $('#pesan_no_bpjs_ks_modal').html("");
+    $('#pesan_no_bpjs_tk_modal').html("");
 
-    // $('.judul-modal').html("Download E-Slip");
-    // $('.isi-modal').html(html_text);
-    // $('#button_save_pin').attr("hidden", true);
-    $('#editBPJSModal').appendTo("body").modal('show');
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_bpjs/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.info-modal-edit-bpjs').attr("hidden", false);
+        $('.isi-modal-edit-bpjs').attr("hidden", true);
+        $('.info-modal-edit-bpjs').html(loading_html_text);
+        $('#button_save_bpjs').attr("hidden", true);
+        $('#editBPJSModal').modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#no_bpjs_ks_modal').val(res['data']['bpjs_ks_no']);
+          $("#no_bpjs_tk_modal").val(res['data']['bpjs_tk_no']);
+
+          $('.isi-modal-edit-bpjs').attr("hidden", false);
+          $('.info-modal-edit-bpjs').attr("hidden", true);
+          $('#button_save_bpjs').attr("hidden", false);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-edit-bpjs').html(html_text);
+          $('.isi-modal-edit-bpjs').attr("hidden", true);
+          $('.info-modal-edit-bpjs').attr("hidden", false);
+          $('#button_save_bpjs').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-edit-bpjs').html(html_text); //coba pake iframe
+        $('.isi-modal-edit-bpjs').attr("hidden", true);
+        $('.info-modal-edit-bpjs').attr("hidden", false);
+        $('#button_save_bpjs').attr("hidden", true);
+      }
+    });
 
   }
+</script>
+
+<!-- Tombol Verifikasi Data NIK -->
+<script type="text/javascript">
+  document.getElementById("button_save_bpjs").onclick = function(e) {
+
+  };
 </script>
 
 <!-- Tombol Verifikasi Data NIK -->
@@ -3934,6 +4005,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var id_employee = "<?php echo $verification_id; ?>";
     var nama_kolom = "nik";
     var status = "1";
+
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
 
     // alert(id_employee);
 
@@ -3953,6 +4028,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         verified_by_id: user_id,
       },
       success: function(response) {
+        var res = jQuery.parseJSON(response);
+
+        if ((res['filename_ktp'] == null) || (res['filename_ktp'] == "") || (res['filename_ktp'] == "0")) {
+          var tombol_ktp_tabel = '-tidak ada data- <button onclick="upload_ktp(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+        } else {
+          var tombol_ktp_tabel = '<button onclick="open_ktp(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+        }
+
+        $('#dokumen_ktp_tabel').html(tombol_ktp_tabel);
+
         ktp_no_modal.setAttribute("readonly", "readonly");
         nik_modal.setAttribute("readonly", "readonly");
 
@@ -3986,6 +4071,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "nik";
     var status = "0";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4002,6 +4091,28 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         verified_by_id: user_id,
       },
       success: function(response) {
+        var res = jQuery.parseJSON(response);
+
+        var tes_role = <?php if (in_array('1008', $role_resources_ids)) {
+                          echo "1";
+                        } else {
+                          echo "0";
+                        }; ?>
+
+        if (tes_role == "1") {
+          var tombol_upload_ktp_tabel = '<button onclick="upload_ktp(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+        } else {
+          var tombol_upload_ktp_tabel = '';
+        }
+
+        if ((res['filename_ktp'] == null) || (res['filename_ktp'] == "") || (res['filename_ktp'] == "0")) {
+          var tombol_ktp_tabel = '-tidak ada data- <button onclick="upload_ktp(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+        } else {
+          var tombol_ktp_tabel = '<button onclick="open_ktp(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>' + tombol_upload_ktp_tabel;
+        }
+
+        $('#dokumen_ktp_tabel').html(tombol_ktp_tabel);
+
         document.getElementById("ktp_no_modal").removeAttribute("readonly");
         document.getElementById("nik_modal").removeAttribute("readonly");
 
@@ -4033,6 +4144,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "kk";
     var status = "1";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4049,6 +4164,16 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         verified_by_id: user_id,
       },
       success: function(response) {
+        var res = jQuery.parseJSON(response);
+
+        if ((res['filename_kk'] == null) || (res['filename_kk'] == "") || (res['filename_kk'] == "0")) {
+          var tombol_kk_tabel = '-tidak ada data- <button onclick="upload_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+        } else {
+          var tombol_kk_tabel = '<button onclick="open_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KK</button>';
+        }
+
+        $('#dokumen_kk_tabel').html(tombol_kk_tabel);
+
         kk_no_modal.setAttribute("readonly", "readonly");
         kk_modal.setAttribute("readonly", "readonly");
 
@@ -4082,6 +4207,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "kk";
     var status = "0";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4098,6 +4227,28 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         verified_by_id: user_id,
       },
       success: function(response) {
+        var res = jQuery.parseJSON(response);
+
+        var tes_role = <?php if (in_array('1008', $role_resources_ids)) {
+                          echo "1";
+                        } else {
+                          echo "0";
+                        }; ?>
+
+        if (tes_role == "1") {
+          var tombol_upload_kk_tabel = '<button onclick="upload_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+        } else {
+          var tombol_upload_kk_tabel = '';
+        }
+
+        if ((res['filename_kk'] == null) || (res['filename_kk'] == "") || (res['filename_kk'] == "0")) {
+          var tombol_kk_tabel = '-tidak ada data- <button onclick="upload_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+        } else {
+          var tombol_kk_tabel = '<button onclick="open_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KK</button>' + tombol_upload_kk_tabel;
+        }
+
+        $('#dokumen_kk_tabel').html(tombol_kk_tabel);
+
         document.getElementById("kk_no_modal").removeAttribute("readonly");
         document.getElementById("kk_modal").removeAttribute("readonly");
 
@@ -4127,6 +4278,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var id_employee = "<?php echo $verification_id; ?>";
     var nama_kolom = "nama";
     var status = "1";
+
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
 
     // AJAX request
     $.ajax({
@@ -4179,6 +4334,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "nama";
     var status = "0";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4226,6 +4385,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var id_employee = "<?php echo $verification_id; ?>";
     var nama_kolom = "bank";
     var status = "1";
+
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
 
     // AJAX request
     $.ajax({
@@ -4278,6 +4441,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "bank";
     var status = "0";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4325,6 +4492,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "norek";
     var status = "1";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4343,6 +4514,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       success: function(response) {
         nomor_rekening.setAttribute("readonly", "readonly");
         rekening_modal.setAttribute("readonly", "readonly");
+        $('#button_open_upload_buku_tabungan').attr("hidden", true);
 
         document.getElementById("nomor_rekening").value = norek;
         $('#nomor_rekening_table').html(norek);
@@ -4375,6 +4547,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var nama_kolom = "norek";
     var status = "0";
 
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
+
     // AJAX request
     $.ajax({
       url: '<?= base_url() ?>admin/Employees/valiadsi_employee_existing/',
@@ -4393,6 +4569,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       success: function(response) {
         document.getElementById("nomor_rekening").removeAttribute("readonly");
         document.getElementById("rekening_modal").removeAttribute("readonly");
+        $('#button_open_upload_buku_tabungan').attr("hidden", false);
 
         $('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
 
@@ -4421,6 +4598,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var id_employee = "<?php echo $verification_id; ?>";
     var nama_kolom = "pemilik_rekening";
     var status = "1";
+
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
 
     // AJAX request
     $.ajax({
@@ -4471,6 +4652,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var id_employee = "<?php echo $verification_id; ?>";
     var nama_kolom = "pemilik_rekening";
     var status = "0";
+
+    if ((id_employee == null) || (id_employee == "")) {
+      id_employee = "e_" + "<?php echo $user[0]->user_id; ?>";
+    }
 
     // AJAX request
     $.ajax({

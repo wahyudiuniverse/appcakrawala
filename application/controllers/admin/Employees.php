@@ -8246,10 +8246,72 @@ class Employees extends MY_Controller
 			$gender_name = '--';
 		}
 
+		//verification id
+		$actual_verification_id = "";
+		if ((is_null($result[0]->verification_id)) || ($result[0]->verification_id == "") || ($result[0]->verification_id == "0")) {
+			$actual_verification_id = "e_" . $result[0]->user_id;
+		} else {
+			$actual_verification_id = $result[0]->verification_id;
+		}
+
+		//cek status validation ke database
+		$nik_validation = "0";
+		$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+		if (is_null($nik_validation_query)) {
+			$nik_validation = "0";
+		} else {
+			$nik_validation = $nik_validation_query['status'];
+		}
+		$kk_validation = "0";
+		$kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
+		if (is_null($kk_validation_query)) {
+			$kk_validation = "0";
+		} else {
+			$kk_validation = $kk_validation_query['status'];
+		}
+		$nama_validation = "0";
+		$nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
+		if (is_null($nama_validation_query)) {
+			$nama_validation = "0";
+		} else {
+			$nama_validation = $nama_validation_query['status'];
+		}
+		$bank_validation = "0";
+		$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+		if (is_null($bank_validation_query)) {
+			$bank_validation = "0";
+		} else {
+			$bank_validation = $bank_validation_query['status'];
+		}
+		$norek_validation = "0";
+		$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+		if (is_null($norek_validation_query)) {
+			$norek_validation = "0";
+		} else {
+			$norek_validation = $norek_validation_query['status'];
+		}
+		$pemilik_rekening_validation = "0";
+		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+		if (is_null($pemilik_rekening_validation_query)) {
+			$pemilik_rekening_validation = "0";
+		} else {
+			$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+		}
+
 		//role id untuk upload dokumen
 		if (in_array('1008', $role_resources_ids)) {
-			$button_upload_ktp = '<button id="button_upload_ktp" onclick="upload_ktp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
-			$button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+			if ($nik_validation == "0") {
+				$button_upload_ktp = '<button id="button_upload_ktp" onclick="upload_ktp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+			} else {
+				$button_upload_ktp = '';
+			}
+			if ($kk_validation == "0") {
+				$button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' .$result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+			} else {
+				$button_upload_kk = '';
+			}
+			// $button_upload_ktp = '<button id="button_upload_ktp" onclick="upload_ktp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+			// $button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
 			$button_upload_npwp = '<button id="button_upload_npwp" onclick="upload_npwp(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload NPWP</button>';
 			$button_upload_cv = '<button id="button_upload_cv" onclick="upload_cv(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload CV</button>';
 			$button_upload_skck = '<button id="button_upload_skck" onclick="upload_skck(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload SKCK</button>';
@@ -8348,58 +8410,7 @@ class Employees extends MY_Controller
 			$status_pengajuan_paklaring = $result[0]->request_resign_date;
 		}
 
-		//cek status validation ke database
-		$id_verification = $result[0]->verification_id;
-		$nik_validation = "0";
-		$nik_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'nik');
-		if (is_null($nik_validation_query)) {
-			$nik_validation = "0";
-		} else {
-			$nik_validation = $nik_validation_query['status'];
-		}
-		$kk_validation = "0";
-		$kk_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'kk');
-		if (is_null($kk_validation_query)) {
-			$kk_validation = "0";
-		} else {
-			$kk_validation = $kk_validation_query['status'];
-		}
-		$nama_validation = "0";
-		$nama_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'nama');
-		if (is_null($nama_validation_query)) {
-			$nama_validation = "0";
-		} else {
-			$nama_validation = $nama_validation_query['status'];
-		}
-		$bank_validation = "0";
-		$bank_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'bank');
-		if (is_null($bank_validation_query)) {
-			$bank_validation = "0";
-		} else {
-			$bank_validation = $bank_validation_query['status'];
-		}
-		$norek_validation = "0";
-		$norek_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'norek');
-		if (is_null($norek_validation_query)) {
-			$norek_validation = "0";
-		} else {
-			$norek_validation = $norek_validation_query['status'];
-		}
-		$pemilik_rekening_validation = "0";
-		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($id_verification, 'pemilik_rekening');
-		if (is_null($pemilik_rekening_validation_query)) {
-			$pemilik_rekening_validation = "0";
-		} else {
-			$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
-		}
-
-		//verification id
-		$actual_verification_id = "";
-		if ((is_null($result[0]->verification_id)) || ($result[0]->verification_id == "") || ($result[0]->verification_id == "0")) {
-			$actual_verification_id = "e_" . $result[0]->user_id;
-		} else {
-			$actual_verification_id = $result[0]->verification_id;
-		}
+		
 
 		$data = array(
 			//Pages Attributes
@@ -8466,7 +8477,7 @@ class Employees extends MY_Controller
 			'id_bank' => $result[0]->bank_name,
 			'filename_rek' => $filename_rek,
 			'pemilik_rek' => strtoupper($result[0]->pemilik_rek),
-			'bank_name' => strtoupper("[ " . $this->Employees_model->get_id_bank($result[0]->bank_name) . " ] " . $this->Employees_model->get_nama_bank($result[0]->bank_name)),
+			'bank_name' => strtoupper($this->Employees_model->get_nama_bank($result[0]->bank_name) . " (" . $this->Employees_model->get_id_bank($result[0]->bank_name) . ") "),
 
 			//Dokumen Pribadi
 			'display_ktp' => $filename_ktp,
@@ -8539,7 +8550,7 @@ class Employees extends MY_Controller
 			'all_marital' 			=> $this->Xin_model->get_all_marital(),
 			'all_departments' 		=> $this->Department_model->all_departments(),
 			'all_projects' 			=> $this->Project_model->get_project_brand(),
-			'all_contract'			=> $this->Employees_model->get_data_kontrak($result[0]->employee_id,$result[0]->user_id),
+			'all_contract'			=> $this->Employees_model->get_data_kontrak($result[0]->employee_id, $result[0]->user_id),
 			'all_addendum'			=> $this->Employees_model->get_data_addendum($result[0]->user_id),
 			'all_eslip'				=> $this->Employees_model->read_saltab_by_nip2($result[0]->employee_id),
 			'all_sk'				=> $this->Esign_model->read_skk_by_nip($result[0]->employee_id),
@@ -8866,8 +8877,56 @@ class Employees extends MY_Controller
 			'employee_id'        => $postData['nip']
 		];
 
-		// get data diri
+		// get data rekening
 		$data = $this->Employees_model->get_data_rekening($datarequest);
+
+		//status validasi rekening
+		$norek_validation = "0";
+		$norek_validation_query = $this->Employees_model->get_valiadation_status($data['verification_id'], 'norek');
+		if (is_null($norek_validation_query)) {
+			$norek_validation = "0";
+		} else {
+			$norek_validation = $norek_validation_query['status'];
+		}
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+				'validation' => $norek_validation,
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+				'validation' => $norek_validation,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data bpjs employee
+	public function get_data_bpjs()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'employee_id'        => $postData['nip']
+		];
+
+		// get data rekening
+		$data = $this->Employees_model->get_data_bpjs($datarequest);
 
 		if (empty($data)) {
 			$response = array(
@@ -9247,12 +9306,22 @@ class Employees extends MY_Controller
 			$nama_bank_read = strtoupper("[ " . $this->Employees_model->get_id_bank($datahasil['bank_name']) . " ] " . $this->Employees_model->get_nama_bank($datahasil['bank_name']));
 		}
 
+		$data_karyawan = $this->Employees_model->get_employee_array_by_nip($postData['nip']);
+
+		//dokumen buku rekening
+		if ((is_null($data_karyawan['filename_rek'])) || ($data_karyawan['filename_rek'] == "") || ($data_karyawan['filename_rek'] == "0")) {
+			$filename_rek = '-tidak ada data-';
+		} else {
+			$filename_rek = '<button id="button_open_buku_tabungan" onclick="open_buku_tabungan(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Open Buku Tabungan</button>';
+		}
+
 		$response = array(
 			'status'		=> $status, //200 = sukses tanpa file, 201 = sukses dengan file, 202 = sukses dengan error file, 300 = error
 			'pesan' 		=> "Berhasil Save Data",
 			'pesan_error' 	=> $pesan_error,
 			'data'			=> $datahasil,
-			'nama_bank_read'=> $nama_bank_read,
+			'nama_bank_read' => $nama_bank_read,
+			'open_buku_tabungan' => $filename_rek,
 		);
 
 		echo json_encode($response);
@@ -9272,6 +9341,14 @@ class Employees extends MY_Controller
 		$jenis_dokumen = $postData['jenis_dokumen'];
 		$status = "";
 		$datahasil;
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
+		$verification_id = $this->Employees_model->get_verification_id($nip);
+
+		if ((empty($verification_id)) || ($verification_id  == "")) {
+			$verification_id = "-1";
+		}
 
 		//Cek variabel post
 		// $datarequest = [
@@ -9411,12 +9488,120 @@ class Employees extends MY_Controller
 			// echo $pesan_error;
 		}
 
+		//cek verifikasi
+		$ktp_validation = "0";
+		$ktp_validation_query = $this->Employees_model->get_valiadation_status($verification_id, 'ktp');
+		if (is_null($ktp_validation_query)) {
+			$ktp_validation = "0";
+		} else {
+			$ktp_validation = $ktp_validation_query['status'];
+		}
+		$kk_validation = "0";
+		$kk_validation_query = $this->Employees_model->get_valiadation_status($verification_id, 'kk');
+		if (is_null($kk_validation_query)) {
+			$kk_validation = "0";
+		} else {
+			$kk_validation = $kk_validation_query['status'];
+		}
+
+		//role id untuk upload dokumen
+		if (in_array('1008', $role_resources_ids)) {
+			if ($ktp_validation == "1") {
+				$button_upload_ktp = '<button id="button_upload_ktp" onclick="upload_ktp(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+			} else {
+				$button_upload_ktp = '';
+			}
+			if ($kk_validation == "1") {
+				$button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+			} else {
+				$button_upload_kk = '';
+			}
+			$button_upload_npwp = '<button id="button_upload_npwp" onclick="upload_npwp(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload NPWP</button>';
+			$button_upload_cv = '<button id="button_upload_cv" onclick="upload_cv(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload CV</button>';
+			$button_upload_skck = '<button id="button_upload_skck" onclick="upload_skck(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload SKCK</button>';
+			$button_upload_ijazah = '<button id="button_upload_ijazah" onclick="upload_ijazah(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload Ijazah</button>';
+		} else {
+			$button_upload_ktp = '';
+			$button_upload_kk = '';
+			$button_upload_npwp = '';
+			$button_upload_cv = '';
+			$button_upload_skck = '';
+			$button_upload_ijazah = '';
+		}
+
+		//role id untuk update nomor bpjs
+		if (in_array('1009', $role_resources_ids)) {
+			$button_update_bpjs_ks = '<button id="button_upload_ktp" onclick="update_bpjs(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS KS</button>';
+			$button_update_bpjs_tk = '<button id="button_upload_kk" onclick="update_bpjs(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS TK</button>';
+		} else {
+			$button_update_bpjs_ks = '';
+			$button_update_bpjs_tk = '';
+		}
+
+		//dokumen buku rekening
+		if ((is_null($datahasil['filename_rek'])) || ($datahasil['filename_rek'] == "") || ($datahasil['filename_rek'] == "0")) {
+			$filename_rek = '-tidak ada data-';
+		} else {
+			$filename_rek = '<button id="button_open_buku_tabungan" onclick="open_buku_tabungan(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Open Buku Tabungan</button>';
+		}
+
+		//dokumen ktp
+		if ((is_null($datahasil['filename_ktp'])) || ($datahasil['filename_ktp'] == "") || ($datahasil['filename_ktp'] == "0")) {
+			$filename_ktp = '-tidak ada data- <button id="button_upload_ktp" onclick="upload_ktp(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+		} else {
+			$filename_ktp = '<button id="button_open_ktp" onclick="open_ktp(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>' . $button_upload_ktp;
+		}
+
+		//dokumen kk
+		if ((is_null($datahasil['filename_kk'])) || ($datahasil['filename_kk'] == "") || ($datahasil['filename_kk'] == "0")) {
+			$filename_kk = '-tidak ada data- <button id="button_upload_kk" onclick="upload_kk(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+		} else {
+			$filename_kk = '<button id="button_open_kk" onclick="open_kk(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KK</button>' . $button_upload_kk;
+		}
+
+		//dokumen npwp
+		if ((is_null($datahasil['filename_npwp'])) || ($datahasil['filename_npwp'] == "") || ($datahasil['filename_npwp'] == "0")) {
+			$filename_npwp = '-tidak ada data- <button id="button_upload_npwp" onclick="upload_npwp(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload NPWP</button>';
+		} else {
+			$filename_npwp = '<button id="button_open_npwp" onclick="open_npwp(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open NPWP</button>' . $button_upload_npwp;
+		}
+
+		//dokumen cv
+		if ((is_null($datahasil['filename_cv'])) || ($datahasil['filename_cv'] == "") || ($datahasil['filename_cv'] == "0")) {
+			$filename_cv = '-tidak ada data- <button id="button_upload_cv" onclick="upload_cv(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload CV</button>';
+		} else {
+			$filename_cv = '<button id="button_open_cv" onclick="open_cv(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open CV</button>' . $button_upload_cv;
+		}
+
+		//dokumen skck
+		if ((is_null($datahasil['filename_skck'])) || ($datahasil['filename_skck'] == "") || ($datahasil['filename_skck'] == "0")) {
+			$filename_skck = '-tidak ada data- <button id="button_upload_skck" onclick="upload_skck(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload SKCK</button>';
+		} else {
+			$filename_skck = '<button id="button_open_skck" onclick="open_skck(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open SKCK</button>' . $button_upload_skck;
+		}
+
+		//dokumen ijazah
+		if ((is_null($datahasil['filename_isd'])) || ($datahasil['filename_isd'] == "") || ($datahasil['filename_isd'] == "0")) {
+			$filename_isd = '-tidak ada data- <button id="button_upload_ijazah" onclick="upload_ijazah(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload Ijazah</button>';
+		} else {
+			$filename_isd = '<button id="button_open_ijazah" onclick="open_ijazah(' . $postData['nip'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open Ijazah</button>' . $button_upload_ijazah;
+		}
+
 		$response = array(
-			'status'		=> $status, //300 = tidak ada file yang dipiih
-			'pesan' 		=> "Berhasil Save Data",
-			'pesan_error' 	=> $pesan_error,
-			'data'			=> $datahasil,
-			'time'			=> time(),
+			'status'				=> $status, //300 = tidak ada file yang dipiih
+			'pesan' 				=> "Berhasil Save Data",
+			'pesan_error' 			=> $pesan_error,
+			'data'					=> $datahasil,
+			'time'					=> time(),
+			'button_update_bpjs_ks' => $button_update_bpjs_ks,
+			'button_update_bpjs_tk' => $button_update_bpjs_tk,
+			'button_upload_rekening' => $filename_rek,
+			'button_upload_ktp'		=> $filename_ktp,
+			'button_upload_kk'		=> $filename_kk,
+			'button_upload_npwp'	=> $filename_npwp,
+			'button_upload_cv'		=> $filename_cv,
+			'button_upload_skck'	=> $filename_skck,
+			'button_upload_ijazah'	=> $filename_isd,
 		);
 
 		echo json_encode($response);
@@ -9604,6 +9789,7 @@ class Employees extends MY_Controller
 
 		// get data 
 		$data = $this->Employees_model->valiadsi_employee_existing($postData);
+
 		echo json_encode($data);
 		//echo "data berhasil masuk";
 	}

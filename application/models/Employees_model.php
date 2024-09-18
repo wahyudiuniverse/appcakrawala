@@ -1023,47 +1023,73 @@ class Employees_model extends CI_Model
 			'verified_by_id'          => $postData['verified_by_id']
 		];
 
+		//get user varification_id info
+		$result = $this->read_employee_info_by_nik($postData['employee_id']);
+
 		//update data employee
 		if ($postData['kolom'] == "nik") {
 			$data = array(
 				'ktp_no' => $postData['nilai_sesudah']
 			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
 		} else if ($postData['kolom'] == "kk") {
 			$data = array(
 				'kk_no' => $postData['nilai_sesudah']
 			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
 		} else if ($postData['kolom'] == "nama") {
 			$data = array(
 				'first_name' => $postData['nilai_sesudah']
 			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
 		} else if ($postData['kolom'] == "bank") {
 			$data = array(
 				'bank_name' => $postData['nilai_sesudah']
 			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
 		} else if ($postData['kolom'] == "norek") {
 			$data = array(
 				'nomor_rek' => $postData['nilai_sesudah']
 			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
 		} else if ($postData['kolom'] == "pemilik_rekening") {
 			$data = array(
 				'pemilik_rek' => $postData['nilai_sesudah']
 			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
 		}
 
 
 		$this->db->insert('log_employee_verification', $datalock);
+
+		//get user varification_id info
+		$result = $this->get_employee_array_by_nip($postData['employee_id']);
+
+		return $result;
 	}
 
 	//un validasi employee request
@@ -5669,10 +5695,42 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data rekening employee
 	public function get_data_rekening($postData)
 	{
+		$this->db->select('verification_id');
 		$this->db->select('bank_name');
 		$this->db->select('nomor_rek');
 		$this->db->select('pemilik_rek');
 		$this->db->select('filename_rek');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data rekening employee
+	public function get_data_bpjs($postData)
+	{
+		$this->db->select('bpjs_tk_no');
+		$this->db->select('bpjs_ks_no');
+
+		$this->db->from('xin_employees',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data verification_id employee
+	public function get_verification_id($postData)
+	{
+		$this->db->select('verification_id');
 
 		$this->db->from('xin_employees',);
 		$this->db->where($postData);
@@ -5705,6 +5763,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data dokumen pribadi employee
 	public function get_data_dokumen_pribadi($postData)
 	{
+		$this->db->select('gender');
 		$this->db->select('filename_ktp');
 		$this->db->select('filename_kk');
 		$this->db->select('filename_npwp');
@@ -5727,6 +5786,9 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data kontrak+addendum employee
 	public function get_data_kontrak($nip, $karyawan_id)
 	{
+		//ambil role resource id
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
 		// get data kontrak
 		$this->db->select('uniqueid');
 		$this->db->select('from_date');
@@ -5763,6 +5825,11 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$data = array();
 
 		foreach ($query as $record) {
+			if (in_array('1010', $role_resources_ids)) {
+				$button_hapus = '<button onclick="hapus_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>';
+			} else {
+				$button_hapus = '';
+			}
 			$data[] = array(
 				"jenis_dokumen" => "KONTRAK",
 				"nomor_surat" => $record['no_surat'],
@@ -5775,11 +5842,16 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"button_open" => '<button onclick="open_kontrak(\'' . $record['uniqueid'] . '\',' . $record['sub_project'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
 				"button_upload" => '<button onclick="upload_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
-				"button_hapus" => '<button onclick="hapus_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>',
+				"button_hapus" => $button_hapus,
 			);
 		}
 
 		foreach ($query2 as $record) {
+			if (in_array('1010', $role_resources_ids)) {
+				$button_hapus = '<button onclick="hapus_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>';
+			} else {
+				$button_hapus = '';
+			}
 			$data[] = array(
 				"jenis_dokumen" => "ADDENDUM",
 				"nomor_surat" => $record['no_addendum'],
@@ -5792,7 +5864,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"button_open" => '<button onclick="open_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
 				"button_upload" => '<button onclick="upload_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
-				"button_hapus" => '<button onclick="hapus_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>',
+				"button_hapus" => $button_hapus,
 			);
 		}
 
@@ -5967,6 +6039,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->update('xin_employees', $postData);
 
 		// //fetch data terbaru
+		$this->db->select('gender');
 		$this->db->select('filename_ktp');
 		$this->db->select('filename_kk');
 		$this->db->select('filename_npwp');
@@ -5975,6 +6048,22 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('filename_isd');
 		$this->db->select('filename_rek');
 		$this->db->select('profile_picture');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//get data employee by nip
+	public function get_employee_array_by_nip($nip)
+	{
+		// //fetch data terbaru
+		$this->db->select('*');
 
 		$this->db->from('xin_employees',);
 		$this->db->where('employee_id', $nip);
