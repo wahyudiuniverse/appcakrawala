@@ -9125,6 +9125,7 @@ class Employees extends MY_Controller
 			'penempatan'     	=> $postData['penempatan'],
 			'location_id'       => $postData['kategori'],
 			'date_of_joining'   => $postData['date_of_join'],
+			'user_role_id'   => $postData['role_id_karyawan'],
 		];
 
 		// save data diri

@@ -5650,6 +5650,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data project employee
 	public function get_data_project($postData)
 	{
+		$this->db->select('user_role_id');
 		$this->db->select('sub_project_id');
 		$this->db->select('designation_id');
 		$this->db->select('penempatan');

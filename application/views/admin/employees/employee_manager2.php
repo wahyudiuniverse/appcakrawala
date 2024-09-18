@@ -495,6 +495,20 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       <span id='pesan_date_of_join_modal'></span>
                     </td>
                   </tr>
+                  <tr <?php in_array('1013', $role_resources_ids) ? print("") : print("hidden"); ?>>
+                    <td><strong>Role Karyawan</strong></td>
+                    <td>
+                      <div id="area_role">
+                        <select class="form-control" id="role_modal" name="role_modal" data-plugin="select_modal_project" data-placeholder="Role Karyawan">
+                          <option value="">Pilih Role Karyawan</option>
+                          <?php foreach ($all_user_roles as $role): ?>
+                            <option value="<?php echo $role->role_id; ?>" <?php if ($role_id == $role->role_id): ?> selected <?php endif; ?>><?php echo strtoupper($role->role_name); ?></option>
+                          <?php endforeach; ?>
+                        </select>
+                      </div>
+                      <span id='pesan_role_modal'></span>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -2647,6 +2661,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") {
+          $('#role_modal').val(res['data']['user_role_id']).change();
           $('#sub_project_modal').val(res['data']['sub_project_id']).change();
           $("#jabatan_modal").val(res['data']['designation_id']).change();
           $('#penempatan_modal').val(res['data']['penempatan']);
@@ -2691,6 +2706,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var penempatan = $("#penempatan_modal").val();
     var kategori = $("#kategori_modal option:selected").val();
     var date_of_join = $("#date_of_join_modal").val();
+    var role_id_karyawan = $("#role_modal").val();
 
     //-------testing-------
     // alert("masuk button save Data Diri");
@@ -2748,6 +2764,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           penempatan: penempatan,
           kategori: kategori,
           date_of_join: date_of_join,
+          role_id_karyawan: role_id_karyawan,
         },
         beforeSend: function() {
           $('#editProjectModal').modal('show');
