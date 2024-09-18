@@ -8306,7 +8306,7 @@ class Employees extends MY_Controller
 				$button_upload_ktp = '';
 			}
 			if ($kk_validation == "0") {
-				$button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' .$result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
+				$button_upload_kk = '<button id="button_upload_kk" onclick="upload_kk(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
 			} else {
 				$button_upload_kk = '';
 			}
@@ -8410,7 +8410,7 @@ class Employees extends MY_Controller
 			$status_pengajuan_paklaring = $result[0]->request_resign_date;
 		}
 
-		
+
 
 		$data = array(
 			//Pages Attributes
@@ -9185,6 +9185,77 @@ class Employees extends MY_Controller
 			'nama'      		=> strtoupper($data['nama']),
 			'hubungan'       	=> strtoupper($this->Employees_model->get_nama_hubungan_kontak_darurat($data['hubungan'])),
 			'no_kontak'       	=> $data['no_kontak'],
+		];
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Save Data",
+				'data'		=> $datahasil,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save data bpjs employee
+	public function save_data_bpjs()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'bpjs_ks_no'    => $postData['no_bpjs_ks'],
+			'bpjs_tk_no'  	=> $postData['no_bpjs_tk'],
+		];
+
+		// save data diri
+		$data = $this->Employees_model->save_data_bpjs($datarequest, $postData['nip']);
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$result = $this->Employees_model->get_employee_array_by_nip($postData['nip']);
+
+		//role id untuk update nomor bpjs
+		if (in_array('1009', $role_resources_ids)) {
+			$button_update_bpjs_ks = '<button id="button_upload_ktp" onclick="update_bpjs(' . $result['employee_id'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS KS</button>';
+			$button_update_bpjs_tk = '<button id="button_upload_kk" onclick="update_bpjs(' . $result['employee_id'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS TK</button>';
+		} else {
+			$button_update_bpjs_ks = '';
+			$button_update_bpjs_tk = '';
+		}
+
+		//BPJS Kesehatan
+		if ((is_null($result['bpjs_ks_no'])) || ($result['bpjs_ks_no'] == "") || ($result['bpjs_ks_no'] == "0")) {
+			$bpjs_ks_no = '-tidak ada data-' . $button_update_bpjs_ks;
+		} else {
+			$bpjs_ks_no = $result['bpjs_ks_no'] . $button_update_bpjs_ks;
+		}
+
+		//BPJS Ketenagakerjaan
+		if ((is_null($result['bpjs_tk_no'])) || ($result['bpjs_tk_no'] == "") || ($result['bpjs_tk_no'] == "0")) {
+			$bpjs_tk_no = '-tidak ada data-' . $button_update_bpjs_tk;
+		} else {
+			$bpjs_tk_no = $result['bpjs_tk_no'] . $button_update_bpjs_tk;
+		}
+
+		//Susun variabel untuk update element di view
+		$datahasil = [
+			//Kontak Darurat
+			'bpjs_ks_no'      	=> $bpjs_ks_no,
+			'bpjs_tk_no'       	=> $bpjs_tk_no,
 		];
 
 		if (empty($data)) {

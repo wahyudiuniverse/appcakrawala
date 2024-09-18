@@ -2507,12 +2507,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('#pesan_marital_status_modal').html(pesan_marital_status_modal);
     $('#pesan_tinggi_badan_modal').html(pesan_tinggi_badan_modal);
     $('#pesan_berat_badan_modal').html(pesan_berat_badan_modal);
-    $('#pesan_blood_group_modal').html(pesan_blood_group_modal);
     $('#pesan_ktp_no_modal').html(pesan_ktp_no_modal);
     $('#pesan_kk_no_modal').html(pesan_kk_no_modal);
     $('#pesan_npwp_no_modal').html(pesan_npwp_no_modal);
     $('#pesan_contact_no_modal').html(pesan_contact_no_modal);
-    $('#pesan_email_modal').html(pesan_email_modal);
     $('#pesan_ibu_kandung_modal').html(pesan_ibu_kandung_modal);
     $('#pesan_alamat_ktp_modal').html(pesan_alamat_ktp_modal);
     $('#pesan_alamat_domisili_modal').html(pesan_alamat_domisili_modal);
@@ -2522,8 +2520,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       (pesan_first_name_modal != "") || (pesan_gender_modal != "") || (pesan_tempat_lahir_modal != "") ||
       (pesan_date_of_birth_modal != "") || (pesan_last_edu_modal != "") || (pesan_ethnicity_modal != "") ||
       (pesan_marital_status_modal != "") || (pesan_tinggi_badan_modal != "") || (pesan_berat_badan_modal != "") ||
-      (pesan_blood_group_modal != "") || (pesan_ktp_no_modal != "") || (pesan_kk_no_modal != "") ||
-      (pesan_npwp_no_modal != "") || (pesan_contact_no_modal != "") || (pesan_email_modal != "") ||
+      (pesan_ktp_no_modal != "") || (pesan_kk_no_modal != "") ||
+      (pesan_npwp_no_modal != "") || (pesan_contact_no_modal != "") ||
       (pesan_ibu_kandung_modal != "") || (pesan_alamat_ktp_modal != "") || (pesan_alamat_domisili_modal != "")
     ) { //kalau ada input kosong 
       alert("Tidak boleh ada input kosong");
@@ -3986,9 +3984,63 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   }
 </script>
 
-<!-- Tombol Verifikasi Data NIK -->
+<!-- Tombol Save Data BPJS -->
 <script type="text/javascript">
   document.getElementById("button_save_bpjs").onclick = function(e) {
+    var nip = "<?php echo $employee_id; ?>";
+    var no_bpjs_ks = $("#no_bpjs_ks_modal").val();
+    var no_bpjs_tk = $("#no_bpjs_tk_modal").val();
+
+    //inisialisasi pesan
+    $('#pesan_no_bpjs_ks_modal').html("");
+    $('#pesan_no_bpjs_tk_modal').html("");
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/save_data_bpjs/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+        no_bpjs_ks: no_bpjs_ks,
+        no_bpjs_tk: no_bpjs_tk,
+      },
+      beforeSend: function() {
+        $('.info-modal-edit-bpjs').attr("hidden", false);
+        $('.isi-modal-edit-bpjs').attr("hidden", true);
+        $('.info-modal-edit-bpjs').html(uploading_html_text);
+        $('#button_save_bpjs').attr("hidden", true);
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#dokumen_bpjs_ks_tabel').html(res['data']['bpjs_ks_no']);
+          $("#dokumen_bpjs_tk_tabel").html(res['data']['bpjs_tk_no']);
+
+          $('.info-modal-edit-bpjs').html(success_html_text);
+          $('.isi-modal-edit-bpjs').attr("hidden", true);
+          $('.info-modal-edit-bpjs').attr("hidden", false);
+          $('#button_save_bpjs').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-edit-bpjs').html(html_text);
+          $('.isi-modal-edit-bpjs').attr("hidden", true);
+          $('.info-modal-edit-bpjs').attr("hidden", false);
+          $('#button_save_bpjs').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-edit-bpjs').html(html_text); //coba pake iframe
+        $('.isi-modal-edit-bpjs').attr("hidden", true);
+        $('.info-modal-edit-bpjs').attr("hidden", false);
+        $('#button_save_bpjs').attr("hidden", true);
+      }
+    });
 
   };
 </script>
@@ -4690,4 +4742,63 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     });
 
   };
+</script>
+
+<!-- Tombol Upload Kontrak -->
+<script type="text/javascript">
+  function upload_kontrak(uniqueid) {
+    var nip = "<?php echo $employee_id; ?>";
+
+    alert(uniqueid);
+
+    //inisialisasi pesan
+    // $('#pesan_no_bpjs_ks_modal').html("");
+    // $('#pesan_no_bpjs_tk_modal').html("");
+
+    // AJAX untuk ambil data employee terupdate
+    // $.ajax({
+    //   url: '<?php //base_url() ?>admin/Employees/get_data_bpjs/',
+    //   method: 'post',
+    //   data: {
+    //     [csrfName]: csrfHash,
+    //     nip: nip,
+    //   },
+    //   beforeSend: function() {
+    //     $('.info-modal-edit-bpjs').attr("hidden", false);
+    //     $('.isi-modal-edit-bpjs').attr("hidden", true);
+    //     $('.info-modal-edit-bpjs').html(loading_html_text);
+    //     $('#button_save_bpjs').attr("hidden", true);
+    //     $('#editBPJSModal').modal('show');
+    //   },
+    //   success: function(response) {
+
+    //     var res = jQuery.parseJSON(response);
+
+    //     if (res['status'] == "200") {
+    //       $('#no_bpjs_ks_modal').val(res['data']['bpjs_ks_no']);
+    //       $("#no_bpjs_tk_modal").val(res['data']['bpjs_tk_no']);
+
+    //       $('.isi-modal-edit-bpjs').attr("hidden", false);
+    //       $('.info-modal-edit-bpjs').attr("hidden", true);
+    //       $('#button_save_bpjs').attr("hidden", false);
+    //     } else {
+    //       html_text = res['pesan'];
+    //       $('.info-modal-edit-bpjs').html(html_text);
+    //       $('.isi-modal-edit-bpjs').attr("hidden", true);
+    //       $('.info-modal-edit-bpjs').attr("hidden", false);
+    //       $('#button_save_bpjs').attr("hidden", true);
+    //     }
+    //   },
+    //   error: function(xhr, status, error) {
+    //     html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+    //     html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+    //     // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+    //     $('.info-modal-edit-bpjs').html(html_text); //coba pake iframe
+    //     $('.isi-modal-edit-bpjs').attr("hidden", true);
+    //     $('.info-modal-edit-bpjs').attr("hidden", false);
+    //     $('#button_save_bpjs').attr("hidden", true);
+    //   }
+    // });
+
+  }
 </script>

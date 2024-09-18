@@ -5840,8 +5840,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['from_date']),
 				"button_open" => '<button onclick="open_kontrak(\'' . $record['uniqueid'] . '\',' . $record['sub_project'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
-				"button_upload" => '<button onclick="upload_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
-				"button_lihat" => '<button onclick="lihat_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
+				"button_upload" => '<button onclick="upload_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
+				"button_lihat" => '<button onclick="lihat_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => $button_hapus,
 			);
 		}
@@ -5984,6 +5984,26 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
+	//save data bpjs employee
+	public function save_data_bpjs($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		//fetch data terbaru
+		$this->db->select('bpjs_tk_no');
+		$this->db->select('bpjs_ks_no');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
 
 	//save data project employee
 	public function save_rekening($postData, $nip)
