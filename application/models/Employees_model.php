@@ -353,6 +353,52 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nama karyawan
+	function get_nama_karyawan_by_nip($nip)
+	{
+		if ($nip == null) {
+			return "";
+		} else if ($nip == 0) {
+			return "";
+		} else {
+			$this->db->select('first_name');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $nip);
+
+			$query = $this->db->get()->row_array();
+
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['first_name'];
+			}
+			//return $query['title'];
+		}
+	}
+
+	//ambil nama karyawan by id
+	function get_nama_karyawan_by_id($user_id)
+	{
+		if ($user_id == null) {
+			return "";
+		} else if ($user_id == 0) {
+			return "";
+		} else {
+			$this->db->select('first_name');
+			$this->db->from('xin_employees');
+			$this->db->where('user_id', $user_id);
+
+			$query = $this->db->get()->row_array();
+
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['first_name'];
+			}
+			//return $query['title'];
+		}
+	}
+
 	//ambil nama sub project
 	function get_nama_sub_project($id)
 	{
@@ -5613,6 +5659,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data diri employee
 	public function get_data_diri($postData)
 	{
+		$this->db->select('employee_id');
 		$this->db->select('first_name');
 		$this->db->select('gender');
 		$this->db->select('tempat_lahir');
@@ -5636,6 +5683,11 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('bank_name');
 		$this->db->select('nomor_rek');
 		$this->db->select('pemilik_rek');
+
+		$this->db->select('status_resign');
+		$this->db->select('deactive_by');
+		$this->db->select('deactive_date');
+		$this->db->select('deactive_reason');
 
 		$this->db->from('xin_employees',);
 		$this->db->where($postData);
@@ -5995,6 +6047,26 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		//fetch data terbaru
 		$this->db->select('bpjs_tk_no');
 		$this->db->select('bpjs_ks_no');
+
+		$this->db->from('xin_employees',);
+		$this->db->where('employee_id', $nip);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//save data resign employee
+	public function save_data_resign($postData, $nip)
+	{
+		//update data
+		$this->db->where('employee_id', $nip);
+		$this->db->update('xin_employees', $postData);
+
+		//fetch data terbaru
+		$this->db->select('status_resign');
 
 		$this->db->from('xin_employees',);
 		$this->db->where('employee_id', $nip);

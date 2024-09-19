@@ -8338,7 +8338,7 @@ class Employees extends MY_Controller
 		if ((is_null($result[0]->filename_rek)) || ($result[0]->filename_rek == "") || ($result[0]->filename_rek == "0")) {
 			$filename_rek = '-tidak ada data-';
 		} else {
-			$filename_rek = '<button id="button_open_buku_tabungan" onclick="open_buku_tabungan(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Open Buku Tabungan</button>';
+			$filename_rek = '<button id="button_open_buku_tabungan" onclick="open_buku_tabungan(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1 mb-1" data-style="expand-right">Open Buku Tabungan</button>';
 		}
 
 		//dokumen ktp
@@ -8410,6 +8410,20 @@ class Employees extends MY_Controller
 			$status_pengajuan_paklaring = $result[0]->request_resign_date;
 		}
 
+		//Status Resign
+		if ($result[0]->status_resign == '1') {
+			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-success ladda-button mx-0 mt-1" data-style="expand-right">AKTIF</button>';
+		} else if ($result[0]->status_resign == '2') {
+			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-warning ladda-button mx-0 mt-1" data-style="expand-right">RESIGN</button>';
+		} else if ($result[0]->status_resign == '3') {
+			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-danger ladda-button mx-0 mt-1" data-style="expand-right">BLACK LIST</button>';
+		} else if ($result[0]->status_resign == '4') {
+			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-warning ladda-button mx-0 mt-1" data-style="expand-right">END CONTRACT</button>';
+		} else if ($result[0]->status_resign == '5') {
+			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-warning ladda-button mx-0 mt-1" data-style="expand-right">RESIGN</button>';
+		} else {
+			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-danger ladda-button mx-0 mt-1" data-style="expand-right">UNDEFINED</button>';
+		}
 
 
 		$data = array(
@@ -8425,6 +8439,8 @@ class Employees extends MY_Controller
 			'profile_picture' => $result[0]->profile_picture,
 			'private_code' => $result[0]->private_code,
 			'verification_id' => $actual_verification_id,
+			'status_resign' => $result[0]->status_resign,
+			'button_resign' => $button_resign,
 
 			//Data Diri
 			'first_name' => strtoupper($result[0]->first_name),
@@ -8775,10 +8791,71 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			//nama status resign
+			if ($data['status_resign'] == "1") {
+				$status_resign_name = "AKTIF";
+			} else if ($data['status_resign'] == "2") {
+				$status_resign_name = "RESIGN";
+			} else if ($data['status_resign'] == "3") {
+				$status_resign_name = "BLACKLIST";
+			} else if ($data['status_resign'] == "4") {
+				$status_resign_name = "END CONTRACT";
+			} else if ($data['status_resign'] == "5") {
+				$status_resign_name = "RESIGN";
+			} else {
+				$status_resign_name = "";
+			}
+
+			//deactive date
+			$deactive_date_seed = "";
+			if ((empty($data['deactive_date'])) || ($data['deactive_date'] == "")) {
+				$deactive_date_text = "";
+			} else {
+				$deactive_date_array = explode(" ", $data['deactive_date']);
+				$deactive_date_seed = $deactive_date_array[0];
+				$deactive_date_text = $this->Xin_model->tgl_indo($deactive_date_array[0]) . " " . $deactive_date_array[1];
+			}
+
+			$data2 = array(
+				'employee_id'		=> $data['employee_id'],
+				'first_name'		=> $data['first_name'],
+				'gender'			=> $data['gender'],
+				'tempat_lahir'		=> $data['tempat_lahir'],
+				'date_of_birth'		=> $data['date_of_birth'],
+				'last_edu'			=> $data['last_edu'],
+				'ethnicity_type'	=> $data['ethnicity_type'],
+				'marital_status'	=> $data['marital_status'],
+				'tinggi_badan'		=> $data['tinggi_badan'],
+				'berat_badan'		=> $data['berat_badan'],
+				'blood_group'		=> $data['blood_group'],
+
+				'ktp_no'			=> $data['ktp_no'],
+				'kk_no'				=> $data['kk_no'],
+				'npwp_no'			=> $data['npwp_no'],
+				'contact_no'		=> $data['contact_no'],
+				'email'				=> $data['email'],
+				'ibu_kandung'		=> $data['ibu_kandung'],
+				'alamat_ktp'		=> $data['alamat_ktp'],
+				'alamat_domisili'	=> $data['alamat_domisili'],
+
+				'bank_name'			=> $data['bank_name'],
+				'nomor_rek'			=> $data['nomor_rek'],
+				'pemilik_rek'		=> $data['pemilik_rek'],
+
+				'status_resign'		=> $data['status_resign'],
+				'status_resign_name' => $status_resign_name,
+				'deactive_by'		=> $data['deactive_by'],
+				'deactive_by_name'	=> $this->Employees_model->get_nama_karyawan_by_id($data['deactive_by']),
+				'deactive_date'		=> $data['deactive_date'],
+				'deactive_date_seed'=> $deactive_date_seed,
+				'deactive_date_text'=> $deactive_date_text,
+				'deactive_reason'	=> $data['deactive_reason'],
+			);
+
 			$response = array(
 				'status'	=> "200",
 				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data,
+				'data'		=> $data2,
 			);
 		}
 
@@ -9269,6 +9346,73 @@ class Employees extends MY_Controller
 				'status'	=> "200",
 				'pesan' 	=> "Berhasil Save Data",
 				'data'		=> $datahasil,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save data resign employee
+	public function save_data_resign()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		$nilai_status_employee = "";
+		if($postData['status_resign'] == "1"){
+			$nilai_status_employee = "1";
+		} else {
+			$nilai_status_employee = "0";
+		}
+
+		//Cek variabel post
+		$datarequest = [
+			'status_resign'    		=> $postData['status_resign'],
+			'date_resign_request'  	=> $postData['date_resign_request'],
+			'deactive_reason'  		=> $postData['deactive_reason'],
+
+			'deactive_by'  			=> $session['user_id'],
+			'deactive_date'  		=> date('Y-m-d H:i:s'),
+			'request_resign_date'  	=> date('Y-m-d H:i:s'),
+			'user_role_id'  		=> 9,
+			'status_employee'  		=> $nilai_status_employee,
+		];
+
+		// save data diri
+		$data = $this->Employees_model->save_data_resign($datarequest, $postData['nip']);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			//Status Resign
+			if ($data['status_resign'] == '1') {
+				$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-success ladda-button mx-0 mt-1" data-style="expand-right">AKTIF</button>';
+			} else if ($data['status_resign'] == '2') {
+				$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-warning ladda-button mx-0 mt-1" data-style="expand-right">RESIGN</button>';
+			} else if ($data['status_resign'] == '3') {
+				$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-danger ladda-button mx-0 mt-1" data-style="expand-right">BLACK LIST</button>';
+			} else if ($data['status_resign'] == '4') {
+				$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-warning ladda-button mx-0 mt-1" data-style="expand-right">END CONTRACT</button>';
+			} else if ($data['status_resign'] == '5') {
+				$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-warning ladda-button mx-0 mt-1" data-style="expand-right">RESIGN</button>';
+			} else {
+				$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-danger ladda-button mx-0 mt-1" data-style="expand-right">UNDEFINED</button>';
+			}
+
+			$response = array(
+				'status'		=> "200",
+				'pesan' 		=> "Berhasil Save Data",
+				'button_resign'	=> $button_resign,
 			);
 		}
 

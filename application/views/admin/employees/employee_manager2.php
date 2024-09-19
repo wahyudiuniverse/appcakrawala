@@ -227,6 +227,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         </button>
       </div>
       <div class="modal-body">
+        <!-- <pre>
+          <?php //print_r($session); ?>
+        </pre> -->
         <div class="isi-modal-edit-data-diri">
           <div class="container" id="container_modal">
             <div class="row">
@@ -481,9 +484,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       <select class="form-control" id="kategori_modal" name="kategori_modal" data-plugin="select_modal_project" data-placeholder="Golongan Darah">
                         <option value="">Pilih Kategori Karyawan</option>
                         <option value="1" <?php if ($location_id == '1'): ?> selected="selected" <?php endif; ?>>INHOUSE</option>
-                        <option value="2" <?php if ($blood_group == '2'): ?> selected="selected" <?php endif; ?>>AREA</option>
-                        <option value="3" <?php if ($blood_group == '3'): ?> selected="selected" <?php endif; ?>>RATECARD</option>
-                        <option value="4" <?php if ($blood_group == '4'): ?> selected="selected" <?php endif; ?>>PROJECT</option>
+                        <option value="2" <?php if ($location_id == '2'): ?> selected="selected" <?php endif; ?>>AREA</option>
+                        <option value="3" <?php if ($location_id == '3'): ?> selected="selected" <?php endif; ?>>RATECARD</option>
+                        <option value="4" <?php if ($location_id == '4'): ?> selected="selected" <?php endif; ?>>PROJECT</option>
                       </select>
                       <span id='pesan_kategori_modal'></span>
                     </td>
@@ -585,6 +588,102 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   </div>
 </div>
 
+<!-- MODAL EDIT RESIGN -->
+<div class="modal fade" id="editResignModal" tabindex="-1" role="dialog" aria-labelledby="editResignModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editResignModalLabel">Edit Status Karyawan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="isi-modal-edit-resign">
+          <div class="container" id="container_modal_resign">
+            <div class="row">
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr>
+                    <td style='width:25%'><strong>NIP</strong></td>
+                    <td style='width:75%'>
+                      <span id='nip_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Nama Lengkap</strong></td>
+                    <td>
+                      <span id='nama_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Status Aktif</strong></td>
+                    <td>
+                      <span id='status_aktif_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Non Aktif By</strong></td>
+                    <td>
+                      <span id='non_aktif_by_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Non Aktif Date</strong></td>
+                    <td>
+                      <span id='non_aktif_on_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Non Aktif Pesan</strong></td>
+                    <td>
+                      <span id='non_aktif_pesan_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Status Aktif</strong></td>
+                    <td>
+                      <select class="form-control" id="kategori_resign_modal" name="kategori_resign_modal" data-plugin="select_modal_resign" data-placeholder="Status Aktif">
+                        <option value="">Pilih Status Aktif Karyawan</option>
+                        <option value="1" <?php if ($status_resign == '1'): ?> selected="selected" <?php endif; ?>>AKTIF</option>
+                        <option value="2" <?php if (($status_resign == '2') || ($status_resign == '5')): ?> selected="selected" <?php endif; ?>>RESIGN</option>
+                        <option value="3" <?php if ($status_resign == '3'): ?> selected="selected" <?php endif; ?>>BLACKLIST</option>
+                        <option value="4" <?php if ($status_resign == '4'): ?> selected="selected" <?php endif; ?>>END CONTRACT</option>
+                      </select>
+                      <span id='pesan_kategori_resign_modal'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Tanggal Resign</strong></td>
+                    <td>
+                      <input type='date' class='form-control date' name='tanggal_resign_modal2' id='tanggal_resign_modal2' placeholder='Tanggal Resign' value=''>
+                      <span id='pesan_tanggal_resign_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Keterangan Resign</strong></td>
+                    <td>
+                      <input id='keterangan_resign_modal2' name='keterangan_resign_modal2' type='text' class='form-control' placeholder='Keterangan Resign' value=''>
+                      <span id='pesan_keterangan_resign_modal2'></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-modal-edit-resign"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <button id='button_save_resign' name='button_save_resign' type='button' class='btn btn-primary'>Save Status Karyawan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL EDIT REKENING BANK -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -635,7 +734,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     <td>
                       <div id="file_buku_tabungan_kosong" class="mb-2">BELUM ADA DATA. SILAHKAN UPLOAD FOTO BUKU TABUNGAN</div>
                       <div id="file_buku_tabungan_isi" class="mb-2">
-                        <button id="button_open_buku_tabungan" type="button" onclick="open_buku_tabungan(<?php echo $employee_id; ?>)" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Open Buku Tabungan</button>
+                        <button id="button_open_buku_tabungan" type="button" onclick="open_buku_tabungan(<?php echo $employee_id; ?>)" class="btn btn-sm btn-outline-primary ladda-button mx-1 mb-1" data-style="expand-right">Open Buku Tabungan</button>
                         <button id="button_open_upload_buku_tabungan" type="button" onclick="open_upload_buku_tabungan()" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Upload Buku Tabungan</button>
                       </div>
                       <div id="form_upload_buku_tabungan" class="form-group">
@@ -776,22 +875,33 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   <div class="col-12">
     <div class="card mb-1 bg-primary border-0 text-white">
       <div class="card-body">
-        <div class="row">
-          <div class="col-3 col-md-2 col-auto text-center align-self-center">
-            <span id="foto_profile"><button onclick="open_foto_profil(<?php echo $employee_id; ?>)" type='button' class='btn btn-primary'><img src="<?php echo $de_file; ?>" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></button></span>
-            <br>
-            <button id="button_ubah_foto" class="btn btn-sm btn-white ladda-button mx-0" data-style="expand-right">Ubah Foto</button>
+        <div class="row align-items-center">
+          <div class="col-4 col-sm-3 col-md-2 text-center align-self-center">
+            <div class="row">
+              <div class="col-12 col-md-12 text-center align-self-center">
+                <span id="foto_profile"><button onclick="open_foto_profil(<?php echo $employee_id; ?>)" type='button' class='btn btn-block btn-primary'><img src="<?php echo $de_file; ?>" alt="" width="100%"></button></span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 text-center align-self-center">
+                <button id="button_ubah_foto" class="btn btn-block btn-sm btn-white ladda-button mx-0 mt-1" data-style="expand-right">Ubah Foto</button>
+              </div>
+              <div class="w-100"></div>
+              <div class="col-md-12 text-center align-self-center">
+                <div id="button_resign"><?php echo $button_resign; ?></div>
+              </div>
+            </div>
           </div>
-          <div class="col-9 col-md-10 col-auto">
-            <div class="ml-3">
+          <div class="col-8 col-sm-9 col-md-10">
+            <div class="ml-0">
               <div class="text-big mt-1"><span id="nama_lengkap_card"><?php echo $first_name; ?></span> <span class="icon-verify-nama"></span></div>
-              <div class="mt-1">NIP: <?php echo $employee_id; ?> <button id="button_ganti_pin" class="btn btn-sm btn-white ladda-button mx-1" data-style="expand-right">Ganti PIN</button><button id="button_show_pin" class="btn btn-sm btn-white ladda-button mx-1" data-style="expand-right">Show PIN</button></div>
+              <div class="mt-1">NIP: <?php echo $employee_id; ?> <button id="button_ganti_pin" class="btn btn-sm btn-white ladda-button mx-1 mb-1" data-style="expand-right">Ganti PIN</button><button id="button_show_pin" class="btn btn-sm btn-white ladda-button mx-1" data-style="expand-right">Show PIN</button></div>
               <div class="mt-1">PROJECT: <?php echo $project_name; ?></div>
               <div class="mt-1" id="jabatan_name_card">JABATAN: <?php echo $designation_name; ?></div>
               <div class="mt-1" id="kategori_name_card">KATEGORI: <?php echo $kategori; ?></div>
               <div class="mt-3">
                 <?php if (in_array('1000', $role_resources_ids)) { ?>
-                  <button id="button_verifikasi" class="btn btn-sm btn-white ladda-button mr-1" data-style="expand-right">Verifikasi Data</button>
+                  <button id="button_verifikasi" class="btn btn-sm btn-white ladda-button mr-1 mb-1" data-style="expand-right">Verifikasi Data</button>
                 <?php } ?>
                 <button id="button_download_resume" class="btn btn-sm btn-white ladda-button mx-0" data-style="expand-right">Download Resume</button>
               </div>
@@ -1502,6 +1612,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('[data-plugin="select_modal_verifikasi"]').select2({
       width: "100%",
       dropdownParent: $("#container_modal_verifikasi")
+    });
+    $('[data-plugin="select_modal_resign"]').select2({
+      width: "100%",
+      dropdownParent: $("#container_modal_resign")
     });
 
     // Sub Change - Jabatan
@@ -3265,7 +3379,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             file_foto_profile = '<?= base_url() ?>uploads/profile/' + res['data']['profile_picture'] + '?' + res['time'];
           }
-          var foto_profile_html = '<button onclick="open_foto_profil(' + nip + ')" type="button" class="btn btn-primary"><img src="' + file_foto_profile + '" alt="" style="display: block; margin-left: auto; margin-right: auto;" class="d-block ui-w-80"></button>';
+          var foto_profile_html = '<button onclick="open_foto_profil(' + nip + ')" type="button" class="btn btn-primary"><img src="' + file_foto_profile + '" alt="" width="100%"></button>';
 
           $('#dokumen_ktp_tabel').html(res['button_upload_ktp']);
           $('#dokumen_kk_tabel').html(res['button_upload_kk']);
@@ -4761,6 +4875,160 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   };
 </script>
 
+<!-- Tombol resign -->
+<script type="text/javascript">
+  document.getElementById("button_resign").onclick = function(e) {
+    var nip = "<?php echo $employee_id; ?>";
+
+    //inisialisasi pesan
+    $('#pesan_kategori_modal').html("");
+    $('#pesan_tanggal_resign_modal2').html("");
+    $('#pesan_keterangan_resign_modal2').html("");
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_diri/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('.info-modal-edit-resign').attr("hidden", false);
+        $('.isi-modal-edit-resign').attr("hidden", true);
+        $('.info-modal-edit-resign').html(loading_html_text);
+        $('#button_save_resign').attr("hidden", true);
+        $('#editResignModal').modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#nip_modal2').html(res['data']['employee_id']);
+          $("#nama_modal2").html(res['data']['first_name']);
+          $('#status_aktif_modal2').html(res['data']['status_resign_name']);
+          $('#non_aktif_by_modal2').html(res['data']['deactive_by_name']);
+          $("#non_aktif_on_modal2").html(res['data']['deactive_date_text']);
+          $("#non_aktif_pesan_modal2").html(res['data']['deactive_reason']);
+          $("#kategori_modal").val(res['data']['status_resign']).change();
+          $('#tanggal_resign_modal2').val(res['data']['deactive_date_seed']);
+          $('#keterangan_resign_modal2').val(res['data']['deactive_reason']);
+
+          $('.isi-modal-edit-resign').attr("hidden", false);
+          $('.info-modal-edit-resign').attr("hidden", true);
+          $('#button_save_resign').attr("hidden", false);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-edit-resign').html(html_text);
+          $('.isi-modal-edit-resign').attr("hidden", true);
+          $('.info-modal-edit-resign').attr("hidden", false);
+          $('#button_save_resign').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-edit-resign').html(html_text); //coba pake iframe
+        $('.isi-modal-edit-resign').attr("hidden", true);
+        $('.info-modal-edit-resign').attr("hidden", false);
+        $('#button_save_resign').attr("hidden", true);
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Save Data Resign -->
+<script type="text/javascript">
+  document.getElementById("button_save_resign").onclick = function(e) {
+    var nip = "<?php echo $employee_id; ?>";
+    var status_resign = $("#kategori_resign_modal").val();
+    var date_resign_request = $("#tanggal_resign_modal2").val();
+    var deactive_reason = $("#keterangan_resign_modal2").val();
+
+    //inisialisasi pesan
+    $('#pesan_kategori_resign_modal').html("");
+    $('#pesan_tanggal_resign_modal2').html("");
+    $('#pesan_keterangan_resign_modal2').html("");
+
+    //-------cek apakah ada yang tidak diisi-------
+    var pesan_kategori_resign_modal = "";
+    var pesan_tanggal_resign_modal2 = "";
+    var pesan_keterangan_resign_modal2 = "";
+    if (status_resign == "") {
+      pesan_kategori_resign_modal = "<small style='color:#FF0000;'>Status Aktif tidak boleh kosong</small>";
+      $('#kategori_resign_modal').focus();
+    }
+    if (date_resign_request == "") {
+      pesan_tanggal_resign_modal2 = "<small style='color:#FF0000;'>Tanggal Resign tidak boleh kosong</small>";
+      $('#tanggal_resign_modal2').focus();
+    }
+    if (deactive_reason == "") {
+      pesan_keterangan_resign_modal2 = "<small style='color:#FF0000;'>Keterangan Resign tidak boleh kosong</small>";
+      $('#keterangan_resign_modal2').focus();
+    }
+    $('#pesan_kategori_resign_modal').html(pesan_kategori_resign_modal);
+    $('#pesan_tanggal_resign_modal2').html(pesan_tanggal_resign_modal2);
+    $('#pesan_keterangan_resign_modal2').html(pesan_keterangan_resign_modal2);
+
+    //-------action-------
+    if ((pesan_kategori_resign_modal != "") || (pesan_tanggal_resign_modal2 != "") || (pesan_keterangan_resign_modal2 != "")) { //kalau ada input kosong 
+      alert("Tidak boleh ada input kosong");
+    } else { //kalau semua terisi
+      // AJAX untuk save data resign terupdate
+      $.ajax({
+        url: '<?= base_url() ?>admin/Employees/save_data_resign/',
+        method: 'post',
+        data: {
+          [csrfName]: csrfHash,
+          nip: nip,
+          status_resign: status_resign,
+          date_resign_request: date_resign_request,
+          deactive_reason: deactive_reason,
+        },
+        beforeSend: function() {
+          $('.info-modal-edit-resign').attr("hidden", false);
+          $('.isi-modal-edit-resign').attr("hidden", true);
+          $('.info-modal-edit-resign').html(loading_html_text);
+          $('#button_save_resign').attr("hidden", true);
+        },
+        success: function(response) {
+
+          var res = jQuery.parseJSON(response);
+
+          if (res['status'] == "200") {
+            //301088
+            $('#button_resign').html(res['button_resign']);
+
+            $('.info-modal-edit-resign').html(success_html_text);
+            $('.isi-modal-edit-resign').attr("hidden", true);
+            $('.info-modal-edit-resign').attr("hidden", false);
+            $('#button_save_resign').attr("hidden", true);
+          } else {
+            html_text = res['pesan'];
+            $('.info-modal-edit-resign').html(html_text);
+            $('.isi-modal-edit-resign').attr("hidden", true);
+            $('.info-modal-edit-resign').attr("hidden", false);
+            $('#button_save_resign').attr("hidden", true);
+          }
+        },
+        error: function(xhr, status, error) {
+          html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+          html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+          // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+          $('.info-modal-edit-resign').html(html_text); //coba pake iframe
+          $('.isi-modal-edit-resign').attr("hidden", true);
+          $('.info-modal-edit-resign').attr("hidden", false);
+          $('#button_save_resign').attr("hidden", true);
+        }
+      });
+    }
+
+  };
+</script>
+
 <!-- Tombol Upload Kontrak -->
 <script type="text/javascript">
   function upload_kontrak(uniqueid) {
@@ -4774,7 +5042,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
     // AJAX untuk ambil data employee terupdate
     // $.ajax({
-    //   url: '<?php //base_url() ?>admin/Employees/get_data_bpjs/',
+    //   url: '<?php //base_url() 
+                ?>admin/Employees/get_data_bpjs/',
     //   method: 'post',
     //   data: {
     //     [csrfName]: csrfHash,
