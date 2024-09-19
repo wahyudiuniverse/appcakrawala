@@ -1527,7 +1527,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				}
 			} else {
 				$release_eslip = "Tanggal terbit: " . $this->Xin_model->tgl_indo($record->eslip_release);
-				$release_eslip = $release_eslip . '<button type="button" onclick="detailReleaseEslip(' . $record->id . ')" class="btn btn-xs btn-outline-success ml-1 mt-1" >Detail Eslip</button>';
+				$release_eslip = $release_eslip . '<button type="button" onclick="detailReleaseEslip(' . $record->id . ')" class="btn btn-xs btn-outline-success ml-1 mt-1" >Detail Info</button>';
 			}
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
