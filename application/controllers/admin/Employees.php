@@ -9098,6 +9098,80 @@ class Employees extends MY_Controller
 		// echo "</pre>";
 	}
 
+	//mengambil Json data dokumen kontrak ttd employee
+	public function get_data_dokumen_kontrak()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'uniqueid'        => $postData['uniqueid']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_dokumen_kontrak($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data dokumen addendum ttd employee
+	public function get_data_dokumen_addendum()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id'        => $postData['id']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_dokumen_addendum($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
 	//save data diri employee
 	public function save_data_diri()
 	{
@@ -9818,6 +9892,110 @@ class Employees extends MY_Controller
 			'button_upload_cv'		=> $filename_cv,
 			'button_upload_skck'	=> $filename_skck,
 			'button_upload_ijazah'	=> $filename_isd,
+		);
+
+		echo json_encode($response);
+	}
+
+	// save dokumen kontrak employee
+	public function save_kontrak_ttd()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		//ambil variabel post
+		$postData = $this->input->post();
+		$nip = $postData['nip'];
+		$id = $postData['id'];
+		$jenis_dokumen = $postData['jenis_dokumen'];
+		$status = "";
+		$datahasil;
+
+		$pesan_error = "";
+		if ($_FILES['file_dokumen']['error'] == "0") {
+
+			//parameter untuk path dokumen
+			$yearmonth = date('Y/m');
+			if ($jenis_dokumen == "kontrak") {
+				$path_dokumen = "./uploads/document/pkwt/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf';
+				$nama_file = 'kontrak_' . $nip . '_' . $id;
+				$pesan_format_error = "Hanya menerima file berformat PDF";
+			} else if ($jenis_dokumen == "addendum") {
+				$path_dokumen = "./uploads/document/addendum/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf';
+				$nama_file = 'addendum_' . $nip . '_' . $id;
+				$pesan_format_error = "Hanya menerima file berformat PDF";
+			} else {
+				$path_dokumen = "./uploads/document/unspecified/" . $yearmonth . '/';
+				$tipe_dokumen = 'pdf';
+				$nama_file = $jenis_dokumen . '_' . $nip . '_' . $id;
+				$pesan_format_error = "Hanya menerima file berformat PDF";
+			}
+
+			//kalau blm ada folder path nya
+			if (!file_exists($path_dokumen)) {
+				mkdir($path_dokumen, 0777, true);
+			}
+
+			//konfigurasi upload
+			$config['upload_path']          = $path_dokumen;
+			$config['allowed_types']        = $tipe_dokumen;
+			$config['max_size']             = 5120;
+			$config['file_name'] 			= $nama_file;
+			$config['overwrite']            = TRUE;
+
+			//inisialisasi proses upload
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			//upload data kalau tidak ada error
+			if (!$this->upload->do_upload('file_dokumen')) {
+				$error = array('error' => $this->upload->display_errors());
+				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
+				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
+					$pesan_error = "Dokumen melebihi ukuran 5 MB. Silahkan upload ulang";
+				} else {
+					$pesan_error = $pesan_format_error;
+				}
+
+				$status = "201";
+
+				
+			} else {
+				//save path ktp ke database
+				$new_filename_dokumen = $this->upload->data('file_name');
+				$dokumen_database = $yearmonth . '/' . $new_filename_dokumen;
+				if ($jenis_dokumen == "kontrak") {
+					$data_file = array(
+						'file_name' => $dokumen_database,
+						'upload_pkwt' => date('Y-m-d H:i:s'),
+					);
+					$this->Employees_model->save_file_kontrak($data_file, $postData['id']);
+				} else if ($jenis_dokumen == "addendum") {
+					$data_file = array(
+						'file_signed' => $dokumen_database,
+						'file_signed_time' => date('Y-m-d H:i:s'),
+					);
+					$this->Employees_model->save_file_addendum($data_file, $postData['id']);
+				}
+				$data = array('upload_data' => $this->upload->data());
+
+				$status = "200";
+			}
+
+		} else {
+			$pesan_error = "Tidak ada file yang dipilih";
+
+			$status = "300";
+		}
+
+		$response = array(
+			'status'				=> $status,
+			'pesan' 				=> "Berhasil Save Data",
+			'pesan_error' 			=> $pesan_error,
 		);
 
 		echo json_encode($response);

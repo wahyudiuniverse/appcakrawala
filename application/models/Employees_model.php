@@ -5836,6 +5836,36 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
+	//ambil data dokumen kontrak ttd employee
+	public function get_data_dokumen_kontrak($postData)
+	{
+		$this->db->select('file_name');
+
+		$this->db->from('xin_employee_contract');
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data dokumen addendum ttd employee
+	public function get_data_dokumen_addendum($postData)
+	{
+		$this->db->select('file_signed');
+
+		$this->db->from('xin_contract_addendum');
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
 	//ambil data kontrak+addendum employee
 	public function get_data_kontrak($nip, $karyawan_id)
 	{
@@ -6150,6 +6180,22 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$query = $this->db->get()->row_array();
 
 		return $query;
+	}
+
+	//save file kontrak employee
+	public function save_file_kontrak($postData, $id)
+	{
+		//update data
+		$this->db->where('uniqueid', $id);
+		$this->db->update('xin_employee_contract', $postData);
+	}
+
+	//save file addendum employee
+	public function save_file_addendum($postData, $id)
+	{
+		//update data
+		$this->db->where('id', $id);
+		$this->db->update('xin_contract_addendum', $postData);
 	}
 
 	//get data employee by nip

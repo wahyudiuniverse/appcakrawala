@@ -228,7 +228,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       </div>
       <div class="modal-body">
         <!-- <pre>
-          <?php //print_r($session); ?>
+          <?php //print_r($session); 
+          ?>
         </pre> -->
         <div class="isi-modal-edit-data-diri">
           <div class="container" id="container_modal">
@@ -5032,59 +5033,281 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Upload Kontrak -->
 <script type="text/javascript">
   function upload_kontrak(uniqueid) {
-    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "kontrak";
+    var button_save = "<button onclick='save_kontrak(\"" + uniqueid + "\",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Upload Kontrak</button>";
+    // alert(uniqueid);
 
-    alert(uniqueid);
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf">';
+    input_upload = input_upload + '<small>Jenis File: PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
 
     //inisialisasi pesan
-    // $('#pesan_no_bpjs_ks_modal').html("");
-    // $('#pesan_no_bpjs_tk_modal').html("");
+    $('#judul_modal_upload_dokumen').html("Upload Kontrak");
+    $('#label_upload_dokumen').html("Dokumen Kontrak");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD DOKUMEN KONTRAK YANG SUDAH DITANDATANGANI");
+    $('#input_upload_dokumen').html(input_upload);
+    $('#button_upload_dokumen').html(button_save);
 
-    // AJAX untuk ambil data employee terupdate
-    // $.ajax({
-    //   url: '<?php //base_url() 
-                ?>admin/Employees/get_data_bpjs/',
-    //   method: 'post',
-    //   data: {
-    //     [csrfName]: csrfHash,
-    //     nip: nip,
-    //   },
-    //   beforeSend: function() {
-    //     $('.info-modal-edit-bpjs').attr("hidden", false);
-    //     $('.isi-modal-edit-bpjs').attr("hidden", true);
-    //     $('.info-modal-edit-bpjs').html(loading_html_text);
-    //     $('#button_save_bpjs').attr("hidden", true);
-    //     $('#editBPJSModal').modal('show');
-    //   },
-    //   success: function(response) {
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
 
-    //     var res = jQuery.parseJSON(response);
+  }
+</script>
 
-    //     if (res['status'] == "200") {
-    //       $('#no_bpjs_ks_modal').val(res['data']['bpjs_ks_no']);
-    //       $("#no_bpjs_tk_modal").val(res['data']['bpjs_tk_no']);
+<!-- Tombol Upload Addendum -->
+<script type="text/javascript">
+  function upload_addendum(id) {
+    var jenis_dokumen = "addendum";
+    var button_save = "<button onclick='save_kontrak(" + id + ",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Upload Kontrak</button>";
+    // alert(id);
 
-    //       $('.isi-modal-edit-bpjs').attr("hidden", false);
-    //       $('.info-modal-edit-bpjs').attr("hidden", true);
-    //       $('#button_save_bpjs').attr("hidden", false);
-    //     } else {
-    //       html_text = res['pesan'];
-    //       $('.info-modal-edit-bpjs').html(html_text);
-    //       $('.isi-modal-edit-bpjs').attr("hidden", true);
-    //       $('.info-modal-edit-bpjs').attr("hidden", false);
-    //       $('#button_save_bpjs').attr("hidden", true);
-    //     }
-    //   },
-    //   error: function(xhr, status, error) {
-    //     html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-    //     html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-    //     // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-    //     $('.info-modal-edit-bpjs').html(html_text); //coba pake iframe
-    //     $('.isi-modal-edit-bpjs').attr("hidden", true);
-    //     $('.info-modal-edit-bpjs').attr("hidden", false);
-    //     $('#button_save_bpjs').attr("hidden", true);
-    //   }
-    // });
+    var input_upload = '<fieldset class="form-group">';
+    input_upload = input_upload + '<input type="file" class="form-control-file" id="file_dokumen" name="file_dokumen" accept="application/pdf">';
+    input_upload = input_upload + '<small>Jenis File: PDF | Size MAX 5 MB</small>';
+    input_upload = input_upload + '</fieldset>';
+
+    //inisialisasi pesan
+    $('#judul_modal_upload_dokumen').html("Upload Kontrak");
+    $('#label_upload_dokumen').html("Dokumen Kontrak");
+    $('#file_dokumen_kosong').html("SILAHKAN UPLOAD DOKUMEN KONTRAK YANG SUDAH DITANDATANGANI");
+    $('#input_upload_dokumen').html(input_upload);
+    $('#button_upload_dokumen').html(button_save);
+
+    $("#file_dokumen").val("");
+    $('#pesan_upload_dokumen').html("");
+    $('.info-modal-upload-dokumen').attr("hidden", true);
+    $('.isi-modal-upload-dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("hidden", false);
+    $('#button_upload_dokumen').attr("disabled", false);
+    $('#button_upload_dokumen').removeAttr("data-loading");
+    $('#uploadDokumenModal').modal('show');
+
+  }
+</script>
+
+<!-- Tombol Save Kontrak -->
+<script type="text/javascript">
+  function save_kontrak(id, jenis_dokumen) {
+    var nip = "<?php echo $employee_id; ?>";
+    var form = document.getElementById('dokumen_form');
+    var formData = new FormData(form);
+    formData.append('nip', nip);
+    formData.append('id', id);
+    formData.append('jenis_dokumen', jenis_dokumen);
+
+    $('#pesan_upload_dokumen').html("");
+
+    //-------testing-------
+    // alert("masuk button save");
+    // alert('Server Time: '+ getServerTime());
+    // alert('Locale Time: '+ new Date(getServerTime()));
+
+    //cek isi form data
+    // var html_text_formdata = "";
+    // for (var pair of formData.entries()) { // Display the key/value pairs
+    //   html_text_formdata = html_text_formdata + pair[0] + ', ' + pair[1] + '\n';
+    // }
+    // alert(html_text_formdata);
+
+    //-------action-------
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/save_kontrak_ttd/',
+      method: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      beforeSend: function() {
+        // $('#editRekeningModal').modal('show');
+        $('.info-modal-upload-dokumen').attr("hidden", false);
+        $('.isi-modal-upload-dokumen').attr("hidden", true);
+        $('.info-modal-upload-dokumen').html(uploading_html_text);
+        $('#button_upload_dokumen').attr("hidden", true);
+      },
+      success: function(response) {
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") { //sukses upload file
+          $('.info-modal-upload-dokumen').html(success_html_text);
+          $('.info-modal-upload-dokumen').attr("hidden", false);
+          $('.isi-modal-upload-dokumen').attr("hidden", true);
+          $('#button_upload_dokumen').attr("hidden", true);
+          $('#button_upload_dokumen').attr("disabled", false);
+          $('#button_upload_dokumen').removeAttr("data-loading");
+        } else if (res['status'] == "201") { //upload file error
+          $('#pesan_upload_dokumen').html("<small style='color:#FF0000;'>" + res['pesan_error'] + "</small>");
+          $("#file_dokumen").val("");
+          $('.info-modal-upload-dokumen').attr("hidden", true);
+          $('.isi-modal-upload-dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("disabled", false);
+          $('#button_upload_dokumen').removeAttr("data-loading");
+        } else { //another error (unspecified)
+          $('#pesan_upload_dokumen').html("<small style='color:#FF0000;'>" + res['pesan_error'] + "</small>");
+          $('.info-modal-upload-dokumen').attr("hidden", true);
+          $('.isi-modal-upload-dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("hidden", false);
+          $('#button_upload_dokumen').attr("disabled", false);
+          $('#button_upload_dokumen').removeAttr("data-loading");
+        }
+
+        // alert('Your form has been sent successfully.');
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-upload-dokumen').html(html_text); //coba pake iframe
+        $('.isi-modal-upload-dokumen').attr("hidden", true);
+        $('.info-modal-upload-dokumen').attr("hidden", false);
+        $('#button_upload_dokumen').attr("hidden", true);
+        $('#button_upload_dokumen').attr("disabled", false);
+        $('#button_upload_dokumen').removeAttr("data-loading");
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Open Kontrak -->
+<script type="text/javascript">
+  function lihat_kontrak(uniqueid) {
+    // alert(uniqueid);
+    // AJAX untuk ambil data kontrak employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_kontrak/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        uniqueid: uniqueid,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File Kontrak");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          if ((res['data']['file_name'] == "") || (res['data']['file_name'] == null) || (res['data']['file_name'] == "0")) {
+            var html_text = "Belum Upload FIle";
+          } else {
+
+            var nama_file = res['data']['file_name'];
+            var tipe_file = nama_file.substr(-3, 3);
+            var atribut = "";
+            var height = '';
+            var d = new Date();
+            var time = d.getTime();
+            nama_file = nama_file + "?" + time;
+            var tes = nama_file.substr(-14);
+
+            // alert(nama_file);
+            // alert(tes);
+
+            if (tipe_file == "pdf") {
+              atribut = "application/pdf";
+              height = 'height="500px"';
+            } else {
+              atribut = "image/jpg";
+            }
+
+            var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/pkwt/' + nama_file + '"></embed>';
+
+          }
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
+</script>
+
+<!-- Tombol Open Addendum -->
+<script type="text/javascript">
+  function lihat_addendum(id) {
+    // AJAX untuk ambil data addendum employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_addendum/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id: id,
+      },
+      beforeSend: function() {
+        $('.judul-modal').html("File Kontrak");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          if ((res['data']['file_signed'] == "") || (res['data']['file_signed'] == null) || (res['data']['file_signed'] == "0")) {
+            var html_text = "Belum Upload FIle";
+          } else {
+
+            var nama_file = res['data']['file_signed'];
+            var tipe_file = nama_file.substr(-3, 3);
+            var atribut = "";
+            var height = '';
+            var d = new Date();
+            var time = d.getTime();
+            nama_file = nama_file + "?" + time;
+            var tes = nama_file.substr(-14);
+
+            // alert(nama_file);
+            // alert(tes);
+
+            if (tipe_file == "pdf") {
+              atribut = "application/pdf";
+              height = 'height="500px"';
+            } else {
+              atribut = "image/jpg";
+            }
+
+            var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/addendum/' + nama_file + '"></embed>';
+
+          }
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
 
   }
 </script>
