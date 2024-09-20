@@ -1187,7 +1187,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       </div>
 
                     </div>
-                    <?php if (in_array('1005', $role_resources_ids)) { ?>
+                    <?php if ((in_array('1005', $role_resources_ids)) && ($user[0]->employee_id != $employee_id)) { ?>
                       <hr class="border-light m-0">
                       <div class="row">
                         <div class="col-12 my-3">
