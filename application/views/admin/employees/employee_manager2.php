@@ -4981,9 +4981,18 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           $('#tanggal_resign_modal2').val(res['data']['deactive_date_seed']);
           $('#keterangan_resign_modal2').val(res['data']['deactive_reason']);
 
+          if (res['data']['employee_id'] == nip) {
+            $("#kategori_modal").attr("hidden", true);
+            $('#tanggal_resign_modal2').attr("hidden", true);
+            $('#keterangan_resign_modal2').attr("hidden", true);
+            $('#button_save_resign').attr("hidden", true);
+          } else {
+            $('#button_save_resign').attr("hidden", false);
+          }
+
           $('.isi-modal-edit-resign').attr("hidden", false);
           $('.info-modal-edit-resign').attr("hidden", true);
-          $('#button_save_resign').attr("hidden", false);
+
         } else {
           html_text = res['pesan'];
           $('.info-modal-edit-resign').html(html_text);
@@ -5535,7 +5544,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           var i;
           for (i = 0; i < res['data'].length; ++i) {
             // do something with `substr[i]`
-            if(res['data'][i]['jenis_dokumen'] == "ADDENDUM"){
+            if (res['data'][i]['jenis_dokumen'] == "ADDENDUM") {
               $variable_style = 'style="background-color:#c0ebbc;"';
             } else {
               $variable_style = 'style="background-color:#bcbeeb;"';
