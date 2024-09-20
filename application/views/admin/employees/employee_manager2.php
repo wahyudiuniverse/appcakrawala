@@ -685,6 +685,82 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   </div>
 </div>
 
+<!-- MODAL HAPUS KONTRAK -->
+<div class="modal fade" id="hapusKontrakModal" tabindex="-1" role="dialog" aria-labelledby="hapusKontrakModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="hapusKontrakModalLabel">Hapus Kontrak</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="isi-modal-hapus-kontrak">
+          <div class="container" id="container_modal_hapus_kontrak">
+            <div class="row">
+              <strong>Apakah anda ingin menghapus kontrak ini?</strong></br>
+              <table class="table table-striped col-md-12">
+                <tbody>
+                  <tr>
+                    <td style='width:25%'><strong>Jenis Kontrak</strong></td>
+                    <td style='width:75%'>
+                      <span id='jenis_kontrak_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Nomor Dokumen</strong></td>
+                    <td>
+                      <span id='nomor_dokumen_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Periode</strong></td>
+                    <td>
+                      <span id='periode_kontrak_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Tanggal Terbit</strong></td>
+                    <td>
+                      <span id='tgl_terbit_kontrak_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Project</strong></td>
+                    <td>
+                      <span id='project_kontrak_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Sub Project</strong></td>
+                    <td>
+                      <span id='sub_project_kontrak_modal2'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jabatan</strong></td>
+                    <td>
+                      <span id='jabatan_kontrak_modal2'></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-modal-hapus-kontrak"></div>
+
+      </div>
+      <div class="modal-footer">
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <span id='button_delete_kontrak'></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL EDIT REKENING BANK -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -1282,12 +1358,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                   <!-- TAB DOKUMEN KONTRAK -->
                   <!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
                   <div class="tab-pane fade" id="dokumen-kontrak" role="tabpanel" aria-labelledby="dokumen-kontrak-tab">
-                    <div class="row">
+                    <div class="row" id="isi-dokumen-kontrak-tabel">
                       <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> </div>
-                      <!-- <pre>
-                        <?php //print_r($all_contract); 
-                        ?>
-                      </pre> -->
 
                       <?php foreach ($all_contract as $kontrak): ?>
                         <div class="card-header with-elements" <?php echo ($kontrak['jenis_dokumen'] == "ADDENDUM" ? 'style="background-color:#c0ebbc;"' : 'style="background-color:#bcbeeb;"'); ?>> <span class="card-header-title mr-2"> <strong> <?php echo $kontrak['jenis_dokumen']; ?>. Periode: <?php echo $kontrak['periode_start']; ?> - <?php echo $kontrak['periode_end']; ?></strong></span> </div>
@@ -1335,13 +1407,6 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       <?php endforeach; ?>
 
                     </div>
-                    <!-- <hr class="border-light m-0">
-                    <div class="row">
-                      <div class="col-12 my-3">
-                        <button id="button_edit_dokumen_kontrak" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Upload Dokumen</button>
-                      </div>
-                    </div> -->
-
                   </div>
                   <!-- END TAB DOKUMEN KONTRAK -->
 
@@ -5310,4 +5375,217 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     });
 
   }
+</script>
+
+<!-- Tombol Hapus Kontrak -->
+<script type="text/javascript">
+  function hapus_kontrak(uniqueid) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "kontrak";
+    var button_delete = "<button onclick='hapus_detail_kontrak(\"" + uniqueid + "\",\"" + jenis_dokumen + "\")' class='btn btn-danger'>Hapus Kontrak</button>";
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_detail_kontrak/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        uniqueid: uniqueid,
+      },
+      beforeSend: function() {
+        $('.info-modal-hapus-kontrak').attr("hidden", false);
+        $('.isi-modal-hapus-kontrak').attr("hidden", true);
+        $('.info-modal-hapus-kontrak').html(loading_html_text);
+        $('#button_delete_kontrak').html(button_delete);
+        $('#button_delete_kontrak').attr("hidden", true);
+        $('#hapusKontrakModal').modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#jenis_kontrak_modal2').html(res['data']['jenis_dokumen']);
+          $("#nomor_dokumen_modal2").html(res['data']['nomor_surat']);
+          $('#periode_kontrak_modal2').html(res['data']['periode_start'] + " s/d " + res['data']['periode_end']);
+          $('#tgl_terbit_kontrak_modal2').html(res['data']['tanggal_terbit']);
+          $("#project_kontrak_modal2").html(res['data']['project']);
+          $("#sub_project_kontrak_modal2").html(res['data']['sub_project']);
+          $("#jabatan_kontrak_modal2").html(res['data']['jabatan']);
+
+          $('.isi-modal-hapus-kontrak').attr("hidden", false);
+          $('.info-modal-hapus-kontrak').attr("hidden", true);
+          $('#button_delete_kontrak').attr("hidden", false);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-hapus-kontrak').html(html_text);
+          $('.isi-modal-hapus-kontrak').attr("hidden", true);
+          $('.info-modal-hapus-kontrak').attr("hidden", false);
+          $('#button_delete_kontrak').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-hapus-kontrak').html(html_text); //coba pake iframe
+        $('.isi-modal-hapus-kontrak').attr("hidden", true);
+        $('.info-modal-hapus-kontrak').attr("hidden", false);
+        $('#button_delete_kontrak').attr("hidden", true);
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Hapus Addendum -->
+<script type="text/javascript">
+  function hapus_addendum(id) {
+    var nip = "<?php echo $employee_id; ?>";
+    var jenis_dokumen = "addendum";
+    var button_delete = "<button onclick='hapus_detail_kontrak(" + id + ",\"" + jenis_dokumen + "\")' class='btn btn-danger'>Hapus Kontrak</button>";
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_detail_addendum/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id: id,
+      },
+      beforeSend: function() {
+        $('.info-modal-hapus-kontrak').attr("hidden", false);
+        $('.isi-modal-hapus-kontrak').attr("hidden", true);
+        $('.info-modal-hapus-kontrak').html(loading_html_text);
+        $('#button_delete_kontrak').html(button_delete);
+        $('#button_delete_kontrak').attr("hidden", true);
+        $('#hapusKontrakModal').modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          $('#jenis_kontrak_modal2').html(res['data']['jenis_dokumen']);
+          $("#nomor_dokumen_modal2").html(res['data']['nomor_surat']);
+          $('#periode_kontrak_modal2').html(res['data']['periode_start'] + " s/d " + res['data']['periode_end']);
+          $('#tgl_terbit_kontrak_modal2').html(res['data']['tanggal_terbit']);
+          $("#project_kontrak_modal2").html(res['data']['project']);
+          $("#sub_project_kontrak_modal2").html(res['data']['sub_project']);
+          $("#jabatan_kontrak_modal2").html(res['data']['jabatan']);
+
+          $('.isi-modal-hapus-kontrak').attr("hidden", false);
+          $('.info-modal-hapus-kontrak').attr("hidden", true);
+          $('#button_delete_kontrak').attr("hidden", false);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-hapus-kontrak').html(html_text);
+          $('.isi-modal-hapus-kontrak').attr("hidden", true);
+          $('.info-modal-hapus-kontrak').attr("hidden", false);
+          $('#button_delete_kontrak').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-hapus-kontrak').html(html_text); //coba pake iframe
+        $('.isi-modal-hapus-kontrak').attr("hidden", true);
+        $('.info-modal-hapus-kontrak').attr("hidden", false);
+        $('#button_delete_kontrak').attr("hidden", true);
+      }
+    });
+
+  };
+</script>
+
+<!-- Tombol Hapus Detail Kontrak -->
+<script type="text/javascript">
+  function hapus_detail_kontrak(id, jenis_dokumen) {
+    var nip = "<?php echo $employee_id; ?>";
+    var karyawan_id = "<?php echo $user_id; ?>";
+
+    // alert("id: " + id + "\nJenis Dokumen: " + jenis_dokumen);
+
+    // AJAX untuk ambil data employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/hapus_detail_kontrak/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        karyawan_id: karyawan_id,
+        nip: nip,
+        id: id,
+        jenis_dokumen: jenis_dokumen,
+      },
+      beforeSend: function() {
+        $('.info-modal-hapus-kontrak').attr("hidden", false);
+        $('.isi-modal-hapus-kontrak').attr("hidden", true);
+        $('.info-modal-hapus-kontrak').html(loading_html_text);
+        $('#button_delete_kontrak').attr("hidden", true);
+        $('#hapusKontrakModal').modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status'] == "200") {
+          var html_kontrak = "";
+          html_kontrak = html_kontrak + '<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> </div>';
+          var i;
+          for (i = 0; i < res['data'].length; ++i) {
+            // do something with `substr[i]`
+            if(res['data'][i]['jenis_dokumen'] == "ADDENDUM"){
+              $variable_style = 'style="background-color:#c0ebbc;"';
+            } else {
+              $variable_style = 'style="background-color:#bcbeeb;"';
+            }
+            html_kontrak = html_kontrak + '';
+            html_kontrak = html_kontrak + '<div class="card-header with-elements" ' + $variable_style + '> <span class="card-header-title mr-2"> <strong> ' + res['data'][i]['jenis_dokumen'] + '. Periode: ' + res['data'][i]['periode_start'] + ' - ' + res['data'][i]['periode_end'] + '</strong></span> </div>';
+            html_kontrak = html_kontrak + '<div class="col-md-6">';
+            html_kontrak = html_kontrak + '<table class="table table-striped">';
+            html_kontrak = html_kontrak + '<tbody><tr>';
+            html_kontrak = html_kontrak + '<th scope="row" style="width: 30%">Nomor Dokumen</th>';
+            html_kontrak = html_kontrak + '<td>' + res['data'][i]['nomor_surat'] + '</td></tr><tr>';
+            html_kontrak = html_kontrak + '<th scope="row">Project</th>';
+            html_kontrak = html_kontrak + '<td>' + res['data'][i]['project'] + '</td></tr><tr>';
+            html_kontrak = html_kontrak + '<th scope="row">Sub Project</th>';
+            html_kontrak = html_kontrak + '<td>' + res['data'][i]['sub_project'] + '</td></tr><tr>';
+            html_kontrak = html_kontrak + '<th scope="row">Jabatan</th>';
+            html_kontrak = html_kontrak + '<td>' + res['data'][i]['jabatan'] + '</td></tr></tbody></table></div>';
+            html_kontrak = html_kontrak + '<div class="col-md-6">';
+            html_kontrak = html_kontrak + '<table class="table table-striped">';
+            html_kontrak = html_kontrak + '<tbody><tr>';
+            html_kontrak = html_kontrak + '<th scope="row" style="width: 30%">Tanggal Terbit</th>';
+            html_kontrak = html_kontrak + '<td>' + res['data'][i]['tanggal_terbit'] + '</td></tr><tr>';
+            html_kontrak = html_kontrak + '<td colspan="2">';
+            html_kontrak = html_kontrak + res['data'][i]['button_open'] + res['data'][i]['button_upload'] + res['data'][i]['button_lihat'] + res['data'][i]['button_hapus'];
+            html_kontrak = html_kontrak + '</td></tr></tbody></table></div>';
+          }
+          $('#isi-dokumen-kontrak-tabel').html(html_kontrak);
+
+          $('.isi-modal-hapus-kontrak').attr("hidden", true);
+          $('.info-modal-hapus-kontrak').html(success_html_text);
+          $('.info-modal-hapus-kontrak').attr("hidden", false);
+          $('#button_delete_kontrak').attr("hidden", true);
+        } else {
+          html_text = res['pesan'];
+          $('.info-modal-hapus-kontrak').html(html_text);
+          $('.isi-modal-hapus-kontrak').attr("hidden", true);
+          $('.info-modal-hapus-kontrak').attr("hidden", false);
+          $('#button_delete_kontrak').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal-hapus-kontrak').html(html_text); //coba pake iframe
+        $('.isi-modal-hapus-kontrak').attr("hidden", true);
+        $('.info-modal-hapus-kontrak').attr("hidden", false);
+        $('#button_delete_kontrak').attr("hidden", true);
+      }
+    });
+
+  };
 </script>

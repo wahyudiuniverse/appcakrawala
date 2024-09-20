@@ -5839,7 +5839,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data dokumen kontrak ttd employee
 	public function get_data_dokumen_kontrak($postData)
 	{
-		$this->db->select('file_name');
+		$this->db->select('*');
 
 		$this->db->from('xin_employee_contract');
 		$this->db->where($postData);
@@ -5854,7 +5854,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data dokumen addendum ttd employee
 	public function get_data_dokumen_addendum($postData)
 	{
-		$this->db->select('file_signed');
+		$this->db->select('*');
 
 		$this->db->from('xin_contract_addendum');
 		$this->db->where($postData);
@@ -5909,7 +5909,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		foreach ($query as $record) {
 			if (in_array('1010', $role_resources_ids)) {
-				$button_hapus = '<button onclick="hapus_kontrak(' . $record['uniqueid'] . ')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>';
+				$button_hapus = '<button onclick="hapus_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>';
 			} else {
 				$button_hapus = '';
 			}
@@ -5959,6 +5959,30 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//ambil data addendum employee
 	public function get_data_addendum($karyawan_id)
 	{
+		// get data addendum
+		$this->db->select('id');
+		$this->db->select('kontrak_start_new');
+		$this->db->select('kontrak_end_new');
+		$this->db->select('no_addendum');
+		$this->db->select('tgl_terbit');
+		$this->db->select('xin_employee_contract.project');
+		$this->db->select('xin_employee_contract.sub_project');
+		$this->db->select('xin_employee_contract.jabatan');
+
+
+		$this->db->from('xin_contract_addendum');
+		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id', 'left');
+		$this->db->where('xin_contract_addendum.cancel_stat', "0");
+		$this->db->where('karyawan_id', $karyawan_id);
+
+		$query = $this->db->get()->result_array();
+
+		return $query;
+	}
+
+	//ambil data detail addendum employee
+	public function get_detail_addendum($datarequest)
+	{
 		// $this->db->select('*');no_surat
 		$this->db->select('kontrak_start_new');
 		$this->db->select('kontrak_end_new');
@@ -5970,11 +5994,53 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		$this->db->from('xin_contract_addendum');
 		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id', 'left');
-		$this->db->where('karyawan_id', $karyawan_id);
+		$this->db->where($datarequest);
 
-		$query = $this->db->get()->result_array();
+		$query = $this->db->get()->row_array();
 
-		return $query;
+		$data = array(
+			"jenis_dokumen" => "ADDENDUM",
+			"nomor_surat" => $query['no_addendum'],
+			"periode_start" => $this->Xin_model->tgl_indo($query['kontrak_start_new']),
+			"periode_end" => $this->Xin_model->tgl_indo($query['kontrak_end_new']),
+			"project" => strtoupper($this->get_nama_project($query['project'])),
+			"sub_project" => strtoupper($this->get_nama_sub_project($query['sub_project'])),
+			"jabatan" => strtoupper($this->get_nama_jabatan($query['jabatan'])),
+			"tanggal_terbit" => $this->Xin_model->tgl_indo($query['tgl_terbit']),
+		);
+
+		return $data;
+	}
+
+	//ambil data detail kontrak employee
+	public function get_detail_kontrak($datarequest)
+	{
+		// get data kontrak
+		$this->db->select('from_date');
+		$this->db->select('to_date');
+		$this->db->select('no_surat');
+		$this->db->select('project');
+		$this->db->select('sub_project');
+		$this->db->select('jabatan');
+
+		$this->db->from('xin_employee_contract');
+		$this->db->where('cancel_stat', "0");
+		$this->db->where($datarequest);
+
+		$query = $this->db->get()->row_array();
+
+		$data = array(
+			"jenis_dokumen" => "KONTRAK",
+			"nomor_surat" => $query['no_surat'],
+			"periode_start" => $this->Xin_model->tgl_indo($query['from_date']),
+			"periode_end" => $this->Xin_model->tgl_indo($query['to_date']),
+			"project" => strtoupper($this->get_nama_project($query['project'])),
+			"sub_project" => strtoupper($this->get_nama_sub_project($query['sub_project'])),
+			"jabatan" => strtoupper($this->get_nama_jabatan($query['jabatan'])),
+			"tanggal_terbit" => $this->Xin_model->tgl_indo($query['from_date']),
+		);
+
+		return $data;
 	}
 
 	//save data diri employee
@@ -6012,6 +6078,22 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$query = $this->db->get()->row_array();
 
 		return $query;
+	}
+
+	//hapus detail single kontrak employee
+	public function hapus_detail_kontrak($postData, $id)
+	{
+		//update data
+		$this->db->where('uniqueid', $id);
+		$this->db->update('xin_employee_contract', $postData);
+	}
+
+	//hapus detail single addendum employee
+	public function hapus_detail_addendum($postData, $id)
+	{
+		//update data
+		$this->db->where('id', $id);
+		$this->db->update('xin_contract_addendum', $postData);
 	}
 
 	//save data project employee

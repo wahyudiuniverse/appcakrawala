@@ -8596,6 +8596,7 @@ class Employees extends MY_Controller
 		);
 
 		//variabel untuk inisialisasi varifikasi
+		$data['path_url'] = "emp_view";
 		$data['nik_validation'] = $nik_validation;
 		$data['kk_validation'] = $kk_validation;
 		$data['nama_validation'] = $nama_validation;
@@ -8847,8 +8848,8 @@ class Employees extends MY_Controller
 				'deactive_by'		=> $data['deactive_by'],
 				'deactive_by_name'	=> $this->Employees_model->get_nama_karyawan_by_id($data['deactive_by']),
 				'deactive_date'		=> $data['deactive_date'],
-				'deactive_date_seed'=> $deactive_date_seed,
-				'deactive_date_text'=> $deactive_date_text,
+				'deactive_date_seed' => $deactive_date_seed,
+				'deactive_date_text' => $deactive_date_text,
 				'deactive_reason'	=> $data['deactive_reason'],
 			);
 
@@ -8919,6 +8920,80 @@ class Employees extends MY_Controller
 
 		// get data diri
 		$data = $this->Employees_model->get_data_kontak($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data detail kontak employee
+	public function get_detail_kontrak()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'uniqueid'        => $postData['uniqueid']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_detail_kontrak($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data detail addendum employee
+	public function get_detail_addendum()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id'        => $postData['id']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_detail_addendum($datarequest);
 
 		if (empty($data)) {
 			$response = array(
@@ -9259,6 +9334,60 @@ class Employees extends MY_Controller
 		// echo "</pre>";
 	}
 
+	//hapus single kontrak employee
+	public function hapus_detail_kontrak()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		if ($postData['jenis_dokumen'] == "kontrak") {
+			//Cek variabel post
+			$datarequest = [
+				'cancel_stat'       => "1",
+				'cancel_by'        	=> $session['user_id'],
+				'cancel_on'        	=> date('Y-m-d H:i:s'),
+			];
+
+			// save data diri
+			$this->Employees_model->hapus_detail_kontrak($datarequest, $postData['id']);
+		} else if ($postData['jenis_dokumen'] == "addendum") {
+			//Cek variabel post
+			$datarequest = [
+				'cancel_stat'       => "1",
+				'cancel_by'        	=> $session['user_id'],
+				'cancel_on'        	=> date('Y-m-d H:i:s'),
+			];
+
+			// save data diri
+			$this->Employees_model->hapus_detail_addendum($datarequest, $postData['id']);
+		}
+
+		//Susun variabel untuk update element di view
+		$datahasil = $this->Employees_model->get_data_kontrak($postData['nip'], $postData['karyawan_id']);
+
+		if (empty($datahasil)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Save Data",
+				'data'		=> $datahasil,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
 	//save data project employee
 	public function save_project()
 	{
@@ -9440,7 +9569,7 @@ class Employees extends MY_Controller
 		$postData = $this->input->post();
 
 		$nilai_status_employee = "";
-		if($postData['status_resign'] == "1"){
+		if ($postData['status_resign'] == "1") {
 			$nilai_status_employee = "1";
 		} else {
 			$nilai_status_employee = "0";
@@ -9962,8 +10091,6 @@ class Employees extends MY_Controller
 				}
 
 				$status = "201";
-
-				
 			} else {
 				//save path ktp ke database
 				$new_filename_dokumen = $this->upload->data('file_name');
@@ -9985,7 +10112,6 @@ class Employees extends MY_Controller
 
 				$status = "200";
 			}
-
 		} else {
 			$pesan_error = "Tidak ada file yang dipilih";
 
