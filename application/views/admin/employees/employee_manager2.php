@@ -594,7 +594,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editResignModalLabel">Edit Status Karyawan</h5>
+        <h5 class="modal-title" id="editResignModalLabel">Status Karyawan</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -623,25 +623,25 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       <span id='status_aktif_modal2'></span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="isi_non_aktif_by_modal3">
                     <td><strong>Non Aktif By</strong></td>
                     <td>
                       <span id='non_aktif_by_modal2'></span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="isi_non_aktif_date_modal3">
                     <td><strong>Non Aktif Date</strong></td>
                     <td>
                       <span id='non_aktif_on_modal2'></span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="isi_keterangan_aktif_modal3">
                     <td><strong>Non Aktif Pesan</strong></td>
                     <td>
                       <span id='non_aktif_pesan_modal2'></span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="isi_status_aktif_modal2">
                     <td><strong>Status Aktif</strong></td>
                     <td>
                       <select class="form-control" id="kategori_resign_modal" name="kategori_resign_modal" data-plugin="select_modal_resign" data-placeholder="Status Aktif">
@@ -654,14 +654,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       <span id='pesan_kategori_resign_modal'></span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="isi_tanggal_aktif_modal2">
                     <td><strong>Tanggal Resign</strong></td>
                     <td>
                       <input type='date' class='form-control date' name='tanggal_resign_modal2' id='tanggal_resign_modal2' placeholder='Tanggal Resign' value=''>
                       <span id='pesan_tanggal_resign_modal2'></span>
                     </td>
                   </tr>
-                  <tr>
+                  <tr id="isi_keterangan_aktif_modal2">
                     <td><strong>Keterangan Resign</strong></td>
                     <td>
                       <input id='keterangan_resign_modal2' name='keterangan_resign_modal2' type='text' class='form-control' placeholder='Keterangan Resign' value=''>
@@ -2474,12 +2474,73 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Download Resume -->
 <script type="text/javascript">
   document.getElementById("button_download_resume").onclick = function(e) {
-    var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/2024/09/rekening_20509590.pdf" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
-    $('.judul-modal').html("Download Resume");
-    $('.isi-modal').html(html_text);
-    $('#button_save_pin').attr("hidden", true);
-    $('#editModal').appendTo("body").modal('show');
-    // alert("Under Construction. Masuk button download resume");
+    // AJAX untuk ambil data employee terupdate
+    // $.ajax({
+    //   url: '<?php //base_url() ?>admin/Employees/is_exist_file/',
+    //   method: 'post',
+    //   data: {
+    //     [csrfName]: csrfHash,
+    //   },
+    //   beforeSend: function() {
+    //     // $('#editDataDiriModal').modal('show');
+    //     // $('.info-modal-edit-data-diri').attr("hidden", false);
+    //     // $('.isi-modal-edit-data-diri').attr("hidden", true);
+    //     // $('.info-modal-edit-data-diri').html(loading_html_text);
+    //     // $('#button_save_data_diri').attr("hidden", true);
+    //   },
+    //   success: function(response) {
+
+    //     var res = jQuery.parseJSON(response);
+
+    //     if (res['status'] == "200") {
+    //       alert(res['pesan']);
+    //       // $('#first_name_modal').val(res['data']['first_name']);
+    //       // $("#gender_modal").val(res['data']['gender']).change();
+    //       // $('#tempat_lahir_modal').val(res['data']['tempat_lahir']);
+    //       // $('#date_of_birth_modal').val(res['data']['date_of_birth']);
+    //       // $("#ethnicity_modal").val(res['data']['ethnicity_type']).change();
+    //       // $("#last_edu_modal").val(res['data']['last_edu']).change();
+    //       // $("#marital_status_modal").val(res['data']['marital_status']).change();
+    //       // $('#tinggi_badan_modal').val(res['data']['tinggi_badan']);
+    //       // $('#berat_badan_modal').val(res['data']['berat_badan']);
+    //       // $("#blood_group_modal").val(res['data']['blood_group']).change();
+    //       // $('#ktp_no_modal').val(res['data']['ktp_no']);
+    //       // $('#kk_no_modal').val(res['data']['kk_no']);
+    //       // $('#npwp_no_modal').val(res['data']['npwp_no']);
+    //       // $('#contact_no_modal').val(res['data']['contact_no']);
+    //       // $('#email_modal').val(res['data']['email']);
+    //       // $('#ibu_kandung_modal').val(res['data']['ibu_kandung']);
+    //       // $('#alamat_ktp_modal').val(res['data']['alamat_ktp']);
+    //       // $('#alamat_domisili_modal').val(res['data']['alamat_domisili']);
+
+    //       // $('.isi-modal-edit-data-diri').attr("hidden", false);
+    //       // $('.info-modal-edit-data-diri').attr("hidden", true);
+    //       // $('#button_save_data_diri').attr("hidden", false);
+    //     } else {
+    //       // html_text = res['pesan'];
+    //       // $('.info-modal-edit-data-diri').html(html_text);
+    //       // $('.isi-modal-edit-data-diri').attr("hidden", true);
+    //       // $('.info-modal-edit-data-diri').attr("hidden", false);
+    //       // $('#button_save_data_diri').attr("hidden", true);
+    //     }
+    //   },
+    //   error: function(xhr, status, error) {
+    //     html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+    //     html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+    //     // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+    //     $('.info-modal-edit-data-diri').html(html_text); //coba pake iframe
+    //     $('.isi-modal-edit-data-diri').attr("hidden", true);
+    //     $('.info-modal-edit-data-diri').attr("hidden", false);
+    //     $('#button_save_data_diri').attr("hidden", true);
+    //   }
+    // });
+
+    // var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/2024/09/rekening_20509590.pdf" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
+    // $('.judul-modal').html("Download Resume");
+    // $('.isi-modal').html(html_text);
+    // $('#button_save_pin').attr("hidden", true);
+    // $('#editModal').appendTo("body").modal('show');
+    alert("Under Construction. Masuk button download resume");
   };
 </script>
 
@@ -4945,6 +5006,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <script type="text/javascript">
   document.getElementById("button_resign").onclick = function(e) {
     var nip = "<?php echo $employee_id; ?>";
+    var nip_session = "<?php echo $user[0]->employee_id; ?>";
 
     //inisialisasi pesan
     $('#pesan_kategori_modal').html("");
@@ -4962,6 +5024,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       beforeSend: function() {
         $('.info-modal-edit-resign').attr("hidden", false);
         $('.isi-modal-edit-resign').attr("hidden", true);
+        $('#editResignModalLabel').html("Status Karyawan");
         $('.info-modal-edit-resign').html(loading_html_text);
         $('#button_save_resign').attr("hidden", true);
         $('#editResignModal').modal('show');
@@ -4981,12 +5044,17 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           $('#tanggal_resign_modal2').val(res['data']['deactive_date_seed']);
           $('#keterangan_resign_modal2').val(res['data']['deactive_reason']);
 
-          if (res['data']['employee_id'] == nip) {
-            $("#kategori_modal").attr("hidden", true);
-            $('#tanggal_resign_modal2').attr("hidden", true);
-            $('#keterangan_resign_modal2').attr("hidden", true);
+          if (res['data']['employee_id'] == nip_session) {
+            $('#editResignModalLabel').html("Informasi Status Karyawan");
+            $("#isi_non_aktif_by_modal3").attr("hidden", true);
+            $("#isi_non_aktif_date_modal3").attr("hidden", true);
+            $("#isi_keterangan_aktif_modal3").attr("hidden", true);
+            $("#isi_status_aktif_modal2").attr("hidden", true);
+            $('#isi_tanggal_aktif_modal2').attr("hidden", true);
+            $('#isi_keterangan_aktif_modal2').attr("hidden", true);
             $('#button_save_resign').attr("hidden", true);
           } else {
+            $('#editResignModalLabel').html("Edit Status Karyawan");
             $('#button_save_resign').attr("hidden", false);
           }
 

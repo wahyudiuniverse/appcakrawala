@@ -6295,4 +6295,26 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		return $query;
 	}
+
+	//get data employee by nip
+	public function is_have_project_access($project_id)
+	{
+		$session = $this->session->userdata('username');
+
+		// //fetch data terbaru
+		$this->db->select('*');
+
+		$this->db->from('xin_projects_akses',);
+		$this->db->where('project_id', $project_id);
+		$this->db->where('nip', $session['employee_id']);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->result_array();
+
+		if(empty($query)){
+			return false;
+		} else {
+			return true;
+		}
+	}
 }

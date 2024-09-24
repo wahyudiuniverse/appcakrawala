@@ -8181,6 +8181,20 @@ class Employees extends MY_Controller
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 
+		//Check previledges untuk lihat page profile
+		$user = $this->Xin_model->read_user_info($session['user_id']);
+
+		if (($user[0]->user_role_id == "2") || ($user[0]->user_role_id == "9")) { //kalau employee biasa dan resign
+			if ($user[0]->employee_id != $result[0]->employee_id) { //kalau bukan halaman profil diri sendiri
+				redirect('admin/');
+			}
+		} else {
+			$have_project_acces = $this->Employees_model->is_have_project_access($result[0]->project_id);
+			if (!$have_project_acces) {
+				redirect('admin/');
+			}
+		}
+
 		// company info
 		$company = $this->Xin_model->read_company_info($result[0]->company_id);
 		if (!is_null($company)) {
@@ -8761,6 +8775,55 @@ class Employees extends MY_Controller
 				}
 			}
 		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data diri employee
+	public function is_exist_file()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		// $record_database = "2024/09/rekening_20509590.pdf";
+
+		$nama_file = "./uploads/document/rekening/";
+
+		$record_database = "http://localhost/appcakrawala/uploads/document/rekening/2024/09/rekening_20509590.pdf";
+
+		//kalau blm ada folder path nya
+		if (file_exists($nama_file . $record_database)) {
+			$pesan = "ada file"; //tampil file skema terbaru
+		} else {
+			if (file_exists($record_database)) {
+				$pesan = "ada file"; //tampil file skema lama tanpa http
+			} else {
+				$headers = get_headers($record_database);
+				$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false;
+				if ($file_in_url_exist) {
+					$pesan = "ada file"; //tampil file skema lama dengan http
+				} else {
+					$pesan = "tidak ada file"; //tampil file beda server
+				}
+			}
+		}
+
+		// $postData = $this->input->post();
+
+		// //Cek variabel post
+		// $datarequest = [
+		// 	'employee_id'        => $postData['nip']
+		// ];
+
+		$response = array(
+			'status'	=> "200",
+			'pesan' 	=> $pesan,
+		);
 
 		echo json_encode($response);
 		// echo "<pre>";
