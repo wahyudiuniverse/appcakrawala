@@ -2278,7 +2278,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             $('.ktp-modal').html(html_text);
             flag_ktp = 1;
           } else {
-            html_text = res['pesan']['filename_ktp'];
+            var html_text = "<div class='row'>";
+            html_text = html_text + "<label>Foto KTP: </label>";
+            html_text = html_text + res['pesan']['filename_ktp'];
+            html_text = html_text + "</div>";
             $('.ktp-modal').html(html_text);
             flag_ktp = 1;
           }
@@ -2348,7 +2351,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             $('.kk-modal').html(html_text);
             flag_kk = 1;
           } else {
-            html_text = res['pesan']['filename_kk'];
+            var html_text = "<div class='row'>";
+            html_text = html_text + "<label>Foto KK: </label>";
+            html_text = html_text + res['pesan']['filename_kk'];
+            html_text = html_text + "</div>";
             $('.kk-modal').html(html_text);
             flag_kk = 1;
           }

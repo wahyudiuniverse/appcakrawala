@@ -9245,7 +9245,7 @@ class Employees extends MY_Controller
 					$status_profile = "200"; //file ditemukan
 					$pesan_profile = "Berhasil Fetch Data";
 				} else {
-					if (strpos($record_database, "http") == false) { //kalau ada http nya
+					if (strpos($record_database, "http") === false) { //kalau ada http nya
 						$nama_file_profile = "tidak ada file"; //record di database tanpa http
 						$status_profile = "203"; //file tidak ditemukan
 						$pesan_profile = "File Tidak Ditemukan";
@@ -9293,7 +9293,7 @@ class Employees extends MY_Controller
 							$status_ijazah = "200"; //file ditemukan
 							$pesan_ijazah = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file_ijazah = "tidak ada file"; //record di database tanpa http
 								$status_ijazah = "203"; //file tidak ditemukan
 								$pesan_ijazah = "File Tidak Ditemukan";
@@ -9343,7 +9343,7 @@ class Employees extends MY_Controller
 							$status_skck = "200"; //file ditemukan
 							$pesan_skck = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file_skck = "tidak ada file"; //record di database tanpa http
 								$status_skck = "203"; //file tidak ditemukan
 								$pesan_skck = "File Tidak Ditemukan";
@@ -9393,7 +9393,7 @@ class Employees extends MY_Controller
 							$status_cv = "200"; //file ditemukan
 							$pesan_cv = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file_cv = "tidak ada file"; //record di database tanpa http
 								$status_cv = "203"; //file tidak ditemukan
 								$pesan_cv = "File Tidak Ditemukan";
@@ -9444,7 +9444,7 @@ class Employees extends MY_Controller
 							$status_npwp = "200"; //file ditemukan
 							$pesan_npwp = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file_npwp = "tidak ada file"; //record di database tanpa http
 								$status_npwp = "203"; //file tidak ditemukan
 								$pesan_npwp = "File Tidak Ditemukan";
@@ -9494,7 +9494,7 @@ class Employees extends MY_Controller
 							$status_kk = "200"; //file ditemukan
 							$pesan_kk = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file_kk = "tidak ada file"; //record di database tanpa http
 								$status_kk = "203"; //file tidak ditemukan
 								$pesan_kk = "File Tidak Ditemukan";
@@ -9544,7 +9544,7 @@ class Employees extends MY_Controller
 							$status_ktp = "200"; //file ditemukan
 							$pesan_ktp = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file_ktp = "tidak ada file"; //record di database tanpa http
 								$status_ktp = "203"; //file tidak ditemukan
 								$pesan_ktp = "File Tidak Ditemukan";
@@ -9594,7 +9594,7 @@ class Employees extends MY_Controller
 							$status_rekening = "200"; //file ditemukan
 							$pesan_rekening = "Berhasil Fetch Data";
 						} else {
-							if (strpos($record_database, "http") == false) { //kalau ngga ada http nya
+							if (strpos($record_database, "http") === false) { //kalau ngga ada http nya
 								$nama_file_rekening = "tidak ada file"; //record di database tanpa http
 								$status_rekening = "203"; //file tidak ditemukan
 								$pesan_rekening = "File Tidak Ditemukan";
@@ -9702,7 +9702,7 @@ class Employees extends MY_Controller
 					$status = "200"; //file ditemukan
 					$pesan = "Berhasil Fetch Data";
 				} else {
-					if (strpos($record_database, "http") == false) { //kalau ada http nya
+					if (strpos($record_database, "http") === false) { //kalau ada http nya
 						$nama_file = "tidak ada file"; //record di database tanpa http
 						$status = "203"; //file tidak ditemukan
 						$pesan = "File Tidak Ditemukan";
@@ -9778,7 +9778,7 @@ class Employees extends MY_Controller
 					$status = "200"; //file ditemukan
 					$pesan = "Berhasil Fetch Data";
 				} else {
-					if (strpos($record_database, "http") == false) { //kalau ada http nya
+					if (strpos($record_database, "http") === false) { //kalau ada http nya
 						$nama_file = "tidak ada file"; //record di database tanpa http
 						$status = "203"; //file tidak ditemukan
 						$pesan = "File Tidak Ditemukan";
