@@ -9683,10 +9683,49 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			$local1 = "./uploads/document/pkwt/";
+
+			$record_database = $data['file_name'];
+
+			$nama_file = "";
+			$status = "";
+			$pesan = "";
+
+
+			if (($data['file_name'] == "") || (empty($data['file_name'])) || ($data['file_name'] == "0")) {
+				$nama_file = "tidak ada file"; //nilai di database kosong
+				$status = "202"; //file blm upload
+				$pesan = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal
+					$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
+					$status = "200"; //file ditemukan
+					$pesan = "Berhasil Fetch Data";
+				} else {
+					if (strpos($record_database, "http") == false) { //kalau ada http nya
+						$nama_file = "tidak ada file"; //record di database tanpa http
+						$status = "203"; //file tidak ditemukan
+						$pesan = "File Tidak Ditemukan";
+					} else {
+						$headers = get_headers($record_database);
+						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						if ($file_in_url_exist) {
+							$nama_file = $record_database; //tampil file skema lama dengan http
+							$status = "200"; //file ditemukan
+							$pesan = "Berhasil Fetch Data";
+						} else {
+							$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+							$status = "203"; //file tidak ditemukan
+							$pesan = "File Tidak Ditemukan";
+						}
+					}
+				}
+			}
+
 			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data,
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $nama_file,
 			);
 		}
 
@@ -9720,10 +9759,49 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			$local1 = "./uploads/document/addendum/";
+
+			$record_database = $data['file_signed'];
+
+			$nama_file = "";
+			$status = "";
+			$pesan = "";
+
+
+			if (($data['file_signed'] == "") || (empty($data['file_signed'])) || ($data['file_signed'] == "0")) {
+				$nama_file = "tidak ada file"; //nilai di database kosong
+				$status = "202"; //file blm upload
+				$pesan = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal
+					$nama_file = base_url() . "uploads/document/addendum/" . $record_database;
+					$status = "200"; //file ditemukan
+					$pesan = "Berhasil Fetch Data";
+				} else {
+					if (strpos($record_database, "http") == false) { //kalau ada http nya
+						$nama_file = "tidak ada file"; //record di database tanpa http
+						$status = "203"; //file tidak ditemukan
+						$pesan = "File Tidak Ditemukan";
+					} else {
+						$headers = get_headers($record_database);
+						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						if ($file_in_url_exist) {
+							$nama_file = $record_database; //tampil file skema lama dengan http
+							$status = "200"; //file ditemukan
+							$pesan = "Berhasil Fetch Data";
+						} else {
+							$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+							$status = "203"; //file tidak ditemukan
+							$pesan = "File Tidak Ditemukan";
+						}
+					}
+				}
+			}
+
 			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data,
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $nama_file,
 			);
 		}
 
