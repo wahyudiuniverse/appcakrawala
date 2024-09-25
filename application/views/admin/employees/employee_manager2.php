@@ -2252,7 +2252,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
           var res = jQuery.parseJSON(response);
 
-          if (res['status'] == "200") {
+          if (res['status']['filename_ktp'] == "200") {
             var nama_file = res['data']['filename_ktp'];
             var tipe_file = nama_file.substr(-3, 3);
             var atribut = "";
@@ -2271,14 +2271,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             var html_text = "<div class='row'>";
             // html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Foto KTP  </label>";
-            html_text = html_text + '<embed width="100%" ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/ktp/' + nama_file + '"></embed>';
+            html_text = html_text + '<embed width="100%" ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
             // html_text = html_text + "</div>";
             html_text = html_text + "</div>";
 
             $('.ktp-modal').html(html_text);
             flag_ktp = 1;
           } else {
-            html_text = res['pesan'];
+            html_text = res['pesan']['filename_ktp'];
             $('.ktp-modal').html(html_text);
             flag_ktp = 1;
           }
@@ -2322,7 +2322,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
           var res = jQuery.parseJSON(response);
 
-          if (res['status'] == "200") {
+          if (res['status']['filename_kk'] == "200") {
             var nama_file = res['data']['filename_kk'];
             var tipe_file = nama_file.substr(-3, 3);
             var atribut = "";
@@ -2341,14 +2341,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             var html_text = "<div class='row'>";
             // html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Foto KK  </label>";
-            html_text = html_text + '<embed width="100%" ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/kk/' + nama_file + '"></embed>';
+            html_text = html_text + '<embed width="100%" ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
             // html_text = html_text + "</div>";
             html_text = html_text + "</div>";
 
             $('.kk-modal').html(html_text);
             flag_kk = 1;
           } else {
-            html_text = res['pesan'];
+            html_text = res['pesan']['filename_kk'];
             $('.kk-modal').html(html_text);
             flag_kk = 1;
           }
@@ -3297,6 +3297,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('#button_open_upload_buku_tabungan').attr("hidden", true);
   }
 </script>
+
 
 <!-- Tombol Open KTP -->
 <script type="text/javascript">
