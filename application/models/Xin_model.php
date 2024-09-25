@@ -143,6 +143,10 @@ class Xin_model extends CI_Model
 			$arr['active'] = 'active';
 			$arr['open'] = '';
 			return $arr;
+		} else if ($mClass == 'employees' && $mMethod='emp_view') {
+			$arr['activep'] = 'activep';
+			$arr['open'] = '';
+			return $arr;
 		} else if ($mClass == 'company') {
 			$arr['com_active'] = 'active';
 			$arr['adm_open'] = 'open';

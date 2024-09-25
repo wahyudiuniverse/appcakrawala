@@ -81,8 +81,8 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   if (in_array('132', $role_resources_ids)) {
   ?>
 
-    <li class="sidenav-item <?php if (!empty($arr_mod['profile_active'])) echo $arr_mod['profile_active']; ?>">
-      <a href="<?php echo site_url('admin/profile/'); ?>" class="sidenav-link">
+    <li class="sidenav-item <?php if (!empty($arr_mod['activep'])) echo $arr_mod['activep']; ?>">
+      <a href="<?php echo site_url('admin/employees/emp_view/'.$session['employee_id']); ?>" class="sidenav-link">
         <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
         <i class="sidenav-icon ion ion-logo-buffer"></i>
         <div><?php echo $this->lang->line('header_my_profile'); ?></div>
