@@ -129,8 +129,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
   <?php
   if (
-    in_array('13', $role_resources_ids)
-    || in_array('7', $role_resources_ids)
+    in_array('7', $role_resources_ids)
     || $reports_to > 0
     || $user_info[0]->user_role_id == 1
   ) {
@@ -139,21 +138,10 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     <li class="<?php if (!empty($arr_mod['stff_open'])) echo $arr_mod['stff_open']; ?> sidenav-item">
       <a href="#" class="sidenav-link sidenav-toggle">
         <i class="sidenav-icon fas fa-user-friends"></i>
-        <div><?php echo $this->lang->line('dashboard_employees'); ?></div>
+        <div>Employees Roles</div>
       </a>
 
       <ul class="sidenav-menu">
-
-        <?php
-        if (in_array('13', $role_resources_ids) || $reports_to > 0) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['hremp_active'])) echo $arr_mod['hremp_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/employees/'); ?>"> <?php echo $this->lang->line('dashboard_employees'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
 
         <?php
         if ($user_info[0]->user_role_id == 1) {

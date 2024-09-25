@@ -46,7 +46,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
 
   <?php $attributes = array('name' => 'edit_company', 'id' => 'edit_company', 'autocomplete' => 'off', 'class'=>'m-b-1');?>
   <?php $hidden = array('_method' => 'EDIT', '_token' => $_GET['company_id'], 'ext_name' => $idrequest);?>
-  <?php echo form_open_multipart('admin/Employee_resign_apnae/update/'.$idrequest.'/YES', $attributes, $hidden);?>
+  <?php echo form_open_multipart('admin/Employee_resign_apnom/update/'.$idrequest.'/YES', $attributes, $hidden);?>
 
  <hr style="height:1px;border-width:0;color:gray;background-color:gray; margin: auto;">
 
@@ -306,7 +306,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
                var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
     "ajax": {
-            url : base_url+"/resign_list/",
+            url : base_url+"/request_list/",
             type : 'GET'
         },
     dom: 'lBfrtip',

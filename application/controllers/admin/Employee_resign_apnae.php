@@ -107,26 +107,49 @@ class employee_resign_apnae extends MY_Controller {
 				}
 
 
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				if(is_null($r->dok_exit_clearance)) {
+					$vexc = '';
+				} else {
 
-				if(is_null($r->dok_resign_letter)){
+					$nama_file_exit = $r->dok_exit_clearance;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_exit)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vexc = '<a href="'.base_url().$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vexc = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
+				}
+
+				if(is_null($r->dok_resign_letter)) {
 					$vsrs = '';
 				} else {
-					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+					$nama_file_sresign = $r->dok_resign_letter;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_sresign)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vsrs = '<a href="'.base_url().$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vsrs = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
 				}
 
-				if(is_null($r->dok_over_hand)){
+
+				if(is_null($r->dok_over_hand)) {
 					$vhov = '';
 				} else {
-					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+					$nama_file_overh = $r->dok_over_hand;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_overh)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vhov = '<a href="'.base_url().$nama_file_overh.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vhov = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_overh.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
 				}
 				
-				// $vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
-
-				// $vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
-
-				// $vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
-
 
 				$projects = $this->Project_model->read_single_project($r->project_id);
 				if(!is_null($projects)){
@@ -418,11 +441,6 @@ class employee_resign_apnae extends MY_Controller {
 
 				);
 			}
-
-			// $data_up = array(
-			// 	'approve_resignnae' =>  $session['user_id'],
-			// 	'approve_resignnae_on' => date("Y-m-d h:i:s")
-			// );
 
 			$result = $this->Employees_model->update_resign_apnae($data_up,$id);
 

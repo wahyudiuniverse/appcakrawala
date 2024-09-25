@@ -272,7 +272,6 @@ class Employee_resign extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	}
 
-
 	 // get location > departments
 	public function get_info() {
 
@@ -379,22 +378,28 @@ class Employee_resign extends MY_Controller {
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
 						$yearmonth = date('Y/m');
-						$alloweda =  array('png','jpg','jpeg','pdf');
+						$alloweda =  array('png','jpg','jpeg','pdf','PDF');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
 						if(in_array($exta,$alloweda)){
 							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
 							$documentda = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentda)) {
+                    mkdir($documentda, 0777, true);
+                }
+
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
 							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
 							// $fnameExit = $newfilenamea;
-							$fnameExit = 'https://apps-cakrawala.com/uploads/document/exit/'.$yearmonth.'/'.$newfilenamea;
+							$fnameExit = $documentda.$newfilenamea;
 						} else {
-							$Return['error'] = 'Jenis File CV tidak diterima..';
+							$Return['error'] = 'Jenis File tidak diterima..';
 						}
 					} else {
 						// $fnameExit = null;
@@ -403,19 +408,26 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
 						//checking image type
-						$allowedb =  array('pdf');
+						$yearmonth = date('Y/m');
+						$allowedb =  array('png','jpg','jpeg','pdf','PDF');
 						$filenameb = $_FILES['dok_sresign']['name'];
 						$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
 						
 						if(in_array($extb,$allowedb)){
 							$tmp_nameb = $_FILES["dok_sresign"]["tmp_name"];
-							$documentdb = "uploads/document/";
+							$documentdb = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentdb)) {
+                    mkdir($documentdb, 0777, true);
+                }
+
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_sresign"]["name"]);
 							$newfilenameb = 'document_srs_'.round(microtime(true)).'.'.$extb;
 							move_uploaded_file($tmp_nameb, $documentdb.$newfilenameb);
-							$fname_sresign = $newfilenameb;
+							$fname_sresign = $documentdb.$newfilenameb;
 						} else {
 							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
 						}
@@ -426,19 +438,25 @@ class Employee_resign extends MY_Controller {
 
 					if(is_uploaded_file($_FILES['dok_sover']['tmp_name'])) {
 						//checking image type
-						$allowedc =  array('pdf');
+						$yearmonth = date('Y/m');
+						$allowedc =  array('png','jpg','jpeg','pdf','PDF');
 						$filenamec = $_FILES['dok_sover']['name'];
 						$extc = pathinfo($filenamec, PATHINFO_EXTENSION);
 						
 						if(in_array($extc,$allowedc)){
 							$tmp_namec = $_FILES["dok_sover"]["tmp_name"];
-							$documentdc = "uploads/document/";
+							$documentdc = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentdc)) {
+                    mkdir($documentdc, 0777, true);
+                }
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_sover"]["name"]);
 							$newfilenamec = 'document_hov_'.round(microtime(true)).'.'.$extc;
 							move_uploaded_file($tmp_namec, $documentdc.$newfilenamec);
-							$fname_ov = $newfilenamec;
+							$fname_ov = $documentdc.$newfilenamec;
 						} else {
 							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
 						}
@@ -447,7 +465,7 @@ class Employee_resign extends MY_Controller {
 					$Return['error'] = "ERROR Dokumen Hand-Over Kosong";
 					}
 
-						if($Return['error']!=''){
+						if($Return['error']!='') {
 							$this->output($Return);
 				  	}
 
@@ -464,18 +482,18 @@ class Employee_resign extends MY_Controller {
 						if(!is_null($isnae)){
 
 									$data = array(
-									'request_resign_by' => $session['user_id'],
-									'request_resign_date' => date('Y-m-d h:i:s'),
-									'approve_resignnae' => $session['user_id'],
-									'approve_resignnae_on' => date('Y-m-d h:i:s'),
-									'ktp_no' => $nomor_ktp,
-									'status_resign' => $status_resign,
-									'description_resign' => $ket_resign,
-									'date_of_leaving' => $date_of_leave,
-									'dok_exit_clearance' => $fnameExit,
-									'dok_resign_letter' => $fname_sresign,
-									'dok_over_hand' => $fname_ov,
-									'date_resign_request' => date('Y-m-d h:i:s')
+									'request_resign_by' 		=> $session['user_id'],
+									'request_resign_date' 	=> date('Y-m-d h:i:s'),
+									'approve_resignnae' 		=> $session['user_id'],
+									'approve_resignnae_on' 	=> date('Y-m-d h:i:s'),
+									'ktp_no' 								=> $nomor_ktp,
+									'status_resign' 				=> $status_resign,
+									'description_resign' 		=> $ket_resign,
+									'date_of_leaving' 			=> $date_of_leave,
+									'dok_exit_clearance' 		=> $fnameExit,
+									'dok_resign_letter' 		=> $fname_sresign,
+									'dok_over_hand' 				=> $fname_ov,
+									'date_resign_request' 	=> date('Y-m-d h:i:s')
 									);
 
 						} else {
@@ -524,21 +542,28 @@ class Employee_resign extends MY_Controller {
 					 	$Return['error'] = $this->lang->line('xin_employee_error_sresign');
 					}
 				
+
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('pdf');
+						$yearmonth = date('Y/m');
+						$alloweda =  array('png','jpg','jpeg','pdf','PDF');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
 						if(in_array($exta,$alloweda)){
 							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
-							$documentda = "uploads/document/";
+							$documentda = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentda)) {
+                    mkdir($documentda, 0777, true);
+                }
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
 							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
-							$fnameExit = $newfilenamea;
+							$fnameExit = $documentda.$newfilenamea;
 						} else {
 							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
 						}
@@ -547,21 +572,30 @@ class Employee_resign extends MY_Controller {
 					$Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
 					}
 
+
+
 					if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
 						//checking image type
-						$allowedb =  array('pdf');
+						$yearmonth = date('Y/m');
+						$allowedb =  array('png','jpg','jpeg','pdf','PDF');
 						$filenameb = $_FILES['dok_sresign']['name'];
 						$extb = pathinfo($filenameb, PATHINFO_EXTENSION);
 						
 						if(in_array($extb,$allowedb)){
 							$tmp_nameb = $_FILES["dok_sresign"]["tmp_name"];
-							$documentdb = "uploads/document/";
+							$documentdb = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentdb)) {
+                    mkdir($documentdb, 0777, true);
+                }
+
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_sresign"]["name"]);
 							$newfilenameb = 'document_srs_'.round(microtime(true)).'.'.$extb;
 							move_uploaded_file($tmp_nameb, $documentdb.$newfilenameb);
-							$fname_sresign = $newfilenameb;
+							$fname_sresign = $documentdb.$newfilenameb;
 						} else {
 							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
 						}
@@ -648,20 +682,26 @@ class Employee_resign extends MY_Controller {
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
 						$yearmonth = date('Y/m');
-						$alloweda =  array('png','jpg','jpeg','pdf');
+						$alloweda =  array('png','jpg','jpeg','pdf','PDF');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
 						if(in_array($exta,$alloweda)){
 							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
 							$documentda = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentda)) {
+                    mkdir($documentda, 0777, true);
+                }
+
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
 							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
 							// $fnameExit = $newfilenamea;
-							$fnameExit = 'https://apps-cakrawala.com/uploads/document/exit/'.$yearmonth.'/'.$newfilenamea;
+							$fnameExit = $documentda.$newfilenamea;
 						} else {
 							$Return['error'] = 'Jenis File CV tidak diterima..';
 						}
@@ -670,27 +710,6 @@ class Employee_resign extends MY_Controller {
 						$Return['error'] = "ERROR Dokumen Exit Clearance Kosong";
 					}
 					
-					// if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
-					// 	//checking image type
-					// 	$alloweda =  array('pdf');
-					// 	$filenamea = $_FILES['dok_exitc']['name'];
-					// 	$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
-						
-					// 	if(in_array($exta,$alloweda)){
-					// 		$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
-					// 		$documentda = "uploads/document/";
-					// 		// basename() may prevent filesystem traversal attacks;
-					// 		// further validation/sanitation of the filename may be appropriate
-					// 		$name = basename($_FILES["dok_exitc"]["name"]);
-					// 		$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
-					// 		move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
-					// 		$fnameExit = $newfilenamea;
-					// 	} else {
-					// 		$Return['error'] = $this->lang->line('xin_employee_document_file_type');
-					// 	}
-					// } else {
-					// 	$fnameExit = null;
-					// }
 
 						if($Return['error']!=''){
 							$this->output($Return);
@@ -763,21 +782,29 @@ class Employee_resign extends MY_Controller {
 					 	$Return['error'] = "Dokumen Exit Clearance kosong...!";
 					}
 				
+
 					if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 						//checking image type
-						$alloweda =  array('pdf');
+						$yearmonth = date('Y/m');
+						$alloweda =  array('png','jpg','jpeg','pdf','PDF');
 						$filenamea = $_FILES['dok_exitc']['name'];
 						$exta = pathinfo($filenamea, PATHINFO_EXTENSION);
 						
 						if(in_array($exta,$alloweda)){
 							$tmp_namea = $_FILES["dok_exitc"]["tmp_name"];
-							$documentda = "uploads/document/";
+							$documentda = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentda)) {
+                    mkdir($documentda, 0777, true);
+                }
+
 							// basename() may prevent filesystem traversal attacks;
 							// further validation/sanitation of the filename may be appropriate
 							$name = basename($_FILES["dok_exitc"]["name"]);
 							$newfilenamea = 'document_exc_'.round(microtime(true)).'.'.$exta;
 							move_uploaded_file($tmp_namea, $documentda.$newfilenamea);
-							$fnameExit = $newfilenamea;
+							$fnameExit = $documentda.$newfilenamea;
 						} else {
 							$Return['error'] = $this->lang->line('xin_employee_document_file_type');
 						}

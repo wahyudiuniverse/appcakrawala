@@ -15,7 +15,6 @@ $(document).ready(function() {
 	$('[data-plugin="xin_select"]').select2($(this).attr('data-options'));
 	$('[data-plugin="xin_select"]').select2({ width:'100%' }); 
 	
-		
 	/* Delete data */
 	$("#delete_record").submit(function(e){
 	/*Form Submit*/

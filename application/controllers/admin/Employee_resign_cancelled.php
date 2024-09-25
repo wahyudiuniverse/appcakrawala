@@ -108,26 +108,48 @@ class Employee_resign_cancelled extends MY_Controller {
 				}
 
 
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+				if(is_null($r->dok_exit_clearance)) {
+					$vexc = '';
+				} else {
 
-				if(is_null($r->dok_resign_letter)){
+					$nama_file_exit = $r->dok_exit_clearance;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_exit)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vexc = '<a href="'.base_url().$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vexc = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
+				}
+
+				if(is_null($r->dok_resign_letter)) {
 					$vsrs = '';
 				} else {
-					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+					$nama_file_sresign = $r->dok_resign_letter;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_sresign)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vsrs = '<a href="'.base_url().$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vsrs = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
 				}
 
-				if(is_null($r->dok_over_hand)){
+
+				if(is_null($r->dok_over_hand)) {
 					$vhov = '';
 				} else {
-					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+					$nama_file_overh = $r->dok_over_hand;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_overh)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vhov = '<a href="'.base_url().$nama_file_overh.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vhov = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_overh.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
 				}
-				
-				// $vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
-
-				// $vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
-
-				// $vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
-
 
 				$projects = $this->Project_model->read_single_project($r->project_id);
 				if(!is_null($projects)){
@@ -406,19 +428,27 @@ class Employee_resign_cancelled extends MY_Controller {
 		} else {
 			if(is_uploaded_file($_FILES['dok_exitc']['tmp_name'])) {
 				//checking image type
+
+				$yearmonth = date('Y/m');
 				$allowed =  array('pdf','PDF');
 				$filename = $_FILES['dok_exitc']['name'];
 				$ext = pathinfo($filename, PATHINFO_EXTENSION);
 				
 				if(in_array($ext,$allowed)){
 					$tmp_name = $_FILES["dok_exitc"]["tmp_name"];
-					$documentd = "uploads/document/";
+					$documentd = "uploads/document/exit/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentd)) {
+                    mkdir($documentd, 0777, true);
+                }
+
 					// basename() may prevent filesystem traversal attacks;
 					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["dok_exitc"]["name"]);
 					$newfilename = 'document_exc_'.round(microtime(true)).'.'.$ext;
 					move_uploaded_file($tmp_name, $documentd.$newfilename);
-					$fnameExit = $newfilename;
+					$fnameExit = $documentd.$newfilename;
 				} else {
 					$Return['error'] = 'Jenis File Exit Clearance tidak diterima..';
 				}
@@ -428,23 +458,30 @@ class Employee_resign_cancelled extends MY_Controller {
 
 		/* Check if file uploaded..*/
 		if($_FILES['dok_sresign']['size'] == 0) {
-			$fname_sresign = $this->input->post('ffoto_kk');
+			$fname_sresign = $this->input->post('dsresign');
 		} else {
 			if(is_uploaded_file($_FILES['dok_sresign']['tmp_name'])) {
 				//checking image type
+				$yearmonth = date('Y/m');
 				$allowed_kk =  array('pdf','PDF');
 				$filename_kk = $_FILES['dok_sresign']['name'];
 				$ext_kk = pathinfo($filename_kk, PATHINFO_EXTENSION);
 				
-				if(in_array($ext_kk,$allowed_kk)){
-					$tmp_name_kk = $_FILES["dok_sresign"]["tmp_name"];
-					$documentd_kk = "uploads/document/";
+				if(in_array($ext_kk,$allowed_kk)) {
+					$tmp_name_sresign = $_FILES["dok_sresign"]["tmp_name"];
+					$documentd_sresign = "uploads/document/resign/".$yearmonth.'/';
+
+                //kalau blm ada folder path nya
+                if (!file_exists($documentd_sresign)) {
+                    mkdir($documentd_sresign, 0777, true);
+                }
+
 					// basename() may prevent filesystem traversal attacks;
 					// further validation/sanitation of the filename may be appropriate
 					$name = basename($_FILES["dok_sresign"]["name"]);
-					$newfilename_kk = 'kk_'.round(microtime(true)).'.'.$ext_kk;
-					move_uploaded_file($tmp_name_kk, $documentd_kk.$newfilename_kk);
-					$fname_sresign = $newfilename_kk;
+					$newfilename_resign = 'kk_'.round(microtime(true)).'.'.$ext_kk;
+					move_uploaded_file($tmp_name_sresign, $documentd_sresign.$newfilename_resign);
+					$fname_sresign = $documentd_sresign.$newfilename_resign;
 				} else {
 					$Return['error'] = 'Jenis File SURAT RESIGN tidak diterima..';
 				}
@@ -465,7 +502,7 @@ class Employee_resign_cancelled extends MY_Controller {
 			$result = $this->Employees_model->update_resign_apnae($data_up,$id);
 
 			if ($result == TRUE) {
-						$Return['result'] = "Revisi Karyawan Resign sudah dibuat.";
+					$Return['result'] = "Revisi Karyawan Resign sudah dibuat.";
 			} else {
 					$Return['error'] = $this->lang->line('xin_error_msg');
 			}

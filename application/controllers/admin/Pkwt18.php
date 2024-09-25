@@ -1083,13 +1083,13 @@ class Pkwt18 extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="0">a.</td>
-								<td colspan="20">Saya mengajukann resign sebelum berakhirnya 3 bulan masa percobaan maka saya bersedia diberikan penalty sebesar Rp. 500.000,- dari  dengan mekanisme pemotongan gaji saya diperiode gaji terakhir.</td>
+								<td colspan="20">Apabila saya mengajukann resign sebelum berakhirnya 3 bulan kerja maka saya bersedia diberikan pinalti sebesar Rp. 500.000,- dari mekanisme pemotongan gaji saya diperiode gaji terakhir.</td>
 							</tr>
 
 							<tr>
 								<td></td>
 								<td colspan="0">b.</td>
-								<td colspan="20">Saya mengajukan resign tidak sesuai prosedur, yaitu 14 hari sebelum penutupan absensi maka saya bersedia dikenakan penalty/sanksi pemotongan masa gaji periode akhir bekerja sebesar 50% dari gaji yang diterima.</td>
+								<td colspan="20">Apabila mengajukan resign yaitu kurang dari 6 hari kerja maka saya bersedia dipotongkan gaji (Take Home Pay) sebesar 25% dari gaji periode terakhir yang saya terima.</td>
 							</tr>
 
 
@@ -1185,6 +1185,17 @@ class Pkwt18 extends MY_Controller
 								<td colspan="20">Memanipulasi data (Data Absen ataupun Data Penjualan) agar mendapatkan keuntungan pribadi sekaligus kerugian untuk perusahaan.</td>
 							</tr>
 
+							<tr>
+								<td>10.</td>
+								<td colspan="20">Apabila saya terbukti melakukan Fraud/Kecurangan maka saya bersedia mendapat pinalti berupa pemotongan  gaji (Take Home Pay) sebesar 50%, ketentuan pinalti ini akan dicantumkan kembali di berita acara setelah dilakukan (Stock Opname). Jika gaji yang diterima lebih kecil dari nilai Fraud maka yang diprioritaskan adalah pembayaran untuk mengganti kerugian nominal fraud namun untuk kerugian pinalti pemotongan gaji terakhir 50% maka akan tetap menjadi tanggung jawab saya untuk menyelesaikannya.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td>11.</td>
+								<td colspan="20">Wajib menyelesaikan kewajiban dan exit clearance cakrawala dan project selama bekerja, apabila tidak menyelesaikan segala tanggung jawab dan administrasi maka saya bersedia dikenakan pinalti berupa pemotongan gaji terakhiir sebesar 50%.</td>
+								<td colspan="0"></td>
+							</tr>
 
 				</table>
 
@@ -1257,8 +1268,7 @@ class Pkwt18 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br>
+				<br><br><br><br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1549,9 +1559,6 @@ class Pkwt18 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
-				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();

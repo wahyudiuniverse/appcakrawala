@@ -91,10 +91,10 @@ class employee_resign_apnom extends MY_Controller {
 
 				if(is_null($approve_resignnae) || $approve_resignnae=='0'){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NOM</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->user_id . '">Need Approval NOM</button>';
 				} else {
 					
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NOM</button>';
+			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->user_id . '">Need Approval NOM</button>';
 				}
 
 				if($r->status_resign==2){
@@ -107,26 +107,49 @@ class employee_resign_apnom extends MY_Controller {
 					$status_name = 'Undefined';
 				}
 
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
 
-				if(is_null($r->dok_resign_letter)){
+				if(is_null($r->dok_exit_clearance) || empty($r->dok_exit_clearance)) {
+					$vexc = '';
+				} else {
+
+					$nama_file_exit = $r->dok_exit_clearance;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_exit)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vexc = '<a href="'.base_url().$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vexc = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
+				}
+
+				if(is_null($r->dok_resign_letter) || empty($r->dok_resign_letter)) {
 					$vsrs = '';
 				} else {
-					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+					$nama_file_sresign = $r->dok_resign_letter;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_sresign)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vsrs = '<a href="'.base_url().$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vsrs = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
 				}
 
-				if(is_null($r->dok_over_hand)){
+
+				if(is_null($r->dok_over_hand) || empty($r->dok_over_hand)) {
 					$vhov = '';
 				} else {
-					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+					$nama_file_overh = $r->dok_over_hand;
+					//kalau blm ada folder path nya
+					if (file_exists($nama_file_overh)) {
+						// $pesan = "ada file"; //tampil file skema terbaru
+							$vhov = '<a href="'.base_url().$nama_file_overh.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					} else {
+							$vhov = '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_overh.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+					}
 				}
-				
-
-				// $vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'"></a>';
-
-				// $vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_resign_letter.'"></a>';
-
-				// $vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/document/'.$r->dok_over_hand.'"></a>';
 
 
 				$projects = $this->Project_model->read_single_project($r->project_id);
@@ -288,8 +311,10 @@ class employee_resign_apnom extends MY_Controller {
 		}
 		$data['title'] = $this->Xin_model->site_title();
 		$id = $this->input->get('company_id');
-       // $data['all_countries'] = $this->xin_model->get_countries();
-		// $result = $this->Company_model->read_company_information('2');
+
+		$idsubmit = substr($this->input->get('company_id'),0,1);
+		$id = str_replace("$","",str_replace("@","",$this->input->get('company_id')));
+
 		$result = $this->Employees_model->read_employee_info($id);
 		$data = array(
 				'idrequest' => $result[0]->user_id,
@@ -319,7 +344,14 @@ class employee_resign_apnom extends MY_Controller {
 				'all_countries' => $this->Xin_model->get_countries(),
 				'get_company_types' => $this->Company_model->get_company_types()
 				);
-		$this->load->view('admin/employees/dialog_resign_approve_nom', $data);
+
+		if($idsubmit=='$'){
+			$this->load->view('admin/employees/dialog_resign_approve_nom', $data);
+		} else {
+			$this->load->view('admin/employees/dialog_resign_cancel_nom', $data);
+		}
+
+		// $this->load->view('admin/employees/dialog_resign_approve_nom', $data);
 
 	}
 
@@ -396,16 +428,30 @@ class employee_resign_apnom extends MY_Controller {
 
 		if($this->input->post('edit_type')=='company') {
 		$id = $this->uri->segment(4);
+		$cancel = $this->uri->segment(5);
 				
 		/* Define return | here result is used to return user data and error for error message */
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-			$data_up = array(
-				// 'migrasi' => '1',
-				'approve_resignnom' =>  $session['user_id'],
-				'approve_resignnom_on' => date("Y-m-d h:i:s")
-			);
+
+			if($cancel=='YES'){
+
+				$data_up = array(
+					// 'migrasi' => '1',
+					'cancel_resign_stat' =>  1,
+					'cancel_date' => date("Y-m-d h:i:s"),
+					'cancel_ket' => 'REVISI DOKUMEN PENDUKUNG'
+
+				);
+			} else {
+				$data_up = array(
+					// 'migrasi' => '1',
+					'approve_resignnom' =>  $session['user_id'],
+					'approve_resignnom_on' => date("Y-m-d h:i:s")
+				);
+			}
+
 
 			$result = $this->Employees_model->update_resign_apnae($data_up,$id);
 

@@ -22,7 +22,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                    <label for="employee_id">Status Resign<i class="hrpremium-asterisk">*</i></label>
-                    <select class="form-control" name="status_resign" id="aj_dokumen" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
+                    <select class="form-control" name="status_resign" id="aj_dokumen" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_karyawan');?>">
                       <option value=""></option>
                       <option value="2">RESIGN</option>
                       <option value="4">END CONTRACT</option>

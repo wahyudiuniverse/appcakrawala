@@ -216,7 +216,23 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
 
                           <?php 
-                                  echo '<a href="'.base_url().'uploads/document/'.$dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+
+        if(is_null($dok_exit_clearance)) {
+          $vexc = '';
+        } else {
+
+          $nama_file_exit = $dok_exit_clearance;
+          //kalau blm ada folder path nya
+          if (file_exists($nama_file_exit)) {
+            // $pesan = "ada file"; //tampil file skema terbaru
+              echo '<a href="'.base_url().$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+          } else {
+              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+          }
+        }
+
                           ?>
     </div>
   </div>
@@ -227,6 +243,9 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" <?php if(is_null($dok_resign_letter)){?> hidden <?php } ?>>
     <div class="row">
       <!-- PENEMPATAN -->
+
+      <input name="dsresign" type="text" value="<?php echo $dok_resign_letter;?>" hidden>
+
       <div class="col-sm-4">
         <div>
           <label for="penempatan">Surat Resign</label>
@@ -243,7 +262,22 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
         </div>
       </div>
                           <?php 
-                                  echo '<a href="'.base_url().'uploads/document/'.$dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+
+
+        if(is_null($dok_resign_letter)) {
+          $vsrs = '';
+        } else {
+
+          $nama_file_sresign = $dok_resign_letter;
+          //kalau blm ada folder path nya
+          if (file_exists($nama_file_sresign)) {
+            // $pesan = "ada file"; //tampil file skema terbaru
+              echo '<a href="'.base_url().$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+          } else {
+              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+          }
+        }
+
                           ?>
     </div>
   </div>

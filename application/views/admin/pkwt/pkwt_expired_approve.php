@@ -570,7 +570,7 @@ if($e_status=='1'){
 
         </div>
 
-        <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.'APPROVE PKWT')); ?> 
+        <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.'AJUKAN PERPANJANG PKWT')); ?> 
         </div>
         <?php echo form_close(); ?> 
       </div>

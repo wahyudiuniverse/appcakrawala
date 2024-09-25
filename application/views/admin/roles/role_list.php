@@ -11,26 +11,13 @@
 $reports_to = get_reports_team_data($session['user_id']); ?>
 <div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
   <ul class="nav nav-tabs step-anchor">
-    <?php if(in_array('422',$role_resources_ids) && $user_info[0]->user_role_id==1) {?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employees/staff_dashboard/');?>" data-link-data="<?php echo site_url('admin/employees/staff_dashboard/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-done-icon ion ion-md-speedometer"></span> <span class="sw-icon ion ion-md-speedometer"></span> <?php echo $this->lang->line('hr_staff_dashboard_title');?>
-      <div class="text-muted small"><?php echo $this->lang->line('hr_staff_dashboard_title');?></div>
-      </a> </li>
-      <?php } ?>
-    <?php if(in_array('13',$role_resources_ids) || $reports_to>0) {?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employees/');?>" data-link-data="<?php echo site_url('admin/employees/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-done-icon fas fa-user-friends"></span> <span class="sw-icon fas fa-user-friends"></span> <?php echo $this->lang->line('dashboard_employees');?>
-      <div class="text-muted small"><?php echo $this->lang->line('xin_set_up');?> <?php echo $this->lang->line('dashboard_employees');?></div>
-      </a> </li>
-    <?php } ?>
-    <?php if($user_info[0]->user_role_id==1) {?>
+    
+    <?php if($user_info[0]->user_role_id==1) { ?>
     <li class="nav-item active"> <a href="<?php echo site_url('admin/roles/');?>" class="mb-3 nav-link hrpremium-link" data-link-data="<?php echo site_url('admin/roles/');?>"> <span class="sw-icon ion ion-md-unlock"></span> <?php echo $this->lang->line('xin_role_urole');?>
       <div class="text-muted small"><?php echo $this->lang->line('left_set_roles');?></div>
       </a> </li>
      <?php } ?>
-    <?php if(in_array('7',$role_resources_ids)) { ?>
-    <li class="nav-item clickable"> <a href="<?php echo site_url('admin/timesheet/office_shift/');?>" data-link-data="<?php echo site_url('admin/timesheet/office_shift/');?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-md-clock"></span> <?php echo $this->lang->line('left_office_shifts');?>
-      <div class="text-muted small"><?php echo $this->lang->line('xin_role_create');?> <?php echo $this->lang->line('left_office_shifts');?></div>
-      </a> </li>
-    <?php } ?>
+
   </ul>
 </div>
 <hr class="border-light m-0 mb-3">
