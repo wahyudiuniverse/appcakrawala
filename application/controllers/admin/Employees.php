@@ -8190,8 +8190,10 @@ class Employees extends MY_Controller
 			}
 		} else {
 			$have_project_acces = $this->Employees_model->is_have_project_access($result[0]->project_id);
-			if (!$have_project_acces) {
-				redirect('admin/');
+			if ($user[0]->employee_id != $result[0]->employee_id) { //kalau bukan halaman profil diri sendiri
+				if (!$have_project_acces) {
+					redirect('admin/');
+				}
 			}
 		}
 
@@ -9223,10 +9225,430 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			//cek file profile picture
+			$local1 = "./uploads/profile/";
+			$record_database = $data['profile_picture'];
+			$nama_file_profile = "";
+			$status_profile = "";
+			$pesan_profile = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				if ($data['gender'] == 'L') {
+					$nama_file_profile = base_url() . "uploads/profile/default_male.jpg";
+				} else {
+					$nama_file_profile = base_url() . "uploads/profile/default_female.jpg";
+				}
+				$status_profile = "200"; //file blm upload
+				$pesan_profile = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_profile = base_url() . "uploads/profile/" . $record_database;
+					$status_profile = "200"; //file ditemukan
+					$pesan_profile = "Berhasil Fetch Data";
+				} else {
+					if (strpos($record_database, "http")) { //kalau ada http nya
+						$headers = get_headers($record_database);
+						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						if ($file_in_url_exist) {
+							$nama_file_profile = $record_database; //tampil file skema lama dengan http
+							$status_profile = "200"; //file ditemukan
+							$pesan_profile = "Berhasil Fetch Data";
+						} else {
+							$nama_file_profile = "tidak ada file"; //link mati atau tidak bisa dibuka
+							$status_profile = "203"; //file tidak ditemukan
+							$pesan_profile = "File Tidak Ditemukan";
+						}
+					} else {
+						$nama_file_profile = "tidak ada file"; //record di database tanpa http
+						$status_profile = "203"; //file tidak ditemukan
+						$pesan_profile = "File Tidak Ditemukan";
+					}
+				}
+			}
+
+			//cek file ijazah
+			$local1 = "./uploads/document/ijazah/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_isd'];
+			$nama_file_ijazah = "";
+			$status_ijazah = "";
+			$pesan_ijazah = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_ijazah = "File Belum Diupload";
+				$status_ijazah = "201"; //file blm upload
+				$pesan_ijazah = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_ijazah = base_url() . "uploads/document/ijazah/" . $record_database;
+					$status_ijazah = "200"; //file ditemukan
+					$pesan_ijazah = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_ijazah = base_url() . "uploads/document/" . $record_database;
+						$status_ijazah = "200"; //file ditemukan
+						$pesan_ijazah = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_ijazah = base_url() . $record_database;
+							$status_ijazah = "200"; //file ditemukan
+							$pesan_ijazah = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_ijazah = $record_database; //tampil file skema lama dengan http
+									$status_ijazah = "200"; //file ditemukan
+									$pesan_ijazah = "Berhasil Fetch Data";
+								} else {
+									$nama_file_ijazah = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_ijazah = "203"; //file tidak ditemukan
+									$pesan_ijazah = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_ijazah = "tidak ada file"; //record di database tanpa http
+								$status_ijazah = "203"; //file tidak ditemukan
+								$pesan_ijazah = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			//cek file skck
+			$local1 = "./uploads/document/skck/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_skck'];
+			$nama_file_skck = "";
+			$status_skck = "";
+			$pesan_skck = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_skck = "File Belum Diupload";
+				$status_skck = "201"; //file blm upload
+				$pesan_skck = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_skck = base_url() . "uploads/document/skck/" . $record_database;
+					$status_skck = "200"; //file ditemukan
+					$pesan_skck = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_skck = base_url() . "uploads/document/" . $record_database;
+						$status_skck = "200"; //file ditemukan
+						$pesan_skck = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_skck = base_url() . $record_database;
+							$status_skck = "200"; //file ditemukan
+							$pesan_skck = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_skck = $record_database; //tampil file skema lama dengan http
+									$status_skck = "200"; //file ditemukan
+									$pesan_skck = "Berhasil Fetch Data";
+								} else {
+									$nama_file_skck = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_skck = "203"; //file tidak ditemukan
+									$pesan_skck = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_skck = "tidak ada file"; //record di database tanpa http
+								$status_skck = "203"; //file tidak ditemukan
+								$pesan_skck = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			//cek file cv
+			$local1 = "./uploads/document/cv/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_cv'];
+			$nama_file_cv = "";
+			$status_cv = "";
+			$pesan_cv = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_cv = "File Belum Diupload";
+				$status_cv = "201"; //file blm upload
+				$pesan_cv = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_cv = base_url() . "uploads/document/cv/" . $record_database;
+					$status_cv = "200"; //file ditemukan
+					$pesan_cv = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_cv = base_url() . "uploads/document/" . $record_database;
+						$status_cv = "200"; //file ditemukan
+						$pesan_cv = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_cv = base_url() . $record_database;
+							$status_cv = "200"; //file ditemukan
+							$pesan_cv = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_cv = $record_database; //tampil file skema lama dengan http
+									$status_cv = "200"; //file ditemukan
+									$pesan_cv = "Berhasil Fetch Data";
+								} else {
+									$nama_file_cv = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_cv = "203"; //file tidak ditemukan
+									$pesan_cv = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_cv = "tidak ada file"; //record di database tanpa http
+								$status_cv = "203"; //file tidak ditemukan
+								$pesan_cv = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			//cek file npwp
+			$local1 = "./uploads/document/npwp/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_npwp'];
+			$nama_file_npwp = "";
+			$status_npwp = "";
+			$pesan_npwp = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_npwp = "File Belum Diupload";
+				$status_npwp = "201"; //file blm upload
+				$pesan_npwp = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_npwp = base_url() . "uploads/document/npwp/" . $record_database;
+					$status_npwp = "200"; //file ditemukan
+					$pesan_npwp = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_npwp = base_url() . "uploads/document/" . $record_database;
+						$status_npwp = "200"; //file ditemukan
+						$pesan_npwp = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_npwp = base_url() . $record_database;
+							$status_npwp = "200"; //file ditemukan
+							$pesan_npwp = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_npwp = $record_database; //tampil file skema lama dengan http
+									$status_npwp = "200"; //file ditemukan
+									$pesan_npwp = "Berhasil Fetch Data";
+								} else {
+									$nama_file_npwp = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_npwp = "203"; //file tidak ditemukan
+									$pesan_npwp = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_npwp = "tidak ada file"; //record di database tanpa http
+								$status_npwp = "203"; //file tidak ditemukan
+								$pesan_npwp = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			//cek file kk
+			$local1 = "./uploads/document/kk/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_kk'];
+			$nama_file_kk = "";
+			$status_kk = "";
+			$pesan_kk = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_kk = "File Belum Diupload";
+				$status_kk = "201"; //file blm upload
+				$pesan_kk = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_kk = base_url() . "uploads/document/kk/" . $record_database;
+					$status_kk = "200"; //file ditemukan
+					$pesan_kk = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_kk = base_url() . "uploads/document/" . $record_database;
+						$status_kk = "200"; //file ditemukan
+						$pesan_kk = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_kk = base_url() . $record_database;
+							$status_kk = "200"; //file ditemukan
+							$pesan_kk = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_kk = $record_database; //tampil file skema lama dengan http
+									$status_kk = "200"; //file ditemukan
+									$pesan_kk = "Berhasil Fetch Data";
+								} else {
+									$nama_file_kk = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_kk = "203"; //file tidak ditemukan
+									$pesan_kk = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_kk = "tidak ada file"; //record di database tanpa http
+								$status_kk = "203"; //file tidak ditemukan
+								$pesan_kk = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			//cek file ktp
+			$local1 = "./uploads/document/ktp/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_ktp'];
+			$nama_file_ktp = "";
+			$status_ktp = "";
+			$pesan_ktp = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_ktp = "File Belum Diupload";
+				$status_ktp = "201"; //file blm upload
+				$pesan_ktp = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_ktp = base_url() . "uploads/document/ktp/" . $record_database;
+					$status_ktp = "200"; //file ditemukan
+					$pesan_ktp = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_ktp = base_url() . "uploads/document/" . $record_database;
+						$status_ktp = "200"; //file ditemukan
+						$pesan_ktp = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_ktp = base_url() . $record_database;
+							$status_ktp = "200"; //file ditemukan
+							$pesan_ktp = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_ktp = $record_database; //tampil file skema lama dengan http
+									$status_ktp = "200"; //file ditemukan
+									$pesan_ktp = "Berhasil Fetch Data";
+								} else {
+									$nama_file_ktp = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_ktp = "203"; //file tidak ditemukan
+									$pesan_ktp = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_ktp = "tidak ada file"; //record di database tanpa http
+								$status_ktp = "203"; //file tidak ditemukan
+								$pesan_ktp = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			//cek file rekening
+			$local1 = "./uploads/document/rekening/";
+			$local2 = "./uploads/document/";
+			$local3 = "./";
+			$record_database = $data['filename_rek'];
+			$nama_file_rekening = "";
+			$status_rekening = "";
+			$pesan_rekening = "";
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file_rekening = "File Belum Diupload";
+				$status_rekening = "201"; //file blm upload
+				$pesan_rekening = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file_rekening = base_url() . "uploads/document/rekening/" . $record_database;
+					$status_rekening = "200"; //file ditemukan
+					$pesan_rekening = "Berhasil Fetch Data";
+				} else {
+					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						$nama_file_rekening = base_url() . "uploads/document/" . $record_database;
+						$status_rekening = "200"; //file ditemukan
+						$pesan_rekening = "Berhasil Fetch Data";
+					} else {
+						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+							$nama_file_rekening = base_url() . $record_database;
+							$status_rekening = "200"; //file ditemukan
+							$pesan_rekening = "Berhasil Fetch Data";
+						} else {
+							if (strpos($record_database, "http")) { //kalau ada http nya
+								$headers = get_headers($record_database);
+								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								if ($file_in_url_exist) {
+									$nama_file_rekening = $record_database; //tampil file skema lama dengan http
+									$status_rekening = "200"; //file ditemukan
+									$pesan_rekening = "Berhasil Fetch Data";
+								} else {
+									$nama_file_rekening = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$status_rekening = "203"; //file tidak ditemukan
+									$pesan_rekening = "File Tidak Ditemukan";
+								}
+							} else {
+								$nama_file_rekening = "tidak ada file"; //record di database tanpa http
+								$status_rekening = "203"; //file tidak ditemukan
+								$pesan_rekening = "File Tidak Ditemukan";
+							}
+						}
+					}
+				}
+			}
+
+			$data_hasil = array(
+				'filename_ktp' 		=> $nama_file_ktp,
+				'filename_kk' 		=> $nama_file_kk,
+				'filename_npwp' 	=> $nama_file_npwp,
+				'filename_cv' 		=> $nama_file_cv,
+				'filename_skck' 	=> $nama_file_skck,
+				'filename_isd' 		=> $nama_file_ijazah,
+				'filename_rek' 		=> $nama_file_rekening,
+				'profile_picture' 	=> $nama_file_profile,
+			);
+			$status = array(
+				'filename_ktp' 		=> $status_ktp,
+				'filename_kk' 		=> $status_kk,
+				'filename_npwp' 	=> $status_npwp,
+				'filename_cv' 		=> $status_cv,
+				'filename_skck' 	=> $status_skck,
+				'filename_isd' 		=> $status_ijazah,
+				'filename_rek' 		=> $status_rekening,
+				'profile_picture' 	=> $status_profile,
+			);
+			$pesan = array(
+				'filename_ktp' 		=> $pesan_ktp,
+				'filename_kk' 		=> $pesan_kk,
+				'filename_npwp' 	=> $pesan_npwp,
+				'filename_cv' 		=> $pesan_cv,
+				'filename_skck' 	=> $pesan_skck,
+				'filename_isd' 		=> $pesan_ijazah,
+				'filename_rek' 		=> $pesan_rekening,
+				'profile_picture' 	=> $pesan_profile,
+			);
 			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data,
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $data_hasil,
 			);
 		}
 
@@ -9260,10 +9682,49 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			$local1 = "./uploads/document/pkwt/";
+
+			$record_database = $data['file_name'];
+
+			$nama_file = "";
+			$status = "";
+			$pesan = "";
+
+
+			if (($data['file_name'] == "") || (empty($data['file_name'])) || ($data['file_name'] == "0")) {
+				$nama_file = "tidak ada file"; //nilai di database kosong
+				$status = "202"; //file blm upload
+				$pesan = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal
+					$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
+					$status = "200"; //file ditemukan
+					$pesan = "Berhasil Fetch Data";
+				} else {
+					if (strpos($record_database, "http")) { //kalau ada http nya
+						$headers = get_headers($record_database);
+						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						if ($file_in_url_exist) {
+							$nama_file = $record_database; //tampil file skema lama dengan http
+							$status = "200"; //file ditemukan
+							$pesan = "Berhasil Fetch Data";
+						} else {
+							$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+							$status = "203"; //file tidak ditemukan
+							$pesan = "File Tidak Ditemukan";
+						}
+					} else {
+						$nama_file = "tidak ada file"; //record di database tanpa http
+						$status = "203"; //file tidak ditemukan
+						$pesan = "File Tidak Ditemukan";
+					}
+				}
+			}
+
 			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data,
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $nama_file,
 			);
 		}
 
@@ -9297,10 +9758,49 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			$local1 = "./uploads/document/addendum/";
+
+			$record_database = $data['file_signed'];
+
+			$nama_file = "";
+			$status = "";
+			$pesan = "";
+
+
+			if (($data['file_signed'] == "") || (empty($data['file_signed'])) || ($data['file_signed'] == "0")) {
+				$nama_file = "tidak ada file"; //nilai di database kosong
+				$status = "202"; //file blm upload
+				$pesan = "File Belum Diupload";
+			} else {
+				if (file_exists($local1 . $record_database)) { //cek file di lokal
+					$nama_file = base_url() . "uploads/document/addendum/" . $record_database;
+					$status = "200"; //file ditemukan
+					$pesan = "Berhasil Fetch Data";
+				} else {
+					if (strpos($record_database, "http")) { //kalau ada http nya
+						$headers = get_headers($record_database);
+						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						if ($file_in_url_exist) {
+							$nama_file = $record_database; //tampil file skema lama dengan http
+							$status = "200"; //file ditemukan
+							$pesan = "Berhasil Fetch Data";
+						} else {
+							$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+							$status = "203"; //file tidak ditemukan
+							$pesan = "File Tidak Ditemukan";
+						}
+					} else {
+						$nama_file = "tidak ada file"; //record di database tanpa http
+						$status = "203"; //file tidak ditemukan
+						$pesan = "File Tidak Ditemukan";
+					}
+				}
+			}
+
 			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data,
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $nama_file,
 			);
 		}
 

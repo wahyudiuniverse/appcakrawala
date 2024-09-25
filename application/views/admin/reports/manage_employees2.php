@@ -413,7 +413,7 @@
   //-----lihat employee-----
   function viewEmployee(id) {
     //alert("masuk fungsi lihat. id: " + id);
-    window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
+    window.open('<?= base_url() ?>admin/employees/emp_view/' + id, "_blank");
   }
 
   //-----lihat dokumen employee-----

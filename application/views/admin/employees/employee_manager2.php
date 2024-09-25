@@ -2474,72 +2474,6 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 <!-- Tombol Download Resume -->
 <script type="text/javascript">
   document.getElementById("button_download_resume").onclick = function(e) {
-    // AJAX untuk ambil data employee terupdate
-    // $.ajax({
-    //   url: '<?php //base_url() ?>admin/Employees/is_exist_file/',
-    //   method: 'post',
-    //   data: {
-    //     [csrfName]: csrfHash,
-    //   },
-    //   beforeSend: function() {
-    //     // $('#editDataDiriModal').modal('show');
-    //     // $('.info-modal-edit-data-diri').attr("hidden", false);
-    //     // $('.isi-modal-edit-data-diri').attr("hidden", true);
-    //     // $('.info-modal-edit-data-diri').html(loading_html_text);
-    //     // $('#button_save_data_diri').attr("hidden", true);
-    //   },
-    //   success: function(response) {
-
-    //     var res = jQuery.parseJSON(response);
-
-    //     if (res['status'] == "200") {
-    //       alert(res['pesan']);
-    //       // $('#first_name_modal').val(res['data']['first_name']);
-    //       // $("#gender_modal").val(res['data']['gender']).change();
-    //       // $('#tempat_lahir_modal').val(res['data']['tempat_lahir']);
-    //       // $('#date_of_birth_modal').val(res['data']['date_of_birth']);
-    //       // $("#ethnicity_modal").val(res['data']['ethnicity_type']).change();
-    //       // $("#last_edu_modal").val(res['data']['last_edu']).change();
-    //       // $("#marital_status_modal").val(res['data']['marital_status']).change();
-    //       // $('#tinggi_badan_modal').val(res['data']['tinggi_badan']);
-    //       // $('#berat_badan_modal').val(res['data']['berat_badan']);
-    //       // $("#blood_group_modal").val(res['data']['blood_group']).change();
-    //       // $('#ktp_no_modal').val(res['data']['ktp_no']);
-    //       // $('#kk_no_modal').val(res['data']['kk_no']);
-    //       // $('#npwp_no_modal').val(res['data']['npwp_no']);
-    //       // $('#contact_no_modal').val(res['data']['contact_no']);
-    //       // $('#email_modal').val(res['data']['email']);
-    //       // $('#ibu_kandung_modal').val(res['data']['ibu_kandung']);
-    //       // $('#alamat_ktp_modal').val(res['data']['alamat_ktp']);
-    //       // $('#alamat_domisili_modal').val(res['data']['alamat_domisili']);
-
-    //       // $('.isi-modal-edit-data-diri').attr("hidden", false);
-    //       // $('.info-modal-edit-data-diri').attr("hidden", true);
-    //       // $('#button_save_data_diri').attr("hidden", false);
-    //     } else {
-    //       // html_text = res['pesan'];
-    //       // $('.info-modal-edit-data-diri').html(html_text);
-    //       // $('.isi-modal-edit-data-diri').attr("hidden", true);
-    //       // $('.info-modal-edit-data-diri').attr("hidden", false);
-    //       // $('#button_save_data_diri').attr("hidden", true);
-    //     }
-    //   },
-    //   error: function(xhr, status, error) {
-    //     html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-    //     html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-    //     // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-    //     $('.info-modal-edit-data-diri').html(html_text); //coba pake iframe
-    //     $('.isi-modal-edit-data-diri').attr("hidden", true);
-    //     $('.info-modal-edit-data-diri').attr("hidden", false);
-    //     $('#button_save_data_diri').attr("hidden", true);
-    //   }
-    // });
-
-    // var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/2024/09/rekening_20509590.pdf" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
-    // $('.judul-modal').html("Download Resume");
-    // $('.isi-modal').html(html_text);
-    // $('#button_save_pin').attr("hidden", true);
-    // $('#editModal').appendTo("body").modal('show');
     alert("Under Construction. Masuk button download resume");
   };
 </script>
@@ -3298,7 +3232,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   function open_buku_tabungan(nip) {
     // AJAX untuk ambil data buku tabungan employee terupdate
     $.ajax({
-      url: '<?= base_url() ?>admin/Employees/get_data_buku_tabungan/',
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
@@ -3320,7 +3254,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_rek'] == "200") {
           var nama_file = res['data']['filename_rek'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3336,13 +3270,13 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/rekening/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           // var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/' + res['data']['filename_rek'] + '" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_rek'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -3385,7 +3319,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_ktp'] == "200") {
           var nama_file = res['data']['filename_ktp'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3401,12 +3335,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/ktp/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_ktp'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -3584,7 +3518,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_kk'] == "200") {
           var nama_file = res['data']['filename_kk'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3600,12 +3534,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/kk/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_kk'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -3681,7 +3615,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_npwp'] == "200") {
           var nama_file = res['data']['filename_npwp'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3697,12 +3631,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/npwp/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_npwp'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -3778,7 +3712,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_cv'] == "200") {
           var nama_file = res['data']['filename_cv'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3794,12 +3728,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/cv/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_cv'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -3875,7 +3809,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_skck'] == "200") {
           var nama_file = res['data']['filename_skck'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3891,12 +3825,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/skck/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_skck'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -3972,7 +3906,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['filename_isd'] == "200") {
           var nama_file = res['data']['filename_isd'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
@@ -3992,12 +3926,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/ijazah/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['filename_isd'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -4067,17 +4001,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
         var res = jQuery.parseJSON(response);
 
-        if (res['status'] == "200") {
+        if (res['status']['profile_picture'] == "200") {
           var nama_file = "";
-          if ((res['data']['profile_picture'] == null) || (res['data']['profile_picture'] == '') || (res['data']['profile_picture'] == 'no file')) {
-            if (res['data']['gender'] == 'L') {
-              nama_file = 'default_male.jpg';
-            } else {
-              nama_file = 'default_female.jpg';
-            }
-          } else {
-            nama_file = res['data']['profile_picture'];
-          }
+          nama_file = res['data']['profile_picture'];
           var tipe_file = nama_file.substr(-3, 3);
           var atribut = "";
           var height = '';
@@ -4092,12 +4018,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/profile/' + nama_file + '"></embed>';
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan'];
+          html_text = res['pesan']['profile_picture'];
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         }
@@ -5340,32 +5266,28 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") {
-          if ((res['data']['file_name'] == "") || (res['data']['file_name'] == null) || (res['data']['file_name'] == "0")) {
-            var html_text = "Belum Upload FIle";
+          var nama_file = res['data'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+          var tes = nama_file.substr(-14);
+
+          // alert(nama_file);
+          // alert(tes);
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
           } else {
-
-            var nama_file = res['data']['file_name'];
-            var tipe_file = nama_file.substr(-3, 3);
-            var atribut = "";
-            var height = '';
-            var d = new Date();
-            var time = d.getTime();
-            nama_file = nama_file + "?" + time;
-            var tes = nama_file.substr(-14);
-
-            // alert(nama_file);
-            // alert(tes);
-
-            if (tipe_file == "pdf") {
-              atribut = "application/pdf";
-              height = 'height="500px"';
-            } else {
-              atribut = "image/jpg";
-            }
-
-            var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/pkwt/' + nama_file + '"></embed>';
-
+            atribut = "image/jpg";
           }
+
+          var html_text = "";
+          html_text = html_text + '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
@@ -5408,32 +5330,27 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         var res = jQuery.parseJSON(response);
 
         if (res['status'] == "200") {
-          if ((res['data']['file_signed'] == "") || (res['data']['file_signed'] == null) || (res['data']['file_signed'] == "0")) {
-            var html_text = "Belum Upload FIle";
+          var nama_file = res['data'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+          var tes = nama_file.substr(-14);
+
+          // alert(nama_file);
+          // alert(tes);
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
           } else {
-
-            var nama_file = res['data']['file_signed'];
-            var tipe_file = nama_file.substr(-3, 3);
-            var atribut = "";
-            var height = '';
-            var d = new Date();
-            var time = d.getTime();
-            nama_file = nama_file + "?" + time;
-            var tes = nama_file.substr(-14);
-
-            // alert(nama_file);
-            // alert(tes);
-
-            if (tipe_file == "pdf") {
-              atribut = "application/pdf";
-              height = 'height="500px"';
-            } else {
-              atribut = "image/jpg";
-            }
-
-            var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="<?= base_url() ?>uploads/document/addendum/' + nama_file + '"></embed>';
-
+            atribut = "image/jpg";
           }
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
         } else {
