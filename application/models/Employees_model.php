@@ -5873,6 +5873,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		// get data kontrak
+		$this->db->select('contract_id');
 		$this->db->select('uniqueid');
 		$this->db->select('from_date');
 		$this->db->select('to_date');
@@ -5913,6 +5914,11 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 			} else {
 				$button_hapus = '';
 			}
+			if (in_array('1014', $role_resources_ids)) {
+				$button_edit = '<button onclick="edit_kontrak(\'' . $record['contract_id'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Edit Kontrak</button>';
+			} else {
+				$button_edit = '';
+			}
 			$data[] = array(
 				"jenis_dokumen" => "KONTRAK",
 				"nomor_surat" => $record['no_surat'],
@@ -5926,6 +5932,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"button_upload" => '<button onclick="upload_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => $button_hapus,
+				"button_edit" => $button_edit,
 			);
 		}
 
@@ -5935,6 +5942,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 			} else {
 				$button_hapus = '';
 			}
+			$button_edit = '';
 			$data[] = array(
 				"jenis_dokumen" => "ADDENDUM",
 				"nomor_surat" => $record['no_addendum'],
@@ -5948,6 +5956,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"button_upload" => '<button onclick="upload_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => $button_hapus,
+				"button_edit" => $button_edit,
 			);
 		}
 

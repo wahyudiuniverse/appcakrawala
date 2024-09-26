@@ -1399,6 +1399,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                                   <?php echo $kontrak['button_upload']; ?>
                                   <?php echo $kontrak['button_lihat']; ?>
                                   <?php echo $kontrak['button_hapus']; ?>
+                                  <?php echo $kontrak['button_edit']; ?>
                                 </td>
                               </tr>
                             </tbody>
@@ -5436,6 +5437,15 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       }
     });
 
+  };
+</script>
+
+<!-- Tombol Send Whatsapp -->
+<script type="text/javascript">
+  function edit_kontrak(id) {
+    // alert("masuk button send whatsapp");
+
+    window.open("<?= base_url() ?>admin/employee_pkwt_cancel/pkwt_edit/" + id, "_blank");
   };
 </script>
 
