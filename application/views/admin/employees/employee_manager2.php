@@ -1400,6 +1400,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                                   <?php echo $kontrak['button_lihat']; ?>
                                   <?php echo $kontrak['button_hapus']; ?>
                                   <?php echo $kontrak['button_edit']; ?>
+                                  <?php echo $kontrak['button_add_addendum']; ?>
                                 </td>
                               </tr>
                             </tbody>
@@ -5440,12 +5441,17 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   };
 </script>
 
-<!-- Tombol Send Whatsapp -->
+<!-- Tombol Edit Kontrak -->
 <script type="text/javascript">
   function edit_kontrak(id) {
-    // alert("masuk button send whatsapp");
-
     window.open("<?= base_url() ?>admin/employee_pkwt_cancel/pkwt_edit/" + id, "_blank");
+  };
+</script>
+
+<!-- Tombol Add Addendum -->
+<script type="text/javascript">
+  function add_addendum_kontrak(id) {
+    window.open("<?= base_url() ?>admin/addendum/view/" + id, "_blank");
   };
 </script>
 

@@ -1493,21 +1493,27 @@ class ImportExcel extends MY_Controller
 				for ($j = 0; $j < $length_header; $j++) {
 					if ($header_tabel_saltab[$j] == "nip") {
 						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
-							$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+							// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+							$trimmed_nip = trim($sheet_data[$i][$j], " ");
+							$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 						} else {
 							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
-								$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								$trimmed_nip = trim($sheet_data[$i][$j], " ");
+								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
 								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
 								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
 								$j = $j + 1;
 							} else {
-								$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								$trimmed_nip = trim($sheet_data[$i][$j], " ");
+								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 							}
 						}
 						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
 					} else {
-						$data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+						$trimmed_nip = trim($sheet_data[$i][$j], " ");
+						$data += [$header_tabel_saltab[$j] =>$trimmed_nip];
 					}
 				}
 				$array_data[] = $data;

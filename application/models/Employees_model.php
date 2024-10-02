@@ -5919,6 +5919,11 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 			} else {
 				$button_edit = '';
 			}
+			if (in_array('1015', $role_resources_ids)) {
+				$button_add_addendum = '<button onclick="add_addendum_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Add Addendum</button>';
+			} else {
+				$button_add_addendum = '';
+			}
 			$data[] = array(
 				"jenis_dokumen" => "KONTRAK",
 				"nomor_surat" => $record['no_surat'],
@@ -5933,6 +5938,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"button_lihat" => '<button onclick="lihat_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => $button_hapus,
 				"button_edit" => $button_edit,
+				"button_add_addendum" => $button_add_addendum,
 			);
 		}
 
@@ -5943,6 +5949,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				$button_hapus = '';
 			}
 			$button_edit = '';
+			$button_add_addendum = '';
 			$data[] = array(
 				"jenis_dokumen" => "ADDENDUM",
 				"nomor_surat" => $record['no_addendum'],
@@ -5957,6 +5964,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"button_lihat" => '<button onclick="lihat_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => $button_hapus,
 				"button_edit" => $button_edit,
+				"button_add_addendum" => $button_add_addendum,
 			);
 		}
 
