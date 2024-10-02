@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt216 extends MY_Controller 
+class Pkwt216tl extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -97,7 +97,7 @@ class Pkwt216 extends MY_Controller
 				$pdf->SetAuthor('HRCakrawala');
 				// $baseurl=base_url();
 
-				$header_namae = 'PT. Siprama Cakrawala TL';
+				$header_namae = 'PT. Siprama Cakrawala SPG';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
@@ -1442,27 +1442,32 @@ class Pkwt216 extends MY_Controller
 
 							<tr>
 								<td >13.</td>
-								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran, apabila tidak melakukan absensi tanpa aplikasi Trec maka diberlakukan “No Trec No Pay”.</td>
+								<td colspan="20">Target visit adalah 5 toko perhari, jika diakumulasikan dalam 6 hari kerja sebanyak 30 toko. Apabila dalam 1 hari saya selaku TL tidak mencapai 5 toko maka dapat di adjustment dihari berikutnya. Apabila dalam 1 bulan tidak mencapai target yang ditentukan maka akan dilakukan review performance. Jika ada permintaan kunjungan diluar toko dari pihak RSM dan ASM maka saya selaku TL wajib melakukan konfirmasi melalui email dan pjp yang dihitung secara actual, Didalam email konfirmasi tersebut melampirkan email permintaan dari pihak RSM dan ASM</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >14.</td>
-								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 (delapan) jam per hari berlaku selama 6 hari kerja, terkecuali untuk Team Leader (TL) pada hari sabtu, durasi kerja yang dihitung adalah 5 (lima) jam per hari.</td>
+								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran. Apabila absensi tidak terdeteksi pada aplikasi Trec maka gaji pada hari tersebut tidak dibayarkan atau tidak dihitung. Apabila pada hari tersebut ada izin tidak masuk atau sakit, wajib melampirkan bukti berupa SKD (Surat Keterangan Dokter) untuk izin sakit dan foto menggunakan timestamp untuk izin tidak masuk. Bukti tersebut harus mendapat approval dari NAE dan user.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >15.</td>
-								<td colspan="20">Saya selaku TL,SPG dan MD bersedia untuk direview apabila dalam waktu periode 3 bulan bekerja terdapat izin tidak masuk bekerja disetiap bulan.</td>
+								<td colspan="20">Saya bersedia untuk menjalankan KPI yang sudah ditentukan oleh user sebagai berikut :</td>
 								<td colspan="0"></td>
 							</tr>
 
+
 							<tr>
-								<td >16.</td>
-								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya apabila terjadi selisih ataupun kecurangan terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
+								<td ></td>
+								<td colspan="20">
+<img src="'.base_url().'assets/oatside_pkwt_dimensi_kpi_spg.png" alt="Trulli" width="590" height="240"></td>
 								<td colspan="0"></td>
 							</tr>
+
+
+
 				</table>
 
 				<br><br>
@@ -1532,9 +1537,8 @@ class Pkwt216 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br>
+				<br><br><br><br><br><br><br><br>
+				
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

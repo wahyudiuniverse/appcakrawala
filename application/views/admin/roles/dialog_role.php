@@ -326,11 +326,35 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 								{
 									id: "",
 									class: "role-checkbox-modal custom-control-input",
+									text: "Edit Kontrak",
+									add_info: "",
+									value: "1014",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('1014', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
 									text: "Upload PKWT",
 									add_info: "",
 									value: "1011",
 									check: "<?php if (isset($_GET['role_id'])) {
 												if (in_array('1011', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "Tambah Addendum",
+									add_info: "",
+									value: "1015",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('1015', $role_resources_ids)) : echo 'checked';
 												else : echo '';
 												endif;
 											} ?>"

@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt216 extends MY_Controller 
+class Pkwt216spg extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1442,27 +1442,38 @@ class Pkwt216 extends MY_Controller
 
 							<tr>
 								<td >13.</td>
-								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran, apabila tidak melakukan absensi tanpa aplikasi Trec maka diberlakukan “No Trec No Pay”.</td>
+								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran. Apabila absensi tidak terdeteksi pada aplikasi Trec maka gaji pada hari tersebut tidak dibayarkan atau tidak dihitung. Apabila pada hari tersebut ada izin tidak masuk atau sakit, wajib melampirkan bukti berupa SKD (Surat Keterangan Dokter) untuk izin sakit dan foto menggunakan timestamp untuk izin tidak masuk. Bukti tersebut harus mendapat approval dari NAE dan user.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >14.</td>
-								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 (delapan) jam per hari berlaku selama 6 hari kerja, terkecuali untuk Team Leader (TL) pada hari sabtu, durasi kerja yang dihitung adalah 5 (lima) jam per hari.</td>
+								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 jam kerja per hari selama 6 hari kerja dengan total waktu 48 jam kerja.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >15.</td>
-								<td colspan="20">Saya selaku TL,SPG dan MD bersedia untuk direview apabila dalam waktu periode 3 bulan bekerja terdapat izin tidak masuk bekerja disetiap bulan.</td>
+								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya dan mengganti 2x lipat dari nominal produk/hadiah apabila terjadi selisih ataupun kecurangan/fraud terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >16.</td>
-								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya apabila terjadi selisih ataupun kecurangan terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
+								<td colspan="20">Saya bersedia untuk menjalankan KPI yang sudah ditentukan oleh user sebagai berikut :</td>
 								<td colspan="0"></td>
 							</tr>
+
+
+							<tr>
+								<td ></td>
+								<td colspan="20">
+<img src="'.base_url().'assets/oatside_pkwt_dimensi_kpi_spg.png" alt="Trulli" width="590" height="240"></td>
+								<td colspan="0"></td>
+							</tr>
+
+
+
 				</table>
 
 				<br><br>
@@ -1532,9 +1543,8 @@ class Pkwt216 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br>
+				<br><br><br><br><br><br><br><br>
+				
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

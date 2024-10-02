@@ -1887,6 +1887,7 @@ class Reports extends MY_Controller
 
 			$nip = $r->employee_id;
 			$project = $r->project;
+			$subproject_id = $r->sub_project;
 			$jabatan = $r->jabatan;
 			$penempatan = $r->penempatan;
 			$begin_until = $r->from_date . ' s/d ' . $r->to_date;
@@ -1904,7 +1905,7 @@ class Reports extends MY_Controller
 
 				$pin = $emp[0]->private_code;
 				$fullname = $emp[0]->first_name;
-				$sub_project = 'pkwt' . $emp[0]->sub_project_id;
+				$sub_project = 'pkwt' . $subproject_id;
 				$nowhatsapp = $emp[0]->contact_no;
 				$tkhl_status = $emp[0]->e_status;
 				$roleid = $emp[0]->user_role_id;
@@ -1913,7 +1914,7 @@ class Reports extends MY_Controller
 
 				$pin = '--';
 				$fullname = '--';
-				$sub_project = '0';
+				$sub_project = 'pkwt' . $subproject_id;
 				$nowhatsapp = '0';
 				$tkhl_status = '0';
 				$roleid = '0';
