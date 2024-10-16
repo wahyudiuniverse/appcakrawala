@@ -8987,9 +8987,16 @@ class Employees extends MY_Controller
 		$data = $this->Employees_model->get_data_kontak($datarequest);
 
 		if (empty($data)) {
+			$data_empty = array(
+				'nama'		=> "",
+				'hubungan'	=> "0",
+				'no_kontak'	=> "",
+			);
+
 			$response = array(
-				'status'	=> "201",
-				'pesan' 	=> "Karyawan tidak ditemukan",
+				'status'	=> "200",
+				'pesan' 	=> "Belum ada data",
+				'data'		=> $data_empty,
 			);
 		} else {
 			$response = array(

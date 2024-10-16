@@ -5884,6 +5884,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		$this->db->from('xin_employee_contract');
 		$this->db->where('cancel_stat', "0");
+		$this->db->where('status_pkwt', "1");
 		$this->db->where('employee_id', $nip);
 
 		$query = $this->db->get()->result_array();
@@ -6140,6 +6141,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//save data kontak employee
 	public function save_kontak($postData, $nip)
 	{
+		//ambil ktp karyawan
 		$this->db->select('ktp_no');
 
 		$this->db->from('xin_employees',);
@@ -6149,9 +6151,24 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		$query = $this->db->get()->row_array();
 
-		//update data
+		//cek apakah sudah ada data?
+		$this->db->select('*');
+
+		$this->db->from('xin_employee_emergency',);
 		$this->db->where('employee_request_nik', $query['ktp_no']);
-		$this->db->update('xin_employee_emergency', $postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query2 = $this->db->get()->row_array();
+
+		if (empty($query2)) {
+			$postData["employee_request_nik"] = $query['ktp_no'];
+			$this->db->insert('xin_employee_emergency', $postData);
+		} else {
+			//update data
+			$this->db->where('employee_request_nik', $query['ktp_no']);
+			$this->db->update('xin_employee_emergency', $postData);
+		}
 
 		//fetch data terbaru
 		$this->db->select('*');
@@ -6161,9 +6178,9 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
 
-		$query = $this->db->get()->row_array();
+		$query3 = $this->db->get()->row_array();
 
-		return $query;
+		return $query3;
 	}
 
 	//save data bpjs employee
@@ -6328,7 +6345,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		$query = $this->db->get()->result_array();
 
-		if(empty($query)){
+		if (empty($query)) {
 			return false;
 		} else {
 			return true;

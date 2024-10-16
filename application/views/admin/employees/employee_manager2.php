@@ -356,7 +356,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                   <tr>
                     <td><strong>Nomor NPWP</strong></td>
                     <td>
-                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='npwp_no_modal' name='npwp_no_modal' type='number' class='form-control' placeholder='Nomor NPWP' value=''>
+                      <input <?php in_array('1004', $role_resources_ids) ? print("") : print("readonly"); ?> id='npwp_no_modal' name='npwp_no_modal' type='text' class='form-control' placeholder='Nomor NPWP' value=''>
                       <span id='pesan_npwp_no_modal'></span>
                     </td>
                   </tr>
