@@ -727,6 +727,17 @@ WHERE contract.employee_id = '$id'
 		}
 	}
 	
+
+	public function get_montly_expired_pkwt($empID)
+	{
+		$query = $this->db->query("SELECT pros.project_id, CONCAT('[',pro.priority,']', ' ', pro.title) AS title
+		FROM xin_projects_akses pros
+		LEFT JOIN xin_projects pro ON pro.project_id = pros.project_id
+		WHERE pros.nip = '$empID'
+		GROUP BY pros.project_id");
+				return $query->result();
+	}
+
 	// Function to update record in table
 	public function update_pkwt_record($data, $id){
 		$this->db->where('contract_id', $id);

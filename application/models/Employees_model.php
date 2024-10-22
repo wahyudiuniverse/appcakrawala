@@ -5685,6 +5685,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('pemilik_rek');
 
 		$this->db->select('status_resign');
+		$this->db->select('date_resign_request');
 		$this->db->select('deactive_by');
 		$this->db->select('deactive_date');
 		$this->db->select('deactive_reason');
@@ -5875,6 +5876,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		// get data kontrak
 		$this->db->select('contract_id');
 		$this->db->select('uniqueid');
+		$this->db->select('approve_hrd_date');
 		$this->db->select('from_date');
 		$this->db->select('to_date');
 		$this->db->select('no_surat');
@@ -5891,6 +5893,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		// get data addendum
 		$this->db->select('id');
+		$this->db->select('created_time');
 		$this->db->select('kontrak_start_new');
 		$this->db->select('kontrak_end_new');
 		$this->db->select('no_addendum');
@@ -5934,6 +5937,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"sub_project" => strtoupper("[" . $record['sub_project'] . "] " . $this->get_nama_sub_project($record['sub_project'])),
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['from_date']),
+				"tanggal_created" => $this->Xin_model->tgl_indo($record['approve_hrd_date']),
 				"button_open" => '<button onclick="open_kontrak(\'' . $record['uniqueid'] . '\',' . $record['sub_project'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
 				"button_upload" => '<button onclick="upload_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
@@ -5960,6 +5964,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"sub_project" => strtoupper("[" . $record['sub_project'] . "] " . $this->get_nama_sub_project($record['sub_project'])),
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['tgl_terbit']),
+				"tanggal_created" => $this->Xin_model->tgl_indo($record['created_time']),
 				"button_open" => '<button onclick="open_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
 				"button_upload" => '<button onclick="upload_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
 				"button_lihat" => '<button onclick="lihat_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',

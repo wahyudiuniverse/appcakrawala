@@ -28,6 +28,13 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     } else {
       $approved_hrd_name = '--'; 
     }
+
+    if(!is_null($canceled_by)){
+      $canceled_name = $canceled_by[0]->first_name;
+    } else {
+      $canceled_name = '--'; 
+    }
+
     
   ?>
   <div class="modal-header">
@@ -667,50 +674,17 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- APPROVED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">Approve NAE/Admin</label>
+          <label for="no_transaksi">Ditolak Oleh</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo ': '.$approve_nae_name. ' ('.$approved_naeon.')';?></label>
+          <label for="plant"><?php echo ': '.$canceled_name. ' ('.$canceled_on.')';?></label>
         </div>
       </div>
     </div>
   </div>
 
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Approve NOM/SM</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$approved_nom_name. ' ('.$approved_nomon.')';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-  
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Approve HRD</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$approved_hrd_name. ' ('.$approved_hrdon.')';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>

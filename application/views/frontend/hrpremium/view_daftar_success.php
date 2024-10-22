@@ -21,8 +21,12 @@
 <div class="container">
 	<!-- Table -->
 	<div class="sixteen columns">
-
-		<h3 class="margin-bottom-25">Halo, <?php echo strtoupper(str_replace("%20"," ",$fullname)); ?></h3>
+			<?php
+				echo "Today :" . date("d/M/Y h:m") . "<br>";
+			?>
+		<h3 class="margin-bottom-25"> 
+			
+			Halo, <?php echo strtoupper(str_replace("%20"," ",$fullname)); ?></h3>
 		<h3 class="margin-bottom-25">Data Diri Kamu Berhasil Tersimpan,</h3>
 
 

@@ -8879,6 +8879,8 @@ class Employees extends MY_Controller
 			} else {
 				$deactive_date_array = explode(" ", $data['deactive_date']);
 				$deactive_date_seed = $deactive_date_array[0];
+				$deactive_date_seed = $data['date_resign_request'];
+
 				$deactive_date_text = $this->Xin_model->tgl_indo($deactive_date_array[0]) . " " . $deactive_date_array[1];
 			}
 
@@ -8914,6 +8916,7 @@ class Employees extends MY_Controller
 				'deactive_by_name'	=> $this->Employees_model->get_nama_karyawan_by_id($data['deactive_by']),
 				'deactive_date'		=> $data['deactive_date'],
 				'deactive_date_seed' => $deactive_date_seed,
+				// 'deactive_date_seed' => '12-12-2025',
 				'deactive_date_text' => $deactive_date_text,
 				'deactive_reason'	=> $data['deactive_reason'],
 			);

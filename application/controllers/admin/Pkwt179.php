@@ -557,7 +557,7 @@ class Pkwt179 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">-</td>
-								<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:<br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
+								<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:<br>•	Hari Senin – Jumat  7 Jam Kerja<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
 							</tr>
 							<tr>
 								<td ></td>
@@ -1199,7 +1199,7 @@ class Pkwt179 extends MY_Controller
 				<br>			<br>
 				<br>			<br>
 				<br>			<br>
-				<br>			<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<br>			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1219,7 +1219,7 @@ class Pkwt179 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 					<tr>
 						<td>Demikian Surat Perjanjian Bersama ini ditandatangani dalam keadaan jasmani/rohani yang sehat, dan tanpa paksaan dari pihak manapun.</td>
-					</tr>			
+					</tr>
 				</table>
 
 				<br><br>
@@ -1389,7 +1389,79 @@ class Pkwt179 extends MY_Controller
 
 							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="20">Saya selaku karyawan sebagai motoris/canvasser, SPG/MD dan sales koordinator bersedia dipotongkan jaminan atau deposit melalui pemotongan gaji setiap bulan. Apabila saat dilakukan Stock Opname (SO) ditemukan selisih atas hasil dari SO tersebut maka uang deposit/jaminan yang dipotongkan akan dijadikan pengganti atas selisih tersebut.</td>
+								<td colspan="0"></td>
+							</tr>
+
+
+							<tr>
+								<td ></td>
+								<td colspan="20">
+
+									<table cellpadding="2" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
+										<tr>
+											<td style="text-align:center;" colspan="20">Nilai Pemotongan Deposit</td>
+											<td style="text-align:center;" colspan="0"></td>
+											<td style="text-align:center;" colspan="0"></td>
+											<td style="text-align:center;" colspan="0"></td>
+											<td style="text-align:center;" colspan="0"></td>
+										</tr>	
+
+										<tr>
+											<td style="text-align:center;" colspan="4">Jabatan</td>
+											<td style="text-align:center;" colspan="4">Area</td>
+											<td style="text-align:center;" colspan="4">Nominal Deposit</td>
+											<td style="text-align:center;" colspan="4">Nominal Pemotongan</td>
+											<td style="text-align:center;" colspan="4">Durasi Pemotongan</td>
+										</tr>	
+
+										<tr>
+											<td style="text-align:center;" colspan="4">Motoris/Canvasser</td>
+											<td style="text-align:center;" colspan="4">All region exclude Jawa Tengah</td>
+											<td style="text-align:center;" colspan="4">Rp. 2.000.000</td>
+											<td style="text-align:center;" colspan="4">Rp. 600.000</td>
+											<td style="text-align:center;" colspan="4">3-4 kali penggajian (conditional)</td>
+										</tr>	
+
+										<tr>
+											<td style="text-align:center;" colspan="4">Motoris/Canvasser</td>
+											<td style="text-align:center;" colspan="4">Jawa Tengah</td>
+											<td style="text-align:center;" colspan="4">Rp. 2.000.000</td>
+											<td style="text-align:center;" colspan="4">Rp. 300.000</td>
+											<td style="text-align:center;" colspan="4">5-6 kali penggajian (conditional)</td>
+										</tr>	
+
+
+										<tr>
+											<td style="text-align:center;" colspan="4">SPG/SMD</td>
+											<td style="text-align:center;" colspan="4">All Region</td>
+											<td style="text-align:center;" colspan="4">Rp. 600.000</td>
+											<td style="text-align:center;" colspan="4">Rp. 300.000</td>
+											<td style="text-align:center;" colspan="4">1-2 kali penggajian (conditional)</td>
+										</tr>	
+
+									</table>
+
+								</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="20">Notes : Skema pemotongan deposit</td>
+								<td colspan="0"></td>
+							</tr>
+							<br>
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Jaminan/ deposit akan dikembalikan kepada karyawan setelah 2 bulan masa pengunduran diri/tidak akfit bekerja (terhitung surat pengunduran diri diterima oleh pengangung jawab project dan menyelesaikan exit cleareance)</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Jika saya selaku karyawan melakukan pengunduran diri secara mendadak, maka jaminan/deposit dan paklaring akan di hold hingga penyelesaian administrasi (exit clearence) di selesaikan dan clear.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1462,9 +1534,8 @@ class Pkwt179 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1761,11 +1832,8 @@ class Pkwt179 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

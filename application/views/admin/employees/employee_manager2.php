@@ -1389,6 +1389,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                           <table class="table table-striped">
                             <tbody>
                               <tr>
+                                <th scope="row" style="width: 30%">Tanggal Approve HRD</th>
+                                <td><?php echo $kontrak['tanggal_created']; ?></td>
+                              </tr>
+                              <tr>
                                 <th scope="row" style="width: 30%">Tanggal Terbit</th>
                                 <td><?php echo $kontrak['tanggal_terbit']; ?></td>
                               </tr>

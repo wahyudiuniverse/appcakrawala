@@ -2185,6 +2185,8 @@ class Reports extends MY_Controller
 		$data['all_companies'] = $this->Xin_model->get_companies();
 
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
 		if (in_array('377', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/report_pkwt_expired", $data, TRUE);
