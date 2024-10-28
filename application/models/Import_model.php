@@ -1865,10 +1865,34 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_final/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
 			$delete = '<br><button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
+
+			$getContact = $this->Employees_model->getKontak($record->nip);
+				  if(!is_null($getContact)){
+				  	$contact_no = $getContact[0]->contact_no;
+				  } else {
+					  $contact_no = '#';	
+				  }
+
+
+				$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
+
+				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Oktober 2024 - 31 Oktober 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+
+				Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
+
+				Link C.I.S : https://apps-cakrawala.com/admin%0a
+
+				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				
+				Terima kasih.';
+
+			$whatsapp = '<a href="https://wa.me/62'.$contact_no.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Send WA</button> </a>';
+
+
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $esaltab,
+				"aksi" => $view . " " . $esaltab. " ". $whatsapp,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,

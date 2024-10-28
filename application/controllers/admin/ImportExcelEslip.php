@@ -2292,45 +2292,6 @@ class Importexceleslip extends MY_Controller
 					$deduction_name = 'Deduction';
 				}
 	
-
-				// $pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				// $transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				// $armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
-
 				} else {
 					redirect('admin/');
 				}

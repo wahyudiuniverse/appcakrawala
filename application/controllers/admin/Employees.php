@@ -9027,7 +9027,7 @@ class Employees extends MY_Controller
 
 		//Cek variabel post
 		$datarequest = [
-			'uniqueid'        => $postData['uniqueid']
+			'contract_id'        => $postData['kontrakid']
 		];
 
 		// get data diri
@@ -9681,7 +9681,7 @@ class Employees extends MY_Controller
 
 		//Cek variabel post
 		$datarequest = [
-			'uniqueid'        => $postData['uniqueid']
+			'contract_id'        => $postData['kontrakid']
 		];
 
 		// get data diri

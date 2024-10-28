@@ -2405,6 +2405,8 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.email');
 		$this->db->select('xin_employees.contact_no');
 		$this->db->select('xin_employees.last_edu');
+		$this->db->select('xin_employees.edu_school_name');
+		$this->db->select('xin_employees.edu_prodi_name');
 		$this->db->select('xin_employees.alamat_ktp');
 		$this->db->select('xin_employees.alamat_domisili');
 		$this->db->select('xin_employees.kk_no');
@@ -2674,7 +2676,9 @@ class Employees_model extends CI_Model
 				strtoupper($this->get_nama_agama($record->ethnicity_type)),
 				strtoupper($record->email),
 				$record->contact_no,
+				strtoupper($record->edu_school_name),
 				strtoupper($this->get_nama_pendidikan($record->last_edu)),
+				strtoupper($record->edu_prodi_name),
 				strtoupper($record->alamat_ktp),
 				strtoupper($record->alamat_domisili),
 				$record->kk_no,
@@ -3158,10 +3162,20 @@ WHERE ktp_no = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 
+		// kondisi eslip
+			// if() {
+
+			// } else {
+
+			// }
+
+			// $button_view_eslip = '<button onclick="lihat_eslip(' . $record['secid'] . ',' . $record['nip'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat e-Slip</button>';
+
 		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
 
 			$data = array();
+
 
 			foreach ($result as $record) {
 				$data[] = array(
@@ -4334,6 +4348,21 @@ ORDER BY jab.designation_id ASC";
 	{
 
 		$sql = 'SELECT * FROM xin_contract_type WHERE contract_type_id = ? limit 1';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	// contract type
+	public function getKontak($id)
+	{
+
+		$sql = 'SELECT contact_no FROM xin_employees WHERE employee_id = ? limit 1';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 
@@ -5914,12 +5943,12 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		foreach ($query as $record) {
 			if (in_array('1010', $role_resources_ids)) {
-				$button_hapus = '<button onclick="hapus_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>';
+				$button_hapus = '<button onclick="hapus_kontrak(\'' . $record['contract_id'] . '\')" class="btn btn-sm btn-outline-danger mr-1 my-1">Hapus Kontrak</button>';
 			} else {
 				$button_hapus = '';
 			}
 			if (in_array('1014', $role_resources_ids)) {
-				$button_edit = '<button onclick="edit_kontrak(\'' . $record['contract_id'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Edit Kontrak</button>';
+				$button_edit = '<button onclick="edit_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Edit Kontrak</button>';
 			} else {
 				$button_edit = '';
 			}
@@ -5928,6 +5957,21 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 			} else {
 				$button_add_addendum = '';
 			}
+
+
+			if (in_array('1011', $role_resources_ids)) {
+				$button_download_pkwt = '<button onclick="open_kontrak(\'' . $record['uniqueid'] . '\',' . $record['sub_project'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>';
+
+				$button_upload_pkwt = '<button onclick="upload_kontrak(\'' . $record['contract_id'] . '\')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>';
+			} else {
+				$button_download_pkwt = '';
+				$button_upload_pkwt = '';
+			}
+
+			
+
+			
+
 			$data[] = array(
 				"jenis_dokumen" => "KONTRAK",
 				"nomor_surat" => $record['no_surat'],
@@ -5938,9 +5982,9 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['from_date']),
 				"tanggal_created" => $this->Xin_model->tgl_indo($record['approve_hrd_date']),
-				"button_open" => '<button onclick="open_kontrak(\'' . $record['uniqueid'] . '\',' . $record['sub_project'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
-				"button_upload" => '<button onclick="upload_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
-				"button_lihat" => '<button onclick="lihat_kontrak(\'' . $record['uniqueid'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
+				"button_open" => $button_download_pkwt,
+				"button_upload" => $button_upload_pkwt,
+				"button_lihat" => '<button onclick="lihat_kontrak(\'' . $record['contract_id'] . '\')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat Kontrak</button>',
 				"button_hapus" => $button_hapus,
 				"button_edit" => $button_edit,
 				"button_add_addendum" => $button_add_addendum,
@@ -6307,7 +6351,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	public function save_file_kontrak($postData, $id)
 	{
 		//update data
-		$this->db->where('uniqueid', $id);
+		$this->db->where('contract_id', $id);
 		$this->db->update('xin_employee_contract', $postData);
 	}
 

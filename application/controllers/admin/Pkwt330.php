@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt351 extends MY_Controller 
+class Pkwt330 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1603,25 +1603,16 @@ class Pkwt351 extends MY_Controller
 				
 				if($allowance_transport!="Rp 0"){	
 				$lampiran .= '
-
+					
 						<tr>
 							<td>Tunjangan Transport</td>
 							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 				}
 
-				if( $jabatan != "ADMIN" || $jabatan != "PROJECT LEADER"){	
-				$lampiran .= '
-
-						<tr>
-							<td colspan="20">(Uang transport akan diberikan kepada karyawan 1 Minggu sekali di Minggu berikutnya, mengacu pada Hari Kerja aktual yang sudah berjalan di Minggu sebelumnya)</td>
-							<td colspan="0"></td>
-						</tr>';
-				}
-
 				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '
-
+					
 						<tr>
 							<td>Tunjangan Rental</td>
 							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>

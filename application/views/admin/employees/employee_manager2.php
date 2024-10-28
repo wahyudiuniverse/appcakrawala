@@ -48,7 +48,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_nik_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
                         <button id="button_unverify_nik_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -61,7 +61,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_kk_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
                         <button id="button_unverify_kk_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -74,7 +74,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_nama_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
                         <button id="button_unverify_nama_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -96,7 +96,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_bank_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
                         <button id="button_unverify_bank_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -109,7 +109,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_norek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
                         <button id="button_unverify_norek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -122,7 +122,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_pemilik_rek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
                         <button id="button_unverify_pemilik_rek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -3710,7 +3710,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         nip: nip,
       },
       beforeSend: function() {
-        $('.judul-modal').html("File NPWP");
+        $('.judul-modal').html("File CV");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3807,7 +3807,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         nip: nip,
       },
       beforeSend: function() {
-        $('.judul-modal').html("File NPWP");
+        $('.judul-modal').html("File SKCK");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3904,7 +3904,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
         nip: nip,
       },
       beforeSend: function() {
-        $('.judul-modal').html("File NPWP");
+        $('.judul-modal').html("File Ijazah");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -5113,9 +5113,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- Tombol Upload Kontrak -->
 <script type="text/javascript">
-  function upload_kontrak(uniqueid) {
+  function upload_kontrak(kontrakid) {
     var jenis_dokumen = "kontrak";
-    var button_save = "<button onclick='save_kontrak(\"" + uniqueid + "\",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Upload Kontrak</button>";
+    var button_save = "<button onclick='save_kontrak(\"" + kontrakid + "\",\"" + jenis_dokumen + "\")' class='btn btn-primary'>Upload Kontrak</button>";
     // alert(uniqueid);
 
     var input_upload = '<fieldset class="form-group">';
@@ -5258,7 +5258,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- Tombol Open Kontrak -->
 <script type="text/javascript">
-  function lihat_kontrak(uniqueid) {
+  function lihat_kontrak(kontrakid) {
     // alert(uniqueid);
     // AJAX untuk ambil data kontrak employee terupdate
     $.ajax({
@@ -5266,7 +5266,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       method: 'post',
       data: {
         [csrfName]: csrfHash,
-        uniqueid: uniqueid,
+        kontrakid: kontrakid,
       },
       beforeSend: function() {
         $('.judul-modal').html("File Kontrak");
@@ -5386,10 +5386,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- Tombol Hapus Kontrak -->
 <script type="text/javascript">
-  function hapus_kontrak(uniqueid) {
+  function hapus_kontrak(kontrakid) {
     var nip = "<?php echo $employee_id; ?>";
     var jenis_dokumen = "kontrak";
-    var button_delete = "<button onclick='hapus_detail_kontrak(\"" + uniqueid + "\",\"" + jenis_dokumen + "\")' class='btn btn-danger'>Hapus Kontrak</button>";
+    var button_delete = "<button onclick='hapus_detail_kontrak(\"" + kontrakid + "\",\"" + jenis_dokumen + "\")' class='btn btn-danger'>Hapus Kontrak</button>";
 
     // AJAX untuk ambil data employee terupdate
     $.ajax({
@@ -5397,7 +5397,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       method: 'post',
       data: {
         [csrfName]: csrfHash,
-        uniqueid: uniqueid,
+        kontrakid: kontrakid,
       },
       beforeSend: function() {
         $('.info-modal-hapus-kontrak').attr("hidden", false);

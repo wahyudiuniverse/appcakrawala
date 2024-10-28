@@ -338,7 +338,7 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 								{
 									id: "",
 									class: "role-checkbox-modal custom-control-input",
-									text: "Upload PKWT",
+									text: "Download/Upload Kontrak",
 									add_info: "",
 									value: "1011",
 									check: "<?php if (isset($_GET['role_id'])) {
