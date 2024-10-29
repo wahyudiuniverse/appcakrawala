@@ -4373,6 +4373,24 @@ ORDER BY jab.designation_id ASC";
 		}
 	}
 
+	// contract type
+	public function getLevel($id)
+	{
+
+		$sql = "SELECT emp.designation_id, pos.level 
+		FROM xin_employees emp
+		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+		WHERE emp.employee_id = '$id';";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 	// contract employee
 	public function read_contract_information($id)
 	{

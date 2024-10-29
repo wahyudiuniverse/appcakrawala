@@ -62,7 +62,7 @@
 
             <div class="col-md mb-3">
 
-            <label class="form-label">Projects <?php echo $session['employee_id'];?></label>
+            <label class="form-label">PROJECT <?php echo $session['employee_id'];?></label>
               <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
                   <option value="0">--ALL--</option>
                 <?php foreach($all_projects as $proj) {?>
@@ -71,18 +71,13 @@
               </select>
             </div>
 
-
-          <div class="col-md mb-3" id="subproject_ajax" hidden>
-            <label class="form-label">Sub Projects</label>
-            <select class="form-control" name="sub_project_id" id="aj_subproject"  data-plugin="select_hrm" data-placeholder="Sub Project">
-              <option value="0">--</option>
-            </select>
-          </div>
-
-          <div class="col-md mb-3" id="areaemp_ajax" hidden>
-            <label class="form-label">Area/Penempatan</label>
+          <div class="col-md mb-3">
+            <label class="form-label">WAKTU BERAKHIR</label>
             <select class="form-control" name="area_emp" id="aj_area_emp"  data-plugin="select_hrm" data-placeholder="Area/Penempatan">
-              <option value="0">--</option>
+               <option value="7">-7 Hari</option>
+               <option value="14">-14 Hari</option>
+               <option value="21">-21 Hari</option>
+               <option value="30">-30 Hari</option>
             </select>
           </div>
 

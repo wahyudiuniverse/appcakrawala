@@ -549,6 +549,7 @@ class employee_request_cancelled extends MY_Controller
 			$Return['error'] = 'Tempat Lahir Kosong..!';
 		} else {
 
+
 			$idrequest 					= $this->input->post('idrequest');
 			$fullname 					= $this->input->post('fullname');
 			$nama_ibu						= $this->input->post('nama_ibu');
@@ -615,66 +616,136 @@ class employee_request_cancelled extends MY_Controller
 				$this->output($Return);
 			}
 
-			$data = array(
-				'fullname' 					=> $fullname,
-				'nama_ibu' 					=> $nama_ibu,
-				'tempat_lahir' 				=> $tempat_lahir,
-				'tanggal_lahir' 			=> $tanggal_lahir,
-				'gender'					=> $jenis_kelamin,
-				'agama' 					=> $agama,
-				'status_kawin' 				=> $marital_status,
-				'nik_ktp' 					=> $nomor_ktp,
-				'alamat_ktp' 				=> $alamat_ktp,
-				'no_kk' 					=> $nomor_kk,
+			if($session['user_id']=='5725'){
 
-				'alamat_domisili' 			=> $alamat_domisili,
-				'npwp' 						=> $npwp,
-				'contact_no' 				=> $nomor_hp,
-				'email' 					=> $email,
-				'bank_id' 					=> $bank_name,
-				'no_rek' 					=> $no_rek,
-				'pemilik_rekening' 			=> $pemilik_rekening,
-				'company_id' 				=> $company_id,
-				'project' 					=> $project_id,
-				'sub_project' 				=> $sub_project,
-				'posisi' 					=> $posisi,
-				'e_status' 					=> $e_status,
+				$data = array(
+					'fullname' 					=> $fullname,
+					'nama_ibu' 					=> $nama_ibu,
+					'tempat_lahir' 				=> $tempat_lahir,
+					'tanggal_lahir' 			=> $tanggal_lahir,
+					'gender'					=> $jenis_kelamin,
+					'agama' 					=> $agama,
+					'status_kawin' 				=> $marital_status,
+					'nik_ktp' 					=> $nomor_ktp,
+					'alamat_ktp' 				=> $alamat_ktp,
+					'no_kk' 					=> $nomor_kk,
 
-				'doj' 						=> $date_of_join,
-				'penempatan' 				=> $penempatan,
-				'gaji_pokok' 				=> str_replace(".", "", $gaji_pokok),
+					'alamat_domisili' 			=> $alamat_domisili,
+					'npwp' 						=> $npwp,
+					'contact_no' 				=> $nomor_hp,
+					'email' 					=> $email,
+					'bank_id' 					=> $bank_name,
+					'no_rek' 					=> $no_rek,
+					'pemilik_rekening' 			=> $pemilik_rekening,
+					'company_id' 				=> $company_id,
+					'project' 					=> $project_id,
+					'sub_project' 				=> $sub_project,
+					'posisi' 					=> $posisi,
+					'e_status' 					=> $e_status,
 
-				'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
-				'allow_area' 				=> str_replace(".", "", $tunjangan_area),
-				'allow_masakerja' 			=> str_replace(".", "", $tunjangan_masakerja),
-				'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
-				'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
-				'allow_konsumsi' 			=> str_replace(".", "", $tunjangan_makan),
-				'allow_transport' 			=> str_replace(".", "", $tunjangan_transport),
-				'allow_comunication' 		=> str_replace(".", "", $tunjangan_komunikasi),
-				'allow_device' 				=> str_replace(".", "", $tunjangan_device),
-				'allow_residence_cost' 		=> str_replace(".", "", $tunjangan_tempat_tinggal),
-				'allow_rent' 				=> str_replace(".", "", $tunjangan_rental),
-				'allow_parking' 			=> str_replace(".", "", $tunjangan_parkir),
-				'allow_medichine' 			=> str_replace(".", "", $tunjangan_kesehatan),
-				'allow_akomodsasi' 			=> str_replace(".", "", $tunjangan_akomodasi),
-				'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
-				'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
+					'doj' 						=> $date_of_join,
+					'penempatan' 				=> $penempatan,
+					'gaji_pokok' 				=> str_replace(".", "", $gaji_pokok),
 
-				'dm_allow_jabatan' 			=> $option_gaji,
+					'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
+					'allow_area' 				=> str_replace(".", "", $tunjangan_area),
+					'allow_masakerja' 			=> str_replace(".", "", $tunjangan_masakerja),
+					'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
+					'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
+					'allow_konsumsi' 			=> str_replace(".", "", $tunjangan_makan),
+					'allow_transport' 			=> str_replace(".", "", $tunjangan_transport),
+					'allow_comunication' 		=> str_replace(".", "", $tunjangan_komunikasi),
+					'allow_device' 				=> str_replace(".", "", $tunjangan_device),
+					'allow_residence_cost' 		=> str_replace(".", "", $tunjangan_tempat_tinggal),
+					'allow_rent' 				=> str_replace(".", "", $tunjangan_rental),
+					'allow_parking' 			=> str_replace(".", "", $tunjangan_parkir),
+					'allow_medichine' 			=> str_replace(".", "", $tunjangan_kesehatan),
+					'allow_akomodsasi' 			=> str_replace(".", "", $tunjangan_akomodasi),
+					'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
+					'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
 
-				'contract_start' 			=> $join_date_pkwt,
-				'contract_end' 				=> $pkwt_end_date,
+					'dm_allow_jabatan' 			=> $option_gaji,
 
-				'contract_periode' 			=> $waktu_kontrak,
-				'hari_kerja' 				=> $hari_kerja,
-				'cut_start' 				=> $cut_start,
-				'cut_off' 					=> $cut_off,
-				'date_payment' 				=> $date_payment,
-				'location_id' 				=> $location_id
-			);
+					'contract_start' 			=> $join_date_pkwt,
+					'contract_end' 				=> $pkwt_end_date,
+
+					'contract_periode' 			=> $waktu_kontrak,
+					'hari_kerja' 				=> $hari_kerja,
+					'cut_start' 				=> $cut_start,
+					'cut_off' 					=> $cut_off,
+					'date_payment' 				=> $date_payment,
+					'location_id' 				=> $location_id
+				);
 
 			$iresult = $this->Employees_model->update_request_employee($data, $idrequest);
+
+			} else {
+
+				$data = array(
+					'fullname' 					=> $fullname,
+					'nama_ibu' 					=> $nama_ibu,
+					'tempat_lahir' 				=> $tempat_lahir,
+					'tanggal_lahir' 			=> $tanggal_lahir,
+					'gender'					=> $jenis_kelamin,
+					'agama' 					=> $agama,
+					'status_kawin' 				=> $marital_status,
+					'nik_ktp' 					=> $nomor_ktp,
+					'alamat_ktp' 				=> $alamat_ktp,
+					'no_kk' 					=> $nomor_kk,
+
+					'alamat_domisili' 			=> $alamat_domisili,
+					'npwp' 						=> $npwp,
+					'contact_no' 				=> $nomor_hp,
+					'email' 					=> $email,
+					'bank_id' 					=> $bank_name,
+					'no_rek' 					=> $no_rek,
+					'pemilik_rekening' 			=> $pemilik_rekening,
+					'company_id' 				=> $company_id,
+					'project' 					=> $project_id,
+					'sub_project' 				=> $sub_project,
+					'posisi' 					=> $posisi,
+					'e_status' 					=> $e_status,
+
+					'doj' 						=> $date_of_join,
+					'penempatan' 				=> $penempatan,
+					'gaji_pokok' 				=> str_replace(".", "", $gaji_pokok),
+
+					'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
+					'allow_area' 				=> str_replace(".", "", $tunjangan_area),
+					'allow_masakerja' 			=> str_replace(".", "", $tunjangan_masakerja),
+					'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
+					'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
+					'allow_konsumsi' 			=> str_replace(".", "", $tunjangan_makan),
+					'allow_transport' 			=> str_replace(".", "", $tunjangan_transport),
+					'allow_comunication' 		=> str_replace(".", "", $tunjangan_komunikasi),
+					'allow_device' 				=> str_replace(".", "", $tunjangan_device),
+					'allow_residence_cost' 		=> str_replace(".", "", $tunjangan_tempat_tinggal),
+					'allow_rent' 				=> str_replace(".", "", $tunjangan_rental),
+					'allow_parking' 			=> str_replace(".", "", $tunjangan_parkir),
+					'allow_medichine' 			=> str_replace(".", "", $tunjangan_kesehatan),
+					'allow_akomodsasi' 			=> str_replace(".", "", $tunjangan_akomodasi),
+					'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
+					'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
+
+					'dm_allow_jabatan' 			=> $option_gaji,
+
+					'contract_start' 			=> $join_date_pkwt,
+					'contract_end' 				=> $pkwt_end_date,
+
+					'contract_periode' 			=> $waktu_kontrak,
+					'hari_kerja' 				=> $hari_kerja,
+					'cut_start' 				=> $cut_start,
+					'cut_off' 					=> $cut_off,
+					'date_payment' 				=> $date_payment,
+					'location_id' 				=> $location_id,
+					'modifiedby' 				=> $session['user_id'],
+					'modifiedon' 				=> date('Y-m-d h:i:s')
+				);
+
+			$iresult = $this->Employees_model->update_request_employee($data, $idrequest);
+			}
+
+
 		}
 
 		// $Return['result'] = ' ELSE DIBAWAH Permintaan Karyawan berhasil di Ubah..';
@@ -1183,6 +1254,8 @@ class employee_request_cancelled extends MY_Controller
 			'approved_nomon' => $result[0]->approved_nomon,
 			'approved_hrdby' => $this->Employees_model->read_employee_info($result[0]->approved_hrdby),
 			'approved_hrdon' => $result[0]->approved_hrdon,
+			'canceled_by' => $this->Employees_model->read_employee_info($result[0]->cancel_by),
+			'canceled_on' => $result[0]->cancel_on,
 
 			// 'createdon' => $result[0]->createdon,
 			// 'modifiedon' => $result[0]->modifiedon,

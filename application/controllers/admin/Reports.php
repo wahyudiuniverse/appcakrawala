@@ -2216,24 +2216,31 @@ class Reports extends MY_Controller
 
 		// $company_id = $this->uri->segment(4);
 		$project_id = $this->uri->segment(4);
-		$start_date = $this->uri->segment(5);
-		$end_date = $this->uri->segment(6);
-		$searchkey = $this->uri->segment(7);
+		$down_time = $this->uri->segment(5);
+		$searchkey = $this->uri->segment(6);
 		$finalkey = str_replace("%20", " ", $searchkey);
-		// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
 
 
 
-		//$employee = $this->Pkwt_model->get_monitoring_pkwt_aphrd($session['employee_id']);
+		$getLevel = $this->Employees_model->getLevel($session['employee_id']);
+				  if(!is_null($getLevel)){
+				  	$level_id = $getLevel[0]->level;
+				  } else {
+					$level_id = '';	
+				  }
+
+		// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
 
 		if ($searchkey == '0') {
 
 			if ($project_id == '0') {
 				$employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
 			} else {
-				$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+				$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
 			}
 		} else {
+
+			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
 
 			if ($searchkey != "") {
 
@@ -2243,7 +2250,7 @@ class Reports extends MY_Controller
 				if ($project_id == 0) {
 					$employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
 				} else {
-					$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $session['employee_id']);
+					$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
 				}
 			}
 		}
@@ -2258,26 +2265,26 @@ class Reports extends MY_Controller
 			$user_id = $r->user_id;
 			$nip = $r->employee_id;
 			$fullname = $r->first_name;
-			$project = $r->project_id;
+			$project = $r->project;
 			$penempatan = $r->penempatan;
-			$last_contract = $r->contract_end;
+			$last_contract = $r->to_date;
 
 
-			$projects = $this->Project_model->read_single_project($r->project_id);
+			$projects = $this->Project_model->read_single_project($r->project);
 			if (!is_null($projects)) {
 				$nama_project = $projects[0]->title;
 			} else {
 				$nama_project = '--';
 			}
 
-			// $subprojects = $this->Project_model->read_single_subproject($r->sub_project_id);
-			// if (!is_null($projects)) {
-			// 	$nama_subproject = $subprojects[0]->sub_project_name;
-			// } else {
-			// 	$nama_subproject = '--';
-			// }
+			$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
+			if (!is_null($projects)) {
+				$nama_subproject = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_subproject = '--';
+			}
 
-			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			$designation = $this->Designation_model->read_designation_information($r->jabatan);
 			if (!is_null($designation)) {
 				$designation_name = $designation[0]->designation_name;
 			} else {
@@ -2295,23 +2302,9 @@ class Reports extends MY_Controller
 				$terbitPkwt = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>';
 			}
 
-
-
-
-
-
-
-
-
-			// $terbitPkwt = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_expired_edit/'.$r->employee_id.'/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>'; 
-			// $whatsapp = '<a href="https://wa.me/62'.$nowhatsapp.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$nowhatsapp.'</button> </a>'; 
-
 			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/0" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">PERPANJANG PKWT</button></a>';
 
-
-
-			$stopPkwt = '<a href="' . site_url() . 'admin/employees/emp_edit/' . $r->employee_id . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-danger">STOP PKWT</button></a>';
-
+			$stopPkwt = '<a href="' . site_url() . 'admin/employees/emp_view/' . $r->employee_id . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-danger">STOP PKWT</button></a>';
 
 			$data[] = array(
 				$terbitPkwt . ' ' . $stopPkwt,
@@ -2319,7 +2312,7 @@ class Reports extends MY_Controller
 				$nip,
 				$fullname,
 				$nama_project,
-				'$nama_subproject',
+				$nama_subproject,
 				$designation_name,
 				$penempatan,
 				$last_contract

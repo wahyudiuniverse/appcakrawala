@@ -33,6 +33,9 @@ class Auth extends MY_Controller
 			$this->load->model("Designation_model");
 			$this->load->model("Department_model");
 			$this->load->model("Location_model");
+      $this->load->helper('shared');
+      // $this->CI->load->library('Rest_Controller');
+
      }
 	 
 	 /*Function to set JSON output*/
@@ -373,5 +376,119 @@ class Auth extends MY_Controller
 			}
 		}
 	}
+
+
+
+    public function login_cis() {
+        $status 			= 1; $message = ''; $data = null;
+        $apiName 			= "apicakrawala/auth/login_cis";
+
+        // $nip 					= $this->input->post('nip'); 
+        $nip 					= $_GET['nip'];
+        // $pin 					= $this->input->post('pin');
+        $pin 					= $_GET['pin'];
+
+        $isnip 				= $this->isNullField($nip);
+        $ispin 				= $this->isNullField($pin);
+
+        if ($isnip || $ispin) {
+
+	            restOutput(0, "NIP atau PIN Kosong.", new stdClass());
+        	// $this->response(0, "NIP atau PIN Kosong.", new stdClass());
+
+	        }else{
+
+			      $isNIKExists = $this->isNIKExists($nip, $pin);
+						$token = null;
+						if($isNIKExists->STATUS){
+
+							$data = array(
+								"employee_id" => $isNIKExists->EMPLOYEE_ID,
+								"fullname" => $isNIKExists->FULLNAME,
+								"status_emp" => $isNIKExists->STATUS_EMP
+
+							);
+
+							restOutput($isNIKExists->STATUS, $isNIKExists->MESSAGE, $data);
+
+						} else {
+
+							restOutput($isNIKExists->STATUS, $isNIKExists->MESSAGE, new stdClass());
+
+
+						}
+
+	    		}
+    		}
+
+
+
+    private function isNIKExists($nip, $pin) {
+        $q = $this->db->query("
+        	SELECT user_id, employee_id, first_name, is_active, status_employee FROM xin_employees WHERE employee_id = $nip AND private_code = $pin AND is_active = 1;");
+
+        $status = 1;
+        $employeeID = $fullname = $message = null;
+
+        if ($q->num_rows() == 1) {
+            $rows = $q->row();
+
+            $message = "success";
+            $isActive = $rows->is_active;
+						$employeeID = $rows->employee_id;
+            $fullname = $rows->first_name;
+            if($rows->status_employee==1){
+            	$status_emp = "AKTIF";
+            } else if ($rows->status_employee==2){
+            	$status_emp = "RESIGN";
+            } else if ($rows->status_employee==3){
+            	$status_emp = "BLACKLIST";
+            } else if ($rows->status_employee==4){
+            	$status_emp = "END CONTRACT";
+            } else if ($rows->status_employee==5){
+            	$status_emp = "DEACTIVE";
+            } else {
+	            $status_emp = $rows->status_employee;			
+            }
+
+
+            if ($isActive != 1) {
+                $status = 0;
+                $message = "NIP anda sudah tidak aktif, Hubungi admin untuk informasi lengkapnya.";
+								$isActive = "";
+								$employeeID = "";
+								$fullname = "";
+            		$status_emp = "";	
+
+            } 
+
+        }  else {
+            $status = 0;
+            $message = "NIP atau PIN salah, Hubungi admin untuk informasi lengkapnya.";
+						$isActive = "";
+						$employeeID = "";
+						$fullname = "";
+            $status_emp = "";
+				
+        }
+      
+        return (object) [
+            'STATUS' => $status,
+            'MESSAGE' => $message,
+            'EMPLOYEE_ID' => $employeeID,
+            'FULLNAME' => $fullname,
+            'STATUS_EMP' => $status_emp,
+        ];
+    }
+
+
+    private function isNullField($data) {
+        if (is_null($data) || trim($data) == '') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 } 
 ?>

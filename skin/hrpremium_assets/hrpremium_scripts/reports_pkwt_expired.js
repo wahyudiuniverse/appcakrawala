@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"reports/pkwt_expired_list/0/0/0/0/",
+            url : site_url+"reports/pkwt_expired_list/0/0/0/",
             type : 'GET'
         },
 		dom: 'lBfrtip',
@@ -45,10 +45,7 @@ $(document).ready(function() {
 
 		// var company_id = document.getElementById("aj_company").value;
 		var project_id = document.getElementById("aj_project").value;
-		var subproject_id = document.getElementById("aj_subproject").value;
 		var area_emp = document.getElementById("aj_area_emp").value;
-		var start_date = document.getElementById("start_date").value;
-		var end_date = document.getElementById("end_date").value;
 		var searchkey = document.getElementById("aj_searchkey").value;
 		
 		// var company_id = $('#aj_company').val();
@@ -60,7 +57,7 @@ $(document).ready(function() {
 			"bDestroy": true,
 			"ajax": {
 				
-				url : site_url+"reports/pkwt_expired_list/"+project_id+"/"+start_date+"/"+end_date+"/"+searchkey+"/",
+				url : site_url+"reports/pkwt_expired_list/"+project_id+"/"+area_emp+"/"+searchkey+"/",
 				// url : site_url+"reports/empdtwise_attendance_list/"+project_id+"/"+subproject_id+"/"+area_emp+"/"+start_date+"/"+end_date+"/",
 				// url : site_url+"reports/empdtwise_attendance_list/"+company_id+"/"+project_id+"/"+subproject_id+"/"+start_date+"/"+end_date+"/",
 				type : 'GET'

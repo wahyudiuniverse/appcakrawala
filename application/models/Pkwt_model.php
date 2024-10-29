@@ -461,13 +461,14 @@ ORDER BY contract_id DESC LIMIT 1";
 		// $today_date = date('Y-m-d');
 		$sql = "
 
-
-		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
+		SELECT emp.user_id, emp.employee_id, emp.first_name, empct.project, empct.sub_project, empct.jabatan, emp.contact_no, empct.contract_id, empct.penempatan, empct.from_date, empct.to_date, empct.approve_hrd_date, empct.upload_pkwt, empct.file_name
 		FROM xin_employees emp 
-		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
-		ON pkwt.employee_id = emp.employee_id 
-		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-		LIMIT 0;";
+		LEFT JOIN ( 
+		    SELECT con.contract_id, con.employee_id, con.project, con.sub_project, con.jabatan, con.penempatan, con.from_date, con.to_date, con.approve_hrd_date, con.upload_pkwt, con.file_name 
+		    FROM xin_employee_contract con 
+		    WHERE con.contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id) AND con.project = 00) empct 
+		ON empct.employee_id = emp.employee_id 
+		WHERE emp.user_id=00;";
 
 		$query = $this->db->query($sql);
 	    return $query;
@@ -478,57 +479,36 @@ ORDER BY contract_id DESC LIMIT 1";
 		// $today_date = date('Y-m-d');
 		$sql = "
 
-		SELECT exp.user_id, exp.employee_id, exp.first_name, exp.company_id, exp.project_id, exp.sub_project_id, exp.designation_id, exp.date_of_joining, exp.penempatan, exp.contract_end, exp.all_name
-		FROM (
-			SELECT emp.user_id,emp.employee_id,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end, concat(concat(emp.employee_id,emp.first_name),emp.ktp_no) as all_name
-			FROM xin_employees emp 
-			LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
-			ON pkwt.employee_id = emp.employee_id 
-			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-			WHERE emp.status_employee = 1
-			AND emp.status_resign = 1
-			AND emp.project_id NOT IN (22,95)
-			AND pos.level NOT IN ('A','A1','B1','B2')
-			AND emp.employee_id not in (1,1024)) exp
-		WHERE exp.all_name LIKE '%$key%'";
+		SELECT emp.user_id, emp.employee_id, emp.first_name, empct.project, empct.sub_project, empct.jabatan, emp.contact_no, empct.contract_id, empct.penempatan, empct.from_date, empct.to_date, empct.approve_hrd_date, empct.upload_pkwt, empct.file_name
+		FROM xin_employees emp 
+		LEFT JOIN ( 
+		    SELECT con.contract_id, con.employee_id, con.project, con.sub_project, con.jabatan, con.penempatan, con.from_date, con.to_date, con.approve_hrd_date, con.upload_pkwt, con.file_name 
+		    FROM xin_employee_contract con 
+		    WHERE con.contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) empct 
+		ON empct.employee_id = emp.employee_id 
+		WHERE emp.status_employee = 1
+        AND CONCAT(emp.employee_id,emp.first_name) LIKE '%$key%'";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
 	}
 
  	// monitoring request
-	public function report_pkwt_expired_pro($project, $empID) {
+	public function report_pkwt_expired_pro($project, $downtime, $empID) {
 		// $today_date = date('Y-m-d');
 		$sql = "
 
-		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
+		SELECT emp.user_id, emp.employee_id, emp.first_name, empct.project, empct.sub_project, empct.jabatan, emp.contact_no, empct.contract_id, empct.penempatan, empct.from_date, empct.to_date, empct.approve_hrd_date, empct.upload_pkwt, empct.file_name
 		FROM xin_employees emp 
-		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
-		ON pkwt.employee_id = emp.employee_id 
-		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-		WHERE emp.status_employee = 1 
-		AND emp.status_resign = 1 
-		AND emp.employee_id not in (1,1024)
-		AND pkwt.to_date < now() + INTERVAL 90 day
-      --  AND pkwt.approve_hrd = 0
-		AND emp.project_id = '$project'
-		AND pos.level NOT IN ('A','A1','B1','B2')
-
-		UNION 
-
-		SELECT emp.user_id,emp.employee_id,pkwt.approve_hrd,emp.first_name,emp.company_id,emp.project_id,emp.sub_project_id,emp.designation_id, emp.date_of_joining, emp.penempatan, pkwt.to_date as contract_end 
-		FROM xin_employees emp 
-		LEFT JOIN (SELECT employee_id, max(to_date) AS to_date, max(approve_hrd_date) as approve_hrd FROM xin_employee_contract GROUP BY employee_id) pkwt 
-		ON pkwt.employee_id = emp.employee_id 
-		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-		WHERE emp.status_employee = 1 
-		AND emp.status_resign = 1 
-		AND emp.employee_id not in (1,1024)
-		AND pkwt.to_date is null 
-      --  AND pkwt.approve_hrd = 0
-		AND emp.project_id = '$project'
-		AND pos.level NOT IN ('A','A1','B1','B2')
-";
+		LEFT JOIN ( 
+		    SELECT con.contract_id, con.employee_id, con.project, con.sub_project, con.jabatan, con.penempatan, con.from_date, con.to_date, con.approve_hrd_date, con.upload_pkwt, con.file_name 
+		    FROM xin_employee_contract con 
+		    WHERE con.contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id) AND con.project = $project) empct 
+		ON empct.employee_id = emp.employee_id 
+		WHERE emp.project_id = $project 
+		AND (DATE_SUB(empct.to_date, INTERVAL $downtime DAY)) < CURDATE() 
+		AND emp.status_employee = 1;
+		";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 	    return $query;
