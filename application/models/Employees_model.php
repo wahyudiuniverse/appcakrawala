@@ -6001,6 +6001,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"sub_project" => strtoupper("[" . $record['sub_project'] . "] " . $this->get_nama_sub_project($record['sub_project'])),
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['from_date']),
+				"tanggal_terbit_sort" => $record['from_date'],
 				"tanggal_created" => $this->Xin_model->tgl_indo($record['approve_hrd_date']),
 				"button_open" => $button_download_pkwt,
 				"button_upload" => $button_upload_pkwt,
@@ -6028,6 +6029,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				"sub_project" => strtoupper("[" . $record['sub_project'] . "] " . $this->get_nama_sub_project($record['sub_project'])),
 				"jabatan" => strtoupper($this->get_nama_jabatan($record['jabatan'])),
 				"tanggal_terbit" => $this->Xin_model->tgl_indo($record['tgl_terbit']),
+				"tanggal_terbit_sort" => $record['tgl_terbit'],
 				"tanggal_created" => $this->Xin_model->tgl_indo($record['created_time']),
 				"button_open" => '<button onclick="open_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Download Draft Kontrak</button>',
 				"button_upload" => '<button onclick="upload_addendum(' . $record['id'] . ')" class="btn btn-sm btn-outline-primary mr-1 my-1">Upload Kontrak</button>',
@@ -6038,7 +6040,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 			);
 		}
 
-		array_multisort(array_column($data, "tanggal_terbit"), SORT_DESC, $data);
+		array_multisort(array_column($data, "tanggal_terbit_sort"), SORT_DESC, $data);
 
 		return $data;
 	}
