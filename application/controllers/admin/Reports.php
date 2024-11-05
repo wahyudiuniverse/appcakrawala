@@ -2287,19 +2287,27 @@ class Reports extends MY_Controller
 			$designation = $this->Designation_model->read_designation_information($r->jabatan);
 			if (!is_null($designation)) {
 				$designation_name = $designation[0]->designation_name;
+				$level_employee = $designation[0]->level;
 			} else {
 				$designation_name = '--';
+				$level_employee = 'Z9';
 			}
 
-
+			// $level_employee = $this->Employee_model->get_level($r->jabatan);
+			
 			$readyHrd = $this->Pkwt_model->read_pkwt_pengajuan($r->employee_id);
 
 			if (!is_null($readyHrd)) {
 
 				$terbitPkwt = '<a href="#" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-warning">SUDAH DIAJUKAN</button></a>';
 			} else {
+				// $terbitPkwt = $level_employee;
+				if($level_id >= $level_employee){
+					$terbitPkwt = '';
+				} else {
 
-				$terbitPkwt = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>';
+					$terbitPkwt = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>';
+				}
 			}
 
 			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/0" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">PERPANJANG PKWT</button></a>';
@@ -3103,6 +3111,7 @@ class Reports extends MY_Controller
 			'DOKUMEN CV',
 			'DOKUMEN PAKLARING',
 			'PKWT',
+			'NO KONTRAK',
 			'TANGGAL UPLOAD PKWT',
 		];
 
@@ -3122,7 +3131,7 @@ class Reports extends MY_Controller
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle('A1:AV1')
+			->getStyle('A1:AW1')
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()

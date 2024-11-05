@@ -488,6 +488,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         <option value="2" <?php if ($location_id == '2'): ?> selected="selected" <?php endif; ?>>AREA</option>
                         <option value="3" <?php if ($location_id == '3'): ?> selected="selected" <?php endif; ?>>RATECARD</option>
                         <option value="4" <?php if ($location_id == '4'): ?> selected="selected" <?php endif; ?>>PROJECT</option>
+                        <option value="4" <?php if ($location_id == '5'): ?> selected="selected" <?php endif; ?>>FRELANCE/MAGANG</option>
                       </select>
                       <span id='pesan_kategori_modal'></span>
                     </td>

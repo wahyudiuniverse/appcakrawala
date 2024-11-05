@@ -377,7 +377,7 @@ class Pkwt353 extends MY_Controller
 
 							<tr>
 								<td>2.</td>
-								<td colspan="20">Hari kerja adalah Jumat, Sabtu, dan Minggu..</td>
+								<td colspan="20">Hari kerja disesuaikan dengan ketentuan perusahaan/klien.</td>
 							</tr>
 				<br>
 

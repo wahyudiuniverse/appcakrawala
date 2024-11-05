@@ -405,7 +405,9 @@ class Auth extends MY_Controller
 							$data = array(
 								"employee_id" => $isNIKExists->EMPLOYEE_ID,
 								"fullname" => $isNIKExists->FULLNAME,
-								"status_emp" => $isNIKExists->STATUS_EMP
+								"status_emp" => $isNIKExists->STATUS_EMP,
+								"userrole" => $isNIKExists->USERROLE,
+								"approle" => $isNIKExists->APPROLE
 
 							);
 
@@ -425,7 +427,12 @@ class Auth extends MY_Controller
 
     private function isNIKExists($nip, $pin) {
         $q = $this->db->query("
-        	SELECT user_id, employee_id, first_name, is_active, status_employee FROM xin_employees WHERE employee_id = $nip AND private_code = $pin AND is_active = 1;");
+        	SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources 
+FROM xin_employees emp
+LEFT JOIN xin_user_roles approle ON approle.role_id=emp.user_role_id
+WHERE employee_id = $nip 
+AND private_code = $pin 
+AND is_active = 1;");
 
         $status = 1;
         $employeeID = $fullname = $message = null;
@@ -435,8 +442,10 @@ class Auth extends MY_Controller
 
             $message = "success";
             $isActive = $rows->is_active;
-						$employeeID = $rows->employee_id;
+			$employeeID = $rows->employee_id;
             $fullname = $rows->first_name;
+            $userRole = $rows->user_role_id;
+            $appRole = $rows->role_resources;
             if($rows->status_employee==1){
             	$status_emp = "AKTIF";
             } else if ($rows->status_employee==2){
@@ -458,7 +467,9 @@ class Auth extends MY_Controller
 								$isActive = "";
 								$employeeID = "";
 								$fullname = "";
-            		$status_emp = "";	
+            					$status_emp = "";	
+								$userRole = "";
+								$appRole = "";
 
             } 
 
@@ -468,7 +479,9 @@ class Auth extends MY_Controller
 						$isActive = "";
 						$employeeID = "";
 						$fullname = "";
-            $status_emp = "";
+            			$status_emp = "";
+						$userRole = "";
+						$appRole = "";
 				
         }
       
@@ -478,6 +491,8 @@ class Auth extends MY_Controller
             'EMPLOYEE_ID' => $employeeID,
             'FULLNAME' => $fullname,
             'STATUS_EMP' => $status_emp,
+            'USERROLE' => $userRole,
+            'APPROLE' => $appRole,
         ];
     }
 

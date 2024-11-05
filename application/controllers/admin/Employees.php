@@ -8244,9 +8244,9 @@ class Employees extends MY_Controller
 		} else if ($result[0]->location_id == "3") {
 			$kategori = 'RATECARD';
 		} else if ($result[0]->location_id == "4") {
-			$kategori = 'MAGANG';
+			$kategori = 'PROJECT';
 		} else if ($result[0]->location_id == "5") {
-			$kategori = 'FREELANCE';
+			$kategori = 'FREELANCE/MAGANG';
 		} else {
 			$kategori = '--';
 		}

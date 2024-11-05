@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : site_url+"reports/pkwt_expired_list/0/0/0/0/0/",
+            url : site_url+"reports/pkwt_expired_list/0/0/0/",
             type : 'GET'
         },
 		dom: 'lBfrtip',

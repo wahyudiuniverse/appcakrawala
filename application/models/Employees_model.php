@@ -2428,6 +2428,7 @@ class Employees_model extends CI_Model
 		$this->db->select('b.to_date');
 		$this->db->select('b.file_name');
 		$this->db->select('b.upload_pkwt');
+		$this->db->select('b.no_surat');
 
 		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
@@ -2448,7 +2449,7 @@ class Employees_model extends CI_Model
 		// $this->db->join('xin_projects_sub', 'xin_projects_sub.secid = xin_employees.sub_project_id');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-		$this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		$this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$tes_query = $this->db->last_query();
 
@@ -2701,6 +2702,7 @@ class Employees_model extends CI_Model
 				$text_cv,
 				$text_paklaring,
 				$record->file_name,
+				$record->no_surat,
 				$record->upload_pkwt,
 				// $this->get_tanggal_pkwt($record->upload_pkwt),
 				// $this->get_nama_karyawan($record->upload_by)
