@@ -173,11 +173,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       <div class="modal-header">
         <h5 class="modal-title" id="editModalLabel">
           <div class="judul-modal">
-			<span id="judul-modal-edit"></span>
-			<?php if (in_array('1016', $role_resources_ids)) { ?>
-				<span id="button_download_dokumen_conditional">tes</span>
-			<?php } ?>
-		  </div>
+            <span id="judul-modal-edit"></span>
+            <?php if (in_array('1016', $role_resources_ids)) { ?>
+              <span id="button_download_dokumen_conditional">tes</span>
+            <?php } ?>
+          </div>
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -1661,6 +1661,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <script type="text/javascript">
   $(document).ready(function() {
+    var link = opener.location.href;
+    alert(link);
+    // window.opener.location.reload();
+    // window.opener.refresh();
+    //window.parent.location.reload();
     //-- GLOBAL VARIABLE --
     // $('[data-plugin="select_modal"]').select2($(this).attr("data-options"));
     $('[data-plugin="select_modal"]').select2({
@@ -1966,7 +1971,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       beforeSend: function() {
         // setting a timeout
         $('#judul-modal-edit').html("Show PIN");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').modal('show');
@@ -2007,7 +2012,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     html_text = html_text + "</tbody></div></div>";
 
     $('#judul-modal-edit').html("Ubah PIN");
-	$('#button_download_dokumen_conditional').html("");
+    $('#button_download_dokumen_conditional').html("");
     $('.isi-modal').html(html_text);
     $('#button_save_pin').attr("hidden", false);
     $('#editModal').modal('show');
@@ -3260,7 +3265,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File Buku Tabungan");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3333,7 +3338,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File KTP");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3357,10 +3362,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -3531,7 +3536,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File KK");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3561,10 +3566,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -3633,7 +3638,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File NPWP");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3663,10 +3668,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -3735,7 +3740,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File CV");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3765,10 +3770,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -3837,7 +3842,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File SKCK");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3867,10 +3872,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -3939,7 +3944,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File Ijazah");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -3973,10 +3978,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -4045,7 +4050,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("Foto Profil");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -4070,10 +4075,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           } else {
             atribut = "image/jpg";
           }
-		  
-		  var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
 
-		  $('#button_download_dokumen_conditional').html(button_download);
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
 
           var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
@@ -4105,10 +4110,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/Importexceleslip/eslip_final/' + nip + '/' + secid;
-    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Download E-Slip");
-	$('#button_download_dokumen_conditional').html("");
+    $('#button_download_dokumen_conditional').html("");
     $('.isi-modal').html(html_text);
     $('#button_save_pin').attr("hidden", true);
     $('#editModal').appendTo("body").modal('show');
@@ -4124,10 +4130,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
-    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Lihat SK");
-	$('#button_download_dokumen_conditional').html("");
+    $('#button_download_dokumen_conditional').html("");
     $('.isi-modal').html(html_text);
     $('#button_save_pin').attr("hidden", true);
     $('#editModal').appendTo("body").modal('show');
@@ -4143,10 +4150,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(sub_project);
 
     var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
-    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Lihat Draft Kontrak");
-	$('#button_download_dokumen_conditional').html("");
+    $('#button_download_dokumen_conditional').html("");
     $('.isi-modal').html(html_text);
     $('#button_save_pin').attr("hidden", true);
     $('#editModal').appendTo("body").modal('show');
@@ -4161,10 +4169,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(id);
 
     var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
-    var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Lihat Draft Addendum");
-	$('#button_download_dokumen_conditional').html("");
+    $('#button_download_dokumen_conditional').html("");
     $('.isi-modal').html(html_text);
     $('#button_save_pin').attr("hidden", true);
     $('#editModal').appendTo("body").modal('show');
@@ -5318,7 +5327,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File Kontrak");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
@@ -5383,7 +5392,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File Kontrak");
-		$('#button_download_dokumen_conditional').html("");
+        $('#button_download_dokumen_conditional').html("");
         $('.isi-modal').html(loading_html_text);
         $('#button_save_pin').attr("hidden", true);
         $('#editModal').appendTo("body").modal('show');
