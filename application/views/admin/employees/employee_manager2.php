@@ -1661,8 +1661,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <script type="text/javascript">
   $(document).ready(function() {
-    var link = opener.location.href;
-    alert(link);
+    // var link = opener.location.href;
+    // alert(link);
     // window.opener.location.reload();
     // window.opener.refresh();
     //window.parent.location.reload();
