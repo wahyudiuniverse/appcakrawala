@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt221 extends MY_Controller 
+class Pkwt355 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -261,7 +261,7 @@ class Pkwt221 extends MY_Controller
 
 
 				$tbl_2 = '
-				<br><br>
+				<br>
 					<div style="text-align: center; text-justify: inter-word;">
 						<b><u>PERJANJIAN KEMITRAAN<br>'.$nomorsurat.'</u></b>
 					</div>
@@ -346,7 +346,7 @@ class Pkwt221 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="20">Bahwa Perusahaan bermaksud menggunakan jasa Mitra untuk melakukan pekerjaan sebagai <b>'.$jabatan.'</b> di klien perusahaan yaitu <b>'.$client.'</b> Penempatan <b>'.$penempatan.'</b>.</td>
+								<td colspan="20">Bahwa Perusahaan bermaksud menggunakan jasa Mitra untuk melakukan pekerjaan sebagai <b>'.$jabatan.'</b> di klien perusahaan yaitu <b>'.$client.'</b> Penempatan di Bali (area Kuta, Legian, Seminyak, dan sekitarnya). Lokasi penempatan kerja akan ditentukan kemudian.</td>
 							</tr>
 
 							<tr>
@@ -377,7 +377,7 @@ class Pkwt221 extends MY_Controller
 
 							<tr>
 								<td>2.</td>
-								<td colspan="20">Hari kerja disesuaikan dengan ketentuan perusahaan/klien</td>
+								<td colspan="20">Hari kerja adalah Jumat, Sabtu, dan Minggu..</td>
 							</tr>
 				<br>
 
@@ -390,116 +390,63 @@ class Pkwt221 extends MY_Controller
 							<tr>
 								<td>4.</td>
 								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+							</tr>';
+
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">Total Upah Harian yang didapatkan sebesar <b>'.$basicpay.'</b> /Hari.</td>
 							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>';
-
-
-						if($allowance_meal!="Rp 0"){	
-						$tbl_2 .= '
-					
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>';
-						}
-
-						if($allowance_transport!="Rp 0"){	
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
-							</tr>';
-
-						}
-
-						if($allowance_rent!="Rp 0"){	
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>';
-						}
-
-						if($allowance_komunikasi!="Rp 0"){	
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
-							</tr>';
-						}
-
-						if($allowance_operation!="Rp 0"){	
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
-							</tr>';
-						}
-
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Komisi lain – lain berupa insentive dimana akan diberikan apabila mencapai target 100% dalam 1 bulan dengan ketentuan sebagai berikut :</td>
-							</tr>
-
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1"></td>
-								<td colspan="20"><img src="'.base_url().'assets/tkhl_rao_tabel.png" alt="Trulli" width="360" height="280"></td>
-							</tr>
-
-							<tr>
-								<td colspan="10">Note:<br>Minimal Visit Per hari 10 toko/ Hari<br>Minimal Visit Per hari 11 toko/ Hari<br>Minimal Visit Per hari 12 toko/ Hari</td>
-								<td colspan="0"></td>
-								<td colspan="0"></td>
-							</tr>
-
-
+							
 							<br>
-
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
+								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan.</td>
 							</tr>
 							
 							<br>
 							<tr>
 								<td>6.</td>
-								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
+								<td colspan="20">Apabila saya selaku mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 							
 							<br>
 							<tr>
 								<td>7.</td>
-								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
+								<td colspan="20">Apabila saya selaku mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
-							
+
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td>8.</td>
+								<td colspan="20">Saya selaku mitra wajib mencapai target yang telah ditentukan dimana target tersebut akan diinformasikan setiap minggu. Apabila saya selaku mitra tidak mencapai target yang diberikan maka pemberian insentif akan diperhitungkan sesuai dengan ketentuan berlaku.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>9.</td>
+								<td colspan="20">Saya selaku mitra berkomitmen untuk menyelesaikan pekerjaan/proyek hingga selesai. Apabila saya mengundurkan diri secara mendadak saat pekerjaan/proyek masih berjalan. Saya selaku mitra bersedia untuk tidak dibayarkan 100% dari gaji saya kecuali saya dapat memberikan/menyediakan pengganti untuk melanjutkan proyek/pekerjaan tersebut.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>10.</td>
+								<td colspan="20">Apabila selama pekerjaan/proyek berjalan saya selaku mitra mangkir dan tidak masuk tanpa ada keterangan secara mendadak, maka saya bersedia untuk menerima konsekuensi dari perusahaan.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>11.</td>
+								<td colspan="20">Saya selaku mitra akan menerima gaji setelah proyek/pekerjan selesai dan seluruh kewajiban kerja saya telah di penuhi sesuai dengan ketentuan yang berlaku.</td>
+							</tr>
+
+							<br>
+							<tr>
+								<td>12.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
 							</tr>
 
@@ -512,7 +459,7 @@ class Pkwt221 extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="1">b.</td>
-								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga..</td>
+								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga.</td>
 							</tr>
 							<tr>
 								<td></td>
@@ -577,14 +524,8 @@ class Pkwt221 extends MY_Controller
 
 				
 				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-
-			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
-				//Close and output PDF document
+	
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

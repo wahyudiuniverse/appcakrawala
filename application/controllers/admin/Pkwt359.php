@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt221 extends MY_Controller 
+class Pkwt359 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -440,41 +440,12 @@ class Pkwt221 extends MY_Controller
 							</tr>';
 						}
 
-						if($allowance_operation!="Rp 0"){	
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
-							</tr>';
-						}
-
 						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
 								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Komisi lain – lain berupa insentive dimana akan diberikan apabila mencapai target 100% dalam 1 bulan dengan ketentuan sebagai berikut :</td>
-							</tr>
-
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1"></td>
-								<td colspan="20"><img src="'.base_url().'assets/tkhl_rao_tabel.png" alt="Trulli" width="360" height="280"></td>
-							</tr>
-
-							<tr>
-								<td colspan="10">Note:<br>Minimal Visit Per hari 10 toko/ Hari<br>Minimal Visit Per hari 11 toko/ Hari<br>Minimal Visit Per hari 12 toko/ Hari</td>
-								<td colspan="0"></td>
-								<td colspan="0"></td>
 							</tr>
 
 

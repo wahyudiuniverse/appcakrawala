@@ -32,6 +32,7 @@ class ImportExcel extends MY_Controller
 	{
 		parent::__construct();
 		//load the models
+    	$this->load->library('session');
 		$this->load->model("Employees_model");
 		$this->load->model("Register_model");
 		$this->load->model("Xin_model");
@@ -1081,6 +1082,16 @@ class ImportExcel extends MY_Controller
 
 	public function downloadDetailSaltabReleaseBPJS($id = null)
 	{
+
+
+		if($this->Import_model->CheckDownloadBPJS($id) < 1) {
+			$this->update_downloader($id);
+		}
+
+
+
+		
+
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
 		$spreadsheet->getActiveSheet()->setTitle('E-Saltab BPJS'); //nama Spreadsheet yg baru dibuat
 
@@ -1358,6 +1369,35 @@ class ImportExcel extends MY_Controller
 
 		$writer->save('php://output');	// download file 
 		// $writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function update_downloader($id) {
+		/* Define return | here result is used to return user data and error for error message */
+		// $status_id = $this->uri->segment(4);
+		// $session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
+
+
+
+		$session = $this->session->userdata('username');
+		if(empty($session)) { 
+			redirect('admin/');
+		}
+
+				$datas = array(
+					'down_bpjs_by' => $session['employee_id'],
+					'down_bpjs_on' =>  date("Y-m-d h:i:s"),
+				);
+
+				$this->Import_model->update_download_bpjs($datas, $id);
+
+
+		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
+		// $tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+
+
 	}
 
 	/*

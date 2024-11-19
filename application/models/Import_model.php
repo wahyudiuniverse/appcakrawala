@@ -691,11 +691,33 @@ GROUP BY uploadid, periode, project, project_sub;';
 	public function update_release_eslip($data, $id)
 	{
 		$this->db->where('uploadid', $id);
-		if ($this->db->update('xin_employees_eslip', $data)) {
+		if ($this->db->update('xin_saltab_bulk_release', $data)) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	// Function to update record in table > basic_info
+	public function update_download_bpjs($data, $id)
+	{
+		$this->db->where('id', $id);
+		if ($this->db->update('xin_saltab_bulk_release', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	// check client email
+	public function CheckDownloadBPJS($id)
+	{
+
+		$sql = 'SELECT * FROM xin_saltab_bulk_release WHERE id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+		return $query->num_rows();
 	}
 
 	// Function to update record in table

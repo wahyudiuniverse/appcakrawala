@@ -681,7 +681,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 		$emp_info = $this->Employees_model->read_employee_information_nip($result[0]->employee_id);
 		if(!is_null($emp_info)) {
-
 		  $fullname = $emp_info[0]->first_name;
 		  $ibu_kandung = $emp_info[0]->ibu_kandung;
 		  $ktp_no = $emp_info[0]->ktp_no;
@@ -831,11 +830,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,
 			'allow_operational' => $result[0]->allow_operational,
-			
-			// 'status_employee' => $result[0]->status_employee,
-			// 'deactive_by' => $result[0]->deactive_by,
-			// 'deactive_date' => $result[0]->deactive_date,
-			// 'deactive_reason' => $result[0]->deactive_reason,
 
 			);
 		

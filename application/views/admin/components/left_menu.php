@@ -208,49 +208,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     in_array('34', $role_resources_ids)
     || in_array('58', $role_resources_ids)
     || in_array('67', $role_resources_ids)
-  ) {
-  ?>
-    <li class="<?php if (!empty($arr_mod['pkwt_open'])) echo $arr_mod['pkwt_open']; ?> sidenav-item">
-      <a href="#" class="sidenav-link sidenav-toggle">
-        <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div><?php echo $this->lang->line('xin_pkwt'); ?></div>
-      </a>
-
-      <ul class="sidenav-menu">
-        <?php
-        if (in_array('34', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['pkwt_active'])) echo $arr_mod['pkwt_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/pkwt/'); ?>"> <?php echo $this->lang->line('xin_pkwt_list'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php if (in_array('58', $role_resources_ids)) { ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['expired_active'])) echo $arr_mod['expired_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/pkwt/expired'); ?>"> <?php echo $this->lang->line('xin_pkwt_expired'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-        <?php
-        if (in_array('67', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['approval_active'])) echo $arr_mod['approval_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/pkwt/approval'); ?>"> <?php echo $this->lang->line('xin_pkwt_approval'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-      </ul>
-    </li>
-  <?php
-  }
+  ) {}
   ?>
 
   <!-- user mobile -->
@@ -375,7 +333,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   <?php
   if (in_array('137', $role_resources_ids)) { ?>
     <li class="sidenav-item <?php if (!empty($arr_mod['my_pkwt_active'])) echo $arr_mod['my_pkwt_active']; ?>">
-      <a href="<?php echo site_url('admin/mypkwt/'); ?>" class="sidenav-link">
+      <a href="<?php echo site_url('admin/employees/emp_view/'.$session['employee_id']); ?>" class="sidenav-link">
         <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
         <i class="sidenav-icon ion ion-logo-buffer"></i>
         <div><?php echo $this->lang->line('header_my_contract'); ?></div>

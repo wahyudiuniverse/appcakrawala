@@ -302,6 +302,18 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 								{
 									id: "",
 									class: "role-checkbox-modal custom-control-input",
+									text: "Download Dokumen Pribadi",
+									add_info: "",
+									value: "1016",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('1016', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
 									text: "Edit BPJS KS & TK",
 									add_info: "",
 									value: "1009",
