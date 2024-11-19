@@ -714,7 +714,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	public function CheckDownloadBPJS($id)
 	{
 
-		$sql = 'SELECT * FROM xin_saltab_bulk_release WHERE id = ?';
+		$sql = 'SELECT * FROM xin_saltab_bulk_release WHERE id = ? AND down_bpjs_by is not null';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		return $query->num_rows();
