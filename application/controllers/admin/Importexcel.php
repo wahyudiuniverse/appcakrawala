@@ -60,6 +60,7 @@ class ImportExcel extends MY_Controller
 		$this->load->model('Exin_model');
 		$this->load->model('Import_model');
 		$this->load->model('Pkwt_model');
+		$this->load->model('Xin_model');
 		$this->load->library("pagination");
 		$this->load->library('Pdf');
 		//$this->load->library("phpspreadsheet");

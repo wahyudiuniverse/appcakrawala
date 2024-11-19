@@ -1512,8 +1512,9 @@ GROUP BY uploadid, periode, project, project_sub;';
 			if (empty($record->periode_salary) || ($record->periode_salary == "")) {
 				$periode_salary = "--";
 			} else {
-				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary);
+				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary) ."<BR> <span style='color:#3F72D5;'>".$this->Employees_model->get_nama_karyawan_by_nip($record->down_bpjs_by) .' ['. $this->Xin_model->tgl_indo($record->down_bpjs_on).']'."</span>";
 			}
+
 
 			// if (empty($record->eslip_release) || ($record->eslip_release == "")) {
 			// 	$eslip_release = "";
