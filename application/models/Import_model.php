@@ -433,7 +433,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		foreach ($records as $row) {
-			if(!is_integer(intval($row['nip'])) || $row['nip'] == "0"){
+			if(!is_integer(intval($row['nip'])) || intval($row['nip']) == "0"){
 				$new_row = array_values($row);
 				// $new_row = array_keys($row);
 				array_push($data, $new_row);
@@ -1597,7 +1597,7 @@ GROUP BY uploadid, periode, project, project_sub;';
       			<button type="button" class="btn btn-sm btn-outline-success dropdown-toggle" data-toggle="dropdown">
       				DOWNLOAD <span class="caret"></span></button>
       				<ul class="dropdown-menu" role="menu" style="width: 100px;background-color:#faf7f0;">
-					<span style="color:#3F72D5;">TES</span>
+					<span style="color:#3F72D5;">DOWNLOAD OPTION:</span>
         				<li class="mb-1">' . $download_nip_kosong . '</li>
         				<li class="mb-1">' . $download_raw . '</li>
 						<li class="mb-1">' . $download_BPJS . '</li>
