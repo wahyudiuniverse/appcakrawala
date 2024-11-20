@@ -618,6 +618,13 @@ if (in_array('514', $role_resources_ids)) {
     window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabReleasePayroll/' + id, "_self");
   }
 
+  //-----download salab NIP Kosong-----
+  function downloadBatchSaltabReleaseNIPKosong(id) {
+    // alert("masuk fungsi download. id: " + id);
+    // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
+    window.open('<?= base_url() ?>admin/Importexcel/downloadBatchSaltabReleaseNIPKosong/' + id, "_self");
+  }
+
   // function cek_isi() {
   //   var isi = langopt.getValue();
   //   //alert("tes");

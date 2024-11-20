@@ -1089,10 +1089,6 @@ class ImportExcel extends MY_Controller
 			$this->update_downloader($id);
 		}
 
-
-
-		
-
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
 		$spreadsheet->getActiveSheet()->setTitle('E-Saltab BPJS'); //nama Spreadsheet yg baru dibuat
 
@@ -1370,6 +1366,127 @@ class ImportExcel extends MY_Controller
 
 		$writer->save('php://output');	// download file 
 		// $writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadBatchSaltabReleaseNIPKosong($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_nip_kosong($id, $gabung);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
 	public function update_downloader($id) {

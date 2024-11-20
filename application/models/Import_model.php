@@ -419,6 +419,30 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	//get table saltab release untuk download excel
+	public function get_saltab_temp_detail_excel_release_nip_kosong($id, $parameter)
+	{
+		$data = array();
+
+		$this->db->select($parameter);
+		$this->db->from('xin_saltab');
+		$this->db->where('uploadid', $id);
+
+		$records = $this->db->get()->result_array();
+
+		$data = array();
+
+		foreach ($records as $row) {
+			if(!is_integer(intval($row['nip'])) || $row['nip'] == "0"){
+				$new_row = array_values($row);
+				// $new_row = array_keys($row);
+				array_push($data, $new_row);
+			}
+		}
+
+		return $data;
+	}
+
 	//get table saltab release untuk download excel BPJS
 	public function get_saltab_temp_detail_excel_release_bpjs($id, $data_batch)
 	{
@@ -1508,11 +1532,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		foreach ($records as $record) {
+			$nama_download_bpjs = "";
+			if (empty($record->down_bpjs_by) || ($record->down_bpjs_by == "")) {
+				$nama_download_bpjs = "";
+			} else {
+				$nama_download_bpjs = "<BR> <span style='color:#3F72D5;'>" . $this->Employees_model->get_nama_karyawan_by_nip($record->down_bpjs_by) . ' [' . $this->Xin_model->tgl_indo($record->down_bpjs_on) . ']' . "</span>";
+			}
+
 			$periode_salary = "";
 			if (empty($record->periode_salary) || ($record->periode_salary == "")) {
 				$periode_salary = "--";
 			} else {
-				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary) ."<BR> <span style='color:#3F72D5;'>".$this->Employees_model->get_nama_karyawan_by_nip($record->down_bpjs_by) .' ['. $this->Xin_model->tgl_indo($record->down_bpjs_on).']'."</span>";
+				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary) . $nama_download_bpjs;
 			}
 
 
@@ -1555,17 +1586,31 @@ GROUP BY uploadid, periode, project, project_sub;';
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
-			$view = '<button id="tesbutton" type="button" onclick="lihatBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-			$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Raw Data</button>';
-			$download_BPJS = '<br><button type="button" onclick="downloadBatchSaltabReleaseBPJS(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Data BPJS</button>';
-			$download_Payroll = '<br><button type="button" onclick="downloadBatchSaltabReleasePayroll(' . $record->id . ')" class="btn btn-xs btn-outline-success" ><i class="fa fa-download"></i> Data Payroll</button>';
-			$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			$view = '<button id="tesbutton" type="button" onclick="lihatBatchSaltabRelease(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-twitter" >VIEW</button>';
+			$download_nip_kosong = '<button type="button" onclick="downloadBatchSaltabReleaseNIPKosong(' . $record->id . ')" class=" btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> NIP Kosong</button>';
+			$download_raw = '<button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class=" btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Raw Data</button>';
+			$download_BPJS = '<button type="button" onclick="downloadBatchSaltabReleaseBPJS(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data BPJS</button>';
+			$download_Payroll = '<button type="button" onclick="downloadBatchSaltabReleasePayroll(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data Payroll</button>';
+			$delete = '<button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-danger" >DELETE</button>';
+
+			$button_download = '<div class="btn-group mt-2">
+      			<button type="button" class="btn btn-sm btn-outline-success dropdown-toggle" data-toggle="dropdown">
+      				DOWNLOAD <span class="caret"></span></button>
+      				<ul class="dropdown-menu" role="menu" style="width: 100px;background-color:#faf7f0;">
+					<span style="color:#3F72D5;">TES</span>
+        				<li class="mb-1">' . $download_nip_kosong . '</li>
+        				<li class="mb-1">' . $download_raw . '</li>
+						<li class="mb-1">' . $download_BPJS . '</li>
+						<li class="mb-1">' . $download_Payroll . '</li>
+      				</ul>
+    		</div>';
 
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $editReq . " " . $download_BPJS . " " . $download_Payroll,
+				"aksi" => $view . $button_download,
+				// "aksi" => $view . " " . $download_nip_kosong . " " . $download_raw . " " . $download_BPJS . " " . $download_Payroll,
 				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
 				"periode_salary" => $periode_salary,
 				"periode" => $text_periode,
@@ -1890,14 +1935,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 
 			$getContact = $this->Employees_model->getKontak($record->nip);
-				  if(!is_null($getContact)){
-				  	$contact_no = $getContact[0]->contact_no;
-				  } else {
-					  $contact_no = '#';	
-				  }
+			if (!is_null($getContact)) {
+				$contact_no = $getContact[0]->contact_no;
+			} else {
+				$contact_no = '#';
+			}
 
 
-				$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
+			$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
 
 				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Oktober 2024 - 31 Oktober 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
 
@@ -1909,13 +1954,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 				
 				Terima kasih.';
 
-			$whatsapp = '<a href="https://wa.me/62'.$contact_no.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Send WA</button> </a>';
+			$whatsapp = '<a href="https://wa.me/62' . $contact_no . '?text=' . $copypaste . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Send WA</button> </a>';
 
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $esaltab. " ". $whatsapp,
+				"aksi" => $view . " " . $esaltab . " " . $whatsapp,
 				"nik" => $record->nik,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
