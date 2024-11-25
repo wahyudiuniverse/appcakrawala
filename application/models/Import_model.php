@@ -311,6 +311,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$length = count($result_index);
 
 		for ($i = 2; $i < ($length); $i++) {
+			// $button_edit_nip = "";
+			// if (in_array('1101', $role_resources_ids)) {
+			// 	if ($i == "3") {
+			// 		$button_edit_nip = '<button type="button" onclick="edit_nip(' . $id . ')" class="btn btn-sm btn-outline-success ml-2" ><i class="fa fa-file mr-1"></i> EDIT NIP</button>';
+			// 	}
+			// }
+
+			// $data[] = array(
+			// 	$this->get_nama_kolom_detail_saltab($result_index[$i]),
+			// 	$result_value[$i] . $button_edit_nip,
+			// );
+
 			$data[] = array(
 				$this->get_nama_kolom_detail_saltab($result_index[$i]),
 				$result_value[$i],
@@ -322,6 +334,8 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 	public function get_detail_saltab_release($id = null)
 	{
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
 		$data = array();
 		$this->db->select('*');
 		$this->db->from('xin_saltab');
@@ -335,9 +349,16 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$length = count($result_index);
 
 		for ($i = 2; $i < ($length); $i++) {
+			$button_edit_nip = "";
+			if (in_array('1101', $role_resources_ids)) {
+				if ($i == "3") {
+					$button_edit_nip = '<button type="button" onclick="edit_nip(' . $id . ',\'' . $result_value[$i] . '\')" class="btn btn-sm btn-outline-success ml-2" ><i class="fa fa-file mr-1"></i> EDIT NIP</button>';
+				}
+			}
+
 			$data[] = array(
 				$this->get_nama_kolom_detail_saltab($result_index[$i]),
-				$result_value[$i],
+				$result_value[$i] . $button_edit_nip,
 			);
 		}
 
@@ -353,6 +374,31 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$records = $this->db->get()->row_array();
 
 		return $records['alias'];
+	}
+
+	//update NIP employee
+	public function update_nip($postData)
+	{
+		$this->db->set('nip', $postData['nip_baru']);
+		$this->db->where('secid', $postData['id']);
+		$this->db->update('xin_saltab');
+	}
+
+	//ambil data diri employee
+	public function get_single_nip_saltab_release($postData)
+	{
+		$this->db->select('secid');
+		$this->db->select('nip');
+		$this->db->select('fullname');
+
+		$this->db->from('xin_saltab',);
+		$this->db->where('secid', $postData['id']);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
 	}
 
 	//get table saltab untuk download excel
@@ -433,7 +479,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		foreach ($records as $row) {
-			if(!is_integer(intval($row['nip'])) || intval($row['nip']) == "0"){
+			if (!is_integer(intval($row['nip'])) || intval($row['nip']) == "0") {
 				$new_row = array_values($row);
 				// $new_row = array_keys($row);
 				array_push($data, $new_row);
@@ -1527,8 +1573,6 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->limit($rowperpage, $start);
 		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 
-
-
 		$data = array();
 
 		foreach ($records as $record) {
@@ -1545,7 +1589,6 @@ GROUP BY uploadid, periode, project, project_sub;';
 			} else {
 				$periode_salary = $this->Xin_model->tgl_indo($record->periode_salary) . $nama_download_bpjs;
 			}
-
 
 			// if (empty($record->eslip_release) || ($record->eslip_release == "")) {
 			// 	$eslip_release = "";
@@ -1583,6 +1626,9 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$release_eslip = "Tanggal terbit: " . $this->Xin_model->tgl_indo($record->eslip_release);
 				$release_eslip = $release_eslip . '<button type="button" onclick="detailReleaseEslip(' . $record->id . ')" class="btn btn-xs btn-outline-success ml-1 mt-1" >Detail Info</button>';
 			}
+
+			//hitung dokumen ke-
+			$dokumen_ke = $this->get_jumlah_dokumen_salatab_sama($record->project_id,$record->sub_project_id,$record->periode_salary);
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
@@ -1613,7 +1659,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				// "aksi" => $view . " " . $download_nip_kosong . " " . $download_raw . " " . $download_BPJS . " " . $download_Payroll,
 				// "periode_salary" => $periode_salary . "<br>" . $tes_query,
 				"periode_salary" => $periode_salary,
-				"periode" => $text_periode,
+				"periode" => $text_periode . "<span style='color:#3F72D5;'><br>Dokumen ke " . $dokumen_ke . "</span>",
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
 				"total_mpp" => $record->total_mpp,
@@ -1635,6 +1681,20 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//die;
 
 		return $response;
+	}
+
+	//hitung jumlah batch saltab yang sama
+	function get_jumlah_dokumen_salatab_sama($project_id, $sub_project_id, $periode_salary)
+	{
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where('project_id',$project_id);
+		$this->db->where('sub_project_id',$sub_project_id);
+		$this->db->where('periode_salary',$periode_salary);
+		$records = $this->db->get('xin_saltab_bulk_release')->result();
+		$totalRecords = $records[0]->allcount;
+
+		return $totalRecords;
 	}
 
 	/*

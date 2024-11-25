@@ -853,6 +853,33 @@ class ImportExcel extends MY_Controller
 		// echo "</pre>";
 	}
 
+	//ganti data nip employee
+	public function ganti_nip()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//update NIP
+		$this->Import_model->update_NIP($postData);
+
+		//data response NIP
+		$data2 = $this->Import_model->get_single_nip_saltab_release($postData);
+		$response = array(
+			'status'	=> "200",
+			'pesan' 	=> "Berhasil Ubah NIP",
+			'data'		=> $data2,
+		);
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
 	public function downloadDetailSaltab($id = null)
 	{
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
