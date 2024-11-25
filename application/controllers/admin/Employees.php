@@ -8874,14 +8874,18 @@ class Employees extends MY_Controller
 
 			//deactive date
 			$deactive_date_seed = "";
-			if ((empty($data['deactive_date'])) || ($data['deactive_date'] == "")) {
+			if ((empty($data['date_resign_request'])) || ($data['date_resign_request'] == "")) {
 				$deactive_date_text = "";
 			} else {
-				$deactive_date_array = explode(" ", $data['deactive_date']);
+				$deactive_date_array = explode(" ", $data['date_resign_request']);
 				$deactive_date_seed = $deactive_date_array[0];
-				$deactive_date_seed = $data['date_resign_request'];
+				// $deactive_date_seed = $data['date_resign_request'];
 
-				$deactive_date_text = $this->Xin_model->tgl_indo($deactive_date_array[0]) . " " . $deactive_date_array[1];
+				if(count($deactive_date_array) == "1"){
+					$deactive_date_text = $this->Xin_model->tgl_indo($deactive_date_array[0]);
+				} else {
+					$deactive_date_text = $this->Xin_model->tgl_indo($deactive_date_array[0]) . " " . $deactive_date_array[1];
+				}
 			}
 
 			$data2 = array(
