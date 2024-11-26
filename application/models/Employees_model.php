@@ -3063,7 +3063,21 @@ WHERE ktp_no = ?';
 		return $query;
 	}
 
+	// get single employee request
+	public function read_employee_by_nip_array($nip)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employees');
+		$this->db->where('employee_id', $nip);
 
+		$query = $this->db->get()->row_array();
+
+		if (!empty($query)) {
+			return $query;
+		} else {
+			return null;
+		}
+	}
 
 	// get single employee request
 	public function read_employee_expired($id)
@@ -3165,13 +3179,13 @@ WHERE ktp_no = ?';
 		$query = $this->db->query($sql, $binds);
 
 		// kondisi eslip
-			// if() {
+		// if() {
 
-			// } else {
+		// } else {
 
-			// }
+		// }
 
-			// $button_view_eslip = '<button onclick="lihat_eslip(' . $record['secid'] . ',' . $record['nip'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat e-Slip</button>';
+		// $button_view_eslip = '<button onclick="lihat_eslip(' . $record['secid'] . ',' . $record['nip'] . ')" class="btn btn-sm btn-outline-success mr-1 my-1">Lihat e-Slip</button>';
 
 		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -5714,6 +5728,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('tempat_lahir');
 		$this->db->select('date_of_birth');
 		$this->db->select('last_edu');
+		$this->db->select('edu_school_name');
+		$this->db->select('edu_prodi_name');
 		$this->db->select('ethnicity_type');
 		$this->db->select('marital_status');
 		$this->db->select('tinggi_badan');
@@ -5988,9 +6004,9 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				$button_upload_pkwt = '';
 			}
 
-			
 
-			
+
+
 
 			$data[] = array(
 				"jenis_dokumen" => "KONTRAK",
@@ -6145,6 +6161,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('tempat_lahir');
 		$this->db->select('date_of_birth');
 		$this->db->select('last_edu');
+		$this->db->select('edu_school_name');
+		$this->db->select('edu_prodi_name');
 		$this->db->select('ethnicity_type');
 		$this->db->select('marital_status');
 		$this->db->select('tinggi_badan');

@@ -286,6 +286,20 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                   </tr>
                   <tr>
+                    <td><strong>Nama Sekolah/Universitas</strong></td>
+                    <td>
+                      <input id='nama_sekolah_modal' name='nama_sekolah_modal' type='text' class='form-control' placeholder='Nama Sekolah/Universitas' value=''>
+                      <span id='pesan_nama_sekolah_modal'></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><strong>Jurusan</strong></td>
+                    <td>
+                      <input id='jurusan_modal' name='jurusan_modal' type='text' class='form-control' placeholder='Jurusan' value=''>
+                      <span id='pesan_jurusan_modal'></span>
+                    </td>
+                  </tr>
+                  <tr>
                     <td><strong>Agama</strong></td>
                     <td>
                       <select class="form-control" id="ethnicity_modal" name="ethnicity_modal" data-plugin="select_modal" data-placeholder="Agama">
@@ -1060,6 +1074,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                             <tr>
                               <th scope="row">Pendidikan Terakhir</th>
                               <td id="pendidikan_terakhir_tabel"><?php echo $last_edu_name; ?></td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Nama Sekolah/Universitas</th>
+                              <td id="nama_sekolah_tabel"><?php echo $edu_school_name; ?></td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Jurusan</th>
+                              <td id="jurusan_tabel"><?php echo $edu_prodi_name; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Agama</th>
@@ -2514,6 +2536,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('#pesan_tempat_lahir_modal').html("");
     $('#pesan_date_of_birth_modal').html("");
     $('#pesan_last_edu_modal').html("");
+    $('#pesan_nama_sekolah_modal').html("");
+    $('#pesan_jurusan_modal').html("");
     $('#pesan_ethnicity_modal').html("");
     $('#pesan_marital_status_modal').html("");
     $('#pesan_tinggi_badan_modal').html("");
@@ -2554,6 +2578,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           $('#date_of_birth_modal').val(res['data']['date_of_birth']);
           $("#ethnicity_modal").val(res['data']['ethnicity_type']).change();
           $("#last_edu_modal").val(res['data']['last_edu']).change();
+          $('#nama_sekolah_modal').val(res['data']['edu_school_name']);
+          $('#jurusan_modal').val(res['data']['edu_prodi_name']);
           $("#marital_status_modal").val(res['data']['marital_status']).change();
           $('#tinggi_badan_modal').val(res['data']['tinggi_badan']);
           $('#berat_badan_modal').val(res['data']['berat_badan']);
@@ -2602,6 +2628,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var tempat_lahir = $("#tempat_lahir_modal").val();
     var tanggal_lahir = $("#date_of_birth_modal").val();
     var pendidikan_terakhir = $("#last_edu_modal option:selected").val();
+    var edu_school_name = $("#nama_sekolah_modal").val();
+    var edu_prodi_name = $("#jurusan_modal").val();
     var agama = $("#ethnicity_modal option:selected").val();
     var status_kawin = $("#marital_status_modal option:selected").val();
     var tinggi_badan = $("#tinggi_badan_modal").val();
@@ -2627,6 +2655,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var pesan_tempat_lahir_modal = "";
     var pesan_date_of_birth_modal = "";
     var pesan_last_edu_modal = "";
+    var pesan_edu_school_name_modal = "";
+    var pesan_edu_prodi_name_modal = "";
     var pesan_ethnicity_modal = "";
     var pesan_marital_status_modal = "";
     var pesan_tinggi_badan_modal = "";
@@ -2659,6 +2689,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     if (pendidikan_terakhir == "") {
       pesan_last_edu_modal = "<small style='color:#FF0000;'>Pendidikan terakhir tidak boleh kosong</small>";
       $('#last_edu_modal').focus();
+    }
+    if (edu_school_name == "") {
+      pesan_edu_school_name_modal = "<small style='color:#FF0000;'>Nama Sekolah/Universitas tidak boleh kosong</small>";
+      $('#nama_sekolah_modal').focus();
+    }
+    if (edu_prodi_name == "") {
+      pesan_edu_prodi_name_modal = "<small style='color:#FF0000;'>Jurusan tidak boleh kosong</small>";
+      $('#jurusan_modal').focus();
     }
     if (agama == "") {
       pesan_ethnicity_modal = "<small style='color:#FF0000;'>Agama tidak boleh kosong</small>";
@@ -2717,6 +2755,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('#pesan_tempat_lahir_modal').html(pesan_tempat_lahir_modal);
     $('#pesan_date_of_birth_modal').html(pesan_date_of_birth_modal);
     $('#pesan_last_edu_modal').html(pesan_last_edu_modal);
+    $('#pesan_nama_sekolah_modal').html(pesan_edu_school_name_modal);
+    $('#pesan_jurusan_modal').html(pesan_edu_prodi_name_modal);
     $('#pesan_ethnicity_modal').html(pesan_ethnicity_modal);
     $('#pesan_marital_status_modal').html(pesan_marital_status_modal);
     $('#pesan_tinggi_badan_modal').html(pesan_tinggi_badan_modal);
@@ -2734,7 +2774,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       (pesan_first_name_modal != "") || (pesan_gender_modal != "") || (pesan_tempat_lahir_modal != "") ||
       (pesan_date_of_birth_modal != "") || (pesan_last_edu_modal != "") || (pesan_ethnicity_modal != "") ||
       (pesan_marital_status_modal != "") || (pesan_tinggi_badan_modal != "") || (pesan_berat_badan_modal != "") ||
-      (pesan_ktp_no_modal != "") || (pesan_kk_no_modal != "") ||
+      (pesan_ktp_no_modal != "") || (pesan_kk_no_modal != "") || (pesan_edu_school_name_modal != "") || (pesan_edu_prodi_name_modal != "") ||
       (pesan_npwp_no_modal != "") || (pesan_contact_no_modal != "") ||
       (pesan_ibu_kandung_modal != "") || (pesan_alamat_ktp_modal != "") || (pesan_alamat_domisili_modal != "")
     ) { //kalau ada input kosong 
@@ -2752,6 +2792,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           tempat_lahir: tempat_lahir,
           tanggal_lahir: tanggal_lahir,
           pendidikan_terakhir: pendidikan_terakhir,
+          edu_school_name: edu_school_name,
+          edu_prodi_name: edu_prodi_name,
           agama: agama,
           status_kawin: status_kawin,
           tinggi_badan: tinggi_badan,
@@ -2785,6 +2827,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             $('#tempat_lahir_tabel').html(res['data']['tempat_lahir']);
             $('#tanggal_lahir_tabel').html(res['data']['date_of_birth']);
             $('#pendidikan_terakhir_tabel').html(res['data']['last_edu']);
+            $('#nama_sekolah_tabel').html(res['data']['edu_school_name']);
+            $('#jurusan_tabel').html(res['data']['edu_prodi_name']);
             $('#agama_tabel').html(res['data']['ethnicity_type']);
             $('#status_kawin_tabel').html(res['data']['marital_status']);
             $('#tinggi_badan_tabel').html(res['data']['tinggi_badan']);
