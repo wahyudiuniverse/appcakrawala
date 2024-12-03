@@ -1679,26 +1679,30 @@ class ImportExcel extends MY_Controller
 					if ($header_tabel_saltab[$j] == "nip") {
 						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
 							// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-							$trimmed_nip = trim($sheet_data[$i][$j], " ");
+							$trimmed_nip = trim($sheet_data[$i][$j],' ');
+							$trimmed_nip = trim($trimmed_nip,' ');
 							$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 						} else {
 							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
 								// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-								$trimmed_nip = trim($sheet_data[$i][$j], " ");
+								$trimmed_nip = trim($sheet_data[$i][$j],' ');
+								$trimmed_nip = trim($trimmed_nip,' ');
 								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
 								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
 								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
 								$j = $j + 1;
 							} else {
-								$trimmed_nip = trim($sheet_data[$i][$j], " ");
+								$trimmed_nip = trim($sheet_data[$i][$j],' ');
+								$trimmed_nip = trim($trimmed_nip,' ');
 								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 							}
 						}
 						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
 					} else {
-						$trimmed_nip = trim($sheet_data[$i][$j], " ");
-						$data += [$header_tabel_saltab[$j] =>$trimmed_nip];
+						$trimmed_nip = trim($sheet_data[$i][$j],' ');
+						$trimmed_nip = trim($trimmed_nip,' ');
+						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 					}
 				}
 				$array_data[] = $data;
@@ -1735,9 +1739,9 @@ class ImportExcel extends MY_Controller
 			// echo '<pre>';
 			// print_r("NIK : " . $nik);
 			// echo '</pre>';
-			// echo '<pre>';
-			// print_r($array_data_final);
-			// echo '</pre>';
+			echo '<pre>';
+			print_r($array_data);
+			echo '</pre>';
 			// echo '<pre>';
 			// print_r($header_tabel_saltab);
 			// echo '</pre>';
@@ -1750,7 +1754,7 @@ class ImportExcel extends MY_Controller
 		//$this->view_batch_saltab_temporary($id_batch);
 		//redirect('/');
 
-		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
 	function view_batch_saltab_temporary($id_batch = null)
