@@ -1739,9 +1739,9 @@ class ImportExcel extends MY_Controller
 			// echo '<pre>';
 			// print_r("NIK : " . $nik);
 			// echo '</pre>';
-			echo '<pre>';
-			print_r($array_data);
-			echo '</pre>';
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
 			// echo '<pre>';
 			// print_r($header_tabel_saltab);
 			// echo '</pre>';
@@ -1754,7 +1754,7 @@ class ImportExcel extends MY_Controller
 		//$this->view_batch_saltab_temporary($id_batch);
 		//redirect('/');
 
-		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
 	function view_batch_saltab_temporary($id_batch = null)
