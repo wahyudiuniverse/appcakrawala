@@ -268,6 +268,65 @@ ORDER BY contract_id DESC LIMIT 1";
 		}
 	}
 
+	public function read_last_active_pkwt_bynip($nip)
+	{
+
+		$sql = "SELECT * FROM xin_employee_contract WHERE employee_id = ? AND status_pkwt = '1' AND cancel_stat = '0' AND approve_hrd != '0' AND approve_nae != '0' AND approve_nom != '0' ORDER BY contract_id DESC LIMIT 1";
+		// $sql = 'SELECT * FROM xin_employee_contract WHERE employee_id = ?';
+		$binds = array($nip);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
+	public function read_last_active_pkwt_bynip_array($nip)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employee_contract');
+		$this->db->where('employee_id', $nip);
+		$this->db->where('status_pkwt', '1');
+		$this->db->where('cancel_stat', '0');
+		$this->db->where('approve_hrd !=', '0');
+		$this->db->where('approve_nae !=', '0');
+		$this->db->where('approve_nom !=', '0');
+		$this->db->order_by('contract_id', 'DESC');
+		$this->db->limit(1);
+
+		$query = $this->db->get()->row_array();
+
+		if (!empty($query)) {
+			return $query;
+		} else {
+			return null;
+		}
+	}
+
+	public function read_last_request_pkwt_bynip_array($nip)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employee_contract');
+		$this->db->where('employee_id', $nip);
+		$this->db->where('status_pkwt', '0');
+		$this->db->where('cancel_stat', '0');
+		$this->db->where('approve_hrd', '0');
+		$this->db->where('approve_nae', '0');
+		$this->db->where('approve_nom', '0');
+		$this->db->order_by('contract_id', 'DESC');
+		$this->db->limit(1);
+
+		$query = $this->db->get()->row_array();
+
+		if (!empty($query)) {
+			return $query;
+		} else {
+			return null;
+		}
+	}
+
 	// get single employee
 	public function read_info_ratecard($proj,$posi,$area) {
 	

@@ -303,6 +303,8 @@ class Employees_model extends CI_Model
 		return $query;
 	}
 
+
+
 	//ambil golongan karawan berdasarkan project
 	function get_golongan_karyawan($proj_id)
 	{
@@ -2036,6 +2038,160 @@ class Employees_model extends CI_Model
 			// 	);
 			// }
 			$i++;
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	function list_employees($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$identifier = $postData['identifier'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			// if (strlen($searchValue) >= 3) {
+			$searchQuery = " (employee_id like '%" . $searchValue . "%' or ktp_no like '%" . $searchValue . "%' or first_name like '%" . $searchValue . "%') ";
+			// }
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(`user_id` = '-1')";
+		if ($identifier == "tigaraksa") {
+			$kondisiDefaultQuery = "(`project_id` = '46' or `project_id` = '94' or `project_id` = '106')";
+		}
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		if ($kondisiDefaultQuery != '') {
+			$this->db->where($kondisiDefaultQuery);
+		}
+		$records = $this->db->get('xin_employees')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		if ($kondisiDefaultQuery != '') {
+			$this->db->where($kondisiDefaultQuery);
+		}
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_employees')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		// $this->db->select('*');
+		$this->db->select('status_resign');
+		$this->db->select('employee_id');
+		$this->db->select('ktp_no');
+		$this->db->select('first_name');
+		$this->db->select('project_id');
+		$this->db->select('sub_project_id');
+		$this->db->select('designation_id');
+		$this->db->select('penempatan');
+		if ($kondisiDefaultQuery != '') {
+			$this->db->where($kondisiDefaultQuery);
+		}
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_employees')->result();
+
+		#Debugging variable
+		// $tes_query = $this->db->last_query();
+		// $totalRecords = $tes_query;
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$status_karyawan = "";
+			if ($record->status_resign == "1") {
+				$status_karyawan = "AKTIF";
+			} else if ($record->status_resign == "2") {
+				$status_karyawan = "RESIGN";
+			} else if ($record->status_resign == "3") {
+				$status_karyawan = "BLACKLIST";
+			} else if ($record->status_resign == "4") {
+				$status_karyawan = "END CONTRACT";
+			} else if ($record->status_resign == "5") {
+				$status_karyawan = "DEACTIVE";
+			} else {
+				$status_karyawan = "";
+			}
+
+			//get detail pkwt aktif terkahir
+			$pkwt_info = $this->Pkwt_model->read_last_active_pkwt_bynip_array($record->employee_id);
+
+			//variabel pkwt aktif terkahir
+			if (!is_null($pkwt_info)) {
+				//atribut kontrak
+				$contract_start 		= $this->Xin_model->tgl_indo($pkwt_info['from_date']);
+				$contract_end 			= $this->Xin_model->tgl_indo($pkwt_info['to_date']);
+				$periode_kontrak = $contract_start . " s/d " . $contract_end;
+			} else {
+				$periode_kontrak = "";
+			}
+
+			// $nama_rekruter = "";
+			// if (($record->nama_rekruter != null) && ($record->nama_rekruter != "") && ($record->nama_rekruter != '0')) {
+			//     $nama_rekruter = $record->nama_rekruter;
+			// } else {
+			//     $nama_rekruter = "";
+			// }
+
+			// $region = "";
+			// if (($record->region != null) && ($record->region != "") && ($record->region != '0')) {
+			//     $region = $record->region;
+			// } else {
+			//     $region = "";
+			// }
+
+			$button_open_profile = '<button onclick="open_profile(' . $record->employee_id . ')" class="btn btn-sm btn-outline-success ladda-button mt-1" data-style="expand-right">View</button>';
+			// $button_open_profile = '<button class="btn btn-sm btn-outline-success ladda-button mt-1" data-style="expand-right">View</button>';
+
+			$data[] = array(
+				"aksi" => $button_open_profile,
+				// "status_resign" => $record->status_resign,
+				"status_resign" => $status_karyawan,
+				"employee_id" => $record->employee_id,
+				"ktp_no" => $record->ktp_no,
+				"first_name" => strtoupper($record->first_name),
+				"project_id" => strtoupper($this->get_nama_project($record->project_id)),
+				"sub_project_id" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
+				"designation_id" => strtoupper($this->get_nama_jabatan($record->designation_id)),
+				// "project_id" => $record->project_id,
+				// "sub_project_id" => $record->sub_project_id,
+				// "designation_id" => $record->designation_id,
+				"penempatan" => strtoupper($record->penempatan),
+				"periode_kontrak" => $periode_kontrak,
+			);
 		}
 
 		## Response
