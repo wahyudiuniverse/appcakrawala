@@ -2057,7 +2057,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->select('*');
 		$this->db->from('log_request_open_saltab',);
 		$this->db->where($postData);
-		$this->db->order_by('request_on', 'DESC');
+		$this->db->order_by('id', 'DESC');
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
 
@@ -2072,7 +2072,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->select('*');
 		$this->db->from('log_request_open_saltab',);
 		$this->db->where($postData);
-		$this->db->order_by('request_on', 'DESC');
+		$this->db->order_by('id', 'DESC');
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
 
