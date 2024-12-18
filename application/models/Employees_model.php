@@ -574,8 +574,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('max(contract_id)');
-			$this->db->select('file_name');
+			$this->db->select('max(contract_id) as max_contract_id');
 			$this->db->from('xin_employee_contract');
 			$this->db->where('employee_id', $id);
 			// $this->db->order_by('createdon', 'desc');
@@ -587,7 +586,15 @@ class Employees_model extends CI_Model
 			if (empty($query)) {
 				return "";
 			} else {
-				return $query['file_name'];
+				$this->db->select('file_name');
+				$this->db->from('xin_employee_contract');
+				$this->db->where('contract_id', $query['max_contract_id']);
+				// $this->db->order_by('createdon', 'desc');
+				// $this->db->limit(1);
+
+				$query2 = $this->db->get()->row_array();
+
+				return $query2['file_name'];
 			}
 		}
 	}
@@ -600,8 +607,7 @@ class Employees_model extends CI_Model
 		} else if ($id == 0) {
 			return "";
 		} else {
-			$this->db->select('max(contract_id)');
-			$this->db->select('upload_pkwt');
+			$this->db->select('max(contract_id) as max_contract_id');
 			$this->db->from('xin_employee_contract');
 			$this->db->where('employee_id', $id);
 			// $this->db->order_by('createdon', 'desc');
@@ -613,7 +619,49 @@ class Employees_model extends CI_Model
 			if (empty($query)) {
 				return "";
 			} else {
-				return $query['upload_pkwt'];
+				$this->db->select('upload_pkwt');
+				$this->db->from('xin_employee_contract');
+				$this->db->where('contract_id', $query['max_contract_id']);
+				// $this->db->order_by('createdon', 'desc');
+				// $this->db->limit(1);
+
+				$query2 = $this->db->get()->row_array();
+
+				return $query2['upload_pkwt'];
+			}
+		}
+	}
+
+	//ambil periode pkwt terakhir
+	function get_periode_pkwt($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(contract_id) as max_contract_id');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				$this->db->select('from_date');
+				$this->db->select('to_date');
+				$this->db->from('xin_employee_contract');
+				$this->db->where('contract_id', $query['max_contract_id']);
+				// $this->db->order_by('createdon', 'desc');
+				// $this->db->limit(1);
+
+				$query2 = $this->db->get()->row_array();
+
+				return $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']);
 			}
 		}
 	}
@@ -2310,6 +2358,7 @@ class Employees_model extends CI_Model
 			## Fetch records
 			// $this->db->select('*');
 			$this->db->select('xin_employees.user_id');
+			$this->db->select('xin_employees.verification_id');
 			$this->db->select('xin_employees.employee_id');
 			$this->db->select('xin_employees.status_resign');
 			$this->db->select('xin_employees.ktp_no');
@@ -2320,8 +2369,8 @@ class Employees_model extends CI_Model
 			// $this->db->select('xin_designations.designation_id');
 			$this->db->select('xin_designations.designation_name');
 			$this->db->select('xin_employees.penempatan');
-			$this->db->select('b.from_date');
-			$this->db->select('b.to_date');
+			//$this->db->select('b.from_date');
+			//$this->db->select('b.to_date');
 			$this->db->select('xin_employees.contract_start');
 			$this->db->select('xin_employees.contract_end');
 			$this->db->select('xin_employees.private_code');
@@ -2342,7 +2391,7 @@ class Employees_model extends CI_Model
 			}
 			// $this->db->order_by($columnName, $columnSortOrder);
 			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-			$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+			//$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 			// $this->db->join('(select max(contract_id), employee_id from xin_employee_contract group by employee_id) b', 'b.employee_id = xin_employees.employee_id', 'inner');
 			$this->db->limit($rowperpage, $start);
 			$records = $this->db->get('xin_employees')->result();
@@ -2354,24 +2403,49 @@ class Employees_model extends CI_Model
 			$data = array();
 
 			foreach ($records as $record) {
-				$text_periode_from = "";
-				$text_periode_to = "";
-				$text_periode = "";
-				if (empty($record->from_date) || ($record->from_date == "")) {
-					$text_periode_from = "";
+				//verification id
+				$actual_verification_id = "";
+				if ((is_null($record->verification_id)) || ($record->verification_id == "") || ($record->verification_id == "0")) {
+					$actual_verification_id = "e_" . $record->user_id;
 				} else {
-					$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
+					$actual_verification_id = $record->verification_id;
 				}
-				if (empty($record->to_date) || ($record->to_date == "")) {
-					$text_periode_to = "";
+
+				//cek status validation ke database
+				$nik_validation = "0";
+				$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+				if (is_null($nik_validation_query)) {
+					$nik_validation = "0";
 				} else {
-					$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
+					$nik_validation = $nik_validation_query['status'];
 				}
-				if (($text_periode_from == "") && ($text_periode_to == "")) {
-					$text_periode = "";
+
+				$validate_nik = "";
+				if($nik_validation == "1"){
+					$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
 				} else {
-					$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+					$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 				}
+				$button_open_ktp = '<button onclick="open_ktp(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+
+				// $text_periode_from = "";
+				// $text_periode_to = "";
+				// $text_periode = "";
+				// if (empty($record->from_date) || ($record->from_date == "")) {
+				// 	$text_periode_from = "";
+				// } else {
+				// 	$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
+				// }
+				// if (empty($record->to_date) || ($record->to_date == "")) {
+				// 	$text_periode_to = "";
+				// } else {
+				// 	$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
+				// }
+				// if (($text_periode_from == "") && ($text_periode_to == "")) {
+				// 	$text_periode = "";
+				// } else {
+				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+				// }
 
 				$text_resign = "";
 				if (empty($record->status_resign) || ($record->status_resign == "")) {
@@ -2440,13 +2514,13 @@ class Employees_model extends CI_Model
 				$data[] = array(
 					"aksi" => $view,
 					"employee_id" => $record->employee_id . $text_resign,
-					"ktp_no" => $record->ktp_no,
+					"ktp_no" => $record->ktp_no . $validate_nik . $button_open_ktp,
 					"first_name" => strtoupper($record->first_name),
 					"project" => strtoupper($this->get_nama_project($record->project_id)),
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
 					"penempatan" => strtoupper($record->penempatan),
-					"periode" => $text_periode,
+					"periode" => $this->get_periode_pkwt($record->employee_id),
 					"pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
 				);

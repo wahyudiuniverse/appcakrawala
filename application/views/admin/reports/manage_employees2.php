@@ -6,6 +6,37 @@
 <?php $_tasks = $this->Timesheet_model->get_tasks(); ?>
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
+<?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
+
+<!-- MODAL UNTUK EDIT -->
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">
+          <div class="judul-modal">
+            <span id="judul-modal-edit"></span>
+            <?php if (in_array('1016', $role_resources_ids)) { ?>
+              <span id="button_download_dokumen_conditional">tes</span>
+            <?php } ?>
+          </div>
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- <iframe src="" style="zoom:0.60" frameborder="0" height="250" width="99.6%"></iframe> -->
+        <div class="isi-modal"></div>
+        <div class="pesan-isi-modal"></div>
+      </div>
+      <div class="modal-footer">
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+        <button hidden id='button_save_pin' name='button_save_pin' type='button' class='btn btn-primary'>Save PIN</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade" id="dokumenModal" tabindex="-1" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -194,6 +225,12 @@
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
   var session_id = '<?php echo $session['employee_id']; ?>';
+
+  var loading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+  var loading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+  loading_html_text = loading_html_text + '<img src="' + loading_image + '" alt="" width="100px">';
+  loading_html_text = loading_html_text + '<h2>LOADING...</h2>';
+  loading_html_text = loading_html_text + '</div>';
 
   $(document).ready(function() {
     var project = document.getElementById("aj_project").value;
@@ -384,6 +421,70 @@
     // alert(sub_project);
     // alert(status);
   };
+</script>
+
+<!-- Tombol Open KTP -->
+<script type="text/javascript">
+  function open_ktp(nip) {
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        nip: nip,
+      },
+      beforeSend: function() {
+        $('#judul-modal-edit').html("File KTP");
+        $('#button_download_dokumen_conditional').html("");
+        $('.isi-modal').html(loading_html_text);
+        $('#button_save_pin').attr("hidden", true);
+        $('#editModal').appendTo("body").modal('show');
+      },
+      success: function(response) {
+
+        var res = jQuery.parseJSON(response);
+
+        if (res['status']['filename_ktp'] == "200") {
+          var nama_file = res['data']['filename_ktp'];
+          var tipe_file = nama_file.substr(-3, 3);
+          var atribut = "";
+          var height = '';
+          var d = new Date();
+          var time = d.getTime();
+          nama_file = nama_file + "?" + time;
+
+          if (tipe_file == "pdf") {
+            atribut = "application/pdf";
+            height = 'height="500px"';
+          } else {
+            atribut = "image/jpg";
+          }
+
+          var button_download = "<a href='" + nama_file + "' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>Download File</button></a>";
+
+          $('#button_download_dokumen_conditional').html(button_download);
+
+          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        } else {
+          html_text = res['pesan']['filename_ktp'];
+          $('.isi-modal').html(html_text);
+          $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
 </script>
 
 <script type="text/javascript">
