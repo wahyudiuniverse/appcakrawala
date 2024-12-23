@@ -1699,6 +1699,11 @@ class ImportExcel extends MY_Controller
 							}
 						}
 						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+					} if ($header_tabel_saltab[$j] == "adjustment_pph") {
+						$trimmed_nip = trim($sheet_data[$i][$j],' ');
+						$trimmed_nip = trim($trimmed_nip,' ');
+						$trimmed_nip = abs($trimmed_nip);
+						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 					} else {
 						$trimmed_nip = trim($sheet_data[$i][$j],' ');
 						$trimmed_nip = trim($trimmed_nip,' ');
@@ -1711,6 +1716,9 @@ class ImportExcel extends MY_Controller
 
 			if ($nama_sub_project == "-ALL-") {
 				if (!empty($array_data)) {
+			// 		echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
 					$this->Import_model->insert_saltab_detail($array_data);
 				}
 			} else {
