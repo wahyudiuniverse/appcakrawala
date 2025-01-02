@@ -32,7 +32,7 @@ class ImportExcel extends MY_Controller
 	{
 		parent::__construct();
 		//load the models
-    	$this->load->library('session');
+		$this->load->library('session');
 		$this->load->model("Employees_model");
 		$this->load->model("Register_model");
 		$this->load->model("Xin_model");
@@ -1112,7 +1112,7 @@ class ImportExcel extends MY_Controller
 	{
 
 
-		if($this->Import_model->CheckDownloadBPJS($id) < 1) {
+		if ($this->Import_model->CheckDownloadBPJS($id) < 1) {
 			$this->update_downloader($id);
 		}
 
@@ -1516,7 +1516,8 @@ class ImportExcel extends MY_Controller
 		//$writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
-	public function update_downloader($id) {
+	public function update_downloader($id)
+	{
 		/* Define return | here result is used to return user data and error for error message */
 		// $status_id = $this->uri->segment(4);
 		// $session = $this->session->userdata('username');
@@ -1527,16 +1528,16 @@ class ImportExcel extends MY_Controller
 
 
 		$session = $this->session->userdata('username');
-		if(empty($session)) { 
+		if (empty($session)) {
 			redirect('admin/');
 		}
 
-				$datas = array(
-					'down_bpjs_by' => $session['employee_id'],
-					'down_bpjs_on' =>  date("Y-m-d h:i:s"),
-				);
+		$datas = array(
+			'down_bpjs_by' => $session['employee_id'],
+			'down_bpjs_on' =>  date("Y-m-d h:i:s"),
+		);
 
-				$this->Import_model->update_download_bpjs($datas, $id);
+		$this->Import_model->update_download_bpjs($datas, $id);
 
 
 		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
@@ -1619,6 +1620,10 @@ class ImportExcel extends MY_Controller
 			$jumlah_data = count($sheet_data) - 2;
 			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
 
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
+
 			//susun array batch saltab
 			$data_batch = array(
 				'periode_cutoff_from'    => $saltab_from,
@@ -1679,34 +1684,35 @@ class ImportExcel extends MY_Controller
 					if ($header_tabel_saltab[$j] == "nip") {
 						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
 							// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-							$trimmed_nip = trim($sheet_data[$i][$j],' ');
-							$trimmed_nip = trim($trimmed_nip,' ');
+							$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+							$trimmed_nip = trim($trimmed_nip, ' ');
 							$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 						} else {
 							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
 								// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-								$trimmed_nip = trim($sheet_data[$i][$j],' ');
-								$trimmed_nip = trim($trimmed_nip,' ');
+								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+								$trimmed_nip = trim($trimmed_nip, ' ');
 								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
 								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
 								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
 								$j = $j + 1;
 							} else {
-								$trimmed_nip = trim($sheet_data[$i][$j],' ');
-								$trimmed_nip = trim($trimmed_nip,' ');
+								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+								$trimmed_nip = trim($trimmed_nip, ' ');
 								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 							}
 						}
 						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-					} if ($header_tabel_saltab[$j] == "adjustment_pph") {
-						$trimmed_nip = trim($sheet_data[$i][$j],' ');
-						$trimmed_nip = trim($trimmed_nip,' ');
-						$trimmed_nip = abs($trimmed_nip);
+					}
+					if ($header_tabel_saltab[$j] == "adjustment_pph") {
+						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+						$trimmed_nip = trim($trimmed_nip, ' ');
+						$trimmed_nip = abs(doubleval($trimmed_nip));
 						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 					} else {
-						$trimmed_nip = trim($sheet_data[$i][$j],' ');
-						$trimmed_nip = trim($trimmed_nip,' ');
+						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+						$trimmed_nip = trim($trimmed_nip, ' ');
 						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
 					}
 				}
@@ -1716,9 +1722,9 @@ class ImportExcel extends MY_Controller
 
 			if ($nama_sub_project == "-ALL-") {
 				if (!empty($array_data)) {
-			// 		echo '<pre>';
-			// print_r($array_data);
-			// echo '</pre>';
+					// echo '<pre>';
+					// print_r($array_data);
+					// echo '</pre>';
 					$this->Import_model->insert_saltab_detail($array_data);
 				}
 			} else {
@@ -3534,13 +3540,13 @@ class ImportExcel extends MY_Controller
 				$full_name = strtoupper($user[0]->first_name);
 			}
 
-			if((empty($data['eslip_release_on'])) || ($data['eslip_release_on'] == "")){
+			if ((empty($data['eslip_release_on'])) || ($data['eslip_release_on'] == "")) {
 				$eslip_release_on_text = "";
 			} else {
 				$eslip_release_on_array = explode(" ", $data['eslip_release_on']);
 				$eslip_release_on_text = $this->Xin_model->tgl_indo($data['eslip_release_on']) . " " . $eslip_release_on_array[1];
 			}
-			
+
 			$data2 = array(
 				'tanggal_penggajian'	=> $this->Xin_model->tgl_indo($data['periode_salary']),
 				'periode_salary'		=> $data['periode_salary'],
