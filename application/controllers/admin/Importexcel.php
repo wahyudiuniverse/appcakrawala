@@ -1612,10 +1612,23 @@ class ImportExcel extends MY_Controller
 
 			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
 			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			// $sheet_data = array_map('trim', $sheet_data);
+			$sheet_data = array_filter($sheet_data);
 			$array_data  = [];
 			$array_data_final  = [];
 			$data        = [];
 			$header_tabel_saltab = $sheet_data[0];
+			$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+			// echo '<pre>';
+			// print_r(array_filter($header_tabel_saltab));
+			// echo '</pre>';
+
+			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+			// $header_tabel_saltab = array_filter($header_tabel_saltab);
 			$length_header = count($header_tabel_saltab);
 			$jumlah_data = count($sheet_data) - 2;
 			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
