@@ -1894,8 +1894,7 @@ class Reports extends MY_Controller
 			// $file_pkwt = $r->file_name;
 
 			if (!is_null($r->file_name)) {
-
-				$pkwt_file = '<a href="' . $r->file_name . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">PKWT FILE</button></a>';
+				$pkwt_file = '<a href="https://apps-cakrawala.com/uploads/document/pkwt/' . $r->file_name . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">PKWT FILE</button></a>';
 			} else {
 				$pkwt_file = '';
 			}
@@ -1987,7 +1986,7 @@ class Reports extends MY_Controller
 			$whatsapp = '<a href="https://wa.me/62' . $nowhatsapp . '?text=' . $copypaste . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">' . $nowhatsapp . '</button> </a>';
 
 			// if($roleid=='1' || $roleid=='3' || $roleid=='11'){
-			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_edit/' . $r->contract_id . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>';
+			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_edit/' . $r->uniqueid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>';
 			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '">Hapus</button>';
 			// } else {
 			// 	$editReq = '';

@@ -82,99 +82,19 @@ class Employee_resign extends MY_Controller {
 		
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		$employee = $this->Employees_model->get_monitoring_rsign($session['employee_id']);
+		$employee = $this->Employees_model->get_data_null($session['employee_id']);
 		$no=0;
 		$data = array();
 
           foreach($employee->result() as $r) {
 			  $no++;
-				$project = $r->project_id;
-				$nip = $r->employee_id;
-				$fullname = $r->first_name;
-				$posisi = $r->designation_id;
-				$date_of_leaving = $r->date_of_leaving;
-				$ktp_no = $r->ktp_no;
-				$penempatan = $r->penempatan;
-				$approve_resignnae = $r->approve_resignnae;
-				$approve_resignnom = $r->approve_resignnom;
-				$approve_resignhrd = $r->approve_resignhrd;
-				$cancel_resign_stat = $r->cancel_resign_stat;
+			  $status_migrasi = '0';
 
-				if($cancel_resign_stat==1){
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal">DITOLAK</button>';
-				} else if(is_null($approve_resignnae) || $approve_resignnae=='0'){
 
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NAE</button>';
-				} else if(is_null($approve_resignnom) || $approve_resignnom=='0') {
-					
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval NOM</button>';
-				} else if(is_null($approve_resignhrd) || $approve_resignhrd=='0') {
-
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="'. $r->user_id . '">Need Approval HRD</button>';
-				} else {
-
-			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal">Resigned</button>';
-				}
-
-				if($r->status_resign==2){
-					$status_name = 'RESIGN';
-				} else if ($r->status_resign==3){
-					$status_name = 'BAD ATITUDE';
-				} else if ($r->status_resign==4){
-					$status_name = 'END CONTRACT';
-				} else {
-					$status_name = 'Undefined';
-				}
-
-				$vexc = '<a href="'.base_url().'uploads/document/'.$r->dok_exit_clearance.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-
-				if(is_null($r->dok_resign_letter)){
-					$vsrs = '';
-				} else {
-					$vsrs = '<a href="'.base_url().'uploads/document/'.$r->dok_resign_letter.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-				}
-
-				if(is_null($r->dok_over_hand)){
-					$vhov = '';
-				} else {
-					$vhov = '<a href="'.base_url().'uploads/document/'.$r->dok_over_hand.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-				}
-
-				$projects = $this->Project_model->read_single_project($r->project_id);
-				if(!is_null($projects)){
-					$nama_project = $projects[0]->title;
-				} else {
-					$nama_project = '--';	
-				}
-			
-				// $department = $this->Department_model->read_department_information($r->department);
-				// if(!is_null($department)){
-				// 	$department_name = $department[0]->department_name;
-				// } else {
-				// 	$department_name = '--';	
-				// }
-
-				$designation = $this->Designation_model->read_designation_information($r->designation_id);
-				if(!is_null($designation)){
-					$designation_name = $designation[0]->designation_name;
-				} else {
-					$designation_name = '--';	
-				}
-
-				$dok_p = $vexc.' '.$vsrs.' '.$vhov;
 
 			$data[] = array(
 				$no,
-				$status_migrasi,
-				$nip,
-				$fullname,
-				$nama_project,
-				$designation_name,
-				$date_of_leaving,
-				$penempatan,
-				$ktp_no,
-				$status_name,
-				$dok_p,
+				$status_migrasi
 			);
           }
 
@@ -492,7 +412,8 @@ class Employee_resign extends MY_Controller {
 									'date_of_leaving' 			=> $date_of_leave,
 									'dok_exit_clearance' 		=> $fnameExit,
 									'dok_resign_letter' 		=> $fname_sresign,
-									'dok_over_hand' 				=> $fname_ov,
+									'dok_over_hand' 			=> $fname_ov,
+									'request_paklaring' 		=> 1,
 									'date_resign_request' 	=> date('Y-m-d h:i:s')
 									);
 
@@ -510,6 +431,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => $fname_sresign,
 									'dok_over_hand' => $fname_ov,
+									'request_paklaring' 	=> 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 
@@ -631,6 +553,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => $fname_sresign,
 									'dok_over_hand' => null,
+									'request_paklaring' => 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 
@@ -648,6 +571,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => $fname_sresign,
 									'dok_over_hand' => null,
+									'request_paklaring' => 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 
@@ -738,6 +662,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => null,
 									'dok_over_hand' => null,
+									'request_paklaring' => 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 						} else {
@@ -754,6 +679,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => null,
 									'dok_over_hand' => null,
+									'request_paklaring' => 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 
@@ -840,6 +766,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => null,
 									'dok_over_hand' => null,
+									'request_paklaring' => 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 						} else {
@@ -856,6 +783,7 @@ class Employee_resign extends MY_Controller {
 									'dok_exit_clearance' => $fnameExit,
 									'dok_resign_letter' => null,
 									'dok_over_hand' => null,
+									'request_paklaring' => 1,
 									'date_resign_request' => date('Y-m-d h:i:s')
 									);
 						}
@@ -866,9 +794,7 @@ class Employee_resign extends MY_Controller {
 						} else {
 							$Return['error'] = $this->lang->line('xin_error_msg');
 						}
-
 			}
-
 						$this->output($Return);
 						exit;
 					

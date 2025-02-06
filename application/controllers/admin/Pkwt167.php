@@ -1435,7 +1435,7 @@ class Pkwt167 extends MY_Controller
 
 							<tr>
 								<td >11.</td>
-								<td colspan="20">11.	Jika tidak menggunakan sistem Aplikasi dengan jangka waktu kurang dari 8 jam, maka diwajibkan:</td>
+								<td colspan="20">Jika tidak menggunakan sistem Aplikasi dengan jangka waktu kurang dari 8 jam, maka diwajibkan:</td>
 								<td colspan="0"></td>
 							</tr>
 							<tr>
@@ -1464,6 +1464,34 @@ class Pkwt167 extends MY_Controller
 							<tr>
 								<td >14.</td>
 								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Tunjangan kehadiran diberikan dengan ketentuan sebagai berikut ::</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Jika karyawan mencapai target sebanyak 30 kunjungan toko/call per hari. Maka akan diberikan tunjangan sebesar Rp. 35.000.</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Jika penjualan produk Slurp mencapai minimal Rp. 500.000 maka karyawan akan mendapat tambahan tunjangan sebesar Rp. 10.000 per hari.</td>
+							</tr>
+
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Jika karyawan menjual produk Slurp 1 box per hari akan mendapat komisi sebesar Rp. 1.500 dan jika menjual sampai dengan 3 karton/30 box (1 karton isi 10 box tidak berlaku kelipatan) maka akan diberikan tambahan komisi sebesar Rp. 50.000 diluar dari komisi penjualan per box.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >17.</td>
+								<td colspan="20">Pembayaran diluar gaji pokok dibayarkan seminggu sekali per hari senin dengan cut in dan cut off dari hari kamis ke hari rabu.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1536,7 +1564,6 @@ class Pkwt167 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br>
 				

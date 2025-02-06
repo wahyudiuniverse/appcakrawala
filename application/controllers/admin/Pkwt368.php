@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt216spg extends MY_Controller 
+class Pkwt368 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -81,23 +81,26 @@ class Pkwt216spg extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
-		
-
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
 
 		if($pkwt[0]->approve_hrd != null){
 
+				// if($pkwt[0]->company==2){
 					$logo_cover = 'tcpdf_logo_sc.png';
 					$header_namae = 'PT. Siprama Cakrawala';
+				// } else {
+					// $logo_cover = 'tcpdf_logo_kac.png';
+					// $header_namae = 'PT. Krista Aulia Cakrawala';
+				// }
 
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
 				$pdf->SetAuthor('HRCakrawala');
 				// $baseurl=base_url();
 
-				$header_namae = 'PT. Siprama Cakrawala SPG';
+				$header_namae = 'PT. Siprama Cakrawala';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
@@ -288,7 +291,7 @@ class Pkwt216spg extends MY_Controller
 
 					<tr>
 						<td>Alamat Kantor</td>
-						<td colspan="3">: Gedung Graha Krista Aulia Cakrawala Lt.2 Jl. Andara No. 20 Pangkalan Jati Baru Cinere Depok 16514</td>
+						<td colspan="3">: Gedung Graha Siprama Cakrawala Lt.2 Jl. Andara No. 20 Pangkalan Jati Baru Cinere Depok 16514</td>
 					</tr>
 				</table>
 				<br>
@@ -434,7 +437,6 @@ class Pkwt216spg extends MY_Controller
 				</div>
 				<br>
 
-
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td >3.1</td>
@@ -518,8 +520,7 @@ class Pkwt216spg extends MY_Controller
 				<br>
 				<br>
 				<br>
-				<br>
-				<br>
+				
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
@@ -529,18 +530,20 @@ class Pkwt216spg extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18">4.1	Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b>.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>4.2</td>
-								<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat  mengikat.</td>
+								<td colspan="18">Jam kerja normal adalah 8 (delapan) jam kerja untuk 1 (satu) hari kerja dan 40 (empat puluh) jam kerja untuk 1 (satu) minggu dengan 5 (lima) hari kerja dalam 7 (tujuh) hari kalender.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>4.3</td>
 								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
 							</tr>
+
+
 				<br>
 							<tr>
 								<td>4.4</td>
@@ -556,7 +559,7 @@ class Pkwt216spg extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="0"></td>
-								<td colspan="15">•	Hari Senin - Jumat 8 Jam Kerja.</td>
+								<td colspan="15">•	Hari Senin s/d Jumat 8 Jam Kerja.</td>
 							</tr>
 
 							<tr>
@@ -597,7 +600,6 @@ class Pkwt216spg extends MY_Controller
 
 				</table>
 
-				<br>
 				<br>
 
 
@@ -659,8 +661,6 @@ class Pkwt216spg extends MY_Controller
 							</tr>
 				</table>
 
-<br><br><br><br>
-<br><br><br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
 				</div>
@@ -672,7 +672,7 @@ class Pkwt216spg extends MY_Controller
 							</tr>			
 				</table>
 				<br>
-
+	
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -877,12 +877,248 @@ class Pkwt216spg extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-				<br>	<br>
-
+				<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 10<br>KETENTUAN LAIN - LAIN</b>
+					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
+				</div>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+							</tr>
+				</table>
+				<br>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SIMPANAN KOPERASI</b></td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Simpanan Pokok</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan diawal pendaftaran anggota dan hanya di potongkan 1 kali, besarnya sama untuk semua anggota yaitu sebesar Rp.50.000.-</td>
+							</tr>
+				<br>
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Simpanan Wajib</td>
+							</tr>
+							<tr>
+								<td></td>
+								<td colspan="20">Simpanan yang dipotongkan setiap bulannya Jumlah simpanan wajib per bulan bervariasi berdasarkan level/jenjang jabatan anggota di Perusahaan dengan rincian:</td>
+							</tr>
+				</table>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+									<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>HO</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Admin</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">NAE</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">Manager – General Manager </td>
+											<td colspan="9">: Rp. 100.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">d.</td>
+											<td colspan="8">Direksi / Komisaris</td>
+											<td colspan="9">: Rp. 150.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1"></td>
+											<td colspan="8"><b>Area/Cabang</b></td>
+											<td colspan="9"></td>
+										</tr>
+
+										<tr>
+											<td colspan="1">a.</td>
+											<td colspan="8">Frontliner	( Sales/SPG SPB/Motoris/MD)</td>
+											<td colspan="9">: Rp. 25.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">b.</td>
+											<td colspan="8">Team Leader/Koordinator</td>
+											<td colspan="9">: Rp. 50.000,-</td>
+										</tr>
+
+										<tr>
+											<td colspan="1">c.</td>
+											<td colspan="8">PIC/Kepala Cabang/Area</td>
+											<td colspan="9">: Rp. 75.000,-</td>
+										</tr>
+
+									</table>
+
+								</td>
+							</tr>
+				</table>
+
+
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>PAGU PINJAMAN /PLAFON PINJAMAN</b></td>
+							</tr>			
+				</table>
+
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Besarnya maksimal pinjaman yang dapat diajukan kekoprasi adalah 1x dari Gaji Pokok.</td>
+							</tr>			
+				</table>
+
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
+							</tr>			
+				</table>
+				
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Dengan mempertimbangkan keberadaan Koperasi yang merupakan bagian yang tidak dapat dipisahkan dari bisnis utama dari Perusahaan. Dalam hal ini Perusahaan tergantung atas adanya Kontrak Kerjasama dengan Client/Customer maka :</td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>a.</td>
+								<td colspan="20">Karyawan yang dapat mengajukan pinjaman adalah karyawan yang telah menjadi anggota koperasi dengan 	ketentuan lebih lanjut</td>
+							</tr>
+							<tr>
+								<td>b.</td>
+								<td colspan="20">Memiliki kinerja yang baik dan tidak memiliki catatan dari  masing-masing pengawas</td>
+							</tr>
+				
+							<tr>
+								<td>c.</td>
+								<td colspan="20">Lamanya tenggang/tenor pinjaman maksimal mengikuti batas kontrak karyawan terhadap perusahaan dengan 	tetap mempertimbangan kontrak kerjasama Perusahaan  dengan Client/Customer.</td>
+							</tr>
+				</table>
+
+				<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Karyawan yang dapat mengajukan pinjaman hanyalah karyawan yang sudah menjadi anggota Koperasi dengan mengisi formulir pengajuan pinjaman dan harus atas persetujuan atasan dan Department  HR dengan memperhatikan ketentuan sebagai berikut :</td>
+							</tr>			
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>a.</td>
+								<td colspan="20">Anggota yang telah membayar simpanan pokok (satu kali) dan dua kali simpanan wajib.</td>
+							</tr>
+							<tr>
+								<td>b.</td>
+								<td colspan="20">Pinjaman akan diberikan berdasarkan urutan formulir yang telah masuk ke pengurus koperasi</td>
+							</tr>
+							<tr>
+								<td>c.</td>
+								<td colspan="20">Pinjaman diberikan dengan tetap memperhatikan ketersediaan keuangan koperasi</td>
+							</tr>
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Batas akhir penyerahan aplikasi pengajuan pinjaman adalah setiap tanggal 24 di setiap bulannya untuk pencairan di bulan berikutnya.</td>
+							</tr>			
+				</table>
+
+
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
+							</tr>			
+				</table>
+<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Seluruh simpanan baik simpanan  pokok, wajib  tidak dapat diambil selama masih menjadi anggota Koperasi.</td>
+							</tr>
+
+							<tr>
+								<td>Pengembalian simpanan anggota dapat setelah anggota tidak lagi menjadi anggota Koperasi. Dananya diberikan setelah 1 bulan periode penggajian terhitung sejak anggota tidak menjadi anggota Koperasi.</td>
+							</tr>
+<br>
+							<tr>
+								<td>Apabila anggota keluar  namun masih memiliki kewajiban kepada Koperasi maka : </td>
+							</tr>
+
+				</table>
+
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Total simpanan anggota akan diperhitungkan untuk melunasi kewajiban pinjaman</td>
+							</tr>
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Apabila masih belum cukup melunasi kewajiban terhadap koperasi maka Gaji bulan terakhir akan dipotong untuk melunasi kewajiban tersebut</td>
+							</tr>
+							<tr>
+								<td>3.</td>
+								<td colspan="20">Apabila masih belum cukup melunasi juga, maka koperasi akan mengusulkan kepada Departemen HR untuk tidak memberikan surat pengalaman kerja sampai kewajibannya telah dilunasi</td>
+							</tr>
+				</table>
+
+				<br>
+
+				<div style="text-align: center; text-justify: inter-word;">
+					<b>PASAL 11<br>KETENTUAN LAIN - LAIN</b>
 				</div>
 				<br>
 
@@ -908,7 +1144,7 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="20"><b>PKWT</b> ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
 							</tr>
 				<br>
-
+				<br>
 							<tr>
 								<td>5.</td>
 								<td colspan="20"><b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
@@ -987,12 +1223,38 @@ class Pkwt216spg extends MY_Controller
 
 				$tbl_spb = '
 
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>		
+				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1132,12 +1394,12 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
 							</tr>
 
+							<br>
 							<tr>
 								<td >8.</td>
 								<td colspan="20">Jika karyawan melanggar & menerima SP 1, SP 2 dan berakibat pada SPHK. Maka karyawan tidak berhak menuntut/mendapat hak kompensasi. Serta perusahaan berhak memutuskan kontrak kerja dengan karyawan tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
-							<br><br><br><br><br><br><br>
 							<tr>
 								<td >9.</td>
 								<td colspan="20">Jika karyawan melakukan tindakan merugikan perusahaan secara disengaja maupun tidak disengaja maka karyawan tersebut tidak berhak mendapat/menuntut kompensasi terhadap perusahaan, serta perusahaan berhak memutus kontrak dengan karyawan tersebut. Adapun perbuatan yang dimaksud adalah:</td>
@@ -1181,41 +1443,6 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
 								<td colspan="0"></td>
 							</tr>
-
-
-							<tr>
-								<td >13.</td>
-								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran. Apabila absensi tidak terdeteksi pada aplikasi Trec maka gaji pada hari tersebut tidak dibayarkan atau tidak dihitung. Apabila pada hari tersebut ada izin tidak masuk atau sakit, wajib melampirkan bukti berupa SKD (Surat Keterangan Dokter) untuk izin sakit dan foto menggunakan timestamp untuk izin tidak masuk. Bukti tersebut harus mendapat approval dari NAE dan user.</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td >14.</td>
-								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 jam kerja per hari selama 6 hari kerja dengan total waktu 48 jam kerja.</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td >15.</td>
-								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya dan mengganti 2x lipat dari nominal produk/hadiah apabila terjadi selisih ataupun kecurangan/fraud terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td >16.</td>
-								<td colspan="20">Saya bersedia untuk menjalankan KPI yang sudah ditentukan oleh user sebagai berikut :</td>
-								<td colspan="0"></td>
-							</tr>
-
-
-							<tr>
-								<td ></td>
-								<td colspan="20">
-<img src="'.base_url().'assets/oatside_pkwt_dimensi_kpi_spg.png" alt="Trulli" width="590" height="55"></td>
-								<td colspan="0"></td>
-							</tr>
-
-
 
 				</table>
 
@@ -1286,11 +1513,10 @@ class Pkwt216spg extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1578,9 +1804,9 @@ class Pkwt216spg extends MY_Controller
 				
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
-			
+
+				//Close and output PDF document
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

@@ -5,9 +5,9 @@
  *
  * This source file is subject to the dndsoft License
  * that is bundled with this package in the file license.txt.
- * @author   dndsoft
- * @author-email  komputer.dnd@gmail.com
- * @copyright  Copyright © dndsoft.my.id All Rights Reserved
+ * @author traxes
+ * @author-email  supoort@traxes.co.id
+ * @copyright  Copyright © traxes.co.id All Rights Reserved
  */
 defined('BASEPATH') or exit('No direct script access allowed');
 
@@ -1159,6 +1159,8 @@ class Employee_request_hrd extends MY_Controller
 
 		$verification_id 		= $employee_request['secid'];
 		$last_edu				= $employee_request['last_edu'];
+		$jurusan				= $employee_request['jurusan'];
+		$school_name			= $employee_request['school_name'];
 		$tinggi_badan			= $employee_request['tinggi_badan'];
 		$berat_badan			= $employee_request['berat_badan'];
 		$golongan_darah			= $employee_request['golongan_darah'];
@@ -1300,7 +1302,7 @@ class Employee_request_hrd extends MY_Controller
 
 			$data_up = array(
 
-				'cancel_stat' => 1,
+				'cancel_stat' 	=> 1,
 				'cancel_on' 	=> date("Y-m-d h:i:s"),
 				'cancel_by' 	=> $session['user_id'],
 				'cancel_ket' 	=> $this->input->post('ket_revisi')
@@ -1317,6 +1319,8 @@ class Employee_request_hrd extends MY_Controller
 
 				'verification_id'			=> $verification_id,
 				'last_edu'					=> $last_edu,
+				'edu_prodi_name'			=> $jurusan,
+				'edu_school_name'			=> $school_name,
 				'employee_id' 				=> $employee_id,
 				'username' 					=> $employee_id,
 				'first_name' 				=> $fullname,

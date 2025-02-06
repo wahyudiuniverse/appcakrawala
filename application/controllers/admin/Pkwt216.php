@@ -82,6 +82,8 @@ class Pkwt216 extends MY_Controller
 			redirect('admin/');
 		}
 
+		// DEFAULT PROJECT LEADER
+
 		// SPG
 		if ($pkwt[0]->jabatan=='395') {
 			redirect('admin/pkwt216spg/view/'.$pkwt[0]->uniqueid);

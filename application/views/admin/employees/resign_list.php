@@ -253,7 +253,7 @@
 </div>
 
 <?php } ?>
-<div class="card">
+<div class="card" hidden>
   <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>DAFTAR</strong> PENGAJUAN PAKLARING KARYAWAN</span> </div>
   <div class="card-body">
     <div class="box-datatable table-responsive">
@@ -262,15 +262,6 @@
           <tr>
             <th>No.</th>
             <th><?php echo $this->lang->line('xin_request_employee_status');?></th>
-            <th>NIP</th>
-            <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name');?></th>
-            <th><?php echo $this->lang->line('left_projects');?></th>
-            <th><?php echo $this->lang->line('left_designation');?></th>
-            <th>Tanggal Resign</th>
-            <th><?php echo $this->lang->line('xin_placement');?></th>
-            <th>No KTP</th>
-            <th>Status</th>
-            <th>Dokumen</th>
           </tr>
         </thead>
       </table>

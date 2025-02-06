@@ -41,7 +41,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   ?>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">×</span> </button>
-    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> REVISI EMPLOYEE RESIGN</h4>
+    <h4 class="modal-title" id="edit-modal-data"><i class="icon-pencil7"></i> REVISI PENGAJUAN PAKLARING</h4>
   </div>
 
 
@@ -108,7 +108,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- POSISI/JABATAN -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('left_department');?></label>
+          <label for="no_transaksi">Posisi/Jabatan</label>
         </div>
       </div>
       <div class="col-sm-4">
@@ -203,6 +203,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="penempatan">Exit Clearance</label>
         </div>
       </div>
+
       <div class="col-sm-4">
         <div>
           
@@ -215,25 +216,18 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
         </div>
       </div>
 
-                          <?php 
+      <div class="col-sm-6">
+        <div>
+          
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="dok_exitc" name="dok_exitc">
+                              <small>Jenis File: .pdf</small>
+                            </fieldset>
+                          </div>
+        </div>
+      </div>
 
-
-        if(is_null($dok_exit_clearance)) {
-          $vexc = '';
-        } else {
-
-          $nama_file_exit = $dok_exit_clearance;
-          //kalau blm ada folder path nya
-          if (file_exists($nama_file_exit)) {
-            // $pesan = "ada file"; //tampil file skema terbaru
-              echo '<a href="'.base_url().$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-
-          } else {
-              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_exit.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
-          }
-        }
-
-                          ?>
     </div>
   </div>
 
@@ -251,7 +245,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="penempatan">Surat Resign</label>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <div>
                           <div class="form-group">
                             <fieldset class="form-group">
@@ -277,19 +271,35 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
               echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
           }
         }
-
-                          ?>
+    ?>
     </div>
   </div>
 
 
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" >
+  <div class="modal-body" style="padding-top: 1px; padding-bottom: 1px;" >
     <div class="row" style="background-color: #ff4f4f;">
       <!-- REQUESTED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi" style="color: white;">Info Revisi</label>
+          <label for="no_transaksi" style="color: white;">Tanggal Ditolak</label>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div>
+          <label for="plant" style="color: white;"><?php echo ': '.$cancel_date;?></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 1px; padding-bottom: 1px;" >
+    <div class="row" style="background-color: #ff4f4f;">
+      <!-- REQUESTED -->
+      <div class="col-sm-4">
+        <div>
+          <label for="no_transaksi" style="color: white;">Alasan Ditolak</label>
         </div>
       </div>
       <div class="col-sm-4">

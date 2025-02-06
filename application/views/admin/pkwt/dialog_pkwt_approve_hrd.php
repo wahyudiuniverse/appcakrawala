@@ -672,24 +672,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       <!-- APPROVED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">Approve NAE</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$approve_nae_by. ' ('.$approve_nae_date.')';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Approve NOM/SM</label>
+          <label for="no_transaksi">Approve PIC/SPV/Manager</label>
         </div>
       </div>
       <div class="col-sm-4">

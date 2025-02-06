@@ -74,14 +74,14 @@ class Project_model extends CI_Model
 	// get all employees
 	public function all_projects_admin()
 	{
-		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects");
+		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects ORDER BY project_id DESC");
 		return $query->result();
 	}
 
 	// get all employees
 	public function all_projects()
 	{
-		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id not in (22, 95);");
+		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id not in (22, 95) ORDER BY project_id DESC;");
 		return $query->result();
 	}
 

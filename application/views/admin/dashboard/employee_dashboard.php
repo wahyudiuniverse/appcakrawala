@@ -339,124 +339,6 @@ $new_date = date('d-M-Y', $strtotime);
 <div class="row mt-3">
 
 
-<!-- PAKLARING STATUS -->
-<?php
-  if(!is_null($skk_release)){
-    foreach($skk_release->result() as $r) {
-?>
-
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-5">
-      <a href="<?php echo site_url().'admin/skk/view/'.$r->secid.'/'.$r->nip;?>" target="_blank">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted normal"><?php echo $this->lang->line('xin_paklaring'). ' '.'Periode:';?></div>
-            <p style="font-size: 18px;"><?php echo $r->nomor_dokumen;?></p>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
-  </div>
-
-<?php
-    }
-
-  } else {
-?>
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('xin_paklaring');?></div>
-            <div class="text-large">Tidak Ditemukan..!</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php
-  }
-?>
-
-</div>
-
-<div class="row mt-3">
-
-<!-- PKWT STATUS -->
-  <?php 
-  if($approve_pkwt=='2'){
-    ?>
-
-  <div class="col-sm-6 col-xl-4">
-  <a href="#" target="_blank">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted small">SUDAH DIUPLOAD</div>
-            <div class="text-large"><?php echo $pkwt_periode;?>
-          <i class="fa fa-check-circle" aria-hidden="true" style="color:#03b403"></i></div>
-            <div class="text-muted small"><?php echo $nomorsurat;?></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </a>
-  </div>
-
-  <?php
-  }
-
-  else if($approve_pkwt=='0'){
-  ?>
-
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('xin_pkwt');?></div>
-            <div class="text-large">Belum Tersedia..!</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <?php
-
-  } else {
-
-  ?>
-
-  <div class="col-sm-6 col-xl-4">
-  <a href="<?php echo site_url('admin/'.$sub_project.'/view/'.$uniqueid);?>" target="_blank">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted small">DOWNLOAD</div>
-            <div class="text-large"><?php echo $pkwt_periode;?></div>
-            <div class="text-muted small"><?php echo $nomorsurat;?></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </a>
-  </div>
-
-  <?php
-  }
-  ?>
-
 
   <?php
   if($projectid=='61' && $designation_id=='165'){
@@ -575,63 +457,10 @@ $new_date = date('d-M-Y', $strtotime);
 
 <!-- NEW E-SLIP SALTAB -->
 
+
 <div class="row mt-3">
 
-<!-- ESLIP STATUS -->
-<?php
-  if(!is_null($eslip_saltab)){
-    foreach($eslip_saltab->result() as $r) {
 
-    if($doc_ktp==0 || $doc_kk==0 || $doc_ijazah==0 || $doc_cv==0) {
-?>
-
-
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <a href="#">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?>  <p style="color: #F00;">(Selesaikan Unggah Dokumen Secara Lengkap)</p></div>
-            <p style="font-size: 18px;"><?php echo $this->Xin_model->tgl_indo($r->periode_cutoff_from).' - '.$this->Xin_model->tgl_indo($r->periode_cutoff_to);?></p>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
-  </div>
-
-<?php
-    } else {
-?>
-
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <a href="<?php echo site_url().'admin/importexceleslip/eslip_final/'.$r->nip.'/'.$r->secid; ?>" target="_blank">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
-            <p style="font-size: 18px;"><?php echo $this->Xin_model->tgl_indo($r->periode_cutoff_from).' - '.$this->Xin_model->tgl_indo($r->periode_cutoff_to);?></p>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
-  </div>
-<?php
-    }
-
-?>
-
-
-<?php
-    }
-
-  } else {
-?>
   <div class="col-sm-6 col-xl-4">
     <div class="card mb-4">
       <div class="card-body">
@@ -639,91 +468,13 @@ $new_date = date('d-M-Y', $strtotime);
           <div class="ion ion-ios-paper display-4 text-info"></div>
           <div class="ml-4">
             <div class="text-muted small"><?php echo $this->lang->line('xin_eslip');?></div>
-            <div class="text-large">Tidak Ditemukan..!</div>
+            <div class="text-large">CEK E-SLIP DI PROFILE KAMU..!</div>
           </div>
         </div>
       </div>
     </div>
   </div>
-<?php
-  }
-?>
-</div>
 
-<div class="row mt-3">
-
-
-<!-- ESLIP STATUS -->
-<?php
-  if(!is_null($eslip_release)){
-    foreach($eslip_release->result() as $r) {
-
-    if($doc_ktp==0 || $doc_kk==0 || $doc_ijazah==0 || $doc_cv==0) {
-?>
-
-
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <a href="#">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?>  <p style="color: #F00;">(Selesaikan Unggah Dokumen Secara Lengkap)</p></div>
-            <p style="font-size: 18px;"><?php echo $r->periode;?></p>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
-  </div>
-
-<?php
-    } else {
-?>
-
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <a href="<?php echo site_url().'admin/importexceleslip/view/'.$r->nip.'/'.$r->secid; ?>" target="_blank">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted normal"><?php echo $this->lang->line('xin_eslip'). ' '.'Periode:';?></div>
-            <p style="font-size: 18px;"><?php echo $r->periode;?></p>
-          </div>
-        </div>
-      </div>
-      </a>
-    </div>
-  </div>
-<?php
-    }
-
-?>
-
-
-<?php
-    }
-
-  } else {
-?>
-  <div class="col-sm-6 col-xl-4">
-    <div class="card mb-4">
-      <div class="card-body">
-        <div class="d-flex align-items-center">
-          <div class="ion ion-ios-paper display-4 text-info"></div>
-          <div class="ml-4">
-            <div class="text-muted small"><?php echo $this->lang->line('xin_eslip');?></div>
-            <div class="text-large">Tidak Ditemukan..!</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php
-  }
-?>
 </div>
 
 
@@ -732,7 +483,7 @@ $new_date = date('d-M-Y', $strtotime);
 
 <!-- BPJS KS STATUS -->
 <?php
-  if(!is_null($user_info[0]->bpjs_ks_status)){
+  if(!is_null($user_info[0]->bpjs_ks_no)){
 ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -789,7 +540,7 @@ $new_date = date('d-M-Y', $strtotime);
 
 <!-- BPJS TK STATUS -->
 <?php
-  if(!is_null($user_info[0]->bpjs_tk_status)){
+  if(!is_null($user_info[0]->bpjs_tk_no)){
 ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -883,122 +634,4 @@ $new_date = date('d-M-Y', $strtotime);
   </div>
 </div>
 <?php } ?>
-<?php if(in_array('44',$role_resources_ids) || in_array('45',$role_resources_ids)) { ?>
-<div class="row">
-    <?php if(in_array('44',$role_resources_ids)) { ?>
-    <div class="col-md-6">
-      <div class="card mb-4">
-        <h6 class="card-header with-elements border-0 pr-0 pb-0">
-          <div class="card-header-title"><?php echo $this->lang->line('xin_projects_status');?></div>
-        </h6>
-        <div class="row">
-          <div class="col-md-6">
-            <div id="overflow-scrolls" class="py-2 px-3 " style="overflow:auto; height:200px;">
-              <div class="table-responsive">
-                <table class="table mb-0 table-dashboard">
-                  <tbody>
-                    <?php //$dc_color = array(,'#2196f3','#02bc77','#d3733b','#673AB7');?>
-                    <?php $dj=0;$projects = get_user_projects_status($session['user_id']); foreach($projects->result() as $eproject) { ?>
-                    <?php
-                    //$row = total_user_projects_status($eproject->status,$session['user_id']);
-                    if($eproject->status==0){
-                        $row = total_user_projects_status($eproject->status,$session['user_id']);
-                        $csname = htmlspecialchars_decode($this->lang->line('xin_not_started'));
-                        $bdcolor = '#647c8a';
-                    } else if($eproject->status==1){
-                        $csname = htmlspecialchars_decode($this->lang->line('xin_in_progress'));
-                        $row = total_user_projects_status($eproject->status,$session['user_id']);
-                        $bdcolor = '#2196f3';
-                    } else if($eproject->status==2){
-                        $csname = htmlspecialchars_decode($this->lang->line('xin_completed'));
-                        $row = total_user_projects_status($eproject->status,$session['user_id']);
-                        $bdcolor = '#02bc77';
-                    } else if($eproject->status==3){
-                        $csname = htmlspecialchars_decode($this->lang->line('xin_project_cancelled'));
-                        $row = total_user_projects_status($eproject->status,$session['user_id']);
-                        $bdcolor = '#d3733b';
-                    } else if($eproject->status==4){
-                        $csname = htmlspecialchars_decode($this->lang->line('xin_project_hold'));
-                        $row = total_user_projects_status($eproject->status,$session['user_id']);
-                        $bdcolor = '#673AB7';
-                    }
-                ?>
-                    <tr>
-                      <td style="vertical-align: inherit;"><div style="width:4px;border:5px solid <?php echo $bdcolor;?>;"></div></td>
-                      <td><?php echo htmlspecialchars_decode($csname);?> (<?php echo $row;?>)</td>
-                    </tr>
-                    <?php $dj++; } ?>
-                    <?php  ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-5">
-            <div style="height:120px;">
-              <canvas id="hrpremium_user_chart_projects"  style="display: block; height: 150px; width:300px;"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php } ?>
-    <?php if(in_array('45',$role_resources_ids)) { ?>
-    <div class="col-md-6">
-      <div class="card mb-4">
-        <h6 class="card-header with-elements border-0 pr-0 pb-0">
-          <div class="card-header-title"><?php echo $this->lang->line('xin_tasks_status');?></div>
-        </h6>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="overflow-scrolls py-2 px-3" style="overflow:auto; height:200px;">
-              <div class="table-responsive">
-                <table class="table mb-0 table-dashboard">
-                  <tbody>
-                    <?php $dc_color = array('#3c8dbc','#006400','#dd4b39','#a98852','#f39c12','#605ca8');?>
-                    <?php $sj=0;$tasks = get_user_tasks_status($session['user_id']); foreach($tasks->result() as $etask) { ?>
-                    <?php
-                    if($etask->task_status==0){
-                        $sname = htmlspecialchars_decode($this->lang->line('xin_not_started'));
-                        $trow = total_user_tasks_status($etask->task_status,$session['user_id']);
-                        $tbdcolor = '#647c8a';
-                    } else if($etask->task_status==1){
-                        $sname = htmlspecialchars_decode($this->lang->line('xin_in_progress'));
-                        $trow = total_user_tasks_status($etask->task_status,$session['user_id']);
-                        $tbdcolor = '#2196f3';
-                    } else if($etask->task_status==2){
-                        $sname = htmlspecialchars_decode($this->lang->line('xin_completed'));
-                        $trow = total_user_tasks_status($etask->task_status,$session['user_id']);
-                        $tbdcolor = '#02bc77';
-                    } else if($etask->task_status==3){
-                        $sname = htmlspecialchars_decode($this->lang->line('xin_project_cancelled'));
-                        $trow = total_user_tasks_status($etask->task_status,$session['user_id']);
-                        $tbdcolor = '#d3733b';
-                    } else if($etask->task_status==4){
-                        $sname = htmlspecialchars_decode($this->lang->line('xin_project_hold'));
-                        $trow = total_user_tasks_status($etask->task_status,$session['user_id']);
-                        $tbdcolor = '#673AB7';
-                    } 
-                ?>
-                    <tr>
-                      <td style="vertical-align: inherit;"><div style="width:4px;border:5px solid <?php echo $tbdcolor;?>;"></div></td>
-                      <td><?php echo htmlspecialchars_decode($sname);?> (<?php echo $trow;?>)</td>
-                    </tr>
-                    <?php $sj++; } ?>
-                    <?php  ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-5">
-            <div style="height:120px;">
-              <canvas id="hrpremium_user_tasks" style="display: block; height: 150px; width:300px;"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <?php } ?>
-   </div>
- <?php } ?>  
+ 

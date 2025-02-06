@@ -203,6 +203,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 	}
 
+
+	// Function to update record in table > basic_info
+	public function update_pkwt_emp($data, $id)
+	{
+		$this->db->where('employee_id', $id);
+		if ($this->db->update('xin_employees', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	// Function to add record in table
 	public function addratecard($data)
 	{

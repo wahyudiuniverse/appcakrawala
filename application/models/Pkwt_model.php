@@ -474,6 +474,7 @@ ORDER BY contract_id DESC LIMIT 1";
 			AND approve_nom !=0
 			AND approve_hrd != 0
 			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+			AND employee_id = 0
 			ORDER BY contract_id DESC";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);

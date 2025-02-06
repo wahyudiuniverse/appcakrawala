@@ -1,5 +1,6 @@
 <?php
-  /**
+
+/**
  * NOTICE OF LICENSE
  *
  * This source file is subject to the dndsoft License
@@ -8,34 +9,18 @@
  * @author-email  komputer.dnd@gmail.com
  * @copyright  Copyright © dndsoft.my.id All Rights Reserved
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Importexceleslip extends MY_Controller 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+class ImportExcel extends MY_Controller
 {
 
-	public function __construct(){
-    parent::__construct();
-    $this->load->library('session');
-		$this->load->helper('form');
-		$this->load->helper('url');
-		$this->load->helper('html');
-		$this->load->database();
-		$this->load->library('form_validation');
-		//load the model
-		$this->load->model("Xin_model");
-		$this->load->model("Employees_model");
-		$this->load->model("Callplan_model");
-		$this->load->model("Customers_model");
-		$this->load->model("Import_model");
-		$this->load->model("Designation_model");
-		$this->load->model("Project_model");
-			$this->load->library("pagination");
-			$this->load->library('Pdf');
-			$this->load->helper('string');
-  }
-	 		
 	/*Function to set JSON output*/
-	public function output($Return=array()){
+	public function output($Return = array())
+	{
 		/*Set response header*/
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
@@ -43,790 +28,1663 @@ class Importexceleslip extends MY_Controller
 		exit(json_encode($Return));
 	}
 
-	// invoices page
-	public function index() {
-	
+	public function __construct()
+	{
+		parent::__construct();
+		//load the models
+		$this->load->library('session');
+		$this->load->model("Employees_model");
+		$this->load->model("Register_model");
+		$this->load->model("Xin_model");
+		$this->load->model("Department_model");
+		$this->load->model("Designation_model");
+		$this->load->model("Roles_model");
+		$this->load->model("Location_model");
+		$this->load->model("Company_model");
+		$this->load->model("Timesheet_model");
+		$this->load->model("Project_model");
+		$this->load->model("Assets_model");
+		// $this->load->model("Training_model");
+		// $this->load->model("Trainers_model");
+		// $this->load->model("Awards_model");
+		$this->load->model("Travel_model");
+		$this->load->model("Tickets_model");
+		$this->load->model("Transfers_model");
+		$this->load->model("Promotion_model");
+		$this->load->model("Complaints_model");
+		$this->load->model("Warning_model");
+		$this->load->model("Subproject_model");
+		$this->load->model("Payroll_model");
+		$this->load->model("Events_model");
+		$this->load->model("Meetings_model");
+		$this->load->model('Exin_model');
+		$this->load->model('Import_model');
+		$this->load->model('Pkwt_model');
+		$this->load->model('Xin_model');
+		$this->load->library("pagination");
+		$this->load->library('Pdf');
+		//$this->load->library("phpspreadsheet");
+		$this->load->helper('string');
+
+		$this->load->library('ciqrcode');
+	}
+
+	// import
+	public function index()
+	{
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if (empty($session)) {
 			redirect('admin/');
 		}
-
-		$data['title'] = $this->lang->line('xin_import_excl_eslip_view').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip_view');
-
-		$product_id = 
-		$data['all_employees'] = $this->Xin_model->all_employees();
-		$data['uploadid'] = $this->input->get('upid', TRUE);
-		// $data['all_posisi'] = $this->Xin_model->get_designations();
-		// $data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['path_url'] = 'import_excel_eslip_view';
-		$session = $this->session->userdata('username');
+		$data['title'] = $this->lang->line('xin_hr_imports') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_imports');
+		$data['path_url'] = 'hrpremium_import';
+		$data['all_companies'] = $this->Xin_model->get_companies();
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-				
-		if(in_array('127',$role_resources_ids)) {
-			if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/import_excel/view_import_eslip", $data, TRUE);
+
+		if (in_array('127', $role_resources_ids) || in_array('127', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/hr_import_excel", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
-			} else { 
-				redirect('admin/');
-			}
 		} else {
 			redirect('admin/dashboard');
 		}
 	}
-	
 
-	// invoices page
-	public function show_eslip() {
-	
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
+	// Validate and add info in database
+	public function import_employees()
+	{
 
-		$uploadid_segment = $this->uri->segment(4);
-		// $uploadid_segment = '20221029111847383';
-		$data['title'] = $this->lang->line('xin_preview_eslip').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_preview_eslip');
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+		// $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
 
-		// $product_id = 
-		$data['all_employees'] = $this->Xin_model->all_employees();
-		$data['uploadid'] = $uploadid_segment;
-		// $data['all_posisi'] = $this->Xin_model->get_designations();
-		// $data['get_all_companies'] = $this->Xin_model->get_companies();
-		$data['path_url'] = 'import_excel_eslip_preview';
-		$session = $this->session->userdata('username');
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-				
-		// if(in_array('127',$role_resources_ids)) {
-			if(!empty($session)){ 
-			$data['subview'] = $this->load->view("admin/import_excel/preview_eslip", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-			} else { 
-				redirect('admin/');
-			}
-		// } else {
-		// 	redirect('admin/dashboard');
-		// }
-	}
+		// $csvMimes =  array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel');
 
-	public function view_import_excel_employees() {
+		$csvMimes =  array(
 
-		$datad['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/import_excel/view_import_eslip", $datad);
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
 		} else {
-			redirect('admin/');
-		}
-		$product_id = $this->input->get('upid', TRUE);
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-		$employees_temp = $this->Import_model->get_eslip_temp($product_id);
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data = array();
-
-    		foreach($employees_temp->result() as $r) {
-			  
-			  $importid = $r->uploadid;
-			  $nip = $r->nip;
-			  $fullname = $r->fullname;
-			  $periode = $r->periode;
-			  $project = $r->project;
-			  $project_sub = $r->project_sub;
-			  $area = $r->area;
-			  $hari_kerja = $r->hari_kerja;
-			  $gaji_umk = $r->gaji_umk;
-			  $gaji_pokok = $r->gaji_pokok;
-
-			  $allow_jabatan = $r->allow_jabatan;
-			  $allow_konsumsi = $r->allow_konsumsi;
-			  $allow_transport = $r->allow_transport;
-			  $allow_rent = $r->allow_rent;
-			  $allow_comunication = $r->allow_comunication;
-			  $allow_parking = $r->allow_parking;
-			  $allow_residence_cost = $r->allow_residence_cost;
-			  $allow_device = $r->allow_device;
-			  $penyesuaian_umk = $r->penyesuaian_umk;
-			  $insentive = $r->insentive;
-			  $overtime = $r->overtime;
-			  $overtime_national_day = $r->overtime_national_day;
-			  $overtime_rapel = $r->overtime_rapel;
-			  $kompensasi = $r->kompensasi;
-			  $bonus = $r->bonus;
-			  $thr = $r->thr;
-			  $bpjs_tk_deduction = $r->bpjs_tk_deduction;
-			  $bpjs_ks_deduction = $r->bpjs_ks_deduction;
-			  $jaminan_pensiun_deduction = $r->jaminan_pensiun_deduction;
-			  $pendapatan = $r->pendapatan;
-			  $bpjs_tk = $r->bpjs_tk;
-			  $bpjs_ks = $r->bpjs_ks;
-			  $jaminan_pensiun = $r->jaminan_pensiun;
-			  $pph = $r->pph;
-			  $penalty_late = $r->penalty_late;
-			  $penalty_attend = $r->penalty_attend;
-			  $deduction = $r->deduction;
-			  $simpanan_pokok = $r->simpanan_pokok;
-			  $simpanan_wajib_koperasi = $r->simpanan_wajib_koperasi;
-			  $pembayaran_pinjaman = $r->pembayaran_pinjaman;
-			  $biaya_admin_bank = $r->biaya_admin_bank;
-			  $total = $r->total;
-
-				$now = new DateTime(date("Y-m-d"));
-
-				$isExist = $this->Employees_model->CheckExistNIP_Periode($r->nip, $r->periode);
-
-
-				if(!is_null($r->status_error)){
-					if($r->status_error=='Duplicate'){
-
-						$error = '<p style="color:#6b4141">Gagal Tersimpan (Duplikat NIK)</p>';
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
 					} else {
-						$error = '<p style="color:#75b37f">Success Import</p>';
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+							$data = array(
+								'uploadid' => $uploadid,
+								'employee_id' 		=> str_replace(' ', '', $line[0]), // auto
+								'fullname' 				=> $line[1],
+								'company_id' 			=> $line[2],
+								'location_id' 		=> $line[3], //ho-area
+								'department_id' 	=> $line[4], //divisi
+								'designation_id' 	=> $line[5], //jabatan
+								'project_id' 			=> $line[6], //jabatan
+								'sub_project_id' 	=> $line[7], //jabatan
+								'penempatan' 			=> $line[8],
+								'marital_status' 	=> $line[9], //status perkawinan
+								'gender' 					=> $line[10], //jenis kelamin
+								'tempat_lahir'		=> $line[11],
+								'date_of_birth' 	=> $line[12],
+								'date_of_joining' => $line[13],
+								'contact_no' 			=> $line[14],
+								'email' 					=> $line[15],
+								'alamat_ktp' 			=> $line[16],
+								'alamat_domisili' => $line[17],
+								'kk_no' 					=> $line[18],
+								'ktp_no' 					=> $line[19],
+								'npwp_no' 				=> $line[20],
+								'bpjs_tk_no' 			=> $line[21],
+								'bpjs_ks_no' 			=> $line[22],
+								'ibu_kandung' 		=> $line[23],
+								'bank_name' 			=> $line[24],
+								'nomor_rek' 			=> $line[25],
+								'pemilik_rek' 		=> $line[26],
+								'basic_salary' 		=> $line[27]
+							);
+							$result = $this->Employees_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Employees_model->delete_temp_by_employeeid();
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
 					}
 				} else {
-
-						if(!is_null($isExist)){
-							// $status_btn = 'btn-success'; 
-							// $status_title = $this->lang->line('xin_employees_active');
-
-							$error = '<p style="color:#f95275">NIK-PERIODE Sudah Terdaftar</p>';
-
-						}else {
-							$status_btn = 'btn-outline-danger'; 
-							$status_title = $this->lang->line('xin_employees_inactive');
-
-							$error = '
-								<div class="btn-group btn-success" data-toggle="tooltip" data-state="primary" data-placement="top">
-									<div>
-										<a class="dropdown-item inserttemp" href="javascript:void(0)" data-status="1" data-user-id="'.$r->secid.'" style="color: azure;">Import</a>
-									</div>
-								</div>';
-						}
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
 				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
 
 
-
-		   $data[] = array(
-		   	$error,
-				// $importid,
-				$nip,
-				$fullname,
-				$periode,
-				$project,
-				$project_sub,
-				$area,
-				$hari_kerja,
-				$gaji_pokok,
-			  $allow_jabatan,
-			  $allow_konsumsi,
-			  $allow_transport,
-			  $allow_rent,
-			  $allow_comunication,
-			  $allow_parking,
-			  $allow_residence_cost,
-			  $allow_device,
-			  $penyesuaian_umk,
-			  $insentive,
-			  $overtime,
-			  $overtime_national_day,
-			  $overtime_rapel,
-			  $kompensasi,
-			  $bonus,
-			  $thr,
-			  $bpjs_tk_deduction,
-			  $bpjs_ks_deduction,
-			  $jaminan_pensiun_deduction,
-			  $pendapatan,
-			  $bpjs_tk,
-			  $bpjs_ks,
-			  $jaminan_pensiun,
-			  $pph,
-			  $penalty_late,
-			  $penalty_attend,
-			  $deduction,
-			  $simpanan_pokok,
-			  $simpanan_wajib_koperasi,
-			  $pembayaran_pinjaman,
-			  $biaya_admin_bank,
-			  $total,
-		   );
-     	}
-
-          $output = array(
-               "draw" => $draw,
-                 "recordsTotal" => $employees_temp->num_rows(),
-                 "recordsFiltered" => $employees_temp->num_rows(),
-                 "data" => $data
-            );
-          echo json_encode($output);
-          exit();
-  	}
+		redirect('admin/ImportExcelEmployees?upid=' . $uploadid);
+	}
 
 
-	public function preview_eslip_list() {
+	// Validate and add info in database
+	public function import_employees_active()
+	{
 
-		$datad['title'] = $this->Xin_model->site_title();
+		if ($this->input->post('is_ajax') == '3') {
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+			//validate whether uploaded file is a csv file
+			$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+
+			if ($_FILES['file']['name'] === '') {
+				$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+			} else {
+				if (in_array($_FILES['file']['type'], $csvMimes)) {
+					if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+						// check file size
+						if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+							$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+						} else {
+
+							//open uploaded csv file with read only mode
+							$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+							//skip first line
+							fgetcsv($csvFile);
+
+							//parse data from csv file line by line
+							while (($line = fgetcsv($csvFile)) !== FALSE) {
+
+								$data = array(
+									'employee_id' => $line[0], // auto
+									'username' => $line[0], // nik
+									'first_name' => $line[1],
+									'designation_id' => $line[2], //jabatan
+									'department_id' => $line[3], //divisi
+									'location_id' => $line[4], //ho-area
+									'marital_status' => $line[5], //status perkawinan
+									'gender' => $line[6], //jenis kelamin
+									'date_of_birth' => $line[7],
+									'contact_no' => $line[8],
+									'address' => $line[9],
+									'company_id' => 2, //auto cakrawala => 2
+									'user_role_id' => 2, // auto 2 => emplyee
+									'is_active' => 0, // auto 0 disactive
+									'ktp_no' => $line[10],
+									'kk_no' => $line[11],
+									'npwp_no' => $line[12],
+									'bpjs_tk_no' => $line[13],
+									'bpjs_ks_no' => $line[14],
+									'created_at' => date('Y-m-d h:i:s')
+
+								);
+								$last_insert_id = $this->Employees_model->add($data);
+
+								$bank_account_data = array(
+									'account_title' => 'Rekening',
+									'account_number' => $line[15], //NO. REK
+									'bank_name' => $line[16],
+									'employee_id' => $last_insert_id,
+									'created_at' => date('d-m-Y'),
+								);
+								$ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+							}
+							//close opened csv file
+							fclose($csvFile);
+
+							$Return['result'] = $this->lang->line('xin_success_empactive_import');
+						}
+					} else {
+						$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_invalid_file');
+				}
+			} // file empty
+
+			if ($Return['error'] != '') {
+				$this->output($Return);
+			}
+
+			$this->output($Return);
+			exit;
+		}
+	}
+
+	// expired page
+	public function importpkwt()
+	{
+
 		$session = $this->session->userdata('username');
-		if(!empty($session)){ 
-			$this->load->view("admin/import_excel/preview_eslip", $datad);
-		} else {
+		if (empty($session)) {
 			redirect('admin/');
 		}
-		$product_id = $this->input->get('upid', TRUE);
-
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-		$employees_temp = $this->Import_model->get_eslip_preview($product_id);
+		$data['title'] = 'IMPORT PKWT';
+		$data['breadcrumbs'] = 'IMPORT PKWT';
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		// $data['all_taxes'] = $this->Tax_model->get_all_taxes();
+		$data['path_url'] = 'hrpremium_import_pkwt';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$data = array();
-
-    		foreach($employees_temp->result() as $r) {
-			  
-			  $secid = $r->secid;
-			  $importid = $r->uploadid;
-			  $nip = $r->nip;
-			  $contact_no = $r->contact_no;
-			  $fullname = $r->fullname;
-			  $periode = $r->periode;
-			  $project = $r->project;
-			  $project_sub = $r->project_sub;
-			  $area = $r->area;
-			  $hari_kerja = $r->hari_kerja;
-			  $gaji_umk = $r->gaji_umk;
-			  $gaji_pokok = $r->gaji_pokok;
-
-			  $allow_jabatan = $r->allow_jabatan;
-			  $allow_konsumsi = $r->allow_konsumsi;
-			  $allow_transport = $r->allow_transport;
-			  $allow_rent = $r->allow_rent;
-			  $allow_comunication = $r->allow_comunication;
-			  $allow_parking = $r->allow_parking;
-			  $allow_residence_cost = $r->allow_residence_cost;
-			  $allow_device = $r->allow_device;
-			  $penyesuaian_umk = $r->penyesuaian_umk;
-			  $insentive = $r->insentive;
-			  $overtime = $r->overtime;
-			  $overtime_national_day = $r->overtime_national_day;
-			  $overtime_rapel = $r->overtime_rapel;
-			  $kompensasi = $r->kompensasi;
-			  $bonus = $r->bonus;
-			  $thr = $r->thr;
-			  $bpjs_tk_deduction = $r->bpjs_tk_deduction;
-			  $bpjs_ks_deduction = $r->bpjs_ks_deduction;
-			  $jaminan_pensiun_deduction = $r->jaminan_pensiun_deduction;
-			  $pendapatan = $r->pendapatan;
-			  $bpjs_tk = $r->bpjs_tk;
-			  $bpjs_ks = $r->bpjs_ks;
-			  $jaminan_pensiun = $r->jaminan_pensiun;
-			  $pph = $r->pph;
-			  $penalty_late = $r->penalty_late;
-			  $penalty_attend = $r->penalty_attend;
-			  $deduction = $r->deduction;
-			  $simpanan_pokok = $r->simpanan_pokok;
-			  $simpanan_wajib_koperasi = $r->simpanan_wajib_koperasi;
-			  $pembayaran_pinjaman = $r->pembayaran_pinjaman;
-			  $biaya_admin_bank = $r->biaya_admin_bank;
-			  $total = $r->total;
-			  $release = $r->release;
-
-				$now = new DateTime(date("Y-m-d"));
-
-				$isExist = $this->Employees_model->CheckExistNIP_Periode($r->nip, $r->periode);
-
-
-			  	$error = '<a href="'.site_url().'admin/Importexceleslip/preview_pdf/'.$nip.'/'.$secid.'/'.$nip.'/'.$nip.'"><button type="button" class="btn btn-xs btn-outline-success">PDF</button></a>';
-
-			  	if($release==0){
-			  		$status_release = '<button type="button" class="btn btn-xs btn-outline-secondary">DRAF</button>';
-			  	} else {
-			  		$status_release = '<button type="button" class="btn btn-xs btn-outline-success">RELEASE</button>';
-			  	}
-
-
-				$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
-
-				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Apr 2024 - 30 Apr 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
-
-				Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
-
-				Link C.I.S : https://apps-cakrawala.com/admin%0a
-
-				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
-				
-				Terima kasih.';
-
-
-				$whatsapp = '<a href="https://wa.me/62'.$contact_no.'?text='.$copypaste.'" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$contact_no.'</button> </a>';
-
-		   $data[] = array(
-		   	$error.' '.$status_release .' '.$whatsapp,
-				// $importid,
-				$nip,
-				$fullname,
-				$periode,
-				$project,
-				$project_sub,
-				$area,
-				$hari_kerja,
-				$gaji_pokok,
-			  $allow_jabatan,
-			  $allow_konsumsi,
-			  $allow_transport,
-			  $allow_rent,
-			  $allow_comunication,
-			  $allow_parking,
-			  $allow_residence_cost,
-			  $allow_device,
-			  $penyesuaian_umk,
-			  $insentive,
-			  $overtime,
-			  $overtime_national_day,
-			  $overtime_rapel,
-			  $kompensasi,
-			  $bonus,
-			  $thr,
-			  $bpjs_tk_deduction,
-			  $bpjs_ks_deduction,
-			  $jaminan_pensiun_deduction,
-			  $pendapatan,
-			  $bpjs_tk,
-			  $bpjs_ks,
-			  $jaminan_pensiun,
-			  $pph,
-			  $penalty_late,
-			  $penalty_attend,
-			  $deduction,
-			  $simpanan_pokok,
-			  $simpanan_wajib_koperasi,
-			  $pembayaran_pinjaman,
-			  $biaya_admin_bank,
-			  $total,
-		   );
-     	}
-
-          $output = array(
-               "draw" => $draw,
-                 "recordsTotal" => $employees_temp->num_rows(),
-                 "recordsFiltered" => $employees_temp->num_rows(),
-                 "data" => $data
-            );
-          echo json_encode($output);
-          exit();
-  	}
-
-	// Validate and update status info in database // status info
-	public function temp_to_primary() {
-		/* Define return | here result is used to return user data and error for error message */
-		$status_id = $this->uri->segment(4);
-		// if($status_id == 2){
-		// 	$status_id = 0;
-		// }
-		// $user_id = $this->uri->segment(5);
-		$user = $this->Xin_model->read_eslip_temp_info($status_id);
-		$duplicate = $this->Employees_model->read_eslip_info_by_nip_periode($user[0]->nip, $user[0]->periode);
-
-
-			if(!is_null($duplicate)) {
-				// $error = 'Error';
-
-				$datas = array(
-					'status_error' => 'Duplicate',
-				);
-
-				$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
-
-			} else {
-
-				$uploadid = $user[0]->uploadid;
-				$nip = $user[0]->nip;
-				$fullname = $user[0]->fullname;
-				$periode = $user[0]->periode;
-				$project = $user[0]->project;
-				$project_sub = $user[0]->project_sub;
-				$area = $user[0]->area;
-				$status_emp = $user[0]->status_emp;
-				$hari_kerja = $user[0]->hari_kerja;
-				$gaji_umk = $user[0]->gaji_umk;
-				$gaji_pokok = $user[0]->gaji_pokok;
-
-				$allow_jabatan = $user[0]->allow_jabatan;
-				$allow_masakerja = $user[0]->allow_masakerja;
-				$allow_konsumsi = $user[0]->allow_konsumsi;
-				$allow_transport = $user[0]->allow_transport;
-				$allow_rent = $user[0]->allow_rent;
-				$allow_comunication = $user[0]->allow_comunication;
-				$allow_parking = $user[0]->allow_parking;
-				$allow_residence_cost = $user[0]->allow_residence_cost;
-				$allow_akomodasi = $user[0]->allow_akomodasi;
-				$allow_device = $user[0]->allow_device;
-				$allow_kasir = $user[0]->allow_kasir;
-				$allow_trans_meal = $user[0]->allow_trans_meal;
-				$allow_trans_rent = $user[0]->allow_trans_rent;
-				$allow_vitamin = $user[0]->allow_vitamin;
-				$allow_grooming = $user[0]->allow_grooming;
-				$allow_others = $user[0]->allow_others;
-				$allow_operation = $user[0]->allow_operation;
-
-				$over_salary = $user[0]->over_salary;
-				$penyesuaian_umk = $user[0]->penyesuaian_umk;
-				$insentive = $user[0]->insentive; 
-				$overtime = $user[0]->overtime;
-				$overtime_holiday = $user[0]->overtime_holiday;
-				$overtime_national_day = $user[0]->overtime_national_day;
-				$overtime_rapel = $user[0]->overtime_rapel;
-				$kompensasi = $user[0]->kompensasi;
-				$bonus = $user[0]->bonus;
-				$uuck = $user[0]->uuck;
-				$thr = $user[0]->thr;
-
-				$bpjs_ks_deduction = $user[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $user[0]->jaminan_pensiun_deduction;
-				$pendapatan = $user[0]->pendapatan;
-				$bpjs_tk = $user[0]->bpjs_tk;
-				$bpjs_ks = $user[0]->bpjs_ks; 
-				$jaminan_pensiun = $user[0]->jaminan_pensiun;
-				$deposit = $user[0]->deposit;
-				$pph = $user[0]->pph;
-				$pph_thr = $user[0]->pph_thr;
-				$penalty_late = $user[0]->penalty_late;
-				$penalty_alfa = $user[0]->penalty_alfa;
-				$penalty_attend = $user[0]->penalty_attend;
-				$mix_oplos = $user[0]->mix_oplos;
-				$pot_trip_malang = $user[0]->pot_trip_malang;
-				$pot_device = $user[0]->pot_device;
-				$pot_kpi = $user[0]->pot_kpi;
-				$deduction = $user[0]->deduction;
-				$simpanan_pokok = $user[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $user[0]->biaya_admin_bank;
-
-				$adjustment = $user[0]->adjustment;
-				$adjustment_dlk = $user[0]->adjustment_dlk;
-				$total = $user[0]->total;
-				$createdby = $user[0]->createdby;
-
-				$data = array(
-					'uploadid' => $uploadid,
-					'nip' => $nip,
-					'fullname' => $fullname,
-					'periode' => $periode,
-					'project' => $project,
-					'project_sub' => $project_sub,
-					'area' => $area,
-					'status_emp' => $status_emp,
-					'hari_kerja' => $hari_kerja,
-					'gaji_umk' => $gaji_umk,
-					'gaji_pokok' => $gaji_pokok,
-					'allow_jabatan' => $allow_jabatan,
-					'allow_masakerja' => $allow_masakerja,
-					'allow_konsumsi' => $allow_konsumsi,
-					'allow_transport' => $allow_transport,
-					'allow_rent' => $allow_rent,
-					'allow_comunication' => $allow_comunication,
-					'allow_parking' => $allow_parking,
-					'allow_residence_cost' => $allow_residence_cost,
-					'allow_akomodasi' => $allow_akomodasi,
-					'allow_device' => $allow_device,
-					'allow_kasir' => $allow_kasir,
-					'allow_trans_meal' => $allow_trans_meal,
-					'allow_trans_rent' => $allow_trans_rent,
-					'allow_vitamin' => $allow_vitamin,
-					'allow_grooming' => $allow_grooming,
-					'allow_others' => $allow_others,
-					'allow_operation' => $allow_operation,
-
-					'over_salary' => $over_salary,
-					'penyesuaian_umk' => $penyesuaian_umk,
-					'insentive' => $insentive,
-					'overtime' => $overtime,
-					'overtime_holiday' => $overtime_holiday,
-					'overtime_national_day' => $overtime_national_day,
-					'overtime_rapel' => $overtime_rapel,
-					'kompensasi' => $kompensasi,
-					'bonus' => $bonus,
-					'uuck' => $uuck,
-					'thr' => $thr,
-
-					'bpjs_tk_deduction' => $bpjs_tk_deduction,
-					'bpjs_ks_deduction' => $bpjs_ks_deduction,
-					'jaminan_pensiun_deduction' => $jaminan_pensiun_deduction,
-					'pendapatan' => $pendapatan,
-					'bpjs_tk' => $bpjs_tk,
-					'bpjs_ks' => $bpjs_ks,
-					'jaminan_pensiun' => $jaminan_pensiun,
-					'deposit' => $deposit,
-					'pph' => $pph,
-					'pph_thr' => $pph_thr,
-					'penalty_late' => $penalty_late,
-					'penalty_alfa' => $penalty_alfa,
-					'penalty_attend' => $penalty_attend,
-					'mix_oplos' => $mix_oplos,
-					'pot_trip_malang' => $pot_trip_malang,
-					'pot_device' => $pot_device,
-					'pot_kpi' => $pot_kpi,
-					'deduction' => $deduction,
-					'simpanan_pokok' => $simpanan_pokok,
-					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
-					'pembayaran_pinjaman' => $pembayaran_pinjaman,
-					'biaya_admin_bank' => $biaya_admin_bank,
-					'adjustment' => $adjustment,
-					'adjustment_dlk' => $adjustment_dlk,
-					'total' => $total,
-					'createdby' => $createdby,
-				);
-
-				//$id = $this->input->post('user_id');
-				$this->Employees_model->addeslip($data);
-
-				$datas = array(
-					'status_error' => 'Success Import',
-				);
-
-				$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
-
-				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');
-				echo $user[0]->nip.' '.$this->lang->line('xin_employee_status_updated');
-
-			}
-
-		//$this->output($Return);
-		//exit;
+		if (in_array('232', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/import_pkwt", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
 	}
-	
-	// Validate and update status info in database // status info
-	public function temp_to_primary_all() {
+
+
+	// Validate and add info in database
+	public function import_pkwt()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
 		/* Define return | here result is used to return user data and error for error message */
-		// $status_id = $this->uri->segment(4);
-		// $session = $this->session->userdata('username');
-		// if(empty($session)){ 
-		// 	redirect('admin/');
-		// }
-		$upload_id = $this->uri->segment(4);
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
 
-		$tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+		$csvMimes =  array(
 
-		for($i=0; $i< count($tempEmployees); $i++){
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						// $lastnik = $this->Employees_model->get_maxid();
+						// $formula4 = substr($lastnik,5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+
+							$data = array(
+								// 'uploadid' 					=> $uploadid,
+								'designation_id' 			=> $line[3],
+								'company_id' 				=> $line[4],
+								'project_id' 				=> $line[5],
+								'sub_project_id' 			=> $line[6],
+								'penempatan' 				=> $line[7],
+								'region' 					=> $line[8]
+								// 'project' 						=> $line[6], //project
+
+								// 'createdby' => $employee_id,
+								// 'createdon' => date('Y-m-d h:i:s'),
+							);
+
+							$this->Import_model->update_pkwt_emp($data, $line[1]);
+							// $result = $this->Import_model->addratecardtemp($data);
 
 
 
-				$user = $this->Xin_model->read_eslip_temp_info($tempEmployees[$i]->secid);
-				$duplicate = $this->Employees_model->read_eslip_info_by_nip_periode($user[0]->nip, $user[0]->periode);
+			$config['cacheable']	= true; //boolean, the default is true
+			$config['cachedir']		= './assets/'; //string, the default is application/cache/
+			$config['errorlog']		= './assets/'; //string, the default is application/logs/
+			$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
+			$config['quality']		= true; //boolean, the default is true
+			$config['size']			= '1024'; //interger, the default is 1024
+			$config['black']		= array(224,255,255); // array, default is array(255,255,255)
+			$config['white']		= array(70,130,180); // array, default is array(0,0,0)
+			$this->ciqrcode->initialize($config);
 
 
-					if(!is_null($duplicate)) {
-						// $error = 'Error';
 
-						$datas = array(
-							'status_error' => 'Duplicate',
+						if($line[9]==1){
+
+							if($line[4]=='2'){
+								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+								$spb_hr = 'E-SPB-JKT/SC-HR/';
+								$companyID = '2';
+							}else if ($line[4]=='3'){
+								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+								$spb_hr = 'E-SPB-JKT/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+								$spb_hr = 'E-SPB-JKT/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_pkwt();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
+						} else {
+
+							if($line[4]=='2'){
+								$pkwt_hr = 'KEMITRAAN/SC-HR/';
+								$spb_hr = 'KEMITRAAN/SC-HR/';
+								$companyID = '2';
+							}else if ($line[4]=='3'){
+								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
+								$spb_hr = 'KEMITRAAN/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'KEMITRAAN/MATA-HR/';
+								$spb_hr = 'KEMITRAAN/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_tkhl();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
+
+						}
+
+						$docid = date('ymdHisv');
+						$yearmonth = date('Y/m');
+
+								$dirpkwt = $config['imagedir'].$yearmonth.'/';
+ 								//kalau blm ada folder path nya
+		                if (!file_exists($dirpkwt)) {
+		                    mkdir($dirpkwt, 0777, true);
+		                }
+
+						$image_name= $yearmonth.'/esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
+						$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
+						$params['data'] = $domain; //data yang akan di jadikan QR CODE
+						$params['level'] = 'H'; //H=High
+						$params['size'] = 10;
+						$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+						
+
+
+
+						// INSERT TO PKWT
+
+						$data = array(
+							'uniqueid' 							=> $unicode,
+							'employee_id' 						=> $line[1],
+							'docid'								=> $docid,
+							'project' 							=> $line[5],
+							'sub_project'						=> $line[6],
+							'from_date'	 						=> $line[10],
+							'to_date' 							=> $line[11],
+							'no_surat' 							=> $nomor_surat,
+							'no_spb' 							=> $nomor_surat_spb,
+							'waktu_kontrak' 					=> $line[12],
+							'company' 							=> $line[4],
+							'jabatan' 							=> $line[3],
+							'penempatan' 						=> $line[7],
+							'hari_kerja' 						=> $line[13],
+							'tgl_payment'						=> $line[14],
+							'start_period_payment' 				=> $line[15],
+							'end_period_payment'				=> $line[16],
+							'basic_pay' 						=> $line[17],
+							'allowance_grade'					=> $line[18],
+							'dm_allow_grade' 					=> $line[19],
+							'allowance_area'					=> $line[20],
+							'dm_allow_area' 					=> $line[21],
+							'allowance_masakerja' 				=> $line[22],
+							'dm_allow_masakerja' 				=> $line[23],
+							'allowance_meal' 				=> $line[24],
+							'dm_allow_meal' 				=> $line[25],
+							'allowance_transport' 			=> $line[26],
+							'dm_allow_transport' 			=> $line[27],
+							'allowance_rent' 				=> $line[28],
+							'dm_allow_rent' 				=> $line[29],
+							'allowance_transrent' 			=> $line[30],
+							'dm_allow_transrent' 			=> $line[31],
+							'allowance_komunikasi' 			=> $line[32],
+							'dm_allow_komunikasi' 			=> $line[33],
+							'allowance_park' 				=> $line[34],
+							'dm_allow_park' 				=> $line[35],
+							'allowance_residance' 			=> $line[36],
+							'dm_allow_residance' 			=> $line[37],
+							'allowance_laptop' 				=> $line[38],
+							'dm_allow_laptop' 				=> $line[39],
+							'allowance_transmeal' 				=> $line[40],
+							'dm_allow_transmeal' 				=> $line[41],
+							'allowance_kasir' 				=> $line[42],
+							'dm_allow_kasir' 				=> $line[43],
+							'allowance_medicine' 			=> $line[44],
+							'dm_allow_medicine' 			=> $line[45],
+							'allowance_akomodasi' 			=> $line[46],
+							'dm_allow_akomodasi' 			=> $line[47],
+							'allowance_operation' 			=> $line[48],
+							'dm_allow_operation' 			=> $line[49],
+							'img_esign'						=> $image_name,
+
+							'sign_nip'						=> '21300033',
+							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+							'sign_jabatan'					=> 'HR & GA MANAGER',
+							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
+							'contract_type_id'				=> $line[9], //1 pkwt, 2 tkhl
+							'request_pkwt' => $session['user_id'],
+							'request_date' => date('Y-m-d h:i:s'),
+							'approve_nae' => $session['user_id'],
+							'approve_nae_date' => date('Y-m-d h:i:s'),
+							'approve_nom' =>  $session['user_id'],
+							'approve_nom_date' => date('Y-m-d h:i:s')
+
 						);
 
-						$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
 
-					} else {
+					$iresult = $this->Pkwt_model->add_pkwt_record($data);
 
-				$uploadid = $user[0]->uploadid;
-				$nip = $user[0]->nip;
-				$fullname = $user[0]->fullname;
-				$periode = $user[0]->periode;
-				$project = $user[0]->project;
-				$project_sub = $user[0]->project_sub;
-				$area = $user[0]->area;
-				$status_emp = $user[0]->status_emp;
-				$hari_kerja = $user[0]->hari_kerja;
-				$gaji_umk = $user[0]->gaji_umk;
-				$gaji_pokok = $user[0]->gaji_pokok;
+						
+				if ($iresult == TRUE) {
+					$Return['result'] = 'PENGAJUAN PKWT EXPIRED berhasil..';
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_msg');
+				}
 
-				$allow_jabatan = $user[0]->allow_jabatan;
-				$allow_masakerja = $user[0]->allow_masakerja;
-				$allow_konsumsi = $user[0]->allow_konsumsi;
-				$allow_transport = $user[0]->allow_transport;
-				$allow_rent = $user[0]->allow_rent;
-				$allow_comunication = $user[0]->allow_comunication;
-				$allow_parking = $user[0]->allow_parking;
-				$allow_residence_cost = $user[0]->allow_residence_cost;
-				$allow_akomodasi = $user[0]->allow_akomodasi;
-				$allow_device = $user[0]->allow_device;
-				$allow_kasir = $user[0]->allow_kasir;
-				$allow_trans_meal = $user[0]->allow_trans_meal;
-				$allow_trans_rent = $user[0]->allow_trans_rent;
-				$allow_vitamin = $user[0]->allow_vitamin;
-				$allow_grooming = $user[0]->allow_grooming;
-				$allow_others = $user[0]->allow_others;
-				$allow_operation = $user[0]->allow_operation;
+				//END INSERT TO PKWT
 
-				$over_salary = $user[0]->over_salary;
-				$penyesuaian_umk = $user[0]->penyesuaian_umk;
-				$insentive = $user[0]->insentive; 
-				$overtime = $user[0]->overtime;
-				$overtime_holiday = $user[0]->overtime_holiday;
-				$overtime_national_day = $user[0]->overtime_national_day;
-				$overtime_rapel = $user[0]->overtime_rapel;
-				$kompensasi = $user[0]->kompensasi;
-				$bonus = $user[0]->bonus;
-				$uuck = $user[0]->uuck;
-				$thr = $user[0]->thr;
 
-				$bpjs_tk_deduction = $user[0]->bpjs_tk_deduction;
-				$bpjs_ks_deduction = $user[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $user[0]->jaminan_pensiun_deduction;
-				$pendapatan = $user[0]->pendapatan;
-				$bpjs_tk = $user[0]->bpjs_tk;
-				$bpjs_ks = $user[0]->bpjs_ks; 
-				$jaminan_pensiun = $user[0]->jaminan_pensiun;
-				$pph = $user[0]->pph;
-				$deposit = $user[0]->deposit;
-				$pph = $user[0]->pph;
-				$pph_thr = $user[0]->pph_thr;
-				$penalty_late = $user[0]->penalty_late;
-				$penalty_alfa = $user[0]->penalty_alfa;
-				$penalty_attend = $user[0]->penalty_attend;
-				$mix_oplos = $user[0]->mix_oplos;
-				$pot_trip_malang = $user[0]->pot_trip_malang;
-				$pot_device = $user[0]->pot_device;
-				$pot_kpi = $user[0]->pot_kpi;
-				$deduction = $user[0]->deduction;
-				$simpanan_pokok = $user[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $user[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $user[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $user[0]->biaya_admin_bank;
-				$adjustment = $user[0]->adjustment;
-				$adjustment_dlk = $user[0]->adjustment_dlk;
-				$total = $user[0]->total;
-				$createdby = $user[0]->createdby;
 
-				$data = array(
-					'uploadid' => $uploadid,
-					'nip' => $nip,
-					'fullname' => $fullname,
-					'periode' => $periode,
-					'project' => $project,
-					'project_sub' => $project_sub,
-					'area' => $area,
-					'status_emp' => $status_emp,
-					'hari_kerja' => $hari_kerja,
-					'gaji_umk' => $gaji_umk,
-					'gaji_pokok' => $gaji_pokok,
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
 
-					'allow_jabatan' => $allow_jabatan,
-					'allow_masakerja' => $allow_masakerja,
-					'allow_konsumsi' => $allow_konsumsi,
-					'allow_transport' => $allow_transport,
-					'allow_rent' => $allow_rent,
-					'allow_comunication' => $allow_comunication,
-					'allow_parking' => $allow_parking,
-					'allow_residence_cost' => $allow_residence_cost,
-					'allow_akomodasi' => $allow_akomodasi,
-					'allow_device' => $allow_device,
-					'allow_kasir' => $allow_kasir,
-					'allow_trans_meal' => $allow_trans_meal,
-					'allow_trans_rent' => $allow_trans_rent,
-					'allow_vitamin' => $allow_vitamin,
-					'allow_grooming' => $allow_grooming,
-					'allow_others' => $allow_others,
-					'allow_operation' => $allow_operation,
+							// $resultdel = $this->Import_model->delete_temp_by_pt();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
 
-					'over_salary' => $over_salary,
-					'penyesuaian_umk' => $penyesuaian_umk,
-					'insentive' => $insentive,
-					'overtime' => $overtime,
-					'overtime_holiday' => $overtime_holiday,
-					'overtime_national_day' => $overtime_national_day,
-					'overtime_rapel' => $overtime_rapel,
-					'kompensasi' => $kompensasi,
-					'bonus' => $bonus,
-					'uuck' => $uuck,
-					'thr' => $thr,
 
-					'bpjs_tk_deduction' => $bpjs_tk_deduction,
-					'bpjs_ks_deduction' => $bpjs_ks_deduction,
-					'jaminan_pensiun_deduction' => $jaminan_pensiun_deduction,
-					'pendapatan' => $pendapatan,
-					'bpjs_tk' => $bpjs_tk,
-					'bpjs_ks' => $bpjs_ks,
-					'jaminan_pensiun' => $jaminan_pensiun,
-					'deposit' => $deposit,
-					'pph' => $pph,
-					'pph_thr' => $pph_thr,
-					'penalty_late' => $penalty_late,
-					'penalty_alfa' => $penalty_alfa,
-					'penalty_attend' => $penalty_attend,
-					'mix_oplos' => $mix_oplos,
-					'pot_trip_malang' => $pot_trip_malang,
-					'pot_device' => $pot_device,
-					'pot_kpi' => $pot_kpi,
-					'deduction' => $deduction,
-					'simpanan_pokok' => $simpanan_pokok,
-					'simpanan_wajib_koperasi' => $simpanan_wajib_koperasi,
-					'pembayaran_pinjaman' => $pembayaran_pinjaman,
-					'biaya_admin_bank' => $biaya_admin_bank,
-					'adjustment' => $adjustment,
-					'adjustment_dlk' => $adjustment_dlk,
-					'total' => $total,	
-					'createdby' => $createdby,
-				);
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
 
-						//$id = $this->input->post('user_id');
-						$this->Employees_model->addeslip($data);
-
-						$datas = array(
-							'status_error' => 'Success Import',
-						);
-
-						$this->Employees_model->update_error_eslip_temp($datas, $user[0]->secid);
+		if ($Return['error'] != '') {
+			$this->output($Return);
 		}
 
-				//$Return['result'] = $this->lang->line('xin_employee_basic_info_updated');            
-				echo $user[0]->employee_id.' '.$this->lang->line('xin_employee_status_updated');
 
+		// redirect('admin/Importexcelratecard?upid=' . $uploadid);
+		redirect('admin');
+
+	}
+
+	// expired page
+	public function importnewemployees()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_import_new_employee') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_new_employee');
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_new_employees';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('109', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/new_employees", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	// expired page
+	public function importratecard()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_import_excl_ratecard') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_ratecard');
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_ratecard';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('232', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_ratecard", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	// expired page
+	public function importeslip()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_import_excl_eslip') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip');
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_eslip';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('469', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_eslip", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//delete batch saltab
+	public function delete_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete batch saltab release
+	public function delete_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_saltab_release($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//release eslip batch saltab release
+	public function release_eslip_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_eslip_batch_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//accept request open lock saltab
+	public function accept_request()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->accept_request($postData);
+
+		echo json_encode($data);
+	}
+
+	//reject request open lock saltab
+	public function reject_request()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->reject_request($postData);
+
+		echo json_encode($data);
+	}
+
+	//release batch saltab
+	public function release_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_batch_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail saltab
+	public function delete_detail_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail saltab release
+	public function delete_detail_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_saltab_release($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch saltab
+	public function list_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch saltab release
+	public function list_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list open import batch saltab
+	public function list_open_import_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_request_open_import_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch saltab release untuk download
+	public function list_batch_saltab_release_download()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab_release_download($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab
+	public function list_detail_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab release
+	public function list_detail_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab release untuk download
+	public function list_detail_saltab_release_download()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab_release_download($postData);
+
+		echo json_encode($data);
+	}
+
+	public function downloadTemplateSaltab()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template E-Saltab'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function format_array_print_excel($tabel_hasil)
+	{
+		// $tabel_saltab = $this->Import_model->get_saltab_table();
+
+		// $jumlah_data = count($tabel_saltab);
+
+		// $new_tabel_saltab = array_values($tabel_saltab);
+
+		// if($tabel_hasil['sub_project']){
+		// }
+
+		$data = array();
+
+		foreach ($tabel_hasil as $row) {
+			$new_row = array_values($row);
+			array_push($data, $new_row);
+		}
+
+		$jumlah_data = count($data);
+
+		for ($i = 0; $i < $jumlah_data; $i++) {
+			$jumlah_kolom = count($data[$i]);
+			for ($j = 0; $j < $jumlah_kolom; $j++) {
+				if (is_numeric($data[$i][$j])) {
+					// $data[$i][$j] = "NUMERIC";
+					if ($data[$i][$j] <= 100000000) {
+						// $data[$i][$j] = "NUMERIC kecil";
+						$data[$i][$j] = round($data[$i][$j]) . " ";
+					} else {
+						// $data[$i][$j] = "NUMERIC besar";
+						$data[$i][$j] = $data[$i][$j] . " ";
+					}
+				} else {
+					// $data[$i][$j] = "NOT NUMERIC";
+					$data[$i][$j] = $data[$i][$j] . " ";
+				}
 			}
+		}
 
-		//$this->output($Return);
-		//exit;
+		return $data;
+
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
 	}
 
+	//mengambil Json data Detail Saltab
+	public function get_detail_saltab()
+	{
+		$postData = $this->input->post();
 
-	// Validate and update status info in database // status info
-	public function hapus_eslip_preview() {
+		// get data 
+		$data = $this->Import_model->get_detail_saltab($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail Saltab
+	public function get_detail_saltab_release()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_saltab_release($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//ganti data nip employee
+	public function ganti_nip()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//update NIP
+		$this->Import_model->update_NIP($postData);
+
+		//data response NIP
+		$data2 = $this->Import_model->get_single_nip_saltab_release($postData);
+		$response = array(
+			'status'	=> "200",
+			'pesan' 	=> "Berhasil Ubah NIP",
+			'data'		=> $data2,
+		);
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	public function downloadDetailSaltab($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel($id, $gabung);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A6'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 7])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabRelease($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release($id, $gabung);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabReleaseBPJS($id = null)
+	{
+
+
+		if ($this->Import_model->CheckDownloadBPJS($id) < 1) {
+			$this->update_downloader($id);
+		}
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab BPJS'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$header2_tabel_saltab = array(
+			'STATUS',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+			'PROJECT',
+			'SUB PROJECT',
+			'JABATAN',
+			'AREA',
+			'TEMPAT LAHIR',
+			'TANGGAL LAHIR (Y-m-d)',
+			'NAMA IBU KANDUNG',
+			'JENIS KELAMIN',
+			'STATUS PERNIKAHAN',
+			'ALAMAT',
+			'TANGGAL MULAI KONTRAK',
+			'TANGGAL AKHIR KONTRAK',
+			'GAPOK UMK',
+			'GAPOK DIERIMA (THP)',
+			'BPJS KETENAGAKERJAAN',
+			'BPJS KESEHATAN',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_bpjs($id, $data_batch_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A9'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setWrapText(true);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab BPJS - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabReleasePayroll($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab Payroll'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header2_tabel_saltab = array(
+			'STATUS',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+			'PROJECT',
+			'SUB PROJECT',
+			'AREA',
+			'THP',
+			'NOMOR REKENING',
+			'NAMA BANK',
+			'PEMILIK REKENING',
+			'STATUS HOLD',
+			'STATUS VERIFIKASI',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_payroll($id, $data_batch_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		// echo "<pre>";
+		// print_r($detail_saltab);
+		// echo "</pre>";
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab Payroll - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		// $writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadBatchSaltabReleaseNIPKosong($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_nip_kosong($id, $gabung);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function update_downloader($id)
+	{
 		/* Define return | here result is used to return user data and error for error message */
 		// $status_id = $this->uri->segment(4);
 		// $session = $this->session->userdata('username');
 		// if(empty($session)){ 
 		// 	redirect('admin/');
 		// }
-		$upload_id = $this->uri->segment(4);
-
-		$resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
-		$resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
-		// $tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
 
 
-	}
 
-	// Validate and update status info in database // status info
-	public function release_eslip_preview() {
-		/* Define return | here result is used to return user data and error for error message */
-		// $status_id = $this->uri->segment(4);
-		// $session = $this->session->userdata('username');
-		// if(empty($session)){ 
-		// 	redirect('admin/');
-		// }
-		$upload_id = $this->uri->segment(4);
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
 
+		$datas = array(
+			'down_bpjs_by' => $session['employee_id'],
+			'down_bpjs_on' =>  date("Y-m-d h:i:s"),
+		);
 
-				$datas = array(
-					'release' => 1,
-					'release_date' =>  date("Y-m-d h:i:s"),
-				);
-
-				$this->Import_model->update_release_eslip($datas, $upload_id);
+		$this->Import_model->update_download_bpjs($datas, $id);
 
 
 		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
@@ -835,5062 +1693,2029 @@ class Importexceleslip extends MY_Controller
 
 	}
 
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel saltab
+    |-------------------------------------------------------------------
+    |
+    */
+		function import_saltab2()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nik = $this->input->post('nik');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$saltab_from = $this->input->post('saltab_from');
+		$saltab_to = $this->input->post('saltab_to');
+		$periode_salary = $this->input->post('periode_salary');
 
-	public function view() {
-
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
 		}
 
-		$system = $this->Xin_model->read_setting_info(1);		
-		 // create new PDF document
-   		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$vnip = $this->uri->segment(4);
-		$ideslip = $this->uri->segment(5);
-		// $employee_id = $this->uri->segment(5);
-
-		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
-		$employee = $this->Employees_model->read_employee_info_by_nik($vnip);
-
-		// if($session['user_id'] != $employee[0]->user_id) {
-		// 	redirect('admin/');
-		// }
-
-		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
-				if(!is_null($designation)){
-					$jabatan = $designation[0]->designation_name;
-				} else {
-					$jabatan = '--';	
-				}
-
-		// if($eslip[0]->status_kirim==1){
-			// $bMargin = $this->getBreakMargin();
-			// $bMargi = $this->getBreakMargin();
-
-
-				if($employee[0]->company_id == '2'){
-					$company_name = 'PT. SIPRAMA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_sc.png';
-				} else if ($employee[0]->company_id == '3') {
-					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_kac.png';
-				} else {
-					$company_name = 'PT. MATA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_mata.png';
-				}
-			// set document information
-			$pdf->SetCreator('PT Siprama Cakrawala');
-			$pdf->SetAuthor('PT Siprama Cakrawala');
-			// $baseurl=base_url();
-
-			$header_namae = $company_name;
-			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
-
-			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
-			
-			$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
-			// set header and footer fonts
-			// $pdf->setHeaderFont(Array('helvetica', '', 20));
-			// $pdf->setFooterFont(Array('helvetica', '', 9));
-		
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont('courier');
-			
-			// set margins
-			$pdf->SetMargins(15, 27, 15);
-			$pdf->SetHeaderMargin(5);
-			$pdf->SetFooterMargin(10);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 25);
-			
-			// set image scale factor
-			$pdf->setImageScale(10);
-
-
-			$pdf->SetAuthor('HRCakrawala');
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-
-			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
-			$pdf->SetSubject($this->lang->line('xin_eslip'));
-			$pdf->SetKeywords($this->lang->line('xin_eslip'));
-			// set font
-			$pdf->SetFont('helvetica', 'B', 10);
-					
-			// set header and footer fonts
-			$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 9));
-			$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-			
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-			
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 12);
-			
-			// set image scale factor
-			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-			
-			// ---------------------------------------------------------
-
-			// set default font subsetting mode
-			$pdf->setFontSubsetting(true);
-			
-			// Set font
-			// dejavusans is a UTF-8 Unicode font, if you only need to
-			// print standard ASCII chars, you can use core fonts like
-			// helvetica or times to reduce file size.
-			$pdf->SetFont('helvetica', '', 9, '', true);
-			
-			// Add a page
-			// This method has several options, check the source code documentation for more information.
-			$pdf->AddPage();
-		
-			// set cell padding
-			$pdf->setCellPaddings(1, 1, 1, 1);
-			
-			// set cell margins
-			$pdf->setCellMargins(0, 0, 0, 0);
-			
-			// set color for background
-			$pdf->SetFillColor(255, 255, 127);
-			/////////////////////////////////////////////////////////////////////////////////
-
-			if(!is_null($eslip)){
-
-				if($eslip[0]->nip == $employee[0]->employee_id) {
-				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
-
-				$nip = $eslip[0]->nip;
-				$namalengkap = $employee[0]->first_name;
-				$periode = $eslip[0]->periode;
-				$project = $eslip[0]->project;
-				$area = $eslip[0]->area;
-				$hari_kerja = $eslip[0]->hari_kerja;
-				$gaji_umk = $eslip[0]->gaji_umk;
-				$gaji_pokok = $eslip[0]->gaji_pokok;
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
-				$allow_rent = $eslip[0]->allow_rent;
-				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
-				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_vitamin;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
-
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
-				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-
-				$bpjs_tk_deduction = $eslip[0]->bpjs_tk_deduction;
-				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $eslip[0]->jaminan_pensiun_deduction;
-				$pendapatan = $eslip[0]->pendapatan;
-				$bpjs_tk = $eslip[0]->bpjs_tk;
-				$bpjs_ks = $eslip[0]->bpjs_ks;
-				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
-				$deposit = $eslip[0]->deposit;
-				$pph = $eslip[0]->pph;
-				$pph_thr = $eslip[0]->pph_thr;
-				$penalty_late = $eslip[0]->penalty_late;
-				$penalty_alfa = $eslip[0]->penalty_alfa;
-				$penalty_attend = $eslip[0]->penalty_attend;
-				$mix_oplos = $eslip[0]->mix_oplos;
-				$pot_trip_malang = $eslip[0]->pot_trip_malang;
-				$pot_device = $eslip[0]->pot_device;
-				$pot_kpi = $eslip[0]->pot_kpi;
-				$deduction = $eslip[0]->deduction;
-				$simpanan_pokok = $eslip[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
-				$adjustment = $eslip[0]->adjustment;
-				$adjustment_dlk = $eslip[0]->adjustment_dlk;
-				$total = $eslip[0]->total;
-				$monyear =  date('M Y');
-				$tanggalcetak = date("Y-m-d");
-
-				if($project=='CPJF'){
-					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
-				} else {
-					$deduction_name = 'Deduction';
-				}
-	
-
-				// $pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				// $transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				// $armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
-
-				} else {
-					redirect('admin/');
-				}
-				
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
 			} else {
-				redirect('admin/');
+				$nama_sub_project = '--';
+			}
+		}
 
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+			$array_file = explode('.', $_FILES['file_excel']['name']);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
 			}
 
+			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			$array_data  = [];
+			$array_data_final  = [];
+			$data        = [];
+			$header_tabel_saltab = $sheet_data[0];
+			$length_header = count($header_tabel_saltab);
+			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
 
-			$tbl_2 = '
-			<div style="text-align: center; text-justify: inter-word;">
-				<b>SLIP GAJI</b>
-			</div>
-			<br>
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
 
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>NIP</td>
-								<td colspan="2">: '.$nip.'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Project</td>
-								<td colspan="2">: '.strtoupper($project).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Nama</td>
-								<td colspan="2">: '.strtoupper($namalengkap).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Area</td>
-								<td colspan="2">: '.strtoupper($area).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Periode</td>
-								<td colspan="2">: '.strtoupper($periode).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Hari Kerja</td>
-								<td colspan="2">: '.$hari_kerja.'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
+			//susun array batch saltab
+			$data_batch = array(
+				'periode_cutoff_from'    => $saltab_from,
+				'periode_cutoff_to'      => $saltab_to,
+				'periode_salary'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+				'total_mpp'        	 	 => $jumlah_data,
+				'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($nik),
+				'upload_by_id'        	 => $nik,
+				'upload_ip'        	 	 => $this->get_client_ip(),
+			);
 
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Posisi/Jabatan</td>
-								<td colspan="2">: '.$jabatan.'</td>
-							</tr>
-						</table>
-					</td>
-		
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Gaji Pokok</td>
-								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).';-</td>
-							</tr>
-						</table>
-					</td>
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			$data_batch_cek = array(
+				'periode_cutoff_from'    => $saltab_from,
+				'periode_cutoff_to'      => $saltab_to,
+				'periode_salary'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+			);
 
+			$id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
 
-				</tr>
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			$data_batch_cek_request_open = array(
+				'periode_saltab_from'    => $saltab_from,
+				'periode_saltab_to'      => $saltab_to,
+				'tanggal_gajian'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+			);
 
-			</table>
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br><br>
+			$this->Import_model->update_request_open_import($data_batch_cek_request_open);
 
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+			if ($id_batch_awal != "") {
+				$this->Import_model->delete_batch_saltab($id_batch_awal);
+			}
 
+			// $data_batch += ['id' => $id_batch_awal];
 
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji Diterima</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
+			if ($data_batch != '') {
+				$this->Import_model->insert_saltab_batch($data_batch);
+			}
 
-				if($allow_jabatan!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Jabatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
+			$id_batch = $this->Import_model->get_id_saltab_batch($data_batch);
+
+			//susun array saltab detail
+			for ($i = 2; $i < count($sheet_data); $i++) {
+				$data += ['uploadid' => $id_batch];
+				for ($j = 0; $j < $length_header; $j++) {
+					if ($header_tabel_saltab[$j] == "nip") {
+						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
+							// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+							$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+							$trimmed_nip = trim($trimmed_nip, ' ');
+							$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+						} else {
+							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
+								// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+								$trimmed_nip = trim($trimmed_nip, ' ');
+								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
+								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
+								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
+								$j = $j + 1;
+							} else {
+								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+								$trimmed_nip = trim($trimmed_nip, ' ');
+								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+							}
+						}
+						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+					}
+					if ($header_tabel_saltab[$j] == "adjustment_pph") {
+						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+						$trimmed_nip = trim($trimmed_nip, ' ');
+						$trimmed_nip = abs(doubleval($trimmed_nip));
+						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					} else {
+						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+						$trimmed_nip = trim($trimmed_nip, ' ');
+						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					}
 				}
+				$array_data[] = $data;
+				$data = array();
+			}
 
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
+			if ($nama_sub_project == "-ALL-") {
+				if (!empty($array_data)) {
+					// echo '<pre>';
+					// print_r($array_data);
+					// echo '</pre>';
+					$this->Import_model->insert_saltab_detail($array_data);
 				}
-
-			if($allow_konsumsi!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Makan/Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_konsumsi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_transport!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transportasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_transport).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Sewa/Rent</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_comunication!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Komunikasi/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_comunication).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_parking!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Parkir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_parking).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_residence_cost!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Tempat Tinggal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_residence_cost).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_akomodasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_device!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Laptop</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_kasir!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kasir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-
-			if($allow_trans_meal!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_trans_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Rental</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_vitamin!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_grooming!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Grooming</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_others!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Lain-lain</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_operation!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Operational</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($penyesuaian_umk!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penyesuaian UMK/Meal/Transport/Sewa/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($insentive!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Insentif</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_holiday!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Hari Libur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_holiday).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_national_day!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Libur Nasional</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_national_day).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_rapel!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Rapel Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_rapel).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($kompensasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Kompensasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($kompensasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($bonus!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Bonus</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bonus).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($uuck!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">UUCK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($thr!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">THR</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($thr).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-				
-			$tbl_2 .= '
-			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2"></td>
-								<td colspan="0"></td>
-								<td colspan="0" align="right"></td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Ketenagakerjaan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Kesehatan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Jaminan Pensiun</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-
-
-
-			if($over_salary!=0) {
-				$tbl_2 .= '
-				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Kelebihan Gaji</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>';
-			}
-
-
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-
-			$tbl_2 .= '
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>Pendapatan</b></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($pendapatan).'&nbsp;&nbsp;&nbsp;</b> &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><u><i>Potongan</i></u></td>
-								<td colspan="2"></td>
-								<td colspan="2" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Ketenagakerjaan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Jaminan Pensiun</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Deposit</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*PPH Karyawan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-				if($pph_thr!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">PPH 21 THR</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
+			} else {
+				foreach ($array_data as $array_data) {
+					$array_data['sub_project'] = $nama_sub_project;
+					$array_data_final[] = $array_data;
 				}
-
-
-
-				if($penalty_late!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Keterlambatan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
+				if (!empty($array_data_final)) {
+					$this->Import_model->insert_saltab_detail($array_data_final);
 				}
+			}
+
+			$tes_query = $this->db->last_query();
 
 
+			// if ($array_data != '') {
+			// 	$this->Import_model->insert_saltab_detail($array_data);
+			// }
 
-				if($penalty_attend!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
+			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
 
+			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
+			// echo '<pre>';
+			// print_r($tes_query);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+		} else {
+			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+			print_r("gagal import");
+			print_r($_FILES['file_excel']['name']);
+		}
 
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
 
-				if($penalty_alfa!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($mix_oplos!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Mix Oplos</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($pot_trip_malang!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Trip Bali</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_device!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Laptop/HP</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_kpi!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan KPI</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				$tbl_2 .= '<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">'.$deduction_name.'</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Pokok</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Wajib Koperasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_wajib_koperasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Pembayaran Pinjaman</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pembayaran_pinjaman).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Biaya Admin</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-			$tbl_2 .= '
-			<br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>';
-
-			$tbl_2 .= '
-			<br><br>
-
-
-			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA</b></td>
-								<td colspan="2"><b>: Rp.</b></td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total).' &nbsp;&nbsp;</b> </td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>
-			
-			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
-
-			';
-			$pdf->writeHTML($tbl_2, true, false, false, false, '');
-
-
-			$tbl_ttd = '';
-			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-
-			$lampiran = '';
-			$pdf->writeHTML($lampiran, true, false, false, false, '');
-		
-			//Close and output PDF document
-			ob_start();
-			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
-			ob_end_flush();
-
-		// } else {
-		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';
-		// 	// redirect('admin/pkwt');
-		// }
+		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
 
-	public function eslip_final() {
+	function view_batch_saltab_temporary($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Preview E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/importesaltab') . "'>Import E-SALTAB</a> | Preview E-Saltab";
 
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/preview_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
 			redirect('admin/');
 		}
+	}
 
-		$system = $this->Xin_model->read_setting_info(1);		
-		 // create new PDF document
-   		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$employee_id = $this->uri->segment(4);
-		$idsaltab = $this->uri->segment(5);
-		// $employee_id = $this->uri->segment(5);
-
-
-		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$employee = $this->Employees_model->read_employee_info_eslip($employee_id);
-		$eslip = $this->Employees_model->read_saltab_by_id($idsaltab);
-		// $this->Employees_model->check_akses_project($this->input->post('employees'), $this->input->post('project')) > 0
-		// $check_akses_project = $this->Employees_model->read_akses_project($session['employee_id'],$employee[0]->project_id);
-
-
-		if(empty($employee) || $employee_id== 0){
+	function view_batch_saltab_release($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
 			redirect('admin/');
 		}
-		// $checkap = $this->Employees_model->check_akses_project($session['employee_id'], $employee[0]->project_id)
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
 
-		if($session['user_id']!=1){
+		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/manage_esaltab') . "'>Manage E-SALTAB</a> | Detail E-Saltab";
 
-			if($session['user_id'] != $employee[0]->user_id){
-				if($this->Employees_model->check_akses_project($session['employee_id'], $employee[0]->project_id)==0){
-					redirect('admin/');
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_saltab_release_download($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/download_esaltab') . "'>Download E-SALTAB</a> | Detail E-Saltab";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab_download", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	// Function to get the client IP address
+	function get_client_ip()
+	{
+		$ipaddress = '';
+		if (isset($_SERVER['HTTP_CLIENT_IP']))
+			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+		else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		else if (isset($_SERVER['HTTP_X_FORWARDED']))
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+		else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
+			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+		else if (isset($_SERVER['HTTP_FORWARDED']))
+			$ipaddress = $_SERVER['HTTP_FORWARDED'];
+		else if (isset($_SERVER['REMOTE_ADDR']))
+			$ipaddress = $_SERVER['REMOTE_ADDR'];
+		else
+			$ipaddress = 'UNKNOWN';
+		return $ipaddress;
+	}
+
+	// Validate and add info in database
+	public function import_newemp()
+	{
+
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							if ($line[2] == 'HO' || $line[2] == 'INHOUSE' || $line[2] == 'IN-HOUSE') {
+								$formula2 = '2';
+							} else {
+								$formula2 = '3';
+							}
+
+							$formula3 = sprintf("%03d", $line[3]);
+
+
+
+							$ids = '2' . $formula2 . $formula3 . (int)$formula4 + 1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' => $uploadid,
+								'employee_id' => $ids, // auto
+								'fullname' => $line[1],
+								'company_id' => '2',
+								'location_id' => '3', //ho-area
+								'department_id' => $line[2], //divisi
+								'designation_id' => $line[3], //jabatan
+								'date_of_joining' => $line[4],
+								'ktp_no' => $line[0],
+
+							);
+							$result = $this->Employees_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Employees_model->delete_temp_by_employeeid();
+							$formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
 				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
 			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
 		}
 
 
-			$project = $this->Project_model->getcomp_single_project($employee[0]->project_id);
-			if(!is_null($project)){
-				$project_name = $project[0]->title;
-			} else {
-				$project_name = '--';	
-			}
-
-		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
-				if(!is_null($designation)){
-					$jabatan = $designation[0]->designation_name;
-				} else {
-					$jabatan = '--';	
-				}
-
-		// if($eslip[0]->status_kirim==1){
-			// $bMargin = $this->getBreakMargin();
-			// $bMargi = $this->getBreakMargin();
-
-				if($employee[0]->company_id == '2') {
-					$company_name = 'PT. SIPRAMA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_sc.png';
-				} else if ($employee[0]->company_id == '3') {
-					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_kac.png';
-				} else {
-					$company_name = 'PT. MATA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_mata.png';
-				}
-			// set document information
-			$pdf->SetCreator('PT Siprama Cakrawala');
-			$pdf->SetAuthor('PT Siprama Cakrawala');
-			// $baseurl=base_url();
-
-			$header_namae = $company_name;
-			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
-
-			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
-			
-			$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
-			// set header and footer fonts
-			// $pdf->setHeaderFont(Array('helvetica', '', 20));
-			// $pdf->setFooterFont(Array('helvetica', '', 9));
-		
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont('courier');
-			
-			// set margins
-			$pdf->SetMargins(15, 27, 15);
-			$pdf->SetHeaderMargin(5);
-			$pdf->SetFooterMargin(10);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 25);
-			
-			// set image scale factor
-			$pdf->setImageScale(10);
-
-
-			$pdf->SetAuthor('HRCakrawala');
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-
-			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
-			$pdf->SetSubject($this->lang->line('xin_eslip'));
-			$pdf->SetKeywords($this->lang->line('xin_eslip'));
-			// set font
-			$pdf->SetFont('helvetica', 'B', 10);
-					
-			// set header and footer fonts
-			$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 9));
-			$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-			
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-			
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 12);
-			
-			// set image scale factor
-			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-			
-			// ---------------------------------------------------------
-
-			// set default font subsetting mode
-			$pdf->setFontSubsetting(true);
-			
-			// Set font
-			// dejavusans is a UTF-8 Unicode font, if you only need to
-			// print standard ASCII chars, you can use core fonts like
-			// helvetica or times to reduce file size.
-			$pdf->SetFont('helvetica', '', 9, '', true);
-			
-			// Add a page
-			// This method has several options, check the source code documentation for more information.
-			$pdf->AddPage();
-		
-			// set cell padding
-			$pdf->setCellPaddings(1, 1, 1, 1);
-			
-			// set cell margins
-			$pdf->setCellMargins(0, 0, 0, 0);
-			
-			// set color for background
-			$pdf->SetFillColor(255, 255, 127);
-			/////////////////////////////////////////////////////////////////////////////////
-
-			if(!is_null($eslip)){
-
-				if($eslip[0]->nip == $employee[0]->employee_id) {
-				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
-
-				$nip = $eslip[0]->nip;
-				$namalengkap = $employee[0]->first_name;
-				$periode = $this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_from).' - '.$this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_to);
-				$jabatan = $jabatan;
-				$project = $project_name;
-				$area = $eslip[0]->area;
-				$hari_kerja = $eslip[0]->hari_kerja;
-				$gaji_umk = $eslip[0]->gaji_umk;
-				$gaji_pokok = $eslip[0]->gaji_pokok;
-
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
-				$allow_rent = $eslip[0]->allow_rent;
-				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
-				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_medicine;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
-				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-				$adjustment_bruto = $eslip[0]->adjustment_bruto;
-				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
-
-				$deduction_bruto = $eslip[0]->deduction_bruto;
-				$deduction_so_bruto = $eslip[0]->deduction_so_bruto;
-				$potongan_kpi_bruto = $eslip[0]->potongan_kpi_bruto;
-				$bpjs_tk_deduction_jkk_jkm = $eslip[0]->bpjs_tk_deduction_jkk_jkm;
-				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
-				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
-				$bpjs_jp_deduction = $eslip[0]->jaminan_pensiun_deduction;
-
-				$pendapatan = $eslip[0]->total_1;
-				
-				$bpjs_tk = $eslip[0]->bpjs_tk;
-				$bpjs_ks = $eslip[0]->bpjs_ks;
-				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
-				$deposit = $eslip[0]->deposit;
-				$pph = $eslip[0]->pph_21;
-				$pph_thr = $eslip[0]->pph_21_thr;
-				$penalty_late = $eslip[0]->penalty_late;
-				$penalty_alfa = $eslip[0]->penalty_alfa;
-				$penalty_attend = $eslip[0]->penalty_attend;
-				$mix_oplos = $eslip[0]->mix_oplos;
-				$pot_trip_malang = $eslip[0]->pot_trip_malang;
-				$pot_device = $eslip[0]->pot_device;
-				$pot_kpi = $eslip[0]->pot_kpi;
-				$deduction = $eslip[0]->deduction;
-				$simpanan_pokok = $eslip[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
-				$adjustment = $eslip[0]->adjustment;
-				$adjustment_dlk = $eslip[0]->adjustment_dlk;
-				$total = $eslip[0]->total_thp;
-
-				$monyear =  date('M Y');
-				$tanggalcetak = date("Y-m-d");
-
-				if($project=='CPJF'){
-					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
-				} else {
-					$deduction_name = 'Deduction';
-				}
-	
-				} else {
-					redirect('admin/');
-				}
-				
-			} else {
-				redirect('admin/');
-
-			}
-
-
-			$tbl_2 = '
-			<div style="text-align: center; text-justify: inter-word;">
-				<b>SLIP GAJI</b>
-			</div>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>NIP</td>
-								<td colspan="2">: '.$nip.'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Project</td>
-								<td colspan="2">: '.strtoupper($project).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Nama</td>
-								<td colspan="2">: '.strtoupper($namalengkap).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Area</td>
-								<td colspan="2">: '.strtoupper($area).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Periode</td>
-								<td colspan="2">: '.strtoupper($periode).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Hari Kerja</td>
-								<td colspan="2">: '.$hari_kerja.'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Posisi/Jabatan</td>
-								<td colspan="2">: '.$jabatan.'</td>
-							</tr>
-						</table>
-					</td>
-		
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Gaji Pokok</td>
-								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).';-</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br><br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji Diterima</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-				if($allow_jabatan!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Jabatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-			if($allow_konsumsi!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Makan/Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_konsumsi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_transport!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transportasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_transport).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Sewa/Rent</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_comunication!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Komunikasi/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_comunication).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_parking!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Parkir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_parking).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_residence_cost!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Tempat Tinggal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_residence_cost).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_akomodasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_device!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Laptop</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_kasir!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kasir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-
-			if($allow_trans_meal!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_trans_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Rental</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_vitamin!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_grooming!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Grooming</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_others!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Lain-lain</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_operation!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Operational</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($penyesuaian_umk!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penyesuaian UMK/Meal/Transport/Sewa/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($insentive!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Insentif</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_holiday!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Hari Libur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_holiday).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_national_day!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Libur Nasional</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_national_day).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_rapel!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Rapel Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_rapel).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($kompensasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Kompensasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($kompensasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($bonus!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Bonus</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bonus).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($uuck!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">UUCK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($thr!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">THR</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($thr).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-				
-			if($adjustment_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Adjustment</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($adjustment_dlk_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Adjustment DLK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			$tbl_2 .= '
-
-			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2"><u><i>Deduction</u></i></td>
-								<td colspan="0"></td>
-								<td colspan="0" align="right"></td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-			if($deduction_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Deduction</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($deduction_so_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Deduction SO</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_so_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($potongan_kpi_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Potongan KPI</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_kpi_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			$tbl_2 .= '
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Program JKK+JKM</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction_jkk_jkm).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Program JHT</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction_jht).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Kesehatan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Jaminan Pensiun</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_jp_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-
-			if($over_salary!=0) {
-				$tbl_2 .= '
-				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Kelebihan Gaji</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>';
-			}
-
-
-
-
-			$tbl_2 .= '
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>Pendapatan</b></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($pendapatan).'&nbsp;&nbsp;&nbsp;</b> &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><u><i>Potongan</i></u></td>
-								<td colspan="2"></td>
-								<td colspan="2" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Ketenagakerjaan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Jaminan Pensiun</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Deposit</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*PPH Karyawan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-				if($pph_thr!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">PPH 21 THR</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_late!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Keterlambatan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_attend!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_alfa!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($mix_oplos!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Mix Oplos</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($pot_trip_malang!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Trip Bali</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_device!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Laptop/HP</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_kpi!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan KPI</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				$tbl_2 .= '<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">'.$deduction_name.'</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Pokok</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Wajib Koperasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_wajib_koperasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Pembayaran Pinjaman</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pembayaran_pinjaman).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Biaya Admin</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-			$tbl_2 .= '
-			<br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>';
-
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-			
-			$tbl_2 .= '
-			<br><br>
-
-
-			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA</b></td>
-								<td colspan="2"><b>: Rp.</b></td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total).' &nbsp;&nbsp;</b> </td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>
-			
-			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
-
-			';
-			$pdf->writeHTML($tbl_2, true, false, false, false, '');
-
-
-			$tbl_ttd = '';
-			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-
-			$lampiran = '';
-			$pdf->writeHTML($lampiran, true, false, false, false, '');
-		
-			//Close and output PDF document
-			ob_start();
-			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
-			ob_end_flush();
-
-		// } else {
-		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';
-		// 	// redirect('admin/pkwt');
-		// }
+		redirect('admin/ImportExcelEmployees?upid=' . $uploadid);
 	}
 
 
-	public function eslip_temp2() {
-
+	// Validate and add info in database
+	public function import_eslip()
+	{
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if (empty($session)) {
 			redirect('admin/');
 		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
 
-		$system = $this->Xin_model->read_setting_info(1);		
-		 // create new PDF document
-   		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$employee_id = $this->uri->segment(4);
-		$idsaltab = $this->uri->segment(5);
-		// $employee_id = $this->uri->segment(5);
+		$csvMimes =  array(
 
-		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$employee = $this->Employees_model->read_employee_info_eslip($employee_id);
-		$eslip = $this->Employees_model->read_saltab_temp_by_id($idsaltab);
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
 
-		if(empty($employee)){
-			redirect('https://apps-cakrawala.com/eslip_notfound'); 
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+
+						//parse data from csv file line by line
+						//while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 								=> $uploadid,
+								'nip' 										=> $line[0],
+								'fullname' 								=> str_replace("'", " ", $line[1]),
+								'periode' 								=> str_replace("'", " ", $line[2]),
+								'project' 								=> $line[3],
+								'project_sub' 						=> $line[4],
+								'area' 										=> str_replace("'", " ", $line[5]),
+								'status_emp' 							=> $line[6],
+								'hari_kerja' 							=> $line[7],
+								'gaji_umk' 								=> $line[8],
+								'gaji_pokok' 							=> $line[9],
+								'allow_jabatan' 					=> $line[10],
+								'allow_area' 							=> $line[11],
+								'allow_masakerja' 				=> $line[12],
+								'allow_konsumsi' 					=> $line[13],
+								'allow_transport' 				=> $line[14],
+								'allow_rent' 							=> $line[15],
+								'allow_comunication' 			=> $line[16],
+								'allow_parking' 					=> $line[17],
+								'allow_residence_cost' 		=> $line[18],
+								'allow_akomodasi' 				=> $line[19],
+								'allow_device' 						=> $line[20],
+								'allow_kasir' 						=> $line[21],
+								'allow_trans_meal' 				=> $line[22],
+								'allow_trans_rent' 				=> $line[23],
+								'allow_vitamin' 					=> $line[24],
+								'allow_grooming'					=> $line[25],
+								'allow_others'						=> $line[26],
+								'allow_operation' 				=> $line[27],
+								'over_salary' 						=> $line[28],
+								'penyesuaian_umk' 				=> $line[29],
+								'insentive'								=> $line[30],
+								'overtime' 								=> $line[31],
+								'overtime_holiday' 				=> $line[32],
+								'overtime_national_day' 	=> $line[33],
+								'overtime_rapel' 					=> $line[34],
+								'kompensasi' 							=> $line[35],
+								'bonus' 									=> $line[36],
+								'uuck' 										=> $line[37],
+								'thr' 										=> $line[38],
+								'bpjs_tk_deduction' 			=> $line[39],
+								'bpjs_ks_deduction' 			=> $line[40],
+								'jaminan_pensiun_deduction' => $line[41],
+								'pendapatan' 							=> $line[42],
+								'bpjs_tk' 								=> $line[43],
+								'bpjs_ks' 								=> $line[44],
+								'jaminan_pensiun' 				=> $line[45],
+								'deposit' 								=> $line[46],
+								'pph' 										=> $line[47],
+								'pph_thr' 								=> $line[48],
+								'penalty_late' 						=> $line[49],
+								'penalty_alfa' 						=> $line[50],
+								'penalty_attend' 					=> $line[51],
+								'mix_oplos' 							=> $line[52],
+								'pot_trip_malang' 				=> $line[53],
+								'pot_device' 							=> $line[54],
+								'pot_kpi' 								=> $line[55],
+								'deduction' 							=> $line[56],
+								'simpanan_pokok' 					=> $line[57],
+								'simpanan_wajib_koperasi' => $line[58],
+								'pembayaran_pinjaman' 		=> $line[59],
+								'biaya_admin_bank' 				=> $line[60],
+								'adjustment' 							=> $line[61],
+								'adjustment_dlk' 					=> $line[62],
+								'total' 									=> $line[63],
+								'createdby' 							=> $employee_id,
+
+							);
+							$result = $this->Import_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_temp_by_nip();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
 		}
-		// if($session['user_id'] != $employee[0]->user_id) {
-		// 	redirect('admin/');
-		// }
 
-			$project = $this->Project_model->getcomp_single_project($employee[0]->project_id);
-			if(!is_null($project)){
-				$project_name = $project[0]->title;
-			} else {
-				$project_name = '--';	
-			}
-
-		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
-				if(!is_null($designation)){
-					$jabatan = $designation[0]->designation_name;
-				} else {
-					$jabatan = '--';	
-				}
-
-			if($employee[0]->company_id == '2') {
-					$company_name = 'PT. SIPRAMA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_sc.png';
-				} else if ($employee[0]->company_id == '3') {
-					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_kac.png';
-				} else {
-					$company_name = 'PT. MATA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_mata.png';
-				}
-			// set document information
-			$pdf->SetCreator('PT Siprama Cakrawala');
-			$pdf->SetAuthor('PT Siprama Cakrawala');
-			// $baseurl=base_url();
-
-			$header_namae = $company_name;
-			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
-
-			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
-			
-			$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
-			// set header and footer fonts
-			// $pdf->setHeaderFont(Array('helvetica', '', 20));
-			// $pdf->setFooterFont(Array('helvetica', '', 9));
-		
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont('courier');
-			
-			// set margins
-			$pdf->SetMargins(15, 27, 15);
-			$pdf->SetHeaderMargin(5);
-			$pdf->SetFooterMargin(10);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 25);
-			
-			// set image scale factor
-			$pdf->setImageScale(10);
-
-
-			$pdf->SetAuthor('HRCakrawala');
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-
-			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
-			$pdf->SetSubject($this->lang->line('xin_eslip'));
-			$pdf->SetKeywords($this->lang->line('xin_eslip'));
-			// set font
-			$pdf->SetFont('helvetica', 'B', 10);
-					
-			// set header and footer fonts
-			$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 9));
-			$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-			
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-			
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 12);
-			
-			// set image scale factor
-			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-			
-			// ---------------------------------------------------------
-
-			// set default font subsetting mode
-			$pdf->setFontSubsetting(true);
-			
-			// Set font
-			// dejavusans is a UTF-8 Unicode font, if you only need to
-			// print standard ASCII chars, you can use core fonts like
-			// helvetica or times to reduce file size.
-			$pdf->SetFont('helvetica', '', 9, '', true);
-			
-			// Add a page
-			// This method has several options, check the source code documentation for more information.
-			$pdf->AddPage();
-		
-			// set cell padding
-			$pdf->setCellPaddings(1, 1, 1, 1);
-			
-			// set cell margins
-			$pdf->setCellMargins(0, 0, 0, 0);
-			
-			// set color for background
-			$pdf->SetFillColor(255, 255, 127);
-			/////////////////////////////////////////////////////////////////////////////////
-
-			if(!is_null($eslip)){
-
-				// if($eslip[0]->nip == $employee[0]->employee_id) {
-				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
-
-				$nip = $eslip[0]->nip;
-				$namalengkap = $employee[0]->first_name;
-				$periode = $this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_from).' - '.$this->Xin_model->tgl_indo($eslip[0]->periode_cutoff_to);
-				$jabatan = $jabatan;
-				$project = $project_name;
-				$area = $eslip[0]->area;
-				$hari_kerja = $eslip[0]->hari_kerja;
-				$gaji_umk = $eslip[0]->gaji_umk;
-				$gaji_pokok = $eslip[0]->gaji_pokok;
-
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
-				$allow_rent = $eslip[0]->allow_rent;
-				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
-				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_medicine;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
-				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-				$adjustment_bruto = $eslip[0]->adjustment_bruto;
-				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
-
-				$deduction_bruto = $eslip[0]->deduction_bruto;
-				$deduction_so_bruto = $eslip[0]->deduction_so_bruto;
-				$potongan_kpi_bruto = $eslip[0]->potongan_kpi_bruto;
-				$bpjs_tk_deduction_jkk_jkm = $eslip[0]->bpjs_tk_deduction_jkk_jkm;
-				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
-				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
-				$bpjs_jp_deduction = $eslip[0]->jaminan_pensiun_deduction;
-				$pendapatan = $eslip[0]->total_1;
-				$bpjs_tk = $eslip[0]->bpjs_tk;
-				$bpjs_ks = $eslip[0]->bpjs_ks;
-				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
-				$deposit = $eslip[0]->deposit;
-				$pph = $eslip[0]->pph_21;
-				$pph_thr = $eslip[0]->pph_21_thr;
-				$penalty_late = $eslip[0]->penalty_late;
-				$penalty_alfa = $eslip[0]->penalty_alfa;
-				$penalty_attend = $eslip[0]->penalty_attend;
-				$mix_oplos = $eslip[0]->mix_oplos;
-				$pot_trip_malang = $eslip[0]->pot_trip_malang;
-				$pot_device = $eslip[0]->pot_device;
-				$pot_kpi = $eslip[0]->pot_kpi;
-				$deduction = $eslip[0]->deduction;
-				$simpanan_pokok = $eslip[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
-				$adjustment = $eslip[0]->adjustment;
-				$adjustment_dlk = $eslip[0]->adjustment_dlk;
-				$total = $eslip[0]->total_thp;
-
-				$monyear =  date('M Y');
-				$tanggalcetak = date("Y-m-d");
-
-				if($project=='CPJF'){
-					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
-				} else {
-					$deduction_name = 'Deduction';
-				}
-	
-
-				// $pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				// $transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				// $armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
-
-				// } else {
-				// 	redirect('admin/');
-				// }
-				
-			} else {
-				redirect('admin/');
-			}
-
-
-			$tbl_2 = '
-			<div style="text-align: center; text-justify: inter-word;">
-				<b>SLIP GAJI</b>
-			</div>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>NIP</td>
-								<td colspan="2">: '.$nip.'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Project</td>
-								<td colspan="2">: '.strtoupper($project).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Nama</td>
-								<td colspan="2">: '.strtoupper($namalengkap).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Area</td>
-								<td colspan="2">: '.strtoupper($area).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Periode</td>
-								<td colspan="2">: '.strtoupper($periode).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Hari Kerja</td>
-								<td colspan="2">: '.$hari_kerja.'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Posisi/Jabatan</td>
-								<td colspan="2">: '.$jabatan.'</td>
-							</tr>
-						</table>
-					</td>
-		
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Gaji Pokok</td>
-								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).';-</td>
-							</tr>
-						</table>
-					</td>
-
-
-				</tr>
-
-			</table>
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br><br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji Diterima</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-				if($allow_jabatan!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Jabatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-			if($allow_konsumsi!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Makan/Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_konsumsi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_transport!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transportasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_transport).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Sewa/Rent</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_comunication!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Komunikasi/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_comunication).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_parking!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Parkir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_parking).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_residence_cost!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Tempat Tinggal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_residence_cost).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_akomodasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_device!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Laptop</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_kasir!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kasir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-
-			if($allow_trans_meal!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_trans_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Rental</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_vitamin!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_grooming!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Grooming</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_others!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Lain-lain</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_operation!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Operational</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($penyesuaian_umk!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penyesuaian UMK/Meal/Transport/Sewa/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($insentive!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Insentif</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_holiday!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Hari Libur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_holiday).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_national_day!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Libur Nasional</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_national_day).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_rapel!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Rapel Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_rapel).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($kompensasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Kompensasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($kompensasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($bonus!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Bonus</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bonus).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($uuck!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">UUCK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($thr!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">THR</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($thr).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-				
-			if($adjustment_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Adjustment</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($adjustment_dlk_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Adjustment DLK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			$tbl_2 .= '
-
-			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2"><u><i>Deduction</u></i></td>
-								<td colspan="0"></td>
-								<td colspan="0" align="right"></td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-			if($deduction_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Deduction</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($deduction_so_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Deduction SO</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_so_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($potongan_kpi_bruto!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Potongan KPI</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_kpi_bruto).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			$tbl_2 .= '
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Program JKK+JKM</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction_jkk_jkm).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Program JHT</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction_jht).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Kesehatan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Jaminan Pensiun</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_jp_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-
-			if($over_salary!=0) {
-				$tbl_2 .= '
-				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Kelebihan Gaji</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>';
-			}
-
-
-
-			$tbl_2 .= '
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>Pendapatan</b></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($pendapatan).'&nbsp;&nbsp;&nbsp;</b> &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><u><i>Potongan</i></u></td>
-								<td colspan="2"></td>
-								<td colspan="2" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Ketenagakerjaan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Jaminan Pensiun</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Deposit</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*PPH Karyawan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-				if($pph_thr!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">PPH 21 THR</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_late!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Keterlambatan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_attend!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_alfa!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($mix_oplos!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Mix Oplos</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($pot_trip_malang!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Trip Bali</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_device!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Laptop/HP</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_kpi!=0){
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan KPI</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				$tbl_2 .= '<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">'.$deduction_name.'</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Pokok</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Wajib Koperasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_wajib_koperasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Pembayaran Pinjaman</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pembayaran_pinjaman).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Biaya Admin</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-			$tbl_2 .= '
-			<br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>';
-
-
-
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			$tbl_2 .= '
-			<br><br>
-
-
-			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA</b></td>
-								<td colspan="2"><b>: Rp.</b></td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total).' &nbsp;&nbsp;</b> </td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>
-			
-			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
-
-			';
-			$pdf->writeHTML($tbl_2, true, false, false, false, '');
-
-
-			$tbl_ttd = '';
-			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-
-			$lampiran = '';
-			$pdf->writeHTML($lampiran, true, false, false, false, '');
-		
-			//Close and output PDF document
-			ob_start();
-			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
-			ob_end_flush();
-
-		// } else {
-		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';
-		// 	// redirect('admin/pkwt');
-		// }
+		redirect('admin/Importexceleslip?upid=' . $uploadid);
 	}
 
-	public function preview_pdf() {
 
+
+	// Validate and add info in database
+	public function import_ratecard()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						// $lastnik = $this->Employees_model->get_maxid();
+						// $formula4 = substr($lastnik,5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 						=> $uploadid,
+								'company_id' 					=> $line[1],
+								'nama_pt' 						=> 'PT Siprama Cakrawala',
+								'periode' 						=> $line[2], //periode
+								'date_periode_start' 	=> $line[3], //start date
+								'date_periode_end' 		=> $line[4], //start date
+								'project_id' 					=> $line[5], //project id
+								'project' 						=> $line[6], //project
+								'sub_project_id' 			=> $line[7], //sub project id
+								'sub_project' 				=> $line[8], // sub project
+								'kota' 								=> $line[9], //kota
+								'posisi_jabatan' 			=> $line[10], //jabatan
+								'jumlah_mpp' 					=> $line[11], //jumlah mpp
+								'gaji_pokok' 					=> $line[12], //gapok
+								'hari_kerja' 					=> $line[13], //hari kerja
+								'dm_grade' 						=> $line[14], // dm_grade
+								'allow_grade' 				=> $line[15], //grade
+								'dm_masa_kerja' 			=> $line[16], // dm_grade
+								'allow_masa_kerja' 		=> $line[17], //grade
+								'dm_konsumsi' 				=> $line[18], //dm_konsumsi
+								'allow_konsumsi' 			=> $line[19], //konsumsi
+								'dm_transport' 				=> $line[20], //dm_transport
+								'allow_transport' 		=> $line[21], //transport
+								'dm_rent' 						=> $line[22], //dm_sewa
+								'allow_rent' 					=> $line[23], //sewa
+								'dm_comunication' 		=> $line[24], //
+								'allow_comunication'	=> $line[25], //
+								'dm_parking'					=> $line[26], //dm_parkir
+								'allow_parking' 			=> $line[27], //parkir
+								'dm_resicance' 				=> $line[28], //dm_residance
+								'allow_residance' 		=> $line[29], //allow resicande
+								'dm_device' 					=> $line[30], //dm_device
+								'allow_device' 				=> $line[31], //device
+								'dm_kasir' 						=> $line[32], //dm kasair
+								'allow_kasir' 				=> $line[33], //allow kasir
+								'dm_trans_meal' 			=> $line[34], //dm_transmeal
+								'allow_trans_meal' 		=> $line[35], //transmeal
+								'dm_medicine' 				=> $line[36], //dm_medical
+								'allow_medicine' 			=> $line[37], //medical
+								'total_allow' 				=> $line[38], //total_tunjangan
+								'gaji_bersih' 				=> $line[39], //gaji bersih
+								'kompensasi' 					=> $line[40], //kompensasi
+								'kompensasi_pt' 			=> $line[41], //kompensasi client
+								'bpjs_tk' 						=> $line[42], //bpjs tk
+								'bpjs_ks' 						=> $line[43], //bpjs ks
+								'insentive' 					=> $line[44], //insentive
+								'total' 							=> $line[45], //total
+								'grand_total' 				=> $line[46], //grand_total
+
+								'createdby' => $employee_id,
+								'createdon' => date('Y-m-d h:i:s'),
+
+
+							);
+							$result = $this->Import_model->addratecardtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_temp_by_pt();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+
+		redirect('admin/Importexcelratecard?upid=' . $uploadid);
+	}
+
+
+	public function history_upload_ratecard_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_ratecard", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_ratecard();
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->sub_project);
+			$createdby = $r->createdby;
+
+			$preiode_param 			= str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param 	= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->sub_project)));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// expired page
+	public function importsaltab()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = 'Import Saltab to BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import Saltab to BPJS';
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_saltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('481', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/import_saltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	public function history_upload_eslip_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_eslip", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param = str_replace("]", "", str_replace("[", "", str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)))));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	public function history_upload_saltab_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_saltab", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_saltab();
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param = str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/importexcelsaltab/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/importexcelsaltab/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// Validate and add info in database
+	public function import_saltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 								=> $uploadid,
+								'nip' 										=> $line[0],
+								'fullname' 								=> $line[1],
+								'periode' 								=> $line[2],
+								'project' 								=> $line[3],
+								'project_sub' 						=> $line[4],
+								'area' 										=> $line[5],
+								'status_emp' 							=> $line[6],
+								'hari_kerja' 							=> $line[7],
+								'gaji_umk' 								=> $line[8],
+								'gaji_pokok' 							=> $line[9],
+
+
+								'allow_jabatan' 					=> $line[10],
+								'allow_area' 							=> $line[11],
+								'allow_masakerja' 				=> $line[12],
+								'allow_konsumsi' 					=> $line[13],
+								'allow_transport' 				=> $line[14],
+								'allow_rent' 							=> $line[15],
+								'allow_comunication' 			=> $line[16],
+								'allow_parking' 					=> $line[17],
+								'allow_residence_cost' 		=> $line[18],
+								'allow_akomodasi' 				=> $line[19],
+								'allow_device' 						=> $line[20],
+								'allow_kasir' 						=> $line[21],
+								'allow_trans_meal' 				=> $line[22],
+								'allow_trans_rent' 				=> $line[23],
+								'allow_vitamin' 					=> $line[24],
+								'allow_grooming'					=> $line[25],
+								'allow_others'						=> $line[26],
+								'allow_operation' 				=> $line[27],
+
+								'over_salary' 						=> $line[28],
+								'penyesuaian_umk' 				=> $line[29],
+								'insentive'								=> $line[30],
+								'overtime' 								=> $line[31],
+								'overtime_holiday' 				=> $line[32],
+								'overtime_national_day' 	=> $line[33],
+								'overtime_rapel' 					=> $line[34],
+								'kompensasi' 							=> $line[35],
+								'bonus' 									=> $line[36],
+								'uuck' 										=> $line[37],
+								'thr' 										=> $line[38],
+								'bpjs_tk_deduction' 			=> $line[39],
+								'bpjs_ks_deduction' 			=> $line[40],
+								'jaminan_pensiun_deduction' => $line[41],
+								'pendapatan' 							=> $line[42],
+								'bpjs_tk' 								=> $line[43],
+								'bpjs_ks' 								=> $line[44],
+								'jaminan_pensiun' 				=> $line[45],
+								'deposit' 								=> $line[46],
+								'pph' 										=> $line[47],
+								'pph_thr' 								=> $line[48],
+								'penalty_late' 						=> $line[49],
+								'penalty_alfa' 						=> $line[50],
+								'penalty_attend' 					=> $line[51],
+								'mix_oplos' 							=> $line[52],
+								'pot_trip_malang' 				=> $line[53],
+								'pot_device' 							=> $line[54],
+								'pot_kpi' 								=> $line[55],
+								'deduction' 							=> $line[56],
+								'simpanan_pokok' 					=> $line[57],
+								'simpanan_wajib_koperasi' => $line[58],
+								'pembayaran_pinjaman' 		=> $line[59],
+								'biaya_admin_bank' 				=> $line[60],
+								'adjustment' 							=> $line[61],
+								'adjustment_dlk' 					=> $line[62],
+								'total' 									=> $line[63],
+								'createdby' 							=> $employee_id,
+
+							);
+							$result = $this->Import_model->add_saltab_temp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_saltabtemp_by_nip();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+		redirect('admin/Importexcelsaltab?upid=' . $uploadid);
+	}
+
+	// expired page
+	public function bpjs()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = 'E-Slip To BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'E-Slip to BPJS';
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_eslip_bpjs';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('477', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/bpjs/eslip_bpjs_list", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	public function history_upload_eslip_bpjs()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/bpjs/eslip_bpjs_list", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_eslip_project();
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param = str_replace(" ", "", $r->project);
+			$project_sub_param = str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			$view_data = '<a href="' . site_url() . 'admin/reports/saltab_bpjs/?upid=' . $uploadid . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+
+			$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_edit') . '"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-usermobile_id="' . $uploadid . '"><span class="fas fa-pencil-alt"></span></button></span>';
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+				$edit
+
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	public function read()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->Xin_model->site_title();
+
+		// $keywords = preg_split("/[\s,]+/", $this->input->get('department_id'));
+		// $keystring = $this->input->get('department_id');
+
+		// 	if(!is_null($keywords[0])){
+
+		// 		$read_employee = $this->Employees_model->read_employee_info_by_nik($keywords[0]);
+		// 		$read_usermobile = $this->Usersmobile_model->read_users_mobile_by_nik($keywords[0]);
+
+		// 		$full_name = $read_employee[0]->first_name;
+
+		// 		$all_projects = $this->Project_model->get_projects();
+		// 		$all_usertype = $this->Usersmobile_model->get_usertype();
+		// 		$all_area = $this->Xin_model->get_area();
+		// 		// $all_area = $this->Usersmobile_model->get_district();
+
+		// 	}
+
+		// if(is_numeric($keywords[0])) {
+
+		// 	$id = $keywords[0];
+		// 	$id = $this->security->xss_clean($id);
+
+
+		// }
+
+		$data = array(
+			'usermobile_id' => 'DIALOG'
+			// 'fullname' => $full_name,
+			// 'usertype_id' => $read_usermobile[0]->usertype_id,
+			// 'project_id' => $read_usermobile[0]->project_id,
+			// 'areaid' => $read_usermobile[0]->areaid,
+			// 'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
+			// 'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
+			// 'device_id' => $read_usermobile[0]->device_id_one,
+			// 'all_usertype' => $all_usertype,
+			// 'all_projects' => $all_projects,
+			// 'all_area' => $all_area
+		);
+
+		$this->load->view('admin/usermobile/dialog_usermobile', $data);
 		// $session = $this->session->userdata('username');
-		// if(empty($session)){ 
-		// 	redirect('admin/');
-		// }
 
-		$system = $this->Xin_model->read_setting_info(1);		
-		 // create new PDF document
-   		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$vnip = $this->uri->segment(4);
-		$ideslip = $this->uri->segment(5);
-		// $employee_id = $this->uri->segment(5);
-
-
-		// if($session['employee_id'] != $vpin) {
-		// 	redirect('admin/');
-		// }
-				// $cekEmp = $this->Employees_model->read_employee_info_by_nik($vpin);
-
-
-				// $cekEslip = $this->Import_model->get_eslip_by_id($ideslip);
-				// if(!is_null($cekEslip)){
-				// 	redirect('admin/');
-				// }
-
-
-		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
-		$employee = $this->Employees_model->read_employee_info_by_nik($vnip);
-
-		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
-				if(!is_null($designation)){
-					$jabatan = $designation[0]->designation_name;
-				} else {
-					$jabatan = '--';	
-				}
-
-		// if($eslip[0]->status_kirim==1){
-			// $bMargin = $this->getBreakMargin();
-			// $bMargi = $this->getBreakMargin();
-
-				if($employee[0]->company_id == '2'){
-					$company_name = 'PT. SIPRAMA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_sc.png';
-				} else if($employee[0]->company_id == '3') {
-					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_kac.png';
-				} else {
-					$company_name = 'PT. MATA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_mata.png';
-				}
-			// set document information
-			$pdf->SetCreator('PT Siprama Cakrawala');
-			$pdf->SetAuthor('PT Siprama Cakrawala');
-			// $baseurl=base_url();
-
-			$header_namae = $company_name;
-			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
-
-			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
-			
-			$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
-			// set header and footer fonts
-			// $pdf->setHeaderFont(Array('helvetica', '', 20));
-			// $pdf->setFooterFont(Array('helvetica', '', 9));
-		
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont('courier');
-			
-			// set margins
-			$pdf->SetMargins(15, 27, 15);
-			$pdf->SetHeaderMargin(5);
-			$pdf->SetFooterMargin(10);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 25);
-			
-			// set image scale factor
-			$pdf->setImageScale(10);
-
-
-			$pdf->SetAuthor('HRCakrawala');
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-
-			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
-			$pdf->SetSubject($this->lang->line('xin_eslip'));
-			$pdf->SetKeywords($this->lang->line('xin_eslip'));
-			// set font
-			$pdf->SetFont('helvetica', 'B', 10);
-					
-			// set header and footer fonts
-			$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 9));
-			$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-			
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-			
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 12);
-			
-			// set image scale factor
-			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-			
-			// ---------------------------------------------------------
-
-			// set default font subsetting mode
-			$pdf->setFontSubsetting(true);
-			
-			// Set font
-			// dejavusans is a UTF-8 Unicode font, if you only need to
-			// print standard ASCII chars, you can use core fonts like
-			// helvetica or times to reduce file size.
-			$pdf->SetFont('helvetica', '', 9, '', true);
-			
-			// Add a page
-			// This method has several options, check the source code documentation for more information.
-			$pdf->AddPage();
-		
-			// set cell padding
-			$pdf->setCellPaddings(1, 1, 1, 1);
-			
-			// set cell margins
-			$pdf->setCellMargins(0, 0, 0, 0);
-			
-			// set color for background
-			$pdf->SetFillColor(255, 255, 127);
-			/////////////////////////////////////////////////////////////////////////////////
-
-			if(!is_null($eslip)){
-
-				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
-				$nip = $eslip[0]->nip;
-				$namalengkap = $employee[0]->first_name;
-				$periode = $eslip[0]->periode;
-				$project = $eslip[0]->project;
-				$area = $eslip[0]->area;
-				$hari_kerja = $eslip[0]->hari_kerja;
-				$gaji_umk = $eslip[0]->gaji_umk;
-				$gaji_pokok = $eslip[0]->gaji_pokok;
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
-				$allow_rent = $eslip[0]->allow_rent;
-				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
-				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_vitamin;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
-
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
-				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-
-				$bpjs_tk_deduction = $eslip[0]->bpjs_tk_deduction;
-				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $eslip[0]->jaminan_pensiun_deduction;
-				$pendapatan = $eslip[0]->pendapatan;
-				$bpjs_tk = $eslip[0]->bpjs_tk;
-				$bpjs_ks = $eslip[0]->bpjs_ks;
-				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
-				$deposit = $eslip[0]->deposit;
-				$pph = $eslip[0]->pph;
-				$pph_thr = $eslip[0]->pph_thr;
-				$penalty_late = $eslip[0]->penalty_late;
-				$penalty_alfa = $eslip[0]->penalty_alfa;
-				$penalty_attend = $eslip[0]->penalty_attend;
-				$mix_oplos = $eslip[0]->mix_oplos;
-				$pot_trip_malang = $eslip[0]->pot_trip_malang;
-				$pot_device = $eslip[0]->pot_device;
-				$pot_kpi = $eslip[0]->pot_kpi;
-				$deduction = $eslip[0]->deduction;
-				$simpanan_pokok = $eslip[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
-				$adjustment = $eslip[0]->adjustment;
-				$adjustment_dlk = $eslip[0]->adjustment_dlk;
-				$total = $eslip[0]->total;
-				$monyear =  date('M Y');
-				$tanggalcetak = date("Y-m-d");
-	
-				if($project=='CPJF'){
-					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
-				} else {
-					$deduction_name = 'Deduction';
-				}
-
-				// $pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				// $transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				// $armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
-
-			} else {
-				redirect('admin/');
-
-			}
-
-
-			$tbl_2 = '
-			<div style="text-align: center; text-justify: inter-word;">
-				<b>SLIP GAJI</b>
-			</div>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>NIP</td>
-								<td colspan="2">: '.$nip.'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Project</td>
-								<td colspan="2">: '.strtoupper($project).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Nama</td>
-								<td colspan="2">: '.strtoupper($namalengkap).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Area</td>
-								<td colspan="2">: '.strtoupper($area).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Periode</td>
-								<td colspan="2">: '.strtoupper($periode).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Hari Kerja</td>
-								<td colspan="2">: '.$hari_kerja.'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Posisi/Jabatan</td>
-								<td colspan="2">: '.$jabatan.'</td>
-							</tr>
-						</table>
-					</td>
-		
-
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Gaji Pokok</td>
-								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).'</td>
-							</tr>
-						</table>
-					</td>
-
-
-				</tr>
-
-			</table>
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br><br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji Diterima</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-				if($allow_jabatan!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Jabatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-			if($allow_konsumsi!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Makan/Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_konsumsi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_transport!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transportasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_transport).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Sewa/Rent</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_comunication!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Komunikasi/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_comunication).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_parking!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Parkir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_parking).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_residence_cost!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Tempat Tinggal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_residence_cost).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_akomodasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_device!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Laptop</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_kasir!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kasir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-
-			if($allow_trans_meal!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_trans_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Rental</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_vitamin!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_grooming!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Grooming</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_others!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Lain-lain</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_operation!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Operational</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($penyesuaian_umk!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penyesuaian UMK/Meal/Transport/Sewa/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($insentive!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Insentif</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_holiday!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Hari Libur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_holiday).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_national_day!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Libur Nasional</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_national_day).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_rapel!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Rapel Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_rapel).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($kompensasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Kompensasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($kompensasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($bonus!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Bonus</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bonus).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($uuck!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">UUCK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($thr!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">THR</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($thr).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-				
-			$tbl_2 .= '
-			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">Deduction</td>
-								<td colspan="0"></td>
-								<td colspan="0" align="right"></td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Ketenagakerjaan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Kesehatan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Jaminan Pensiun</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-
-
-			if($over_salary!=0) {
-				$tbl_2 .= '
-				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Kelebihan Gaji / <i>Extra Cost</i></td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>';
-			}
-
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			$tbl_2 .= '
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>Pendapatan</b></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($pendapatan).'&nbsp;&nbsp;&nbsp;</b> &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><u><i>Potongan</i></u></td>
-								<td colspan="2"></td>
-								<td colspan="2" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Ketenagakerjaan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Jaminan Pensiun</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Deposit</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*PPH Karyawan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-				if($pph_thr!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">PPH21 THR</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_late!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Keterlambatan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_attend!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_alfa!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-				if($mix_oplos!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Mix Oplos</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_trip_malang!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Trip Bali</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_device!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Laptop/HP</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_kpi!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan KPI</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				$tbl_2 .= '<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">'.$deduction_name.'</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Pokok</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Wajib Koperasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_wajib_koperasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Pembayaran Pinjaman</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pembayaran_pinjaman).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Biaya Admin</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-			$tbl_2 .= '
-			<br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>';
-
-
-			$tbl_2 .= '
-			<br><br>
-
-
-			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA</b></td>
-								<td colspan="2"><b>: Rp.</b></td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total).' &nbsp;&nbsp;</b> </td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>
-			
-			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
-
-			';
-			$pdf->writeHTML($tbl_2, true, false, false, false, '');
-
-
-			$tbl_ttd = '';
-			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-			$lampiran = '';
-			$pdf->writeHTML($lampiran, true, false, false, false, '');
-		
-
-			//Close and output PDF document
-			ob_start();
-			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
-			ob_end_flush();
-
+		// if(!empty($session)){
+		// 	$this->load->view('admin/usermobile/dialog_usermobile', $data);
 		// } else {
-		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';
-		// 	// redirect('admin/pkwt');
+		// 	redirect('admin/');
 		// }
+
+	}
+
+	//manage saltab release
+	public function manage_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Manage E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Manage E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('513', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/manage_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//konfigurasi import saltab
+	public function konfig_import_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Konfigurasi Import E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Konfigurasi Import E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('512', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/manage_import_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//download saltab release
+	public function download_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Download E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('514', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/download_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// import saltab
+	public function importesaltab()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('511', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
 	}
 
 
-} 
-?>
+	public function history_upload_esaltab_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_esaltab", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param = str_replace("]", "", str_replace("[", "", str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)))));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// Validate and add info in database
+	public function import_eslip2()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 								=> $uploadid,
+								'nip' 										=> $line[0],
+								'fullname' 								=> str_replace("'", " ", $line[1]),
+								'periode' 								=> str_replace("'", " ", $line[2]),
+								'project' 								=> $line[3],
+								'project_sub' 						=> $line[4],
+								'area' 										=> str_replace("'", " ", $line[5]),
+								'status_emp' 							=> $line[6],
+								'hari_kerja' 							=> $line[7],
+								'gaji_umk' 								=> $line[8],
+								'gaji_pokok' 							=> $line[9],
+								'allow_jabatan' 					=> $line[10],
+								'allow_area' 							=> $line[11],
+								'allow_masakerja' 				=> $line[12],
+								'allow_konsumsi' 					=> $line[13],
+								'allow_transport' 				=> $line[14],
+								'allow_rent' 							=> $line[15],
+								'allow_comunication' 			=> $line[16],
+								'allow_parking' 					=> $line[17],
+								'allow_residence_cost' 		=> $line[18],
+								'allow_akomodasi' 				=> $line[19],
+								'allow_device' 						=> $line[20],
+								'allow_kasir' 						=> $line[21],
+								'allow_trans_meal' 				=> $line[22],
+								'allow_trans_rent' 				=> $line[23],
+								'allow_vitamin' 					=> $line[24],
+								'allow_grooming'					=> $line[25],
+								'allow_others'						=> $line[26],
+								'allow_operation' 				=> $line[27],
+								'over_salary' 						=> $line[28],
+								'penyesuaian_umk' 				=> $line[29],
+								'insentive'								=> $line[30],
+								'overtime' 								=> $line[31],
+								'overtime_holiday' 				=> $line[32],
+								'overtime_national_day' 	=> $line[33],
+								'overtime_rapel' 					=> $line[34],
+								'kompensasi' 							=> $line[35],
+								'bonus' 									=> $line[36],
+								'uuck' 										=> $line[37],
+								'thr' 										=> $line[38],
+								'bpjs_tk_deduction' 			=> $line[39],
+								'bpjs_ks_deduction' 			=> $line[40],
+								'jaminan_pensiun_deduction' => $line[41],
+								'pendapatan' 							=> $line[42],
+								'bpjs_tk' 								=> $line[43],
+								'bpjs_ks' 								=> $line[44],
+								'jaminan_pensiun' 				=> $line[45],
+								'deposit' 								=> $line[46],
+								'pph' 										=> $line[47],
+								'pph_thr' 								=> $line[48],
+								'penalty_late' 						=> $line[49],
+								'penalty_alfa' 						=> $line[50],
+								'penalty_attend' 					=> $line[51],
+								'mix_oplos' 							=> $line[52],
+								'pot_trip_malang' 				=> $line[53],
+								'pot_device' 							=> $line[54],
+								'pot_kpi' 								=> $line[55],
+								'deduction' 							=> $line[56],
+								'simpanan_pokok' 					=> $line[57],
+								'simpanan_wajib_koperasi' => $line[58],
+								'pembayaran_pinjaman' 		=> $line[59],
+								'biaya_admin_bank' 				=> $line[60],
+								'adjustment' 							=> $line[61],
+								'adjustment_dlk' 					=> $line[62],
+								'total' 									=> $line[63],
+								'createdby' 							=> $employee_id,
+
+							);
+							$result = $this->Import_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_temp_by_nip();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+		redirect('admin/Importexceleslip?upid=' . $uploadid);
+	}
+
+	//mengambil Json data validasi employee request
+	public function request_open_import()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($postData['project_id']);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($postData['sub_project_id'] == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($postData['sub_project_id']);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		//Input untuk Database
+		$datarequest = [
+			'request_by_id'     	=> $postData['employee_id'],
+			'request_by_name'       => $postData['request_by_name'],
+			'request_on'      		=> $postData['tgl_request'],
+			'tanggal_gajian'        => $postData['tgl_gajian'],
+			'project_id'       	  	=> $postData['project_id'],
+			'project_name'       	=> $nama_project,
+			'sub_project_id'      	=> $postData['sub_project_id'],
+			'sub_project_name'      => $nama_sub_project,
+			'periode_saltab_from'   => $postData['periode_saltab_from'],
+			'periode_saltab_to'     => $postData['periode_saltab_to'],
+			'note'          		=> $postData['note_open'],
+			'status'          		=> '1',
+		];
+
+		// get data 
+		$data = $this->Import_model->insert_request_open_import($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'pesan' 	=> "Gagal",
+			);
+		} else {
+			$response = array(
+				'pesan' 	=> "Berhasil",
+				'data'		=> $data,
+			);
+		}
+
+		//echo "data berhasil masuk";
+		echo json_encode($response);
+		echo "<pre>";
+		print_r($response);
+		echo "</pre>";
+	}
+
+	//mengambil Json data validasi employee request
+	public function cek_request_open_import()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek Request ACC
+		$datarequest = [
+			'tanggal_gajian'        => $postData['tgl_gajian'],
+			'project_id'       	  	=> $postData['project_id'],
+			'sub_project_id'      	=> $postData['sub_project_id'],
+			'periode_saltab_from'   => $postData['periode_saltab_from'],
+			'periode_saltab_to'     => $postData['periode_saltab_to']
+		];
+
+		// get data 
+		$data = $this->Import_model->cek_request_open_import($datarequest);
+
+		//cek pengaturan lock manual
+		$project_id = $postData['project_id'];
+
+		//cek pengaturan lock otomatis
+		$jam_sekarang = $postData['jam_sekarang'];
+
+		if (empty($data)) {
+			//cek pengaturan lock manual
+			$project_id = $postData['project_id'];
+			$data2 = $this->Import_model->cek_request_open_import_manual($project_id);
+
+			if (empty($data2)) {
+				//cek pengaturan lock otomatis
+				$jam_sekarang = $postData['jam_sekarang'];
+
+				if ($jam_sekarang >= 12) {
+					$response = array(
+						'status'	=> "100",
+						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Tidak Diset. Jam lebih dari 12",
+					);
+				} else {
+					$response = array(
+						'status'	=> "101",
+						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Tidak Diset. Jam blm 12",
+					);
+				}
+			} else {
+				if ($jam_sekarang >= $data2['jam']) {
+					$response = array(
+						'status'	=> "102",
+						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Diset. Jam melebihi angka yang di set",
+						'data'		=> $data2,
+					);
+				} else {
+					$response = array(
+						'status'	=> "103",
+						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Diset. Jam tidak melebihi angka yang di set",
+						'data'		=> $data2,
+					);
+				}
+			}
+		} else {
+			if ($data['status'] == 1) {
+				$response = array(
+					'status'	=> "104",
+					'pesan' 	=> "LOCK IMPORT. Ada Request Blm ACC. Tidak Boleh Request",
+					'data'		=> $data,
+				);
+			} else if ($data['status'] == 0) {
+				$response = array(
+					'status'	=> "105",
+					'pesan' 	=> "OPEN IMPORT. Ada Request dan di ACC",
+					'data'		=> $data,
+				);
+			} else if ($data['status'] == 2) {
+				$response = array(
+					'status'	=> "106",
+					'pesan' 	=> "LOCK IMPORT. Ada Request dan ditolak. Boleh request ulang",
+					'data'		=> $data,
+				);
+			} else {
+				$response = array(
+					'status'	=> "107",
+					'pesan' 	=> "LOCK IMPORT. Ada Request dan berhasil upload. Boleh request ulang",
+					'data'		=> $data,
+				);
+			}
+		}
+
+		// //echo "data berhasil masuk";
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	/**
+	 * Compress a file using gzip
+	 *
+	 * Rewritten from Simon East's version here:
+	 * https://stackoverflow.com/a/22754032/3499843
+	 *
+	 * @param string $inFilename Input filename
+	 * @param int    $level      Compression level (default: 9)
+	 *
+	 * @throws Exception if the input or output file can not be opened
+	 *
+	 * @return string Output filename
+	 */
+	function gzcompressfile(string $inFilename, int $level = 9): string
+	{
+		// Is the file gzipped already?
+		$extension = pathinfo($inFilename, PATHINFO_EXTENSION);
+		if ($extension == "gz") {
+			return $inFilename;
+		}
+
+		// Open input file
+		$inFile = fopen($inFilename, "rb");
+		if ($inFile === false) {
+			throw new \Exception("Unable to open input file: $inFilename");
+		}
+
+		// Open output file
+		$gzFilename = $inFilename . ".gz";
+		$mode = "wb" . $level;
+		$gzFile = gzopen($gzFilename, $mode);
+		if ($gzFile === false) {
+			fclose($inFile);
+			throw new \Exception("Unable to open output file: $gzFilename");
+		}
+
+		// Stream copy
+		$length = 512 * 1024; // 512 kB
+		while (!feof($inFile)) {
+			gzwrite($gzFile, fread($inFile, $length));
+		}
+
+		// Close files
+		fclose($inFile);
+		gzclose($gzFile);
+
+		// Return the new filename
+		return $gzFilename;
+	}
+
+	//mengambil Json data eslip release
+	public function get_data_eslip_release()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id'        => $postData['id']
+		];
+
+		// get data rekening
+		$data = $this->Import_model->get_data_eslip_release($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$full_name = "";
+			$user = $this->Xin_model->read_user_info($data['eslip_release_by']);
+			if (empty($user)) {
+				$full_name = "";
+			} else {
+				$full_name = strtoupper($user[0]->first_name);
+			}
+
+			if ((empty($data['eslip_release_on'])) || ($data['eslip_release_on'] == "")) {
+				$eslip_release_on_text = "";
+			} else {
+				$eslip_release_on_array = explode(" ", $data['eslip_release_on']);
+				$eslip_release_on_text = $this->Xin_model->tgl_indo($data['eslip_release_on']) . " " . $eslip_release_on_array[1];
+			}
+
+			$data2 = array(
+				'tanggal_penggajian'	=> $this->Xin_model->tgl_indo($data['periode_salary']),
+				'periode_salary'		=> $data['periode_salary'],
+				'release_by'			=> $data['release_by'],
+				'sub_project_name'		=> $data['sub_project_name'],
+				'project_name'			=> $data['project_name'],
+				'total_mpp'				=> $data['total_mpp'],
+				'periode_cutoff'		=> $this->Xin_model->tgl_indo($data['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data['periode_cutoff_to']),
+				'tanggal_terbit'		=> $this->Xin_model->tgl_indo($data['eslip_release']),
+				'eslip_release_by'		=> $full_name,
+				// 'eslip_release_on'		=> $eslip_release_on_array[1],
+				'eslip_release_on'		=> $eslip_release_on_text,
+			);
+
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data2,
+			);
+		}
+
+		echo json_encode($response);
+	}
+}

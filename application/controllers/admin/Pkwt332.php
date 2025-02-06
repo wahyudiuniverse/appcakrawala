@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt216spg extends MY_Controller 
+class Pkwt332 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -81,23 +81,26 @@ class Pkwt216spg extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
-		
-
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
 
 		if($pkwt[0]->approve_hrd != null){
 
-					$logo_cover = 'tcpdf_logo_sc.png';
-					$header_namae = 'PT. Siprama Cakrawala';
+				// if($pkwt[0]->company==2){
+				// 	$logo_cover = 'tcpdf_logo_sc.png';
+				// 	$header_namae = 'PT. Siprama Cakrawala';
+				// } else {
+					$logo_cover = 'tcpdf_logo_kac.png';
+					$header_namae = 'PT. Krista Aulia Cakrawala';
+				// }
 
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
 				$pdf->SetAuthor('HRCakrawala');
 				// $baseurl=base_url();
 
-				$header_namae = 'PT. Siprama Cakrawala SPG';
+				$header_namae = 'PT. Krista Aulia Cakrawala';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
@@ -123,7 +126,7 @@ class Pkwt216spg extends MY_Controller
 				$pdf->setImageScale(10);
 
 				$pdf->SetAuthor('HRCakrawala');
-				$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
+				$pdf->SetTitle('PT. Krista Aulia Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
 				$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
 				$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
 				// set font
@@ -296,7 +299,7 @@ class Pkwt216spg extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Dalam hal ini bertindak untuk dan atas nama serta sah mewakili perseroan terbatas <b>PT. Siprama Cakrawala</b>, suatu Perseroan Terbatas yang bergerak dibidang Penyediaan Jasa Tenaga Kerja dan Konsultan didirikan menurut hukum Indonesa, selanjutnya disebut sebagai <b>PIHAK PERTAMA ----------------------------------------------</b></td>
+								<td>Dalam hal ini bertindak untuk dan atas nama serta sah mewakili perseroan terbatas <b>PT. Krista Aulia Cakrawala</b>, suatu Perseroan Terbatas yang bergerak dibidang Penyediaan Jasa Tenaga Kerja dan Konsultan didirikan menurut hukum Indonesa, selanjutnya disebut sebagai <b>PIHAK PERTAMA ----------------------------------------------</b></td>
 							</tr>			
 				</table>
 				<br>
@@ -386,17 +389,17 @@ class Pkwt216spg extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
-								<td>a.</td>
+								<td>1.1</td>
 								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di '.$penempatan.' dengan posisi sebagai karyawan/Staff '.$jabatan.' di Jakarta atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
 							</tr>
 				<br>
 							<tr>
-								<td>b.</td>
+								<td>1.2</td>
 								<td colspan="18">Tugas dan tanggung jawab yang ditetapkan tersebut diatas akan dievaluasi setiap bulannya dan per <b>3 Bulan</b>, dimana hasil yang dicapai dapat mempengaruhi dan / atau dapat dijadikan dasar untuk memperpanjang pada <b>PKWT</b> selanjutnya.</td>
 							</tr>
 				<br>
 							<tr>
-								<td>c.</td>
+								<td>1.3</td>
 								<td colspan="18"><b>PIHAK PERTAMA</b> berdasarkan pertimbangan tertentu berhak memindah ke bagian lain serta merubah nama Jabatan <b>PIHAK KEDUA</b> dan karenanya <b>PIHAK KEDUA</b> wajib bersedia untuk dipindah ke bagian lain dan atau dirubah nama jabatannya sesuai dengan kebutuhan. Dalam hal ini <b>PIHAK PERTAMA</b> akan memberitahukan hal tersebut secara tertulis kepada <b>PIHAK KEDUA</b>.</td>
 							</tr>
 				</table>
@@ -411,19 +414,19 @@ class Pkwt216spg extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
-								<td>a.</td>
+								<td>2.1</td>
 								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>
 													'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>
 																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.</td>
 							</tr>
 				<br>
 							<tr>
-								<td>b.</td>
+								<td>2.2</td>
 								<td colspan="18">Jika <b>PIHAK KEDUA</b> setelah masa Evaluasi Kinerja 3 Bulan dan atau 6 Bulan dan oleh <b>PIHAK PERTAMA</b> atau Pihak User/Klien diperpanjang maka <b>PIHAK KEDUA</b> tetap melanjutkan PKWT yang sudah berlangsung/berlaku sampai PKWT berakhir.</td>
 							</tr>
 				<br>
 							<tr>
-								<td>c.</td>
+								<td>2.3</td>
 								<td colspan="18"><b>PIHAK PERTAMA</b> berhak memutuskan/memberhentikan PKWT <b>PIHAK KEDUA</b> apabila jika pada saat masa Evaluasi Kinerja tidak sesuai dengan komitmen dan kinerja, walaupun PKWT masih berlaku/berjalan.</td>
 							</tr>
 				</table>
@@ -529,75 +532,42 @@ class Pkwt216spg extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18">Hari kerja normal adalah 6 hari kerja dalam 7 (tujuh) hari kalender sesuai dengan ketentuan PIHAK PERTAMA.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>4.2</td>
-								<td colspan="18">Ketentuan waktu kerja ditentukan oleh <b>PIHAK PERTAMA</b> sesuai dengan peraturan undang – undang ketenagakerjaan dan dapat berubah sewaktu – waktu sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>. Setiap perubahan waktu kerja akan diinformasikan kepada <b>PIHAK KEDUA</b> dan bersifat  mengikat.</td>
+								<td colspan="18">Jam kerja normal adalah 8 (delapan) jam kerja untuk 1 (satu) hari kerja dan 40 (empat puluh) jam kerja untuk 1 (satu) minggu dengan 5 (lima) hari kerja dalam 7 (tujuh) hari kalender.</td>
 							</tr>
 				<br>
 							<tr>
 								<td>4.3</td>
 								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
 							</tr>
+
 				<br>
 							<tr>
 								<td>4.4</td>
+								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
+							</tr>
+				<br>
+							<tr>
+								<td>4.5</td>
 								<td colspan="18">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
 							</tr>
-<br>
+
 							<tr>
 								<td></td>
-								<td colspan="20">5 Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
-								<td colspan="0"></td>
+								<td colspan="18">•	Hari Senin s/d Sabtu 8 Jam Kerja *istirahat 1 (satu) jam.</td>
 							</tr>
 
 							<tr>
 								<td></td>
-								<td colspan="0"></td>
-								<td colspan="15">•	Hari Senin - Jumat 8 Jam Kerja.</td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td colspan="0"></td>
-								<td colspan="15">•	Hari libur Sabtu-Minggu.</td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td colspan="20">6 Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td colspan="0"></td>
-								<td colspan="15">•	Hari Senin – Sabtu 	7 Jam Kerja.</td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td colspan="0"></td>
-								<td colspan="15">•	Hari Sabtu 	5 Jam Kerja.</td>
-							</tr>
-
-							<tr>
-								<td></td>
-								<td colspan="0"></td>
-								<td colspan="15">•	Hari libur Minggu.</td>
-							</tr>
-<br>
-							<tr>
-								<td></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja.</td>
-								<td colspan="0"></td>
+								<td colspan="18">•	Hari Minggu Libur</td>
 							</tr>
 
 				</table>
 
-				<br>
 				<br>
 
 
@@ -658,9 +628,7 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="18">Bersedia melaksanakan tanggung jawab sebagai seorang Karyawan/Staff sesuai yang tertulis pada Instruksi Kerja dan SOP yang berlaku di perusahaan.</td>
 							</tr>
 				</table>
-
-<br><br><br><br>
-<br><br><br>
+<br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
 				</div>
@@ -672,7 +640,8 @@ class Pkwt216spg extends MY_Controller
 							</tr>			
 				</table>
 				<br>
-
+				<br>
+				<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -836,7 +805,7 @@ class Pkwt216spg extends MY_Controller
 				<br>
 							<tr>
 								<td>m.</td>
-								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Siprama Cakrawala.</td>
+								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Krista Aulia Cakrawala.</td>
 							</tr>
 
 				</table>
@@ -877,8 +846,7 @@ class Pkwt216spg extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-				<br>	<br>
-
+				<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -908,7 +876,9 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="20"><b>PKWT</b> ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
 							</tr>
 				<br>
-
+				<br>
+				<br>
+				<br>
 							<tr>
 								<td>5.</td>
 								<td colspan="20"><b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
@@ -916,7 +886,7 @@ class Pkwt216spg extends MY_Controller
 				<br>
 							<tr>
 								<td>6.</td>
-								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT. Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
+								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT. Krista Aulia Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
 							</tr>
 				<br>
 							<tr>
@@ -987,12 +957,38 @@ class Pkwt216spg extends MY_Controller
 
 				$tbl_spb = '
 
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>		
+				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1046,7 +1042,7 @@ class Pkwt216spg extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 					<tr>
-						<td>Selanjutnya dengan ini saya menyatakan, bahwa saya menerima, dan menyetujui serta melaksanakan ketentuan-ketentuan/tata tertib kerja PT. SIPRAMA CAKRAWALA (selanjutnya disebut “Perusahaan”) yang mengacu kepada Peraturan Perusahaan PT. SIPRAMA CAKRAWALA.</td>
+						<td>Selanjutnya dengan ini saya menyatakan, bahwa saya menerima, dan menyetujui serta melaksanakan ketentuan-ketentuan/tata tertib kerja PT. KRISTA AULIA CAKRAWALA (selanjutnya disebut “Perusahaan”) yang mengacu kepada Peraturan Perusahaan PT. KRISTA AULIA CAKRAWALA.</td>
 					</tr>			
 				</table>
 				<br>
@@ -1076,7 +1072,17 @@ class Pkwt216spg extends MY_Controller
 
 							<tr>
 								<td>5.</td>
+								<td colspan="20">Dalam hal kehadiran jika saya datang terlambat lebih dari 5 menit akan dikenakan sanksi Rp.25.000; dan jika izin/absen tidak hadir tanpa keterangan yang jelas akan dikenakan sanksi Rp.60.000; (kecuali sakit ada surat dokter, istri melahirkan, karyawan menikah, orang tua/keluarga sekandung meninggal dunia).</td>
+							</tr>
+
+							<tr>
+								<td>6.</td>
 								<td colspan="20">Dalam hal pengunduran diri, saya bersedia diberikan pinalty/sanksi administratif apabila saya mengundurkan diri tidak sesuai dengan ketentuan minimal mengajukan surat pengunduran diri 1 bulan sebelumnya. (sanksi administratif adalah sisa masa kontrak kerja saya dikali jumlah gaji yang diterima).</td>
+							</tr>
+
+							<tr>
+								<td>7.</td>
+								<td colspan="20">Untuk Pendaftaran kepesertaan BPJS Kesehatan dan BPJS Ketenagakerjaan karyawan, Proses pendaftaran dari kami PT. Krista Aulia Cakrawala akan dilakukan pendaftaran dan pemotongan sesuai dengan surat pernyataan BPJS KESEHATAN dan BPJS KETENAGAKERJAAN karyawan.</td>
 							</tr>
 
 				</table>
@@ -1085,7 +1091,7 @@ class Pkwt216spg extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
-								<td >6.</td>
+								<td >8.</td>
 								<td colspan="20">Bahwa saya bersedia menjadi <b>Karyawan Kontrak</b> selama jangka waktu <b>'.$waktukontrak.'</b> bulan dengan ketentuan sebagai berikut :</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1117,7 +1123,7 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="20">Apabila saya karyawan yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
 							</tr>
 							<tr>
-								<td >7.</td>
+								<td >9.</td>
 								<td colspan="20">Surat keterangan kerja tidak dapat dikeluarkan apabila karyawan bekerja dibawah 3 bulan dengan pengecualian:</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1132,14 +1138,14 @@ class Pkwt216spg extends MY_Controller
 								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
 							</tr>
 
+							<br>
 							<tr>
-								<td >8.</td>
+								<td >10.</td>
 								<td colspan="20">Jika karyawan melanggar & menerima SP 1, SP 2 dan berakibat pada SPHK. Maka karyawan tidak berhak menuntut/mendapat hak kompensasi. Serta perusahaan berhak memutuskan kontrak kerja dengan karyawan tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
-							<br><br><br><br><br><br><br>
 							<tr>
-								<td >9.</td>
+								<td >11.</td>
 								<td colspan="20">Jika karyawan melakukan tindakan merugikan perusahaan secara disengaja maupun tidak disengaja maka karyawan tersebut tidak berhak mendapat/menuntut kompensasi terhadap perusahaan, serta perusahaan berhak memutus kontrak dengan karyawan tersebut. Adapun perbuatan yang dimaksud adalah:</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1165,57 +1171,62 @@ class Pkwt216spg extends MY_Controller
 							</tr>
 
 							<tr>
-								<td >10.</td>
-								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan diakhiri kontrak kerjasama.</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td >11.</td>
-								<td colspan="20">Apabila terjadi hubungan asmara diluar wajar/selingkuh yang berakibat terhadap produktivitas dan menggangu kinerja serta nama baik perusahaan maka karyawan bersedia untuk mengakhiri masa kerjasama</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="20">Bersedia mengikuti perubahan jam kerja yakni 06:45 – 16:00</td>
 								<td colspan="0"></td>
 							</tr>
-
 
 							<tr>
 								<td >13.</td>
-								<td colspan="20">Wajib menggunakan Aplikasi Trec untuk absensi kehadiran. Apabila absensi tidak terdeteksi pada aplikasi Trec maka gaji pada hari tersebut tidak dibayarkan atau tidak dihitung. Apabila pada hari tersebut ada izin tidak masuk atau sakit, wajib melampirkan bukti berupa SKD (Surat Keterangan Dokter) untuk izin sakit dan foto menggunakan timestamp untuk izin tidak masuk. Bukti tersebut harus mendapat approval dari NAE dan user.</td>
+								<td colspan="20">Melakukan izin kerja maksimal 2 kali dalam sebulan bekerja, apabila melebihi waktu yang ditentukan maka akan diberikan Surat Peringatan 1 dan berlaku selanjutnya. Ketentuan izin Sbb :</td>
 								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Sakit/meninggal saudara sekandung atau orang tua</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Sakit/meninggal pasangan (suami/istri) dan anak</td>
 							</tr>
 
 							<tr>
 								<td >14.</td>
-								<td colspan="20">Durasi kerja yang menjadi perhitungan penggajian adalah 8 jam kerja per hari selama 6 hari kerja dengan total waktu 48 jam kerja.</td>
+								<td colspan="20">Melakukan mangkir dalam kehadiran (Alfa) sebanyak 3 kali dalam sebulan secara berturut-turut maka akan dilakukan pemutusan hubungan kerja.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >15.</td>
-								<td colspan="20">Saya bersedia bertanggung jawab sepenuhnya dan mengganti 2x lipat dari nominal produk/hadiah apabila terjadi selisih ataupun kecurangan/fraud terhadap barang yang diberikan selama kegiatan sampling (produk dan hadiah).</td>
+								<td colspan="20">Tidak menggunakan seragam sebanyak 3 kali dalam 1 bulan, maka akan diberikan Surat Peringatan 1 dan berlaku seterusnya.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >16.</td>
-								<td colspan="20">Saya bersedia untuk menjalankan KPI yang sudah ditentukan oleh user sebagai berikut :</td>
+								<td colspan="20">Apabila tidak mencapai target pengiriman sebanyak 3 kali dalam 1 bulan, maka akan diberikan Surat Peringatan 1 dan berlaku seterusnya.</td>
 								<td colspan="0"></td>
 							</tr>
-
 
 							<tr>
-								<td ></td>
-								<td colspan="20">
-<img src="'.base_url().'assets/oatside_pkwt_dimensi_kpi_spg.png" alt="Trulli" width="590" height="55"></td>
+								<td >17.</td>
+								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan diakhiri kontrak kerjasama.</td>
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >18.</td>
+								<td colspan="20">Apabila terjadi hubungan asmara diluar wajar/selingkuh yang berakibat terhadap produktivitas dan menggangu kinerja serta nama baik perusahaan maka karyawan bersedia untuk mengakhiri masa kerjasama</td>
+								<td colspan="0"></td>
+							</tr>
 
+							<tr>
+								<td >19.</td>
+								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="0"></td>
+							</tr>
 
 				</table>
 
@@ -1286,11 +1297,8 @@ class Pkwt216spg extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
+				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				<br><br><br><br><br>
-				
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

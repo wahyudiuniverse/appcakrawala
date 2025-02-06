@@ -115,7 +115,7 @@ class Employee_pkwt_aphrd extends MY_Controller {
 			  	$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$'. $r->contract_id . '">Approved</button>';
 				}
 
-				$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->contract_id.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
+				$editReq = '<a href="'.site_url().'admin/employee_pkwt_cancel/pkwt_edit/'.$r->uniqueid.'" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>'; 
 
 				$emp = $this->Employees_model->read_employee_info_by_nik($nip);
 				if(!is_null($emp)){
