@@ -788,8 +788,9 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
             //   Ladda.stopAll();
             // }
           },
-          error: function() {
-            alert("lainnya");
+          error: function(xhr, status, error) {
+            var pesan = xhr.responseText;
+            alert(pesan);
             toastr.error(JSON.error);
             $('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
             $('.save').prop('disabled', false);

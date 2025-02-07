@@ -1076,7 +1076,7 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'						=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-				'sign_nip'							=> '21300033',
+				'sign_nip'						=> '21300033',
 				'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
 				'sign_jabatan'					=> 'HR & GA MANAGER',
 				'status_pkwt' => 1,
@@ -1475,7 +1475,49 @@ class Employee_request_hrd extends MY_Controller
 				'approved_hrdon' => date("Y-m-d h:i:s")
 			);
 
-			$result = $this->Employees_model->update_request_employee($data_up, $id);
+			//$result = $this->Employees_model->update_request_employee($data_up, $id);
+
+
+			$data_traxes = array(
+
+				'employee_id'			=> $employee_id,
+				'fullname'				=> $fullname,
+				'company_id'			=> $company_id,
+				'company_name'			=> $this->Employees_model->get_nama_company($company_id),
+				'project_id' 			=> $project,
+				'project_name' 			=> $this->Employees_model->get_nama_project($project),
+				'project_sub' 			=> $this->Employees_model->get_nama_sub_project($sub_project),
+				'jabatan' 				=> $this->Employees_model->get_nama_jabatan($posisi),
+				'penempatan' 			=> $penempatan,
+				'usertype_id' 			=> 1,
+				'device_id_one' 		=> 0,
+				'server_inv' 			=> 'PROD',
+				'is_active' 			=> 1,
+				'createdby' 			=> $session['user_id'],
+				'createdon'				=> date("Y-m-d h:i:s")
+
+
+				// 'employee_id'			=> '13009987',
+				// 'fullname'				=> $fullname,
+				// 'company_id'			=> $company_id,
+				// 'company_name'			=> 'COMP NAME',
+				// 'project_id' 			=> $project,
+				// 'project_name' 			=> 'PROJECT NAME',
+				// 'project_sub' 			=> 'PROJECT SUB',
+				// 'jabatan' 				=> 'JABATAN',
+				// 'penempatan' 			=> $penempatan,
+				// 'usertype_id' 			=> 1,
+				// 'device_id_one' 		=> 0,
+				// 'server_inv' 			=> 'PROD',
+				// 'is_active' 			=> 1,
+				// 'createdby' 			=> $session['user_id'],
+				// 'createdon'				=> date("Y-m-d h:i:s")
+
+
+			);
+
+			$txresult = $this->Employees_model->add_traxes($data_traxes);
+
 
 			//update data emergency contact
 			if ((empty($nik_ktp)) || ($nik_ktp == "") || ($nik_ktp == "0") || (empty($employee_id)) || ($employee_id == "") || ($employee_id == "0")) {

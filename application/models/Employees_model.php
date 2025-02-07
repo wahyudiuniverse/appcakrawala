@@ -3842,6 +3842,33 @@ ORDER BY jab.designation_id ASC";
 		}
 	}
 
+
+	// get all employees
+	public function add_traxes($data)
+	{
+
+      $dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$dbtraxes->insert('xin_user_mobile', $data);
+		// $sql = "SELECT * FROM xin_user_mobile";
+		// $query = $this->dbtraxes->query($sql);
+		// $return = $query->num_rows();
+
+		// if ($this->cisdb->affected_rows() > 0) {
+		// 	// return $this->cisdb->insert_id();
+		// 	return true;
+		// } else {
+		// 	return false;
+		// }
+
+
+	  // $query = $cisdb->query("SELECT user_id, employee_id, first_name
+	// 	FROM xin_employees
+	// 	where project_id in (select DISTINCT(project_id) from xin_projects_akses where nip = '$nip')
+	// 	AND status_resign = 1");
+  	  // return $query->result();
+	}
+
 	// Function to add record in table
 	public function addeslip($data)
 	{

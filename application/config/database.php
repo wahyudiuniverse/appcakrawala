@@ -74,11 +74,11 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> 'mysql:host=localhost;dbname=cakrawalaglobaldata',
+	'dsn'	=> 'mysql:host=localhost;dbname=siprama_globaldata',
 	'hostname' => "localhost",
-	'username' => "root",
-	'password' => "",
-	'database' => "cakrawalaglobaldata",
+	'username' => "siprama",
+	'password' => "96raG5RmWjti",
+	'database' => "siprama_globaldata",
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -94,3 +94,25 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+ $db['dbtraxes'] = array(
+ 	'dsn'	=> 'mysql:host=103.175.220.103;dbname=traxesid_globaldata',
+ 	'hostname' => "103.175.220.103",
+ 	'username' => "traxesid_wahyu",
+ 	'password' => "Orangila#2024",
+ 	'database' => "traxesid_globaldata",
+ 	'dbdriver' => 'pdo',
+ 	'dbprefix' => '',
+ 	'pconnect' => FALSE,
+ 	'db_debug' => (ENVIRONMENT !== 'production'),
+ 	'cache_on' => FALSE,
+ 	'cachedir' => '',
+ 	'char_set' => 'utf8',
+ 	'dbcollat' => 'utf8_general_ci',
+ 	'swap_pre' => '',
+ 	'encrypt' => FALSE,
+ 	'compress' => FALSE,
+ 	'stricton' => FALSE,
+ 	'failover' => array(),
+ 	'save_queries' => TRUE
+ );
