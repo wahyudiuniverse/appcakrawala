@@ -6823,4 +6823,15 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		return $response;
 	}
+
+	// Update data kontrak di tabelemployee
+	public function update_pkwt_employee($data, $employee_id)
+	{
+		$this->db->where('employee_id', $employee_id);
+		if ($this->db->update('xin_employees', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
