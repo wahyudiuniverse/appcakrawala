@@ -203,7 +203,6 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 	}
 
-
 	// Function to update record in table > basic_info
 	public function update_pkwt_emp($data, $id)
 	{
@@ -558,6 +557,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 						$status_pernikahan = "K/2";
 					} else if ($query['marital_status'] == "9") {
 						$status_pernikahan = "K/3";
+					} else if ($query['marital_status'] == "10") {
+						$status_pernikahan = "HB/0";
+					} else if ($query['marital_status'] == "11") {
+						$status_pernikahan = "HB/1";
+					} else if ($query['marital_status'] == "12") {
+						$status_pernikahan = "HB/2";
+					} else if ($query['marital_status'] == "13") {
+						$status_pernikahan = "HB/3";
 					} else {
 						$status_pernikahan = "-";
 					}
@@ -575,14 +582,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 				// $tes_query = $this->db->last_query();
 				// $contract_start = $tes_query;
 			}
-			$this->db->select('*');
-			$this->db->from('xin_employees');
-			$this->db->where('employee_id', $record->nip);
+			// $this->db->select('*');
+			// $this->db->from('xin_employees');
+			// $this->db->where('employee_id', $record->nip);
 
-			$query = $this->db->get()->row_array();
+			// $query = $this->db->get()->row_array();
 
-			if (!empty($query)) {
-			}
+			// if (!empty($query)) {
+			// }
 
 			$bpjs_ketenagakerjaan = $record->bpjs_tk_deduction_jkk_jkm + $record->bpjs_tk_deduction_jht + $record->jaminan_pensiun_deduction + $record->bpjs_tk + $record->jaminan_pensiun;
 			$bpjs_kesehatan = $record->bpjs_ks_deduction + $record->bpjs_ks;
@@ -609,6 +616,271 @@ GROUP BY uploadid, periode, project, project_sub;';
 				round($record->total_thp),
 				round($bpjs_ketenagakerjaan),
 				round($bpjs_kesehatan),
+			);
+		}
+
+		//$tabel_saltab = $this->Import_model->get_saltab_table();
+		//$paremeter = implode(",", $tabel_saltab);
+		// $jumlah_data = count($tabel_saltab);
+
+		// foreach ($records as $record) {
+
+		// 	$data[] = array(
+
+		// 	);
+		// }
+
+		return $data;
+	}
+
+	//get table saltab release untuk download excel Pajak
+	public function get_saltab_temp_detail_excel_release_pajak($id, $data_batch)
+	{
+		// $this->db->select($parameter);
+		$this->db->select("*");
+		// $this->db->from('xin_saltab');
+		$this->db->where('uploadid', $id);
+
+		// $records = $this->db->get()->result_array();
+		$records = $this->db->get('xin_saltab')->result();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$nip = $record->nip;
+			$nik = $record->nik;
+			$nama_lengkap = $record->fullname;
+			$nik_validation = "0";
+			$tanggal_join = "";
+			$tempat_lahir = "";
+			$tanggal_lahir = "";
+			$nama_ibu = "";
+			$jenis_kelamin = "";
+			$status_pernikahan = "";
+			$alamat = "";
+			$contract_start = "";
+			$contract_end = "";
+
+			if ((!is_null($record->nip)) && ($record->nip != "") && ($record->nip != "0")) {
+				$this->db->select('user_id,verification_id,first_name,date_of_joining,ktp_no,marital_status');
+				$this->db->from('xin_employees');
+				$this->db->where('employee_id', $record->nip);
+
+				$query = $this->db->get()->row_array();
+
+				if (!empty($query)) {
+					$tanggal_join = $query['date_of_joining'];
+
+					//verification id
+					$actual_verification_id = "";
+					if ((is_null($query['verification_id'])) || ($query['verification_id'] == "") || ($query['verification_id'] == "0")) {
+						$actual_verification_id = "e_" . $query['user_id'];
+					} else {
+						$actual_verification_id = $query['verification_id'];
+					}
+
+					//cek status validation ke database
+					$nik_validation = "0";
+					$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+					if (is_null($nik_validation_query)) {
+						$nik_validation = "0";
+					} else {
+						$nik_validation = $nik_validation_query['status'];
+					}
+
+					if (empty($query['marital_status']) || ($query['marital_status'] == "")) {
+						$status_pernikahan = "-";
+					} else if ($query['marital_status'] == "1") {
+						$status_pernikahan = "TK/0";
+					} else if ($query['marital_status'] == "2") {
+						$status_pernikahan = "TK/0";
+					} else if ($query['marital_status'] == "3") {
+						$status_pernikahan = "TK/1";
+					} else if ($query['marital_status'] == "4") {
+						$status_pernikahan = "TK/2";
+					} else if ($query['marital_status'] == "5") {
+						$status_pernikahan = "TK/3";
+					} else if ($query['marital_status'] == "6") {
+						$status_pernikahan = "K/0";
+					} else if ($query['marital_status'] == "7") {
+						$status_pernikahan = "K/1";
+					} else if ($query['marital_status'] == "8") {
+						$status_pernikahan = "K/2";
+					} else if ($query['marital_status'] == "9") {
+						$status_pernikahan = "K/3";
+					} else if ($query['marital_status'] == "10") {
+						$status_pernikahan = "HB/0";
+					} else if ($query['marital_status'] == "11") {
+						$status_pernikahan = "HB/1";
+					} else if ($query['marital_status'] == "12") {
+						$status_pernikahan = "HB/2";
+					} else if ($query['marital_status'] == "13") {
+						$status_pernikahan = "HB/3";
+					} else {
+						$status_pernikahan = "-";
+					}
+
+					if ((!empty($query['ktp_no'])) || ($query['ktp_no'] != "") || ($query['ktp_no'] != "0")) {
+						$nik = $query['ktp_no'];
+					} else {
+						$nik = $record->nik;
+					}
+
+					if ((!empty($query['first_name'])) || ($query['first_name'] != "") || ($query['first_name'] != "0")) {
+						$nama_lengkap = $query['first_name'];
+					} else {
+						$nama_lengkap = $record->fullname;
+					}
+				}
+				// $nama_lengkap = "NIP TIDAK KOSONG";
+				// $tes_query = $this->db->last_query();
+				// $contract_start = $tes_query;
+			} else {
+				if ((!is_null($record->nip)) && ($record->nik != "") && ($record->nik != "0")) {
+					$this->db->select('user_id,employee_id,verification_id,first_name,date_of_joining,ktp_no,marital_status');
+					$this->db->from('xin_employees');
+					$this->db->where('ktp_no', $record->nik);
+					$this->db->order_by('user_id', 'DESC');
+					$this->db->limit(1);
+	
+					$query = $this->db->get()->row_array();
+
+					// $tes_query = $this->db->last_query();
+	
+					if (!empty($query)) {
+						$tanggal_join = $query['date_of_joining'];
+						$nip = $query['employee_id'];
+	
+						//verification id
+						$actual_verification_id = "";
+						if ((is_null($query['verification_id'])) || ($query['verification_id'] == "") || ($query['verification_id'] == "0")) {
+							$actual_verification_id = "e_" . $query['user_id'];
+						} else {
+							$actual_verification_id = $query['verification_id'];
+						}
+	
+						//cek status validation ke database
+						$nik_validation = "0";
+						$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+						if (is_null($nik_validation_query)) {
+							$nik_validation = "0";
+						} else {
+							$nik_validation = $nik_validation_query['status'];
+						}
+	
+						if (empty($query['marital_status']) || ($query['marital_status'] == "")) {
+							$status_pernikahan = "-";
+						} else if ($query['marital_status'] == "1") {
+							$status_pernikahan = "TK/0";
+						} else if ($query['marital_status'] == "2") {
+							$status_pernikahan = "TK/0";
+						} else if ($query['marital_status'] == "3") {
+							$status_pernikahan = "TK/1";
+						} else if ($query['marital_status'] == "4") {
+							$status_pernikahan = "TK/2";
+						} else if ($query['marital_status'] == "5") {
+							$status_pernikahan = "TK/3";
+						} else if ($query['marital_status'] == "6") {
+							$status_pernikahan = "K/0";
+						} else if ($query['marital_status'] == "7") {
+							$status_pernikahan = "K/1";
+						} else if ($query['marital_status'] == "8") {
+							$status_pernikahan = "K/2";
+						} else if ($query['marital_status'] == "9") {
+							$status_pernikahan = "K/3";
+						} else if ($query['marital_status'] == "10") {
+							$status_pernikahan = "HB/0";
+						} else if ($query['marital_status'] == "11") {
+							$status_pernikahan = "HB/1";
+						} else if ($query['marital_status'] == "12") {
+							$status_pernikahan = "HB/2";
+						} else if ($query['marital_status'] == "13") {
+							$status_pernikahan = "HB/3";
+						} else {
+							$status_pernikahan = "-";
+						}
+	
+						if ((!empty($query['ktp_no'])) || ($query['ktp_no'] != "") || ($query['ktp_no'] != "0")) {
+							$nik = $query['ktp_no'];
+						} else {
+							$nik = $record->nik;
+						}
+	
+						if ((!empty($query['first_name'])) || ($query['first_name'] != "") || ($query['first_name'] != "0")) {
+							$nama_lengkap = $query['first_name'];
+						} else {
+							$nama_lengkap = $record->fullname;
+						}
+					}
+					// $tes_query = $this->db->last_query();
+					// $contract_start = $tes_query;
+					// $nama_lengkap = $tes_query;
+				}
+			}
+
+			// $bpjs_ketenagakerjaan = $record->bpjs_tk_deduction_jkk_jkm + $record->bpjs_tk_deduction_jht + $record->jaminan_pensiun_deduction + $record->bpjs_tk + $record->jaminan_pensiun;
+			// $bpjs_kesehatan = $record->bpjs_ks_deduction + $record->bpjs_ks;
+			$total_bpjs_tk_pensiun = $record->bpjs_tk + $record->jaminan_pensiun;
+
+			$data[] = array(
+				// $record->nip,
+				$nip,
+				$tanggal_join,
+				$nik,
+				$nik_validation,
+				trim(strtoupper($nama_lengkap), " "),
+				trim(strtoupper($status_pernikahan), " "),
+				trim(strtoupper($record->sub_project), " "),
+				trim(strtoupper($record->jabatan), " "),
+				trim(strtoupper($record->status_emp), " "),
+				$record->gaji_pokok,
+				$record->allow_pph,
+				$record->allow_jabatan,
+				$record->allow_keahlian,
+				$record->allow_area,
+				$record->allow_masakerja,
+				$record->allow_konsumsi,
+				$record->allow_transport,
+				$record->allow_rent,
+				$record->allow_comunication,
+				$record->allow_parking,
+				$record->allow_residence_cost,
+				$record->allow_akomodasi,
+				$record->allow_device,
+				$record->allow_kasir,
+				$record->allow_trans_meal,
+				$record->allow_trans_rent,
+				$record->allow_medicine,
+				$record->allow_grooming,
+				$record->allow_kehadiran,
+				$record->allow_operation,
+				$record->allow_others,
+				$record->over_salary,
+				$record->penyesuaian_umk,
+				$record->insentive,
+				$record->overtime,
+				$record->overtime_holiday,
+				$record->overtime_national_day,
+				$record->overtime_rapel,
+				$record->kompensasi,
+				$record->bonus,
+				$record->uuck,
+				$record->thr,
+				$record->adjustment_pph,
+				$record->adjustment_bruto,
+				$record->adjustment_dlk_bruto,
+				$record->deduction_bruto,
+				$record->deduction_so_bruto,
+				$record->potongan_kpi_bruto,
+				$record->total_pendapatan_tidak_teratur,
+				$record->total_1,
+				$record->bpjs_tk_deduction_jkk_jkm,
+				$record->bpjs_ks_deduction,
+				$record->bpjs_tk,
+				$record->jaminan_pensiun,
+				$total_bpjs_tk_pensiun,
+				$record->pph_21,
+				$record->pph_21_thr,
 			);
 		}
 
@@ -1535,7 +1807,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$this->db->where($filterRangeTo);
 		}
 		$this->db->where($kondisiDefaultQuery);
-		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_cutoff_from,periode_cutoff_to,periode_salary) b', 'a.id = b.maxid', 'inner');
 		// $this->db->group_by(array("periode_salary", "project_id","sub_project_id", "periode_cutoff_to","periode_cutoff_from"));
 		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 		$totalRecords = $records[0]->allcount;
@@ -1559,7 +1831,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_cutoff_from,periode_cutoff_to,periode_salary) b', 'a.id = b.maxid', 'inner');
 		// $this->db->group_by(array("periode_salary", "project_id","sub_project_id", "periode_cutoff_to","periode_cutoff_from"));
 		$records = $this->db->get('xin_saltab_bulk_release a')->result();
 		$totalRecordwithFilter = $records[0]->allcount;
@@ -1579,7 +1851,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		if ($filterRangeTo != '') {
 			$this->db->where($filterRangeTo);
 		}
-		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,periode_cutoff_from,periode_cutoff_to,sub_project_id,periode_salary) b', 'a.id = b.maxid', 'inner');
 		// $this->db->group_by(array("periode_salary", "project_id","sub_project_id", "periode_cutoff_to","periode_cutoff_from"));
 		$this->db->order_by($columnName, $columnSortOrder);
 		$this->db->limit($rowperpage, $start);
@@ -1640,7 +1912,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			//hitung dokumen ke-
-			$dokumen_ke = $this->get_jumlah_dokumen_salatab_sama($record->project_id,$record->sub_project_id,$record->periode_salary);
+			$dokumen_ke = $this->get_jumlah_dokumen_salatab_sama($record->project_id, $record->sub_project_id, $record->periode_salary);
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
@@ -1649,6 +1921,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$download_raw = '<button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class=" btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Raw Data</button>';
 			$download_BPJS = '<button type="button" onclick="downloadBatchSaltabReleaseBPJS(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data BPJS</button>';
 			$download_Payroll = '<button type="button" onclick="downloadBatchSaltabReleasePayroll(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data Payroll</button>';
+			$download_Pajak = '<button type="button" onclick="downloadBatchSaltabReleasePajak(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data Pajak</button>';
 			$delete = '<button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-danger" >DELETE</button>';
 
 			$button_download = '<div class="btn-group mt-2">
@@ -1660,6 +1933,7 @@ GROUP BY uploadid, periode, project, project_sub;';
         				<li class="mb-1">' . $download_raw . '</li>
 						<li class="mb-1">' . $download_BPJS . '</li>
 						<li class="mb-1">' . $download_Payroll . '</li>
+						<li class="mb-1">' . $download_Pajak . '</li>
       				</ul>
     		</div>';
 
@@ -1700,9 +1974,9 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
-		$this->db->where('project_id',$project_id);
-		$this->db->where('sub_project_id',$sub_project_id);
-		$this->db->where('periode_salary',$periode_salary);
+		$this->db->where('project_id', $project_id);
+		$this->db->where('sub_project_id', $sub_project_id);
+		$this->db->where('periode_salary', $periode_salary);
 		$records = $this->db->get('xin_saltab_bulk_release')->result();
 		$totalRecords = $records[0]->allcount;
 

@@ -611,11 +611,18 @@ if (in_array('514', $role_resources_ids)) {
     window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabReleaseBPJS/' + id, "_self");
   }
 
-  //-----download salab BPJS-----
+  //-----download salab Payroll-----
   function downloadBatchSaltabReleasePayroll(id) {
     //alert("masuk fungsi download. id: " + id);downloadDetailSaltab
     // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
     window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabReleasePayroll/' + id, "_self");
+  }
+
+  //-----download salab Pajak-----
+  function downloadBatchSaltabReleasePajak(id) {
+    // alert("masuk fungsi download pajak. id: " + id);
+    // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
+    window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabReleasePajak/' + id, "_self");
   }
 
   //-----download salab NIP Kosong-----
