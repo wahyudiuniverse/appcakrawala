@@ -965,6 +965,17 @@ ORDER BY contract_id DESC LIMIT 1";
 	{
 		$this->db->where('contract_id', $id);
 		if ($this->db->update('xin_employee_contract', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	// Function to update record in table
+	public function update_pkwt_aphrd($data, $id)
+	{
+		$this->db->where('contract_id', $id);
+		if ($this->db->update('xin_employee_contract', $data)) {
 			//sekalian update employee
 			$detail_pkwt = $this->get_single_pkwt_array($id);
 			$data_update_employee = array(
@@ -995,8 +1006,9 @@ ORDER BY contract_id DESC LIMIT 1";
 				$this->db->where('contract_id', $id);
 				if ($this->db->update('xin_employee_contract', $data_up)) {
 					return false;
+				} else {
+					return false;
 				}
-				return false;
 			}
 		} else {
 			return false;

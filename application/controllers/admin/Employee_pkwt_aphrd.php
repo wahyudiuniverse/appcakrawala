@@ -435,7 +435,7 @@ class Employee_pkwt_aphrd extends MY_Controller
 				);
 			}
 
-			$result = $this->Pkwt_model->update_pkwt_apnae($data_up, $id);
+			$result = $this->Pkwt_model->update_pkwt_aphrd($data_up, $id);
 
 			if ($Return['error'] != '') {
 				$this->output($Return);
