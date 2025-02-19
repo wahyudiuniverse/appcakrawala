@@ -186,6 +186,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       <div class="modal-body">
         <!-- <iframe src="" style="zoom:0.60" frameborder="0" height="250" width="99.6%"></iframe> -->
         <div class="isi-modal"></div>
+        <div class="pesan-isi-modal"></div>
       </div>
       <div class="modal-footer">
         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
@@ -4154,7 +4155,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/Importexceleslip/eslip_final/' + nip + '/' + secid;
-    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    var html_text = '<object id="lihat_eslip" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Download E-Slip");
@@ -4174,7 +4176,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
-    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    var html_text = '<object id="lihat_sk" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Lihat SK");
@@ -4194,7 +4197,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(sub_project);
 
     var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
-    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    var html_text = '<object id="dokumen_object" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + 'https://apps-cakrawala.com/admin/pkwt1/view/bYqHsn9BkHeoaumXMggr' + '&embedded=true"></embed>';
+    // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + link_eslip + '&embedded=true"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Lihat Draft Kontrak");
@@ -4204,6 +4209,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     $('#editModal').appendTo("body").modal('show');
 
   }
+
+  $('.isi-modal').change(function() {
+    $('.pesan-isi-modal').html("LOADING");
+  });
+
+  // document.getElementById("dokumen_object").contentWindow.onloadstart = function() {
+  //   $('.pesan-isi-modal').html("LOADING");
+  // };
 </script>
 
 <!-- Tombol Lihat Addendum -->
@@ -4213,7 +4226,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(id);
 
     var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
-    var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    var html_text = '<object id="open_kontrak" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
     $('#judul-modal-edit').html("Lihat Draft Addendum");
@@ -5400,8 +5414,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = "";
-          html_text = html_text + '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+          // var html_text = "";
+          // html_text = html_text + '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+          var html_text = '<object id="lihat_kontrak" height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
@@ -5465,7 +5480,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             atribut = "image/jpg";
           }
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+          // var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+          var html_text = '<object id="lihat_addendum" height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);

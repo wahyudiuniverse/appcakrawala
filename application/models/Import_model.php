@@ -307,6 +307,25 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	//get table bupot
+	public function get_bupot_table()
+	{
+		$data = [""];
+
+		$this->db->select('*');
+		$this->db->from('mt_tabel_bupot');
+		// $this->db->limit(2147483647, 1);
+
+		$query = $this->db->get()->result_array();
+		if (empty($query)) {
+			$data = [""];
+		} else {
+			$data = $query;
+		}
+
+		return $data;
+	}
+
 	public function get_detail_saltab($id = null)
 	{
 		$data = array();
@@ -1163,12 +1182,25 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 	}
 
+	function get_id_bupot_batch($data)
+	{
+		$this->db->order_by('created_on', 'desc');
+		$query = $this->db->get_where('xin_bupot_batch', $data);
+		$result = $query->row_array();
+
+		if (empty($result)) {
+			return "";
+		} else {
+			return $result['id_batch'];
+		}
+	}
+
 	function get_saltab_batch($id)
 	{
 
 		$this->db->select('*');
-		$this->db->from('xin_saltab_bulk');
-		$this->db->where('id', $id);
+		$this->db->from('xin_bupot_batch');
+		$this->db->where('id_batch', $id);
 
 		$query = $this->db->get()->row_array();
 
@@ -1215,6 +1247,32 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 	/*
     |-------------------------------------------------------------------
+    | Insert detail saltab Data
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail saltab Array Data
+    |
+    */
+	function insert_bupot_detail($data)
+	{
+		// $this->db->insert_batch("xin_employees_saltab_temp", $data);
+		// if (!$this->db->insert_batch("xin_employees_saltab_temp", $data)) {
+		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
+		// }
+
+		$this->db->insert_batch("xin_bupot", $data);
+
+		// if (!$this->db->insert_batch("xin_employees_saltab_temp", $data)) {
+		// 	$tes_query = $this->db->last_query();
+		// 	echo "<pre>";
+		// 	print_r($tes_query);
+		// 	echo "</pre>";
+		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
+		// }
+	}
+
+	/*
+    |-------------------------------------------------------------------
     | Insert bach saltab Data
     |-------------------------------------------------------------------
     |
@@ -1226,10 +1284,30 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->replace("xin_saltab_bulk", $data);
 	}
 
+	/*
+    |-------------------------------------------------------------------
+    | Insert bach BUPOT Data
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail saltab Array Data
+    |
+    */
+	function insert_bupot_batch($data)
+	{
+		$this->db->replace("xin_bupot_batch", $data);
+	}
+
 	function delete_batch_saltab($id = null)
 	{
 		$this->db->delete('xin_saltab_bulk', array('id' => $id));
 		$this->db->delete('xin_saltab_temp', array('uploadid' => $id));
+		// $this->db->replace("xin_employees_saltab_bulk", $data);
+	}
+
+	function delete_batch_bupot($id = null)
+	{
+		$this->db->delete('xin_bupot_batch', array('id_batch' => $id));
+		$this->db->delete('xin_bupot', array('batch_bupot_id' => $id));
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
 	}
 
@@ -1517,6 +1595,110 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"total_mpp" => $record->total_mpp,
 				"upload_by" => $record->upload_by,
 				"upload_on" => $record->upload_on,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list batch bupot
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_batch_bupot($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		//$nip = $postData['nip'];
+		//$emp_id = $postData['emp_id'];
+		//$contract_id = $postData['contract_id'];
+		$session_id = $postData['session_id'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (project_name like '%" . $searchValue .  "%' or sub_project_name like '%" . $searchValue . "%' or periode_bupot like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_bupot_batch')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_bupot_batch')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_bupot_batch')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			$view = '<button id="tesbutton" type="button" onclick="lihatBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$download = '<br><button type="button" onclick="downloadBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+			$delete = '<br><button type="button" onclick="deleteBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " " . $delete,
+				"periode_bupot" => $record->periode_bupot,
+				// "periode" => $this->Xin_model->tgl_indo($record->periode_cutoff_from) . " s/d " . $this->Xin_model->tgl_indo($record->periode_cutoff_to),
+				"project_name" => $record->project_name,
+				"sub_project_name" => $record->sub_project_name,
+				"jumlah_data" => $record->jumlah_data,
+				"status_release" => $record->status_release,
+				"created_by" => $record->created_by,
+				"created_on" => $record->created_on,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}

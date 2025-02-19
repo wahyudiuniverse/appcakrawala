@@ -182,6 +182,21 @@ class Project_model extends CI_Model
 		}
 	}
 
+	// get single project by id
+	public function read_single_project_name($id)
+	{
+
+		$sql = "SELECT title FROM xin_projects WHERE project_id = ?";
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+
 
 	// get single project by id
 	public function getcomp_single_project($id)

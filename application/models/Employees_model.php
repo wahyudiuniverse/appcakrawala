@@ -2658,6 +2658,7 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.bank_name');
 		$this->db->select('xin_employees.nomor_rek');
 		$this->db->select('xin_employees.pemilik_rek');
+		$this->db->select('xin_employees.profile_picture');
 		$this->db->select('xin_employees.filename_ktp');
 		$this->db->select('xin_employees.filename_kk');
 		$this->db->select('xin_employees.filename_npwp');
@@ -2690,7 +2691,8 @@ class Employees_model extends CI_Model
 		// $this->db->join('xin_projects_sub', 'xin_projects_sub.secid = xin_employees.sub_project_id');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-		$this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		// $this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		$this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$tes_query = $this->db->last_query();
 
@@ -2756,6 +2758,13 @@ class Employees_model extends CI_Model
 				$text_marital = "K/3";
 			} else {
 				$text_marital = "-";
+			}
+
+			$text_profile_picture = "";
+			if (empty($record->profile_picture) || ($record->profile_picture == "") || ($record->profile_picture == "0")) {
+				$text_profile_picture = "-";
+			} else {
+				$text_profile_picture = base_url() . "uploads/profile/" . $record->profile_picture;
 			}
 
 			$text_ktp = "";
@@ -2935,6 +2944,7 @@ class Employees_model extends CI_Model
 				strtoupper($this->get_nama_bank($record->bank_name)),
 				$record->nomor_rek,
 				strtoupper($record->pemilik_rek),
+				$text_profile_picture,
 				$text_ktp,
 				$text_kk,
 				$text_npwp,

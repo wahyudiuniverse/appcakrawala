@@ -528,6 +528,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//delete batch saltab
+	public function delete_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_bupot($postData['id']);
+
+		echo json_encode($data);
+	}
+
 	//delete batch saltab release
 	public function delete_batch_saltab_release()
 	{
@@ -628,6 +641,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->get_list_batch_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch bupot
+	public function list_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_bupot($postData);
 
 		echo json_encode($data);
 	}
@@ -772,6 +798,77 @@ class ImportExcel extends MY_Controller
 		//$writer->setPreCalculateFormulas(false);
 
 		$filename = 'Template E-Saltab'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadTemplateBupot()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('BUPOT'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_bupot_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template BUPOT'; // set filename for excel file to be exported
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
 		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
@@ -1960,6 +2057,215 @@ class ImportExcel extends MY_Controller
 		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel BUPOT
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_bupot()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nik = $this->input->post('nik');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$periode_bupot = $this->input->post('periode_bupot');
+
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		$nama_project_only = "";
+		$projects = $this->Project_model->read_single_project_name($project);
+		if (!is_null($projects)) {
+			$nama_project_only = $projects[0]->title;
+		} else {
+			$nama_project_only = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+			$array_file = explode('.', $_FILES['file_excel']['name']);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			// $sheet_data = array_map('trim', $sheet_data);
+			$sheet_data = array_filter($sheet_data);
+			$array_data  = [];
+			$array_data_final  = [];
+			$data        = [];
+			$header_tabel_saltab = $sheet_data[0];
+			$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+			// echo '<pre>';
+			// print_r(array_filter($header_tabel_saltab));
+			// echo '</pre>';
+
+			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+			// $header_tabel_saltab = array_filter($header_tabel_saltab);
+			$length_header = count($header_tabel_saltab);
+			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
+
+			//susun array batch saltab
+			$data_batch = array(
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+				'periode_bupot'       	 => $periode_bupot,
+				'jumlah_data'        	 => $jumlah_data,
+				'status_release'         => "0",
+				'created_by'        	 => $this->Import_model->get_nama_karyawan($nik),
+				'created_by_id'        	 => $nik,
+				'created_on'        	 => date("Y-m-d"),
+				// 'upload_ip'        	 	 => $this->get_client_ip(),
+			);
+
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			// $data_batch_cek = array(
+			// 	'periode_cutoff_from'    => $saltab_from,
+			// 	'periode_cutoff_to'      => $saltab_to,
+			// 	'periode_salary'      	 => $periode_salary,
+			// 	'project_id'        	 => $project,
+			// 	'project_name'        	 => $nama_project,
+			// 	'sub_project_id'         => $sub_project,
+			// 	'sub_project_name'       => $nama_sub_project,
+			// );
+
+			// $id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
+
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			// $data_batch_cek_request_open = array(
+			// 	'periode_saltab_from'    => $saltab_from,
+			// 	'periode_saltab_to'      => $saltab_to,
+			// 	'tanggal_gajian'      	 => $periode_salary,
+			// 	'project_id'        	 => $project,
+			// 	'project_name'        	 => $nama_project,
+			// 	'sub_project_id'         => $sub_project,
+			// 	'sub_project_name'       => $nama_sub_project,
+			// );
+
+			// $this->Import_model->update_request_open_import($data_batch_cek_request_open);
+
+			// if ($id_batch_awal != "") {
+			// 	$this->Import_model->delete_batch_saltab($id_batch_awal);
+			// }
+
+			// $data_batch += ['id' => $id_batch_awal];
+
+			if (!empty($data_batch)) {
+				$this->Import_model->insert_bupot_batch($data_batch);
+			}
+
+			$id_batch = $this->Import_model->get_id_bupot_batch($data_batch);
+
+			//susun array saltab detail
+			for ($i = 2; $i < count($sheet_data); $i++) {
+				$data += ['batch_bupot_id' => $id_batch];
+				for ($j = 0; $j < $length_header; $j++) {
+					$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+					$trimmed_nip = trim($trimmed_nip, ' ');
+					$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+
+			//susun nama file
+			$yearmonth = date('Y/m/');
+			$upload_path = 'https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/' . $yearmonth . $nama_project_only . '/';
+			foreach ($array_data as $array_data) {
+				$nama_file = $upload_path . $array_data['no_bukti_potong'] . '_' . $array_data['npwp_pemotong'] . '_' . $array_data['nama_penerima_penghasilan'] . '.pdf';
+				$array_data['file_bupot'] = $nama_file;
+				$array_data_final[] = $array_data;
+			}
+			if (!empty($array_data_final)) {
+				$this->Import_model->insert_bupot_detail($array_data_final);
+			}
+
+
+			$tes_query = $this->db->last_query();
+
+
+			// if ($array_data != '') {
+			// 	$this->Import_model->insert_saltab_detail($array_data);
+			// }
+
+			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
+
+			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
+			// echo '<pre>';
+			// print_r($tes_query);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+		} else {
+			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+			print_r("gagal import");
+			print_r($_FILES['file_excel']['name']);
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		redirect('admin/Importexcel/view_batch_bupot/' . $id_batch);
+	}
+
 	function view_batch_saltab_temporary($id_batch = null)
 	{
 		$session = $this->session->userdata('username');
@@ -1978,6 +2284,40 @@ class ImportExcel extends MY_Controller
 
 		if (!empty($session)) {
 			$data['subview'] = $this->load->view("admin/import_excel/preview_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_bupot($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'VIEW DETAIL BUPOT | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/import_bupot') . "'>MANAGE BUPOT</a> | VIEW DETAIL BUPOT";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_bupot'] = $this->Import_model->get_saltab_batch($id_batch);
+
+		$nama_project_only = "";
+		$projects = $this->Project_model->read_single_project_name($data['batch_bupot']['project_id']);
+		if (!is_null($projects)) {
+			$nama_project_only = $projects[0]->title;
+		} else {
+			$nama_project_only = '';
+		}
+
+		$data['nama_project_only'] = $nama_project_only;
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/preview_bupot", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/');
@@ -3217,6 +3557,54 @@ class ImportExcel extends MY_Controller
 		} else {
 			redirect('admin/dashboard');
 		}
+	}
+
+	// import bupot
+	public function import_bupot()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'MANAJEMEN BUPOT | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'MANAJEMEN BUPOT';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('511', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_bupot", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// tiny_file_manager
+	public function tiny_file_manager()
+	{
+
+		$session = $this->session->userdata('username');
+		// if (empty($session)) {
+		// 	redirect('admin/');
+		// }
+		// $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Import BUPOT | ' . $this->Xin_model->site_title();
+		// $data['breadcrumbs'] = 'Import BUPOT';
+		// // $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// // $data['all_projects'] = $this->Project_model->get_projects();
+		// $data['path_url'] = 'hrpremium_import_esaltab';
+		// $role_resources_ids = $this->Xin_model->user_role_resource();
+		// if (in_array('511', $role_resources_ids)) {
+		// 	// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+		// 	$data['subview'] = $this->load->view("frontend/tinyfilemanager", $data, TRUE);
+		$this->load->view('frontend/tinyfilemanager', $data); //page load
+		// } else {
+		// 	redirect('admin/dashboard');
+		// }
 	}
 
 

@@ -82,7 +82,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   ?>
 
     <li class="sidenav-item <?php if (!empty($arr_mod['activep'])) echo $arr_mod['activep']; ?>">
-      <a href="<?php echo site_url('admin/employees/emp_view/'.$session['employee_id']); ?>" class="sidenav-link">
+      <a href="<?php echo site_url('admin/employees/emp_view/' . $session['employee_id']); ?>" class="sidenav-link">
         <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
         <i class="sidenav-icon ion ion-logo-buffer"></i>
         <div><?php echo $this->lang->line('header_my_profile'); ?></div>
@@ -208,7 +208,8 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     in_array('34', $role_resources_ids)
     || in_array('58', $role_resources_ids)
     || in_array('67', $role_resources_ids)
-  ) {}
+  ) {
+  }
   ?>
 
   <!-- user mobile -->
@@ -318,7 +319,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         <?php
         if (in_array('470', $role_resources_ids)) { ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['man_client_active'])) echo $arr_mod['man_client_active']; ?>">
-            <a href="<?php echo site_url('admin/reports/#'); ?>" class="sidenav-link">
+            <a href="<?php echo site_url('admin/reports/manage_client'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
               <i class="sidenav-icon ion ion-logo-buffer"></i>
               <div>Klien</div>
@@ -1155,6 +1156,49 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['konfig_download_esaltab_active'])) echo $arr_mod['konfig_download_esaltab_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/konfig_download_esaltab'); ?>"> Konfigurasi Download SALTAB
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+      </ul>
+    </li>
+
+  <?php
+  }
+  ?>
+
+  <!-- BUPOT -->
+  <?php
+  if (
+    in_array('1300', $role_resources_ids)
+    || in_array('1301', $role_resources_ids)
+  ) {
+  ?>
+    <li class="<?php if (!empty($arr_mod['saltab_open'])) echo $arr_mod['saltab_open']; ?> sidenav-item">
+      <a href="#" class="sidenav-link sidenav-toggle">
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>BUPOT</div>
+      </a>
+
+      <ul class="sidenav-menu">
+        <?php
+        if (in_array('1301', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/import_bupot'); ?>"> Manajemen BUPOT
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+<?php
+        if (in_array('1302', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/tiny_file_manager'); ?>"> File Manager
             </a>
           </li>
         <?php
