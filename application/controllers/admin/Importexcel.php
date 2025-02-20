@@ -567,6 +567,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//release batch bupot
+	public function release_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_batch_bupot($postData);
+
+		echo json_encode($data);
+	}
+
 	//accept request open lock saltab
 	public function accept_request()
 	{
@@ -615,6 +628,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->delete_detail_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail bupot
+	public function delete_detail_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_bupot($postData['id']);
 
 		echo json_encode($data);
 	}
@@ -706,6 +732,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->get_list_detail_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail bupot
+	public function list_detail_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_bupot($postData);
 
 		echo json_encode($data);
 	}
@@ -931,6 +970,19 @@ class ImportExcel extends MY_Controller
 
 		// get data 
 		$data = $this->Import_model->get_detail_saltab($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail Bupot
+	public function get_detail_bupot()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_bupot($postData['id']);
 		echo json_encode($data);
 		// echo "<pre>";
 		// print_r($data);
@@ -2165,7 +2217,7 @@ class ImportExcel extends MY_Controller
 				'status_release'         => "0",
 				'created_by'        	 => $this->Import_model->get_nama_karyawan($nik),
 				'created_by_id'        	 => $nik,
-				'created_on'        	 => date("Y-m-d"),
+				'created_on'        	 => date("Y-m-d H:i:s"),
 				// 'upload_ip'        	 	 => $this->get_client_ip(),
 			);
 
@@ -2302,9 +2354,10 @@ class ImportExcel extends MY_Controller
 		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/import_bupot') . "'>MANAGE BUPOT</a> | VIEW DETAIL BUPOT";
 
 		$session = $this->session->userdata('username');
+		// $data['path_url'] = 'hrpremium_import';
 
 		$data['id_batch'] = $id_batch;
-		$data['batch_bupot'] = $this->Import_model->get_saltab_batch($id_batch);
+		$data['batch_bupot'] = $this->Import_model->get_bupot_batch($id_batch);
 
 		$nama_project_only = "";
 		$projects = $this->Project_model->read_single_project_name($data['batch_bupot']['project_id']);
@@ -3586,13 +3639,42 @@ class ImportExcel extends MY_Controller
 	// tiny_file_manager
 	public function tiny_file_manager()
 	{
+		// $record_database = "https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/2025/02/PT. SIPRAMA CAKRAWALA/1112240001020_033072117012000_ADIS RITA MAULINA.pdf";
 
-		$session = $this->session->userdata('username');
+		// $lurl=$this->get_fcontent($record_database);
+		// echo"cid:".$lurl[0]."<BR>";
+		echo "AAA";
+		ini_set('user_agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.16) Gecko/2009121601 Ubuntu/9.04 (jaunty) Firefox/3.0.16');
+
+		$record_database = "https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/2025/02/PT. SIPRAMA CAKRAWALA/1112240001020_033072117012000_ADIS RITA MAULINA.pdf";
+		$headers = get_headers($record_database);
+		// $headers = file_get_contents($record_database);
+		
+		$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		if ($file_in_url_exist) {
+			$nama_file_profile = $record_database; //tampil file skema lama dengan http
+			$status_profile = "200"; //file ditemukan
+			echo "Berhasil Fetch Data";
+		} else {
+			$nama_file_profile = "tidak ada file"; //link mati atau tidak bisa dibuka
+			$status_profile = "203"; //file tidak ditemukan
+			echo "File Tidak Ditemukan";
+		}
+
+		// if(strpos("https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/2025/02/PT. SIPRAMA CAKRAWALA/1112240001020_033072117012000_ADIS RITA MAULINA.pdf", "http")){
+		// 	echo "ADA FILE NYA";
+		// };
+		// file_exists("https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/2025/02/PT. SIPRAMA CAKRAWALA/1112240001020_033072117012000_ADIS RITA MAULINA.pdf");
+		// foreach (glob("*.pdf") as $filename) {
+		// 	echo "$filename size " . filesize($filename) . "\n";
+		// }
+
+		// $session = $this->session->userdata('username');
 		// if (empty($session)) {
 		// 	redirect('admin/');
 		// }
 		// $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'Import BUPOT | ' . $this->Xin_model->site_title();
+		// $data['title'] = 'Import BUPOT | ' . $this->Xin_model->site_title();
 		// $data['breadcrumbs'] = 'Import BUPOT';
 		// // $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// // $data['all_projects'] = $this->Project_model->get_projects();
@@ -3601,10 +3683,48 @@ class ImportExcel extends MY_Controller
 		// if (in_array('511', $role_resources_ids)) {
 		// 	// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
 		// 	$data['subview'] = $this->load->view("frontend/tinyfilemanager", $data, TRUE);
-		$this->load->view('frontend/tinyfilemanager', $data); //page load
+		// $this->load->view('frontend/tinyfilemanager', $data); //page load
 		// } else {
 		// 	redirect('admin/dashboard');
 		// }
+	}
+
+	function get_fcontent( $url,  $javascript_loop = 0, $timeout = 5 ) {
+		$url = str_replace( "&amp;", "&", urldecode(trim($url)) );
+	
+		$cookie = tempnam ("/tmp", "CURLCOOKIE");
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1" );
+		curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt( $ch, CURLOPT_COOKIEJAR, $cookie );
+		curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+		curl_setopt( $ch, CURLOPT_ENCODING, "" );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_AUTOREFERER, true );
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );    # required for https urls
+		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, $timeout );
+		curl_setopt( $ch, CURLOPT_MAXREDIRS, 10 );
+		$content = curl_exec( $ch );
+		$response = curl_getinfo( $ch );
+		curl_close ( $ch );
+	
+		if ($response['http_code'] == 301 || $response['http_code'] == 302) {
+			ini_set("user_agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1");
+	
+			if ( $headers = get_headers($response['url']) ) {
+				foreach( $headers as $value ) {
+					if ( substr( strtolower($value), 0, 9 ) == "location:" )
+						return get_url( trim( substr( $value, 9, strlen($value) ) ) );
+				}
+			}
+		}
+	
+		if (    ( preg_match("/>[[:space:]]+window\.location\.replace\('(.*)'\)/i", $content, $value) || preg_match("/>[[:space:]]+window\.location\=\"(.*)\"/i", $content, $value) ) && $javascript_loop < 5) {
+			return get_url( $value[1], $javascript_loop+1 );
+		} else {
+			return array( $content, $response );
+		}
 	}
 
 
@@ -4136,6 +4256,52 @@ class ImportExcel extends MY_Controller
 				'eslip_release_by'		=> $full_name,
 				// 'eslip_release_on'		=> $eslip_release_on_array[1],
 				'eslip_release_on'		=> $eslip_release_on_text,
+			);
+
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data2,
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	//mengambil Json data bupot
+	public function get_data_batch_bupot()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id_batch'        => $postData['id_batch']
+		];
+
+		// get data bupot
+		$data = $this->Import_model->get_data_batch_bupot($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Bupot tidak ditemukan",
+			);
+		} else {
+			$data2 = array(
+				'id_batch'				=> $data['id_batch'],
+				'periode_bupot'			=> $data['periode_bupot'],
+				'project_name'			=> $data['project_name'],
+				'sub_project_name'		=> $data['sub_project_name'],
+				'jumlah_data'			=> $data['jumlah_data'],
+				'created_by'			=> $data['created_by'],
+				'created_on'			=> $this->Xin_model->tgl_indo($data['created_on']),
+				'release_by'			=> $data['release_by'],
+				'release_on'			=> $this->Xin_model->tgl_indo($data['release_on']),
 			);
 
 			$response = array(

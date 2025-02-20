@@ -30,6 +30,9 @@
         <div class="isi-modal">
           ...
         </div>
+        <div class="info-modal">
+          ...
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal"> Close </button>
@@ -104,7 +107,7 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label class="form-label">Periode Bupot</label>
-                <input type="text" class="form-control" readonly name="saltab_to" id="saltab_to" placeholder="Periode Saltab To" value="<?php echo $batch_bupot['periode_bupot']; ?>">
+                <input type="text" class="form-control" readonly name="periode_bupot" id="periode_bupot" placeholder="Periode Saltab To" value="<?php echo $batch_bupot['periode_bupot']; ?>">
               </div>
             </div>
           </div>
@@ -134,17 +137,13 @@
   </div>
   <div class=" card-body">
     <div class="box-datatable table-responsive" id="btn-place">
-      <table class="display dataTable table table-striped table-bordered" id="detail_saltab_table" style="width:100%">
+      <table class="display dataTable table table-striped table-bordered" id="detail_bupot" style="width:100%">
         <thead>
           <tr>
-            <th>Status</th>
+            <th>Aksi</th>
             <th>NIK</th>
-            <th>NIP</th>
+            <th>No. BUPOT</th>
             <th>Nama</th>
-            <th>Sub Project</th>
-            <th>Posisi</th>
-            <th>Area</th>
-            <th>Hari Kerja</th>
           </tr>
         </thead>
       </table>
@@ -163,7 +162,25 @@
 <script src="<?= base_url() ?>assets/assets_data_karyawan/libs/filepond-plugin-file-rename/filepond-plugin-file-rename.js"></script>
 
 <script>
-  var detail_saltab_table;
+  var detail_bupot;
+
+  var loading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+  var loading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+  loading_html_text = loading_html_text + '<img src="' + loading_image + '" alt="" width="100px">';
+  loading_html_text = loading_html_text + '<h2>LOADING...</h2>';
+  loading_html_text = loading_html_text + '</div>';
+
+  var uploading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+  var uploading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+  uploading_html_text = uploading_html_text + '<img src="' + uploading_image + '" alt="" width="100px">';
+  uploading_html_text = uploading_html_text + '<h2>PROCESSING...</h2>';
+  uploading_html_text = uploading_html_text + '</div>';
+
+  var success_image = "<?php echo base_url('assets/icon/ceklis_hijau.png'); ?>";
+  var success_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+  success_html_text = success_html_text + '<img src="' + success_image + '" alt="" width="100px">';
+  success_html_text = success_html_text + '<h2 style="color: #00FFA3;">BERHASIL UPDATE DATA</h2>';
+  success_html_text = success_html_text + '</div>';
 
   FilePond.registerPlugin(
     FilePondPluginFileEncode,
@@ -197,10 +214,12 @@
   if ((id_batch == null) || (id_batch == "")) {
     id_batch = 0;
   }
+
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
   var nama_project_only = '<?php echo $nama_project_only; ?>';
+  var periode_bupot = '<?php echo $batch_bupot['periode_bupot']; ?>';
 
   $(document).ready(function() {
     //alert(id_batch);
@@ -219,6 +238,7 @@
           ondata: (formData) => {
             formData.append('identifier', "bupot");
             formData.append('project_name', nama_project_only);
+            formData.append('periode_bupot', periode_bupot);
             // formData.append([csrfName], csrfHash);
             return formData;
           }
@@ -259,7 +279,7 @@
       });
     });
 
-    detail_saltab_table = $('#detail_saltab_table').DataTable({
+    detail_bupot = $('#detail_bupot').DataTable({
       //"bDestroy": true,
       'processing': true,
       'serverSide': true,
@@ -274,10 +294,10 @@
       //  type: 'date-eu'
       //}],
       'order': [
-        [3, 'desc']
+        [3, 'asc']
       ],
       'ajax': {
-        'url': '<?= base_url() ?>admin/importexcel/list_detail_saltab',
+        'url': '<?= base_url() ?>admin/importexcel/list_detail_bupot',
         data: {
           [csrfName]: csrfHash,
           id_batch: id_batch,
@@ -304,41 +324,25 @@
           //searchable: true
         },
         {
-          data: 'nip',
+          data: 'no_bukti_potong',
           //"orderable": false,
           //searchable: true
         },
         {
-          data: 'fullname',
+          data: 'nama_penerima_penghasilan',
           //"orderable": false
-        },
-        {
-          data: 'sub_project',
-          "orderable": false,
-        },
-        {
-          data: 'jabatan',
-          //"orderable": false,
-        },
-        {
-          data: 'area',
-          //"orderable": false,
-        },
-        {
-          data: 'hari_kerja',
-          //"orderable": false,
         },
       ]
     });
 
   });
 
-  //-----delete detail saltab-----
-  function deleteDetailSaltab(id) {
+  //-----delete detail bupot-----
+  function deleteDetailBupot(id) {
     // alert("masuk fungsi delete detail saltab. id: " + id);
     // AJAX request
     $.ajax({
-      url: '<?= base_url() ?>admin/Importexcel/delete_detail_saltab/',
+      url: '<?= base_url() ?>admin/Importexcel/delete_detail_bupot/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
@@ -346,35 +350,42 @@
       },
       success: function(response) {
         alert("Berhasil Delete Data");
-        detail_saltab_table.ajax.reload(null, false);
+        detail_bupot.ajax.reload(null, false);
       },
       error: function(xhr, ajaxOptions, thrownError) {
         var error_text = "Gagal Delete Data Saltab. Status : " + xhr.status;
-        $('.judul-modal-error').html("ERROR ! ");
-        $('.isi-modal-error').html(xhr.responseText);
-        $('#modal-error').modal('show');
+        alert(error_text);
+        // $('.judul-modal-error').html("ERROR ! ");
+        // $('.isi-modal-error').html(xhr.responseText);
+        // $('#modal-error').modal('show');
       },
     });
     // alert("Beres Ajax. id: " + id);
   }
 
-  //-----lihat batch saltab-----
-  function lihatDetailSaltab(id) {
+  //-----lihat detail bupot-----
+  function lihatDetailBupot(id) {
     var html_text = '<table class="table table-striped col-md-12"><thead class="thead-dark"><tr><th class="col-md-4">ATRIBUT</th><th class="col-md-8">VALUE</th></thead></tr>';
     // AJAX request
     $.ajax({
-      url: '<?= base_url() ?>admin/importexcel/get_detail_saltab/',
+      url: '<?= base_url() ?>admin/importexcel/get_detail_bupot/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
         id: id,
       },
       dataType: 'json',
+      beforeSend: function() {
+        $('.info-modal').attr("hidden", false);
+        $('.isi-modal').attr("hidden", true);
+        $('.info-modal').html(loading_html_text);
+        $('#viewDetailModal').modal('show');
+      },
       success: function(response) {
         // var response2 = JSON.parse(response);
         // Add options
         $(response).each(function(index, data) {
-          html_text = html_text + "<tr><td>" + data[0] + "</td><td><input type='text' class='form-control' readonly placeholder='Periode Saltab To' value='" + data[1] + "'></td></tr>";
+          html_text = html_text + "<tr><td>" + data[0] + "</td><td>" + data[1] + "</td></tr>";
           // html_text = html_text + data;
         });
         // html_text = html_text + response;
@@ -382,13 +393,17 @@
         html_text = html_text + "</table>";
         // alert(html_text);
         $('.isi-modal').html(html_text);
-        $('#viewDetailModal').modal('show');
+
+        $('.isi-modal').attr("hidden", false);
+        $('.info-modal').attr("hidden", true);
       },
       error: function(xhr, ajaxOptions, thrownError) {
-        var error_text = "Error Load Data Sub Project. Status : " + xhr.status;
-        $('.judul-modal-error').html("ERROR ! ");
-        $('.isi-modal-error').html(xhr.responseText);
-        $('#modal-error').modal('show');
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.info-modal').html(html_text); //coba pake iframe
+        $('.isi-modal').attr("hidden", true);
+        $('.info-modal').attr("hidden", false);
       },
     });
 

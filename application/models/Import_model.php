@@ -362,6 +362,46 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	public function get_detail_bupot($id = null)
+	{
+		$data = array();
+		$this->db->select('*');
+		$this->db->from('xin_bupot');
+		$this->db->where('id', $id);
+
+		$records = $this->db->get()->row_array();
+
+		$result_index = array_keys($records);
+		$result_value = array_values($records);
+
+		$length = count($result_index);
+
+		for ($i = 1; $i < ($length); $i++) {
+			// $button_edit_nip = "";
+			// if (in_array('1101', $role_resources_ids)) {
+			// 	if ($i == "3") {
+			// 		$button_edit_nip = '<button type="button" onclick="edit_nip(' . $id . ')" class="btn btn-sm btn-outline-success ml-2" ><i class="fa fa-file mr-1"></i> EDIT NIP</button>';
+			// 	}
+			// }
+
+			// $data[] = array(
+			// 	$this->get_nama_kolom_detail_saltab($result_index[$i]),
+			// 	$result_value[$i] . $button_edit_nip,
+			// );
+
+			$nama_kolom = $this->get_nama_kolom_detail_bupot($result_index[$i]);
+
+			if($nama_kolom != ""){
+				$data[] = array(
+					$nama_kolom,
+					$result_value[$i],
+				);
+			}
+		}
+
+		return $data;
+	}
+
 	public function get_detail_saltab_release($id = null)
 	{
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -404,6 +444,21 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$records = $this->db->get()->row_array();
 
 		return $records['alias'];
+	}
+
+	public function get_nama_kolom_detail_bupot($nama_tabel)
+	{
+		$this->db->select('*');
+		$this->db->from('mt_tabel_bupot');
+		$this->db->where('nama_tabel', $nama_tabel);
+
+		$records = $this->db->get()->row_array();
+
+		if(empty($records)){
+			return "";
+		} else {
+			return $records['alias'];
+		}
 	}
 
 	//update NIP employee
@@ -1199,6 +1254,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 
 		$this->db->select('*');
+		$this->db->from('xin_saltab_bulk');
+		$this->db->where('id', $id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	function get_bupot_batch($id)
+	{
+
+		$this->db->select('*');
 		$this->db->from('xin_bupot_batch');
 		$this->db->where('id_batch', $id);
 
@@ -1337,6 +1404,21 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->update('xin_saltab_bulk_release');
 	}
 
+	function release_batch_bupot($postdata = null)
+	{
+		// $session = $this->session->userdata('username');
+		$release_by_id = $postdata['release_by_id'];
+		$release_by = $this->Import_model->get_nama_karyawan($postdata['release_by_id']);
+		$release_on = date("Y-m-d H:i:s");
+
+		$this->db->set('status_release', "1");
+		$this->db->set('release_by_id', $release_by_id);
+		$this->db->set('release_by', $release_by);
+		$this->db->set('release_on', $release_on);
+		$this->db->where('id_batch', $postdata['id_batch']);
+		$this->db->update('xin_bupot_batch');
+	}
+
 	function accept_request($postData = null)
 	{
 		$this->db->set('status', "0");
@@ -1429,6 +1511,34 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$this->db->where('id', $id_batch);
 		$this->db->update('xin_saltab_bulk', $data);
+	}
+
+	//delete detail bupot
+	function delete_detail_bupot($id = null)
+	{
+		//kalau delete data, update jumlah mpp pada batch
+		## Get Batch Id
+		$this->db->select('*');
+		$this->db->from('xin_bupot');
+		$this->db->where('id', $id);
+		$query = $this->db->get()->row_array();
+		$id_batch = $query['batch_bupot_id'];
+
+		$this->db->delete('xin_bupot', array('id' => $id));
+
+		## Total number of records 
+		$this->db->select('count(*) as allcount');
+		$this->db->where("batch_bupot_id", $id_batch);
+		$records = $this->db->get('xin_bupot')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Update mpp
+		$data = array(
+			'jumlah_data' => $totalRecords,
+		);
+
+		$this->db->where('id_batch', $id_batch);
+		$this->db->update('xin_bupot_batch', $data);
 	}
 
 	//delete detail saltab release
@@ -1620,6 +1730,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	*/
 	function get_list_batch_bupot($postData = null)
 	{
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		$response = array();
 
@@ -1680,6 +1791,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$data = array();
 
 		foreach ($records as $record) {
+			//cek apakah sudah release eslip
+			$release_bupot = "<span style='color:#FF0000;'>Belum Release BUPOT</span>";
+			if (empty($record->status_release) || ($record->status_release == "") || ($record->status_release == "0")) {
+				if (in_array('1302', $role_resources_ids)) {
+					$release_bupot = $release_bupot . '</br><button type="button" onclick="releaseBupot(' . $record->id_batch . ')" class="btn btn-sm btn-outline-primary" >Release BUPOT</button>';
+				}
+			} else {
+				$release_bupot = "Sudah Release BUPOT.</br>Tanggal release: " . $this->Xin_model->tgl_indo($record->release_on);
+				$release_bupot = $release_bupot . '</br><button type="button" onclick="detailReleaseBupot(' . $record->id_batch . ')" class="btn btn-sm btn-outline-success" >Detail Info</button>';
+			}
+
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
@@ -1696,7 +1818,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
 				"jumlah_data" => $record->jumlah_data,
-				"status_release" => $record->status_release,
+				"release_bupot" => $release_bupot,
 				"created_by" => $record->created_by,
 				"created_on" => $record->created_on,
 				// $this->get_nama_karyawan($record->upload_by)
@@ -2275,6 +2397,103 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 	/*
 	* persiapan data untuk datatable pagination
+	* data list detail bupot
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_detail_bupot($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel id batch
+		$id_batch = $postData['id_batch'];
+		$data_batch = $this->get_bupot_batch($id_batch);
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (nik like '%" . $searchValue .  "%' or no_bukti_potong like '%" . $searchValue . "%' or nama_penerima_penghasilan like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(
+			batch_bupot_id = " . $id_batch . "
+		)";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_bupot')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_bupot')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_bupot')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+
+			$view = '<button id="tesbutton" type="button" onclick="lihatDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$esaltab = '<a href="' . $record->file_bupot . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">OPEN BUPOT</button></a>';
+			$delete = '<button type="button" onclick="deleteDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " " . $esaltab . " "  . $delete,
+				"nik" => $record->nik,
+				"no_bukti_potong" => $record->no_bukti_potong,
+				"nama_penerima_penghasilan" => $record->nama_penerima_penghasilan,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
 	* data list detail saltab release
 	* 
 	* @author Fadla Qamara
@@ -2824,6 +3043,21 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->select('*');
 
 		$this->db->from('xin_saltab_bulk_release',);
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data bupot
+	public function get_data_batch_bupot($postData)
+	{
+		$this->db->select('*');
+
+		$this->db->from('xin_bupot_batch',);
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
