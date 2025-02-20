@@ -1590,7 +1590,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 		}
 
-		array_multisort(array_column($data, "tanggal_release"), SORT_DESC, $data);
+		array_multisort(array_column($data, "periode_bupot"), SORT_DESC, $data);
 
 		return $data;
 	}
