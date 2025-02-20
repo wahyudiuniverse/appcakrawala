@@ -2273,7 +2273,7 @@ class ImportExcel extends MY_Controller
 
 			//susun nama file
 			$yearmonth = date('Y/m/');
-			$upload_path = 'https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/' . $yearmonth . $nama_project_only . '/';
+			$upload_path = 'https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/' . $periode_bupot . '/' . $nama_project_only . '/';
 			foreach ($array_data as $array_data) {
 				$nama_file = $upload_path . $array_data['no_bukti_potong'] . '_' . $array_data['npwp_pemotong'] . '_' . $array_data['nama_penerima_penghasilan'] . '.pdf';
 				$array_data['file_bupot'] = $nama_file;
