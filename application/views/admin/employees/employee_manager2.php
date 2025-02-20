@@ -1045,6 +1045,9 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                 <li class="nav-item">
                   <a class="nav-link" id="dokumen-eslip-tab" data-toggle="tab" href="#dokumen-eslip" role="tab" aria-controls="dokumen-eslip" aria-selected="false"><i class="ion ion-logo-usd"></i> &nbsp; E-SLIP</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="dokumen-bupot-tab" data-toggle="tab" href="#dokumen-bupot" role="tab" aria-controls="dokumen-bupot" aria-selected="false"><i class="ion ion-logo-usd"></i> &nbsp; BUPOT</a>
+                </li>
               </ul>
 
               <div class="col-md-12">
@@ -1579,6 +1582,64 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
                   </div>
                   <!-- END TAB DOKUMEN ESLIP -->
+
+                  <!-- TAB DOKUMEN BUPOT -->
+                  <!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
+                  <div class="tab-pane fade" id="dokumen-bupot" role="tabpanel" aria-labelledby="dokumen-bupot-tab">
+                    <div class="row">
+                      <div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN BUPOT</strong></span> </div>
+                      <!-- <pre>
+                        <?php //print_r($all_sk); 
+                        ?>
+                      </pre> -->
+
+                      <?php if (empty($bupot)) { ?>
+                        <div class="card-header with-elements" style="background-color:#e1e1e1;"> <span class="card-header-title mr-2"> <strong> Belum ada data </strong></span> </div>
+                      <?php } else { ?>
+                        <?php foreach ($bupot as $bupot): ?>
+                          <div class="card-header with-elements" style="background-color:#e1e1e1;"> <span class="card-header-title mr-2"> <strong> Bukti Potong Pajak</strong></span> </div>
+                          <div class="col-md-6">
+                            <table class="table table-striped">
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Periode BUPOT</th>
+                                  <td>Tahun <?php echo $bupot['periode_bupot']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th scope="row" style="width: 30%">Nomor BUPOT</th>
+                                  <td><?php echo $bupot['no_bukti_potong']; ?></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="col-md-6">
+                            <table class="table table-striped">
+                              <tbody>
+                                <tr>
+                                  <th scope="row">Tanggal Upload</th>
+                                  <td><?php echo $bupot['release_on']; ?></td>
+                                </tr>
+                                <tr>
+                                  <th>Action</th>
+                                  <td><?php echo $bupot['button_lihat']; ?></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        <?php endforeach; ?>
+
+                      <?php } ?>
+
+                    </div>
+                    <!-- <hr class="border-light m-0">
+                    <div class="row">
+                      <div class="col-12 my-3">
+                        <button id="button_edit_dokumen_kontrak" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Upload Dokumen</button>
+                      </div>
+                    </div> -->
+
+                  </div>
+                  <!-- END TAB DOKUMEN BUPOT -->
 
                 </div>
 

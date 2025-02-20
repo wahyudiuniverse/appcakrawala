@@ -1541,6 +1541,86 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->update('xin_bupot_batch', $data);
 	}
 
+	//ambil data bupot berdasarkan NIK
+	public function get_all_bupot_by_nik($nik)
+	{
+		// get data bupot
+		$this->db->select('*');
+
+		$this->db->from('xin_bupot');
+		$this->db->where('nik', $nik);
+
+		$query = $this->db->get()->result_array();
+
+		$data = array();
+
+		foreach ($query as $record) {
+			$tanggal_release = $this->get_tanggal_release_bupot($record['batch_bupot_id']);
+
+			if(is_null($tanggal_release) || $tanggal_release == "" || $tanggal_release=="0"){
+
+			} else {
+				$data[] = array(
+					"batch_bupot_id" => $record['batch_bupot_id'],
+					"no_bukti_potong" => $record['no_bukti_potong'],
+					"tanggal_bukti_potong" => $record['tanggal_bukti_potong'],
+					"npwp_pemotong" => $record['npwp_pemotong'],
+					"nama_pemotong" => $record['nama_pemotong'],
+					"perekam" => $record['perekam'],
+					"nik" => $record['nik'],
+					"nama_penerima_penghasilan" => $record['nama_penerima_penghasilan'],
+					"penghasilan_bruto" => $record['penghasilan_bruto'],
+					"penghasilan_bruto_masa_terakhir" => $record['penghasilan_bruto_masa_terakhir'],
+					"pph_dipotong" => $record['pph_dipotong'],
+					"kode_objek_pajak" => $record['kode_objek_pajak'],
+					"pasal" => $record['pasal'],
+					"masa_pajak" => $record['masa_pajak'],
+					"tahun_pajak" => $record['tahun_pajak'],
+					"status" => $record['status'],
+					"rev_no" => $record['rev_no'],
+					"posting" => $record['posting'],
+					"id_sistem" => $record['id_sistem'],
+					"file_bupot" => $record['file_bupot'],
+					"tanggal_release" => $tanggal_release,
+	
+					"periode_bupot" => $this->get_periode_bupot($record['batch_bupot_id']),
+					"release_on" => $this->Xin_model->tgl_indo($tanggal_release),
+					"button_lihat" => '<a href="' . $record['file_bupot'] . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-md btn-outline-success">OPEN BUPOT</button></a>',
+				);
+			}
+		}
+
+		array_multisort(array_column($data, "tanggal_release"), SORT_DESC, $data);
+
+		return $data;
+	}
+
+	//get periode bupot
+	function get_periode_bupot($batch_bupot_id = null)
+	{
+		//kalau delete data, update jumlah mpp pada batch
+		## Get Batch Id
+		$this->db->select('periode_bupot');
+		$this->db->from('xin_bupot_batch');
+		$this->db->where('id_batch', $batch_bupot_id);
+		$query = $this->db->get()->row_array();
+
+		return $query['periode_bupot'];
+	}
+
+	//get tanggal release bupot
+	function get_tanggal_release_bupot($batch_bupot_id = null)
+	{
+		//kalau delete data, update jumlah mpp pada batch
+		## Get Batch Id
+		$this->db->select('release_on');
+		$this->db->from('xin_bupot_batch');
+		$this->db->where('id_batch', $batch_bupot_id);
+		$query = $this->db->get()->row_array();
+
+		return $query['release_on'];
+	}
+
 	//delete detail saltab release
 	function delete_detail_saltab_release($id = null)
 	{

@@ -44,6 +44,7 @@ class Employees extends MY_Controller
 		$this->load->model('Exin_model');
 		$this->load->model('Esign_model');
 		$this->load->model('Pkwt_model');
+		$this->load->model('Import_model');
 		$this->load->library("pagination");
 		//$this->load->library('Pdf');
 		$this->load->helper('string');
@@ -8535,6 +8536,8 @@ class Employees extends MY_Controller
 			'bpjs_ks_no' => $result[0]->bpjs_ks_no,
 			'bpjs_ks_status' => $result[0]->bpjs_ks_status,
 
+			//Dokumen BUPOT
+			'bupot' 	=> $this->Import_model->get_all_bupot_by_nik($result[0]->ktp_no),
 
 			'filename_pkwt' => $result[0]->filename_pkwt,
 			'list_bank' => $this->Xin_model->get_bank_code(),

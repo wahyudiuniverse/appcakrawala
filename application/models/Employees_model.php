@@ -6282,10 +6282,6 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 				$button_upload_pkwt = '';
 			}
 
-
-
-
-
 			$data[] = array(
 				"jenis_dokumen" => "KONTRAK",
 				"nomor_surat" => $record['no_surat'],
