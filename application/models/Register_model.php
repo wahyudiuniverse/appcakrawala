@@ -333,7 +333,10 @@ class Register_model extends CI_model
             'location_id'             => '4',
             'approved_hrdby'          => null,
             'approved_hrdon'          => null,
-            'location_id'             => '0'
+            'location_id'             => '0',
+            'cancel_stat'             => '0',
+            'cancel_by'               => NULL,
+            'cancel_ket'              => NULL,
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
@@ -387,7 +390,10 @@ class Register_model extends CI_model
             'location_id'             => '4',
             'approved_hrdby'          => null,
             'approved_hrdon'          => null,
-            'location_id'             => '0'
+            'location_id'             => '0',
+            'cancel_stat'             => '0',
+            'cancel_by'               => NULL,
+            'cancel_ket'              => NULL,
         ];
 
         //$otherdb = $this->load->database('default', TRUE);
