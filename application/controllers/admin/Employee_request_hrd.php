@@ -1475,7 +1475,7 @@ class Employee_request_hrd extends MY_Controller
 				'approved_hrdon' => date("Y-m-d h:i:s")
 			);
 
-			//$result = $this->Employees_model->update_request_employee($data_up, $id);
+			$result = $this->Employees_model->update_request_employee($data_up, $id);
 
 
 			$data_traxes = array(
@@ -1495,24 +1495,6 @@ class Employee_request_hrd extends MY_Controller
 				'is_active' 			=> 1,
 				'createdby' 			=> $session['user_id'],
 				'createdon'				=> date("Y-m-d h:i:s")
-
-
-				// 'employee_id'			=> '13009987',
-				// 'fullname'				=> $fullname,
-				// 'company_id'			=> $company_id,
-				// 'company_name'			=> 'COMP NAME',
-				// 'project_id' 			=> $project,
-				// 'project_name' 			=> 'PROJECT NAME',
-				// 'project_sub' 			=> 'PROJECT SUB',
-				// 'jabatan' 				=> 'JABATAN',
-				// 'penempatan' 			=> $penempatan,
-				// 'usertype_id' 			=> 1,
-				// 'device_id_one' 		=> 0,
-				// 'server_inv' 			=> 'PROD',
-				// 'is_active' 			=> 1,
-				// 'createdby' 			=> $session['user_id'],
-				// 'createdon'				=> date("Y-m-d h:i:s")
-
 
 			);
 

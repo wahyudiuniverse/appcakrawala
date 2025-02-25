@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt295 extends MY_Controller 
+class Pkwt378 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -81,14 +81,6 @@ class Pkwt295 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
-
-		// MOTORIS
-		if ($pkwt[0]->jabatan=='137') {
-			redirect('admin/pkwt295motoris/view/'.$pkwt[0]->uniqueid);
-
-		// ADMIN
-		}
-
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
@@ -253,7 +245,6 @@ class Pkwt295 extends MY_Controller
 					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
 					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
-					$allowance_transrent =	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
@@ -1615,7 +1606,7 @@ class Pkwt295 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1679,17 +1670,7 @@ class Pkwt295 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
-						</tr>';
-				}
-
-
-				if($allowance_transrent!="Rp 0"){	
-				$lampiran .= '
-					
-						<tr>
-							<td>Tunjangan Transport-Rental</td>
-							<td colspan="3"> : '.$allowance_transrent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1804,11 +1785,6 @@ class Pkwt295 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
-
-			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
-				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();

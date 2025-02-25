@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt295 extends MY_Controller 
+class Pkwt295motoris extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -80,13 +80,6 @@ class Pkwt295 extends MY_Controller
 		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
 		if(is_null($pkwt)){
 			redirect('admin/');
-		}
-
-		// MOTORIS
-		if ($pkwt[0]->jabatan=='137') {
-			redirect('admin/pkwt295motoris/view/'.$pkwt[0]->uniqueid);
-
-		// ADMIN
 		}
 
 		$employee_id = $pkwt[0]->employee_id;
@@ -1610,14 +1603,25 @@ class Pkwt295 extends MY_Controller
 						</tr>';
 				}
 				
-				if($allowance_transport!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
-						</tr>';
-				}
+							<td colspan="3"> : (Pemberian sesuai dengan ketentuan achievement) ,-Per Bulan</td>
+						</tr>
+
+						<tr>
+							<td colspan="6"><b>(Berikut merupakan ketentuan pemberian uang Transport sesuai dengan achievement):</b></td>
+							
+						</tr>
+
+						<tr>
+							<td></td>
+							<td colspan="6"><img src="'.base_url().'assets/img_allowance_kopken.png" alt="Trulli" width="380" height="120"></td>
+						</tr>
+
+						';
+				
 
 				if($allowance_rent!="Rp 0"){	
 				$lampiran .= '

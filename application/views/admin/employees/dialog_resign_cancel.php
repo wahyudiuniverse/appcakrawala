@@ -37,6 +37,14 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       $approve_hrd_by = '-';
       $approve_hrd_date = '-';
     }
+
+    if($status_resign==2){
+      $statusResign = 'RESIGN';
+    } else if ($status_resign == 3) {
+      $statusResign = 'BLACKLIST';
+    } else {
+      $statusResign = 'END CONTRACT';
+    }
     
   ?>
   <div class="modal-header">
@@ -59,9 +67,9 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="no_transaksi">Nomor KTP</label>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <div>
-          <label for="plant"><?php echo ': '.$nik_ktp;?></label>
+          <label for="plant"><?php echo ': '.$nik_ktp.' ['.$statusResign.']';?></label>
         </div>
       </div>
     </div>
@@ -76,7 +84,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="no_transaksi"><?php echo $this->lang->line('xin_employees_full_name');?></label>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-6">
         <div>
           <label for="plant"><?php echo ': '.$fullname;?></label>
         </div>
@@ -189,52 +197,9 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 
 
-
-<!-- EXIT CLEARANCE -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" <?php if(is_null($dok_exit_clearance)){?> hidden <?php } ?>>
-    <div class="row">
-      <!-- PENEMPATAN -->
-
-      <input name="dexitc" type="text" value="<?php echo $dok_exit_clearance;?>" hidden>
-
-      <div class="col-sm-4">
-        <div>
-          <label for="penempatan">Exit Clearance</label>
-        </div>
-      </div>
-
-      <div class="col-sm-4">
-        <div>
-          
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="dok_exitc" name="dok_exitc">
-                              <small>Jenis File: .pdf</small>
-                            </fieldset>
-                          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-6">
-        <div>
-          
-                          <div class="form-group">
-                            <fieldset class="form-group">
-                              <input type="file" class="form-control-file" id="dok_exitc" name="dok_exitc">
-                              <small>Jenis File: .pdf</small>
-                            </fieldset>
-                          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-
 <!-- SURAT RESIGN -->
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" <?php if(is_null($dok_resign_letter)){?> hidden <?php } ?>>
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;" <?php if($status_resign!=2){?> hidden <?php } ?>>
     <div class="row">
       <!-- PENEMPATAN -->
 
@@ -266,14 +231,64 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           //kalau blm ada folder path nya
           if (file_exists($nama_file_sresign)) {
             // $pesan = "ada file"; //tampil file skema terbaru
-              echo '<a href="'.base_url().$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+              echo '<a href="'.base_url().$nama_file_sresign.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info" style="height: max-content;padding: 10px;">Lihat Dokumen</button></a>';
           } else {
-              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"> <img id="myImg" style="width: 30px;" src="'.base_url().'uploads/logo/icon_document.png"></a>';
+              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_sresign.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info" style="height: max-content;padding: 10px;">Lihat Dokumen</button></a>';
           }
         }
     ?>
     </div>
   </div>
+
+
+
+<!-- EXIT CLEARANCE -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- PENEMPATAN -->
+
+      <input name="dexitc" type="text" value="<?php echo $dok_exit_clearance;?>" hidden>
+
+      <div class="col-sm-4">
+        <div>
+          <label for="penempatan">Exit Clearance</label>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div>
+          
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="dok_exitc" name="dok_exitc">
+                              <small>Jenis File: .pdf</small>
+                            </fieldset>
+                          </div>
+        </div>
+      </div>
+
+                          <?php 
+
+        if(is_null($dok_exit_clearance)) {
+          $vexc = '';
+        } else {
+
+          $nama_file_exit = $dok_exit_clearance;
+          //kalau blm ada folder path nya
+          if (file_exists($nama_file_exit)) {
+            // $pesan = "ada file"; //tampil file skema terbaru
+              echo '<a href="'.base_url().$nama_file_exit.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info" style="height: max-content;padding: 10px;">Lihat Dokumen</button></a>';
+          } else {
+              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_exit.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info" style="height: max-content;padding: 10px;">Lihat Dokumen</button></a>';
+          }
+        }
+    ?>
+
+    </div>
+  </div>
+
+
 
 
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
