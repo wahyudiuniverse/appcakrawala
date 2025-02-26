@@ -1223,7 +1223,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                       <hr class="border-light m-0">
                       <div class="row">
                         <div class="col-12 my-3">
-                          <button id="button_edit_project" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
+                          <button onclick="edit_project()" id="button_edit_project" class="btn btn-primary ladda-button mx-3" data-style="expand-right">Edit Data</button>
                         </div>
                       </div>
                     <?php } ?>
@@ -2937,7 +2937,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- Tombol Edit Project Jabatan -->
 <script type="text/javascript">
-  document.getElementById("button_edit_project").onclick = function(e) {
+  function edit_project(){
+  // document.getElementById("button_edit_project").onclick = function(e) {
     var nip = "<?php echo $employee_id; ?>";
 
     //inisialisasi pesan
