@@ -326,6 +326,25 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	//get table bpjs
+	public function get_bpjs_table()
+	{
+		$data = [""];
+
+		$this->db->select('*');
+		$this->db->from('mt_tabel_bpjs');
+		// $this->db->limit(2147483647, 1);
+
+		$query = $this->db->get()->result_array();
+		if (empty($query)) {
+			$data = [""];
+		} else {
+			$data = $query;
+		}
+
+		return $data;
+	}
+
 	public function get_detail_saltab($id = null)
 	{
 		$data = array();
@@ -391,7 +410,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$nama_kolom = $this->get_nama_kolom_detail_bupot($result_index[$i]);
 
-			if($nama_kolom != ""){
+			if ($nama_kolom != "") {
 				$data[] = array(
 					$nama_kolom,
 					$result_value[$i],
@@ -454,7 +473,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$records = $this->db->get()->row_array();
 
-		if(empty($records)){
+		if (empty($records)) {
 			return "";
 		} else {
 			return $records['alias'];
@@ -816,15 +835,15 @@ GROUP BY uploadid, periode, project, project_sub;';
 					$this->db->where('ktp_no', $record->nik);
 					$this->db->order_by('user_id', 'DESC');
 					$this->db->limit(1);
-	
+
 					$query = $this->db->get()->row_array();
 
 					// $tes_query = $this->db->last_query();
-	
+
 					if (!empty($query)) {
 						$tanggal_join = $query['date_of_joining'];
 						$nip = $query['employee_id'];
-	
+
 						//verification id
 						$actual_verification_id = "";
 						if ((is_null($query['verification_id'])) || ($query['verification_id'] == "") || ($query['verification_id'] == "0")) {
@@ -832,7 +851,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 						} else {
 							$actual_verification_id = $query['verification_id'];
 						}
-	
+
 						//cek status validation ke database
 						$nik_validation = "0";
 						$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
@@ -841,7 +860,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 						} else {
 							$nik_validation = $nik_validation_query['status'];
 						}
-	
+
 						if (empty($query['marital_status']) || ($query['marital_status'] == "")) {
 							$status_pernikahan = "-";
 						} else if ($query['marital_status'] == "1") {
@@ -873,13 +892,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 						} else {
 							$status_pernikahan = "-";
 						}
-	
+
 						if ((!empty($query['ktp_no'])) || ($query['ktp_no'] != "") || ($query['ktp_no'] != "0")) {
 							$nik = $query['ktp_no'];
 						} else {
 							$nik = $record->nik;
 						}
-	
+
 						if ((!empty($query['first_name'])) || ($query['first_name'] != "") || ($query['first_name'] != "0")) {
 							$nama_lengkap = $query['first_name'];
 						} else {
@@ -1314,10 +1333,10 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 	/*
     |-------------------------------------------------------------------
-    | Insert detail saltab Data
+    | Insert detail BUPOT
     |-------------------------------------------------------------------
     |
-    | @param $data  detail saltab Array Data
+    | @param $data  detail BUPOT Array Data
     |
     */
 	function insert_bupot_detail($data)
@@ -1336,6 +1355,107 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// 	echo "</pre>";
 		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
 		// }
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Insert detail BPJS
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail BUPOT Array Data
+    |
+    */
+	function insert_bpjs_detail($data)
+	{
+		foreach ($data as $record) {
+			$cekdata = $this->cek_bpjs($record['nip']);
+			$nip = $record['nip'];
+
+			if ($cekdata > 0) {
+				$array_data  = [];
+
+				//susun data untuk update
+				if(!is_null($record['nik']) && ($record['nik'] != "") && ($record['nik'] != "0")){
+					$array_data += ['nik' => $record['nik']];
+				}
+				if(!is_null($record['nama_lengkap']) && ($record['nama_lengkap'] != "") && ($record['nama_lengkap'] != "0")){
+					$array_data += ['nama_lengkap' => $record['nama_lengkap']];
+				}
+				if(!is_null($record['project']) && ($record['project'] != "") && ($record['project'] != "0")){
+					$array_data += ['project' => $record['project']];
+				}
+				if(!is_null($record['sub_project']) && ($record['sub_project'] != "") && ($record['sub_project'] != "0")){
+					$array_data += ['sub_project' => $record['sub_project']];
+				}
+				if(!is_null($record['bpjs_kesehatan']) && ($record['bpjs_kesehatan'] != "") && ($record['bpjs_kesehatan'] != "0")){
+					$array_data += ['bpjs_kesehatan' => $record['bpjs_kesehatan']];
+				}
+				if(!is_null($record['bpjs_ketenagakerjaan']) && ($record['bpjs_ketenagakerjaan'] != "") && ($record['bpjs_ketenagakerjaan'] != "0")){
+					$array_data += ['bpjs_ketenagakerjaan' => $record['bpjs_ketenagakerjaan']];
+				}
+				$array_data += ['modify_by' => $record['upload_by']];
+				$array_data += ['modify_by_id' => $record['upload_by_id']];
+				$array_data += ['modify_on' => $record['upload_on']];
+
+				$this->db->where('nip', $nip);
+				$this->db->update('xin_bpjs', $array_data);
+			} else {
+				$this->db->replace("xin_bpjs", $record);
+			}
+		}
+
+		// $this->db->insert_batch("xin_bupot", $data);
+
+		// if (!$this->db->insert_batch("xin_employees_saltab_temp", $data)) {
+		// 	$tes_query = $this->db->last_query();
+		// 	echo "<pre>";
+		// 	print_r($tes_query);
+		// 	echo "</pre>";
+		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
+		// }
+	}
+
+	function cek_bpjs($nip)
+	{
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where('nip', $nip);
+		$records = $this->db->get('xin_bpjs')->result();
+		$totalRecords = $records[0]->allcount;
+
+		return $totalRecords;
+	}
+
+	function get_bpjs_ks($nip)
+	{
+		## Total number of records without filtering
+		$this->db->select('id');
+		$this->db->select('bpjs_kesehatan');
+		$this->db->where('nip', $nip);
+		$this->db->order_by('id','DESC');
+		$records = $this->db->get('xin_bpjs')->row_array();
+
+		if(empty($records)){
+			return "";
+		} else {
+			return $records['bpjs_kesehatan'];
+		}
+	}
+
+	function get_bpjs_tk($nip)
+	{
+		## Total number of records without filtering
+		$this->db->select('id');
+		$this->db->select('bpjs_ketenagakerjaan');
+		$this->db->where('nip', $nip);
+		$this->db->order_by('id','DESC');
+		$records = $this->db->get('xin_bpjs')->row_array();
+
+		if(empty($records)){
+			return "";
+		} else {
+			return $records['bpjs_ketenagakerjaan'];
+		}
 	}
 
 	/*
@@ -1376,6 +1496,11 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->delete('xin_bupot_batch', array('id_batch' => $id));
 		$this->db->delete('xin_bupot', array('batch_bupot_id' => $id));
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
+	}
+
+	function delete_bpjs($id = null)
+	{
+		$this->db->delete('xin_bpjs', array('id' => $id));
 	}
 
 	function delete_batch_saltab_release($id = null)
@@ -1557,8 +1682,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		foreach ($query as $record) {
 			$tanggal_release = $this->get_tanggal_release_bupot($record['batch_bupot_id']);
 
-			if(is_null($tanggal_release) || $tanggal_release == "" || $tanggal_release=="0"){
-
+			if (is_null($tanggal_release) || $tanggal_release == "" || $tanggal_release == "0") {
 			} else {
 				$data[] = array(
 					"batch_bupot_id" => $record['batch_bupot_id'],
@@ -1582,7 +1706,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 					"id_sistem" => $record['id_sistem'],
 					"file_bupot" => $record['file_bupot'],
 					"tanggal_release" => $tanggal_release,
-	
+
 					"periode_bupot" => $this->get_periode_bupot($record['batch_bupot_id']),
 					"release_on" => $this->Xin_model->tgl_indo($tanggal_release),
 					"button_lihat" => '<a href="' . $record['file_bupot'] . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-md btn-outline-success">OPEN BUPOT</button></a>',
@@ -1901,6 +2025,115 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"release_bupot" => $release_bupot,
 				"created_by" => $record->created_by,
 				"created_on" => $record->created_on,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list bpjs
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_bpjs($postData = null)
+	{
+		// $role_resources_ids = $this->Xin_model->user_role_resource();
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		//$nip = $postData['nip'];
+		//$emp_id = $postData['emp_id'];
+		//$contract_id = $postData['contract_id'];
+		$session_id = $postData['session_id'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (nip like '%" . $searchValue .  "%' or nik like '%" . $searchValue . "%' or nama_lengkap like '%" . $searchValue . "%' or project like '%" . $searchValue . "%' or sub_project like '%" . $searchValue . "%' or bpjs_kesehatan like '%" . $searchValue . "%' or bpjs_ketenagakerjaan like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		// $kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
+		// $kondisiDefaultQuery = "1=1";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		// $this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_bpjs')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		// $this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_bpjs')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		// $this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_bpjs')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			$view = '<button id="tesbutton" type="button" onclick="lihatBPJS(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$edit = '<button type="button" onclick="editBPJS(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
+			$delete = '<button type="button" onclick="deleteBPJS(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $delete,
+				"nip" => $record->nip,
+				"nik" => $record->nik,
+				"nama_lengkap" => $record->nama_lengkap,
+				"project" => $record->project,
+				"sub_project" => $record->sub_project,
+				"bpjs_kesehatan" => $record->bpjs_kesehatan,
+				"bpjs_ketenagakerjaan" => $record->bpjs_ketenagakerjaan,
+				"upload_by" => $record->upload_by,
+				"upload_on" => $record->upload_on,
+				"modify_by" => $record->modify_by,
+				"modify_on" => $record->modify_on,
+				// "periode" => $this->Xin_model->tgl_indo($record->periode_cutoff_from) . " s/d " . $this->Xin_model->tgl_indo($record->periode_cutoff_to),
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}

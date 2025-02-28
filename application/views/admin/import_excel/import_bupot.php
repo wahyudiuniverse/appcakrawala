@@ -194,7 +194,7 @@
 </div>
 
 <?php
-if (in_array('511', $role_resources_ids)) {
+if (in_array('1301', $role_resources_ids)) {
 ?>
 
   <div class="card border-blue">

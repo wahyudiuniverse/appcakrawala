@@ -8408,17 +8408,19 @@ class Employees extends MY_Controller
 		}
 
 		//BPJS Kesehatan
-		if ((is_null($result[0]->bpjs_ks_no)) || ($result[0]->bpjs_ks_no == "") || ($result[0]->bpjs_ks_no == "0")) {
+		$nomor_bpjs_kesehatan = $this->Import_model->get_bpjs_ks($id);
+		if ((is_null($nomor_bpjs_kesehatan)) || ($nomor_bpjs_kesehatan == "") || ($nomor_bpjs_kesehatan == "0")) {
 			$bpjs_ks_no = '-tidak ada data-' . $button_update_bpjs_ks;
 		} else {
-			$bpjs_ks_no = $result[0]->bpjs_ks_no . $button_update_bpjs_ks;
+			$bpjs_ks_no = $nomor_bpjs_kesehatan . $button_update_bpjs_ks;
 		}
 
 		//BPJS Ketenagakerjaan
-		if ((is_null($result[0]->bpjs_tk_no)) || ($result[0]->bpjs_tk_no == "") || ($result[0]->bpjs_tk_no == "0")) {
+		$nomor_bpjs_ketenagakerjaan = $this->Import_model->get_bpjs_tk($id);
+		if ((is_null($nomor_bpjs_ketenagakerjaan)) || ($nomor_bpjs_ketenagakerjaan == "") || ($nomor_bpjs_ketenagakerjaan == "0")) {
 			$bpjs_tk_no = '-tidak ada data-' . $button_update_bpjs_tk;
 		} else {
-			$bpjs_tk_no = $result[0]->bpjs_tk_no . $button_update_bpjs_tk;
+			$bpjs_tk_no = $nomor_bpjs_ketenagakerjaan . $button_update_bpjs_tk;
 		}
 
 		if ($result[0]->approve_resignnae == '' || $result[0]->approve_resignnae == null) {

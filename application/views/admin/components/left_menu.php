@@ -1184,10 +1184,42 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
       <ul class="sidenav-menu">
         <?php
-        if (in_array('1301', $role_resources_ids)) {
+        if (in_array('1300', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/import_bupot'); ?>"> Manajemen BUPOT
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+      </ul>
+    </li>
+
+  <?php
+  }
+  ?>
+
+  <!-- BPJS -->
+  <?php
+  if (
+    in_array('1400', $role_resources_ids)
+    || in_array('1401', $role_resources_ids)
+  ) {
+  ?>
+    <li class="<?php if (!empty($arr_mod['saltab_open'])) echo $arr_mod['saltab_open']; ?> sidenav-item">
+      <a href="#" class="sidenav-link sidenav-toggle">
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>BPJS</div>
+      </a>
+
+      <ul class="sidenav-menu">
+        <?php
+        if (in_array('1400', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/import_bpjs'); ?>"> Manajemen BPJS
             </a>
           </li>
         <?php

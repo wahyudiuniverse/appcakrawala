@@ -338,6 +338,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//delete data bpjs
+	public function delete_bpjs()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_bpjs($postData['id']);
+
+		echo json_encode($data);
+	}
+
 	//load datatables list batch bupot
 	public function list_batch_bupot()
 	{
@@ -347,6 +360,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->get_list_batch_bupot($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list bpjs
+	public function list_bpjs()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_bpjs($postData);
 
 		echo json_encode($data);
 	}
@@ -414,6 +440,77 @@ class ImportExcel extends MY_Controller
 		//$writer->setPreCalculateFormulas(false);
 
 		$filename = 'Template BUPOT'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadTemplateBPJS()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('BPJS'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_bpjs_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template BPJS'; // set filename for excel file to be exported
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
 		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
@@ -633,6 +730,125 @@ class ImportExcel extends MY_Controller
 		redirect('admin/Importexcel/view_batch_bupot/' . $id_batch);
 	}
 
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel BPJS
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_bpjs()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$upload_by_id = $this->input->post('upload_by');
+		$upload_by = $this->Import_model->get_nama_karyawan($upload_by_id);
+		$upload_on = date("Y-m-d H:i:s");
+
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+			$array_file = explode('.', $_FILES['file_excel']['name']);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			// $sheet_data = array_map('trim', $sheet_data);
+			$sheet_data = array_filter($sheet_data);
+			$array_data  = [];
+			$array_data_final  = [];
+			$data        = [];
+			$header_tabel_saltab = $sheet_data[0];
+			$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+			// echo '<pre>';
+			// print_r(array_filter($header_tabel_saltab));
+			// echo '</pre>';
+
+			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+			// $header_tabel_saltab = array_filter($header_tabel_saltab);
+			$length_header = count($header_tabel_saltab);
+			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
+
+			//susun array saltab detail dan trim karakter
+			for ($i = 2; $i < count($sheet_data); $i++) {
+				$data += ['upload_by_id' => $upload_by_id];
+				$data += ['upload_by' => $upload_by];
+				$data += ['upload_on' => $upload_on];
+				for ($j = 0; $j < $length_header; $j++) {
+					$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+					$trimmed_nip = trim($trimmed_nip, ' ');
+					$trimmed_nip = trim($trimmed_nip, '\'');
+					$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+
+			if (!empty($array_data)) {
+				$this->Import_model->insert_bpjs_detail($array_data);
+			}
+
+			$tes_query = $this->db->last_query();
+
+			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
+
+			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
+			// echo '<pre>';
+			// print_r($tes_query);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// foreach ($array_data as $record) {
+			// 	echo '<pre>';
+			// 	print_r($record);
+			// 	echo '</pre>';
+			// }
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+		} else {
+			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+			print_r("gagal import");
+			print_r($_FILES['file_excel']['name']);
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		redirect('admin/Importexcel/import_bpjs');
+	}
+
 
 
 	// Validate and add info in database
@@ -672,59 +888,59 @@ class ImportExcel extends MY_Controller
 			if (in_array($_FILES['file']['type'], $csvMimes)) {
 				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
 
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+					//open uploaded csv file with read only mode
+					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
 
-						//skip first line
-						fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
-						// $lastnik = $this->Employees_model->get_maxid();
-						// $formula4 = substr($lastnik,5);
+					//skip first line
+					fgetcsv($csvFile, 0, ';');
+					$d = new DateTime();
+					$datetimestamp = $d->format("YmdHisv");
+					$uploadid = $datetimestamp;
+					// $lastnik = $this->Employees_model->get_maxid();
+					// $formula4 = substr($lastnik,5);
 
-						//parse data from csv file line by line
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-
-							$data = array(
-								// 'uploadid' 					=> $uploadid,
-								'designation_id' 			=> $line[3],
-								'company_id' 				=> $line[4],
-								'project_id' 				=> $line[5],
-								'sub_project_id' 			=> $line[6],
-								'penempatan' 				=> $line[7],
-								'region' 					=> $line[8]
-								// 'project' 						=> $line[6], //project
-
-								// 'createdby' => $employee_id,
-								// 'createdon' => date('Y-m-d h:i:s'),
-							);
-
-							$this->Import_model->update_pkwt_emp($data, $line[1]);
-							// $result = $this->Import_model->addratecardtemp($data);
+					//parse data from csv file line by line
+					while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
 
 
+						$data = array(
+							// 'uploadid' 					=> $uploadid,
+							'designation_id' 			=> $line[3],
+							'company_id' 				=> $line[4],
+							'project_id' 				=> $line[5],
+							'sub_project_id' 			=> $line[6],
+							'penempatan' 				=> $line[7],
+							'region' 					=> $line[8]
+							// 'project' 						=> $line[6], //project
 
-			$config['cacheable']	= true; //boolean, the default is true
-			$config['cachedir']		= './assets/'; //string, the default is application/cache/
-			$config['errorlog']		= './assets/'; //string, the default is application/logs/
-			$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
-			$config['quality']		= true; //boolean, the default is true
-			$config['size']			= '1024'; //interger, the default is 1024
-			$config['black']		= array(224,255,255); // array, default is array(255,255,255)
-			$config['white']		= array(70,130,180); // array, default is array(0,0,0)
-			$this->ciqrcode->initialize($config);
+							// 'createdby' => $employee_id,
+							// 'createdon' => date('Y-m-d h:i:s'),
+						);
+
+						$this->Import_model->update_pkwt_emp($data, $line[1]);
+						// $result = $this->Import_model->addratecardtemp($data);
 
 
 
-						if($line[9]==1){
+						$config['cacheable']	= true; //boolean, the default is true
+						$config['cachedir']		= './assets/'; //string, the default is application/cache/
+						$config['errorlog']		= './assets/'; //string, the default is application/logs/
+						$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
+						$config['quality']		= true; //boolean, the default is true
+						$config['size']			= '1024'; //interger, the default is 1024
+						$config['black']		= array(224, 255, 255); // array, default is array(255,255,255)
+						$config['white']		= array(70, 130, 180); // array, default is array(0,0,0)
+						$this->ciqrcode->initialize($config);
 
-							if($line[4]=='2'){
+
+
+						if ($line[9] == 1) {
+
+							if ($line[4] == '2') {
 								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
 								$spb_hr = 'E-SPB-JKT/SC-HR/';
 								$companyID = '2';
-							}else if ($line[4]=='3'){
+							} else if ($line[4] == '3') {
 								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
 								$spb_hr = 'E-SPB-JKT/KAC-HR/';
 								$companyID = '3';
@@ -737,16 +953,15 @@ class ImportExcel extends MY_Controller
 							$count_pkwt = $this->Xin_model->count_pkwt();
 							$romawi = $this->Xin_model->tgl_pkwt();
 							$unicode = $this->Xin_model->getUniqueCode(20);
-							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
-
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
 						} else {
 
-							if($line[4]=='2'){
+							if ($line[4] == '2') {
 								$pkwt_hr = 'KEMITRAAN/SC-HR/';
 								$spb_hr = 'KEMITRAAN/SC-HR/';
 								$companyID = '2';
-							}else if ($line[4]=='3'){
+							} else if ($line[4] == '3') {
 								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
 								$spb_hr = 'KEMITRAAN/KAC-HR/';
 								$companyID = '3';
@@ -759,28 +974,27 @@ class ImportExcel extends MY_Controller
 							$count_pkwt = $this->Xin_model->count_tkhl();
 							$romawi = $this->Xin_model->tgl_pkwt();
 							$unicode = $this->Xin_model->getUniqueCode(20);
-							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$pkwt_hr.$romawi;
-							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt).'/'.$spb_hr.$romawi;
-
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
 						}
 
 						$docid = date('ymdHisv');
 						$yearmonth = date('Y/m');
 
-								$dirpkwt = $config['imagedir'].$yearmonth.'/';
- 								//kalau blm ada folder path nya
-		                if (!file_exists($dirpkwt)) {
-		                    mkdir($dirpkwt, 0777, true);
-		                }
+						$dirpkwt = $config['imagedir'] . $yearmonth . '/';
+						//kalau blm ada folder path nya
+						if (!file_exists($dirpkwt)) {
+							mkdir($dirpkwt, 0777, true);
+						}
 
-						$image_name= $yearmonth.'/esign_pkwt'.date('ymdHisv').'.png'; //buat name dari qr code sesuai dengan nim
-						$domain = 'https://apps-cakrawala.com/esign/pkwt/'.$docid;
+						$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+						$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $docid;
 						$params['data'] = $domain; //data yang akan di jadikan QR CODE
 						$params['level'] = 'H'; //H=High
 						$params['size'] = 10;
-						$params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+						$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
 						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
-						
+
 
 
 
@@ -854,37 +1068,36 @@ class ImportExcel extends MY_Controller
 						);
 
 
-					$iresult = $this->Pkwt_model->add_pkwt_record($data);
-
-						
-				if ($iresult == TRUE) {
-					$Return['result'] = 'PENGAJUAN PKWT EXPIRED berhasil..';
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_msg');
-				}
-
-				//END INSERT TO PKWT
+						$iresult = $this->Pkwt_model->add_pkwt_record($data);
 
 
-
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-							// $resultdel = $this->Import_model->delete_temp_by_pt();
-							// $formula4++;
+						if ($iresult == TRUE) {
+							$Return['result'] = 'PENGAJUAN PKWT EXPIRED berhasil..';
+						} else {
+							$Return['error'] = $this->lang->line('xin_error_msg');
 						}
-						//close opened csv file
-						fclose($csvFile);
+
+						//END INSERT TO PKWT
 
 
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					
+
+						// $bank_account_data = array(
+						// 'account_title' => 'Rekening',
+						// 'account_number' => $line[18], //NO. REK
+						// 'bank_name' => $line[19],
+						// 'employee_id' => $last_insert_id,
+						// 'created_at' => date('d-m-Y'),
+						// );
+						// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+						// $resultdel = $this->Import_model->delete_temp_by_pt();
+						// $formula4++;
+					}
+					//close opened csv file
+					fclose($csvFile);
+
+
+					$Return['result'] = $this->lang->line('xin_success_attendance_import');
 				} else {
 					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
 				}
@@ -900,7 +1113,6 @@ class ImportExcel extends MY_Controller
 
 		// redirect('admin/Importexcelratecard?upid=' . $uploadid);
 		redirect('admin');
-
 	}
 
 
@@ -3024,11 +3236,35 @@ class ImportExcel extends MY_Controller
 		$data['breadcrumbs'] = 'MANAJEMEN BUPOT';
 		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_esaltab';
+		$data['path_url'] = 'hrpremium_bpjs';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('511', $role_resources_ids)) {
+		if (in_array('1300', $role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/import_excel/import_bupot", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// import bpjs
+	public function import_bpjs()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'MANAJEMEN BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'MANAJEMEN BPJS';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_bpjs';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('1400', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_bpjs", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
