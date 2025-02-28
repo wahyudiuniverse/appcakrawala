@@ -8344,8 +8344,10 @@ class Employees extends MY_Controller
 
 		//role id untuk update nomor bpjs
 		if (in_array('1009', $role_resources_ids)) {
-			$button_update_bpjs_ks = '<button id="button_upload_ktp" onclick="update_bpjs(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS KS</button>';
-			$button_update_bpjs_tk = '<button id="button_upload_kk" onclick="update_bpjs(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS TK</button>';
+			$button_update_bpjs_ks = '';
+			$button_update_bpjs_tk = '';
+			// $button_update_bpjs_ks = '<button id="button_upload_ktp" onclick="update_bpjs(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS KS</button>';
+			// $button_update_bpjs_tk = '<button id="button_upload_kk" onclick="update_bpjs(' . $result[0]->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Update BPJS TK</button>';
 		} else {
 			$button_update_bpjs_ks = '';
 			$button_update_bpjs_tk = '';
