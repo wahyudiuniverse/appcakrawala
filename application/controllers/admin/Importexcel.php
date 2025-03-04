@@ -1353,6 +1353,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//load datatables list detail bupot
+	public function list_detail_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_bupot($postData);
+
+		echo json_encode($data);
+	}
+
 	//load datatables list detail saltab release
 	public function list_detail_saltab_release()
 	{
