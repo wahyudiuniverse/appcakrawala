@@ -1262,6 +1262,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//release batch bupot
+	public function release_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_batch_bupot($postData['id']);
+
+		echo json_encode($data);
+	}
+
 	//delete detail saltab
 	public function delete_detail_saltab()
 	{
@@ -4541,6 +4554,52 @@ class ImportExcel extends MY_Controller
 				'eslip_release_by'		=> $full_name,
 				// 'eslip_release_on'		=> $eslip_release_on_array[1],
 				'eslip_release_on'		=> $eslip_release_on_text,
+			);
+
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data2,
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	//mengambil Json data bupot
+	public function get_data_batch_bupot()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id_batch'        => $postData['id_batch']
+		];
+
+		// get data bupot
+		$data = $this->Import_model->get_data_batch_bupot($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Bupot tidak ditemukan",
+			);
+		} else {
+			$data2 = array(
+				'id_batch'				=> $data['id_batch'],
+				'periode_bupot'			=> $data['periode_bupot'],
+				'project_name'			=> $data['project_name'],
+				'sub_project_name'		=> $data['sub_project_name'],
+				'jumlah_data'			=> $data['jumlah_data'],
+				'created_by'			=> $data['created_by'],
+				'created_on'			=> $this->Xin_model->tgl_indo($data['created_on']),
+				'release_by'			=> $data['release_by'],
+				'release_on'			=> $this->Xin_model->tgl_indo($data['release_on']),
 			);
 
 			$response = array(
