@@ -902,7 +902,7 @@ if (in_array('1301', $role_resources_ids)) {
   document.getElementById("button_release_bupot").onclick = function(e) {
     //-------ambil isi variabel-------
     var id_batch = $("#id_batch_bupot").val();
-    var release_by_id = '<?php echo $session['user_id']; ?>';
+    var release_by_id = '<?php echo $session['employee_id']; ?>';
 
     //-------testing-------
     // alert(tanggal_terbit);
