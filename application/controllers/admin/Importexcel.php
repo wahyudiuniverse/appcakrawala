@@ -1270,7 +1270,7 @@ class ImportExcel extends MY_Controller
 		$postData = $this->input->post();
 
 		// Get data
-		$data = $this->Import_model->release_batch_bupot($postData['id']);
+		$data = $this->Import_model->release_batch_bupot($postData);
 
 		echo json_encode($data);
 	}
