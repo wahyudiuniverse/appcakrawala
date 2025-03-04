@@ -1275,6 +1275,19 @@ class ImportExcel extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//delete detail bupot
+	public function delete_detail_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_bupot($postData['id']);
+
+		echo json_encode($data);
+	}
+
 	//delete detail saltab release
 	public function delete_detail_saltab_release()
 	{
@@ -1516,6 +1529,19 @@ class ImportExcel extends MY_Controller
 
 		// get data 
 		$data = $this->Import_model->get_detail_saltab($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail bupot
+	public function get_detail_bupot()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_bupot($postData['id']);
 		echo json_encode($data);
 		// echo "<pre>";
 		// print_r($data);

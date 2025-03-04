@@ -353,7 +353,7 @@
         detail_bupot.ajax.reload(null, false);
       },
       error: function(xhr, ajaxOptions, thrownError) {
-        var error_text = "Gagal Delete Data Saltab. Status : " + xhr.status;
+        var error_text = "Gagal Delete Data Bupot. Status : " + xhr.status;
         alert(error_text);
         // $('.judul-modal-error').html("ERROR ! ");
         // $('.isi-modal-error').html(xhr.responseText);
