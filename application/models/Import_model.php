@@ -2816,6 +2816,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$esaltab = '<a href="' . $record->file_bupot . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">OPEN BUPOT</button></a>';
+			$delete = "";
 			if (in_array('1303', $role_resources_ids)) {
 				$delete = '<button type="button" onclick="deleteDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 			}
