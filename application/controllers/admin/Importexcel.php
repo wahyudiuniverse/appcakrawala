@@ -675,17 +675,17 @@ class ImportExcel extends MY_Controller
 			for ($i = 2; $i < count($sheet_data); $i++) {
 				$data += ['batch_bupot_id' => $id_batch];
 				for ($j = 0; $j < $length_header; $j++) {
-					if ($header_tabel_saltab[$j] == "nama_penerima_penghasilan") {
-						$trimmed_nip = strtolower($sheet_data[$i][$j]);
-						$trimmed_nip = ucwords($trimmed_nip);
-						$trimmed_nip = trim($trimmed_nip, ' ');
-						$trimmed_nip = trim($trimmed_nip, ' ');
-						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-					} else {
+					// if ($header_tabel_saltab[$j] == "nama_penerima_penghasilan") {
+					// 	$trimmed_nip = strtolower($sheet_data[$i][$j]);
+					// 	$trimmed_nip = ucwords($trimmed_nip);
+					// 	$trimmed_nip = trim($trimmed_nip, ' ');
+					// 	$trimmed_nip = trim($trimmed_nip, ' ');
+					// 	$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					// } else {
 						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
 						$trimmed_nip = trim($trimmed_nip, ' ');
 						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-					}
+					// }
 				}
 				$array_data[] = $data;
 				$data = array();
@@ -695,7 +695,7 @@ class ImportExcel extends MY_Controller
 			$yearmonth = date('Y/m/');
 			$upload_path = 'https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/' . $periode_bupot . '/' . $nama_project_only . '/';
 			foreach ($array_data as $array_data) {
-				$nama_file = $upload_path . $array_data['no_bukti_potong'] . '_' . $array_data['npwp_pemotong'] . '_' . $array_data['nama_penerima_penghasilan'] . '.pdf';
+				$nama_file = $upload_path . $array_data['no_bukti_potong'] . '_' . $array_data['npwp_pemotong'] . '_' . $array_data['id_sistem'] . '.pdf';
 				$array_data['file_bupot'] = $nama_file;
 				$array_data_final[] = $array_data;
 			}
