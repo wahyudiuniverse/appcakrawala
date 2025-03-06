@@ -676,7 +676,8 @@ class ImportExcel extends MY_Controller
 				$data += ['batch_bupot_id' => $id_batch];
 				for ($j = 0; $j < $length_header; $j++) {
 					if ($header_tabel_saltab[$j] == "nama_penerima_penghasilan") {
-						$trimmed_nip = ucwords($sheet_data[$i][$j]);
+						$trimmed_nip = strtolower($sheet_data[$i][$j]);
+						$trimmed_nip = ucwords($trimmed_nip);
 						$trimmed_nip = trim($trimmed_nip, ' ');
 						$trimmed_nip = trim($trimmed_nip, ' ');
 						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
