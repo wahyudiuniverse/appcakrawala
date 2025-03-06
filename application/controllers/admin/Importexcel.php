@@ -1716,6 +1716,130 @@ class ImportExcel extends MY_Controller
 		//$writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
+	public function downloadDetailBupot($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('BUPOT'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_bupot = $this->Import_model->get_bupot_table();
+		$data_batch_bupot = $this->Import_model->get_bupot_batch($id);
+
+		$header_tabel_bupot = array_column($tabel_bupot, 'nama_tabel');
+		$header2_tabel_bupot = array_column($tabel_bupot, 'alias');
+		array_push($header2_tabel_bupot, 'FILE BUPOT');
+		array_push($header_tabel_bupot, 'file_bupot');
+		$length_array = count($header_tabel_bupot);
+		$gabung = implode(",", $header_tabel_bupot);
+
+		$detail_bupot = $this->Import_model->get_bupot_detail_excel($id, $gabung);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_bupot);
+
+		$project = $data_batch_bupot['project_name'];
+		$sub_project = $data_batch_bupot['sub_project_name'];
+		$peride_bupot = $data_batch_bupot['periode_bupot'];
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode BUPOT');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_bupot);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Jumlah Data');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $data_batch_bupot['jumlah_data']);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload On (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_bupot['created_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Upload By');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_bupot['created_by']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Release On (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $data_batch_bupot['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A8', 'Release By');
+		$spreadsheet->getActiveSheet()->setCellValue('B8', ': ' . $data_batch_bupot['release_by']);
+		$spreadsheet->getActiveSheet()->mergeCells("B8:J8");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_bupot,   // The data to set
+				NULL,
+				'A10'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A10:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_bupot);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 11])->setvalueExplicit($detail_bupot[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('10:10')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('10:10')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('10:10')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'BUPOT - ' . $data_batch_bupot['periode_bupot'] . " - " . $data_batch_bupot['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
 	public function downloadDetailSaltabRelease($id = null)
 	{
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet

@@ -537,6 +537,38 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	//get table bupot untuk download excel
+	public function get_bupot_detail_excel($id, $parameter)
+	{
+		$data = array();
+
+		$this->db->select($parameter);
+		$this->db->from('xin_bupot');
+		$this->db->where('batch_bupot_id', $id);
+
+		$records = $this->db->get()->result_array();
+
+		$data = array();
+
+		foreach ($records as $row) {
+			$new_row = array_values($row);
+			array_push($data, $new_row);
+		}
+
+		//$tabel_saltab = $this->Import_model->get_saltab_table();
+		//$paremeter = implode(",", $tabel_saltab);
+		// $jumlah_data = count($tabel_saltab);
+
+		// foreach ($records as $record) {
+
+		// 	$data[] = array(
+
+		// 	);
+		// }
+
+		return $data;
+	}
+
 	//get table saltab release untuk download excel
 	public function get_saltab_temp_detail_excel_release($id, $parameter)
 	{
@@ -1375,22 +1407,22 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$array_data  = [];
 
 				//susun data untuk update
-				if(!is_null($record['nik']) && ($record['nik'] != "") && ($record['nik'] != "0")){
+				if (!is_null($record['nik']) && ($record['nik'] != "") && ($record['nik'] != "0")) {
 					$array_data += ['nik' => $record['nik']];
 				}
-				if(!is_null($record['nama_lengkap']) && ($record['nama_lengkap'] != "") && ($record['nama_lengkap'] != "0")){
+				if (!is_null($record['nama_lengkap']) && ($record['nama_lengkap'] != "") && ($record['nama_lengkap'] != "0")) {
 					$array_data += ['nama_lengkap' => $record['nama_lengkap']];
 				}
-				if(!is_null($record['project']) && ($record['project'] != "") && ($record['project'] != "0")){
+				if (!is_null($record['project']) && ($record['project'] != "") && ($record['project'] != "0")) {
 					$array_data += ['project' => $record['project']];
 				}
-				if(!is_null($record['sub_project']) && ($record['sub_project'] != "") && ($record['sub_project'] != "0")){
+				if (!is_null($record['sub_project']) && ($record['sub_project'] != "") && ($record['sub_project'] != "0")) {
 					$array_data += ['sub_project' => $record['sub_project']];
 				}
-				if(!is_null($record['bpjs_kesehatan']) && ($record['bpjs_kesehatan'] != "") && ($record['bpjs_kesehatan'] != "0")){
+				if (!is_null($record['bpjs_kesehatan']) && ($record['bpjs_kesehatan'] != "") && ($record['bpjs_kesehatan'] != "0")) {
 					$array_data += ['bpjs_kesehatan' => $record['bpjs_kesehatan']];
 				}
-				if(!is_null($record['bpjs_ketenagakerjaan']) && ($record['bpjs_ketenagakerjaan'] != "") && ($record['bpjs_ketenagakerjaan'] != "0")){
+				if (!is_null($record['bpjs_ketenagakerjaan']) && ($record['bpjs_ketenagakerjaan'] != "") && ($record['bpjs_ketenagakerjaan'] != "0")) {
 					$array_data += ['bpjs_ketenagakerjaan' => $record['bpjs_ketenagakerjaan']];
 				}
 				$array_data += ['modify_by' => $record['upload_by']];
@@ -1432,10 +1464,10 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->select('id');
 		$this->db->select('bpjs_kesehatan');
 		$this->db->where('nip', $nip);
-		$this->db->order_by('id','DESC');
+		$this->db->order_by('id', 'DESC');
 		$records = $this->db->get('xin_bpjs')->row_array();
 
-		if(empty($records)){
+		if (empty($records)) {
 			return "";
 		} else {
 			return $records['bpjs_kesehatan'];
@@ -1448,10 +1480,10 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->select('id');
 		$this->db->select('bpjs_ketenagakerjaan');
 		$this->db->where('nip', $nip);
-		$this->db->order_by('id','DESC');
+		$this->db->order_by('id', 'DESC');
 		$records = $this->db->get('xin_bpjs')->row_array();
 
-		if(empty($records)){
+		if (empty($records)) {
 			return "";
 		} else {
 			return $records['bpjs_ketenagakerjaan'];
@@ -2011,12 +2043,16 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$download = '<br><button type="button" onclick="downloadBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
-			$delete = '<br><button type="button" onclick="deleteBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			$delete = "";
+			if (in_array('1303', $role_resources_ids)) {
+				$delete = '<br><button type="button" onclick="deleteBatchBupot(' . $record->id_batch . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			}
+
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
-				"aksi" => $view . " " . $delete,
+				"aksi" => $view . " " . $download . " " . $delete,
 				"periode_bupot" => $record->periode_bupot,
 				// "periode" => $this->Xin_model->tgl_indo($record->periode_cutoff_from) . " s/d " . $this->Xin_model->tgl_indo($record->periode_cutoff_to),
 				"project_name" => $record->project_name,
@@ -2716,6 +2752,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	*/
 	function get_list_detail_bupot($postData = null)
 	{
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		$response = array();
 
@@ -2779,7 +2816,9 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$esaltab = '<a href="' . $record->file_bupot . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">OPEN BUPOT</button></a>';
-			$delete = '<button type="button" onclick="deleteDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			if (in_array('1303', $role_resources_ids)) {
+				$delete = '<button type="button" onclick="deleteDetailBupot(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			}
 
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
