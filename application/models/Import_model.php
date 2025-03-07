@@ -738,6 +738,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$contract_start,
 				$contract_end,
 				round($record->gaji_umk),
+				round($record->gaji_umk_baru),
 				round($record->total_thp),
 				round($bpjs_ketenagakerjaan),
 				round($bpjs_kesehatan),

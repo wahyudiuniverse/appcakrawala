@@ -58,7 +58,7 @@
 	</script>
 <?php } ?>
 <!-- Editor-->
-<script type="text/javascript" src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/Trumbowyg/dist/trumbowyg.min.js"></script>
+<!-- <script type="text/javascript" src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/Trumbowyg/dist/trumbowyg.min.js"></script> -->
 <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/select2/select2.js"></script>
 <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>
 <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/assets/vendor/libs/validate/validate.js"></script>
@@ -226,20 +226,20 @@
 <?php if ($this->router->fetch_class() == 'dashboard') { ?>
 	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_payroll.js"></script>
 	<?php if ($user[0]->user_role_id == 1) : ?>
-		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/employee_department.js"></script>
+		<!-- <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/employee_department.js"></script>
 		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/employee_designation.js"></script>
 		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_projects.js"></script>
-		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_expense_deposit.js"></script>
+		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_expense_deposit.js"></script> -->
 	<?php else : ?>
 		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_projects.js"></script>
 		<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_tasks.js"></script>
 	<?php endif; ?>
 <?php } ?>
 <?php if ($this->router->fetch_class() == 'employees') { ?>
-	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_roles.js"></script>
+	<!-- <script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_roles.js"></script>
 	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_office_shifts.js"></script>
 	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/employee_company.js"></script>
-	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/employee_location.js"></script>
+	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/employee_location.js"></script> -->
 <?php } ?>
 <?php if ($this->router->fetch_method() == 'accounting_dashboard') { ?>
 	<script src="<?php echo base_url(); ?>skin/hrpremium_vendor/hrpremium_scripts/hrpremium_charts/hrpremium_expense_deposit.js"></script>
