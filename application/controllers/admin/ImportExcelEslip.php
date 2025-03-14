@@ -3633,34 +3633,16 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>NIP</td>
-								<td colspan="2">: '.$nip.'</td>
+								<td style="width:25%">NIP</td>
+								<td style="width:75%" colspan="2">: '.$nip.'</td>
 							</tr>
 						</table>
 					</td>
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>Project</td>
-								<td colspan="2">: '.strtoupper($project).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Nama</td>
-								<td colspan="2">: '.strtoupper($namalengkap).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Area</td>
-								<td colspan="2">: '.strtoupper($area).'</td>
+								<td style="width:25%">Project</td>
+								<td style="width:75%" colspan="2">: '.strtoupper($project).'</td>
 							</tr>
 						</table>
 					</td>
@@ -3669,16 +3651,34 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>Periode</td>
-								<td colspan="2">: '.strtoupper($periode).'</td>
+								<td style="width:25%">Nama</td>
+								<td style="width:75%" colspan="2">: '.strtoupper($namalengkap).'</td>
 							</tr>
 						</table>
 					</td>
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>Hari Kerja</td>
-								<td colspan="2">: '.$hari_kerja.'</td>
+								<td style="width:25%">Area</td>
+								<td style="width:75%" colspan="2">: '.strtoupper($area).'</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td style="width:25%">Periode</td>
+								<td style="width:75%" colspan="2">: '.strtoupper($periode).'</td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td style="width:25%">Hari Kerja</td>
+								<td style="width:75%" colspan="2">: '.$hari_kerja.'</td>
 							</tr>
 						</table>
 					</td>
@@ -3688,7 +3688,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>Posisi/Jabatan</td>
+								<td style="width:25%">Posisi/Jabatan</td>
 								<td colspan="2">: '.$jabatan.'</td>
 							</tr>
 						</table>
@@ -3697,13 +3697,11 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td>Gaji Pokok</td>
+								<td style="width:25%">Gaji Pokok</td>
 								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_umk).';-</td>
 							</tr>
 						</table>
 					</td>
-
-
 				</tr>
 
 			</table>
