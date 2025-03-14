@@ -214,7 +214,11 @@ class Xin_model extends CI_Model
 			return $arr;
 		} else if ($mClass == 'importexcel' && $mMethod == 'konfig_download_esaltab') {
 			$arr['konfig_download_esaltab_active'] = 'active';
-			$arr['saltab_open'] = 'open';
+			$arr['saltab_open'] = 'open';	
+			return $arr;
+		} else if ($mClass == 'importexcel' && $mMethod == 'import_bpjs') {
+			$arr['manage_bpjs_active'] = 'active';
+			$arr['bpjs_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'company' && $mMethod == 'official_documents') {
 			$arr['official_documents_active'] = 'active';
@@ -410,10 +414,6 @@ class Xin_model extends CI_Model
 		} else if ($mClass == 'reports' && $mMethod == 'manage_client') {
 			$arr['man_client_active'] = 'active';
 			$arr['emp_manage_open'] = 'open';
-			return $arr;
-		} else if ($mClass == 'importexcel' && $mMethod == 'bpjs') {
-			$arr['bpjs_employees_active'] = 'active';
-			$arr['bpjs_employees_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'reports' && $mMethod == 'saltab_bpjs') {
 			$arr['bpjs_employees_active'] = 'active';

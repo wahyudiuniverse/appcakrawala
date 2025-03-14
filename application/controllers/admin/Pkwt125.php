@@ -81,6 +81,14 @@ class Pkwt125 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+		// SPG
+		if ($pkwt[0]->jabatan=='803' || $pkwt[0]->jabatan=='804' || $pkwt[0]->jabatan=='806') {
+			redirect('admin/pkwt125gfta/view/'.$pkwt[0]->uniqueid);
+
+		// TL
+		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
@@ -1465,7 +1473,6 @@ class Pkwt125 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

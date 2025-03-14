@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt366 extends MY_Controller 
+class Pkwt_default extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -88,15 +88,15 @@ class Pkwt366 extends MY_Controller
 		if($pkwt[0]->approve_hrd != null){
 
 
-					$logo_cover = 'tcpdf_logo_sc.png';
-					$header_namae = 'PT. Siprama Cakrawala';
+					$logo_cover = 'tcpdf_logo_kac.png';
+					$header_namae = 'PT. Krista Aulia Cakrawala';
 					
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
 				$pdf->SetAuthor('HRCakrawala');
 				// $baseurl=base_url();
 
-				$header_namae = 'PT. Siprama Cakrawala';
+				$header_namae = 'PT. Krista Aulia Cakrawala';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
@@ -122,7 +122,7 @@ class Pkwt366 extends MY_Controller
 				$pdf->setImageScale(10);
 
 				$pdf->SetAuthor('HRCakrawala');
-				$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
+				$pdf->SetTitle('PT. Krista Aulia Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
 				$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
 				$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
 				// set font
@@ -295,7 +295,7 @@ class Pkwt366 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Dalam hal ini bertindak untuk dan atas nama serta sah mewakili perseroan terbatas <b>PT. Siprama Cakrawala</b>, suatu Perseroan Terbatas yang bergerak dibidang Penyediaan Jasa Tenaga Kerja dan Konsultan didirikan menurut hukum Indonesa, selanjutnya disebut sebagai <b>PIHAK PERTAMA ----------------------------------------------</b></td>
+								<td>Dalam hal ini bertindak untuk dan atas nama serta sah mewakili perseroan terbatas <b>PT. Krista Aulia Cakrawala</b>, suatu Perseroan Terbatas yang bergerak dibidang Penyediaan Jasa Tenaga Kerja dan Konsultan didirikan menurut hukum Indonesa, selanjutnya disebut sebagai <b>PIHAK PERTAMA ----------------------------------------------</b></td>
 							</tr>			
 				</table>
 				<br>
@@ -820,7 +820,7 @@ class Pkwt366 extends MY_Controller
 				<br>
 							<tr>
 								<td>m.</td>
-								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Siprama Cakrawala.</td>
+								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Krista Aulia Cakrawala.</td>
 							</tr>
 
 				</table>
@@ -871,7 +871,7 @@ class Pkwt366 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Krista Aulia Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
 							</tr>
 				</table>
 				<br>
@@ -1141,7 +1141,7 @@ class Pkwt366 extends MY_Controller
 				<br>
 							<tr>
 								<td>6.</td>
-								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
+								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT. Krista Aulia Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1298,7 +1298,7 @@ class Pkwt366 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 					<tr>
-						<td>Selanjutnya dengan ini saya menyatakan, bahwa saya menerima, dan menyetujui serta melaksanakan ketentuan-ketentuan/tata tertib kerja PT. SIPRAMA CAKRAWALA (selanjutnya disebut “Perusahaan”) yang mengacu kepada Peraturan Perusahaan PT. SIPRAMA CAKRAWALA.</td>
+						<td>Selanjutnya dengan ini saya menyatakan, bahwa saya menerima, dan menyetujui serta melaksanakan ketentuan-ketentuan/tata tertib kerja PT. KRISTA AULIA CAKRAWALA (selanjutnya disebut “Perusahaan”) yang mengacu kepada Peraturan Perusahaan PT. KRISTA AULIA CAKRAWALA.</td>
 					</tr>			
 				</table>
 				<br>
@@ -1438,13 +1438,6 @@ class Pkwt366 extends MY_Controller
 								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
 								<td colspan="0"></td>
 							</tr>
-
-							<tr>
-								<td >13.</td>
-								<td colspan="20">Karyawan mengambil stok barang di distributor/stockis untuk penjualan, jika barang tidak tersedia di distributor/stokis sehingga menyebabkan karyawan tidak dapat melakukan penjualan, maka hari tanpa penjualan tidak terhitung HK (Hari Kerja).</td>
-								<td colspan="0"></td>
-							</tr>
-
 
 				</table>
 
@@ -1613,7 +1606,7 @@ class Pkwt366 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1677,7 +1670,7 @@ class Pkwt366 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1792,7 +1785,6 @@ class Pkwt366 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
-				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();

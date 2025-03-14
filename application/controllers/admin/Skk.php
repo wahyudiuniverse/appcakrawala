@@ -581,7 +581,7 @@ class Skk extends MY_Controller {
 
 
 
-			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '21300004' && $nip != '21306162' && $nip != '21500027' && $nip != '21309963' && $blacklist != 3){
+			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '22529370' && $nip != '21306162' && $nip != '21500027' && $nip != '21309963' && $blacklist != 3){
 
 			$tbl_2 = '
 

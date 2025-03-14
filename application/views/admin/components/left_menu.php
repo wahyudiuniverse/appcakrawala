@@ -1208,7 +1208,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
     || in_array('1401', $role_resources_ids)
   ) {
   ?>
-    <li class="<?php if (!empty($arr_mod['saltab_open'])) echo $arr_mod['saltab_open']; ?> sidenav-item">
+    <li class="<?php if (!empty($arr_mod['bpjs_open'])) echo $arr_mod['bpjs_open']; ?> sidenav-item">
       <a href="#" class="sidenav-link sidenav-toggle">
         <i class="sidenav-icon ion ion-logo-buffer"></i>
         <div>BPJS</div>
@@ -1218,7 +1218,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         <?php
         if (in_array('1400', $role_resources_ids)) {
         ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+          <li class="sidenav-item <?php if (!empty($arr_mod['manage_bpjs_active'])) echo $arr_mod['manage_bpjs_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/import_bpjs'); ?>"> Manajemen BPJS
             </a>
           </li>

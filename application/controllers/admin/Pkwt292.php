@@ -485,6 +485,87 @@ class Pkwt292 extends MY_Controller
 								<td colspan="0">-</td>
 								<td colspan="20">Iuran <b>BPJS Kesehatan</b>.</td>
 							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">Berikut perhitungan gaji yang diterima oleh karyawan :</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0"></td>
+								<td colspan="20">
+								<img src="'.base_url().'assets/pasal_iii_pencapaian_omset.png" alt="Trulli" width="285" height="130"></td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset diatas target (1.000.000) maka motoris diberikan, pemberian gaji 100% Gaji Pokok UMK & 100% Full Allowance</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 95% - 99% maka motoris mendapatkan 100% Gaji Pokok UMK ditambah 70% Allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 90% - 95% maka motoris mendapatkan 100% Gaji Pokok UMK ditambah 50% Allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 85% - 90% maka motoris mendapatkan 75% Gaji Pokok UMK ditambah 50% Allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 80% - 85% maka motoris mendapatkan 75% Gaji Pokok UMK tanpa pemberian allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset di bawah 80% maka motoris mendapatkan 50% Gaji Pokok UMK tanpa pemberian allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Allowance terdiri atas :</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">30.000/Hari tunjangan Transport & Sewa Motor</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">10.000/Hari tunjangan Makan</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">50.000/Bulan tunjangan Pulsa</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Perhitungan gaji di totalkan omset sebulan sesuai cut off 16 ke 15, lalu diambil rata-ratanya sesuai dengan hari kerja target periode tersebut.</td>
+							</tr>
+
 				</table>
 				<br>
 				<br>
@@ -518,10 +599,6 @@ class Pkwt292 extends MY_Controller
 
 				</table>
 		
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1214,38 +1291,12 @@ class Pkwt292 extends MY_Controller
 				$tbl_spb = '
 
 				<br>			
-				<br>
 				<br>			
 				<br>
 				<br>			
 				<br>
 				<br>			
 				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1796,10 +1847,6 @@ class Pkwt292 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
-
-			
-				// $fname = strtolower($fname);
-				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');

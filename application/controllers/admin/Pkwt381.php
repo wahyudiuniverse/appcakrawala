@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt366 extends MY_Controller 
+class Pkwt381 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1439,13 +1439,6 @@ class Pkwt366 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
-							<tr>
-								<td >13.</td>
-								<td colspan="20">Karyawan mengambil stok barang di distributor/stockis untuk penjualan, jika barang tidak tersedia di distributor/stokis sehingga menyebabkan karyawan tidak dapat melakukan penjualan, maka hari tanpa penjualan tidak terhitung HK (Hari Kerja).</td>
-								<td colspan="0"></td>
-							</tr>
-
-
 				</table>
 
 				<br><br>
@@ -1613,7 +1606,7 @@ class Pkwt366 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1677,7 +1670,7 @@ class Pkwt366 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1792,7 +1785,6 @@ class Pkwt366 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
-				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();

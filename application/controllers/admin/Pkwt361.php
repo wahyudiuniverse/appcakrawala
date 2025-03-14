@@ -245,6 +245,7 @@ class Pkwt361 extends MY_Controller
 					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
 					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
+					$allowance_transrent =	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
@@ -484,6 +485,87 @@ class Pkwt361 extends MY_Controller
 								<td colspan="0">-</td>
 								<td colspan="20">Iuran <b>BPJS Kesehatan</b>.</td>
 							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">Berikut perhitungan gaji yang diterima oleh karyawan :</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0"></td>
+								<td colspan="20">
+								<img src="'.base_url().'assets/pasal_iii_pencapaian_omset.png" alt="Trulli" width="285" height="130"></td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset diatas target (1.000.000) maka motoris diberikan, pemberian gaji 100% Gaji Pokok UMK & 100% Full Allowance</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 95% - 99% maka motoris mendapatkan 100% Gaji Pokok UMK ditambah 70% Allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 90% - 95% maka motoris mendapatkan 100% Gaji Pokok UMK ditambah 50% Allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 85% - 90% maka motoris mendapatkan 75% Gaji Pokok UMK ditambah 50% Allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset antara 80% - 85% maka motoris mendapatkan 75% Gaji Pokok UMK tanpa pemberian allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Jika omset di bawah 80% maka motoris mendapatkan 50% Gaji Pokok UMK tanpa pemberian allowance.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Allowance terdiri atas :</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">30.000/Hari tunjangan Transport & Sewa Motor</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">10.000/Hari tunjangan Makan</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td ></td>
+								<td colspan="0">-</td>
+								<td colspan="20">50.000/Bulan tunjangan Pulsa</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Perhitungan gaji di totalkan omset sebulan sesuai cut off 16 ke 15, lalu diambil rata-ratanya sesuai dengan hari kerja target periode tersebut.</td>
+							</tr>
+
 				</table>
 				<br>
 				<br>
@@ -517,10 +599,6 @@ class Pkwt361 extends MY_Controller
 
 				</table>
 		
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1213,38 +1291,12 @@ class Pkwt361 extends MY_Controller
 				$tbl_spb = '
 
 				<br>			
-				<br>
 				<br>			
 				<br>
 				<br>			
 				<br>
 				<br>			
 				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1671,6 +1723,16 @@ class Pkwt361 extends MY_Controller
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
 							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+						</tr>';
+				}
+
+
+				if($allowance_transrent!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Transport-Rental</td>
+							<td colspan="3"> : '.$allowance_transrent.',- Per Bulan</td>
 						</tr>';
 				}
 
