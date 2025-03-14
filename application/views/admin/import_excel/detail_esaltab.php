@@ -330,7 +330,8 @@
         // var response2 = JSON.parse(response);
         // Add options
         $(response).each(function(index, data) {
-          html_text = html_text + "<tr><td>" + data[0] + "</td><td><input type='text' class='form-control' readonly placeholder='Periode Saltab To' value='" + data[1] + "'></td></tr>";
+          html_text = html_text + "<tr><td>" + data[0] + "</td><td>" + data[1] + "</td></tr>";
+          // html_text = html_text + "<tr><td>" + data[0] + "</td><td><input type='text' class='form-control' readonly placeholder='Periode Saltab To' value='" + data[1] + "'></td></tr>";
           // html_text = html_text + data;
         });
         // html_text = html_text + response;
