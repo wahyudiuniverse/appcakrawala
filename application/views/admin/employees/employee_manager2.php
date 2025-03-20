@@ -48,7 +48,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_nik_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
                         <button id="button_unverify_nik_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -61,7 +61,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_kk_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
                         <button id="button_unverify_kk_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -74,7 +74,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_nama_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
                         <button id="button_unverify_nama_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -96,7 +96,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_bank_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
                         <button id="button_unverify_bank_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -109,7 +109,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_norek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
                         <button id="button_unverify_norek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
@@ -122,7 +122,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                     </td>
                     <td style='width:30%'>
                       <button id="button_verify_pemilik_rek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
-                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22")) { ?>
+                      <?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
                         <button id="button_unverify_pemilik_rek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
                       <?php } ?>
                     </td>
