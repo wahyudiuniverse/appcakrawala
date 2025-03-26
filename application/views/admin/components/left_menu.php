@@ -1263,6 +1263,17 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
 
         <?php
+        if (in_array('128', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['importpkwt_active'])) echo $arr_mod['importpkwt_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/importexcel/importpkwt'); ?>"> Import PKWT
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
         if (in_array('232', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['ratecard_active'])) echo $arr_mod['ratecard_active']; ?>">

@@ -316,7 +316,7 @@ class ImportExcel extends MY_Controller
 		// $data['all_taxes'] = $this->Tax_model->get_all_taxes();
 		$data['path_url'] = 'hrpremium_import_pkwt';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('232', $role_resources_ids)) {
+		if (in_array('128', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/import_excel/import_pkwt", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {

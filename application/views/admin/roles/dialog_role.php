@@ -1296,7 +1296,7 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 						{
 							id: "",
 							class: "role-checkbox-modal custom-control-input",
-							text: "<?php echo $this->lang->line('xin_import_excl_pkwt'); ?>",
+							text: "Import PKWT",
 							add_info: "",
 							value: "128",
 							check: "<?php if (isset($_GET['role_id'])) {

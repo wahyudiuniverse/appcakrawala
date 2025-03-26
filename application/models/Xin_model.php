@@ -467,6 +467,10 @@ class Xin_model extends CI_Model
 			$arr['employees_active'] = 'active';
 			$arr['importexcel_open'] = 'open';
 			return $arr;
+		} else if ($mClass == 'importexcel' && $mMethod == 'importpkwt') {
+			$arr['importpkwt_active'] = 'active';
+			$arr['importexcel_open'] = 'open';
+			return $arr;
 		} else if ($mClass == 'payroll' && $mMethod == 'payslip') {
 			$arr['pay_generate_active'] = 'active';
 			$arr['payrl_open'] = 'open';
