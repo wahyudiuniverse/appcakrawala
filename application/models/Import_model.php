@@ -1066,6 +1066,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($record->pemilik_rek), " "),
 				trim(strtoupper($record->status_hold), " "),
 				"",
+				"https://apps-cakrawala.com/admin/importexceleslip/eslip_final/" . $record->nip . "/" . $record->secid,
 			);
 		}
 

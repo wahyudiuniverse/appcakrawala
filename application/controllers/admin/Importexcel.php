@@ -2134,6 +2134,7 @@ class ImportExcel extends MY_Controller
 			'PEMILIK REKENING',
 			'STATUS HOLD',
 			'STATUS VERIFIKASI',
+			'LINK ESLIP',
 		);
 
 		$length_array = count($header2_tabel_saltab);
