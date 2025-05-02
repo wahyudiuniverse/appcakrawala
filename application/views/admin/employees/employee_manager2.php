@@ -4217,7 +4217,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/Importexceleslip/eslip_final/' + nip + '/' + secid;
-    var html_text = '<object id="lihat_eslip" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
@@ -4238,7 +4238,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
-    var html_text = '<object id="lihat_sk" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
@@ -4259,7 +4259,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(sub_project);
 
     var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
-    var html_text = '<object id="dokumen_object" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + 'https://apps-cakrawala.com/admin/pkwt1/view/bYqHsn9BkHeoaumXMggr' + '&embedded=true"></embed>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + link_eslip + '&embedded=true"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
@@ -4288,7 +4288,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(id);
 
     var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
-    var html_text = '<object id="open_kontrak" height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
@@ -5478,14 +5478,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
           // var html_text = "";
           // html_text = html_text + '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
-          var html_text = '<object id="lihat_kontrak" height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
+          var html_text = '<object height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
 
           $('.isi-modal').html(html_text);
-          $('#button_save_pin').attr("hidden", true);
+          // $('#button_save_pin').attr("hidden", true);
         } else {
           html_text = res['pesan'];
           $('.isi-modal').html(html_text);
-          $('#button_save_pin').attr("hidden", true);
+          // $('#button_save_pin').attr("hidden", true);
         }
       },
       error: function(xhr, status, error) {
@@ -5543,7 +5543,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           }
 
           // var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
-          var html_text = '<object id="lihat_addendum" height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
+          var html_text = '<object height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);
