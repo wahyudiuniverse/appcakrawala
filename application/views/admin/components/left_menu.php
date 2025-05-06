@@ -1090,6 +1090,65 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
+
+  <!-- BUDGET -->
+  <?php
+  // if (
+  // in_array('1600', $role_resources_ids)
+  // || in_array('1601', $role_resources_ids)
+  // || in_array('1602', $role_resources_ids)
+  // || in_array('1603', $role_resources_ids)
+  // ) {
+  ?>
+  <li class="<?php if (!empty($arr_mod['saltab_open'])) echo $arr_mod['saltab_open']; ?> sidenav-item">
+    <a href="#" class="sidenav-link sidenav-toggle">
+      <i class="sidenav-icon ion ion-logo-buffer"></i>
+      <div>BUDGETTING</div>
+    </a>
+
+    <ul class="sidenav-menu">
+      <?php
+      // if (in_array('1601', $role_resources_ids)) {
+      ?>
+      <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+        <a class="sidenav-link" href="<?php echo site_url('admin/budget/import_budget'); ?>"> Target Budgetting
+        </a>
+      </li>
+      <?php
+      // }
+      ?>
+
+      <?php
+      // if (in_array('1602', $role_resources_ids)) {
+      ?>
+      <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+        <a class="sidenav-link" href="<?php echo site_url('admin/budget/actual'); ?>"> Actual Budgetting
+        </a>
+      </li>
+      <?php
+      // }
+      ?>
+
+      <?php
+      // if (in_array('1603', $role_resources_ids)) {
+      ?>
+      <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
+        <a class="sidenav-link" href="<?php echo site_url('admin/budget/report'); ?>"> Report Budgetting
+        </a>
+      </li>
+      <?php
+      // }
+      ?>
+
+    </ul>
+  </li>
+
+  <?php
+  // }
+  ?>
+
+
+
   <!-- Saltab -->
   <?php
   if (
