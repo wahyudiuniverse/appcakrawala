@@ -109,16 +109,24 @@ class Budget extends MY_Controller
         if (empty($session)) {
             redirect('admin/');
         }
-        // Ambil dropdown dari gabungan 2 tabel (distinct)
-        $tahun_list = $this->db->query("SELECT DISTINCT tahun FROM mt_budget_target UNION SELECT DISTINCT tahun FROM mt_budget_actual")->result();
-        $pt_list    = $this->db->query("SELECT DISTINCT pt FROM mt_budget_target UNION SELECT DISTINCT pt FROM mt_budget_actual")->result();
-        $area_list  = $this->db->query("SELECT DISTINCT area FROM mt_budget_target UNION SELECT DISTINCT area FROM mt_budget_actual")->result();
 
-        $data = [
-            'tahun_list' => $tahun_list,
-            'pt_list'    => $pt_list,
-            'area_list'  => $area_list
-        ];
+        // $data = $this->Budget_model->get_dropdown_data();
+
+        $this->load->model('Budget_model');
+        $data['tahun_list'] = $this->Budget_model->get_unique('tahun');
+        $data['pt_list'] = $this->Budget_model->get_unique('pt');
+        $data['area_list'] = $this->Budget_model->get_unique('area');
+
+        // Ambil dropdown dari gabungan 2 tabel (distinct)
+        // $tahun_list = $this->db->query("SELECT DISTINCT tahun FROM mt_budget_target UNION SELECT DISTINCT tahun FROM mt_budget_actual")->result();
+        // $pt_list    = $this->db->query("SELECT DISTINCT pt FROM mt_budget_target UNION SELECT DISTINCT pt FROM mt_budget_actual")->result();
+        // $area_list  = $this->db->query("SELECT DISTINCT area FROM mt_budget_target UNION SELECT DISTINCT area FROM mt_budget_actual")->result();
+
+        // $data = [
+        //     'tahun_list' => $tahun_list,
+        //     'pt_list'    => $pt_list,
+        //     'area_list'  => $area_list
+        // ];
 
         // $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
         $data['title'] = 'MT Budget  | ' . $this->Xin_model->site_title();
@@ -135,6 +143,9 @@ class Budget extends MY_Controller
             redirect('admin/dashboard');
         }
     }
+
+
+
 
 
     public function get_budget_report()
@@ -159,13 +170,261 @@ class Budget extends MY_Controller
         echo json_encode($result);
     }
 
+    // public function get_budget_data()
+    // {
+    //     if (!$this->input->is_ajax_request()) {
+    //         show_error('No direct script access allowed');
+    //     }
+
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+
+    //     if (!$tahun || !$pt || !$area) {
+    //         echo json_encode([]);
+    //         return;
+    //     }
+
+    //     $query = $this->db->query("
+    //         SELECT 
+    //             t.id,   
+    //             t.tahun,
+    //             t.pt,
+    //             t.area,
+    //             t.bulan,
+    //             t.target,
+    //             IFNULL(a.actual, 0) AS actual
+    //         FROM mt_budget_target t
+    //         LEFT JOIN mt_budget_actual a ON 
+    //             t.tahun = a.tahun AND 
+    //             t.pt = a.pt AND 
+    //             t.area = a.area AND 
+    //             t.bulan = a.bulan
+    //         WHERE 
+    //             t.tahun = ? AND 
+    //             t.pt = ? AND 
+    //             t.area = ?
+    //         ORDER BY t.bulan ASC
+    //     ", [$tahun, $pt, $area]);
+
+    //     echo json_encode($query->result());
+    // }
+
+
+    // Ambil data untuk datatable via AJAX
+    // public function get_budget_data()
+    // {
+    //     // Cek CSRF
+    //     if (!$this->input->is_ajax_request()) {
+    //         show_error('No direct script access allowed');
+    //     }
+
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+
+    //     if (!$tahun || !$pt || !$area) {
+    //         echo json_encode([]);
+    //         return;
+    //     }
+
+    //     $data = $this->Budget_model->get_budget_data($tahun, $pt, $area);
+    //     echo json_encode($data);
+    // }
+
+
+    // public function get_budget_data()
+    // {
+    //     // Ambil data filter
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+
+    //     // Ambil data budget berdasarkan filter
+    //     $data = $this->Budget_model->get_budget_data($tahun, $pt, $area);
+
+    //     // Kirim data ke view (atau bisa format JSON)
+    //     echo json_encode($data);
+    // }
+
     public function get_budget_data()
     {
+        if (!$this->input->is_ajax_request()) {
+            show_error('No direct script access allowed', 403);
+        }
+
         $tahun = $this->input->post('tahun');
         $pt = $this->input->post('pt');
         $area = $this->input->post('area');
 
-        $data = $this->Budget_model->get_combined_budget($tahun, $pt, $area);
-        echo json_encode($data);
+        $this->load->model('Budget_model');
+        $result = $this->Budget_model->get_budget_data($tahun, $pt, $area);
+
+        echo json_encode($result);
+    }
+
+
+    public function add_budget_target()
+    {
+        // Ambil data dari request POST
+        $tahun = $this->input->post('tahun');
+        $pt = $this->input->post('pt');
+        $area = $this->input->post('area');
+        $bulan = $this->input->post('bulan');
+        $target = $this->input->post('target');
+
+        // Validasi data
+        if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($target)) {
+            // Jika ada data yang kosong, kirim respons gagal
+            echo json_encode(['success' => false, 'message' => 'Semua data harus diisi.']);
+            return;
+        }
+
+        // Siapkan data untuk disimpan
+        $data = [
+            'tahun' => $tahun,
+            'pt' => $pt,
+            'area' => $area,
+            'bulan' => $bulan,
+            'target' => $target
+        ];
+
+        // Panggil model untuk menambahkan data ke tabel mt_budget_target
+        $this->load->model('Budget_model');
+        $result = $this->Budget_model->insert_budget_target($data);
+
+        if ($result) {
+            // Jika berhasil, kirim respons sukses
+            echo json_encode(['success' => true, 'message' => 'Data budget target berhasil ditambahkan']);
+        } else {
+            // Jika gagal, kirim respons gagal
+            echo json_encode(['success' => false, 'message' => 'Gagal menambahkan data target']);
+        }
+    }
+
+
+
+    // public function add_budget_target()
+    // {
+    //     // Cek token CSRF manual (opsional, hanya jika perlu eksplisit)
+    //     $csrf_token_name = $this->security->get_csrf_token_name();
+    //     $csrf_token_hash = $this->security->get_csrf_hash();
+    //     $posted_token = $this->input->post($csrf_token_name);
+
+    //     if ($posted_token !== $csrf_token_hash) {
+    //         echo json_encode(['success' => false, 'message' => 'Token CSRF tidak valid']);
+    //         return;
+    //     }
+
+    //     // Ambil data dari request POST
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+    //     $bulan = $this->input->post('bulan');
+    //     $target = $this->input->post('target');
+
+    //     // Validasi data
+    //     if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($target)) {
+    //         echo json_encode(['success' => false, 'message' => 'Semua data harus diisi.']);
+    //         return;
+    //     }
+
+    //     $data = [
+    //         'tahun' => $tahun,
+    //         'pt' => $pt,
+    //         'area' => $area,
+    //         'bulan' => $bulan,
+    //         'target' => $target
+    //     ];
+
+    //     $this->load->model('Budget_model');
+    //     $result = $this->Budget_model->insert_budget_target($data);
+
+    //     if ($result) {
+    //         echo json_encode(['success' => true, 'message' => 'Data budget target berhasil ditambahkan']);
+    //     } else {
+    //         echo json_encode(['success' => false, 'message' => 'Gagal menambahkan data target']);
+    //     }
+    // }
+
+
+    // public function add_actual_data()
+    // {
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+    //     $bulan = $this->input->post('bulan');
+    //     $actual = $this->input->post('actual');
+    //     $tgl_invoice = $this->input->post('tgl_invoice');
+    //     $nomor_invoice = $this->input->post('nomor_invoice');
+    //     $nomor_ps = $this->input->post('nomor_ps');
+
+    //     // Validasi input
+    //     if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($actual) || empty($tgl_invoice) || empty($nomor_invoice) || empty($nomor_ps)) {
+    //         echo json_encode(['success' => false]);
+    //         return;
+    //     }
+
+    //     // Simpan data ke database
+    //     $data = [
+    //         'tahun' => $tahun,
+    //         'pt' => $pt,
+    //         'area' => $area,
+    //         'bulan' => $bulan,
+    //         'actual' => $actual,
+    //         'tgl_invoice' => $tgl_invoice,
+    //         'nomor_invoice' => $nomor_invoice,
+    //         'nomor_ps' => $nomor_ps
+    //     ];
+
+    //     $this->db->insert('budget_aktual', $data);
+
+    //     echo json_encode(['success' => true]);
+    // }
+
+
+
+    public function add_actual_data()
+    {
+        // Ambil data dari request POST
+        $tahun = $this->input->post('tahun');
+        $pt = $this->input->post('pt');
+        $area = $this->input->post('area');
+        $bulan = $this->input->post('bulan');
+        $actual = $this->input->post('actual');
+        $tgl_invoice = $this->input->post('tgl_invoice');
+        $nomor_invoice = $this->input->post('nomor_invoice');
+        $nomor_ps = $this->input->post('nomor_ps');
+
+        // Validasi data
+        if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($actual)) {
+            // Jika ada data yang kosong, kirim respons gagal
+            echo json_encode(['success' => false, 'message' => 'Semua data harus diisi.']);
+            return;
+        }
+
+        // Siapkan data untuk disimpan
+        $data = [
+            'tahun' => $tahun,
+            'pt' => $pt,
+            'area' => $area,
+            'bulan' => $bulan,
+            'actual' => $actual,
+            'tgl_invoice' => $tgl_invoice,
+            'nomor_invoice' => $nomor_invoice,
+            'nomor_ps' => $nomor_ps
+        ];
+
+        // Panggil model untuk menambahkan data ke tabel mt_budget_target
+        $this->load->model('Budget_model');
+        $result = $this->Budget_model->insert_budget_aktual($data);
+
+        if ($result) {
+            // Jika berhasil, kirim respons sukses
+            echo json_encode(['success' => true, 'message' => 'Data budget target berhasil ditambahkan']);
+        } else {
+            // Jika gagal, kirim respons gagal
+            echo json_encode(['success' => false, 'message' => 'Gagal menambahkan data target']);
+        }
     }
 }

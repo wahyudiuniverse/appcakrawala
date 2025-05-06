@@ -55,4 +55,210 @@ class Budget_model extends CI_Model
         $query = $this->db->get('mt_budget_target');        // sesuaikan dengan nama tabel di database
         return $query->result();
     }
+
+
+
+
+    // // Ambil data dropdown (dari mt_budget_target)
+    // public function get_dropdown_data()
+    // {
+    //     $this->db->distinct();
+    //     $tahun = $this->db->select('tahun')->get('mt_budget_target')->result();
+
+    //     $this->db->distinct();
+    //     $pt = $this->db->select('pt')->get('mt_budget_target')->result();
+
+    //     $this->db->distinct();
+    //     $area = $this->db->select('area')->get('mt_budget_target')->result();
+
+    //     return [
+    //         'tahun' => $tahun,
+    //         'pt' => $pt,
+    //         'area' => $area,
+    //     ];
+    // }
+
+    // // Ambil data gabungan target + actual
+    // public function get_budget_data($tahun, $pt, $area)
+    // {
+    //     $query = $this->db->query("
+    //         SELECT 
+    //             t.id,
+    //             t.tahun,
+    //             t.pt,
+    //             t.area,
+    //             t.bulan,
+    //             t.target,
+    //             IFNULL(a.actual, 0) AS actual
+    //         FROM mt_budget_target t
+    //         LEFT JOIN mt_budget_actual a 
+    //             ON t.tahun = a.tahun AND t.pt = a.pt AND t.area = a.area AND t.bulan = a.bulan
+    //         WHERE t.tahun = ? AND t.pt = ? AND t.area = ?
+    //         ORDER BY t.bulan ASC
+    //     ", [$tahun, $pt, $area]);
+
+    //     return $query->result();
+    // }
+
+
+
+
+
+    // Ambil data untuk dropdown (tahun, pt, area) hanya dari mt_budget_target
+    public function get_dropdown_data()
+    {
+        $this->db->distinct();
+        $this->db->select('tahun');
+        $query = $this->db->get('mt_budget_target');
+        $tahun_list = $query->result();
+
+        $this->db->distinct();
+        $this->db->select('pt');
+        $query = $this->db->get('mt_budget_target');
+        $pt_list = $query->result();
+
+        $this->db->distinct();
+        $this->db->select('area');
+        $query = $this->db->get('mt_budget_target');
+        $area_list = $query->result();
+
+        // Mengembalikan data dropdown
+        return [
+            'tahun' => $tahun_list,
+            'pt' => $pt_list,
+            'area' => $area_list
+        ];
+    }
+
+    // Ambil data gabungan dari kedua tabel (mt_budget_target dan mt_budget_actual)
+    // public function get_budget_data($tahun, $pt, $area)
+    // {
+    //     $this->db->select('
+    //         t.id,
+    //         t.tahun,
+    //         t.pt,
+    //         t.area,
+    //         t.bulan,
+    //         t.target,
+    //         a.actual
+    //     ');
+    //     $this->db->from('mt_budget_target t');
+    //     $this->db->join('mt_budget_actual a', 't.id = a.id AND t.tahun = a.tahun AND t.pt = a.pt AND t.area = a.area AND t.bulan = a.bulan', 'left');
+
+    //     if ($tahun) {
+    //         $this->db->where('t.tahun', $tahun);
+    //     }
+    //     if ($pt) {
+    //         $this->db->where('t.pt', $pt);
+    //     }
+    //     if ($area) {
+    //         $this->db->where('t.area', $area);
+    //     }
+
+    //     $query = $this->db->get();
+    //     return $query->result();
+    // }
+
+
+
+
+    public function get_unique($column)
+    {
+        $this->db->distinct();
+        $this->db->select($column);
+        $query = $this->db->get('mt_budget_target');
+        return $query->result();
+    }
+
+
+
+    // public function get_budget_data($tahun, $pt, $area)
+    // {
+    //     $this->db->select('
+    //         t.id, t.tahun, t.pt, t.area, t.bulan, t.target,
+    //         a.actual
+    //     ');
+    //     $this->db->from('mt_budget_target t');
+    //     $this->db->join(
+    //         'mt_budget_actual a',
+    //         't.tahun = a.tahun AND t.pt = a.pt AND t.area = a.area AND t.bulan = a.bulan',
+    //         'left'
+    //     );
+    //     $this->db->where('t.tahun', $tahun);
+    //     $this->db->where('t.pt', $pt);
+    //     $this->db->where('t.area', $area);
+
+    //     return $this->db->get()->result();
+    // }
+
+
+
+    public function get_budget_data($tahun, $pt, $area)
+    {
+        $this->db->select('
+            target.id,
+            target.tahun,
+            target.pt,
+            target.area,
+            target.bulan,
+            target.target,
+            COALESCE(SUM(actual.actual), 0) AS actual
+        ');
+        $this->db->from('mt_budget_target AS target');
+        $this->db->join(
+            'mt_budget_actual AS actual',
+            'target.tahun = actual.tahun AND 
+             target.pt = actual.pt AND 
+             target.area = actual.area AND 
+             target.bulan = actual.bulan',
+            'left'
+        );
+        $this->db->where('target.tahun', $tahun);
+        $this->db->where('target.pt', $pt);
+        $this->db->where('target.area', $area);
+        $this->db->group_by([
+            'target.id',
+            'target.tahun',
+            'target.pt',
+            'target.area',
+            'target.bulan',
+            'target.target'
+        ]);
+
+        return $this->db->get()->result();
+    }
+
+    // Method untuk menambahkan data ke tabel mt_budget_target
+    // public function insert_budget_target($data)
+    // {
+    //     // Insert data ke dalam tabel mt_budget_target
+    //     $this->db->insert('mt_budget_target', $data);
+
+    //     // Cek apakah insert berhasil
+    //     return $this->db->affected_rows() > 0;
+    // }
+
+    public function insert_budget_target($data)
+    {
+        // Insert data ke dalam tabel mt_budget_target
+        if ($this->db->insert('mt_budget_target', $data)) {
+            return true; // Berhasil insert
+        } else {
+            // Log error jika ingin debugging
+            log_message('error', 'Gagal insert ke mt_budget_target: ' . $this->db->last_query());
+            return false; // Gagal insert
+        }
+    }
+
+    public function insert_budget_aktual($data)
+    {
+        // Insert data ke dalam tabel mt_budget_target
+        if ($this->db->insert('mt_budget_actual', $data)) {
+            return true; // Berhasil insert
+        } else {
+            // Log error jika ingin debugging
+            log_message('error', 'Gagal insert ke actual: ' . $this->db->last_query());
+            return false; // Gagal insert
+        }
+    }
 }

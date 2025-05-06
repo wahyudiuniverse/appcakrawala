@@ -366,6 +366,22 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE npro.doc_id
 	}
 
 
+	// Ambil semua PT yang ada di database
+	public function get_all_pts()
+	{
+		$this->db->select('id, pt');
+		$query = $this->db->get('mt_budget_target');  // Ganti 'pt_table' dengan nama tabel yang sesuai
+		return $query->result();
+	}
+
+	public function get_all_areas()
+	{
+		$this->db->select('id, area'); // sesuaikan dengan nama kolom di tabelmu
+		$query = $this->db->get('mt_budget_target');        // sesuaikan dengan nama tabel di database
+		return $query->result();
+	}
+
+
 	public function get_project_maping($empID)
 	{
 		$query = $this->db->query("SELECT pros.project_id, CONCAT('[',pro.priority,']', ' ', pro.title) AS title
@@ -400,21 +416,21 @@ ORDER BY title ASC");
 
 
 	// get single employee
-	public function get_dokumen_skk($nip) {
-	
+	public function get_dokumen_skk($nip)
+	{
+
 		$sql = 'SELECT * FROM xin_qrcode_skk WHERE nip = ?';
 		// $sql = 'SELECT * FROM xin_employee_contract WHERE uniqueid = ?';
 		$binds = array($nip);
 		$query = $this->db->query($sql, $binds);
-		
+
 		if ($query->num_rows() > 0) {
 			return $query->result();
 		} else {
 			return null;
 		}
-		
 	}
-	
+
 	// check email
 	// public function cek_jenis_dokumen($id)
 	// {
@@ -458,7 +474,7 @@ ORDER BY title ASC");
 			LEFT JOIN xin_projects pro ON pro.project_id = psub.id_project
 			WHERE psub.sub_active=1");
 		return $query->result();
-	}	
+	}
 
 	// get single employee by NIP
 	public function read_project_by_id($id)
