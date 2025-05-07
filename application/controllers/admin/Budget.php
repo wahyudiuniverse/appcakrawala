@@ -117,6 +117,8 @@ class Budget extends MY_Controller
         $data['pt_list'] = $this->Budget_model->get_unique('pt');
         $data['area_list'] = $this->Budget_model->get_unique('area');
 
+        // $data['tahun_list'] = $this->Budget_model->get_tahun_list();
+
         // Ambil dropdown dari gabungan 2 tabel (distinct)
         // $tahun_list = $this->db->query("SELECT DISTINCT tahun FROM mt_budget_target UNION SELECT DISTINCT tahun FROM mt_budget_actual")->result();
         // $pt_list    = $this->db->query("SELECT DISTINCT pt FROM mt_budget_target UNION SELECT DISTINCT pt FROM mt_budget_actual")->result();
@@ -245,6 +247,15 @@ class Budget extends MY_Controller
 
     //     // Kirim data ke view (atau bisa format JSON)
     //     echo json_encode($data);
+    // }
+
+    // public function get_budget_data() {
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+    //     // Ambil data anggaran berdasarkan tahun, pt, dan area
+    //     $result = $this->db->where('tahun', $tahun)->where('pt', $pt)->where('area', $area)->get('budget_data')->result();
+    //     echo json_encode($result);
     // }
 
     public function get_budget_data()
@@ -426,5 +437,75 @@ class Budget extends MY_Controller
             // Jika gagal, kirim respons gagal
             echo json_encode(['success' => false, 'message' => 'Gagal menambahkan data target']);
         }
+    }
+
+
+    // public function get_pt_list()
+    // {
+    //     $tahun = $this->input->post('tahun');
+    //     // Ambil data PT berdasarkan tahun
+    //     $data = $this->budget_model->get_pt_by_tahun($tahun);
+    //     echo json_encode($data);
+    // }
+
+    // public function get_area_list()
+    // {
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     // Ambil data area berdasarkan tahun dan PT
+    //     $data = $this->budget_model->get_area_by_tahun_pt($tahun, $pt);
+    //     echo json_encode($data);
+    // }
+
+    public function get_tahun_list()
+    {
+        // Ambil data tahun dari database
+        $result = $this->db->get('tahun')->result();
+        echo json_encode($result);
+    }
+
+    // public function get_pt_list()
+    // {
+    //     $tahun = $this->input->post('tahun');
+    //     // Ambil data PT berdasarkan tahun
+    //     $result = $this->db->where('tahun', $tahun)->get('pt')->result();
+    //     echo json_encode($result);
+    // }
+
+    public function get_area_list()
+    {
+        $tahun = $this->input->post('tahun');
+        $pt = $this->input->post('pt');
+        // Ambil data Area berdasarkan tahun dan PT
+        $result = $this->db->where('tahun', $tahun)->where('pt', $pt)->get('area')->result();
+        echo json_encode($result);
+    }
+
+    public function get_pt_list()
+    {
+        // Mengambil data tahun dari request
+        $tahun = $this->input->post('tahun');
+        if ($tahun) {
+            // Ambil data PT berdasarkan tahun
+            $this->load->model('Budget_model');
+            $data_pt = $this->Budget_model->get_pt_by_tahun($tahun);
+
+            // Jika data ditemukan, kirimkan sebagai JSON
+            if ($data_pt) {
+                echo json_encode($data_pt);
+            } else {
+                echo json_encode([]);
+            }
+        } else {
+            // Jika tidak ada tahun yang diberikan, kirimkan array kosong
+            echo json_encode([]);
+        }
+    }
+
+    public function get_area_by_pt()
+    {
+        $pt = $this->input->post('pt');
+        $data = $this->Budget_model->get_area_by_pt($pt);
+        echo json_encode($data);
     }
 }

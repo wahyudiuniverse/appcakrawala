@@ -13,18 +13,14 @@
             <label for="pt">PT</label>
             <select class="form-control" id="pt">
                 <option value="">-- Pilih PT --</option>
-                <?php foreach ($pt_list as $p): ?>
-                    <option value="<?= $p->pt ?>"><?= $p->pt ?></option>
-                <?php endforeach; ?>
+
             </select>
         </div>
         <div class="col-md-3">
             <label for="area">Area</label>
             <select class="form-control" id="area">
                 <option value="">-- Pilih Area --</option>
-                <?php foreach ($area_list as $a): ?>
-                    <option value="<?= $a->area ?>"><?= $a->area ?></option>
-                <?php endforeach; ?>
+
             </select>
         </div>
         <div class="col-md-3 d-flex align-items-end">
@@ -221,6 +217,70 @@
 </div>
 
 <script>
+    $('#tahun').on('change', function() {
+        var tahun = $(this).val();
+        if (tahun) {
+            // Reset dropdown PT dan Area
+            $('#pt').html('<option value="">Pilih PT</option>');
+            $('#area').html('<option value="">Pilih Area</option>');
+
+            $.ajax({
+                url: '<?= base_url("admin/budget/get_pt_list") ?>', // pastikan URL ini benar
+                type: 'POST',
+                data: {
+                    tahun: tahun,
+                    <?= $this->security->get_csrf_token_name(); ?>: '<?= $this->security->get_csrf_hash(); ?>'
+                },
+                success: function(data) {
+                    var colum_pt = jQuery.parseJSON(data);
+                    console.log("Data PT:", data); // Debugging data yang diterima
+                    if (colum_pt && Array.isArray(colum_pt)) {
+                        $.each(colum_pt, function(index, value) {
+                            $('#pt').append('<option value="' + value.pt + '">' + value.pt + '</option>');
+                        });
+                    } else {
+                        console.log("Data PT tidak valid", data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("AJAX Error:", error); // Log error jika ada masalah dengan AJAX request
+                }
+            });
+        }
+    });
+
+
+    $('#pt').on('change', function() {
+        var pt = $(this).val();
+
+        if (pt) {
+            $.ajax({
+                url: '<?= base_url("admin/budget/get_area_by_pt") ?>',
+                type: 'POST',
+                data: {
+                    pt: pt,
+                    <?= $this->security->get_csrf_token_name(); ?>: '<?= $this->security->get_csrf_hash(); ?>'
+
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('#area').empty().append('<option value="">Pilih Area</option>');
+                    $.each(data, function(index, value) {
+                        $('#area').append('<option value="' + value.area + '">' + value.area + '</option>');
+                    });
+                },
+                error: function() {
+                    alert('Gagal mengambil data area.');
+                }
+            });
+        } else {
+            $('#area').html('<option value="">Pilih Area</option>');
+        }
+    });
+
+
+
+
     $(document).ready(function() {
         let table = $('#budgetTable').DataTable();
         var csrfName = '<?= $this->security->get_csrf_token_name(); ?>';

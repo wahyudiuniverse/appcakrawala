@@ -164,7 +164,7 @@ class Budget_model extends CI_Model
 
     public function get_unique($column)
     {
-        $this->db->distinct();
+        $this->db->group_by($column);
         $this->db->select($column);
         $query = $this->db->get('mt_budget_target');
         return $query->result();
@@ -260,5 +260,46 @@ class Budget_model extends CI_Model
             log_message('error', 'Gagal insert ke actual: ' . $this->db->last_query());
             return false; // Gagal insert
         }
+    }
+
+    public function get_tahun_list()
+    {
+        $this->db->select('tahun');
+        $this->db->from('mt_budget_target');
+        $this->db->order_by('tahun', 'DESC');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function get_pt_by_tahun($tahun)
+    {
+        // Query untuk mengambil data PT berdasarkan tahun
+        $this->db->group_by('pt');
+        $this->db->select('pt');
+        $this->db->from('mt_budget_target');  // Ganti dengan tabel yang sesuai
+        $this->db->where('tahun', $tahun);
+        $query = $this->db->get();
+
+        return $query->result_array(); // Mengembalikan data dalam bentuk array
+    }
+
+    public function get_area_by_tahun_pt($tahun, $pt)
+    {
+        return $this->db->select('DISTINCT(area)')
+            ->from('mt_budget_target')
+            ->where('tahun', $tahun)
+            ->where('pt', $pt)
+            ->get()
+            ->result();
+    }
+
+    public function get_area_by_pt($pt)
+    {
+        $this->db->group_by('area');
+        $this->db->select('id, area');
+        $this->db->from('mt_budget_target'); // Ganti dengan nama tabel area kamu
+        $this->db->where('pt', $pt);
+        $query = $this->db->get();
+        return $query->result_array();
     }
 }
