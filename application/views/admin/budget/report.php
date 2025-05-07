@@ -267,7 +267,7 @@
 
             $('#inputActualModal').modal('show');
 
-            $('#submitBudget').off('click').on('click', function() {
+            $('#submitActual').off('click').on('click', function() {
                 let tahun = $('#modalTahunActual').val();
                 let pt = $('#modalPTActual').val();
                 let area = $('#modalAreaActual').val();
