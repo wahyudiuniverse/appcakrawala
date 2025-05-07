@@ -62,19 +62,55 @@
                 <form id="budgetForm">
                     <div class="mb-3">
                         <label for="modalTahun" class="form-label">Tahun</label>
-                        <input type="text" class="form-control" id="modalTahun" required>
+                        <select class="form-control" id="modalTahun" required>
+                            <option value="">-- Pilih Tahun --</option>
+                            <?php foreach ($tahun_list as $t): ?>
+                                <option value="<?= $t->tahun ?>"><?= $t->tahun ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="modalPT" class="form-label">PT</label>
-                        <input type="text" class="form-control" id="modalPT" required>
+                        <select class="form-control" id="modalPT" required>
+                            <option value="">-- Pilih PT --</option>
+                            <?php foreach ($pt_list as $p): ?>
+                                <option value="<?= $p->pt ?>"><?= $p->pt ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="modalArea" class="form-label">Area</label>
-                        <input type="text" class="form-control" id="modalArea" required>
+                        <select class="form-control" id="modalArea" required>
+                            <option value="">-- Pilih Area --</option>
+                            <?php foreach ($area_list as $a): ?>
+                                <option value="<?= $a->area ?>"><?= $a->area ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="modalBulan" class="form-label">Bulan</label>
-                        <input type="text" class="form-control" id="modalBulan" required>
+                        <select class="form-control" id="modalBulan" required>
+                            <option value="">-- Pilih Bulan --</option>
+                            <?php
+                            $bulan_list = [
+                                '01' => 'Januari',
+                                '02' => 'Februari',
+                                '03' => 'Maret',
+                                '04' => 'April',
+                                '05' => 'Mei',
+                                '06' => 'Juni',
+                                '07' => 'Juli',
+                                '08' => 'Agustus',
+                                '09' => 'September',
+                                '10' => 'Oktober',
+                                '11' => 'November',
+                                '12' => 'Desember'
+                            ];
+                            foreach ($bulan_list as $key => $value): ?>
+                                <option value="<?= $key ?>"><?= $value ?></option>
+                            <?php endforeach; ?>
+                            ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="modalTarget" class="form-label">Target</label>
@@ -101,21 +137,62 @@
             </div>
             <div class="modal-body">
                 <form id="actualForm">
+                    <!-- Tahun -->
                     <div class="mb-3">
                         <label for="modalTahunActual" class="form-label">Tahun</label>
-                        <input type="text" class="form-control" id="modalTahunActual" required>
+                        <select class="form-control" id="modalTahunActual" required>
+                            <option value="">-- Pilih Tahun --</option>
+                            <?php foreach ($tahun_list as $t): ?>
+                                <option value="<?= $t->tahun ?>"><?= $t->tahun ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+
+                    <!-- PT -->
                     <div class="mb-3">
                         <label for="modalPTActual" class="form-label">PT</label>
-                        <input type="text" class="form-control" id="modalPTActual" required>
+                        <select class="form-control" id="modalPTActual" required>
+                            <option value="">-- Pilih PT --</option>
+                            <?php foreach ($pt_list as $p): ?>
+                                <option value="<?= $p->pt ?>"><?= $p->pt ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+                    <!-- Area -->
                     <div class="mb-3">
                         <label for="modalAreaActual" class="form-label">Area</label>
-                        <input type="text" class="form-control" id="modalAreaActual" required>
+                        <select class="form-control" id="modalAreaActual" required>
+                            <option value="">-- Pilih Area --</option>
+                            <?php foreach ($area_list as $a): ?>
+                                <option value="<?= $a->area ?>"><?= $a->area ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
+
+                    <!-- Bulan -->
                     <div class="mb-3">
                         <label for="modalBulanActual" class="form-label">Bulan</label>
-                        <input type="text" class="form-control" id="modalBulanActual" required>
+                        <select class="form-control" id="modalBulanActual" required>
+                            <option value="">-- Pilih Bulan --</option>
+                            <?php
+                            $bulan_list = [
+                                '01' => 'Januari',
+                                '02' => 'Februari',
+                                '03' => 'Maret',
+                                '04' => 'April',
+                                '05' => 'Mei',
+                                '06' => 'Juni',
+                                '07' => 'Juli',
+                                '08' => 'Agustus',
+                                '09' => 'September',
+                                '10' => 'Oktober',
+                                '11' => 'November',
+                                '12' => 'Desember'
+                            ];
+                            foreach ($bulan_list as $key => $value): ?>
+                                <option value="<?= $key ?>"><?= $value ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="modalActual" class="form-label">Actual</label>
