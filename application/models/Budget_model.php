@@ -240,14 +240,13 @@ class Budget_model extends CI_Model
 
     public function insert_budget_target($data)
     {
-        // Insert data ke dalam tabel mt_budget_target
-        if ($this->db->insert('mt_budget_target', $data)) {
-            return true; // Berhasil insert
-        } else {
-            // Log error jika ingin debugging
-            log_message('error', 'Gagal insert ke mt_budget_target: ' . $this->db->last_query());
-            return false; // Gagal insert
-        }
+        return $this->db->insert('mt_budget_target', $data);
+    }
+    public function insert_pt($pt)
+    {
+        $data = ['name' => $pt];
+        $this->db->insert('xin_companies', $data);
+        return $this->db->affected_rows() > 0 ? $this->db->insert_id() : false;
     }
 
     public function insert_budget_aktual($data)
@@ -302,4 +301,33 @@ class Budget_model extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    public function simpan_actual_data2($data)
+    {
+        // Cek apakah data sudah ada berdasarkan tahun, pt, area, bulan
+        $this->db->where('tahun', $data['tahun']);
+        $this->db->where('pt', $data['pt']);
+        $this->db->where('area', $data['area']);
+        $this->db->where('bulan', $data['bulan']);
+        $query = $this->db->get('mt_budget_actual');
+
+        if ($query->num_rows() > 0) {
+            // Jika data sudah ada, update (misalnya update actual dan tanggal invoice)
+            $this->db->where('tahun', $data['tahun']);
+            $this->db->where('pt', $data['pt']);
+            $this->db->where('area', $data['area']);
+            $this->db->where('bulan', $data['bulan']);
+            return $this->db->update('mt_budget_actual', $data);
+        } else {
+            // Jika data belum ada, insert data baru
+            return $this->db->insert('mt_budget_actual', $data);
+        }
+    }
+
+    // public function insert_pt($pt)
+    // {
+    //     $data = ['name' => $pt];
+    //     $this->db->insert('xin_companies', $data);
+    //     return $this->db->affected_rows() > 0 ? $this->db->insert_id() : false;
+    // }
 }

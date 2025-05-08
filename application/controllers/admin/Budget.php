@@ -277,21 +277,27 @@ class Budget extends MY_Controller
 
     public function add_budget_target()
     {
-        // Ambil data dari request POST
+        // Validasi CSRF otomatis oleh CI jika diaktifkan di config
+
         $tahun = $this->input->post('tahun');
         $pt = $this->input->post('pt');
         $area = $this->input->post('area');
         $bulan = $this->input->post('bulan');
         $target = $this->input->post('target');
 
-        // Validasi data
         if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($target)) {
-            // Jika ada data yang kosong, kirim respons gagal
             echo json_encode(['success' => false, 'message' => 'Semua data harus diisi.']);
             return;
         }
 
-        // Siapkan data untuk disimpan
+        $this->load->model('Budget_model');
+        $pt = $this->Budget_model->insert_pt($pt);
+
+        if (!$pt) {
+            echo json_encode(['success' => false, 'message' => 'Gagal menambahkan PT']);
+            return;
+        }
+
         $data = [
             'tahun' => $tahun,
             'pt' => $pt,
@@ -300,18 +306,53 @@ class Budget extends MY_Controller
             'target' => $target
         ];
 
-        // Panggil model untuk menambahkan data ke tabel mt_budget_target
-        $this->load->model('Budget_model');
         $result = $this->Budget_model->insert_budget_target($data);
 
-        if ($result) {
-            // Jika berhasil, kirim respons sukses
-            echo json_encode(['success' => true, 'message' => 'Data budget target berhasil ditambahkan']);
-        } else {
-            // Jika gagal, kirim respons gagal
-            echo json_encode(['success' => false, 'message' => 'Gagal menambahkan data target']);
-        }
+        echo json_encode([
+            'success' => $result ? true : false,
+            'message' => $result ? 'Data berhasil ditambahkan' : 'Gagal menambahkan data target',
+            'csrf_hash' => $this->security->get_csrf_hash() // Kirim token baru
+        ]);
     }
+
+
+    // public function add_budget_target()
+    // {
+    //     // Ambil data dari request POST
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+    //     $bulan = $this->input->post('bulan');
+    //     $target = $this->input->post('target');
+
+    //     // Validasi data
+    //     if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($target)) {
+    //         // Jika ada data yang kosong, kirim respons gagal
+    //         echo json_encode(['success' => false, 'message' => 'Semua data harus diisi.']);
+    //         return;
+    //     }
+
+    //     // Siapkan data untuk disimpan
+    //     $data = [
+    //         'tahun' => $tahun,
+    //         'pt' => $pt,
+    //         'area' => $area,
+    //         'bulan' => $bulan,
+    //         'target' => $target
+    //     ];
+
+    //     // Panggil model untuk menambahkan data ke tabel mt_budget_target
+    //     $this->load->model('Budget_model');
+    //     $result = $this->Budget_model->insert_budget_target($data);
+
+    //     if ($result) {
+    //         // Jika berhasil, kirim respons sukses
+    //         echo json_encode(['success' => true, 'message' => 'Data budget target berhasil ditambahkan']);
+    //     } else {
+    //         // Jika gagal, kirim respons gagal
+    //         echo json_encode(['success' => false, 'message' => 'Gagal menambahkan data target']);
+    //     }
+    // }
 
 
 
@@ -507,5 +548,29 @@ class Budget extends MY_Controller
         $pt = $this->input->post('pt');
         $data = $this->Budget_model->get_area_by_pt($pt);
         echo json_encode($data);
+    }
+
+    public function add_actual_data2()
+    {
+        // Ambil data dari POST
+        $data = [
+            'tahun'          => $this->input->post('tahun'),
+            'pt'             => $this->input->post('pt'),
+            'area'           => $this->input->post('area'),
+            'bulan'          => $this->input->post('bulan'),
+            'actual'         => $this->input->post('actual'),
+            'tgl_invoice'    => $this->input->post('tgl_invoice'),
+            'nomor_invoice'  => $this->input->post('nomor_invoice'),
+            'nomor_ps'       => $this->input->post('nomor_ps'),
+        ];
+
+        // Simpan ke model
+        $result = $this->Budget_model->simpan_actual_data2($data);
+
+        if ($result) {
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false]);
+        }
     }
 }
