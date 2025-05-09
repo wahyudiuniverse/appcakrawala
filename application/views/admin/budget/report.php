@@ -381,7 +381,8 @@
 
                     // Kirim data via AJAX
                     $.ajax({
-                        url: 'http://localhost/cis_clone/admin/budget/add_budget_target',
+                        // url: 'http://localhost/cis_clone/admin/budget/add_budget_target',
+                        url: "<?= base_url('admin/budget/add_budget_target') ?>",
                         type: 'POST',
                         data: {
                             tahun: tahun,
