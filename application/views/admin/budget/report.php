@@ -67,11 +67,11 @@
 
     <!-- Modal Dialog Input Budget Target -->
     <div class="modal fade" id="inputBudgetModal" tabindex="-1" aria-labelledby="inputBudgetModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="inputBudgetModalLabel">Input Budget Target Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
                     <form id="budgetForm">
@@ -92,9 +92,24 @@
                         </div>
 
                         <!-- PT -->
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="modalPT" class="form-label">PT</label>
                             <input type="text" class="form-control" id="modalPT" required placeholder="Nama PT">
+                        </div> -->
+
+                        <!-- PT -->
+                        <div class="mb-3">
+                            <label for="modalPT" class="form-label">PT</label>
+                            <select class="form-control" id="modalPT" required>
+                                <option value="">-- Pilih PT --</option>
+                                <?php if (!empty($pt_list)) : ?>
+                                    <?php foreach ($pt_list as $pt): ?>
+                                        <option value="<?= $pt->name ?>"><?= $pt->name ?></option>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="">Data PT tidak tersedia</option>
+                                <?php endif; ?>
+                            </select>
                         </div>
 
                         <!-- Area -->
@@ -132,14 +147,17 @@
                         <!-- Target -->
                         <div class="mb-3">
                             <label for="modalTarget" class="form-label">Target</label>
-                            <input type="text" class="form-control" id="modalTarget" required placeholder="Rp 0">
+                            <input type="number" class="form-control" id="modalTarget" required placeholder="Rp 0">
                         </div>
                     </form>
                 </div>
 
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button> -->
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                     <button type="button" class="btn btn-primary" id="submitBudget">Submit</button>
                 </div>
             </div>
@@ -153,8 +171,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTargetAktual2Label">Input Target Aktual 2</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                    <h5 class="modal-title" id="modalTargetAktual2Label">Input Target Aktual</h5>
+                    <!-- <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"></button> -->
                 </div>
                 <div class="modal-body">
                     <form id="formTargetAktual2">
@@ -179,7 +197,7 @@
                         <!-- Input yang diisi manual oleh user -->
                         <div class="mb-3">
                             <label for="modalActual2" class="form-label">Actual</label>
-                            <input type="text" class="form-control" id="modalActual2" required placeholder="Rp 0">
+                            <input type="number" class="form-control" id="modalActual2" required placeholder="Rp 0">
                         </div>
                         <div class="mb-3">
                             <label for="modalTglInvoice2" class="form-label">Tanggal Invoice</label>
@@ -196,7 +214,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button> -->
                     <button type="button" class="btn btn-primary" id="submitActual2">Simpan</button>
                 </div>
             </div>
@@ -213,23 +234,23 @@
 
 
         // Format Target sebagai Rp secara otomatis
-        $('#modalTarget').on('input', function() {
-            let value = $(this).val();
-            value = value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
-            if (value.length > 0) {
-                value = 'Rp ' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format Rupiah
-            }
-            $(this).val(value);
-        });
+        // $('#modalTarget').on('input', function() {
+        //     let value = $(this).val();
+        //     value = value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
+        //     if (value.length > 0) {
+        //         value = 'Rp ' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format Rupiah
+        //     }
+        //     $(this).val(value);
+        // });
 
-        $('#modalActual2').on('input', function() {
-            let value = $(this).val();
-            value = value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
-            if (value.length > 0) {
-                value = 'Rp ' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format Rupiah
-            }
-            $(this).val(value);
-        });
+        // $('#modalActual2').on('input', function() {
+        //     let value = $(this).val();
+        //     value = value.replace(/[^0-9]/g, ''); // Hanya angka yang diizinkan
+        //     if (value.length > 0) {
+        //         value = 'Rp ' + value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Format Rupiah
+        //     }
+        //     $(this).val(value);
+        // });
 
 
         $('#tahun').on('change', function() {
@@ -301,6 +322,13 @@
             var csrfName = '<?= $this->security->get_csrf_token_name(); ?>';
             var csrfHash = '<?= $this->security->get_csrf_hash(); ?>';
 
+            // Mapping angka ke nama bulan
+            const namaBulan = [
+                '', 'JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI',
+                'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'
+            ];
+
+
             $('#btnShow').on('click', function() {
                 let tahun = $('#tahun').val();
                 let pt = $('#pt').val();
@@ -328,17 +356,20 @@
                                 ((row.actual / row.target) * 100).toFixed(2) + '%' :
                                 '0%';
 
+                            // Konversi angka bulan ke nama bulan
+                            const bulanNama = namaBulan[parseInt(row.bulan)];
+
                             table.row.add([
                                 row.id,
                                 row.tahun,
                                 row.pt,
                                 row.area,
-                                row.bulan,
+                                bulanNama,
                                 row.target,
                                 row.actual ?? 0,
                                 percentage,
                                 `
-                            <button class="btn btn-secondary btn-sm" onclick="openInputDialog2('${row.tahun}', '${row.pt}', '${row.area}', '${row.bulan}')">Input Target Aktual</button>`
+                            <button class="btn btn-secondary btn-sm" onclick="openInputDialog2('${row.tahun}', '${row.pt}', '${row.area}', '${row.bulan}')">Input Invoice</button>`
 
 
                             ]).draw(false);
@@ -398,6 +429,12 @@
                                 if (res.success) {
                                     alert('Data berhasil ditambahkan');
                                     $('#inputBudgetModal').modal('hide');
+
+                                    // Tambah tahun ke dropdown #tahun jika belum ada
+                                    let existingOption = $('#tahun option[value="' + tahun + '"]');
+                                    if (existingOption.length === 0) {
+                                        $('#tahun').append(`<option value="${tahun}">${tahun}</option>`);
+                                    }
 
                                     // Perbarui CSRF token jika diberikan oleh server
                                     if (res.csrf_hash) {
@@ -569,16 +606,16 @@
                         success: function(response) {
                             const res = JSON.parse(response);
                             if (res.success) {
-                                alert('Data budget actual 2 berhasil ditambahkan');
+                                alert('Data budget actual berhasil ditambahkan');
                                 $('#modalTargetAktual2').modal('hide');
                                 $('#btnShow').click(); // Refresh tabel jika perlu
                             } else {
-                                alert('Gagal menambahkan data actual 2');
+                                alert('Gagal menambahkan data actual');
                             }
                         },
                         error: function(xhr, status, error) {
                             console.error("AJAX Error:", error);
-                            alert("Gagal menambahkan data actual 2.");
+                            alert("Gagal menambahkan data actual.");
                         }
                     });
                 });

@@ -49,12 +49,19 @@ class Budget_model extends CI_Model
         return $query->result();
     }
 
+    public function get_all_pt()
+    {
+        return $this->db->get('xin_companies')->result();
+    }
+
     public function get_all_areas()
     {
         $this->db->select('id, area'); // sesuaikan dengan nama kolom di tabelmu
         $query = $this->db->get('mt_budget_target');        // sesuaikan dengan nama tabel di database
         return $query->result();
     }
+
+
 
 
 
@@ -302,24 +309,53 @@ class Budget_model extends CI_Model
         return $query->result_array();
     }
 
-    public function simpan_actual_data2($data)
-    {
-        // Cek apakah data sudah ada berdasarkan tahun, pt, area, bulan
-        $this->db->where('tahun', $data['tahun']);
-        $this->db->where('pt', $data['pt']);
-        $this->db->where('area', $data['area']);
-        $this->db->where('bulan', $data['bulan']);
-        $query = $this->db->get('mt_budget_actual');
+    // public function simpan_actual_data2($data)
+    // {
+    //     // Cek apakah data sudah ada berdasarkan tahun, pt, area, bulan
+    //     $this->db->where('tahun', $data['tahun']);
+    //     $this->db->where('pt', $data['pt']);
+    //     $this->db->where('area', $data['area']);
+    //     $this->db->where('bulan', $data['bulan']);
+    //     $query = $this->db->get('mt_budget_actual');
 
-        if ($query->num_rows() > 0) {
-            // Jika data sudah ada, update (misalnya update actual dan tanggal invoice)
-            $this->db->where('tahun', $data['tahun']);
-            $this->db->where('pt', $data['pt']);
-            $this->db->where('area', $data['area']);
-            $this->db->where('bulan', $data['bulan']);
-            return $this->db->update('mt_budget_actual', $data);
+    //     if ($query->num_rows() > 0) {
+    //         // Jika data sudah ada, update (misalnya update actual dan tanggal invoice)
+    //         $this->db->where('tahun', $data['tahun']);
+    //         $this->db->where('pt', $data['pt']);
+    //         $this->db->where('area', $data['area']);
+    //         $this->db->where('bulan', $data['bulan']);
+    //         return $this->db->update('mt_budget_actual', $data);
+    //     } else {
+    //         // Jika data belum ada, insert data baru
+    //         return $this->db->insert('mt_budget_actual', $data);
+    //     }
+    // }
+
+    public function simpan_actual_data2($data)  
+    {
+        // Cek apakah data dengan kombinasi tersebut sudah ada
+        $this->db->where([
+            'tahun' => $data['tahun'],
+            'pt'    => $data['pt'],
+            'area'  => $data['area'],
+            'bulan' => $data['bulan']
+        ]);
+        $existing = $this->db->get('mt_budget_actual')->row(); // Ganti 'budget_table' dengan nama tabelmu
+
+        if ($existing) {
+            // Tambahkan actual baru ke actual lama
+            $newActual = floatval($existing->actual) + floatval($data['actual']);
+
+            // Update dengan actual yang sudah ditambah
+            $this->db->where('id', $existing->id); // atau where by kombinasi kalau tidak ada ID
+            return $this->db->update('mt_budget_actual', [
+                'actual' => $newActual,
+                'tgl_invoice' => $data['tgl_invoice'],
+                'nomor_invoice' => $data['nomor_invoice'],
+                'nomor_ps' => $data['nomor_ps']
+            ]);
         } else {
-            // Jika data belum ada, insert data baru
+            // Insert data baru jika belum ada
             return $this->db->insert('mt_budget_actual', $data);
         }
     }
@@ -330,4 +366,16 @@ class Budget_model extends CI_Model
     //     $this->db->insert('xin_companies', $data);
     //     return $this->db->affected_rows() > 0 ? $this->db->insert_id() : false;
     // }
+
+    public function is_duplicate_budget($tahun, $pt, $area, $bulan)
+    {
+        $this->db->where([
+            'tahun' => $tahun,
+            'pt' => $pt,
+            'area' => $area,
+            'bulan' => $bulan
+        ]);
+        $query = $this->db->get('mt_budget_target');
+        return $query->num_rows() > 0;
+    }
 }

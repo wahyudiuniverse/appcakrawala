@@ -81,7 +81,7 @@ class Budget extends MY_Controller
 
         // Ambil data untuk dropdown
         $data['tahun_list'] = $this->Budget_model->get_all_years();
-        $data['pt_list'] = $this->Budget_model->get_all_pts();
+        $data['pt_list'] = $this->Budget_model->get_all_pt();
         $data['area_list'] = $this->Budget_model->get_all_areas();
 
         // $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
@@ -114,7 +114,8 @@ class Budget extends MY_Controller
 
         $this->load->model('Budget_model');
         $data['tahun_list'] = $this->Budget_model->get_unique('tahun');
-        $data['pt_list'] = $this->Budget_model->get_unique('pt');
+        // $data['pt_list'] = $this->Budget_model->get_unique('pt');
+        $data['pt_list'] = $this->Budget_model->get_all_pt();
         $data['area_list'] = $this->Budget_model->get_unique('area');
 
         // $data['tahun_list'] = $this->Budget_model->get_tahun_list();
@@ -275,10 +276,9 @@ class Budget extends MY_Controller
     }
 
 
+
     public function add_budget_target()
     {
-        // Validasi CSRF otomatis oleh CI jika diaktifkan di config
-
         $tahun = $this->input->post('tahun');
         $pt = $this->input->post('pt');
         $area = $this->input->post('area');
@@ -291,13 +291,17 @@ class Budget extends MY_Controller
         }
 
         $this->load->model('Budget_model');
-        $pt = $this->Budget_model->insert_pt($pt);
 
-        if (!$pt) {
-            echo json_encode(['success' => false, 'message' => 'Gagal menambahkan PT']);
+        // Cek duplikat
+        if ($this->Budget_model->is_duplicate_budget($tahun, $pt, $area, $bulan)) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Data dengan kombinasi tahun, PT, area, dan bulan tersebut sudah ada.'
+            ]);
             return;
         }
 
+        // Insert data
         $data = [
             'tahun' => $tahun,
             'pt' => $pt,
@@ -311,9 +315,49 @@ class Budget extends MY_Controller
         echo json_encode([
             'success' => $result ? true : false,
             'message' => $result ? 'Data berhasil ditambahkan' : 'Gagal menambahkan data target',
-            'csrf_hash' => $this->security->get_csrf_hash() // Kirim token baru
+            'csrf_hash' => $this->security->get_csrf_hash()
         ]);
     }
+
+    // public function add_budget_target()
+    // {
+    //     // Validasi CSRF otomatis oleh CI jika diaktifkan di config
+
+    //     $tahun = $this->input->post('tahun');
+    //     $pt = $this->input->post('pt');
+    //     $area = $this->input->post('area');
+    //     $bulan = $this->input->post('bulan');
+    //     $target = $this->input->post('target');
+
+    //     if (empty($tahun) || empty($pt) || empty($area) || empty($bulan) || empty($target)) {
+    //         echo json_encode(['success' => false, 'message' => 'Semua data harus diisi.']);
+    //         return;
+    //     }
+
+    //     $this->load->model('Budget_model');
+    //     $pt = $this->Budget_model->insert_pt($pt);
+
+    //     if (!$pt) {
+    //         echo json_encode(['success' => false, 'message' => 'Gagal menambahkan PT']);
+    //         return;
+    //     }
+
+    //     $data = [
+    //         'tahun' => $tahun,
+    //         'pt' => $pt,
+    //         'area' => $area,
+    //         'bulan' => $bulan,
+    //         'target' => $target
+    //     ];
+
+    //     $result = $this->Budget_model->insert_budget_target($data);
+
+    //     echo json_encode([
+    //         'success' => $result ? true : false,
+    //         'message' => $result ? 'Data berhasil ditambahkan' : 'Gagal menambahkan data target',
+    //         'csrf_hash' => $this->security->get_csrf_hash() // Kirim token baru
+    //     ]);
+    // }
 
 
     // public function add_budget_target()
