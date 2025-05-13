@@ -92,12 +92,6 @@
                         </div>
 
                         <!-- PT -->
-                        <!-- <div class="mb-3">
-                            <label for="modalPT" class="form-label">PT</label>
-                            <input type="text" class="form-control" id="modalPT" required placeholder="Nama PT">
-                        </div> -->
-
-                        <!-- PT -->
                         <div class="mb-3">
                             <label for="modalPT" class="form-label">PT</label>
                             <select class="form-control" id="modalPT" required>
@@ -147,7 +141,7 @@
                         <!-- Target -->
                         <div class="mb-3">
                             <label for="modalTarget" class="form-label">Target</label>
-                            <input type="number" class="form-control" id="modalTarget" required placeholder="Rp 0">
+                            <input type="text" class="form-control" id="modalTarget" required placeholder="Rp 0">
                         </div>
                     </form>
                 </div>
@@ -197,7 +191,7 @@
                         <!-- Input yang diisi manual oleh user -->
                         <div class="mb-3">
                             <label for="modalActual2" class="form-label">Actual</label>
-                            <input type="number" class="form-control" id="modalActual2" required placeholder="Rp 0">
+                            <input type="text" class="form-control" id="modalActual2" required placeholder="Rp 0">
                         </div>
                         <div class="mb-3">
                             <label for="modalTglInvoice2" class="form-label">Tanggal Invoice</label>
@@ -231,6 +225,81 @@
         // Ambil token CSRF dari elemen input yang tersembunyi
         var csrf_token_name = '<?php echo $this->security->get_csrf_token_name(); ?>';
         var csrf_hash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
+
+        // Fungsi format angka ke Rupiah (tanpa Rp untuk data mentah)
+        function formatRupiah(angka, prefix = 'Rp ') {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix + rupiah;
+        }
+
+        // Format input saat user ketik
+        $('#modalTarget').on('keyup', function(e) {
+            let val = $(this).val();
+            $(this).val(formatRupiah(val));
+        });
+
+        // Saat submit, ambil angka asli tanpa "Rp" dan titik
+        function getRawNumberFromFormatted(str) {
+            return str.replace(/[^0-9]/g, '');
+        }
+
+
+
+        // ketik angka di actual
+        function formatRupiah(angka, prefix = 'Rp ') {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix + rupiah;
+        }
+
+        function getRawNumberFromFormatted(str) {
+            return str.replace(/[^0-9]/g, '');
+        }
+
+        $('#modalActual2').on('keyup', function(e) {
+            $(this).val(formatRupiah($(this).val()));
+        });
+
+
+
+        // rupiah pada data table
+        function formatRupiah(angka, prefix = 'Rp ') {
+            let number_string = angka.toString().replace(/[^,\d]/g, ''),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix + rupiah;
+        }
 
 
         // Format Target sebagai Rp secara otomatis
@@ -365,8 +434,10 @@
                                 row.pt,
                                 row.area,
                                 bulanNama,
-                                row.target,
-                                row.actual ?? 0,
+                                formatRupiah(row.target),
+                                formatRupiah(row.actual ?? 0),
+                                // row.target,
+                                // row.actual ?? 0,
                                 percentage,
                                 `
                             <button class="btn btn-secondary btn-sm" onclick="openInputDialog2('${row.tahun}', '${row.pt}', '${row.area}', '${row.bulan}')">Input Invoice</button>`
@@ -399,7 +470,8 @@
                     let pt = $('#modalPT').val();
                     let area = $('#modalArea').val();
                     let bulan = $('#modalBulan').val();
-                    let target = $('#modalTarget').val();
+                    let targetFormatted = $('#modalTarget').val();
+                    let target = getRawNumberFromFormatted(targetFormatted); // Ambil angka asli
 
                     // CSRF token dari input hidden
                     let csrfTokenName = $('#csrf_token').attr('name');
@@ -455,109 +527,6 @@
                 });
             };
 
-            //     $('#submitBudget').off('click').on('click', function() {
-            //         let tahun = $('#modalTahun').val();
-            //         let pt = $('#modalPT').val();
-            //         let area = $('#modalArea').val();
-            //         let bulan = $('#modalBulan').val();
-            //         let target = $('#modalTarget').val();
-
-            //         if (!tahun || !pt || !area || !bulan || !target) {
-            //             alert("Semua form harus diisi.");
-            //             return;
-            //         }
-
-            //         // Kirim data ke controller untuk menambah data baru
-            //         $.ajax({
-            //             url: "<?= base_url('admin/budget/add_budget_target') ?>",
-            //             type: "POST",
-            //             data: {
-            //                 tahun: tahun,
-            //                 pt: pt,
-            //                 area: area,
-            //                 bulan: bulan,
-            //                 target: target,
-            //                 [csrfName]: csrfHash
-            //             },
-            //             success: function(response) {
-            //                 if (response.success) {
-            //                     alert('Data budget target berhasil ditambahkan');
-            //                     $('#inputBudgetModal').modal('hide');
-            //                     $('#btnShow').click(); // Refresh data
-            //                 } else {
-            //                     alert('Data budget target berhasil ditambahkan');
-            //                 }
-            //             },
-            //             error: function(xhr, status, error) {
-            //                 console.error("AJAX Error:", error);
-            //                 alert("Gagal menambahkan data target.");
-            //             }
-            //         });
-            //     });
-            // };
-
-
-
-            // // Menampilkan dialog input target
-            // window.openInputDialog1 = function() {
-            //     // Reset form
-            //     $('#modalTahunActual').val('');
-            //     $('#modalPTActual').val('');
-            //     $('#modalAreaActual').val('');
-            //     $('#modalBulanActual').val('');
-            //     $('#modalActual').val('');
-            //     $('#modalTglInvoice').val('');
-            //     $('#modalNomorInvoice').val('');
-            //     $('#modalNomorPS').val('');
-
-            //     $('#inputActualModal').modal('show');
-
-            //     $('#submitActual').off('click').on('click', function() {
-            //         let tahun = $('#modalTahunActual').val();
-            //         let pt = $('#modalPTActual').val();
-            //         let area = $('#modalAreaActual').val();
-            //         let bulan = $('#modalBulanActual').val();
-            //         let actual = $('#modalActual').val();
-            //         let tgl_invoice = $('#modalTglInvoice').val();
-            //         let nomor_invoice = $('#modalNomorInvoice').val();
-            //         let nomor_ps = $('#modalNomorPS').val();
-
-            //         if (!tahun || !pt || !area || !bulan || !actual || !tgl_invoice || !nomor_invoice || !nomor_ps) {
-            //             alert("Semua form harus diisi.");
-            //             return;
-            //         }
-
-            //         // Kirim data ke controller untuk menambah data baru
-            //         $.ajax({
-            //             url: "<?= base_url('admin/budget/add_actual_data') ?>",
-            //             type: "POST",
-            //             data: {
-            //                 tahun: tahun,
-            //                 pt: pt,
-            //                 area: area,
-            //                 bulan: bulan,
-            //                 actual: actual,
-            //                 tgl_invoice: tgl_invoice,
-            //                 nomor_invoice: nomor_invoice,
-            //                 nomor_ps: nomor_ps,
-            //                 [csrfName]: csrfHash
-            //             },
-            //             success: function(response) {
-            //                 if (response.success) {
-            //                     alert('Data budget actual berhasil ditambahkan');
-            //                     $('#inputActualModal').modal('hide');
-            //                     $('#btnShow').click(); // Refresh data
-            //                 } else {
-            //                     alert('Data budget actual berhasil ditambahkan');
-            //                 }
-            //             },
-            //             error: function(xhr, status, error) {
-            //                 console.error("AJAX Error:", error);
-            //                 alert("Gagal menambahkan data actual.");
-            //             }
-            //         });
-            //     });
-            // };
 
 
             window.openInputDialog2 = function(tahun, pt, area, bulan) {
@@ -578,10 +547,12 @@
 
                 // Tangani tombol submit
                 $('#submitActual2').off('click').on('click', function() {
-                    let actual = $('#modalActual2').val();
+                    // let actual = $('#modalActual2').val();
                     let tgl_invoice = $('#modalTglInvoice2').val();
                     let nomor_invoice = $('#modalNomorInvoice2').val();
                     let nomor_ps = $('#modalNomorPS2').val();
+                    let actualFormatted = $('#modalActual2').val();
+                    let actual = getRawNumberFromFormatted(actualFormatted); // angka murni
 
                     // Validasi input
                     if (!actual || !tgl_invoice || !nomor_invoice || !nomor_ps) {
@@ -620,7 +591,6 @@
                     });
                 });
             };
-
 
 
         });
