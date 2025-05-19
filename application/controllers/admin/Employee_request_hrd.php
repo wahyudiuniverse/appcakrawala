@@ -164,8 +164,12 @@ class Employee_request_hrd extends MY_Controller
 			'allow_rent',
 			'allow_parking',
 			'TANGGAL REGISTER',
-			'BPJS TK',
-			'BPJS KES'
+			'FILE KTP',
+			'FILE KK',
+			'FILE NPWP',
+			'FILE IJAZAH',
+			'FILE CV',
+			'FILE SKCK',
 		];
 
 		//isi cell dari array
