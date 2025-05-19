@@ -3990,7 +3990,8 @@ ORDER BY jab.designation_id ASC";
 	public function read_employee_nae($id)
 	{
 
-		$sql = "SELECT * FROM xin_employees WHERE sub_project_id = '1' AND user_id = ?";
+		// $sql = "SELECT * FROM xin_employees WHERE sub_project_id = '1' AND user_id = ?";
+		$sql = "SELECT * FROM xin_employees WHERE designation_id in (17,18,155,156,226) AND user_id = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 

@@ -1186,20 +1186,15 @@ class Pkwt179 extends MY_Controller
 
 				$tbl_spb = '
 
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br>
-				<br>			<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>

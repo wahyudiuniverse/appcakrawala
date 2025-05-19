@@ -1606,7 +1606,7 @@ class Pkwt_default extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1670,7 +1670,7 @@ class Pkwt_default extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
 						</tr>';
 				}
 

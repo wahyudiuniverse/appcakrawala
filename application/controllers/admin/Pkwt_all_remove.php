@@ -1780,7 +1780,7 @@ class Pkwt_all_remove extends MY_Controller
 				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				$pdf->Output('pkwt_draf_sc.pdf', 'I');
 				ob_end_flush();
 
 
