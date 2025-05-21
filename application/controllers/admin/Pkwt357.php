@@ -399,7 +399,7 @@ class Pkwt357 extends MY_Controller
 								<td colspan="18"><b>PIHAK PERTAMA</b> berdasarkan pertimbangan tertentu berhak memindah ke bagian lain serta merubah nama Jabatan <b>PIHAK KEDUA</b> dan karenanya <b>PIHAK KEDUA</b> wajib bersedia untuk dipindah ke bagian lain dan atau dirubah nama jabatannya sesuai dengan kebutuhan. Dalam hal ini <b>PIHAK PERTAMA</b> akan memberitahukan hal tersebut secara tertulis kepada <b>PIHAK KEDUA</b>.</td>
 							</tr>
 				</table>
-				<br><br><br><br><br><br><br>
+				<br><br><br><br><br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 2<br>JANGKA WAKTU PERJANJIAN</b>
@@ -519,9 +519,6 @@ class Pkwt357 extends MY_Controller
 		
 				<br>
 				<br>
-				<br>
-				<br>
-				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 4<br>TATA TERTIB WAKTU KERJA</b>
@@ -584,10 +581,15 @@ class Pkwt357 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >4.5</td>
+								<td colspan="20">Karyawan diberikan kuota maksimal 2 (dua) hari izin sakit dalam satu bulan, jika izin melebihi batas yang sudah ditentukan, maka selebihnya akan dihitung sebagai potongan gaji secara prorata sesuai jumlah hari kerja</td>
+								<td colspan="0"></td>
+							</tr>
+
 				</table>
 
 			<br>
-
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 5<br>ETIKA PRILAKU</b>
@@ -657,7 +659,7 @@ class Pkwt357 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br>
+				<br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1243,7 +1245,6 @@ class Pkwt357 extends MY_Controller
 				<br>			
 				<br>
 				<br>			
-				<br>
 				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1368,6 +1369,19 @@ class Pkwt357 extends MY_Controller
 								<td colspan="0">e.</td>
 								<td colspan="20">Apabila saya karyawan yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
 							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">f.</td>
+								<td colspan="20">Apabila saya karyawan yang bertugas tidak melakukan penjualan harian yang bernilai Rp100.000 (seratus ribu rupiah), maka hari itu saya tidak terhitung kerja.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">g.</td>
+								<td colspan="20">Apabila saya, selaku karyawan yang bertugas tidak menggunakan aplikasi Geotaging (Virtusee) untuk visit dan absen, maka gaji saya pada hari itu tidak akan dibayarkan.</td>
+							</tr>
+
 							<tr>
 								<td >7.</td>
 								<td colspan="20">Surat keterangan kerja tidak dapat dikeluarkan apabila karyawan bekerja dibawah 3 bulan dengan pengecualian:</td>
@@ -1392,8 +1406,6 @@ class Pkwt357 extends MY_Controller
 							<br>
 							<br>
 							<br>	
-							<br>
-							<br>
 							<br>
 							<tr>
 								<td >9.</td>

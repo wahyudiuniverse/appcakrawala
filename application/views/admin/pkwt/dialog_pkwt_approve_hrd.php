@@ -686,7 +686,13 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal"><?php echo $this->lang->line('xin_close');?></button>
 
-    <?php if($approver=='1' || $approver=='5725' ||  $approver=='24502' || $approver=='17371') { ?>
+    <?php if($approver=='1' 
+      || $approver=='5725'  //widia 
+      || $approver=='17371' //fitri
+      || $approver=='33113' //nabila
+      || $approver=='29222' //anggun
+      || $approver=='5714' //kyla
+    ) { ?>
     <button type="submit" class="btn btn-primary save">APPROVE HRD</button>
     <?php } ?>
   </div>

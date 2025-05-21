@@ -952,6 +952,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				// $record->nip,
 				$nip,
 				$tanggal_join,
+				//"ini periode",
 				$nik,
 				$nik_validation,
 				trim(strtoupper($nama_lengkap), " "),
@@ -959,6 +960,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($record->sub_project), " "),
 				trim(strtoupper($record->jabatan), " "),
 				trim(strtoupper($record->status_emp), " "),
+				//"ini pindah project",
 				$record->gaji_pokok,
 				$record->allow_pph,
 				$record->allow_jabatan,
@@ -1007,6 +1009,112 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$total_bpjs_tk_pensiun,
 				$record->pph_21,
 				$record->pph_21_thr,
+			);
+		}
+
+		//$tabel_saltab = $this->Import_model->get_saltab_table();
+		//$paremeter = implode(",", $tabel_saltab);
+		// $jumlah_data = count($tabel_saltab);
+
+		// foreach ($records as $record) {
+
+		// 	$data[] = array(
+
+		// 	);
+		// }
+
+		return $data;
+	}
+
+	//get table saltab release untuk download excel Pajak
+	public function get_saltab_detail_excel_release_nik($id, $data_batch)
+	{
+		// $this->db->select($parameter);
+		$this->db->select("*");
+		// $this->db->from('xin_saltab');
+		$this->db->where('uploadid', $id);
+
+		// $records = $this->db->get()->result_array();
+		$records = $this->db->get('xin_saltab')->result();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$nip = $record->nip;
+			$nik_saltab = $record->nik;
+			$nik_cis = "";
+			$link_foto = "";
+			$nama_lengkap = $record->fullname;
+			$nik_validation = "0";
+			$tanggal_join = "";
+
+			if ((!is_null($record->nip)) && ($record->nip != "") && ($record->nip != "0")) {
+				$this->db->select('user_id,verification_id,first_name,date_of_joining,ktp_no,filename_ktp');
+				$this->db->from('xin_employees');
+				$this->db->where('employee_id', $record->nip);
+
+				$query = $this->db->get()->row_array();
+
+				if (!empty($query)) {
+					$tanggal_join = $query['date_of_joining'];
+
+					//verification id
+					$actual_verification_id = "";
+					if ((is_null($query['verification_id'])) || ($query['verification_id'] == "") || ($query['verification_id'] == "0")) {
+						$actual_verification_id = "e_" . $query['user_id'];
+					} else {
+						$actual_verification_id = $query['verification_id'];
+					}
+
+					//cek status validation ke database
+					$nik_validation = "0";
+					$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+					if (is_null($nik_validation_query)) {
+						$nik_validation = "0";
+					} else {
+						$nik_validation = $nik_validation_query['status'];
+					}
+
+					if ((!empty($query['ktp_no'])) || ($query['ktp_no'] != "") || ($query['ktp_no'] != "0")) {
+						$nik_cis = $query['ktp_no'];
+					} else {
+						$nik_cis = "";
+					}
+
+					if ((!empty($query['first_name'])) || ($query['first_name'] != "") || ($query['first_name'] != "0")) {
+						$nama_lengkap = $query['first_name'];
+					} else {
+						$nama_lengkap = $record->fullname;
+					}
+
+					if (empty($query['filename_ktp']) || ($query['filename_ktp'] == "") || ($query['filename_ktp'] == "0")) {
+						$link_foto = "-";
+					} else {
+						$link_foto = base_url() . "uploads/document/ktp/" . $query['filename_ktp'];
+					}
+				}
+				// $nama_lengkap = "NIP TIDAK KOSONG";
+				// $tes_query = $this->db->last_query();
+				// $contract_start = $tes_query;
+			} else {
+				$nama_lengkap = $record->fullname;
+			}
+
+			// $bpjs_ketenagakerjaan = $record->bpjs_tk_deduction_jkk_jkm + $record->bpjs_tk_deduction_jht + $record->jaminan_pensiun_deduction + $record->bpjs_tk + $record->jaminan_pensiun;
+			// $bpjs_kesehatan = $record->bpjs_ks_deduction + $record->bpjs_ks;
+			// $total_bpjs_tk_pensiun = $record->bpjs_tk + $record->jaminan_pensiun;
+
+			$data[] = array(
+				$nip,
+				$tanggal_join,
+				trim(strtoupper($nama_lengkap), " "),
+				$nik_saltab,
+				$nik_cis,
+				"",
+				$nik_validation,
+				$link_foto,
+				trim(strtoupper($record->sub_project), " "),
+				trim(strtoupper($record->jabatan), " "),
 			);
 		}
 
@@ -2577,6 +2685,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$download_BPJS = '<button type="button" onclick="downloadBatchSaltabReleaseBPJS(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data BPJS</button>';
 			$download_Payroll = '<button type="button" onclick="downloadBatchSaltabReleasePayroll(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data Payroll</button>';
 			$download_Pajak = '<button type="button" onclick="downloadBatchSaltabReleasePajak(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data Pajak</button>';
+			$download_nik_saltab = '<button type="button" onclick="downloadBatchSaltabReleaseNIKSaltab(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-success" ><i class="fa fa-download"></i> Data NIK Saltab</button>';
 			$delete = '<button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-danger" >DELETE</button>';
 
 			$button_download = '<div class="btn-group mt-2">
@@ -2589,6 +2698,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 						<li class="mb-1">' . $download_BPJS . '</li>
 						<li class="mb-1">' . $download_Payroll . '</li>
 						<li class="mb-1">' . $download_Pajak . '</li>
+						<li class="mb-1">' . $download_nik_saltab . '</li>
       				</ul>
     		</div>';
 

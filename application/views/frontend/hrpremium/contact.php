@@ -22,17 +22,17 @@
 				<fieldset>
 
 					<div>
-						<label>Name:</label>
+						<label>Nama Lengkap:</label>
 						<input name="name" type="text" id="name" />
 					</div>
 
 					<div>
-						<label >Email: <span>*</span></label>
+						<label >NIP/NIK/Email: <span>*</span></label>
 						<input name="email" type="email" id="email" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" />
 					</div>
 
 					<div>
-						<label>Message: <span>*</span></label>
+						<label>Pesan: <span>*</span></label>
 						<textarea name="message" cols="40" rows="3" id="message" spellcheck="true"></textarea>
 					</div>
 
@@ -55,19 +55,19 @@
 <div class="five columns">
 
 	<!-- Information -->
-	<h3 class="margin-bottom-10">Information</h3>
+	<h3 class="margin-bottom-10">Informasi</h3>
 	<div class="widget-box">
-		<p>Morbi eros bibendum lorem ipsum dolor pellentesque pellentesque bibendum. </p>
+		<p>Sampaikan kendala dan tujuan anda, agar kami bisa melakukan hal terbaik untuk anda.</p>
 
 		<ul class="contact-informations">
-			<li>812 Al Murshid, Apt. 303</li>
-			<li>Riyadh, KSA </li>
+			<li>Gedung. Graha Krista Aulia, No 20 Cinere</li>
+			<li>Depok, Jawa Barat</li>
 		</ul>
 
 		<ul class="contact-informations second">
-			<li><i class="fa fa-phone"></i> <p>+966 123 456 789</p></li>
-			<li><i class="fa fa-envelope"></i> <p>info@yourdomain.com</p></li>
-			<li><i class="fa fa-globe"></i> <p>www.yourdomain.com</p></li>
+			<li><i class="fa fa-phone"></i> <p>+62 851-7412-3434</p></li>
+			<li><i class="fa fa-envelope"></i> <p>itcare@spcakrawala.co.id</p></li>
+			<li><i class="fa fa-globe"></i> <p>https://spcakrawala.co.id</p></li>
 		</ul>
 
 	</div>

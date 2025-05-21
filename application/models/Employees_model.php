@@ -816,7 +816,7 @@ class Employees_model extends CI_Model
 		}
 	}
 
-	//ambil hubunan kontak darurat
+	//ambil nama hubungan kontak darurat
 	function get_nama_hubungan_kontak_darurat($id)
 	{
 		if ($id == null) {
@@ -1512,7 +1512,13 @@ class Employees_model extends CI_Model
 				"allow_comunication" => $record->allow_comunication,
 				"allow_rent" => $record->allow_rent,
 				"allow_parking" => $record->allow_parking,
-				"request_empon" => $record->request_empon
+				"request_empon" => $record->request_empon,
+				"ktp" => base_url() . "uploads/document/ktp/" . $record->ktp,
+				"kk" => base_url() . "uploads/document/kk/" . $record->kk,
+				"file_npwp" => base_url() . "uploads/document/npwp/" . $record->file_npwp,
+				"ijazah" => base_url() . "uploads/document/ijazah/" . $record->ijazah,
+				"civi" => base_url() . "uploads/document/cv/" . $record->civi,
+				"skck" => base_url() . "uploads/document/skck/" . $record->skck,
 			);
 		}
 
@@ -3984,7 +3990,8 @@ ORDER BY jab.designation_id ASC";
 	public function read_employee_nae($id)
 	{
 
-		$sql = "SELECT * FROM xin_employees WHERE sub_project_id = '1' AND user_id = ?";
+		// $sql = "SELECT * FROM xin_employees WHERE sub_project_id = '1' AND user_id = ?";
+		$sql = "SELECT * FROM xin_employees WHERE designation_id in (17,18,155,156,226) AND user_id = ?";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 
