@@ -1147,11 +1147,25 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                             </tr>
                             <tr>
                               <th scope="row">Alamat KTP</th>
-                              <td id="alamat_ktp_tabel"><?php echo $alamat_ktp; ?></td>
+                              <td id="alamat_ktp_tabel"><a href="https://maps.google.com/?q=<?php echo $alamat_ktp; ?>" target="_blank"><?php echo $alamat_ktp; ?></a></td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Maps Alamat KTP</th>
+                              <td id="alamat_ktp_tabel">
+                                <iframe width='100%' height='350' frameborder='0' scrolling='no'  marginheight='0' marginwidth='0' src='https://maps.google.com/maps?q="<?php echo $alamat_ktp; ?>"&output=embed'></iframe>
+                                <!-- <a href="https://maps.google.com/?q=<?php echo $alamat_ktp; ?>" target="_blank"><?php echo $alamat_ktp; ?></a> -->
+                              </td>
                             </tr>
                             <tr>
                               <th scope="row">Alamat Domisili</th>
-                              <td id="alamat_domisili_tabel"><?php echo $alamat_domisili; ?></td>
+                              <td id="alamat_domisili_tabel"><a href="https://maps.google.com/?q=<?php echo $alamat_domisili; ?>" target="_blank"><?php echo $alamat_domisili; ?></a></td>
+                            </tr>
+                            <tr>
+                              <th scope="row">Maps Alamat KTP</th>
+                              <td id="alamat_ktp_tabel">
+                                <iframe width='100%' height='350' frameborder='0' scrolling='no'  marginheight='0' marginwidth='0' src='https://maps.google.com/maps?q="<?php echo $alamat_domisili; ?>"&output=embed'></iframe>
+                                <!-- <a href="https://maps.google.com/?q=<?php echo $alamat_ktp; ?>" target="_blank"><?php echo $alamat_ktp; ?></a> -->
+                              </td>
                             </tr>
                           </tbody>
                         </table>
