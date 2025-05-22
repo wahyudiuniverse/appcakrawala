@@ -289,6 +289,52 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
   </div>
 
 
+<!-- SURAT HAND OVER -->
+ <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
+  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+    <div class="row">
+      <!-- PENEMPATAN -->
+
+      <input name="dhover" type="text" value="<?php echo $dok_over_hand;?>" hidden>
+
+      <div class="col-sm-4">
+        <div>
+          <label for="penempatan">Hand Over</label>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div>
+          
+                          <div class="form-group">
+                            <fieldset class="form-group">
+                              <input type="file" class="form-control-file" id="dok_hover" name="dok_hover">
+                              <small>Jenis File: .pdf</small>
+                            </fieldset>
+                          </div>
+        </div>
+      </div>
+
+                          <?php 
+
+        if(is_null($dok_over_hand)) {
+          $vexc = '';
+        } else {
+
+          $nama_file_over = $dok_over_hand;
+          //kalau blm ada folder path nya
+          if (file_exists($nama_file_over)) {
+            // $pesan = "ada file"; //tampil file skema terbaru
+              echo '<a href="'.base_url().$nama_file_over.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info" style="height: max-content;padding: 10px;">Lihat Dokumen</button></a>';
+          } else {
+              echo '<a href="'.base_url().'uploads/document/exit/2023/12/'.$nama_file_over.'" target="_blank"><button type="button" class="btn btn-xs btn-outline-info" style="height: max-content;padding: 10px;">Lihat Dokumen</button></a>';
+          }
+        }
+    ?>
+
+    </div>
+  </div>
+
 
 
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">

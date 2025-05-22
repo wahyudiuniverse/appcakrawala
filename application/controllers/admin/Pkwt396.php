@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt6 extends MY_Controller 
+class Pkwt396 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1369,11 +1369,6 @@ class Pkwt6 extends MY_Controller
 								<td colspan="20">Apabila saya karyawan yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
 							</tr>
 							<tr>
-								<td ></td>
-								<td colspan="0">f.</td>
-								<td colspan="20">Selama saya menjalankan training, saya hanya mendapatkan Tunjangan Pelatihan per-hari</td>
-							</tr>
-							<tr>
 								<td >7.</td>
 								<td colspan="20">Surat keterangan kerja tidak dapat dikeluarkan apabila karyawan bekerja dibawah 3 bulan dengan pengecualian:</td>
 								<td colspan="0"></td>
@@ -1397,6 +1392,8 @@ class Pkwt6 extends MY_Controller
 							<br>
 							<br>
 							<br>	
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td >9.</td>
@@ -1701,8 +1698,8 @@ class Pkwt6 extends MY_Controller
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Pelatihan</td>
-							<td colspan="3"> : '.$allowance_operation.',- Per Hari</td>
+							<td>Tunjangan Operasional</td>
+							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
 						</tr>';
 				}
 

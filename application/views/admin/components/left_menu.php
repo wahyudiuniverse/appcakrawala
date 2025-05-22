@@ -1093,14 +1093,11 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
   <!-- BUDGET -->
   <?php
-  // if (
-  // in_array('1600', $role_resources_ids)
-  // || in_array('1601', $role_resources_ids)
-  // || in_array('1602', $role_resources_ids)
-  // || in_array('1603', $role_resources_ids)
-  // ) {
+  if (
+  in_array('71', $role_resources_ids)
+  ) {
   ?>
-  <li class="<?php if (!empty($arr_mod['saltab_open'])) echo $arr_mod['saltab_open']; ?> sidenav-item">
+  <li class="<?php if (!empty($arr_mod['budgeting_open'])) echo $arr_mod['budgeting_open']; ?> sidenav-item">
     <a href="#" class="sidenav-link sidenav-toggle">
       <i class="sidenav-icon ion ion-logo-buffer"></i>
       <div>BUDGETTING</div>
@@ -1108,43 +1105,43 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
     <ul class="sidenav-menu">
       <?php
-      // if (in_array('1601', $role_resources_ids)) {
+      if (in_array('711', $role_resources_ids)) {
       ?>
-      <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
-        <a class="sidenav-link" href="<?php echo site_url('admin/budget/budget'); ?>"> Target Budgetting
+      <li class="sidenav-item <?php if (!empty($arr_mod['pengajuan_sp_active'])) echo $arr_mod['pengajuan_sp_active']; ?>">
+        <a class="sidenav-link" href="<?php echo site_url('admin/budget/budget'); ?>">Pengajuan SP
         </a>
       </li>
       <?php
-      // }
+      }
       ?>
 
       <?php
-      // if (in_array('1602', $role_resources_ids)) {
+      if (in_array('712', $role_resources_ids)) {
       ?>
-      <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
-        <a class="sidenav-link" href="<?php echo site_url('admin/budget/actual'); ?>"> Actual Budgetting
+      <li class="sidenav-item <?php if (!empty($arr_mod['budget_invoice_active'])) echo $arr_mod['budget_invoice_active']; ?>">
+        <a class="sidenav-link" href="<?php echo site_url('admin/budget/actual'); ?>">Invoice
         </a>
       </li>
       <?php
-      // }
+      }
       ?>
 
       <?php
-      // if (in_array('1603', $role_resources_ids)) {
+      if (in_array('713', $role_resources_ids)) {
       ?>
-      <li class="sidenav-item <?php if (!empty($arr_mod['import_esaltab_active'])) echo $arr_mod['import_esaltab_active']; ?>">
-        <a class="sidenav-link" href="<?php echo site_url('admin/budget/report'); ?>"> Report Budgetting
+      <li class="sidenav-item <?php if (!empty($arr_mod['budget_report_active'])) echo $arr_mod['budget_report_active']; ?>">
+        <a class="sidenav-link" href="<?php echo site_url('admin/budget/report'); ?>">Report Budgetting
         </a>
       </li>
       <?php
-      // }
+      }
       ?>
 
     </ul>
   </li>
 
   <?php
-  // }
+  }
   ?>
 
 
@@ -1408,14 +1405,14 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
-  <!-- mobile report -->
+  <!-- REPORT TRAXES -->
   <?php
   if (in_array('110', $role_resources_ids) || in_array('112', $role_resources_ids)) {
   ?>
     <li class="<?php if (!empty($arr_mod['reports_open'])) echo $arr_mod['reports_open']; ?> sidenav-item">
       <a href="#" class="sidenav-link sidenav-toggle">
         <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div><?php echo $this->lang->line('xin_report_mobileapp'); ?></div>
+        <div>Report Traxes</div>
       </a>
 
       <ul class="sidenav-menu">
@@ -1424,6 +1421,28 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['remployees_active'])) echo $arr_mod['remployees_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/reports/employee_attendance/'); ?>"> <?php echo $this->lang->line('xin_hr_reports_attendance_employee'); ?>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('112', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['traxes_active'])) echo $arr_mod['traxes_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_cio/'); ?>"> Check In-Out Report
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('112', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['traxes_summary_active'])) echo $arr_mod['traxes_summary_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_summary/'); ?>"> Summary Report
             </a>
           </li>
         <?php

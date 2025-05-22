@@ -216,6 +216,18 @@ class Xin_model extends CI_Model
 			$arr['konfig_download_esaltab_active'] = 'active';
 			$arr['saltab_open'] = 'open';	
 			return $arr;
+		} else if ($mClass == 'budget' && $mMethod == 'budget') {
+			$arr['pengajuan_sp_active'] = 'active';
+			$arr['budgeting_open'] = 'open';	
+			return $arr;
+		} else if ($mClass == 'budget' && $mMethod == 'actual') {
+			$arr['budget_invoice_active'] = 'active';
+			$arr['budgeting_open'] = 'open';	
+			return $arr;
+		} else if ($mClass == 'budget' && $mMethod == 'report') {
+			$arr['budget_report_active'] = 'active';
+			$arr['budgeting_open'] = 'open';	
+			return $arr;
 		} else if ($mClass == 'importexcel' && $mMethod == 'import_bpjs') {
 			$arr['manage_bpjs_active'] = 'active';
 			$arr['bpjs_open'] = 'open';
@@ -721,6 +733,14 @@ class Xin_model extends CI_Model
 			return $arr;
 		} else if ($mClass == 'reports'  && $mMethod == 'employee_attendance') {
 			$arr['remployees_active'] = 'active';
+			$arr['reports_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'traxes_report_cio') {
+			$arr['traxes_active'] = 'active';
+			$arr['reports_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'traxes_report_summary') {
+			$arr['traxes_summary_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'reports'  && $mMethod == 'roles') {
