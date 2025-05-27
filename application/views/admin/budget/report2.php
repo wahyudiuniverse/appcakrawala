@@ -2,7 +2,7 @@
     <!-- Tambahkan tombol di sini -->
     <div class="row mb-3">
         <div class="col-md-3">
-            <button class="btn btn-info btn-sm" onclick="openInputDialog()">Input Target Baru</button>
+            <button class="btn btn-info btn-sm" onclick="openInputDialog()">Input Pengajuan</button>
         </div>
     </div>
 
@@ -41,19 +41,29 @@
                 <tr>
                     <th>ID</th>
                     <th>Tahun</th>
+                    <th>Periode/Bulan</th>
                     <th>PT</th>
                     <th>Area</th>
-                    <th>Bulan</th>
-                    <th>Target</th>
-                    <th>Actual</th>
-                    <th>Percentage</th>
-                    <th>Action</th> <!-- Kolom Action untuk tombol Input Target -->
+                    <th>Project ID</th>
+                    <th>Jumlah PS(PSB & PDA)</th>
+                    <th>KPI (%)</th>
+                    <th>Total Nilai PSB & PDA (Rp)</th>
+                    <th>Total Nilai Pekerjaan Lain-Lain (Rp)</th>
+                    <th>Total Nilai Pendapatan di Pengajuan</th>
+                    <!-- <th>Nomor SP</th>
+                    <th>Total Pendapatan SP</th>
+                    <th>Nomor Invoice</th>
+                    <th>Tanggal Invoice</th>
+                    <th>Nilai Invoice</th> -->
+                    <!-- <th>PT</th>
+                    <th>Area</th> -->
+                    <!-- <th>Keterangan</th> -->
+                    <th>Opsi</th>
                 </tr>
             </thead>
-            <tbody>
-
-            </tbody>
+            <tbody></tbody>
         </table>
+
     </div>
 
     <?php
@@ -72,16 +82,15 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="inputBudgetModalLabel">Input Budget Target Baru</h5>
-                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                    <h5 class="modal-title" id="inputBudgetModalLabel">Input Pengajuan</h5>
                 </div>
                 <div class="modal-body">
                     <form id="budgetForm">
                         <!-- Token CSRF -->
                         <input type="hidden"
                             name="<?= $this->security->get_csrf_token_name(); ?>"
-                            value="<?= $this->security->get_csrf_hash(); ?>"
-                            id="csrf_token">
+                            value="<?= $this->security->get_csrf_hash(); ?>" id="csrf_token">
+
                         <!-- Tahun -->
                         <div class="mb-3">
                             <label for="modalTahun" class="form-label">Tahun</label>
@@ -116,7 +125,7 @@
 
                         <!-- Bulan -->
                         <div class="mb-3">
-                            <label for="modalBulan" class="form-label">Bulan</label>
+                            <label for="modalBulan" class="form-label">Periode/Bulan</label>
                             <select class="form-control" id="modalBulan" required>
                                 <option value="">-- Pilih Bulan --</option>
                                 <?php
@@ -140,9 +149,32 @@
                             </select>
                         </div>
 
+                        <!-- Project ID -->
+                        <div class="mb-3">
+                            <label for="modalProjectId" class="form-label">Project ID</label>
+                            <input type="text" class="form-control" id="modalProjectId" required placeholder="ID Project">
+                        </div>
+
+                        <!-- Jumlah PS PSB dan PDA -->
+                        <div class="mb-3">
+                            <label for="modalJumlahPS" class="form-label">Jumlah PS PSB dan PDA</label>
+                            <input type="text" class="form-control" id="modalJumlahPS" required placeholder="Jumlah PS PSB dan PDA">
+                        </div>
+
+                        <!-- Total Nilai PSB & PDA -->
+                        <div class="mb-3">
+                            <label for="modalPSB" class="form-label">Total Nilai PSB & PDA (Rp)</label>
+                            <input type="text" class="form-control" id="modalPSB" required placeholder="Rp 0">
+                        </div>
+
+                        <!-- Total Nilai Pekerjaan Lain-Lain -->
+                        <div class="mb-3">
+                            <label for="modalLain" class="form-label">Total Nilai Pekerjaan Lain-Lain (Rp)</label>
+                            <input type="text" class="form-control" id="modalLain" required placeholder="Rp 0">
+                        </div>
                         <!-- Target -->
                         <div class="mb-3">
-                            <label for="modalTarget" class="form-label">Target</label>
+                            <label for="modalTarget" class="form-label">Total Nilai Pendapatan Dipengajuan</label>
                             <input type="text" class="form-control" id="modalTarget" required placeholder="Rp 0">
                         </div>
                     </form>
@@ -150,7 +182,6 @@
 
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button> -->
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -159,7 +190,6 @@
             </div>
         </div>
     </div>
-
 
 
     <!-- Modal -->
@@ -323,6 +353,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        const BASE_URL = "<?= base_url() ?>";
+        const CSRF_NAME = "<?= $this->security->get_csrf_token_name(); ?>";
+        const CSRF_HASH = "<?= $this->security->get_csrf_hash(); ?>";
         // Ambil token CSRF dari elemen input yang tersembunyi
         var csrf_token_name = '<?php echo $this->security->get_csrf_token_name(); ?>';
         var csrf_hash = '<?php echo $this->security->get_csrf_hash(); ?>';
@@ -417,6 +450,60 @@
 
 
 
+        function formatRupiah(angka, prefix = 'Rp ') {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix + rupiah;
+        }
+
+        function getRawNumberFromFormatted(str) {
+            return str.replace(/[^0-9]/g, '');
+        }
+
+        $('#modalPSB').on('keyup', function(e) {
+            $(this).val(formatRupiah($(this).val()));
+        });
+
+
+
+
+        function formatRupiah(angka, prefix = 'Rp ') {
+            let number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix + rupiah;
+        }
+
+        function getRawNumberFromFormatted(str) {
+            return str.replace(/[^0-9]/g, '');
+        }
+
+        $('#modalLain').on('keyup', function(e) {
+            $(this).val(formatRupiah($(this).val()));
+        });
+
+
+
+
         // rupiah pada data table
         function formatRupiah(angka, prefix = 'Rp ') {
             let number_string = angka.toString().replace(/[^,\d]/g, ''),
@@ -433,6 +520,10 @@
             rupiah = split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix + rupiah;
         }
+
+
+
+
 
 
 
@@ -464,7 +555,7 @@
                 $('#area').html('<option value="">Pilih Area</option>');
 
                 $.ajax({
-                    url: '<?= base_url("admin/budget/get_pt_list") ?>', // pastikan URL ini benar
+                    url: '<?= base_url("admin/budget/get_pt_list2") ?>', // pastikan URL ini benar
                     type: 'POST',
                     data: {
                         tahun: tahun,
@@ -494,7 +585,7 @@
 
             if (pt) {
                 $.ajax({
-                    url: '<?= base_url("admin/budget/get_area_by_pt") ?>',
+                    url: '<?= base_url("admin/budget/get_area_by_pt2") ?>',
                     type: 'POST',
                     data: {
                         pt: pt,
@@ -518,118 +609,171 @@
         });
 
 
-
-
         $(document).ready(function() {
+            // Inisialisasi DataTable
             let table = $('#budgetTable').DataTable();
-            var csrfName = '<?= $this->security->get_csrf_token_name(); ?>';
-            var csrfHash = '<?= $this->security->get_csrf_hash(); ?>';
 
-            // Mapping angka ke nama bulan
             const namaBulan = [
                 '', 'JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI',
                 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'
             ];
 
-
+            // Event listener untuk tombol Show
             $('#btnShow').on('click', function() {
-                let tahun = $('#tahun').val();
-                let pt = $('#pt').val();
-                let area = $('#area').val();
+                const tahun = $('#tahun').val();
+                const pt = $('#pt').val();
+                const area = $('#area').val();
+
+                console.log('Filter - Tahun: ', tahun, 'PT: ', pt, 'Area: ', area); // Debug filter
 
                 if (!tahun || !pt || !area) {
                     alert("Semua filter wajib diisi.");
                     return;
                 }
 
+                // Melakukan AJAX ke server
                 $.ajax({
-                    url: "<?= base_url('admin/budget/get_budget_data') ?>",
+                    url: BASE_URL + "admin/budget/get_budget_data2",
                     type: "POST",
                     data: {
                         tahun: tahun,
                         pt: pt,
                         area: area,
-                        [csrfName]: csrfHash
+                        [CSRF_NAME]: CSRF_HASH
                     },
                     dataType: "json",
                     success: function(data) {
-                        table.clear().draw();
-                        data.forEach((row) => {
-                            const percentage = row.target > 0 && row.actual !== null ?
-                                ((row.actual / row.target) * 100).toFixed(2) + '%' :
-                                '0%';
+                        console.log(data); // Debug data yang diterima dari server
 
-                            // Konversi angka bulan ke nama bulan
-                            const bulanNama = namaBulan[parseInt(row.bulan)];
+                        // Memastikan data adalah array dan tidak kosong
+                        if (Array.isArray(data) && data.length > 0) {
+                            // Proses data jika ada
+                            table.clear().draw(); // Bersihkan DataTable
+                            data.forEach(row => {
+                                const bulanNama = namaBulan[parseInt(row.periode)] || '-';
 
-                            table.row.add([
-                                row.id,
-                                row.tahun,
-                                row.pt,
-                                row.area,
-                                bulanNama,
-                                formatRupiah(row.target),
-                                // Hanya tampilkan angka actual tanpa tombol
-                                formatRupiah(row.actual ?? 0),
-                                percentage,
-                                `
-                                <button class="btn btn-secondary btn-sm" onclick="openInputDialog3('${row.tahun}', '${row.pt}', '${row.area}', '${row.bulan}')"> Input Invoice</button>
-                              <button class="btn btn-info btn-sm"
-  onclick="lihatInvoice('${row.tahun}', '${row.pt}', '${row.area}', '${row.bulan}')">
-  Lihat Invoice
-</button>`
+                                // Ambil nilai, konversi ke angka
+                                const psb = parseFloat(row.total_nilai_psb_dan_pda) || 0;
+                                const lain = parseFloat(row.total_nilai_pekerjaan_lainlain) || 0;
+                                const pendapatan = parseFloat(row.total_nilai_pendapatan_dipengajuan) || 0;
 
+                                const totalGabungan = psb + lain;
 
-                            ]).draw(false);
-                        });
+                                // Validasi apakah total cocok
+                                const isCocok = Math.abs(totalGabungan - pendapatan) < 1; // Bolehkan sedikit toleransi angka
+
+                                // Hitung KPI jika pendapatan tidak nol
+                                let kpi = 0;
+                                if (pendapatan !== 0) {
+                                    kpi = (totalGabungan / pendapatan) * 100;
+                                }
+
+                                // Tampilkan di konsol untuk debug
+                                console.log(`Row ${row.id_pengajuan}: PSB+Lain = ${totalGabungan}, Pendapatan = ${pendapatan}, KPI = ${kpi.toFixed(2)}%`);
+
+                                // Tambahkan ke DataTable
+                                table.row.add([
+                                    row.id_pengajuan || '-',
+                                    row.tahun || '-',
+                                    bulanNama,
+                                    row.pt || '-',
+                                    row.area || '-',
+                                    row.project_id || '-',
+                                    row.jmlh_ps_psb_dan_pda || '-',
+                                    `${kpi.toFixed(2)}%`, // Menampilkan KPI hasil hitung
+                                    formatRupiah(psb),
+                                    formatRupiah(lain),
+                                    formatRupiah(pendapatan),
+
+                                    //                             `<button class="btn btn-secondary btn-sm" onclick="openInputDialog3('${row.tahun}', '${row.pt}', '${row.area}', '${row.periode}')">Input Invoice</button>
+                                    //  <button class="btn btn-info btn-sm" onclick="lihatInvoice('${row.tahun}', '${row.pt}', '${row.area}', '${row.periode}')">Lihat Invoice</button>`
+                                ]).draw(false);
+
+                                // Bisa juga tandai baris yang tidak cocok jika perlu
+                                if (!isCocok) {
+                                    console.warn(`‼️ WARNING: Total tidak sesuai pada row ID ${row.id_budget}`);
+                                }
+                            });
+
+                            //         data.forEach(row => {
+                            //             const bulanNama = namaBulan[parseInt(row.periode)] || '-';
+                            //             table.row.add([
+                            //                 row.id_budget || '-',
+                            //                 row.tahun || '-',
+                            //                 bulanNama,
+                            //                 row.project_id || '-',
+                            //                 row.jmlh_ps_psb_dan_pda || '-',
+                            //                 row.kpi || '0',
+                            //                 formatRupiah(row.total_nilai_psb_dan_pda || 0),
+                            //                 formatRupiah(row.total_nilai_pekerjaan_lainlain || 0),
+                            //                 formatRupiah(row.total_nilai_pendapatan_dipengajuan || 0),
+                            //                 // row.nomor_sp || '-',
+                            //                 // formatRupiah(row.total_pendapatan_sp || 0),
+                            //                 // row.nomor_invoice || '-',
+                            //                 // row.tanggal_invoice || '-',
+                            //                 // formatRupiah(row.nilai_invoice || 0),
+                            //                 row.pt || '-',
+                            //                 row.area || '-',
+                            //                 // row.keterangan || '-',
+                            //                 `<button class="btn btn-secondary btn-sm" onclick="openInputDialog3('${row.tahun}', '${row.pt}', '${row.area}', '${row.periode}')">Input Invoice</button>
+                            //  <button class="btn btn-info btn-sm" onclick="lihatInvoice('${row.tahun}', '${row.pt}', '${row.area}', '${row.periode}')">Lihat Invoice</button>`
+                            //             ]).draw(false);
+                            //         });
+                        } else {
+                            alert("Tidak ada data ditemukan.");
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.error("AJAX Error:", error);
-                        alert("Gagal mengambil data.");
+                        console.log(xhr.responseText); // Lihat isi error-nya
+                        alert("Gagal mengambil data. Silakan cek konsol.");
                     }
                 });
             });
 
 
             window.openInputDialog = function() {
-                // Reset form input
-                $('#modalTahun').val('');
-                $('#modalPT').val('');
-                $('#modalArea').val('');
-                $('#modalBulan').val('');
-                $('#modalTarget').val('');
+                // Reset form
+                $('#modalTahun, #modalPT, #modalArea, #modalBulan, #modalTarget, #modalPSB, #modalLain, #modalJumlahPS, #modalProjectId', ).val('');
 
                 $('#inputBudgetModal').modal('show');
 
                 $('#submitBudget').off('click').on('click', function() {
                     let tahun = $('#modalTahun').val();
-                    let pt = $('#modalPT').val();   
+                    let pt = $('#modalPT').val();
                     let area = $('#modalArea').val();
-                    let bulan = $('#modalBulan').val();
-                    let targetFormatted = $('#modalTarget').val();
-                    let target = getRawNumberFromFormatted(targetFormatted); // Ambil angka asli
+                    let periode = $('#modalBulan').val();
+                    let projectID = $('#modalProjectId').val(); // sesuai ID input
+                    let jumlahPS = $('#modalJumlahPS').val(); // Ambil Jumlah PS PSB dan PDA
+                    let total_nilai_psb_dan_pda = getRawNumberFromFormatted($('#modalPSB').val());
+                    let total_nilai_pekerjaan_lainlain = getRawNumberFromFormatted($('#modalLain').val());
+                    let total_nilai_pendapatan_dipengajuan = getRawNumberFromFormatted($('#modalTarget').val());
 
-                    // CSRF token dari input hidden
+                    // CSRF
                     let csrfTokenName = $('#csrf_token').attr('name');
                     let csrfTokenValue = $('#csrf_token').val();
 
-                    if (!tahun || !pt || !area || !bulan || !target) {
-                        alert("Semua form harus diisi.");
+                    // Periksa jika ada field yang kosong
+                    if (!tahun || !pt || !area || !periode || !total_nilai_pendapatan_dipengajuan || !projectID || !jumlahPS || !total_nilai_pekerjaan_lainlain || !total_nilai_psb_dan_pda) {
+                        alert("Semua form wajib diisi.");
                         return;
                     }
 
                     // Kirim data via AJAX
                     $.ajax({
-                        // url: 'http://localhost/cis_clone/admin/budget/add_budget_target',
-                        url: "<?= base_url('admin/budget/add_budget_target') ?>",
+                        url: "<?= base_url('admin/budget/add_budget_target2') ?>",
                         type: 'POST',
                         data: {
-                            tahun: tahun,
-                            pt: pt,
-                            area: area,
-                            bulan: bulan,
-                            target: target,
-                            [csrfTokenName]: csrfTokenValue // Gunakan properti dinamis
+                            tahun,
+                            pt,
+                            area,
+                            periode,
+                            project_id: projectID,
+                            jmlh_ps_psb_dan_pda: jumlahPS, // Kirim jumlah PS PSB dan PDA
+                            total_nilai_psb_dan_pda,
+                            total_nilai_pekerjaan_lainlain,
+                            total_nilai_pendapatan_dipengajuan,
+                            [csrfTokenName]: csrfTokenValue
                         },
                         success: function(response) {
                             try {
@@ -638,13 +782,12 @@
                                     alert('Data berhasil ditambahkan');
                                     $('#inputBudgetModal').modal('hide');
 
-                                    // Tambah tahun ke dropdown #tahun jika belum ada
-                                    let existingOption = $('#tahun option[value="' + tahun + '"]');
-                                    if (existingOption.length === 0) {
+                                    // Tambah tahun ke dropdown jika belum ada
+                                    if ($('#tahun option[value="' + tahun + '"]').length === 0) {
                                         $('#tahun').append(`<option value="${tahun}">${tahun}</option>`);
                                     }
 
-                                    // Perbarui CSRF token jika diberikan oleh server
+                                    // Update CSRF
                                     if (res.csrf_hash) {
                                         $('#csrf_token').val(res.csrf_hash);
                                     }
@@ -657,11 +800,12 @@
                         },
                         error: function(xhr) {
                             console.log(xhr.responseText);
-                            alert('Terjadi kesalahan saat kirim data.');
+                            alert('Terjadi kesalahan saat mengirim data.');
                         }
                     });
                 });
             };
+
 
 
 
