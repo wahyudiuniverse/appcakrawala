@@ -109,8 +109,7 @@
 
   <div class="card-body border-bottom-blue ">
 
-    <?php //echo form_open_multipart('/admin/importexcel/import_saltab2/'); ?>
-    <?php echo form_open_multipart('/admin/traxes/report_summary/'); ?>
+    <?php echo form_open_multipart('/admin/importexcel/import_saltab2/'); ?>
 
     <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 
@@ -118,7 +117,7 @@
       <div class="col-md-3">
         <div class="form-group project-option">
           <label class="form-label">Project/Golongan</label>
-          <select class="form-control" data-live-search="true" name="project_id" id="aj_project" data-plugin="xin_select" data-placeholder="Project" required>
+          <select class="form-control select_hrm" data-live-search="true" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="Project" required>
             <option value="0">-ALL-</option>
             <?php foreach ($all_projects as $proj) { ?>
               <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
@@ -129,7 +128,7 @@
 
       <div class="col-md-3" id="subproject_ajax">
         <label class="form-label">Sub Project/Witel</label>
-        <select class="form-control" data-live-search="true" name="sub_project_id" id="aj_sub_project" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
+        <select class="form-control select_hrm" data-live-search="true" name="sub_project_id" id="aj_sub_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
           <!-- <?php foreach ($all_projects as $proj) { ?>
             <option value="<?php echo $proj->project_id; ?>" <?php if ($project_karyawan == $proj->project_id) {
@@ -143,7 +142,7 @@
       <div class="col-md-3">
         <div class="form-group project-option">
           <label class="form-label">Periode</label>
-          <select class="form-control" data-live-search="true" name="periode" id="aj_periode" data-plugin="xin_select" data-placeholder="Project" required>
+          <select class="form-control select_hrm" data-live-search="true" name="periode" id="aj_periode" data-placeholder="Project" required>
             <option value="0">-Pilih Periode-</option>
             <?php $now = new DateTime('now');
                 for ($i = 0; $i < 3; $i++) {
@@ -165,7 +164,7 @@
         <div class="form-group">
           <!-- button submit -->
           <label class="form-label">&nbsp;</label>
-          <button name="filter_summary" id="filter_summary" class="btn btn-primary btn-block"><i class="fa fa-search"></i> FILTER</button>
+          <button name="filter_employee" id="filter_employee" class="btn btn-primary btn-block"><i class="fa fa-search"></i> FILTER</button>
         </div>
       </div>
     </div>
@@ -181,7 +180,7 @@
     <div class="card">
       <div class="card-header with-elements">
         <div class="col-md-6">
-          <span class="card-header-title mr-2"><strong>LIST EMPLOYEES</strong></span>
+          <span class="card-header-title mr-2"><strong>TABEL CHECKIN-OUT</strong></span>
         </div>
 
         <div class="col-md-6">
@@ -200,15 +199,15 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
-                <th>Aksi</th>
-                <th>NIP - Status</th>
-                <th>NIK</th>
+                <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
                 <th>Sub Project</th>
-                <th>Jabatan</th>
-                <th>Penempatan</th>
-                <th>Status Paklaring</th>
+                <th>Posisi/Jabatan</th>
+                <th>Area/Penempatan</th>
+                <th>Toko/Lokasi</th>
+                <th>Check-IN</th>
+                <th>Check-OUT</th>
               </tr>
             </thead>
           </table>
@@ -234,13 +233,27 @@
   loading_html_text = loading_html_text + '</div>';
 
   $(document).ready(function() {
+
+
+    $('.select_hrm').select2({
+                width: '100%',
+                // dropdownParent: $("#container_modal_mulai_screening")
+            });
+
+
+    // $('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
+    // $('[data-plugin="select_hrm"]').select2({
+    //   width: '100%'
+    // });
+
+
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
     var periode = document.getElementById("aj_periode").value;
-    // var search_periode_from = "";
-    // var search_periode_to = "";
+    var search_periode_from = "";
+    var search_periode_to = "";
 
-    summary_table = $('#tabel_summary').DataTable().on('search.dt', () => eventFired('Search'));
+    employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
 
   });
 </script>
@@ -248,16 +261,16 @@
 
 <!-- Tombol Filter -->
 <script type="text/javascript">
-  document.getElementById("filter_summary").onclick = function(e) {
+  document.getElementById("filter_employee").onclick = function(e) {
     employee_table.destroy();
 
     e.preventDefault();
 
-    var project = document.getElementById("aj_project").value;
+    var project     = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var periode = document.getElementById("aj_periode").value;
+    var periode     = document.getElementById("aj_periode").value;
 
-    var searchVal = $('#tabel_summary_filter').find('input').val();
+    var searchVal = $('#tabel_employees_filter').find('input').val();
 
     if ((searchVal == "") && (project == "0")) {
       $('#button_download_data').attr("hidden", true);
@@ -265,7 +278,7 @@
     } else {
       $('#button_download_data').attr("hidden", false);
 
-      employee_table = $('#tabel_summary').DataTable({
+      employee_table = $('#tabel_employees').DataTable({
         //"bDestroy": true,
         'processing': true,
         'serverSide': true,
@@ -283,7 +296,7 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Traxes_report_summary/list_summary',
+          'url': '<?= base_url() ?>admin/Traxes_report_cio/list_tx_cio',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,
@@ -296,18 +309,16 @@
             alert("Status :" + xhr.status);
             alert("responseText :" + xhr.responseText);
           },
+
+
+
         },
         'columns': [{
-            data: 'aksi',
+            data: 'employee_id',
             "orderable": false
           },
           {
-            data: 'employee_id',
-            "orderable": false,
-            //searchable: true
-          },
-          {
-            data: 'employee_name',
+            data: 'fullname',
             "orderable": false,
             //searchable: true
           },
@@ -318,6 +329,11 @@
           },
           {
             data: 'sub_project_name',
+            "orderable": false,
+            //searchable: true
+          },
+          {
+            data: 'jabatan_name',
             "orderable": false
           },
           {
@@ -325,7 +341,7 @@
             "orderable": false,
           },
           {
-            data: 'jabatan_name',
+            data: 'customer_name',
             "orderable": false,
           },
           {
@@ -350,166 +366,15 @@
 </script>
 
 
-
-<!-- Tombol Edit Rekening Bank -->
-<script type="text/javascript">
-  document.getElementById("button_edit_rekening").onclick = function(e) {
-    var nip = "<?php echo $employee_id; ?>";
-    //var buka_buku_tabungan = '<button id="button_open_buku_tabungan" type="button" class="btn btn-sm btn-outline-primary ladda-button mx-1" data-style="expand-right">Open Buku Tabungan</button>';
-    // alert();
-
-    //inisialisasi pesan
-    $('#pesan_nama_bank').html("");
-    $('#pesan_nomor_rekening').html("");
-    $('#pesan_pemilik_rekening').html("");
-    $('#pesan_buku_rekening').html("");
-
-    // AJAX untuk ambil data employee terupdate
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employees/get_data_rekening/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        nip: nip,
-      },
-      beforeSend: function() {
-        $('#editRekeningModal').modal('show');
-        $('.info-modal-edit-rekening').attr("hidden", false);
-        $('.isi-modal-edit-rekening').attr("hidden", true);
-        $('.info-modal-edit-rekening').html(loading_html_text);
-        $('#button_save_rekening').attr("hidden", true);
-      },
-      success: function(response) {
-
-        var res = jQuery.parseJSON(response);
-
-        if (res['status'] == "200") {
-          $('#nama_bank2').val(res['data']['bank_name']).change();
-          $('#nama_bank').val(res['data']['bank_name']);
-          $("#nomor_rekening").val(res['data']['nomor_rek']);
-          $('#pemilik_rekening').val(res['data']['pemilik_rek']);
-
-          if ((res['data']['filename_rek'] == null) || (res['data']['filename_rek'] == "") || (res['data']['filename_rek'] == "0")) {
-            $('#file_buku_tabungan_kosong').attr("hidden", false);
-            $('#file_buku_tabungan_isi').attr("hidden", true);
-            $('#form_upload_buku_tabungan').attr("hidden", false);
-          } else {
-            $('#file_buku_tabungan_kosong').attr("hidden", true);
-            $('#file_buku_tabungan_isi').attr("hidden", false);
-            if (res['validation'] == "1") {
-              $('#button_open_upload_buku_tabungan').attr("hidden", true);
-            } else {
-              $('#button_open_upload_buku_tabungan').attr("hidden", false);
-            }
-            $('#form_upload_buku_tabungan').attr("hidden", true);
-          }
-
-          $('.isi-modal-edit-rekening').attr("hidden", false);
-          $('.info-modal-edit-rekening').attr("hidden", true);
-          $('#button_save_rekening').attr("hidden", false);
-        } else {
-          html_text = res['pesan'];
-          $('.info-modal-edit-rekening').html(html_text);
-          $('.isi-modal-edit-rekening').attr("hidden", true);
-          $('.info-modal-edit-rekening').attr("hidden", false);
-          $('#button_save_rekening').attr("hidden", true);
-        }
-      },
-      error: function(xhr, status, error) {
-        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-        $('.info-modal-edit-rekening').html(html_text); //coba pake iframe
-        $('.isi-modal-edit-rekening').attr("hidden", true);
-        $('.info-modal-edit-rekening').attr("hidden", false);
-        $('#button_save_rekening').attr("hidden", true);
-      }
-    });
-
-  };
-</script>
-
-<!-- Tombol Open Buku Tabungan -->
-<script type="text/javascript">
-  function open_pengajuan(nip) {
-    // AJAX untuk ambil data buku tabungan employee terupdate
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_resign_new/get_data_employee/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        nip: nip,
-      },
-      beforeSend: function() {
-        $('#judul-modal-edit').html("File Buku Tabungan");
-        $('#button_download_dokumen_conditional').html("");
-        $('.isi-modal').html(loading_html_text);
-        $('#button_save_pin').attr("hidden", true);
-        $('#editRekeningModal').appendTo("body").modal('show');
-
-        // $('#editRekeningModal').modal('show');
-        // $('.info-modal-edit-rekening').attr("hidden", false);
-        // $('.isi-modal-edit-rekening').attr("hidden", true);
-        // $('.info-modal-edit-rekening').html(loading_html_text);
-        // $('#button_save_rekening').attr("hidden", true);
-      },
-      success: function(response) {
-
-        var res = jQuery.parseJSON(response);
-
-        if (res['status']['filename_rek'] == "200") {
-          var nama_file = res['data']['filename_rek'];
-          var tipe_file = nama_file.substr(-3, 3);
-          var atribut = "";
-          var height = '';
-          var d = new Date();
-          var time = d.getTime();
-          nama_file = nama_file + "?" + time;
-
-          if (tipe_file == "pdf") {
-            atribut = "application/pdf";
-            height = 'height="500px"';
-          } else {
-            atribut = "image/jpg";
-          }
-
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
-
-          // var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/' + res['data']['filename_rek'] + '" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
-          $('.isi-modal').html(html_text);
-          $('#button_save_pin').attr("hidden", true);
-        } else {
-          html_text = res['pesan']['filename_rek'];
-          $('.isi-modal').html(html_text);
-          $('#button_save_pin').attr("hidden", true);
-        }
-      },
-      error: function(xhr, status, error) {
-        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-        $('.isi-modal').html(html_text); //coba pake iframe
-        $('#button_save_pin').attr("hidden", true);
-      }
-    });
-
-  }
-
-  function open_upload_buku_tabungan(nip) {
-    $('#form_upload_buku_tabungan').attr("hidden", false);
-    $('#button_open_upload_buku_tabungan').attr("hidden", true);
-  }
-</script>
-
 <script type="text/javascript">
   document.getElementById("button_download_data").onclick = function(e) {
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var status = document.getElementById("aj_status").value;
+    var periode = document.getElementById("aj_periode").value;
 
     // ambil input search dari datatable
     var filter = $('.dataTables_filter input').val(); //cara 1
-    var searchVal = $('#tabel_summary_filter').find('input').val(); //cara 2
+    var searchVal = $('#tabel_employees_filter').find('input').val(); //cara 2
 
     if (searchVal == "") {
       searchVal = "-no_input-";
@@ -544,10 +409,10 @@
   // });
 
   function eventFired(type) {
-    var searchVal = $('#tabel_summary_filter').find('input').val();
+    var searchVal = $('#tabel_employees_filter').find('input').val();
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var status = document.getElementById("aj_status").value;
+    var periode = document.getElementById("aj_periode").value;
     // alert(searchVal.length);
 
     if ((searchVal.length <= 2) && (project == "0")) {
@@ -562,19 +427,41 @@
     // n.scrollTop = n.scrollHeight;
 
   }
-
-  jQuery("#aj_project").change(function() {
-
-    var p_id = jQuery(this).val();
-
-    jQuery.get(base_url + "/get_subprojects/" + p_id, function(data, status) {
-      jQuery('#subproject_ajax').html(data);
-    });
-
-
-  });
 </script>
 
+<script>
+  // Project Vacant Change - Jabatan vacant
+    $('#aj_project').change(function() {
+        var project = $(this).val();
+
+        // alert("Project: " + project);
+
+        // AJAX request Jabatan
+        $.ajax({
+            url: '<?= base_url() ?>admin/Traxes_report_cio/get_subprojects2/',
+            method: 'post',
+            data: {
+                [csrfName]: csrfHash,
+                project: project,
+            },
+            // dataType: 'json',
+            success: function(response) {
+                var res = jQuery.parseJSON(response);
+
+                // Remove options
+                $('#aj_sub_project').find('option').not(':first').remove();
+
+                // Add options
+                $.each(res, function(index, data) {
+                    $('#aj_sub_project').append('<option value="' + data['secid'] + '" style="text-wrap: wrap;">' + data['sub_project_name'] + '</option>');
+                });
+
+                // alert("Company name: " + res["company"]["company_name"]);
+            }
+        });
+    });
+
+</script>
 
 <style type="text/css">
   

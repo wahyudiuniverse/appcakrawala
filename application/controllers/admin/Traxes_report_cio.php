@@ -10,6 +10,15 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Style;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+
 class Traxes_report_cio extends MY_Controller {
 	
 	 public function __construct() {
@@ -23,10 +32,11 @@ class Traxes_report_cio extends MY_Controller {
 		$this->load->library('form_validation');
 		// $this->load->model("Company_model");
 		$this->load->model("Xin_model");
+		$this->load->model("Project_model");
+		$this->load->model("Traxes_model");
 		// $this->load->model("Esign_model");
 		// $this->load->model("Custom_fields_model");	
 		// $this->load->model("Employees_model");
-		$this->load->model("Project_model");
 		// $this->load->model("Department_model");
 		// $this->load->model("Designation_model");
 		// $this->load->model("Location_model");
@@ -50,7 +60,7 @@ class Traxes_report_cio extends MY_Controller {
 			$role_resources_ids = $this->Xin_model->user_role_resource();
 			$data['title'] = 'Report | Traxes Check IN-OUT';
 			$data['breadcrumbs'] = 'Report Check In-Out';
-			$data['path_url'] = 'emp_resign';
+			$data['path_url'] = 'emp_view';
 
 			// $data['all_projects'] = $this->Project_model->get_project_exist_deactive();
 
@@ -70,13 +80,13 @@ class Traxes_report_cio extends MY_Controller {
 
 
 	//load datatables Employee
-	public function list_employees()
+	public function list_tx_cio()
 	{
 		// POST data
 		$postData = $this->input->post();
 
 		// Get data
-		$data = $this->Employees_model->get_list_employees_resign($postData);
+		$data = $this->Traxes_model->get_list_tx_cio($postData);
 		echo json_encode($data);
 	}
 
@@ -103,106 +113,155 @@ class Traxes_report_cio extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	}
 
-
-	//mengambil Json data dokumen kontrak ttd employee
-	public function get_data_employee()
+// get company > departments
+	public function get_subprojects2()
 	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-
 		$postData = $this->input->post();
 
-		//Cek variabel post
-		$datarequest = [
-			'nip'        => $postData['nip']
+		// get data 
+		$data = $this->Project_model->ajax_proj_subproj_info($postData["project"]);
+		echo json_encode($data);
+	
+	}
+
+
+	public function printExcel($project, $sub_project, $sdate, $edate,  $searchVal, $session_id)
+	{
+		$postData = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$postData['project'] = $project;
+		$postData['sub_project'] = $sub_project;
+		$postData['sdate'] = $sdate;
+		$postData['edate'] = $edate;
+		$postData['session_id'] = $session_id;
+		$postData['nama_file'] = 'TRAXES REPORT CHECKIN-OUT';
+		if ($searchVal == '-no_input-') {
+			$postData['filter'] = '';
+		} else {
+			$postData['filter'] = urldecode($searchVal);
+		}
+
+		// echo $postData['filter'];
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('TRAXES REPORT CHECKIN-OUT'); //nama Spreadsheet yg baru dibuat
+
+		//data satu row yg mau di isi
+		$rowArray = [
+			'NIP',
+			'NAMA LENGKAP',
+			'PROJECT',
+			'SUB PROJECT',
+			'POSISI/JABATAN',
+			'AREA/PENEMPATAN',
+			'STATUS/VISIT',
+			'ID TOKO/LOKASI',
+			'NAMA TOKO/LOKASI',
+			'ALAMAT TOKO/LOKASI',
+			'PEMILIK TOKO/LOKASI',
+			'KONTAK TOKO/LOKASI',
+			'TANGGAL',
+			'JAM MASUK',
+			'WAKTU SISTEM MASUK',
+			'JARAK MASUK',
+			'JAM KELUAR',
+			'WAKTU SISTEM KELUAR',
+			'JARAK KELUAR',
+			'TOTAL JAM KERJA',
+			'KETERANGAN',
+			'FOTO MASUK',
+			'FOTO KELUAR',
 		];
 
-		// get data diri
-		$data = $this->Employees_model->get_data_karyawan_resign($nip);
-
-		if (empty($data)) {
-			$response = array(
-				'status'	=> "201",
-				'pesan' 	=> "Karyawan tidak ditemukan",
+		$length_array = count($rowArray);
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$rowArray,   // The data to set
+				NULL,
+				'A1'
 			);
-		} else {
 
-			$status_resign = $data['status_resign'];
-			$status = "200"; //file ditemukan
-			$pesan = "Berhasil Fetch Data";
-
-
-
-			$response = array(
-				'status'	=> $status,
-				'pesan' 	=> $pesan,
-				'data'		=> $status_resign,
-			);
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
+		//set background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle('A1:AW1')
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
 
-		echo json_encode($response);
-		// echo "<pre>";
-		// print_r($response);
-		// echo "</pre>";
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR);
+
+		// Get data
+		// $data = $this->Employees_model->get_employee_print($postData);
+		$data = $this->Traxes_model->get_employee_print($postData);
+
+		$length_data = count($data);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 2])->setvalueExplicit($data[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+		//$data = var_dump(json_decode($data_temp, true));
+
+		// if (!is_array(end($data))) {
+		// 	$data = [$data];
+		// }
+
+		$jumlah = count($data) + 1;
+
+		//var_dump($data);
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data,  // The data to set
+		// 		NULL,        // Array values with this value will not be set
+		// 		'A2',
+		// 		false,
+		// 		false         // Top left coordinate of the worksheet range where
+		// 		//    we want to set these values (default is A1)
+		// 	);
+
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+		// $spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+
+		$filename = $postData['nama_file'];
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+
+		$writer->save('php://output');
 	}
 
-	// upload addendum
-	public function upload_dokumen_resign()
-	{
-		$pesan_error = "";
-		if ($_FILES['document_file_addendum']['error'] == "0") {
 
-			//parameter untuk path dokumen
-			$yearmonth = date('Y/m');
-			$path_addendum = "./uploads/document/addendum/" . $yearmonth . '/';
-
-			//kalau blm ada folder path nya
-			if (!file_exists($path_addendum)) {
-				mkdir($path_addendum, 0777, true);
-			}
-
-			$nip_post = $this->input->post('nip');
-			$addendum_id_post = $this->input->post('addendum_id');
-			$file_signed_time_post = $this->input->post('file_signed_time');
-
-			//konfigurasi upload
-			$config['upload_path']          = $path_addendum;
-			$config['allowed_types']        = 'pdf';
-			$config['max_size']             = 3072;
-			$config['file_name']             = 'addendum_' . $nip_post . '_' . round(microtime(true));
-			$config['overwrite']             = TRUE;
-
-			//inisialisasi proses upload
-			$this->load->library('upload', $config);
-			$this->upload->initialize($config);
-
-			//upload data kalau tidak ada error
-			if (!$this->upload->do_upload('document_file_addendum')) {
-				$error = array('error' => $this->upload->display_errors());
-				//$data['error_upload'] = "Foto KTP melebihi ukuran 2 MB. Silahkan upload ulang";
-				if ($error['error'] == "<p>The file you are attempting to upload is larger than the permitted size.</p>") {
-					$pesan_error = "Foto KTP melebihi ukuran 3 MB. Silahkan upload ulang";
-				} else {
-					$pesan_error = "Hanya menerima file berformat PDF";
-				}
-			} else {
-				//save path ktp ke database
-				$new_filename_addendum = $this->upload->data('file_name');
-				$addendum_database = $yearmonth . '/' . $new_filename_addendum;
-				$this->Addendum_model->isiFileUpload($addendum_id_post, $addendum_database, $file_signed_time_post);
-				$data = array('upload_data' => $this->upload->data());
-			}
-
-			//print_r($_FILES['document_file_addendum']);
-			echo $pesan_error;
-		} else {
-			$pesan_error = "Tidak ada file yang dipilih";
-			//print_r($_FILES['document_file_addendum']);
-			echo $pesan_error;
-		}
-	}
 
 
 }
