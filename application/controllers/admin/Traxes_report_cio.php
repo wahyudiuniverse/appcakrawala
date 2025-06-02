@@ -70,7 +70,7 @@ class Traxes_report_cio extends MY_Controller {
 			// $data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('490',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/employees/employee_request_paklaring", $data, TRUE);
+			// $data['subview'] = $this->load->view("admin/employees/employee_request_paklaring", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/traxes/report_traxes_cio", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -131,7 +131,7 @@ class Traxes_report_cio extends MY_Controller {
 
 		//variabel filter (diambil dari post ajax di view)
 		$postData['project'] = $project;
-		$postData['sub_project'] = $sub_project;
+		$postData['sub_project'] = urldecode($sub_project);
 		$postData['sdate'] = $sdate;
 		$postData['edate'] = $edate;
 		$postData['session_id'] = $session_id;

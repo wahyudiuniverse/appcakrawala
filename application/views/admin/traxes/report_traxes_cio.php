@@ -360,7 +360,8 @@
 <script type="text/javascript">
   document.getElementById("button_download_data").onclick = function(e) {
     var project = document.getElementById("aj_project").value;
-    var sub_project = document.getElementById("aj_sub_project").value.trim();
+    // var sub_project = document.getElementById("aj_sub_project").value.trim();
+    var sub_project = document.getElementById("aj_sub_project").value;
     // var sub_project = 'HELPERDRIVER';
     
     var sdate       =  $('#aj_sdate').val();
@@ -379,7 +380,7 @@
     text_pesan = text_pesan + "\nSdate: " + sdate;
     text_pesan = text_pesan + "\nEdate: " + edate;
     text_pesan = text_pesan + "\nSearch: " + searchVal;
-    // alert(sub_project);
+    alert(sub_project);
 
     window.open('<?php echo base_url(); ?>admin/Traxes_report_cio/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
