@@ -1600,7 +1600,7 @@ class Pkwt6 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
 						</tr>';
 				}
 				
@@ -1609,7 +1609,7 @@ class Pkwt6 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1618,7 +1618,7 @@ class Pkwt6 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_rent.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1673,7 +1673,7 @@ class Pkwt6 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
 						</tr>';
 				}
 

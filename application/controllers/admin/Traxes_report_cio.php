@@ -30,16 +30,9 @@ class Traxes_report_cio extends MY_Controller {
 		$this->load->helper('html');
 		$this->load->database();
 		$this->load->library('form_validation');
-		// $this->load->model("Company_model");
 		$this->load->model("Xin_model");
 		$this->load->model("Project_model");
 		$this->load->model("Traxes_model");
-		// $this->load->model("Esign_model");
-		// $this->load->model("Custom_fields_model");	
-		// $this->load->model("Employees_model");
-		// $this->load->model("Department_model");
-		// $this->load->model("Designation_model");
-		// $this->load->model("Location_model");
 	}
 	
 	/*Function to set JSON output*/
@@ -61,16 +54,10 @@ class Traxes_report_cio extends MY_Controller {
 			$data['title'] = 'Report | Traxes Check IN-OUT';
 			$data['breadcrumbs'] = 'Report Check In-Out';
 			$data['path_url'] = 'emp_view';
-
-			// $data['all_projects'] = $this->Project_model->get_project_exist_deactive();
-
 			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-			// $data['all_departments'] = $this->Department_model->all_departments();
-			// $data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('490',$role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
-			// $data['subview'] = $this->load->view("admin/employees/employee_request_paklaring", $data, TRUE);
+
 			$data['subview'] = $this->load->view("admin/traxes/report_traxes_cio", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -119,7 +106,8 @@ class Traxes_report_cio extends MY_Controller {
 		$postData = $this->input->post();
 
 		// get data 
-		$data = $this->Project_model->ajax_proj_subproj_info($postData["project"]);
+		// $data = $this->Project_model->ajax_proj_subproj_info($postData["project"]);
+		$data = $this->Traxes_model->ajax_proj_subproj_info($postData["project"]);
 		echo json_encode($data);
 	
 	}

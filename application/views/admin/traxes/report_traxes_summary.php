@@ -8,14 +8,6 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 
-<?php $count_cancel = $this->Xin_model->count_resign_cancel();?>
-<?php $count_appnae = $this->Xin_model->count_approve_nae();?>
-<?php $count_appnom = $this->Xin_model->count_approve_nom();?>
-<?php $count_apphrd = $this->Xin_model->count_approve_hrd();?>
-<?php $count_emp_request = $this->Xin_model->count_emp_resign();?>
-
-
-
 <!-- MODAL EDIT REKENING BANK -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -87,8 +79,6 @@
   </div>
 </div>
 
-
-
 <hr class="border-light m-0 mb-3">
 
 <!-- SECTION FILTER -->
@@ -149,7 +139,7 @@
                 $date = $now->sub(new DateInterval('P' . $i . 'M'));
             ?>
             
-              <option value="<?php echo $date->format('F Y'); ?>"> <?php echo $date->format('F Y'); ?></option>
+              <option value="<?php echo $date->format('Y-m'); ?>"> <?php echo $date->format('F Y'); ?></option>
             
             <?php
               }
@@ -199,15 +189,108 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
+                <th colspan="6" style="text-align: center;">EMPLOYEE</th>
+                <th colspan="2" style="text-align: center;">01</th>
+                <th colspan="2" style="text-align: center;">02</th>
+                <th colspan="2" style="text-align: center;">03</th>
+                <th colspan="2" style="text-align: center;">04</th>
+                <th colspan="2" style="text-align: center;">05</th>
+                <th colspan="2" style="text-align: center;">06</th>
+                <th colspan="2" style="text-align: center;">07</th>
+                <th colspan="2" style="text-align: center;">08</th>
+                <th colspan="2" style="text-align: center;">09</th>
+                <th colspan="2" style="text-align: center;">10</th>
+                <th colspan="2" style="text-align: center;">11</th>
+                <th colspan="2" style="text-align: center;">12</th>
+                <th colspan="2" style="text-align: center;">13</th>
+                <th colspan="2" style="text-align: center;">14</th>
+                <th colspan="2" style="text-align: center;">15</th>
+                <th colspan="2" style="text-align: center;">16</th>
+                <th colspan="2" style="text-align: center;">17</th>
+                <th colspan="2" style="text-align: center;">18</th>
+                <th colspan="2" style="text-align: center;">19</th>
+                <th colspan="2" style="text-align: center;">20</th>
+                <th colspan="2" style="text-align: center;">21</th>
+                <th colspan="2" style="text-align: center;">22</th>
+                <th colspan="2" style="text-align: center;">23</th>
+                <th colspan="2" style="text-align: center;">24</th>
+                <th colspan="2" style="text-align: center;">25</th>
+                <th colspan="2" style="text-align: center;">26</th>
+                <th colspan="2" style="text-align: center;">27</th>
+                <th colspan="2" style="text-align: center;">28</th>
+                <th colspan="2" style="text-align: center;">29</th>
+                <th colspan="2" style="text-align: center;">30</th>
+                <th colspan="2" style="text-align: center;">31</th>
+              </tr>
+              <tr>
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
-                <th>Project</th>
-                <th>Sub Project</th>
-                <th>Posisi/Jabatan</th>
+                <th>Project/Golongan</th>
+                <th>Sub Project/Witel</th>
                 <th>Area/Penempatan</th>
-                <th>Toko/Lokasi</th>
-                <th>Check-IN</th>
-                <th>Check-OUT</th>
+                <th>Periode</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">IN</th>
+                <th style="text-align: center;">OT</th>
               </tr>
             </thead>
           </table>
@@ -296,13 +379,13 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Traxes_report_cio/list_tx_cio',
+          'url': '<?= base_url() ?>admin/Traxes_report_summary/list_sumary_cio',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,
             project: project,
             sub_project: sub_project,
-            status: status,
+            periode: periode,
             //base_url_catat: base_url_catat
           },
           error: function(xhr, ajaxOptions, thrownError) {
@@ -328,31 +411,285 @@
             //searchable: true
           },
           {
-            data: 'sub_project_name',
+            data: 'project_sub',
             "orderable": false,
             //searchable: true
-          },
-          {
-            data: 'jabatan_name',
-            "orderable": false
           },
           {
             data: 'penempatan',
             "orderable": false,
           },
           {
-            data: 'customer_name',
+            data: 'periode',
             "orderable": false,
           },
           {
-            data: 'datetimephone_in',
+            data: '1in',
             "orderable": false,
           },
           {
-            data: 'datetimephone_out',
+            data: '1out',
             "orderable": false,
           },
-        ]
+          {
+            data: '2in',
+            "orderable": false,
+          },
+          {
+            data: '2out',
+            "orderable": false,
+          },
+          {
+            data: '3in',
+            "orderable": false,
+          },
+          {
+            data: '3out',
+            "orderable": false,
+          },
+          {
+            data: '4in',
+            "orderable": false,
+          },
+          {
+            data: '4out',
+            "orderable": false,
+          },
+          {
+            data: '5in',
+            "orderable": false,
+          },
+          {
+            data: '5out',
+            "orderable": false,
+          },
+          {
+            data: '6in',
+            "orderable": false,
+          },
+          {
+            data: '6out',
+            "orderable": false,
+          },
+          {
+            data: '7in',
+            "orderable": false,
+          },
+          {
+            data: '7out',
+            "orderable": false,
+          },
+          {
+            data: '8in',
+            "orderable": false,
+          },
+          {
+            data: '8out',
+            "orderable": false,
+          },
+          {
+            data: '9in',
+            "orderable": false,
+          },
+          {
+            data: '9out',
+            "orderable": false,
+          },
+          {
+            data: '10in',
+            "orderable": false,
+          },
+          {
+            data: '10out',
+            "orderable": false,
+          },
+          {
+            data: '11in',
+            "orderable": false,
+          },
+          {
+            data: '11out',
+            "orderable": false,
+          },
+          {
+            data: '12in',
+            "orderable": false,
+          },
+          {
+            data: '12out',
+            "orderable": false,
+          },
+          {
+            data: '13in',
+            "orderable": false,
+          },
+          {
+            data: '13out',
+            "orderable": false,
+          },
+          {
+            data: '14in',
+            "orderable": false,
+          },
+          {
+            data: '14out',
+            "orderable": false,
+          },
+          {
+            data: '15in',
+            "orderable": false,
+          },
+          {
+            data: '15out',
+            "orderable": false,
+          },
+          {
+            data: '16in',
+            "orderable": false,
+          },
+          {
+            data: '16out',
+            "orderable": false,
+          },
+          {
+            data: '17in',
+            "orderable": false,
+          },
+          {
+            data: '17out',
+            "orderable": false,
+          },
+          {
+            data: '18in',
+            "orderable": false,
+          },
+          {
+            data: '18out',
+            "orderable": false,
+          },
+          {
+            data: '19in',
+            "orderable": false,
+          },
+          {
+            data: '19out',
+            "orderable": false,
+          },
+          {
+            data: '20in',
+            "orderable": false,
+          },
+          {
+            data: '20out',
+            "orderable": false,
+          },
+          {
+            data: '21in',
+            "orderable": false,
+          },
+          {
+            data: '21out',
+            "orderable": false,
+          },
+          {
+            data: '22in',
+            "orderable": false,
+          },
+          {
+            data: '22out',
+            "orderable": false,
+          },
+          {
+            data: '23in',
+            "orderable": false,
+          },
+          {
+            data: '23out',
+            "orderable": false,
+          },
+          {
+            data: '24in',
+            "orderable": false,
+          },
+          {
+            data: '24out',
+            "orderable": false,
+          },
+          {
+            data: '25in',
+            "orderable": false,
+          },
+          {
+            data: '25out',
+            "orderable": false,
+          },
+          {
+            data: '26in',
+            "orderable": false,
+          },
+          {
+            data: '26out',
+            "orderable": false,
+          },
+          {
+            data: '27in',
+            "orderable": false,
+          },
+          {
+            data: '27out',
+            "orderable": false,
+          },
+          {
+            data: '28in',
+            "orderable": false,
+          },
+          {
+            data: '28out',
+            "orderable": false,
+          },
+          {
+            data: '29in',
+            "orderable": false,
+          },
+          {
+            data: '29out',
+            "orderable": false,
+          },
+          {
+            data: '30in',
+            "orderable": false,
+          },
+          {
+            data: '30out',
+            "orderable": false,
+          },
+          {
+            data: '31in',
+            "orderable": false,
+          },
+          {
+            data: '31out',
+            "orderable": false,
+          },
+        ],
+
+        "columnDefs": [
+        {
+          "targets": [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60],
+          "createdCell": function(td, cellData, rowData, row, col) {
+            
+
+            if(cellData == ""){
+              $(td).css('background-color', '#fafafa') //abu-abu
+            } else if(cellData < "08:15"){
+              $(td).css('background-color', '#d1ffcd') //hijau
+            } else if (cellData > "08:15") {
+              $(td).css('background-color', '#f8eeb6') //kuning
+            }
+          }
+        },
+      ]
+
       }).on('search.dt', () => eventFired('Search'));
 
       $('#tombol_filter').attr("disabled", false);
@@ -382,31 +719,14 @@
 
     var text_pesan = "Project: " + project;
     text_pesan = text_pesan + "\nSub Project: " + sub_project;
-    text_pesan = text_pesan + "\nStatus: " + status;
+    text_pesan = text_pesan + "\nStatus: " + periode;
     text_pesan = text_pesan + "\nSearch: " + searchVal;
     // alert(text_pesan);
 
-    window.open('<?php echo base_url(); ?>admin/reports/printExcel/' + project + '/' + sub_project + '/' + status + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Traxes_report_summary/printExcel/' + project + '/' + sub_project + '/' + periode + '/' + searchVal + '/' + session_id + '/', '_self');
 
   };
 
-  //-----lihat employee-----
-  function viewEmployee(id) {
-    //alert("masuk fungsi lihat. id: " + id);
-    window.open('<?= base_url() ?>admin/employees/emp_view/' + id, "_blank");
-  }
-
-  //-----lihat dokumen employee-----
-  function viewDocumentEmployee(id) {
-    //alert("masuk fungsi lihat. id: " + id);
-    $('#dokumenModal').appendTo("body").modal('show');
-    // $('#dokumenModal').modal('show');
-    // window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
-  }
-
-  // employee_table.on('search.dt', function() {
-  //   alert("ada search");
-  // });
 
   function eventFired(type) {
     var searchVal = $('#tabel_employees_filter').find('input').val();
@@ -438,7 +758,7 @@
 
         // AJAX request Jabatan
         $.ajax({
-            url: '<?= base_url() ?>admin/Traxes_report_cio/get_subprojects2/',
+            url: '<?= base_url() ?>admin/Traxes_report_summary/get_subprojects/',
             method: 'post',
             data: {
                 [csrfName]: csrfHash,
@@ -453,7 +773,7 @@
 
                 // Add options
                 $.each(res, function(index, data) {
-                    $('#aj_sub_project').append('<option value="' + data['secid'] + '" style="text-wrap: wrap;">' + data['sub_project_name'] + '</option>');
+                    $('#aj_sub_project').append('<option value="' + data['sub_project_name'] + '" style="text-wrap: wrap;">' + data['sub_project_name'] + '</option>');
                 });
 
                 // alert("Company name: " + res["company"]["company_name"]);

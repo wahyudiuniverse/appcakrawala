@@ -8,13 +8,6 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 
-<?php $count_cancel = $this->Xin_model->count_resign_cancel();?>
-<?php $count_appnae = $this->Xin_model->count_approve_nae();?>
-<?php $count_appnom = $this->Xin_model->count_approve_nom();?>
-<?php $count_apphrd = $this->Xin_model->count_approve_hrd();?>
-<?php $count_emp_request = $this->Xin_model->count_emp_resign();?>
-
-
 
 <!-- MODAL EDIT REKENING BANK -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
@@ -86,8 +79,6 @@
     </div>
   </div>
 </div>
-
-
 
 <hr class="border-light m-0 mb-3">
 
@@ -360,9 +351,8 @@
 <script type="text/javascript">
   document.getElementById("button_download_data").onclick = function(e) {
     var project = document.getElementById("aj_project").value;
-    // var sub_project = document.getElementById("aj_sub_project").value.trim();
     var sub_project = document.getElementById("aj_sub_project").value;
-    // var sub_project = 'HELPERDRIVER';
+    // var sub_project = sub_project.replace(" ","");
     
     var sdate       =  $('#aj_sdate').val();
     var edate       = $('#aj_edate').val();
@@ -380,7 +370,7 @@
     text_pesan = text_pesan + "\nSdate: " + sdate;
     text_pesan = text_pesan + "\nEdate: " + edate;
     text_pesan = text_pesan + "\nSearch: " + searchVal;
-    alert(sub_project);
+    // alert(sub_project);
 
     window.open('<?php echo base_url(); ?>admin/Traxes_report_cio/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
