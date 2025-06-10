@@ -1147,7 +1147,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                             </tr>
                             <tr>
                               <th scope="row">Alamat KTP</th>
-                              <td id="alamat_ktp_tabel"><a href="https://maps.google.com/?q=<?php echo $alamat_ktp; ?>" target="_blank"><?php echo $alamat_ktp; ?></a></td>
+                              <td id="alamat_ktp_tabel"><?php echo $alamat_ktp; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Maps Alamat KTP</th>
@@ -1158,7 +1158,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                             </tr>
                             <tr>
                               <th scope="row">Alamat Domisili</th>
-                              <td id="alamat_domisili_tabel"><a href="https://maps.google.com/?q=<?php echo $alamat_domisili; ?>" target="_blank"><?php echo $alamat_domisili; ?></a></td>
+                              <td id="alamat_domisili_tabel"><?php echo $alamat_domisili; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Maps Alamat KTP</th>
@@ -2521,23 +2521,22 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
       // AJAX request
       $.ajax({
-        url: '<?= base_url() ?>registrasi/tes_API_bank/' + bank_id + "/" + nomor_rekening,
+        url: '<?= base_url() ?>registrasi/tes_API_Bank3/' + bank_id + "/" + nomor_rekening,
         method: 'get',
         success: function(response) {
           // alert(response);
           var res = jQuery.parseJSON(response);
           // var res2 = jQuery.parseJSON(res);
           // html_text = "";
-          if (res['status'] == true) {
+          if (res['success'] == true) {
             html_text = "";
             html_text = html_text + "<div class='row'>";
             html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Rekening  </label>";
-            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
-            html_text = html_text + "kode bank: " + res['data']['bankcode'] + "<br>";
-            html_text = html_text + "nama bank: " + res['data']['bankname'] + "<br>";
-            html_text = html_text + "nomor rekening: " + res['data']['accountnumber'] + "<br>";
-            html_text = html_text + "nama pemilik rekening: " + res['data']['accountname'] + "<br>";
+            html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
+            html_text = html_text + "Nama Bank: " + res['data']['account_bank'] + "<br>";
+            html_text = html_text + "nomor rekening: " + res['data']['account_number'] + "<br>";
+            html_text = html_text + "nama pemilik rekening: " + res['data']['account_holder'] + "<br>";
             html_text = html_text + "</div>";
             html_text = html_text + "</div>";
 
@@ -2546,7 +2545,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             html_text = html_text + "<div class='row'>";
             html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Rekening  </label>";
-            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
+            html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
             html_text = html_text + "</div>";
             html_text = html_text + "</div>";
           }

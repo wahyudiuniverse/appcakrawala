@@ -939,6 +939,31 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil id bank untuk api verifikasi
+	function get_id_bank_verifikasi($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else if ($id == "") {
+			return "";
+		} else {
+			$this->db->select('bank_code_verifikasi_api');
+			$this->db->from('mt_bank');
+			$this->db->where('secid', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bank_code_verifikasi_api'];
+			}
+		}
+	}
+
 	//ubah tanggal YYYY-MM-DD diubah jadi MM/DD/YYYY
 	function ubah_format_tanggal($tanggal_lahir)
 	{
