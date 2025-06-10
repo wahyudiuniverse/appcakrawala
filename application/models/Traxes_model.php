@@ -658,69 +658,37 @@ class Traxes_model extends CI_Model
 					"project_name" 	=> strtoupper($record['project_name']),
 					"project_sub" 	=> strtoupper($record['sub_project_name']),
 					"penempatan" 	=> strtoupper($record['penempatan']),
-					"periode" 	=> $periode,
-					"1in" 	=> strtoupper($record['1-in']),
-					"1out" 	=> strtoupper($record['1-out']),
-					"2in" 	=> strtoupper($record['2-in']),
-					"2out" 	=> strtoupper($record['2-out']),
-					"3in" 	=> strtoupper($record['3-in']),
-					"3out" 	=> strtoupper($record['3-out']),
-					"4in" 	=> strtoupper($record['4-in']),
-					"4out" 	=> strtoupper($record['4-out']),
-					"5in" 	=> strtoupper($record['5-in']),
-					"5out" 	=> strtoupper($record['5-out']),
-					"6in" 	=> strtoupper($record['6-in']),
-					"6out" 	=> strtoupper($record['6-out']),
-					"7in" 	=> strtoupper($record['7-in']),
-					"7out" 	=> strtoupper($record['7-out']),
-					"8in" 	=> strtoupper($record['8-in']),
-					"8out" 	=> strtoupper($record['8-out']),
-					"9in" 	=> strtoupper($record['9-in']),
-					"9out" 	=> strtoupper($record['9-out']),
-					"10in" 		=> strtoupper($record['10-in']),
-					"10out" 	=> strtoupper($record['10-out']),
-					"11in" 		=> strtoupper($record['11-in']),
-					"11out" 	=> strtoupper($record['11-out']),
-					"12in" 		=> strtoupper($record['12-in']),
-					"12out" 	=> strtoupper($record['12-out']),
-					"13in" 		=> strtoupper($record['13-in']),
-					"13out" 	=> strtoupper($record['13-out']),
-					"14in" 		=> strtoupper($record['14-in']),
-					"14out" 	=> strtoupper($record['14-out']),
-					"15in" 		=> strtoupper($record['15-in']),
-					"15out" 	=> strtoupper($record['15-out']),
-					"16in" 		=> strtoupper($record['16-in']),
-					"16out" 	=> strtoupper($record['16-out']),
-					"17in" 		=> strtoupper($record['17-in']),
-					"17out" 	=> strtoupper($record['17-out']),
-					"18in" 		=> strtoupper($record['18-in']),
-					"18out" 	=> strtoupper($record['18-out']),
-					"19in" 		=> strtoupper($record['19-in']),
-					"19out" 	=> strtoupper($record['19-out']),
-					"20in" 		=> strtoupper($record['20-in']),
-					"20out" 	=> strtoupper($record['20-out']),
-					"21in" 		=> strtoupper($record['21-in']),
-					"21out" 	=> strtoupper($record['21-out']),
-					"22in" 		=> strtoupper($record['22-in']),
-					"22out" 	=> strtoupper($record['22-out']),
-					"23in" 		=> strtoupper($record['23-in']),
-					"23out" 	=> strtoupper($record['23-out']),
-					"24in" 		=> strtoupper($record['24-in']),
-					"24out" 	=> strtoupper($record['24-out']),
-					"25in" 		=> strtoupper($record['25-in']),
-					"25out" 	=> strtoupper($record['25-out']),
-					"26in" 		=> strtoupper($record['26-in']),
-					"26out" 	=> strtoupper($record['26-out']),
-					"27in" 		=> strtoupper($record['27-in']),
-					"27out" 	=> strtoupper($record['27-out']),
-					"28in" 		=> strtoupper($record['28-in']),
-					"28out" 	=> strtoupper($record['28-out']),
-					"29in" 		=> strtoupper($record['29-in']),
-					"29out" 	=> strtoupper($record['29-out']),
-					"30in" 		=> strtoupper($record['30-in']),
-					"30out" 	=> strtoupper($record['30-out']),
-					"31in" 		=> strtoupper($record['31-in']),
-					"31out" 	=> strtoupper($record['31-out']),
+					"1io" 	=> strtoupper($record['1-in'])." ".strtoupper($record['1-out']),
+					"2io" 	=> strtoupper($record['2-in'])." ".strtoupper($record['2-out']),
+					"3io" 	=> strtoupper($record['3-in'])." ".strtoupper($record['3-out']),
+					"4io" 	=> strtoupper($record['4-in'])." ".strtoupper($record['4-out']),
+					"5io" 	=> strtoupper($record['5-in'])." ".strtoupper($record['5-out']),
+					"6io" 	=> strtoupper($record['6-in'])." ".strtoupper($record['6-out']),
+					"7io" 	=> strtoupper($record['7-in'])." ".strtoupper($record['7-out']),
+					"8io" 	=> strtoupper($record['8-in'])." ".strtoupper($record['8-out']),
+					"9io" 	=> strtoupper($record['9-in'])." ".strtoupper($record['9-out']),
+					"10io" 		=> strtoupper($record['10-in'])." ".strtoupper($record['10-out']),
+					"11io" 		=> strtoupper($record['11-in'])." ".strtoupper($record['11-out']),
+					"12io" 		=> strtoupper($record['12-in'])." ".strtoupper($record['12-out']),
+					"13io" 		=> strtoupper($record['13-in'])." ".strtoupper($record['13-out']),
+					"14io" 		=> strtoupper($record['14-in'])." ".strtoupper($record['14-out']),
+					"15io" 		=> strtoupper($record['15-in'])." ".strtoupper($record['15-out']),
+					"16io" 		=> strtoupper($record['16-in'])." ".strtoupper($record['16-out']),
+					"17io" 		=> strtoupper($record['17-in'])." ".strtoupper($record['17-out']),
+					"18io" 		=> strtoupper($record['18-in'])." ".strtoupper($record['18-out']),
+					"19io" 		=> strtoupper($record['19-in'])." ".strtoupper($record['19-out']),
+					"20io" 		=> strtoupper($record['20-in'])." ".strtoupper($record['20-out']),
+					"21io" 		=> strtoupper($record['21-in'])." ".strtoupper($record['21-out']),
+					"22io" 		=> strtoupper($record['22-in'])." ".strtoupper($record['22-out']),
+					"23io" 		=> strtoupper($record['23-in'])." ".strtoupper($record['23-out']),
+					"24io" 		=> strtoupper($record['24-in'])." ".strtoupper($record['24-out']),
+					"25io" 		=> strtoupper($record['25-in'])." ".strtoupper($record['25-out']),
+					"26io" 		=> strtoupper($record['26-in'])." ".strtoupper($record['26-out']),
+					"27io" 		=> strtoupper($record['27-in'])." ".strtoupper($record['27-out']),
+					"28io" 		=> strtoupper($record['28-in'])." ".strtoupper($record['28-out']),
+					"29io" 		=> strtoupper($record['29-in'])." ".strtoupper($record['29-out']),
+					"30io" 		=> strtoupper($record['30-in'])." ".strtoupper($record['30-out']),
+					"31io" 		=> strtoupper($record['31-in'])." ".strtoupper($record['31-out']),
 
 				);
 
@@ -756,6 +724,8 @@ class Traxes_model extends CI_Model
 		//variabel filter (diambil dari post ajax di view)
 		$project = $postData['project'];
 		$sub_project = $postData['sub_project'];
+		// $project = '7008';
+		// $sub_project = 'KUDUS';
 		$periode = $postData['periode'];
 		$filter = $postData['filter'];
 		$session_id = $postData['session_id'];
@@ -925,4 +895,348 @@ class Traxes_model extends CI_Model
 		return $data;
 		//json_encode($data);
 	}
+
+
+	function get_list_tx_order($postData = null)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project 		= $postData['project'];
+		$sub_project 	= $postData['sub_project'];
+		$sdate 			= $postData['sdate'];
+		$edate 			= $postData['edate'];
+		$session_id 	= $postData['session_id'];
+
+		if ($project != "0") {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+					$searchQuery = " (xin_mobile_order.employee_id like '%" . $searchValue .  "%' or xin_mobile_order.employee_name like '%" . $searchValue . "%' or xin_mobile_order.customer_name like '%" . $searchValue . "%')";
+				}
+			}
+
+			## Filter
+			$filterProject = "";
+			if (($project != null) && ($project != "") && ($project != '0')) {
+				$filterProject = "xin_mobile_order.project_id = '" . $project . "'";
+			} else {
+				$filterProject = "";
+			}
+
+			$filterSubProject = "";
+			if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+				// $filterSubProject = "tx_cio.sub_project_id = '" . $sub_project . "'";
+				$filterSubProject = "xin_mobile_order.sub_project = '".$sub_project."'";
+			} else {
+				$filterSubProject = "";
+			}
+
+			$filterPeriode = "";
+			if (($sdate != null) && ($edate != "")) {
+				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
+				$filterPeriode = "DATE_FORMAT(xin_mobile_order.order_date, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+
+				// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
+
+			} else {
+				$filterPeriode = "";
+			}
+
+			## Kondisi Default 
+			// $kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+			// $kondisiDefaultQuery = "(
+			// 	karyawan_id = " . $emp_id . "
+			// AND	pkwt_id = " . $contract_id . "
+			// )";
+			$kondisiDefaultQuery = "";
+
+			## Total number of records without filtering
+			$dbtraxes->select('count(*) as allcount');
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+			// $dbtraxes->where($kondisiDefaultQuery);
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$records = $dbtraxes->get('xin_mobile_order')->result();
+			$totalRecords = $records[0]->allcount;
+
+			## Total number of record with filtering
+			$dbtraxes->select('count(*) as allcount');
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$dbtraxes->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$records = $dbtraxes->get('xin_mobile_order')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
+
+			## Fetch records
+			// $this->db->select('*');
+			$dbtraxes->select('xin_mobile_order.secid');
+			$dbtraxes->select('xin_mobile_order.customer_id');
+			$dbtraxes->select('xin_mobile_order.customer_name');
+			$dbtraxes->select('xin_mobile_order.employee_id');
+			$dbtraxes->select('xin_mobile_order.employee_name');
+			$dbtraxes->select('xin_mobile_order.project_id');
+			$dbtraxes->select('xin_mobile_order.project_name');
+			$dbtraxes->select('xin_mobile_order.sub_project');
+			$dbtraxes->select('xin_mobile_order.jabatan');
+			$dbtraxes->select('xin_mobile_order.penempatan');
+			$dbtraxes->select('xin_mobile_order.material_id');
+			$dbtraxes->select('xin_sku_material.nama_material');
+			$dbtraxes->select('xin_sku_material.brand');
+			$dbtraxes->select('xin_sku_material.poin');
+			$dbtraxes->select('xin_mobile_order.qty');
+			$dbtraxes->select('xin_mobile_order.price');
+			$dbtraxes->select('xin_mobile_order.total');
+			$dbtraxes->select('xin_mobile_order.order_date');
+
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$dbtraxes->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$dbtraxes->limit($rowperpage, $start);
+			$records = $dbtraxes->get('xin_mobile_order')->result();
+
+			#Debugging variable
+			$tes_query = $dbtraxes->last_query();
+			//print_r($tes_query);
+
+			$data = array();
+
+			foreach ($records as $record) {
+				//verification id
+
+
+				$data[] = array(
+					"aksi" => $record->secid,
+					"employee_id" => $record->employee_id,
+					"fullname" => strtoupper($record->employee_name),
+					"customer_id" => strtoupper($record->customer_id),
+					"customer_name" => strtoupper($record->customer_name),
+					"project_id" => strtoupper($record->project_id),
+					"project_name" => strtoupper($record->project_name),
+					"sub_project_name" => strtoupper($record->sub_project),
+					"jabatan_name" => strtoupper($record->jabatan),
+					"penempatan" => strtoupper($record->penempatan),
+					"material_id" => strtoupper($record->material_id),
+					"nama_material" => strtoupper($record->nama_material),
+					"brand" => strtoupper($record->brand),
+					"poin" => strtoupper($record->poin),
+					"qty" => strtoupper($record->qty),
+					"price" => strtoupper($record->price),
+					"total" => strtoupper($record->total),
+					"order_date" => strtoupper($record->order_date),
+
+				);
+
+			}
+		} else {
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
+		}
+
+
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	function get_order_print($postData = null)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$sdate = $postData['sdate'];
+		$edate = $postData['edate'];
+		$filter = $postData['filter'];
+		$session_id = $postData['session_id'];
+
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+			$searchQuery = " (xin_mobile_order.employee_id like '%" . $filter .  "%' or xin_mobile_order.employee_name like '%" . $filter . "%' or xin_mobile_order.customer_name like '%" . $filter . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterSubProject = "";
+		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+			// $filterSubProject = "(
+			// 	REPLACE(tx_cio.sub_project_name,' ','' = '" . $sub_project . "'
+			// )";
+			$filterSubProject = "(
+				sub_project = '" . $sub_project . "'
+			)";
+
+		} else {
+			$filterSubProject = "";
+		}
+
+		$filterStatus = "";
+		if (($sdate != null) && ($sdate != "") && ($sdate != '0')) {
+			$filterStatus = "(
+				DATE_FORMAT(xin_mobile_order.order_date, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'
+			)";
+
+			// $filterStatus = "(
+			// 	DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'
+			// )";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "";
+
+		## Fetch records
+		// $this->db->select('*');
+
+			$dbtraxes->select('xin_mobile_order.secid');
+			$dbtraxes->select('xin_mobile_order.employee_id');
+			$dbtraxes->select('xin_mobile_order.employee_name');
+			$dbtraxes->select('xin_mobile_order.project_id');
+			$dbtraxes->select('xin_mobile_order.project_name');
+			$dbtraxes->select('xin_mobile_order.sub_project');
+			$dbtraxes->select('xin_mobile_order.jabatan');
+			$dbtraxes->select('xin_mobile_order.penempatan');
+			$dbtraxes->select('xin_mobile_order.customer_id');
+			$dbtraxes->select('xin_mobile_order.customer_name');
+			$dbtraxes->select('xin_mobile_order.material_id');
+			$dbtraxes->select('xin_sku_material.nama_material');
+			$dbtraxes->select('xin_sku_material.brand');
+			$dbtraxes->select('xin_sku_material.poin');
+			$dbtraxes->select('xin_mobile_order.qty');
+			$dbtraxes->select('xin_mobile_order.price');
+			$dbtraxes->select('xin_mobile_order.total');
+			$dbtraxes->select('xin_mobile_order.order_date');
+
+
+
+		// $dbtraxes->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$dbtraxes->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$dbtraxes->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$dbtraxes->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$dbtraxes->where($filterStatus);
+		}
+
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+
+		$records = $dbtraxes->get('xin_mobile_order')->result();
+		$tes_query = $dbtraxes->last_query();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			
+
+			$data[] = array(
+				$record->employee_id,
+				trim(strtoupper($record->employee_name), " "),
+				strtoupper($record->project_name),
+
+				strtoupper($record->sub_project),
+				strtoupper($record->jabatan),
+				strtoupper($record->penempatan),
+				
+				strtoupper($record->customer_id),
+				strtoupper($record->customer_name),
+				strtoupper($record->material_id),
+				
+				strtoupper($record->nama_material),
+				strtoupper($record->brand),
+				strtoupper($record->poin),
+				
+				strtoupper($record->qty),
+				strtoupper($record->price),
+				strtoupper($record->total),
+				
+				strtoupper($record->order_date),
+
+			);
+		}
+
+		//print_r($this->db->last_query());
+		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
+
+		return $data;
+		//json_encode($data);
+	}
+
+
 }

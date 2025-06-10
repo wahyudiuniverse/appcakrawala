@@ -1416,16 +1416,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
       </a>
 
       <ul class="sidenav-menu">
-        <?php
-        if (in_array('112', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['remployees_active'])) echo $arr_mod['remployees_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/reports/employee_attendance/'); ?>"> <?php echo $this->lang->line('xin_hr_reports_attendance_employee'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
+        
 
         <?php
         if (in_array('112', $role_resources_ids)) {
@@ -1453,7 +1444,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('112', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['remployees_active'])) echo $arr_mod['remployees_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/reports/report_order/'); ?>"> <?php echo $this->lang->line('xin_order_report'); ?>
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_order/'); ?>"> Sellout Report
             </a>
           </li>
         <?php

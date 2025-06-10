@@ -189,38 +189,8 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
-                <th colspan="6" style="text-align: center;">EMPLOYEE</th>
-                <th colspan="2" style="text-align: center;">01</th>
-                <th colspan="2" style="text-align: center;">02</th>
-                <th colspan="2" style="text-align: center;">03</th>
-                <th colspan="2" style="text-align: center;">04</th>
-                <th colspan="2" style="text-align: center;">05</th>
-                <th colspan="2" style="text-align: center;">06</th>
-                <th colspan="2" style="text-align: center;">07</th>
-                <th colspan="2" style="text-align: center;">08</th>
-                <th colspan="2" style="text-align: center;">09</th>
-                <th colspan="2" style="text-align: center;">10</th>
-                <th colspan="2" style="text-align: center;">11</th>
-                <th colspan="2" style="text-align: center;">12</th>
-                <th colspan="2" style="text-align: center;">13</th>
-                <th colspan="2" style="text-align: center;">14</th>
-                <th colspan="2" style="text-align: center;">15</th>
-                <th colspan="2" style="text-align: center;">16</th>
-                <th colspan="2" style="text-align: center;">17</th>
-                <th colspan="2" style="text-align: center;">18</th>
-                <th colspan="2" style="text-align: center;">19</th>
-                <th colspan="2" style="text-align: center;">20</th>
-                <th colspan="2" style="text-align: center;">21</th>
-                <th colspan="2" style="text-align: center;">22</th>
-                <th colspan="2" style="text-align: center;">23</th>
-                <th colspan="2" style="text-align: center;">24</th>
-                <th colspan="2" style="text-align: center;">25</th>
-                <th colspan="2" style="text-align: center;">26</th>
-                <th colspan="2" style="text-align: center;">27</th>
-                <th colspan="2" style="text-align: center;">28</th>
-                <th colspan="2" style="text-align: center;">29</th>
-                <th colspan="2" style="text-align: center;">30</th>
-                <th colspan="2" style="text-align: center;">31</th>
+                <th colspan="5" style="text-align: center;">EMPLOYEE</th>
+                <th colspan="31" style="text-align: center;"><span id="kolom_bulan">BULAN</span></th>
               </tr>
               <tr>
                 <th>NIP</th>
@@ -228,69 +198,38 @@
                 <th>Project/Golongan</th>
                 <th>Sub Project/Witel</th>
                 <th>Area/Penempatan</th>
-                <th>Periode</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
-                <th style="text-align: center;">IN</th>
-                <th style="text-align: center;">OT</th>
+                <th style="text-align: center;">1</th>
+                <th style="text-align: center;">2</th>
+                <th style="text-align: center;">3</th>
+                <th style="text-align: center;">4</th>
+                <th style="text-align: center;">5</th>
+                <th style="text-align: center;">6</th>
+                <th style="text-align: center;">7</th>
+                <th style="text-align: center;">8</th>
+                <th style="text-align: center;">9</th>
+                <th style="text-align: center;">10</th>
+                <th style="text-align: center;">11</th>
+                <th style="text-align: center;">12</th>
+                <th style="text-align: center;">13</th>
+                <th style="text-align: center;">14</th>
+                <th style="text-align: center;">15</th>
+                <th style="text-align: center;">16</th>
+                <th style="text-align: center;">17</th>
+                <th style="text-align: center;">18</th>
+                <th style="text-align: center;">19</th>
+                <th style="text-align: center;">20</th>
+                <th style="text-align: center;">21</th>
+                <th style="text-align: center;">22</th>
+                <th style="text-align: center;">23</th>
+                <th style="text-align: center;">24</th>
+                <th style="text-align: center;">25</th>
+                <th style="text-align: center;">26</th>
+                <th style="text-align: center;">27</th>
+                <th style="text-align: center;">28</th>
+                <th style="text-align: center;">29</th>
+                <th style="text-align: center;">30</th>
+                <th style="text-align: center;">31</th>
+
               </tr>
             </thead>
           </table>
@@ -352,6 +291,19 @@
     var project     = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
     var periode     = document.getElementById("aj_periode").value;
+
+    // convert periode ke bahasa indonesia
+    // code nya
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    const d = new Date(periode).toLocaleString('id-ID',{month:'long', year:'numeric'})
+    // document.write("The current month is " + monthNames[d.getMonth()]);
+    // var periodeIndo = monthNames[d.getMonth();
+
+
+    //ganti value kolom bulan di datatable
+    // $("#kolom_bulan").html(d);
 
     var searchVal = $('#tabel_employees_filter').find('input').val();
 
@@ -424,266 +376,139 @@
             "orderable": false,
           },
           {
-            data: '1in',
+            data: '1io',
             "orderable": false,
           },
           {
-            data: '1out',
+            data: '2io',
             "orderable": false,
           },
           {
-            data: '2in',
+            data: '3io',
             "orderable": false,
           },
           {
-            data: '2out',
+            data: '4io',
             "orderable": false,
           },
           {
-            data: '3in',
+            data: '5io',
             "orderable": false,
           },
           {
-            data: '3out',
+            data: '6io',
             "orderable": false,
           },
           {
-            data: '4in',
+            data: '7io',
             "orderable": false,
           },
           {
-            data: '4out',
+            data: '8io',
             "orderable": false,
           },
           {
-            data: '5in',
+            data: '9io',
             "orderable": false,
           },
           {
-            data: '5out',
+            data: '11io',
             "orderable": false,
           },
           {
-            data: '6in',
+            data: '12io',
             "orderable": false,
           },
           {
-            data: '6out',
+            data: '13io',
             "orderable": false,
           },
           {
-            data: '7in',
+            data: '14io',
             "orderable": false,
           },
           {
-            data: '7out',
+            data: '15io',
             "orderable": false,
           },
           {
-            data: '8in',
+            data: '16io',
             "orderable": false,
           },
           {
-            data: '8out',
+            data: '17io',
             "orderable": false,
           },
           {
-            data: '9in',
+            data: '18io',
             "orderable": false,
           },
           {
-            data: '9out',
+            data: '19io',
             "orderable": false,
           },
           {
-            data: '10in',
+            data: '20io',
             "orderable": false,
           },
           {
-            data: '10out',
+            data: '21io',
             "orderable": false,
           },
           {
-            data: '11in',
+            data: '22io',
             "orderable": false,
           },
           {
-            data: '11out',
+            data: '23io',
             "orderable": false,
           },
           {
-            data: '12in',
+            data: '24io',
             "orderable": false,
           },
           {
-            data: '12out',
+            data: '25io',
             "orderable": false,
           },
           {
-            data: '13in',
+            data: '26io',
             "orderable": false,
           },
           {
-            data: '13out',
+            data: '27io',
             "orderable": false,
           },
           {
-            data: '14in',
+            data: '28io',
             "orderable": false,
           },
           {
-            data: '14out',
+            data: '29io',
             "orderable": false,
           },
           {
-            data: '15in',
+            data: '30io',
             "orderable": false,
           },
           {
-            data: '15out',
-            "orderable": false,
-          },
-          {
-            data: '16in',
-            "orderable": false,
-          },
-          {
-            data: '16out',
-            "orderable": false,
-          },
-          {
-            data: '17in',
-            "orderable": false,
-          },
-          {
-            data: '17out',
-            "orderable": false,
-          },
-          {
-            data: '18in',
-            "orderable": false,
-          },
-          {
-            data: '18out',
-            "orderable": false,
-          },
-          {
-            data: '19in',
-            "orderable": false,
-          },
-          {
-            data: '19out',
-            "orderable": false,
-          },
-          {
-            data: '20in',
-            "orderable": false,
-          },
-          {
-            data: '20out',
-            "orderable": false,
-          },
-          {
-            data: '21in',
-            "orderable": false,
-          },
-          {
-            data: '21out',
-            "orderable": false,
-          },
-          {
-            data: '22in',
-            "orderable": false,
-          },
-          {
-            data: '22out',
-            "orderable": false,
-          },
-          {
-            data: '23in',
-            "orderable": false,
-          },
-          {
-            data: '23out',
-            "orderable": false,
-          },
-          {
-            data: '24in',
-            "orderable": false,
-          },
-          {
-            data: '24out',
-            "orderable": false,
-          },
-          {
-            data: '25in',
-            "orderable": false,
-          },
-          {
-            data: '25out',
-            "orderable": false,
-          },
-          {
-            data: '26in',
-            "orderable": false,
-          },
-          {
-            data: '26out',
-            "orderable": false,
-          },
-          {
-            data: '27in',
-            "orderable": false,
-          },
-          {
-            data: '27out',
-            "orderable": false,
-          },
-          {
-            data: '28in',
-            "orderable": false,
-          },
-          {
-            data: '28out',
-            "orderable": false,
-          },
-          {
-            data: '29in',
-            "orderable": false,
-          },
-          {
-            data: '29out',
-            "orderable": false,
-          },
-          {
-            data: '30in',
-            "orderable": false,
-          },
-          {
-            data: '30out',
-            "orderable": false,
-          },
-          {
-            data: '31in',
-            "orderable": false,
-          },
-          {
-            data: '31out',
+            data: '31io',
             "orderable": false,
           },
         ],
 
         "columnDefs": [
         {
-          "targets": [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60],
+          // "targets": [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60],
+          "targets": [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
           "createdCell": function(td, cellData, rowData, row, col) {
             
 
-            if(cellData == ""){
+            if(cellData == "" || cellData == " "){
               $(td).css('background-color', '#fafafa') //abu-abu
-            } else if(cellData < "08:15"){
+            } else if(cellData < "08:16"){
               $(td).css('background-color', '#d1ffcd') //hijau
-            } else if (cellData > "08:15") {
+            } else if (cellData >= "08:16") {
               $(td).css('background-color', '#f8eeb6') //kuning
             }
           }
@@ -693,6 +518,7 @@
       }).on('search.dt', () => eventFired('Search'));
 
       $('#tombol_filter').attr("disabled", false);
+       $("#kolom_bulan").html("PERIODE : "+d.toUpperCase());
       $('#tombol_filter').removeAttr("data-loading");
     }
 

@@ -185,12 +185,14 @@
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
-                <th>Sub Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>Toko/Lokasi</th>
-                <th>Check-IN</th>
-                <th>Check-OUT</th>
+                <th>Toko</th>
+                <th>Produk/Material</th>
+                <th>Jumlah</th>
+                <th>Harga</th>
+                <th>Total</th>
+                <th>Tanggal Order</th>
               </tr>
             </thead>
           </table>
@@ -279,7 +281,7 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Traxes_report_cio/list_tx_cio',
+          'url': '<?= base_url() ?>admin/Traxes_report_order/list_tx_order',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,
@@ -293,8 +295,6 @@
             alert("Status :" + xhr.status);
             alert("responseText :" + xhr.responseText);
           },
-
-
 
         },
         'columns': [{
@@ -312,11 +312,6 @@
             //searchable: true
           },
           {
-            data: 'sub_project_name',
-            "orderable": false,
-            //searchable: true
-          },
-          {
             data: 'jabatan_name',
             "orderable": false
           },
@@ -329,11 +324,23 @@
             "orderable": false,
           },
           {
-            data: 'datetimephone_in',
+            data: 'nama_material',
             "orderable": false,
           },
           {
-            data: 'datetimephone_out',
+            data: 'qty',
+            "orderable": false,
+          },
+          {
+            data: 'price',
+            "orderable": false,
+          },
+          {
+            data: 'total',
+            "orderable": false,
+          },
+          {
+            data: 'order_date',
             "orderable": false,
           },
         ]
@@ -374,7 +381,7 @@
     text_pesan = text_pesan + "\nSearch: " + searchVal;
     // alert(sub_project);
 
-    window.open('<?php echo base_url(); ?>admin/Traxes_report_cio/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Traxes_report_order/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
   };
 
