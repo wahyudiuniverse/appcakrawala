@@ -1239,4 +1239,327 @@ class Traxes_model extends CI_Model
 	}
 
 
+	function get_list_tx_display($postData = null)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project 		= $postData['project'];
+		$sub_project 	= $postData['sub_project'];
+		$sdate 			= $postData['sdate'];
+		$edate 			= $postData['edate'];
+		$session_id 	= $postData['session_id'];
+
+		if ($project != "0") {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+					$searchQuery = " (tx_display.nik like '%" . $searchValue .  "%' or tx_display.employee_name like '%" . $searchValue . "%' or tx_display.customer_name like '%" . $searchValue . "%')";
+				}
+			}
+
+			## Filter
+			$filterProject = "";
+			if (($project != null) && ($project != "") && ($project != '0')) {
+				$filterProject = "tx_display.project_id = '" . $project . "'";
+			} else {
+				$filterProject = "";
+			}
+
+			$filterSubProject = "";
+			if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+				// $filterSubProject = "tx_cio.sub_project_id = '" . $sub_project . "'";
+				$filterSubProject = "tx_display.project_sub = '".$sub_project."'";
+			} else {
+				$filterSubProject = "";
+			}
+
+			$filterPeriode = "";
+			if (($sdate != null) && ($edate != "")) {
+				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
+				$filterPeriode = "DATE_FORMAT(tx_display.created_at, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+
+				// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
+
+			} else {
+				$filterPeriode = "";
+			}
+
+			## Kondisi Default 
+			// $kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+			// $kondisiDefaultQuery = "(
+			// 	karyawan_id = " . $emp_id . "
+			// AND	pkwt_id = " . $contract_id . "
+			// )";
+			$kondisiDefaultQuery = "";
+
+			## Total number of records without filtering
+			$dbtraxes->select('count(*) as allcount');
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+			// $dbtraxes->where($kondisiDefaultQuery);
+			// $dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$records = $dbtraxes->get('tx_display')->result();
+			$totalRecords = $records[0]->allcount;
+
+			## Total number of record with filtering
+			$dbtraxes->select('count(*) as allcount');
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$dbtraxes->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+			// $dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$records = $dbtraxes->get('tx_display')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
+
+			## Fetch records
+			// $this->db->select('*');
+			$dbtraxes->select('tx_display.secid');
+			$dbtraxes->select('tx_display.nik');
+			$dbtraxes->select('tx_display.employee_name');
+			$dbtraxes->select('tx_display.project_id');
+			$dbtraxes->select('tx_display.project_name');
+			$dbtraxes->select('tx_display.project_sub');
+			$dbtraxes->select('tx_display.jabatan');
+			$dbtraxes->select('tx_display.id_toko');
+			$dbtraxes->select('tx_display.customer_name');
+			$dbtraxes->select('tx_display.display');
+			$dbtraxes->select('tx_display.display2');
+			$dbtraxes->select('tx_display.display3');
+			$dbtraxes->select('tx_display.status_display');
+			$dbtraxes->select('tx_display.poin');
+			$dbtraxes->select('tx_display.created_at');
+
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$dbtraxes->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+
+			// $dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$dbtraxes->limit($rowperpage, $start);
+			$records = $dbtraxes->get('tx_display')->result();
+
+			#Debugging variable
+			$tes_query = $dbtraxes->last_query();
+			//print_r($tes_query);
+
+			$data = array();
+
+			foreach ($records as $record) {
+				//verification id
+
+
+				$data[] = array(
+					"aksi" => $record->secid,
+					"employee_id" => $record->nik,
+					"fullname" => strtoupper($record->employee_name),
+					"project_name" => strtoupper($record->project_name),
+					"project_sub" => strtoupper($record->project_sub),
+					"jabatan_name" => strtoupper($record->jabatan),
+					"customer_name" => strtoupper($record->customer_name),
+					"tanggal" => strtoupper($record->created_at),
+					"display" => "https://api.traxes.id/".$record->display,
+					"display2" => "https://api.traxes.id/".$record->display2,
+					"display3" => "https://api.traxes.id/".$record->display3,
+
+				);
+
+			}
+		} else {
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
+		}
+
+
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+
+	function get_display_print($postData = null)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$sdate = $postData['sdate'];
+		$edate = $postData['edate'];
+		$filter = $postData['filter'];
+		$session_id = $postData['session_id'];
+
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+			$searchQuery = " (tx_display.employee_id like '%" . $filter .  "%' or tx_display.employee_name like '%" . $filter . "%' or 
+				tx_display.customer_name like '%" . $filter . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterSubProject = "";
+		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+			// $filterSubProject = "(
+			// 	REPLACE(tx_cio.sub_project_name,' ','' = '" . $sub_project . "'
+			// )";
+			$filterSubProject = "(
+				project_sub = '" . $sub_project . "'
+			)";
+
+		} else {
+			$filterSubProject = "";
+		}
+
+		$filterStatus = "";
+		if (($sdate != null) && ($sdate != "") && ($sdate != '0')) {
+			$filterStatus = "(
+				DATE_FORMAT(tx_display.created_at, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'
+			)";
+
+			// $filterStatus = "(
+			// 	DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'
+			// )";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "";
+
+		## Fetch records
+		// $this->db->select('*');
+
+			$dbtraxes->select('tx_display.secid');
+
+			$dbtraxes->select('tx_display.nik');
+			$dbtraxes->select('tx_display.employee_name');
+			$dbtraxes->select('tx_display.project_name');
+			$dbtraxes->select('tx_display.project_sub');
+			$dbtraxes->select('tx_display.jabatan');
+
+			$dbtraxes->select('tx_display.id_toko');
+			$dbtraxes->select('tx_display.customer_name');
+			$dbtraxes->select('tx_display.created_at');
+
+			$dbtraxes->select('tx_display.display');
+			$dbtraxes->select('tx_display.display2');
+			$dbtraxes->select('tx_display.display3');
+			// $dbtraxes->select('tx_display.status_display');
+
+		// $dbtraxes->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$dbtraxes->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$dbtraxes->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$dbtraxes->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$dbtraxes->where($filterStatus);
+		}
+
+			// $dbtraxes->join('tx_display', 'tx_display.kode_sku = xin_mobile_order.material_id', 'left');
+
+		$records = $dbtraxes->get('tx_display')->result();
+		$tes_query = $dbtraxes->last_query();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			
+
+			$data[] = array(
+				trim(strtoupper($record->nik), " "),
+				strtoupper($record->employee_name),
+				strtoupper($record->project_name),
+				strtoupper($record->project_sub),
+				strtoupper($record->jabatan),
+
+				strtoupper($record->id_toko),
+				strtoupper($record->customer_name),
+				strtoupper($record->created_at),
+				
+				"https://api.traxes.id/".$record->display,
+				"https://api.traxes.id/".$record->display2,
+				"https://api.traxes.id/".$record->display3,
+				
+				// strtoupper($record->status_display),
+
+			);
+		}
+
+		//print_r($this->db->last_query());
+		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
+
+		return $data;
+		//json_encode($data);
+	}
+
 }
