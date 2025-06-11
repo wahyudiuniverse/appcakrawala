@@ -453,7 +453,9 @@ class Registrasi extends CI_Controller
 		}
 	}
 
-	//Menampilkan Register tanpa parameter untuk proses POST variable
+	//Cek rekening bank menggunakan API free 
+	//reference API:
+	//https://github.com/cekrekening/cekrekening.github.io
 	public function tes_API_Bank3($id_bank, $no_rekening)
 	{
 		// $data['nik'] = $nik;

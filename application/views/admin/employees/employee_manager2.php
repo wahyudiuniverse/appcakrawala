@@ -2521,7 +2521,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
       // AJAX request
       $.ajax({
-        url: '<?= base_url() ?>registrasi/tes_API_Bank3/' + bank_id + "/" + nomor_rekening,
+        url: 'https://karir.onecorp.co.id/cross_site/Crosscontroller/tes_API_Bank3/' + bank_id + "/" + nomor_rekening,
         method: 'get',
         success: function(response) {
           // alert(response);

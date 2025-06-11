@@ -949,7 +949,7 @@ class Employees_model extends CI_Model
 		} else if ($id == "") {
 			return "";
 		} else {
-			$this->db->select('bank_code_verifikasi_api');
+			$this->db->select('bank_code_verification_api');
 			$this->db->from('mt_bank');
 			$this->db->where('secid', $id);
 
@@ -959,7 +959,7 @@ class Employees_model extends CI_Model
 			if (empty($query)) {
 				return "";
 			} else {
-				return $query['bank_code_verifikasi_api'];
+				return $query['bank_code_verification_api'];
 			}
 		}
 	}
