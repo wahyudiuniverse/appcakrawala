@@ -27,6 +27,7 @@ class Usermobile extends MY_Controller
 		$this->load->model("Usersmobile_model");
 		$this->load->model("Project_model");
 		$this->load->model("Designation_model");
+		$this->load->model("Traxes_model");
 
 		// $this->load->model("Department_model");
 		// $this->load->model("Location_model");
@@ -51,11 +52,10 @@ class Usermobile extends MY_Controller
 		}
 
 		$data['title'] = $this->lang->line('xin_user_mobile').' | '.$this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_user_mobile');
+		$data['breadcrumbs'] = 'Tambah User Mobile Traxes';
 
-		$data['all_employees'] = $this->Xin_model->all_employees();
-		// $data['all_usermobile_type'] = $this->Xin_model->get_usermobile_type();
-		$data['all_projects'] = $this->Xin_model->get_projects();
+		$data['all_employees'] = $this->Usersmobile_model->all_employees($session['employee_id']);
+		$data['all_projects'] = $this->Usersmobile_model->get_projects_usermobile();
 		$data['all_area'] = $this->Xin_model->get_area();
 		$data['all_posisi'] = $this->Xin_model->get_designations();
 		$data['all_companies'] = $this->Xin_model->get_companies();
@@ -74,6 +74,28 @@ class Usermobile extends MY_Controller
 			redirect('admin/dashboard');
 		}
 	}
+
+
+	// get company > departments
+	public function get_emp_cis() {
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+		
+		$data = array(
+			'company_id' => $id
+			);
+		$session = $this->session->userdata('username');
+		if(!empty($session)){ 
+			$this->load->view("admin/usermobile/get_emp_cis", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	} 
 
 
 	// get company > departments
@@ -108,7 +130,7 @@ class Usermobile extends MY_Controller
 			);
 		$session = $this->session->userdata('username');
 		if(!empty($session)){ 
-			$this->load->view("admin/reports/report_get_subprojects", $data);
+			$this->load->view("admin/usermobile/get_proj_sub", $data);
 		} else {
 			redirect('admin/');
 		}
@@ -132,6 +154,7 @@ class Usermobile extends MY_Controller
 		$start = intval($this->input->get("start"));
 		$length = intval($this->input->get("length"));
 		
+		// $company_id = $this->uri->segment(4);
 		$company_id = $this->uri->segment(4);
 		$project_id = $this->uri->segment(5);
 		$subproject_id = $this->uri->segment(6);
@@ -140,12 +163,18 @@ class Usermobile extends MY_Controller
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 
+		if($company_id == "0" || is_null($company_id) || $company_id == "-" || $company_id == "") {
 
-		if($project_id=="0" || is_null($project_id)){
-			$usermobile = $this->Usersmobile_model->user_mobile_limit();
-		}else{
-			$usermobile = $this->Usersmobile_model->user_mobile_limit_fillter($company_id, $project_id, $subproject_id);
+			if($project_id=="0" || is_null($project_id)){
+				$usermobile = $this->Traxes_model->user_mobile_limit_newtraxes();
+			}else{
+				$usermobile = $this->Traxes_model->user_mobile_limit_fillter_newtraxes($company_id, $project_id, $subproject_id);
+			}
+
+		} else {
+			$usermobile = $this->Traxes_model->user_mobile_byemployee_newtraxes($company_id);
 		}
+
 		
 
 
@@ -154,43 +183,19 @@ class Usermobile extends MY_Controller
     foreach($usermobile->result() as $r) {
 
     	$nik = $r->employee_id;
+    	$fullname = $r->fullname;
+    	$jabatan = $r->jabatan;
+    	$penempatan = $r->penempatan;
 
-    	$read_employee = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
-    	if(!is_null($read_employee)){
-				$fullname = $read_employee[0]->first_name;
-    	} else {
-				$fullname = '--';
-    	}
 
-    	$read_usertype = $this->Usersmobile_model->read_usersmobile_type($r->usertype_id);
-			if(!is_null($read_usertype)){
-				$usertype = $read_usertype[0]->user_type_name;
-			} else {
-				$usertype = '--';	
-			}
 
 			$project_info = $this->Project_model->read_project_information($r->project_id);
-			if(!is_null($project_info)){
+			if(!is_null($project_info)) { 
 				$projectname = $project_info[0]->title;
 			} else {
-				$projectname = '--';	
+				$projectname = '--';
 			}
 			
-
-			$read_area = $this->Usersmobile_model->read_usersmobile_area($r->areaid);
-			if(!is_null($read_area)){
-				$area = $read_area[0]->name;
-			} else {
-				$area = '--';	
-			}
-
-			// get company
-			// $location = $this->Location_model->read_location_information($r->location_id);
-			// if(!is_null($location)){
-			// 	$location_name = $location[0]->location_name;
-			// } else {
-			// 	$location_name = '--';	
-			// }
 			
 			if(in_array('65',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-usermobile_id="'. $r->employee_id . '"><span class="fas fa-pencil-alt"></span></button></span>';
@@ -202,16 +207,16 @@ class Usermobile extends MY_Controller
 			} else {
 				$delete = '';
 			}
-			// $ititle = $r->department_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_department_head').': '.$dep_head.'<i></i></i></small>';
+
 			$combhr = $edit.$delete;
 			  
 		   $data[] = array(
 				$combhr,
 				$nik,
 				$fullname,
-				$usertype,
+				$jabatan,
 				$projectname,
-				ucwords(strtolower($area)),
+				ucwords(strtolower($penempatan)),
 		   );
           }
 
@@ -242,26 +247,39 @@ class Usermobile extends MY_Controller
 		/* Server side PHP input validation */
 		if($this->input->post('employees')==='') {
   	  $Return['error'] = 'Employee Kosong..!';
-		} else if($this->input->post('project')==='') {
+		} else if($this->input->post('project_name')==='') {
 			$Return['error'] = 'Project Kosong..!';
-		} else if($this->input->post('area')==='') {
+		} else if($this->input->post('penempatan')==='') {
 			$Return['error'] = 'Area/Penempatan Kosong..!';
-		} 
+		} else if($this->Employees_model->check_usermobile($this->input->post('employee_id')) > 0) {
+			$Return['error'] = $this->lang->line('xin_employee_id_already_exist');
+		}
 
 		if($Return['error']!='') {
   	 	$this->output($Return);
   	}
 	
 		$data = array(
-		'employee_id' => $this->input->post('employees'),
-		'project_id' => $this->input->post('project'),
-		'usertype_id' => 1,
-		'areaid' => $this->input->post('area'),
-		'areaid_extra1' => $this->input->post('area2'),
-		'areaid_extra2' => $this->input->post('area3'),
-		'device_id_one' => $this->input->post('device_id'),
-		'createdby' => $session['user_id'],
-
+			'employee_id' 	=> $this->input->post('employee_id'),
+			'fullname' 			=> $this->input->post('fullname'),
+			'company_id' 		=> $this->input->post('company_id'),
+			'company_name' 	=> $this->input->post('company_name'),
+			'project_id'	 	=> $this->input->post('project_id'),
+			'project_name' 	=> $this->input->post('project_name'),
+			'project_sub' 	=> $this->input->post('subproject'),
+			'jabatan' 			=> $this->input->post('jabatan'),
+			'penempatan' 		=> $this->input->post('penempatan'),
+			'usertype_id' 	=> 1,
+			'areaid' 				=> 1,
+			'areaid_extra1' => $this->input->post('area2'),
+			'areaid_extra2' => $this->input->post('area3'),
+			'device_id_one' => 0,
+			'device_id_two' => 0,
+			'server_inv' 		=> 'PROD',
+			'versi_app' 		=> '1.1.0',
+			'is_active' 		=> 1,
+			'createdby' 		=> $session['user_id'],
+			'createdon' 		=> date('Y-m-d h:i:s'),
 		);
 
 		$result = $this->Usersmobile_model->add($data);
@@ -290,38 +308,36 @@ class Usermobile extends MY_Controller
 
 			if(!is_null($keywords[0])){
 
-    		$read_employee = $this->Employees_model->read_employee_info_by_nik($keywords[0]);
-    		$read_usermobile = $this->Usersmobile_model->read_users_mobile_by_nik($keywords[0]);
+    		// $read_employee = $this->Employees_model->read_employee_info_by_nik($keywords[0]);
+    		$read_usermobile = $this->Traxes_model->read_users_mobile_by_nik_newtraxes($keywords[0]);
 
-    		$full_name = $read_employee[0]->first_name;
+    		//$full_name = $read_usermobile[0]->fullname;
 
 				$all_projects = $this->Project_model->get_projects();
 				$all_usertype = $this->Usersmobile_model->get_usertype();
-				$all_area = $this->Xin_model->get_area();
+				// $all_area = $this->Xin_model->get_area();
 				// $all_area = $this->Usersmobile_model->get_district();
 
 			}
 
-		// if(is_numeric($keywords[0])) {
-
-		// 	$id = $keywords[0];
-		// 	$id = $this->security->xss_clean($id);
-
-
-		// }
 
 			$data = array(
 				'usermobile_id' => $keywords[0],
-				'fullname' => $full_name,
-				'usertype_id' => $read_usermobile[0]->usertype_id,
+				'fullname' => $read_usermobile[0]->fullname,
+				'company_name' => $read_usermobile[0]->company_name,
 				'project_id' => $read_usermobile[0]->project_id,
+				'project_name' => $read_usermobile[0]->project_name,
+				'project_sub' => $read_usermobile[0]->project_sub,
+				'posisi' => $read_usermobile[0]->jabatan,
+				'penempatan' => $read_usermobile[0]->penempatan,
+				'usertype_id' => $read_usermobile[0]->usertype_id,
 				'areaid' => $read_usermobile[0]->areaid,
 				'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
 				'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
 				'device_id' => $read_usermobile[0]->device_id_one,
 				'all_usertype' => $all_usertype,
 				'all_projects' => $all_projects,
-				'all_area' => $all_area
+				// 'all_area' => $all_area
 				);
 			$session = $this->session->userdata('username');
 			
@@ -369,15 +385,11 @@ class Usermobile extends MY_Controller
 			$data = array(
 			'usertype_id' => $this->input->post('usertype'),
 			'project_id' => $this->input->post('project'),
-			'areaid' => $this->input->post('area'),
-			'areaid_extra1' => $this->input->post('area2'),
-			'areaid_extra2' => $this->input->post('area3'),
 			'device_id_one' => $this->input->post('device_id'),
 			// 'device_id_one' => $this->input->post('device_id'),
 			);
 
-			// $data = $this->security->xss_clean($data);
-			$result = $this->Usersmobile_model->update_record($data,$emp);
+			$result = $this->Traxes_model->update_record_newtraxes($data,$emp);
 
 			if ($result == TRUE) {
 				$Return['result'] = $this->lang->line('xin_success_update_department');
@@ -396,7 +408,7 @@ class Usermobile extends MY_Controller
 		$Return = array('result'=>'', 'error'=>'', 'csrf_hash'=>'');
 		$id = $this->uri->segment(4);
 		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		$result = $this->Usersmobile_model->delete_record($id);
+		$result = $this->Traxes_model->delete_record_newtraxes($id);
 		if(isset($id)) {
 			$Return['result'] = $this->lang->line('xin_success_job_deleted');
 		} else {

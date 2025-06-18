@@ -2,7 +2,7 @@ $(document).ready(function() {
    var xin_table = $('#xin_table').dataTable({
         "bDestroy": true,
 		"ajax": {
-            url : base_url+"/usermobile_list/",
+            url : base_url+"/usermobile_list/0/0/0",
             type : 'GET'
         },
 		"fnDrawCallback": function(settings){
@@ -38,6 +38,12 @@ $(document).ready(function() {
 		});
 	});
 
+
+	jQuery("#aj_emp").change(function(){
+		jQuery.get(base_url+"/get_emp_cis/"+jQuery(this).val(), function(data, status){
+			jQuery('#info_emp_ajax').html(data);
+		});
+	});
 
 	jQuery("#aj_company").change(function(){
 		jQuery.get(base_url+"/get_comp_project/"+jQuery(this).val(), function(data, status){

@@ -104,7 +104,7 @@
 
   <div class="card-body border-bottom-blue ">
 
-    <?php echo form_open_multipart('/admin/importexcel/import_saltab2/'); ?>
+    <?php echo form_open_multipart('/admin/importexcel/import_saltab3/'); ?>
 
     <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 

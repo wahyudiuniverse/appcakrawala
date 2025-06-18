@@ -97,7 +97,7 @@ class Akses_project extends MY_Controller {
       $nama_lengkap = $r->first_name;
       $nama_posisi = $r->designation_name;
       // $project_id = $r->project_id;
-      $project_name = $r->title;
+      $project_name = '['.$r->priority.'] ' $r->title;
 
 			// $posisi = $this->Employees_model->read_employee_jabatan($r->nip);
 			// if(!is_null($posisi)){

@@ -23,60 +23,18 @@
 
 
         <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('dashboard_single_employee');?></label>
-          <select class=" form-control" name="employees" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_single_employee');?>">
+          <label for="first_name">NIP / Nama Lengkap</label>
+          <select class=" form-control" name="employees" id="aj_emp" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_single_employee');?>">
             <option value=""></option>
-            <?php foreach($all_employees as $emp) {?>
-            <option value="<?php echo $emp->employee_id?>"><?php echo '('.$emp->employee_id.') '. $emp->first_name.' '.$emp->last_name?></option>
+            <?php foreach($all_employees as $emp) { ?>
+            <option value="<?php echo $emp->employee_id?>"><?php echo '('.$emp->employee_id.') '. $emp->first_name;?></option>
             <?php } ?>
           </select>
         </div>
+ 
 
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_project');?></label>
-          <select class=" form-control" name="project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_project');?>">
-            <option value=""></option>
-            <?php foreach($all_projects as $emp) {?>
-            <option value="<?php echo $emp->project_id?>"><?php echo $emp->title?></option>
-            <?php } ?>
-          </select>
-        </div>
+        <div id="info_emp_ajax">
 
-
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_area');?></label>
-          <select class=" form-control" name="area" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area');?>">
-            <option value=""></option>
-            <?php foreach($all_area as $emp) {?>
-            <option value="<?php echo $emp->id?>"><?php echo ucwords(strtolower($emp->name))?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_area_extra1');?></label>
-          <select class=" form-control" name="area2" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area_extra1');?>">
-            <option value=""></option>
-            <?php foreach($all_area as $emp) {?>
-            <option value="<?php echo $emp->id?>"><?php echo ucwords(strtolower($emp->name))?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_area_extra2');?></label>
-          <select class=" form-control" name="area3" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area_extra2');?>">
-            <option value=""></option>
-            <?php foreach($all_area as $emp) {?>
-            <option value="<?php echo $emp->id?>"><?php echo ucwords(strtolower($emp->name))?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_deviceid');?></label>
-          <input type="text" class="form-control" placeholder="default is 0" value="0" name="device_id"/>
         </div>
 
 
@@ -115,22 +73,15 @@
 
 
         <div class="col-md mb-3">
-          <label class="form-label"><?php echo $this->lang->line('left_company');?></label>
-          <select class="form-control" name="company_id" id="aj_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_company');?>">
-            <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
-            <?php 
-              foreach ($all_companies as $company) {
-            ?>
-                <option value="<?php echo $company->company_id?>"><?php echo $company->name?></option>
-            <?php 
-              } 
-            ?>
-          </select>
+          <label class="form-label">Cari NIP</label>
+
+          <input class="form-control" type="number" name="aj_company" id="aj_company" data-placeholder="<?php echo $this->lang->line('dashboard_single_employee');?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+ 
         </div>
 
     
         <div class="col-md mb-3" id="project_ajax">
-          <label class="form-label"><?php echo $this->lang->line('left_projects').'c';?></label>
+          <label class="form-label">Project</label>
           <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects');?>">
             <option value="0"><?php echo $this->lang->line('xin_acc_all');?></option>
             <?php 

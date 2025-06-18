@@ -2,7 +2,7 @@
 
 <div class="form-group">
   <label for="subproject"><?php echo $this->lang->line('left_sub_projects'); ?></label>
-  <select class="form-control" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_select_sub_projects'); ?>" name="sub_project_id" id="aj_sub_project">
+  <select class="form-control" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_select_sub_projects'); ?>" name="sub_project_id" id="aj_sub_project">
     <option value="0">--ALL--</option>
     <?php foreach ($result as $subprj) { ?>
       <option value="<?php echo $subprj->secid ?>"><?php echo $subprj->sub_project_name ?></option>

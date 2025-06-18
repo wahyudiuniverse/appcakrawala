@@ -20,6 +20,17 @@
 	}
 		
 
+	// get all employees
+	public function all_employees($nip)	
+	{
+
+	  $query = $this->db->query("SELECT user_id, employee_id, first_name
+		FROM xin_employees
+		where project_id in (select DISTINCT(project_id) from xin_projects_akses where nip = '$nip')
+		AND status_resign = 1");
+  	  return $query->result();
+	}
+
 	// get employees list> reports
 	public function user_mobile_limit() {
 		return $query = $this->db->query("SELECT * FROM xin_user_mobile ORDER BY createdon DESC LIMIT 10");
@@ -169,5 +180,31 @@
 			return false;
 		}		
 	}
+
+
+	// get all project
+	public function get_projects_usermobile()
+	{
+	  $query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title 
+		FROM xin_projects 
+		WHERE project_id IN (SELECT DISTINCT(project_id) FROM xin_user_mobile)
+		ORDER BY title ASC;");
+  	  return $query->result();
+	}
+	
+	public function get_employee_cis($empID)
+	{
+
+	  // $cisdb = $this->load->database('cisdb', TRUE);
+	  $query = $this->db->query("SELECT  emp.employee_id, emp.first_name, emp.company_id, com.name as comp_name, emp.project_id, pro.title, prosub.sub_project_name, pos.designation_name, emp.penempatan
+			FROM xin_employees emp
+			LEFT JOIN xin_companies com ON com.company_id = emp.company_id
+			LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
+			LEFT JOIN xin_projects_sub prosub ON prosub.secid = emp.sub_project_id 
+			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+			WHERE emp.employee_id = '$empID';");
+  	  return $query->result();
+	}
+
 }
 ?>

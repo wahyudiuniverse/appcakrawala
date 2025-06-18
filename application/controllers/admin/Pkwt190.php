@@ -1497,7 +1497,7 @@ class Pkwt190 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1780,7 +1780,9 @@ class Pkwt190 extends MY_Controller
 <br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
-<br><br><br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1798,21 +1800,9 @@ class Pkwt190 extends MY_Controller
 
 
 
-					<img src="'.base_url().'assets/lampiran2_gtmt.png" alt="Trulli" width="650" height="400">
+					<img src="'.base_url().'assets/lampiran2_gtmt.png" alt="Trulli" width="650" height="160">
 
-				<br>
-				<br>
-				<br>
-				<br>
-
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br>
+				<br><br><br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>
@@ -1841,16 +1831,8 @@ class Pkwt190 extends MY_Controller
 					<img src="'.base_url().'assets/lampiran3.png" alt="Trulli" width="650" height="500">
 
 <br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br>
+<br><br>
 
-
-
-
-<br>
 				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>
 						<td><b>A.</b></td>

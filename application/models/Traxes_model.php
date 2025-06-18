@@ -1562,4 +1562,84 @@ class Traxes_model extends CI_Model
 		//json_encode($data);
 	}
 
+
+	public function user_mobile_limit_newtraxes()
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		// $api_traxes_db = $this->load->database('api_traxes_db', TRUE);
+		$query = $dbtraxes->query("SELECT * FROM xin_user_mobile ORDER BY createdon DESC LIMIT 10");
+		return $query;
+	}
+
+
+	// get employees list> reports
+	public function user_mobile_limit_fillter_newtraxes($company_id, $project_id, $subproject)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		// $api_traxes_db = $this->load->database('api_traxes_db', TRUE);
+
+		if ($subproject == "0") {
+			$query = $dbtraxes->query("SELECT * FROM xin_user_mobile WHERE project_id = '$project_id'");
+			return $query;
+		} else {
+			$query = $dbtraxes->query("SELECT * FROM xin_user_mobile WHERE project_id = '$project_id'
+			AND project_sub = '$subproject'");
+			return $query;
+		}
+	}
+
+	// get employees list> reports
+	public function user_mobile_byemployee_newtraxes($company_id)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		// $api_traxes_db = $this->load->database('api_traxes_db', TRUE);
+		$query = $dbtraxes->query("SELECT * FROM xin_user_mobile WHERE employee_id= '$company_id';");
+		return $query;
+	}
+
+
+	public function read_users_mobile_by_nik_newtraxes($id)
+	{
+		// $api_traxes_db = $this->load->database('api_traxes_db', TRUE);
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$sql = 'SELECT * FROM xin_user_mobile WHERE employee_id = ?';
+		$binds = array($id);
+		$query = $dbtraxes->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return false;
+		}
+	}
+
+	// Function to update record in table
+	public function update_record_newtraxes($data, $id)
+	{
+		// $api_traxes_db = $this->load->database('api_traxes_db', TRUE);
+		
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$dbtraxes->where('employee_id', $id);
+		$data = $this->security->xss_clean($data);
+		if ($dbtraxes->update('xin_user_mobile', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	// Function to Delete selected record from table
+	public function delete_record_newtraxes($id)
+	{
+		// $api_traxes_db = $this->load->database('api_traxes_db', TRUE);
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$dbtraxes->where('user_id', $id);
+		$dbtraxes->delete('xin_user_mobile');
+	}
+
 }
