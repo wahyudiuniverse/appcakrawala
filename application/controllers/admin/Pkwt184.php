@@ -1778,7 +1778,9 @@ class Pkwt184 extends MY_Controller
 <br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
-<br><br><br><br><br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+<br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1796,22 +1798,9 @@ class Pkwt184 extends MY_Controller
 
 
 
-					<img src="'.base_url().'assets/lampiran2_bastay.png" alt="Trulli" width="650" height="330">
+					<img src="'.base_url().'assets/lampiran2_bastay.png" alt="Trulli" width="650" height="130">
 
-				<br>
-				<br>
-				<br>
-				<br>
-
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br>
+				<br><br><br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>
@@ -1839,10 +1828,6 @@ class Pkwt184 extends MY_Controller
 
 					<img src="'.base_url().'assets/lampiran3.png" alt="Trulli" width="650" height="500">
 
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
-<br><br><br><br>
 <br><br><br><br>
 <br><br><br><br>
 

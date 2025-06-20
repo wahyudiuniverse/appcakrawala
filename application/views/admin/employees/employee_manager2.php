@@ -1147,7 +1147,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                             </tr>
                             <tr>
                               <th scope="row">Alamat KTP</th>
-                              <td id="alamat_ktp_tabel"><a href="https://maps.google.com/?q=<?php echo $alamat_ktp; ?>" target="_blank"><?php echo $alamat_ktp; ?></a></td>
+                              <td id="alamat_ktp_tabel"><?php echo $alamat_ktp; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Maps Alamat KTP</th>
@@ -1158,7 +1158,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                             </tr>
                             <tr>
                               <th scope="row">Alamat Domisili</th>
-                              <td id="alamat_domisili_tabel"><a href="https://maps.google.com/?q=<?php echo $alamat_domisili; ?>" target="_blank"><?php echo $alamat_domisili; ?></a></td>
+                              <td id="alamat_domisili_tabel"><?php echo $alamat_domisili; ?></td>
                             </tr>
                             <tr>
                               <th scope="row">Maps Alamat KTP</th>
@@ -2521,23 +2521,22 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
       // AJAX request
       $.ajax({
-        url: '<?= base_url() ?>registrasi/tes_API_bank/' + bank_id + "/" + nomor_rekening,
+        url: 'https://karir.onecorp.co.id/cross_site/Crosscontroller/tes_API_Bank3/' + bank_id + "/" + nomor_rekening,
         method: 'get',
         success: function(response) {
           // alert(response);
           var res = jQuery.parseJSON(response);
           // var res2 = jQuery.parseJSON(res);
           // html_text = "";
-          if (res['status'] == true) {
+          if (res['success'] == true) {
             html_text = "";
             html_text = html_text + "<div class='row'>";
             html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Rekening  </label>";
-            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
-            html_text = html_text + "kode bank: " + res['data']['bankcode'] + "<br>";
-            html_text = html_text + "nama bank: " + res['data']['bankname'] + "<br>";
-            html_text = html_text + "nomor rekening: " + res['data']['accountnumber'] + "<br>";
-            html_text = html_text + "nama pemilik rekening: " + res['data']['accountname'] + "<br>";
+            html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
+            html_text = html_text + "Nama Bank: " + res['data']['account_bank'] + "<br>";
+            html_text = html_text + "nomor rekening: " + res['data']['account_number'] + "<br>";
+            html_text = html_text + "nama pemilik rekening: " + res['data']['account_holder'] + "<br>";
             html_text = html_text + "</div>";
             html_text = html_text + "</div>";
 
@@ -2546,7 +2545,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
             html_text = html_text + "<div class='row'>";
             html_text = html_text + "<div class='form-group col-md-12'>";
             html_text = html_text + "<label>Rekening  </label>";
-            html_text = html_text + "<br>Pesan: " + res['msg'] + "<br>";
+            html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
             html_text = html_text + "</div>";
             html_text = html_text + "</div>";
           }
@@ -4231,7 +4230,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/Importexceleslip/eslip_final/' + nip + '/' + secid;
-    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE ESLIP</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
@@ -4252,7 +4251,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(nip);
 
     var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
-    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE SURAT KETERANGAN</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
@@ -4273,7 +4272,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(sub_project);
 
     var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
-    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE KONTRAK</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + 'https://apps-cakrawala.com/admin/pkwt1/view/bYqHsn9BkHeoaumXMggr' + '&embedded=true"></embed>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + link_eslip + '&embedded=true"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
@@ -4302,7 +4301,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(id);
 
     var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
-    var html_text = '<object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + link_eslip + '">klik disini untuk mendownload file PDF.</a></p></object>';
+    var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE ADDENDUM</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
@@ -5492,7 +5491,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
           // var html_text = "";
           // html_text = html_text + '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
-          var html_text = '<object height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
+          var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE KONTRAK</button></a></br><object height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
 
           $('.isi-modal').html(html_text);
           // $('#button_save_pin').attr("hidden", true);
@@ -5557,7 +5556,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
           }
 
           // var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
-          var html_text = '<object height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Browser anda tidak mendukung plugin PDF. Silahkan <a href="' + nama_file + '">klik disini untuk mendownload file PDF.</a></p></object>';
+          var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE ADDENDUM</button></a></br><object height="500px" data="' + nama_file + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
 
           $('.isi-modal').html(html_text);
           $('#button_save_pin').attr("hidden", true);

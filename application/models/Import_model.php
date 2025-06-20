@@ -495,7 +495,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->select('nip');
 		$this->db->select('fullname');
 
-		$this->db->from('xin_saltab',);
+		$this->db->from('xin_saltab');
 		$this->db->where('secid', $postData['id']);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -3156,7 +3156,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
 
-				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Oktober 2024 - 31 Oktober 2024, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Mei 2025 - 31 Mei 2025, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
 
 				Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
 
@@ -3207,7 +3207,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	public function cek_request_open_import($postData)
 	{
 		$this->db->select('*');
-		$this->db->from('log_request_open_saltab',);
+		$this->db->from('log_request_open_saltab');
 		$this->db->where($postData);
 		$this->db->order_by('id', 'DESC');
 		$this->db->limit(1);
@@ -3222,7 +3222,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	public function update_request_open_import($postData)
 	{
 		$this->db->select('*');
-		$this->db->from('log_request_open_saltab',);
+		$this->db->from('log_request_open_saltab');
 		$this->db->where($postData);
 		$this->db->order_by('id', 'DESC');
 		$this->db->limit(1);
@@ -3246,7 +3246,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	public function cek_request_open_import_manual($project_id)
 	{
 		$this->db->select('*');
-		$this->db->from('xin_saltab_lock_import',);
+		$this->db->from('xin_saltab_lock_import');
 		$this->db->where("project_id = " . $project_id);
 
 		$query = $this->db->get()->row_array();
@@ -3507,7 +3507,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 		$this->db->select('*');
 
-		$this->db->from('xin_saltab_bulk_release',);
+		$this->db->from('xin_saltab_bulk_release');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -3522,7 +3522,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 	{
 		$this->db->select('*');
 
-		$this->db->from('xin_bupot_batch',);
+		$this->db->from('xin_bupot_batch');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);

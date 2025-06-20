@@ -3,7 +3,7 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 ml-4 text-gray-800"><br>
-        <h2>REGISTRASI KARYAWAN BARU 2024</h2>
+        <h2>REGISTRASI KARYAWAN BARU 2025</h2>
         <h5>CAKRAWALA GROUP</h5><br>
     </h1>
 

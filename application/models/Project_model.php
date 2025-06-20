@@ -26,7 +26,7 @@ class Project_model extends CI_Model
 	public function list_akses_project()
 	{
 
-		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title
+		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title, pro.priority
 			FROM xin_projects_akses pros
 			LEFT JOIN xin_employees emp ON emp.employee_id = pros.nip
 			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
@@ -42,7 +42,7 @@ class Project_model extends CI_Model
 	public function list_akses_project_nip($nip)
 	{
 
-		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title
+		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title, pro.priority
 			FROM xin_projects_akses pros
 			LEFT JOIN xin_employees emp ON emp.employee_id = pros.nip
 			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
@@ -309,13 +309,13 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE npro.doc_id
 		return $query->result();
 	}
 
-	public function get_project_exist_deactive()
+	public function get_project_exist_deactive($empID)
 	{
 		$query = $this->db->query("SELECT distinct(emp.project_id) AS project_id, proj.title 
 		FROM xin_employees emp
 		LEFT JOIN xin_projects proj ON proj.project_id=emp.project_id
-		WHERE emp.project_id NOT IN (0)
-		AND emp.status_resign = 5
+		WHERE emp.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
+		AND emp.status_employee = 0
 		ORDER BY proj.title");
 		return $query->result();
 	}

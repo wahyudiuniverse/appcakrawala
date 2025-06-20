@@ -43,59 +43,29 @@ if(isset($_GET['jd']) && isset($_GET['department_id']) && $_GET['data']=='depart
 
 
   <div class="form-group">
-    <label for="first_name"><?php echo $this->lang->line('xin_user_mobile_type');?></label>
-    <select class="form-control" name="usertype" id="ajx_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_mobile_type');?>">
-			<?php foreach($all_usertype->result() as $userype) {?>
-      <option value="<?php echo $userype->secid?>" <?php if($usertype_id==$userype->secid):?> selected="selected"<?php endif;?>> <?php echo $userype->user_type_name?></option>
-      <?php } ?>
-    </select>
+    <label for="first_name">PT / Perusahaan</label>
+    <input class="form-control" type="text" value="<?php echo $company_name;?>">
   </div>
-
 
   <div class="form-group">
-    <label for="first_name"><?php echo $this->lang->line('xin_project');?></label>
-    <select class="form-control" name="project" id="ajx_company" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_project');?>">
-			<?php foreach($all_projects->result() as $contype) {?>
-      <option value="<?php echo $contype->project_id?>" <?php if($project_id==$contype->project_id):?> selected="selected"<?php endif;?>> <?php echo $contype->title?></option>
-      <?php } ?>
-    </select>
+    <label for="first_name">Project</label>
+    <input class="form-control" type="text" value="<?php echo $project_name;?>">
   </div>
-	
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_area');?></label>
-          <select class=" form-control" name="area" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area');?>">
-            <option value=""></option>
-            <?php foreach($all_area as $emp) {?>
 
-      			<option value="<?php echo $emp->id?>" <?php if($areaid==$emp->id):?> selected="selected"<?php endif;?>> <?php echo ucwords(strtolower($emp->name))?></option>
+  <div class="form-group">
+    <label for="first_name">Sub Project</label>
+    <input class="form-control" type="text" value="<?php echo $project_sub;?>">
+  </div>
 
-            <?php } ?>
-          </select>
-        </div>
+  <div class="form-group">
+    <label for="first_name">Posisi Jabatan</label>
+    <input class="form-control" type="text" value="<?php echo $posisi;?>">
+  </div>
 
-
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_area_extra1');?></label>
-          <select class=" form-control" name="area2" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area_extra1');?>">
-            <option value=""></option>
-            <?php foreach($all_area as $emp) {?>
-
-      			<option value="<?php echo $emp->id?>" <?php if($areaid_extra1==$emp->id):?> selected="selected"<?php endif;?>> <?php echo ucwords(strtolower($emp->name))?></option>
-
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="first_name"><?php echo $this->lang->line('xin_user_area_extra2');?></label>
-          <select class=" form-control" name="area3" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('xin_user_area_extra2');?>">
-            <option value=""></option>
-            <?php foreach($all_area as $emp) {?>
-      			<option value="<?php echo $emp->id?>" <?php if($areaid_extra2==$emp->id):?> selected="selected"<?php endif;?>> <?php echo ucwords(strtolower($emp->name))?></option>
-
-            <?php } ?>
-          </select>
-        </div>
+  <div class="form-group">
+    <label for="first_name">Area / Penempatan</label>
+    <input class="form-control" type="text" placeholder="Area/Penempatan" value="<?php echo $penempatan;?>">
+  </div>
 
 	<div class="form-group">
   	<label for="first_name"><?php echo $this->lang->line('xin_deviceid');?></label>
@@ -103,6 +73,7 @@ if(isset($_GET['jd']) && isset($_GET['department_id']) && $_GET['data']=='depart
   </div>
 
   <input type="hidden" name="employeeid" value="<?php echo $usermobile_id ?>"/>
+  <input type="hidden" name="project" value="<?php echo $project_id ?>"/>
 
 </div>
 

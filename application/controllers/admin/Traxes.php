@@ -13,7 +13,12 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\ConditionalFormatting\Wizard;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Style;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
 class Traxes extends MY_Controller
 {
@@ -21,6 +26,7 @@ class Traxes extends MY_Controller
 	/*Function to set JSON output*/
 	public function output($Return = array())
 	{
+
 		/*Set response header*/
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
@@ -31,44 +37,27 @@ class Traxes extends MY_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		//load the models
-		$this->load->library('session');
-		$this->load->model("Employees_model");
-		$this->load->model("Register_model");
-		$this->load->model("Xin_model");
-		$this->load->model("Department_model");
-		$this->load->model("Designation_model");
-		$this->load->model("Roles_model");
-		$this->load->model("Location_model");
-		$this->load->model("Company_model");
-		$this->load->model("Timesheet_model");
-		$this->load->model("Project_model");
-		$this->load->model("Assets_model");
-		// $this->load->model("Training_model");
-		// $this->load->model("Trainers_model");
-		// $this->load->model("Awards_model");
-		$this->load->model("Travel_model");
-		$this->load->model("Tickets_model");
-		$this->load->model("Transfers_model");
-		$this->load->model("Promotion_model");
-		$this->load->model("Complaints_model");
-		$this->load->model("Warning_model");
-		$this->load->model("Subproject_model");
-		$this->load->model("Payroll_model");
-		$this->load->model("Events_model");
-		$this->load->model("Meetings_model");
-		$this->load->model('Exin_model');
-		$this->load->model('Import_model');
-		$this->load->model('Pkwt_model');
+		//load the login model
+		//load the login model
 		$this->load->model('Xin_model');
-		$this->load->library("pagination");
-		$this->load->library('Pdf');
-		//$this->load->library("phpspreadsheet");
-		$this->load->helper('string');
-		$this->load->library('ciqrcode');
+		$this->load->model("Employees_model");
+		$this->load->model('Customers_model');
+		$this->load->model('Company_model');
+		$this->load->model('Exin_model');
+		$this->load->model('Department_model');
+		$this->load->model('Payroll_model');
+		$this->load->model('Reports_model');
+		$this->load->model('Timesheet_model');
+		$this->load->model('Training_model');
+		$this->load->model('Trainers_model');
+		$this->load->model("Project_model");
+		$this->load->model("Roles_model");
+		$this->load->model("Designation_model");
+		$this->load->model("Pkwt_model");
+		$this->load->model("Bpjs_model");
 	}
 
-	// import
+	// reports
 	public function index()
 	{
 
@@ -76,1564 +65,2948 @@ class Traxes extends MY_Controller
 		if (empty($session)) {
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_hr_imports') . ' | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_hr_imports');
-		$data['path_url'] = 'hrpremium_import';
-		$data['all_companies'] = $this->Xin_model->get_companies();
-		$role_resources_ids = $this->Xin_model->user_role_resource();
 
-		if (in_array('127', $role_resources_ids) || in_array('127', $role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/import_excel/hr_import_excel", $data, TRUE);
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_hr_report_employees') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+		$data['path_url'] = 'reports_employees';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		if (in_array('139', $role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('117', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employees", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
 		}
 	}
 
-	// Validate and add info in database
-	public function import_employees()
+	// payslip reports > employees and company
+	public function payslip()
 	{
 
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		// $config['allowed_types'] = 'csv';
-		// 	$this->load->library('upload', $config);
-		//validate whether uploaded file is a csv file
-		// $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-
-		// $csvMimes =  array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel');
-
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_reports_payslip') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_payslip');
+		$data['path_url'] = 'reports_payslip';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('111', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/payslip", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+			redirect('admin/dashboard');
+		}
+	}
 
-					// check file size
-					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
+	// projects report
+	public function projects()
+	{
 
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_reports_projects') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_projects');
+		$data['path_url'] = 'reports_project';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('114', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/projects", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 
-						//skip first line
-						// fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
+	// tasks report
+	public function tasks()
+	{
 
-						//parse data from csv file line by line
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_reports_tasks') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_tasks');
+		$data['path_url'] = 'reports_task';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('115', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/tasks", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 
-							// $options = array('cost' => 12);
-							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
-							$data = array(
-								'uploadid' => $uploadid,
-								'employee_id' 		=> str_replace(' ', '', $line[0]), // auto
-								'fullname' 				=> $line[1],
-								'company_id' 			=> $line[2],
-								'location_id' 		=> $line[3], //ho-area
-								'department_id' 	=> $line[4], //divisi
-								'designation_id' 	=> $line[5], //jabatan
-								'project_id' 			=> $line[6], //jabatan
-								'sub_project_id' 	=> $line[7], //jabatan
-								'penempatan' 			=> $line[8],
-								'marital_status' 	=> $line[9], //status perkawinan
-								'gender' 					=> $line[10], //jenis kelamin
-								'tempat_lahir'		=> $line[11],
-								'date_of_birth' 	=> $line[12],
-								'date_of_joining' => $line[13],
-								'contact_no' 			=> $line[14],
-								'email' 					=> $line[15],
-								'alamat_ktp' 			=> $line[16],
-								'alamat_domisili' => $line[17],
-								'kk_no' 					=> $line[18],
-								'ktp_no' 					=> $line[19],
-								'npwp_no' 				=> $line[20],
-								'bpjs_tk_no' 			=> $line[21],
-								'bpjs_ks_no' 			=> $line[22],
-								'ibu_kandung' 		=> $line[23],
-								'bank_name' 			=> $line[24],
-								'nomor_rek' 			=> $line[25],
-								'pemilik_rek' 		=> $line[26],
-								'basic_salary' 		=> $line[27]
-							);
-							$result = $this->Employees_model->addtemp($data);
+	// roles/privileges report
+	public function roles()
+	{
 
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_report_user_roles_report') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_user_roles_report');
+		$data['path_url'] = 'reports_roles';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_user_roles'] = $this->Roles_model->all_user_roles();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('116', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/roles", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
 
-							$resultdel = $this->Employees_model->delete_temp_by_employeeid();
-						}
-						//close opened csv file
-						fclose($csvFile);
+	// employees report
+	public function employees()
+	{
 
-
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
-			$this->output($Return);
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
 		}
 
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_hr_report_employees') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+		$data['path_url'] = 'reports_employees';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		if (in_array('139', $role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
 
-		redirect('admin/ImportExcelEmployees?upid=' . $uploadid);
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('117', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employees", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// employees report
+	public function report_summary()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'Traxes Summary | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'SUMMARY REPORT';
+		$data['path_url'] = 'reports_man_employees';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('470', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/traxes/report_traxes_summary", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//load datatables Employee
+	public function list_summary()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Traxes_model->get_list_summary($postData);
+
+		echo json_encode($data);
 	}
 
 
-	// Validate and add info in database
-	public function import_employees_active()
+	public function report_manage_employees_list()
 	{
 
-		if ($this->input->post('is_ajax') == '3') {
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/manage_employees", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$company_id = $this->uri->segment(4);
+		$department_id = $this->uri->segment(5);
+
+		$project_id = $this->uri->segment(6);
+		$subproject_id = $this->uri->segment(7);
+		$status_resign = $this->uri->segment(8);
+
+
+		// $designation_id = $this->uri->segment(6);
+
+		if ($project_id == 0 || is_null($project_id)) {
+
+			$employee = $this->Reports_model->filter_employees_reports_null($company_id, $department_id, $project_id, $subproject_id, $status_resign);
+		} else {
+
+			$employee = $this->Reports_model->filter_employees_reports($project_id, $subproject_id, $status_resign);
+		}
+
+		$data = array();
+
+		foreach ($employee->result() as $r) {
+
+			$full_name = $r->first_name . ' ' . $r->last_name;
+			$company = $this->Xin_model->read_company_info($r->company_id);
+			if (!is_null($company)) {
+				$comp_name = $company[0]->name;
+			} else {
+				$comp_name = '--';
+			}
+
+			// department
+			$department = $this->Department_model->read_department_information($r->department_id);
+			if (!is_null($department)) {
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+
+			// get designation
+			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if (!is_null($project)) {
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';
+			}
+
+			$subproject = $this->Project_model->read_single_subproject($r->sub_project_id);
+			if (!is_null($subproject)) {
+				$subproject_name = $subproject[0]->sub_project_name;
+			} else {
+				$subproject_name = '--';
+			}
+
+			// $agama = '--';
+			$ethnicity = $this->Employees_model->read_ethnicity($r->ethnicity_type);
+			if (!is_null($ethnicity)) {
+				$agama = $ethnicity[0]->type;
+			} else {
+				$agama = '--';
+			}
+
+			$banklist = $this->Xin_model->read_bank_info($r->bank_name);
+			if (!is_null($banklist)) {
+				$bank_name = $banklist[0]->bank_name;
+			} else {
+				$bank_name = '--';
+			}
+
+			$readPkwt = $this->Pkwt_model->read_pkwt_emp($r->employee_id);
+			if (!is_null($readPkwt)) {
+				if ($r->level == "D2" || $r->level == "E1" || $r->level == "E2") {
+					$basicpay 		= $readPkwt[0]->basic_pay;
+				} else {
+					$basicpay 		= "******";
+				}
+				$start_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->from_date);
+				$end_kontrak 	= $this->Xin_model->tgl_excel($readPkwt[0]->to_date);
+				$pkwt_files 	= $readPkwt[0]->file_name;
+				$pkwt_tanggal	= $readPkwt[0]->upload_pkwt;
+			} else {
+
+				$basicpay = '0';
+				$start_kontrak 	= '0';
+				$end_kontrak 	= '0';
+				$pkwt_files 	= '0';
+				$pkwt_tanggal	= '-';
+			}
+
+
+			if (!is_null($r->last_edu)) {
+				if ($r->last_edu == '1') {
+					$education = 'Sekolah Dasar (SD)';
+				} else if ($r->last_edu == '2') {
+					$education = 'Sekolah Menengah Pertama (SMP/MTS)';
+				} else if ($r->last_edu == '3') {
+					$education = 'Sekolah Menengah Atas (SMA/SMK/MA)';
+				} else if ($r->last_edu == '4') {
+					$education = 'Diploma (D1,D2,D3)';
+				} else if ($r->last_edu == '5') {
+					$education = 'Strata 1 (S1)';
+				} else if ($r->last_edu == '6') {
+					$education = 'Strata 2 (S2)';
+				} else if ($r->last_edu == '7') {
+					$education = 'Strata 3 (S3)';
+				} else {
+					$education = '-';
+				}
+			} else {
+				$education = '--';
+			}
+
+
+			if (!is_null($r->gender)) {
+				$gender = $r->gender;
+			} else {
+				$gender = '--';
+			}
+
+			if (!is_null($r->marital_status)) {
+				if ($r->marital_status == '1') {
+					$marital = 'TK/0';
+				} else if ($r->marital_status == '2') {
+					$marital = 'TK/0';
+				} else if ($r->marital_status == '3') {
+					$marital = 'TK/1';
+				} else if ($r->marital_status == '4') {
+					$marital = 'TK/2';
+				} else if ($r->marital_status == '5') {
+					$marital = 'TK/3';
+				} else if ($r->marital_status == '6') {
+					$marital = 'K/0';
+				} else if ($r->marital_status == '7') {
+					$marital = 'K/1';
+				} else if ($r->marital_status == '8') {
+					$marital = 'K/2';
+				} else if ($r->marital_status == '9') {
+					$marital = 'K/3';
+				} else {
+					$marital = '--';
+				}
+			} else {
+				$marital = '--';
+			}
+
+			if ($r->date_of_birth != '' || !is_null($r->date_of_birth)) {
+				$dob = $this->Xin_model->tgl_indo($r->date_of_birth);
+			} else {
+				$dob = '--';
+			}
+
+			if ($r->date_of_joining != '' || !is_null($r->date_of_joining)) {
+				$doj = $this->Xin_model->tgl_excel($r->date_of_joining);
+			} else {
+				$doj = '--';
+			}
+
+			if ($r->date_of_leaving != '' || !is_null($r->date_of_leaving)) {
+				// $dol = $r->date_of_leaving;
+				$dol = $this->Xin_model->tgl_indo($r->date_of_leaving);
+			} else {
+				$dol = '--';
+			}
+
+			if (!is_null($r->email)) {
+				$email = $r->email;
+			} else {
+				$email = '--';
+			}
+
+			if (!is_null($r->contact_no)) {
+				$kontak = $r->contact_no;
+			} else {
+				$kontak = '--';
+			}
+
+			if (!is_null($r->alamat_ktp)) {
+				$alamat_ktp = $r->alamat_ktp;
+			} else {
+				$alamat_ktp = '--';
+			}
+
+			if (!is_null($r->alamat_domisili)) {
+				$alamat_domisili = $r->alamat_domisili;
+			} else {
+				$alamat_domisili = '--';
+			}
+
+			if (!is_null($r->bpjs_tk_no)) {
+				$bpjstk = $r->bpjs_tk_no;
+			} else {
+				$bpjstk = '--';
+			}
+
+			if (!is_null($r->bpjs_ks_no)) {
+				$bpjsks = $r->bpjs_ks_no;
+			} else {
+				$bpjsks = '--';
+			}
+
+			if (!is_null($r->ibu_kandung)) {
+				$ibu = $r->ibu_kandung;
+			} else {
+				$ibu = '--';
+			}
+
+			if (!is_null($r->penempatan)) {
+				$penempatan = $r->penempatan;
+			} else {
+				$penempatan = '--';
+			}
+
+			if (!is_null($r->tempat_lahir)) {
+				$tempat_lahir = $r->tempat_lahir;
+			} else {
+				$tempat_lahir = '--';
+			}
+
+
+			if ($r->password_change == 0 || $r->project_id != '22' || $r->project_id != '95') {
+
+				$pin = $r->private_code;
+			} else {
+				$pin = '******';
+			}
+
+			if ($r->filename_ktp == '0' || $r->filename_ktp == null) {
+				$link_ktp = '-';
+			} else {
+				$link_ktp = '<a href="' . base_url() . 'uploads/document/ktp/' . $r->filename_ktp . '" target="_blank"> ' . base_url() . 'uploads/document/ktp/' . $r->filename_ktp . '</a>';
+			}
+
+			if ($r->filename_kk == '0' || $r->filename_kk == null) {
+				$link_kk = '-';
+			} else {
+				$link_kk = '<a href="' . base_url() . 'uploads/document/kk/' . $r->filename_kk . '" target="_blank"> ' . base_url() . 'uploads/document/kk/' . $r->filename_kk . '</a>';
+			}
+
+			if ($r->filename_npwp == '0' || $r->filename_npwp == null) {
+				$link_npwp = '-';
+			} else {
+				$link_npwp = '<a href="' . base_url() . 'uploads/document/npwp/' . $r->filename_npwp . '" target="_blank"> ' . base_url() . 'uploads/document/npwp/' . $r->filename_npwp . '</a>';
+			}
+
+			if ($r->filename_isd == '0' || $r->filename_isd == null) {
+				$link_isd = '-';
+			} else {
+				$link_isd = '<a href="' . base_url() . 'uploads/document/ijazah/' . $r->filename_isd . '" target="_blank"> ' . base_url() . 'uploads/document/ijazah/' . $r->filename_isd . '</a>';
+			}
+
+			if ($r->filename_skck == '0' || $r->filename_skck == null) {
+				$link_skck = '-';
+			} else {
+				$link_skck = '<a href="' . base_url() . 'uploads/document/skck/' . $r->filename_skck . '" target="_blank"> ' . base_url() . 'uploads/document/skck/' . $r->filename_skck . '</a>';
+			}
+
+			if ($r->filename_cv == '0' || $r->filename_cv == null) {
+				$link_cv = '-';
+			} else {
+				$link_cv = '<a href="' . base_url() . 'uploads/document/cv/' . $r->filename_cv . '" target="_blank"> ' . base_url() . 'uploads/document/cv/' . $r->filename_cv . '</a>';
+			}
+
+			if ($r->filename_paklaring == '0' || $r->filename_paklaring == null) {
+				$link_paklaring = '-';
+			} else {
+				$link_paklaring = '<a href="' . base_url() . 'uploads/document/paklaring/' . $r->filename_paklaring . '" target="_blank"> ' . base_url() . 'uploads/document/paklaring/' . $r->filename_paklaring . '</a>';
+			}
+
+			$ktp = $r->ktp_no;
+			$kk = $r->kk_no;
+			$npwp = $r->npwp_no;
+			$nomor_rek = $r->nomor_rek;
+			// $bank_name = $r->bank_name;
+			$pemilik_rek = $r->pemilik_rek;
+
+			$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_edit') . '"><a href="' . site_url() . 'admin/employees/emp_edit/' . $r->employee_id . '" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+
+			if ($r->status_resign == 2) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
+			} else if ($r->status_resign == 3) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+			} else if ($r->status_resign == 4) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
+			} else if ($r->status_resign == 5) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
+			} else if ($r->status_resign == 6) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-secondary">NON ACTIVE</button>';
+			} else {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
+			}
+
+
+			// if($r->is_active==0): $status = $this->lang->line('xin_employees_inactive');
+			// elseif($r->is_active==1): $status = $this->lang->line('xin_employees_active'); endif;
+
+			$role_resources_ids = $this->Xin_model->user_role_resource();
+
+			if (in_array('471', $role_resources_ids) || in_array('472', $role_resources_ids) || in_array('473', $role_resources_ids)) {
+				$edits = $edit . ' ' . $stat;
+			} else {
+				$edits = $stat;
+			}
+
+
+			if (!is_null($pkwt_files) || $pkwt_files != 0) {
+
+				$file_pkwt = '<a href="' . $pkwt_files . '" target="_blank">
+					<button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"> PKWT </button>
+				</a>';
+			} else {
+				$file_pkwt = '-';
+			}
+
+
+			$data[] = array(
+				$edits,
+				$r->employee_id,
+				strtoupper($full_name),
+				$pin,
+				$comp_name,
+				$department_name,
+				$designation_name,
+				$project_name,
+				$subproject_name,
+				$penempatan, // AREA
+				$r->region,
+				$tempat_lahir, // TEMPAT LAHIR
+				$dob,
+				$doj,
+
+				$start_kontrak,
+				$end_kontrak,
+				$basicpay,
+				$dol,
+				$gender,
+				$marital,
+				$agama, // agama
+				$email,
+				$kontak,
+				$education,
+				$alamat_ktp,
+				$alamat_domisili,
+				"'" . $kk,
+				"'" . $ktp,
+				$npwp,
+				$bpjstk,
+				$bpjsks,
+				$ibu,
+				$bank_name,
+				"'" . $nomor_rek,
+				$pemilik_rek,
+				$link_ktp,
+				$link_kk,
+				$link_npwp,
+				$link_isd,
+				$link_skck,
+				$link_cv,
+				$link_paklaring,
+				$file_pkwt,
+				$pkwt_tanggal
+
+				// $pin
+			);
+		}
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// employees report
+	public function skk_report()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_sk_report') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_sk_report');
+		$data['path_url'] = 'reports_skk';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		if (in_array('139', $role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+			// $data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('470', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/skk_list", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// employees report
+	public function bpjs_employees()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_emp_bpjs') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_emp_bpjs');
+		$data['path_url'] = 'reports_bpjs_employees';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		if (in_array('139', $role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('476', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/bpjs_employees", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// employees report
+	public function pkwt()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_report_employees') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_report_employees');
+		$data['path_url'] = 'pkwt_request';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_projects'] = $this->Project_model->get_project_exist();
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('376', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/pkwt/pkwt_request_list", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	public function report_employees_list_pkwt()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/employees", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$company_id = $this->uri->segment(4);
+		$department_id = $this->uri->segment(5);
+
+		$project_id = $this->uri->segment(6);
+		$subproject_id = $this->uri->segment(7);
+
+		// $designation_id = $this->uri->segment(6);
+		if ($company_id == 0 || is_null($company_id)) {
+
+			$employee = $this->Pkwt_model->filter_employees_reports_none($company_id, $department_id, $project_id, $subproject_id);
+		} else {
+
+			$employee = $this->Pkwt_model->filter_employees_reports($company_id, $department_id, $project_id, $subproject_id);
+		}
+		$data = array();
+
+		foreach ($employee->result() as $r) {
+
+			$nopkwt = '[autogenerate]';
+			$nospb = '[autogenerate]';
+			$nip = $r->employee_id;
+			$full_name = $r->first_name . ' ' . $r->last_name;
+
+			// department
+			$department = $this->Department_model->read_department_information($r->department_id);
+			if (!is_null($department)) {
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+
+			// get designation
+			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if (!is_null($project)) {
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';
+			}
+
+			$data[] = array(
+				$nopkwt,
+				$nopkwt,
+				$nip,
+				$full_name,
+				$designation_name,
+				$project_name,
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'',
+				'YYYY-MM-DD',
+				'YYYY-MM-DD',
+				'YYYY-MM-DD',
+				'',
+				''
+			);
+		}
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	public function report_employees_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/employees", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$company_id = $this->uri->segment(4);
+		$department_id = $this->uri->segment(5);
+		$project_id = $this->uri->segment(6);
+		$subproject_id = $this->uri->segment(7);
+		$status_resign = $this->uri->segment(8);
+
+
+		if ($company_id == 0 || is_null($company_id)) {
+			$employee = $this->Reports_model->filter_employees_reports_null($company_id, $department_id, $project_id, $subproject_id, $status_resign);
+		} else {
+			$employee = $this->Reports_model->filter_employees_reports($company_id, $department_id, $project_id, $subproject_id, $status_resign);
+		}
+
+		$data = array();
+
+		foreach ($employee->result() as $r) {
+
+			$full_name = $r->first_name . ' ' . $r->last_name;
+			$company = $this->Xin_model->read_company_info($r->company_id);
+			if (!is_null($company)) {
+				$comp_name = $company[0]->name;
+			} else {
+				$comp_name = '--';
+			}
+
+			// department
+			$department = $this->Department_model->read_department_information($r->department_id);
+			if (!is_null($department)) {
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+
+			// get designation
+			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if (!is_null($project)) {
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';
+			}
+
+			$subproject = $this->Project_model->read_single_subproject($r->sub_project_id);
+			if (!is_null($subproject)) {
+				$subproject_name = $subproject[0]->sub_project_name;
+			} else {
+				$subproject_name = '--';
+			}
+
+
+			if (!is_null($r->gender)) {
+				$gender = $r->gender;
+			} else {
+				$gender = '--';
+			}
+
+			if (!is_null($r->marital_status)) {
+				$marital = $r->marital_status;
+			} else {
+				$marital = '--';
+			}
+
+			if (!is_null($r->date_of_birth)) {
+				$dob = $r->date_of_birth;
+			} else {
+				$dob = '--';
+			}
+
+			if (!is_null($r->date_of_joining)) {
+				$doj = $r->date_of_joining;
+			} else {
+				$doj = '--';
+			}
+			if (!is_null($r->email)) {
+				$email = $r->email;
+			} else {
+				$email = '--';
+			}
+			if (!is_null($r->contact_no)) {
+				$kontak = $r->contact_no;
+			} else {
+				$kontak = '--';
+			}
+
+			if (!is_null($r->address)) {
+				$alamat = $r->address;
+			} else {
+				$alamat = '--';
+			}
+
+
+			if (!is_null($r->kk_no)) {
+				$kk = $r->kk_no;
+			} else {
+				$kk = '--';
+			}
+
+			if (!is_null($r->ktp_no)) {
+				$ktp = $r->ktp_no;
+			} else {
+				$ktp = '--';
+			}
+
+			if (!is_null($r->npwp_no)) {
+				$npwp = $r->npwp_no;
+			} else {
+				$npwp = '--';
+			}
+
+			if (!is_null($r->private_code)) {
+				$pin = $r->private_code;
+			} else {
+				$pin = '--';
+			}
+
+			if ($r->status_resign == 2) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">RESIGN</button>';
+			} else if ($r->status_resign == 3) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-danger">BLACKLIST</button>';
+			} else if ($r->status_resign == 4) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-info">END CONTRACT</button>';
+			} else if ($r->status_resign == 5) {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-warning">NON ACTIVE</button>';
+			} else {
+				$stat = '&nbsp;&nbsp;<button type="button" class="btn btn-xs btn-outline-success">ACTIVE</button>';
+			}
+
+			// get status
+			if ($r->is_active == 0) : $status = $this->lang->line('xin_employees_inactive');
+			elseif ($r->is_active == 1) : $status = $this->lang->line('xin_employees_active');
+			endif;
+
+			$data[] = array(
+				$stat,
+				$r->employee_id,
+				$full_name,
+				$comp_name,
+				$department_name,
+				$designation_name,
+				$project_name,
+				$subproject_name,
+				$gender,
+				$marital,
+				$this->Xin_model->tgl_indo($dob),
+				$this->Xin_model->tgl_indo($doj),
+				$email,
+				$kontak,
+				$alamat,
+				$kk,
+				$ktp,
+				$npwp,
+				$pin
+			);
+		}
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+
+
+	// get company > departments
+	public function get_comp_project()
+	{
+
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'company_id' => $id,
+			'empid' => $session['employee_id']
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/usermobile/get_comp_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// LIST PAKLARING
+	public function report_skk_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/skk_list", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$project_id 		= $this->uri->segment(4);
+		$subproject_id 		= $this->uri->segment(5);
+		$status_resign 		= $this->uri->segment(6);
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		// $designation_id = $this->uri->segment(6);
+
+
+		if ($project_id == 0 || is_null($project_id)) {
+			// $employee = $this->Reports_model->filter_employees_reports_null($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+
+			$esign = $this->Reports_model->filter_dokumen_sk_null($project_id, $subproject_id, $status_resign);
+		} else {
+			// $employee = $this->Reports_model->filter_employees_reports($company_id,$department_id,$project_id,$subproject_id,$status_resign);
+
+			$esign = $this->Reports_model->filter_dokumen_sk_project($project_id, $subproject_id, $status_resign);
+		}
+
+		$data = array();
+
+		foreach ($esign->result() as $r) {
+
+			$doc_id = $r->doc_id;
+			$nomor_dokumen = $r->nomor_dokumen;
+			$nip = $r->nip;
+			$jenis_doc = $r->jenis_dokumen;
+			$createdat = $this->Xin_model->tgl_indo(substr($r->createdon, 0, 10));
+
+			$head_user = $this->Employees_model->read_employee_info_by_nik($r->nip);
+
+			if (!is_null($head_user)) {
+				$fullname = $head_user[0]->first_name;
+				if (!is_null($head_user[0]->project_id)) {
+					$project = $this->Project_model->read_single_project($head_user[0]->project_id);
+					if (!is_null($project)) {
+						$project_name = $project[0]->title;
+					} else {
+						$project_name = '--';
+					}
+
+					// $project_name = '--';
+				} else {
+					$project_name = '--';
+				}
+				// $project_name = $head_user[0]->project_id;
+
+
+				// $project_name = '--';
+
+			} else {
+
+				$project_name = '--';
+				$fullname = '--';
+			}
+
+			// JENIS DOKUMENT
+			if ($jenis_doc == 1) {
+				$jdoc = 'SK KERJA';
+			} else if ($jenis_doc == 2) {
+				$jdoc = 'PAKLARING';
+			} else if ($jenis_doc == 3) {
+				$jdoc = 'SK KERJA & PAKLARING';
+			} else {
+				$jdoc = '--';
+			}
+
+
+			if (in_array('470', $role_resources_ids)) { //view
+				$view = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_view') . '"><a href="' . site_url() . 'admin/skk/view/' . $r->secid . '/' . $nip . '" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light""><span class="fa fa-arrow-circle-right"></span></button></a></span>';
+			} else {
+				$view = '';
+			}
+
+			if (in_array('470', $role_resources_ids)) { // delete
+				$delete = '<span data-toggle="tooltip" data-placement="top" data-state="danger" title="' . $this->lang->line('xin_delete') . '"><button type="button" class="btn icon-btn btn-sm btn-outline-danger waves-effect waves-light delete" data-toggle="modal" data-target=".delete-modal" data-record-id="' . $r->secid . '"><span class="fas fa-trash-restore"></span></button></span>';
+			} else {
+				$delete = '';
+			}
+
+			// $ititle = $r->department_name.'<br><small class="text-muted"><i>'.$this->lang->line('xin_department_head').': '.$dep_head.'<i></i></i></small>';
+			$combhr = $delete . ' ' . $view;
+
+			$data[] = array(
+				$combhr,
+				$nomor_dokumen,
+				$nip,
+				$fullname,
+				$jdoc,
+				$createdat,
+				$project_name,
+			);
+		}
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $esign->num_rows(),
+			"recordsFiltered" => $esign->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	public function report_bpjs_employees_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/bpjs_employees", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$company_id = $this->uri->segment(4);
+		$department_id = $this->uri->segment(5);
+
+		$project_id = $this->uri->segment(6);
+		$subproject_id = $this->uri->segment(7);
+
+		// $designation_id = $this->uri->segment(6);
+
+		if ($company_id == 0 || is_null($company_id)) {
+
+			$employee = $this->Reports_model->filter_employees_reports_null($company_id, $department_id, $project_id, $subproject_id);
+		} else {
+
+			$employee = $this->Reports_model->filter_employees_reports($company_id, $department_id, $project_id, $subproject_id);
+		}
+
+		$data = array();
+
+		foreach ($employee->result() as $r) {
+
+			$full_name = $r->first_name . ' ' . $r->last_name;
+			$company = $this->Xin_model->read_company_info($r->company_id);
+			if (!is_null($company)) {
+				$comp_name = $company[0]->name;
+			} else {
+				$comp_name = '--';
+			}
+
+			// department
+			$department = $this->Department_model->read_department_information($r->department_id);
+			if (!is_null($department)) {
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+
+			// get designation
+			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+
+			$project = $this->Project_model->read_single_project($r->project_id);
+			if (!is_null($project)) {
+				$project_name = $project[0]->title;
+			} else {
+				$project_name = '--';
+			}
+
+			$subproject = $this->Project_model->read_single_subproject($r->sub_project_id);
+			if (!is_null($subproject)) {
+				$subproject_name = $subproject[0]->sub_project_name;
+			} else {
+				$subproject_name = '--';
+			}
+
+
+			if (!is_null($r->gender)) {
+				$gender = $r->gender;
+			} else {
+				$gender = '--';
+			}
+
+			if (!is_null($r->marital_status)) {
+				$marital = $r->marital_status;
+			} else {
+				$marital = '--';
+			}
+
+			if (!is_null($r->date_of_birth)) {
+				$dob = $r->date_of_birth;
+			} else {
+				$dob = '--';
+			}
+
+			if (!is_null($r->date_of_joining)) {
+				$doj = $r->date_of_joining;
+			} else {
+				$doj = '--';
+			}
+			if (!is_null($r->email)) {
+				$email = $r->email;
+			} else {
+				$email = '--';
+			}
+			if (!is_null($r->contact_no)) {
+				$kontak = $r->contact_no;
+			} else {
+				$kontak = '--';
+			}
+
+			if (!is_null($r->address)) {
+				$alamat = $r->address;
+			} else {
+				$alamat = '--';
+			}
+
+
+			if (!is_null($r->kk_no)) {
+				$kk = $r->kk_no;
+			} else {
+				$kk = '--';
+			}
+
+			if (!is_null($r->ktp_no)) {
+				$ktp = $r->ktp_no;
+			} else {
+				$ktp = '--';
+			}
+
+			if (!is_null($r->npwp_no)) {
+				$npwp = $r->npwp_no;
+			} else {
+				$npwp = '--';
+			}
+
+			if (!is_null($r->private_code)) {
+				$pin = $r->private_code;
+			} else {
+				$pin = '--';
+			}
+
+			$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_edit') . '"><a href="' . site_url() . 'admin/employees/emp_edit/' . $r->employee_id . '"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+
+			// get status
+			if ($r->is_active == 0) : $status = $this->lang->line('xin_employees_inactive');
+			elseif ($r->is_active == 1) : $status = $this->lang->line('xin_employees_active');
+			endif;
+
+
+
+			$data[] = array(
+				$edit,
+				$r->employee_id,
+				$full_name,
+				// $comp_name,
+				// $department_name,
+				// $designation_name,
+				// $project_name,
+				// $subproject_name,
+				// $gender,
+				// $marital,
+				// $this->Xin_model->tgl_indo($dob),
+				// $this->Xin_model->tgl_indo($doj),
+				// $email,
+				// $kontak,
+				// $alamat,
+				// $kk,
+				// $ktp,
+				// $npwp,
+				// $pin
+			);
+		}
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// get company > departments
+	public function get_departments()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'company_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/report_get_departments", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// get company > departments
+	public function get_subprojects()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'project_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/report_get_subprojects", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// get departmens > designations
+	public function designation()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'department_id' => $id,
+			'all_designations' => $this->Designation_model->all_designations(),
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/report_get_designations", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// reports > employee attendance
+	public function employee_attendance()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_hr_reports_attendance_employee') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_reports_attendance_employee');
+		$data['path_url'] = 'reports_employee_attendance';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+
+		// if(in_array('112',$role_resources_ids)) {
+
+		if ($session['employee_id'] == 1 || $session['employee_id'] == 21505790 || $session['employee_id'] == 21300093 || $session['employee_id'] == 21500081) {
+			$data['subview'] = $this->load->view("admin/reports/employee_attendance", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/profile');
+		}
+
+		// redirect('admin/dashboard');
+	}
+
+	// reports > employee attendance
+	public function report_order()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_order_report') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_order_report');
+		$data['path_url'] = 'reports_order';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		if (in_array('139', $role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+		if (in_array('114', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employee_order", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// reports > employee attendance
+	public function report_resume()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_order_resume') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_order_resume');
+		$data['path_url'] = 'reports_order_resume';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		if (in_array('139', $role_resources_ids)) {
+			$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		} else {
+			// $data['all_projects'] = $this->Project_model->get_project_exist_all();
+			$data['all_projects'] = $this->Project_model->get_project_exist();
+		}
+		if (in_array('114', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/employee_order_resume", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// daily attendance list > timesheet
+	public function empdtwise_attendance_list()
+	{
+
+		// redirect('admin/');
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/employee_attendance", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+		// $company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(4);
+		$sub_id = $this->uri->segment(5);
+		$area = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
+		$finalarea = str_replace("%20", " ", $area);
+
+		if ($sub_id == 0 || is_null($sub_id)) {
+			$employee = $this->Reports_model->filter_report_emp_att_null();
+			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
+		} else {
+			$employee = $this->Reports_model->filter_report_emp_att($project_id, $sub_id, $finalarea, $start_date, $end_date);
+		}
+
+		// $employee = $this->Employees_model->get_employees();
+
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+		foreach ($employee->result() as $r) {
+
+			// $emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			// if(!is_null($emp)){
+			// 	$fullname = $emp[0]->first_name;
+			// } else {
+			// 	$fullname = '--';
+			// }
+
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
+
+			$cust = $this->Customers_model->read_single_customer($r->customer_id);
+			if (!is_null($cust)) {
+				$nama_toko 	= $cust[0]->customer_name;
+				$pemilik 	= $cust[0]->owner_name;
+				$no_kontak 	= $cust[0]->no_contact;
+			} else {
+				$nama_toko 	= '--';
+				$pemilik 	= '--';
+				$no_kontak 	= '--';
+			}
+
+			if (!is_null($r->foto_in)) {
+				$fotovIn = 'https://api.apps-cakrawala.com/' . $r->foto_in;
+			} else {
+				$fotovIn = '-';
+			}
+
+			if (!is_null($r->foto_out)) {
+				$fotovOut = 'https://api.apps-cakrawala.com/' . $r->foto_out;
+			} else {
+				$fotovOut = '-';
+			}
+
+			$data[] = array(
+				$r->employee_id,
+				$r->fullname,
+				$r->title,
+				// $project_id,
+				// $sub_id,
+				$r->sub_project_name,
+				$r->penempatan,
+				$r->customer_id,
+				$nama_toko,
+
+				$pemilik,
+				$no_kontak,
+
+				$r->date_phone,
+				$r->time_in,
+				$r->time_out,
+				$r->latitude . ', ' . $r->longitude,
+				$r->timestay,
+				$fotovIn,
+				$fotovOut
+			);
+		}
+
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// daily attendance list > timesheet
+	public function empdtwise_order()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/employee_order", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+		$company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(5);
+		$sub_id = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
+
+		if ($company_id == 0 || is_null($company_id)) {
+			$employee = $this->Reports_model->report_order();
+		} else {
+			$employee = $this->Reports_model->report_order_filter($company_id, $project_id, $sub_id, $start_date, $end_date);
+		}
+
+		// $employee = $this->Employees_model->get_employees();
+
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+		foreach ($employee->result() as $r) {
+
+			$emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			if (!is_null($emp)) {
+				$fullname = $emp[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
+
+			$cust = $this->Customers_model->read_single_customer($r->customer_id);
+			if (!is_null($cust)) {
+				$nama_toko = $cust[0]->customer_name;
+			} else {
+				$nama_toko = '--';
+			}
+
+			// if(!is_null($r->date_phone)){
+
+			// } else {
+
+			// }
+
+			$data[] = array(
+				$r->employee_id,
+				$fullname,
+				$nama_toko,
+				$r->address,
+				$r->city,
+				$r->kec,
+				$r->desa,
+
+				$r->owner_name,
+				$r->no_contact,
+
+				$r->material_id,
+				$r->nama_material,
+				$r->order_date,
+				$r->qty,
+				$r->price,
+				$r->total
+			);
+		}
+
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	// daily attendance list > timesheet
+	public function empdtwise_order_resume()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/employee_order_resume", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+		$company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(5);
+		$sub_id = $this->uri->segment(6);
+		$start_date = $this->uri->segment(7);
+		$end_date = $this->uri->segment(8);
+
+		if ($company_id == 0 || is_null($company_id)) {
+			$employee = $this->Reports_model->report_order_resume();
+		} else {
+			$employee = $this->Reports_model->report_order_resume_filter($company_id, $project_id, $sub_id, $start_date, $end_date);
+		}
+
+		// $employee = $this->Employees_model->get_employees();
+
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+		foreach ($employee->result() as $r) {
+
+			$emp = $this->Employees_model->read_employee_info_by_nik($r->emp_id);
+			if (!is_null($emp)) {
+				$fullname = $emp[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
+
+			// $cust = $this->Customers_model->read_single_customer($r->customer_id);
+			// if(!is_null($cust)){
+			// 	$nama_toko = $cust[0]->customer_name;
+			// } else {
+			// 	$nama_toko = '--';	
+			// }
+
+			// if(!is_null($r->date_phone)){
+
+			// } else {
+
+			// }
+
+			$data[] = array(
+				$r->emp_id,
+				$fullname,
+				$r->penempatan,
+				$r->sdate,
+				$r->ndate,
+				$r->count_call,
+				$r->count_ec,
+				$r->qty_renceng,
+				'Rp. 10.000;',
+				$r->total
+			);
+		}
+
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// reports > employee attendance
+	public function pkwt_history()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'PKWT REPORT';
+		$data['breadcrumbs'] = 'PKWT REPORT';
+		$data['path_url'] = 'reports_pkwt_history';
+		// $data['path_url'] = 'reports_employee_attendance';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+
+
+		// if(in_array('139',$role_resources_ids)) {
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist_all();
+		// } else { 
+		// 	// $data['all_projects'] = $this->Project_model->get_project_exist_all(); 
+		// 	$data['all_projects'] = $this->Project_model->get_project_exist(); 
+		// } 
+		if (in_array('380', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/report_pkwt_history", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load 
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	public function read_pkwt_report()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->input->get('company_id');
+		// $data['all_countries'] = $this->xin_model->get_countries(); 
+		// $result = $this->Company_model->read_company_information('2');
+		// $result = $this->Employees_model->read_employee_info($id);
+		$result = $this->Pkwt_model->read_pkwt_info_by_contractid($id);
+
+		$data = array(
+			'contract_id' => $result[0]->contract_id,
+			'no_surat' => $result[0]->no_surat,
+			'no_spb' => $result[0]->no_spb,
+			'nip' => $result[0]->employee_id,
+			'employee' => $this->Employees_model->read_employee_info_by_nik($result[0]->employee_id),
+			'company' => $result[0]->company,
+			'jabatan' => $result[0]->jabatan,
+			'posisi' => $this->Designation_model->read_designation_information($result[0]->jabatan),
+			'project' => $this->Project_model->read_project_information($result[0]->project),
+			'penempatan' => $result[0]->penempatan
+		);
+		$this->load->view('admin/pkwt/dialog_pkwt_cancel_report', $data);
+	}
+
+
+	// daily attendance list > timesheet
+	public function pkwt_history_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/report_pkwt_history", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+		// $company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(4);
+		$start_date = $this->uri->segment(5);
+		$end_date = $this->uri->segment(6);
+		// $employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'],$project_id,$start_date,$keywords);
+		if ($project_id == 0 || $start_date == 0) {
+			// 	$employee = $this->Reports_model->report_pkwt_history();
+			// $employee = $this->Reports_model->filter_report_emp_att($project_id,$sub_id,$area,$start_date,$end_date);
+			$employee = $this->Pkwt_model->report_pkwt_history_null($session['employee_id']);
+		} else if ($project_id == 999) {
+			$employee = $this->Pkwt_model->report_pkwt_history_all($session['employee_id'], $start_date, $end_date);
+		} else {
+			$employee = $this->Pkwt_model->report_pkwt_history($session['employee_id'], $project_id, $start_date, $end_date);
+		}
+		// $employee = $this->Employees_model->get_employees();
+		$no = 1;
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+		foreach ($employee->result() as $r) {
+
+			$nip = $r->employee_id;
+			$project = $r->project;
+			$subproject_id = $r->sub_project;
+			$jabatan = $r->jabatan;
+			$penempatan = $r->penempatan;
+			$begin_until = $r->from_date . ' s/d ' . $r->to_date;
+			// $file_pkwt = $r->file_name;
+
+			if (!is_null($r->file_name)) {
+				$pkwt_file = '<a href="https://apps-cakrawala.com/uploads/document/pkwt/' . $r->file_name . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">PKWT FILE</button></a>';
+			} else {
+				$pkwt_file = '';
+			}
+
+			$emp = $this->Employees_model->read_employee_info_by_nik($nip);
+			if (!is_null($emp)) {
+
+				$pin = $emp[0]->private_code;
+				$fullname = $emp[0]->first_name;
+				$sub_project = 'pkwt' . $subproject_id;
+				$nowhatsapp = $emp[0]->contact_no;
+				$tkhl_status = $emp[0]->e_status;
+				$roleid = $emp[0]->user_role_id;
+
+			} else {
+
+				$pin = '--';
+				$fullname = '--';
+				$sub_project = 'pkwt' . $subproject_id;
+				$nowhatsapp = '0';
+				$tkhl_status = '0';
+				$roleid = '0';
+			}
+
+			$projects = $this->Project_model->read_single_project($project);
+			if (!is_null($projects)) {
+				$nama_project = $projects[0]->title;
+			} else {
+				$nama_project = '--';
+			}
+
+			$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
+			if (!is_null($subprojects)) {
+				$nama_subproject = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_subproject = '--';
+			}
+
+			$designation = $this->Designation_model->read_designation_information($r->jabatan);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+
+			$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '">Approved</button>';
+
+			$view_pkwt = '<a href="' . site_url() . 'admin/' . $sub_project . '/view/' . $r->uniqueid . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-info">VIEW PKWT' . $roleid . '</button> </a>';
+
+
+			if ($tkhl_status == '1') {
+
+				$copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
+				Nama Lengkap: *' . $fullname . '*%0a
+				NIP: *' . $r->employee_id . '*%0a
+				PIN: *' . $pin . '*%0a
+				PROJECT: *' . $nama_project . '* %0a%0a
+
+				Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+
+				Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+				Link C.I.S : https://apps-cakrawala.com/admin%0a
+				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+
+				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				
+				Terima kasih.';
+			} else {
+
+				$copypaste = '*HRD Notification -> KEMITRAAN DIGITAL.*%0a%0a
+				Nama Lengkap: *' . $fullname . '*%0a
+				NIP: *' . $r->employee_id . '*%0a
+				PIN: *' . $pin . '*%0a
+				PROJECT: *' . $nama_project . '* %0a%0a
+
+				Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen KEMITRAAN, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+
+				Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+				Link C.I.S : https://apps-cakrawala.com/admin%0a
+				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT Kemitraan bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+
+				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				
+				Terima kasih.';
+			}
+
+			$whatsapp = '<a href="https://wa.me/62' . $nowhatsapp . '?text=' . $copypaste . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">' . $nowhatsapp . '</button> </a>';
+
+			// if($roleid=='1' || $roleid=='3' || $roleid=='11'){
+			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_edit/' . $r->uniqueid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>';
+			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '">Hapus</button>';
+			// } else {
+			// 	$editReq = '';
+			// 	$delete = '';
+
+			// }
+
+			$data[] = array(
+				$no,
+				$view_pkwt . ' ' . $editReq . ' ' . $delete,
+				$r->employee_id,
+				$fullname . '#<br>' . $whatsapp,
+				$nama_project,
+				$nama_subproject,
+				$designation_name,
+				$penempatan,
+				$begin_until,
+				$r->approve_hrd_date,
+				$pkwt_file
+			);
+			$no++;
+		}
+
+		$no++;
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// reports > employee attendance
+	public function new_employees()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'KARYAWAN BARU';
+		$data['breadcrumbs'] = 'KARYAWAN BARU';
+		$data['path_url'] = 'reports_new_employees';
+
+
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_projects'] = $this->Project_model->get_all_projects();
+		$data['all_projects_sub'] = $this->Project_model->get_all_projects();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		$data['list_bank'] = $this->Xin_model->get_bank_code();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('327', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/request_list_hrd", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	public function request_list_hrd()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/request_list_hrd", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
+		// $employee = $this->Employees_model->get_request_hrd();
+		$employee = $this->Employees_model->get_request_hrd($session['employee_id']);
+
+		$data = array();
+
+		foreach ($employee->result() as $r) {
+			$no = $r->secid;
+			$fullname = $r->fullname;
+			$location_id = $r->location_id;
+			$project = $r->project;
+			$sub_project = $r->sub_project;
+			$department = $r->department;
+			$posisi = $r->posisi;
+			$penempatan = $r->penempatan;
+			$doj = $r->doj;
+			$contact_no = $r->contact_no;
+			$nik_ktp = "'" . $r->nik_ktp;
+			$notes = $r->catatan_hr;
+			$ktp = 'https://apps-cakrawala.com/admin/uploads/document/ktp/' . $r->ktp;
+
+			$register_date = $r->request_empon;
+			$approved_hrdby = $r->approved_hrdby;
+
+
+			if ($approved_hrdby == null) {
+
+				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-info" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $r->secid . '">Need Approval HRD</button>';
+			} else {
+
+				$status_migrasi = '<button type="button" class="btn btn-xs btn-outline-success" data-toggle="modal" data-target=".edit-modal-data" data-company_id="$' . $r->secid . '">Approved</button>';
+			}
+
+			$editReq = '<a href="' . site_url() . 'admin/employee_request_cancelled/request_edit/' . $r->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>';
+
+			$projects = $this->Project_model->read_single_project($r->project);
+			if (!is_null($projects)) {
+				$nama_project = $projects[0]->title;
+			} else {
+				$nama_project = '--';
+			}
+
+			$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
+			if (!is_null($subprojects)) {
+				$nama_subproject = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_subproject = '--';
+			}
+
+			$department = $this->Department_model->read_department_information($r->department);
+			if (!is_null($department)) {
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+
+			$designation = $this->Designation_model->read_designation_information($r->posisi);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+
+			$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@' . $r->secid . '">TOLAK</button>';
+
+			$noteHR = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal" data-target=".edit-modal-data" data-company_id="!' . $r->secid . '">note</button>';
+
+			if (in_array('382', $role_resources_ids)) {
+				$nik_note = $nik_ktp . '<br><i>' . $notes . '</i> ' . $noteHR;
+			} else {
+				$nik_note = $nik_ktp . '<br><i>' . $notes;
+			}
+
+			$data[] = array(
+				$no,
+				$nik_ktp,
+				$fullname,
+				$nama_project,
+				$nama_subproject,
+				$department_name,
+				$designation_name,
+				$penempatan,
+				$contact_no,
+				$doj,
+				$ktp,
+				$register_date
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// reports > employee attendance
+	public function pkwt_expired()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'PKWT EXPIRED';
+		$data['breadcrumbs'] = 'PKWT EXPIRED';
+		$data['path_url'] = 'reports_pkwt_expired';
+		// $data['path_url'] = 'reports_employee_attendance';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+
+		if (in_array('377', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/report_pkwt_expired", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	public function pkwt_expired_list()
+
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/report_pkwt_expired", $data);
+		} else {
+			redirect('admin/');
+		}
+
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+		// $company_id = $this->uri->segment(4);
+		$project_id = $this->uri->segment(4);
+		$down_time = $this->uri->segment(5);
+		$searchkey = $this->uri->segment(6);
+		$finalkey = str_replace("%20", " ", $searchkey);
+
+
+
+		$getLevel = $this->Employees_model->getLevel($session['employee_id']);
+				  if(!is_null($getLevel)){
+				  	$level_id = $getLevel[0]->level;
+				  } else {
+					$level_id = '';	
+				  }
+
+		// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
+
+		if ($searchkey == '0') {
+
+			if ($project_id == '0') {
+				$employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
+			} else {
+				$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
+			}
+		} else {
+
+			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
+
+			if ($searchkey != "") {
+
+				$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
+			} else {
+
+				if ($project_id == 0) {
+					$employee = $this->Pkwt_model->report_pkwt_expired_default($session['employee_id']);
+				} else {
+					$employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
+				}
+			}
+		}
+
+
+		$no = 1;
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+		foreach ($employee->result() as $r) {
+
+			$user_id = $r->user_id;
+			$nip = $r->employee_id;
+			$fullname = $r->first_name;
+			$project = $r->project;
+			$penempatan = $r->penempatan;
+			$last_contract = $r->to_date;
+
+
+			$projects = $this->Project_model->read_single_project($r->project);
+			if (!is_null($projects)) {
+				$nama_project = $projects[0]->title;
+			} else {
+				$nama_project = '--';
+			}
+
+			$subprojects = $this->Project_model->read_single_subproject($r->sub_project);
+			if (!is_null($projects)) {
+				$nama_subproject = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_subproject = '--';
+			}
+
+			$designation = $this->Designation_model->read_designation_information($r->jabatan);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+				$level_employee = $designation[0]->level;
+			} else {
+				$designation_name = '--';
+				$level_employee = 'Z9';
+			}
+
+			// $level_employee = $this->Employee_model->get_level($r->jabatan);
+			
+			$readyHrd = $this->Pkwt_model->read_pkwt_pengajuan($r->employee_id);
+
+			if (!is_null($readyHrd)) {
+
+				$terbitPkwt = '<a href="#" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-warning">SUDAH DIAJUKAN</button></a>';
+			} else {
+				// $terbitPkwt = $level_employee;
+				if($level_id >= $level_employee){
+					$terbitPkwt = '';
+				} else {
+
+					$terbitPkwt = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/1" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">AJUKAN PERPANJANG PKWT</button></a>';
+				}
+			}
+
+			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_expired_edit/' . $r->employee_id . '/0" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">PERPANJANG PKWT</button></a>';
+
+			$stopPkwt = '<a href="' . site_url() . 'admin/employees/emp_view/' . $r->employee_id . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-danger">STOP PKWT</button></a>';
+
+			$data[] = array(
+				$terbitPkwt . ' ' . $stopPkwt,
+				// $stopPkwt,
+				$nip,
+				$fullname,
+				$nama_project,
+				$nama_subproject,
+				$designation_name,
+				$penempatan,
+				$last_contract
+			);
+			$no++;
+		}
+
+		// $no++;
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	// get location > departments
+	public function get_company_project()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'id_company' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/get_company_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// get location > departments
+	public function get_sub_project()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'id_project' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/get_sub_project", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+
+	// get location > departments
+	public function get_area_emp()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		// $id = $this->uri->segment(4);
+
+		$area = $this->uri->segment(4);
+		$sub_id = $this->uri->segment(5);
+		$project_id = $this->uri->segment(6);
+
+
+		$data = array(
+			'area' => $area,
+			'sub_id' => $sub_id,
+			'pro_id' => $project_id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/get_area_emp", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// Validate and add info in database
+	public function payslip_report()
+	{
+
+		if ($this->input->post('type') == 'payslip_report') {
 			/* Define return | here result is used to return user data and error for error message */
 			$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
 			$Return['csrf_hash'] = $this->security->get_csrf_hash();
 
-			//validate whether uploaded file is a csv file
-			$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
-
-			if ($_FILES['file']['name'] === '') {
-				$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-			} else {
-				if (in_array($_FILES['file']['type'], $csvMimes)) {
-					if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-						// check file size
-						if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-							$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-						} else {
-
-							//open uploaded csv file with read only mode
-							$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-							//skip first line
-							fgetcsv($csvFile);
-
-							//parse data from csv file line by line
-							while (($line = fgetcsv($csvFile)) !== FALSE) {
-
-								$data = array(
-									'employee_id' => $line[0], // auto
-									'username' => $line[0], // nik
-									'first_name' => $line[1],
-									'designation_id' => $line[2], //jabatan
-									'department_id' => $line[3], //divisi
-									'location_id' => $line[4], //ho-area
-									'marital_status' => $line[5], //status perkawinan
-									'gender' => $line[6], //jenis kelamin
-									'date_of_birth' => $line[7],
-									'contact_no' => $line[8],
-									'address' => $line[9],
-									'company_id' => 2, //auto cakrawala => 2
-									'user_role_id' => 2, // auto 2 => emplyee
-									'is_active' => 0, // auto 0 disactive
-									'ktp_no' => $line[10],
-									'kk_no' => $line[11],
-									'npwp_no' => $line[12],
-									'bpjs_tk_no' => $line[13],
-									'bpjs_ks_no' => $line[14],
-									'created_at' => date('Y-m-d h:i:s')
-
-								);
-								$last_insert_id = $this->Employees_model->add($data);
-
-								$bank_account_data = array(
-									'account_title' => 'Rekening',
-									'account_number' => $line[15], //NO. REK
-									'bank_name' => $line[16],
-									'employee_id' => $last_insert_id,
-									'created_at' => date('d-m-Y'),
-								);
-								$ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-							}
-							//close opened csv file
-							fclose($csvFile);
-
-							$Return['result'] = $this->lang->line('xin_success_empactive_import');
-						}
-					} else {
-						$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_invalid_file');
-				}
-			} // file empty
+			/* Server side PHP input validation */
+			if ($this->input->post('company_id') === '') {
+				$Return['error'] = $this->lang->line('error_company_field');
+			} else if ($this->input->post('employee_id') === '') {
+				$Return['error'] = $this->lang->line('xin_error_employee_id');
+			} else if ($this->input->post('month_year') === '') {
+				$Return['error'] = $this->lang->line('xin_hr_report_error_month_field');
+			}
 
 			if ($Return['error'] != '') {
 				$this->output($Return);
 			}
-
-			$this->output($Return);
-			exit;
-		}
-	}
-
-	// expired page
-	public function importpkwt()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['title'] = 'IMPORT PKWT';
-		$data['breadcrumbs'] = 'IMPORT PKWT';
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		// $data['all_taxes'] = $this->Tax_model->get_all_taxes();
-		$data['path_url'] = 'hrpremium_import_pkwt';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('128', $role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/import_excel/import_pkwt", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-	//delete batch saltab
-	public function delete_batch_bupot()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_batch_bupot($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//delete data bpjs
-	public function delete_bpjs()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_bpjs($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list batch bupot
-	public function list_batch_bupot()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_batch_bupot($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list bpjs
-	public function list_bpjs()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_bpjs($postData);
-
-		echo json_encode($data);
-	}
-
-
-	public function downloadTemplateBupot()
-	{
-		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('BUPOT'); //nama Spreadsheet yg baru dibuat
-
-		$tabel_saltab = $this->Import_model->get_bupot_table();
-
-		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
-		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
-		$jumlah_data = count($header_tabel_saltab);
-		//$tes = print_r($tabel_saltab);
-
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
-
-		//isi cell dari array
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$header_tabel_saltab,   // The data to set
-				NULL,
-				'A1'
-			);
-
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$header2_tabel_saltab,   // The data to set
-				NULL,
-				'A2'
-			);
-
-		//set column width jadi auto size
-		for ($i = 1; $i <= $jumlah_data; $i++) {
-			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
-		}
-
-		//set header background color
-		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
-		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
-
-		$spreadsheet
-			->getActiveSheet()
-			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
-			->getFill()
-			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-			->getStartColor()
-			->setARGB('BFBFBF');
-
-		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setWrapText(true);
-
-		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-
-		//----------------Buat File Untuk Download--------------
-		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
-		//$writer->setPreCalculateFormulas(false);
-
-		$filename = 'Template BUPOT'; // set filename for excel file to be exported
-
-		header('Content-Type: application/vnd.ms-excel'); // generate excel file
-		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-		header('Cache-Control: max-age=0');
-
-		$writer->save('php://output');	// download file 
-		//$writer->save('./absen/tes2.xlsx');	// download file 
-	}
-
-	public function downloadTemplateBPJS()
-	{
-		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('BPJS'); //nama Spreadsheet yg baru dibuat
-
-		$tabel_saltab = $this->Import_model->get_bpjs_table();
-
-		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
-		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
-		$jumlah_data = count($header_tabel_saltab);
-		//$tes = print_r($tabel_saltab);
-
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
-
-		//isi cell dari array
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$header_tabel_saltab,   // The data to set
-				NULL,
-				'A1'
-			);
-
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$header2_tabel_saltab,   // The data to set
-				NULL,
-				'A2'
-			);
-
-		//set column width jadi auto size
-		for ($i = 1; $i <= $jumlah_data; $i++) {
-			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
-		}
-
-		//set header background color
-		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
-		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
-
-		$spreadsheet
-			->getActiveSheet()
-			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
-			->getFill()
-			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-			->getStartColor()
-			->setARGB('BFBFBF');
-
-		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setWrapText(true);
-
-		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-
-		//----------------Buat File Untuk Download--------------
-		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
-		//$writer->setPreCalculateFormulas(false);
-
-		$filename = 'Template BPJS'; // set filename for excel file to be exported
-
-		header('Content-Type: application/vnd.ms-excel'); // generate excel file
-		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-		header('Cache-Control: max-age=0');
-
-		$writer->save('php://output');	// download file 
-		//$writer->save('./absen/tes2.xlsx');	// download file 
-	}
-
-
-	/*
-    |-------------------------------------------------------------------
-    | Import Excel BUPOT
-    |-------------------------------------------------------------------
-    |
-    */
-	function import_excel_bupot()
-	{
-		//ambil parameter yg di post sebagai acuan
-		$nik = $this->input->post('nik');
-		$project = $this->input->post('project');
-		$sub_project = $this->input->post('sub_project');
-		$periode_bupot = $this->input->post('periode_bupot');
-
-		//load data Project
-		$nama_project = "";
-		$projects = $this->Project_model->read_single_project($project);
-		if (!is_null($projects)) {
-			$nama_project = $projects[0]->title;
-		} else {
-			$nama_project = '--';
-		}
-
-		$nama_project_only = "";
-		$projects = $this->Project_model->read_single_project_name($project);
-		if (!is_null($projects)) {
-			$nama_project_only = $projects[0]->title;
-		} else {
-			$nama_project_only = '--';
-		}
-
-		//load data Sub Project
-		$nama_sub_project = "";
-		if ($sub_project == 0) {
-			$nama_sub_project = '-ALL-';
-		} else {
-			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
-			if (!is_null($subprojects)) {
-				$nama_sub_project = $subprojects[0]->sub_project_name;
-			} else {
-				$nama_sub_project = '--';
-			}
-		}
-
-		$this->load->helper('file');
-
-		/* Allowed MIME(s) File */
-		$file_mimes = array(
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-		);
-
-		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
-
-			$array_file = explode('.', $_FILES['file_excel']['name']);
-			$extension  = end($array_file);
-
-			if ('csv' == $extension) {
-				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-			} else {
-				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-			}
-
-			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
-			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
-			// $sheet_data = array_map('trim', $sheet_data);
-			$sheet_data = array_filter($sheet_data);
-			$array_data  = [];
-			$array_data_final  = [];
-			$data        = [];
-			$header_tabel_saltab = $sheet_data[0];
-			$header_tabel_saltab = array_filter($header_tabel_saltab);
-
-			// echo '<pre>';
-			// print_r(array_filter($header_tabel_saltab));
-			// echo '</pre>';
-
-			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
-			// echo '<pre>';
-			// print_r($header_tabel_saltab);
-			// echo '</pre>';
-			// $header_tabel_saltab = array_filter($header_tabel_saltab);
-			$length_header = count($header_tabel_saltab);
-			$jumlah_data = count($sheet_data) - 2;
-			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
-
-			// echo '<pre>';
-			// print_r($sheet_data);
-			// echo '</pre>';
-
-			//susun array batch saltab
-			$data_batch = array(
-				'project_id'        	 => $project,
-				'project_name'        	 => $nama_project,
-				'sub_project_id'         => $sub_project,
-				'sub_project_name'       => $nama_sub_project,
-				'periode_bupot'       	 => $periode_bupot,
-				'jumlah_data'        	 => $jumlah_data,
-				'status_release'         => "0",
-				'created_by'        	 => $this->Import_model->get_nama_karyawan($nik),
-				'created_by_id'        	 => $nik,
-				'created_on'        	 => date("Y-m-d H:i:s"),
-				// 'upload_ip'        	 	 => $this->get_client_ip(),
-			);
-
-			//susun array untuk cek apakah sudah ada data batch yg sama
-			// $data_batch_cek = array(
-			// 	'periode_cutoff_from'    => $saltab_from,
-			// 	'periode_cutoff_to'      => $saltab_to,
-			// 	'periode_salary'      	 => $periode_salary,
-			// 	'project_id'        	 => $project,
-			// 	'project_name'        	 => $nama_project,
-			// 	'sub_project_id'         => $sub_project,
-			// 	'sub_project_name'       => $nama_sub_project,
-			// );
-
-			// $id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
-
-			//susun array untuk cek apakah sudah ada data batch yg sama
-			// $data_batch_cek_request_open = array(
-			// 	'periode_saltab_from'    => $saltab_from,
-			// 	'periode_saltab_to'      => $saltab_to,
-			// 	'tanggal_gajian'      	 => $periode_salary,
-			// 	'project_id'        	 => $project,
-			// 	'project_name'        	 => $nama_project,
-			// 	'sub_project_id'         => $sub_project,
-			// 	'sub_project_name'       => $nama_sub_project,
-			// );
-
-			// $this->Import_model->update_request_open_import($data_batch_cek_request_open);
-
-			// if ($id_batch_awal != "") {
-			// 	$this->Import_model->delete_batch_saltab($id_batch_awal);
-			// }
-
-			// $data_batch += ['id' => $id_batch_awal];
-
-			if (!empty($data_batch)) {
-				$this->Import_model->insert_bupot_batch($data_batch);
-			}
-
-			$id_batch = $this->Import_model->get_id_bupot_batch($data_batch);
-
-			//susun array saltab detail
-			for ($i = 2; $i < count($sheet_data); $i++) {
-				$data += ['batch_bupot_id' => $id_batch];
-				for ($j = 0; $j < $length_header; $j++) {
-					// if ($header_tabel_saltab[$j] == "nama_penerima_penghasilan") {
-					// 	$trimmed_nip = strtolower($sheet_data[$i][$j]);
-					// 	$trimmed_nip = ucwords($trimmed_nip);
-					// 	$trimmed_nip = trim($trimmed_nip, ' ');
-					// 	$trimmed_nip = trim($trimmed_nip, ' ');
-					// 	$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-					// } else {
-						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-						$trimmed_nip = trim($trimmed_nip, ' ');
-						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-					// }
-				}
-				$array_data[] = $data;
-				$data = array();
-			}
-
-			//susun nama file
-			$yearmonth = date('Y/m/');
-			$upload_path = 'https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/' . $periode_bupot . '/' . $nama_project_only . '/';
-			foreach ($array_data as $array_data) {
-				$nama_file = $upload_path . $array_data['no_bukti_potong'] . '_' . $array_data['npwp_pemotong'] . '_' . $array_data['id_sistem'] . '.pdf';
-				$array_data['file_bupot'] = $nama_file;
-				$array_data_final[] = $array_data;
-			}
-			if (!empty($array_data_final)) {
-				$this->Import_model->insert_bupot_detail($array_data_final);
-			}
-
-
-			$tes_query = $this->db->last_query();
-
-
-			// if ($array_data != '') {
-			// 	$this->Import_model->insert_saltab_detail($array_data);
-			// }
-
-			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
-
-			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
-			// echo '<pre>';
-			// print_r($tes_query);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r("NIK : " . $nik);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r($array_data);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r($header_tabel_saltab);
-			// echo '</pre>';
-		} else {
-			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
-			print_r("gagal import");
-			print_r($_FILES['file_excel']['name']);
-		}
-
-		//$this->view_batch_saltab_temporary($id_batch);
-		//redirect('/');
-
-		redirect('admin/Importexcel/view_batch_bupot/' . $id_batch);
-	}
-
-	/*
-    |-------------------------------------------------------------------
-    | Import Excel BPJS
-    |-------------------------------------------------------------------
-    |
-    */
-	function import_excel_bpjs()
-	{
-		//ambil parameter yg di post sebagai acuan
-		$upload_by_id = $this->input->post('upload_by');
-		$upload_by = $this->Import_model->get_nama_karyawan($upload_by_id);
-		$upload_on = date("Y-m-d H:i:s");
-
-		$this->load->helper('file');
-
-		/* Allowed MIME(s) File */
-		$file_mimes = array(
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-		);
-
-		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
-
-			$array_file = explode('.', $_FILES['file_excel']['name']);
-			$extension  = end($array_file);
-
-			if ('csv' == $extension) {
-				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-			} else {
-				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-			}
-
-			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
-			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
-			// $sheet_data = array_map('trim', $sheet_data);
-			$sheet_data = array_filter($sheet_data);
-			$array_data  = [];
-			$array_data_final  = [];
-			$data        = [];
-			$header_tabel_saltab = $sheet_data[0];
-			$header_tabel_saltab = array_filter($header_tabel_saltab);
-
-			// echo '<pre>';
-			// print_r(array_filter($header_tabel_saltab));
-			// echo '</pre>';
-
-			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
-			// echo '<pre>';
-			// print_r($header_tabel_saltab);
-			// echo '</pre>';
-			// $header_tabel_saltab = array_filter($header_tabel_saltab);
-			$length_header = count($header_tabel_saltab);
-			$jumlah_data = count($sheet_data) - 2;
-			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
-
-			// echo '<pre>';
-			// print_r($sheet_data);
-			// echo '</pre>';
-
-			//susun array saltab detail dan trim karakter
-			for ($i = 2; $i < count($sheet_data); $i++) {
-				$data += ['upload_by_id' => $upload_by_id];
-				$data += ['upload_by' => $upload_by];
-				$data += ['upload_on' => $upload_on];
-				for ($j = 0; $j < $length_header; $j++) {
-					$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-					$trimmed_nip = trim($trimmed_nip, ' ');
-					$trimmed_nip = trim($trimmed_nip, '\'');
-					$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-				}
-				$array_data[] = $data;
-				$data = array();
-			}
-
-			if (!empty($array_data)) {
-				$this->Import_model->insert_bpjs_detail($array_data);
-			}
-
-			$tes_query = $this->db->last_query();
-
-			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
-
-			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
-			// echo '<pre>';
-			// print_r($tes_query);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r("NIK : " . $nik);
-			// echo '</pre>';
-			// foreach ($array_data as $record) {
-			// 	echo '<pre>';
-			// 	print_r($record);
-			// 	echo '</pre>';
-			// }
-			// echo '<pre>';
-			// print_r($array_data);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r($header_tabel_saltab);
-			// echo '</pre>';
-		} else {
-			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
-			print_r("gagal import");
-			print_r($_FILES['file_excel']['name']);
-		}
-
-		//$this->view_batch_saltab_temporary($id_batch);
-		//redirect('/');
-
-		redirect('admin/Importexcel/import_bpjs');
-	}
-
-
-
-	// Validate and add info in database
-	public function import_pkwt()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$employee_id = $session['employee_id'];
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-
-
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-					//open uploaded csv file with read only mode
-					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-					//skip first line
-					fgetcsv($csvFile, 0, ';');
-					$d = new DateTime();
-					$datetimestamp = $d->format("YmdHisv");
-					$uploadid = $datetimestamp;
-					// $lastnik = $this->Employees_model->get_maxid();
-					// $formula4 = substr($lastnik,5);
-
-					//parse data from csv file line by line
-					while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-
-						$data = array(
-							// 'uploadid' 					=> $uploadid,
-							'designation_id' 			=> $line[3],
-							'company_id' 				=> $line[4],
-							'project_id' 				=> $line[5],
-							'sub_project_id' 			=> $line[6],
-							'penempatan' 				=> $line[7],
-							'region' 					=> $line[8]
-							// 'project' 						=> $line[6], //project
-
-							// 'createdby' => $employee_id,
-							// 'createdon' => date('Y-m-d h:i:s'),
-						);
-
-						$this->Import_model->update_pkwt_emp($data, $line[1]);
-						// $result = $this->Import_model->addratecardtemp($data);
-
-
-
-						$config['cacheable']	= true; //boolean, the default is true
-						$config['cachedir']		= './assets/'; //string, the default is application/cache/
-						$config['errorlog']		= './assets/'; //string, the default is application/logs/
-						$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
-						$config['quality']		= true; //boolean, the default is true
-						$config['size']			= '1024'; //interger, the default is 1024
-						$config['black']		= array(224, 255, 255); // array, default is array(255,255,255)
-						$config['white']		= array(70, 130, 180); // array, default is array(0,0,0)
-						$this->ciqrcode->initialize($config);
-
-
-
-						if ($line[9] == 1) {
-
-							if ($line[4] == '2') {
-								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
-								$spb_hr = 'E-SPB-JKT/SC-HR/';
-								$companyID = '2';
-							} else if ($line[4] == '3') {
-								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
-								$spb_hr = 'E-SPB-JKT/KAC-HR/';
-								$companyID = '3';
-							} else {
-								$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-								$spb_hr = 'E-SPB-JKT/MATA-HR/';
-								$companyID = '4';
-							}
-
-							$count_pkwt = $this->Xin_model->count_pkwt();
-							$romawi = $this->Xin_model->tgl_pkwt();
-							$unicode = $this->Xin_model->getUniqueCode(20);
-							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
-							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
-						} else {
-
-							if ($line[4] == '2') {
-								$pkwt_hr = 'KEMITRAAN/SC-HR/';
-								$spb_hr = 'KEMITRAAN/SC-HR/';
-								$companyID = '2';
-							} else if ($line[4] == '3') {
-								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
-								$spb_hr = 'KEMITRAAN/KAC-HR/';
-								$companyID = '3';
-							} else {
-								$pkwt_hr = 'KEMITRAAN/MATA-HR/';
-								$spb_hr = 'KEMITRAAN/MATA-HR/';
-								$companyID = '4';
-							}
-
-							$count_pkwt = $this->Xin_model->count_tkhl();
-							$romawi = $this->Xin_model->tgl_pkwt();
-							$unicode = $this->Xin_model->getUniqueCode(20);
-							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
-							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
-						}
-
-						$docid = date('ymdHisv');
-						$yearmonth = date('Y/m');
-
-						$dirpkwt = $config['imagedir'] . $yearmonth . '/';
-						//kalau blm ada folder path nya
-						if (!file_exists($dirpkwt)) {
-							mkdir($dirpkwt, 0777, true);
-						}
-
-						$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
-						$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $docid;
-						$params['data'] = $domain; //data yang akan di jadikan QR CODE
-						$params['level'] = 'H'; //H=High
-						$params['size'] = 10;
-						$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
-						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
-
-
-
-
-						// INSERT TO PKWT
-
-						$data = array(
-							'uniqueid' 							=> $unicode,
-							'employee_id' 						=> $line[1],
-							'docid'								=> $docid,
-							'project' 							=> $line[5],
-							'sub_project'						=> $line[6],
-							'from_date'	 						=> $line[10],
-							'to_date' 							=> $line[11],
-							'no_surat' 							=> $nomor_surat,
-							'no_spb' 							=> $nomor_surat_spb,
-							'waktu_kontrak' 					=> $line[12],
-							'company' 							=> $line[4],
-							'jabatan' 							=> $line[3],
-							'penempatan' 						=> $line[7],
-							'hari_kerja' 						=> $line[13],
-							'tgl_payment'						=> $line[14],
-							'start_period_payment' 				=> $line[15],
-							'end_period_payment'				=> $line[16],
-							'basic_pay' 						=> $line[17],
-							'allowance_grade'					=> $line[18],
-							'dm_allow_grade' 					=> $line[19],
-							'allowance_area'					=> $line[20],
-							'dm_allow_area' 					=> $line[21],
-							'allowance_masakerja' 				=> $line[22],
-							'dm_allow_masakerja' 				=> $line[23],
-							'allowance_meal' 				=> $line[24],
-							'dm_allow_meal' 				=> $line[25],
-							'allowance_transport' 			=> $line[26],
-							'dm_allow_transport' 			=> $line[27],
-							'allowance_rent' 				=> $line[28],
-							'dm_allow_rent' 				=> $line[29],
-							'allowance_transrent' 			=> $line[30],
-							'dm_allow_transrent' 			=> $line[31],
-							'allowance_komunikasi' 			=> $line[32],
-							'dm_allow_komunikasi' 			=> $line[33],
-							'allowance_park' 				=> $line[34],
-							'dm_allow_park' 				=> $line[35],
-							'allowance_residance' 			=> $line[36],
-							'dm_allow_residance' 			=> $line[37],
-							'allowance_laptop' 				=> $line[38],
-							'dm_allow_laptop' 				=> $line[39],
-							'allowance_transmeal' 				=> $line[40],
-							'dm_allow_transmeal' 				=> $line[41],
-							'allowance_kasir' 				=> $line[42],
-							'dm_allow_kasir' 				=> $line[43],
-							'allowance_medicine' 			=> $line[44],
-							'dm_allow_medicine' 			=> $line[45],
-							'allowance_akomodasi' 			=> $line[46],
-							'dm_allow_akomodasi' 			=> $line[47],
-							'allowance_operation' 			=> $line[48],
-							'dm_allow_operation' 			=> $line[49],
-							'img_esign'						=> $image_name,
-
-							'sign_nip'						=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR & GA MANAGER',
-							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
-							'contract_type_id'				=> $line[9], //1 pkwt, 2 tkhl
-							'request_pkwt' => $session['user_id'],
-							'request_date' => date('Y-m-d h:i:s'),
-							'approve_nae' => $session['user_id'],
-							'approve_nae_date' => date('Y-m-d h:i:s'),
-							'approve_nom' =>  $session['user_id'],
-							'approve_nom_date' => date('Y-m-d h:i:s')
-
-						);
-
-
-						$iresult = $this->Pkwt_model->add_pkwt_record($data);
-
-
-						if ($iresult == TRUE) {
-							$Return['result'] = 'PENGAJUAN PKWT EXPIRED berhasil..';
-						} else {
-							$Return['error'] = $this->lang->line('xin_error_msg');
-						}
-
-						//END INSERT TO PKWT
-
-
-
-						// $bank_account_data = array(
-						// 'account_title' => 'Rekening',
-						// 'account_number' => $line[18], //NO. REK
-						// 'bank_name' => $line[19],
-						// 'employee_id' => $last_insert_id,
-						// 'created_at' => date('d-m-Y'),
-						// );
-						// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-						// $resultdel = $this->Import_model->delete_temp_by_pt();
-						// $formula4++;
-					}
-					//close opened csv file
-					fclose($csvFile);
-
-
-					$Return['result'] = $this->lang->line('xin_success_attendance_import');
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
+			$Return['result'] = $this->lang->line('xin_hr_request_submitted');
 			$this->output($Return);
 		}
-
-
-		// redirect('admin/Importexcelratecard?upid=' . $uploadid);
-		redirect('admin');
 	}
 
-
-	// expired page
-	public function importnewemployees()
+	public function role_employees_list()
 	{
 
+		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
-		if (empty($session)) {
+		if (!empty($session)) {
+			$this->load->view("admin/reports/roles", $data);
+		} else {
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_import_new_employee') . ' | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_import_new_employee');
-		$data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_new_employees';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('109', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/new_employees", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-	// expired page
-	public function importratecard()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_import_excl_ratecard') . ' | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_ratecard');
-		$data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_ratecard';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('232', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/import_ratecard", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-	// expired page
-	public function importeslip()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['title'] = $this->lang->line('xin_import_excl_eslip') . ' | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip');
-		$data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_eslip';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('469', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/import_eslip", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-	//delete batch saltab
-	public function delete_batch_saltab()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_batch_saltab($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//delete batch saltab release
-	public function delete_batch_saltab_release()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_batch_saltab_release($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//release eslip batch saltab release
-	public function release_eslip_batch_saltab_release()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->release_eslip_batch_saltab_release($postData);
-
-		echo json_encode($data);
-	}
-
-	//accept request open lock saltab
-	public function accept_request()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->accept_request($postData);
-
-		echo json_encode($data);
-	}
-
-	//reject request open lock saltab
-	public function reject_request()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->reject_request($postData);
-
-		echo json_encode($data);
-	}
-
-	//release batch saltab
-	public function release_batch_saltab()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->release_batch_saltab($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//release batch bupot
-	public function release_batch_bupot()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->release_batch_bupot($postData);
-
-		echo json_encode($data);
-	}
-
-	//delete detail saltab
-	public function delete_detail_saltab()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_detail_saltab($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//delete detail bupot
-	public function delete_detail_bupot()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_detail_bupot($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//delete detail saltab release
-	public function delete_detail_saltab_release()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->delete_detail_saltab_release($postData['id']);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list batch saltab
-	public function list_batch_saltab()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_batch_saltab($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list batch saltab release
-	public function list_batch_saltab_release()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_batch_saltab_release($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list open import batch saltab
-	public function list_open_import_batch_saltab()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_request_open_import_saltab($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list batch saltab release untuk download
-	public function list_batch_saltab_release_download()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_batch_saltab_release_download($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list detail saltab
-	public function list_detail_saltab()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_detail_saltab($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list detail bupot
-	public function list_detail_bupot()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_detail_bupot($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list detail saltab release
-	public function list_detail_saltab_release()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_detail_saltab_release($postData);
-
-		echo json_encode($data);
-	}
-
-	//load datatables list detail saltab release untuk download
-	public function list_detail_saltab_release_download()
-	{
-
-		// POST data
-		$postData = $this->input->post();
-
-		// Get data
-		$data = $this->Import_model->get_list_detail_saltab_release_download($postData);
-
-		echo json_encode($data);
-	}
-
-	public function downloadTemplateSaltab()
-	{
-		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
-
-		$tabel_saltab = $this->Import_model->get_saltab_table();
-
-		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
-		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
-		$jumlah_data = count($header_tabel_saltab);
-		//$tes = print_r($tabel_saltab);
-
-		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
-
-		//isi cell dari array
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$header_tabel_saltab,   // The data to set
-				NULL,
-				'A1'
-			);
-
-		$spreadsheet->getActiveSheet()
-			->fromArray(
-				$header2_tabel_saltab,   // The data to set
-				NULL,
-				'A2'
-			);
-
-		//set column width jadi auto size
-		for ($i = 1; $i <= $jumlah_data; $i++) {
-			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
-		}
-
-		//set header background color
-		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
-		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
-
-		$spreadsheet
-			->getActiveSheet()
-			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
-			->getFill()
-			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-			->getStartColor()
-			->setARGB('BFBFBF');
-
-		//set wrap text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setWrapText(true);
-
-		//set vertical dan horizontal alignment text untuk row ke 1
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-		$spreadsheet->getActiveSheet()->getStyle('1:2')
-			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-
-
-		//----------------Buat File Untuk Download--------------
-		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
-		//$writer->setPreCalculateFormulas(false);
-
-		$filename = 'Template E-Saltab'; // set filename for excel file to be exported
-
-		header('Content-Type: application/vnd.ms-excel'); // generate excel file
-		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
-		header('Cache-Control: max-age=0');
-
-		$writer->save('php://output');	// download file 
-		//$writer->save('./absen/tes2.xlsx');	// download file 
-	}
-
-	public function format_array_print_excel($tabel_hasil)
-	{
-		// $tabel_saltab = $this->Import_model->get_saltab_table();
-
-		// $jumlah_data = count($tabel_saltab);
-
-		// $new_tabel_saltab = array_values($tabel_saltab);
-
-		// if($tabel_hasil['sub_project']){
-		// }
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$roleId = $this->uri->segment(4);
+		$employee = $this->Reports_model->get_roles_employees($roleId);
 
 		$data = array();
 
-		foreach ($tabel_hasil as $row) {
-			$new_row = array_values($row);
-			array_push($data, $new_row);
+		foreach ($employee->result() as $r) {
+
+			// get company
+			$company = $this->Xin_model->read_company_info($r->company_id);
+			if (!is_null($company)) {
+				$comp_name = $company[0]->name;
+			} else {
+				$comp_name = '--';
+			}
+
+			// user full name 
+			$full_name = $r->first_name . ' ' . $r->last_name;
+			// get status
+			if ($r->is_active == 0) : $status = $this->lang->line('xin_employees_inactive');
+			elseif ($r->is_active == 1) : $status = $this->lang->line('xin_employees_active');
+			endif;
+			// user role
+			$role = $this->Xin_model->read_user_role_info($r->user_role_id);
+			if (!is_null($role)) {
+				$role_name = $role[0]->role_name;
+			} else {
+				$role_name = '--';
+			}
+			// get designation
+			$designation = $this->Designation_model->read_designation_information($r->designation_id);
+			if (!is_null($designation)) {
+				$designation_name = $designation[0]->designation_name;
+			} else {
+				$designation_name = '--';
+			}
+			// department
+			$department = $this->Department_model->read_department_information($r->department_id);
+			if (!is_null($department)) {
+				$department_name = $department[0]->department_name;
+			} else {
+				$department_name = '--';
+			}
+			$department_designation = $designation_name . ' (' . $department_name . ')';
+
+			$data[] = array(
+				$r->employee_id,
+				$full_name,
+				$comp_name,
+				$r->email,
+				$role_name,
+				$department_designation,
+				$status
+			);
+		}
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	public function project_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/projects", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$projId = $this->uri->segment(4);
+		$projStatus = $this->uri->segment(5);
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		if ($user_info[0]->user_role_id == 1) {
+			$project = $this->Reports_model->get_project_list($projId, $projStatus);
+		} else {
+			$project = $this->Project_model->get_employee_projects($session['user_id']);
+		}
+		$data = array();
+
+		foreach ($project->result() as $r) {
+
+			// get start date
+			$start_date = $this->Xin_model->set_date_format($r->start_date);
+			// get end date
+			$end_date = $this->Xin_model->set_date_format($r->end_date);
+
+			$pbar = '<p class="m-b-0-5">' . $this->lang->line('xin_completed') . ' ' . $r->project_progress . '%</p>';
+
+			//status
+			if ($r->status == 0) {
+				$status = $this->lang->line('xin_not_started');
+			} else if ($r->status == 1) {
+				$status = $this->lang->line('xin_in_progress');
+			} else if ($r->status == 2) {
+				$status = $this->lang->line('xin_completed');
+			} else {
+				$status = $this->lang->line('xin_deffered');
+			}
+
+			// priority
+			if ($r->priority == 1) {
+				$priority = '<span class="tag tag-danger">' . $this->lang->line('xin_highest') . '</span>';
+			} else if ($r->priority == 2) {
+				$priority = '<span class="tag tag-danger">' . $this->lang->line('xin_high') . '</span>';
+			} else if ($r->priority == 3) {
+				$priority = '<span class="tag tag-primary">' . $this->lang->line('xin_normal') . '</span>';
+			} else {
+				$priority = '<span class="tag tag-success">' . $this->lang->line('xin_low') . '</span>';
+			}
+
+			//assigned user
+			if ($r->assigned_to == '') {
+				$ol = $this->lang->line('xin_not_assigned');
+			} else {
+				$ol = '';
+				foreach (explode(',', $r->assigned_to) as $desig_id) {
+					$assigned_to = $this->Xin_model->read_user_info($desig_id);
+					if (!is_null($assigned_to)) {
+
+						$assigned_name = $assigned_to[0]->first_name . ' ' . $assigned_to[0]->last_name;
+						$ol .= $assigned_name . "<br>";
+					}
+				}
+				$ol .= '';
+			}
+			$new_time = $this->Xin_model->actual_hours_timelog($r->project_id);
+
+			//echo $new_time;
+			$project_summary = '<div class="text-semibold"><a href="' . site_url() . 'admin/project/detail/' . $r->project_id . '">' . $r->title . '</a></div>';
+			$data[] = array(
+				$project_summary,
+				$priority,
+				$start_date,
+				$end_date,
+				$status,
+				$pbar,
+				$ol,
+				$r->budget_hours,
+				$new_time,
+
+			);
 		}
 
-		$jumlah_data = count($data);
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $project->num_rows(),
+			"recordsFiltered" => $project->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
 
-		for ($i = 0; $i < $jumlah_data; $i++) {
-			$jumlah_kolom = count($data[$i]);
-			for ($j = 0; $j < $jumlah_kolom; $j++) {
-				if (is_numeric($data[$i][$j])) {
-					// $data[$i][$j] = "NUMERIC";
-					if ($data[$i][$j] <= 100000000) {
-						// $data[$i][$j] = "NUMERIC kecil";
-						$data[$i][$j] = round($data[$i][$j]) . " ";
+	public function training_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/employee_training", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$start_date = $this->uri->segment(4);
+		$end_date = $this->uri->segment(5);
+		$uid = $this->uri->segment(6);
+		$cid = $this->uri->segment(7);
+
+		$training = $this->Reports_model->get_training_list($cid, $start_date, $end_date);
+
+		$data = array();
+
+		foreach ($training->result() as $r) {
+
+			$aim = explode(',', $r->employee_id);
+			foreach ($aim as $dIds) {
+				if ($uid == $dIds) {
+
+					// get training type
+					$type = $this->Training_model->read_training_type_information($r->training_type_id);
+					if (!is_null($type)) {
+						$itype = $type[0]->type;
 					} else {
-						// $data[$i][$j] = "NUMERIC besar";
-						$data[$i][$j] = $data[$i][$j] . " ";
+						$itype = '--';
 					}
-				} else {
-					// $data[$i][$j] = "NOT NUMERIC";
-					$data[$i][$j] = $data[$i][$j] . " ";
+					// get trainer
+					/*$trainer = $this->Trainers_model->read_trainer_information($r->trainer_id);
+		// trainer full name
+		if(!is_null($trainer)){
+			$trainer_name = $trainer[0]->first_name.' '.$trainer[0]->last_name;
+		} else {
+			$trainer_name = '--';	
+		}*/
+					// get trainer
+					if ($r->trainer_option == 2) {
+						$trainer = $this->Trainers_model->read_trainer_information($r->trainer_id);
+						// trainer full name
+						if (!is_null($trainer)) {
+							$trainer_name = $trainer[0]->first_name . ' ' . $trainer[0]->last_name;
+						} else {
+							$trainer_name = '--';
+						}
+					} elseif ($r->trainer_option == 1) {
+						// get user > employee_
+						$trainer = $this->Xin_model->read_user_info($r->trainer_id);
+						// employee full name
+						if (!is_null($trainer)) {
+							$trainer_name = $trainer[0]->first_name . ' ' . $trainer[0]->last_name;
+						} else {
+							$trainer_name = '--';
+						}
+					} else {
+						$trainer_name = '--';
+					}
+					// get start date
+					$start_date = $this->Xin_model->set_date_format($r->start_date);
+					// get end date
+					$finish_date = $this->Xin_model->set_date_format($r->finish_date);
+					// training date
+					$training_date = $start_date . ' ' . $this->lang->line('dashboard_to') . ' ' . $finish_date;
+					// set currency
+					$training_cost = $this->Xin_model->currency_sign($r->training_cost);
+					/* get Employee info*/
+					if ($uid == '') {
+						$ol = '--';
+					} else {
+						$user = $this->Exin_model->read_user_info($uid);
+						$fname = $user[0]->first_name . ' ' . $user[0]->last_name;
+					}
+					// status
+					if ($r->training_status == 0) : $status = $this->lang->line('xin_pending');
+					elseif ($r->training_status == 1) : $status = $this->lang->line('xin_started');
+					elseif ($r->training_status == 2) : $status = $this->lang->line('xin_completed');
+					else : $status = $this->lang->line('xin_terminated');
+					endif;
+
+					// get company
+					$company = $this->Xin_model->read_company_info($r->company_id);
+					if (!is_null($company)) {
+						$comp_name = $company[0]->name;
+					} else {
+						$comp_name = '--';
+					}
+
+					$data[] = array(
+						$comp_name,
+						$fname,
+						$itype,
+						$trainer_name,
+						$training_date,
+						$training_cost,
+						$status
+					);
 				}
 			}
+		} // e- training
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $training->num_rows(),
+			"recordsFiltered" => $training->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	// hourly_list > templates
+	public function payslip_report_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/payslip", $data);
+		} else {
+			redirect('admin/');
 		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
 
-		return $data;
+		$cid = $this->uri->segment(4);
+		$eid = $this->uri->segment(5);
+		$re_date = $this->uri->segment(6);
 
-		// echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
+
+		$payslip_re = $this->Reports_model->get_payslip_list($cid, $eid, $re_date);
+
+		$data = array();
+
+		foreach ($payslip_re->result() as $r) {
+
+			// get addd by > template
+			$user = $this->Xin_model->read_user_info($r->employee_id);
+			// user full name
+			if (!is_null($user)) {
+				$full_name = $user[0]->first_name . ' ' . $user[0]->last_name;
+				$emp_link = $user[0]->employee_id;
+
+				$month_payment = date("F, Y", strtotime($r->salary_month));
+
+				$p_amount = $this->Xin_model->currency_sign($r->net_salary);
+				if ($r->wages_type == 1) {
+					$payroll_type = $this->lang->line('xin_payroll_basic_salary');
+				} else {
+					$payroll_type = $this->lang->line('xin_employee_daily_wages');
+				}
+
+				// get date > created at > and format
+				$created_at = $this->Xin_model->set_date_format($r->created_at);
+
+				$data[] = array(
+					$emp_link,
+					$full_name,
+					$p_amount,
+					$month_payment,
+					$created_at,
+					$payroll_type
+				);
+			}
+		} // if employee available
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $payslip_re->num_rows(),
+			"recordsFiltered" => $payslip_re->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
 	}
 
-	//mengambil Json data Detail Saltab
-	public function get_detail_saltab()
+	// get company > employees
+	public function get_employees()
 	{
-		$postData = $this->input->post();
 
-		// get data 
-		$data = $this->Import_model->get_detail_saltab($postData['id']);
-		echo json_encode($data);
-		// echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'company_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/get_employees", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+	}
+
+	// get company > employees
+	public function get_employees_att()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'company_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/get_employees_att", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
 	}
 
 
-
-	//mengambil Json data Detail Saltab
-	public function get_detail_saltab_release()
+	// get company > employees
+	public function get_project_att()
 	{
-		$postData = $this->input->post();
 
-		// get data 
-		$data = $this->Import_model->get_detail_saltab_release($postData['id']);
-		echo json_encode($data);
-		// echo "<pre>";
-		// print_r($data);
-		// echo "</pre>";
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'company_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/get_project_att", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
 	}
 
-	//ganti data nip employee
-	public function ganti_nip()
+
+	public function saltab_bpjs()
 	{
+
 		$session = $this->session->userdata('username');
 		if (empty($session)) {
 			redirect('admin/');
 		}
 
-		$postData = $this->input->post();
-
-		//update NIP
-		$this->Import_model->update_NIP($postData);
-
-		//data response NIP
-		$data2 = $this->Import_model->get_single_nip_saltab_release($postData);
-		$response = array(
-			'status'	=> "200",
-			'pesan' 	=> "Berhasil Ubah NIP",
-			'data'		=> $data2,
-		);
-
-		echo json_encode($response);
-		// echo "<pre>";
-		// print_r($response);
-		// echo "</pre>";
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'Saltab to BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'BPJS Project';
+		$data['uploadid'] = $this->input->get('upid', TRUE);
+		$data['path_url'] = 'reports_saltab_bpjs';
+		// $data['all_companies'] = $this->Xin_model->get_companies();
+		// $data['all_departments'] = $this->Department_model->all_departments();
+		// $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		// $data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('477', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/saltab_bpjs", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
 	}
 
+	// daily attendance list > timesheet
+	public function saltab_bpjs_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/saltab_bpjs", $data);
+		} else {
+			redirect('admin/');
+		}
+
+		$uploadID = $this->input->get('upid', TRUE);
+		// $uploadID = '20230612142717943';
+
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+		$employee = $this->Bpjs_model->saltab_bpjs_list($uploadID);
 
 
+		// $employee = $this->Employees_model->get_employees();
+
+		$data = array();
+
+		// for($i=0 ; $i < count($attend); $i++) {
+		foreach ($employee->result() as $r) {
+
+			// $emp = $this->Employees_model->read_employee_info_by_nik($r->employee_id);
+			// if(!is_null($emp)){
+			// 	$fullname = $emp[0]->first_name;
+			// } else {
+			// 	$fullname = '--';
+			// }
+
+			// $project = $this->Project_model->read_single_project($r->project_id);
+			// if(!is_null($project)){
+			// 	$project_name = $project[0]->title;
+			// } else {
+			// 	$project_name = '--';	
+			// }
+
+			// $cust = $this->Customers_model->read_single_customer($r->customer_id);
+			// if(!is_null($cust)){
+			// 	$nama_toko = $cust[0]->customer_name;
+			// } else {
+			// 	$nama_toko = '--';	
+			// }
+
+			// if(!is_null($r->foto_in)){
+			// 	$fotovIn = 'https://api.apps-cakrawala.com/'.$r->foto_in;
+			// } else {
+			// 	$fotovIn = '-';
+			// }
+
+			// if(!is_null($r->foto_out)){
+			// 	$fotovOut = 'https://api.apps-cakrawala.com/'.$r->foto_out;
+			// } else {
+			// 	$fotovOut = '-';
+			// }
+
+			$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_edit') . '"><a href="' . site_url() . 'admin/employees/emp_edit/' . $r->nip . '" target="_blank"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"><span class="fas fa-pencil-alt"></span></button></a></span>';
+
+			$data[] = array(
+				$r->status_emp,
+				$edit . ' ' . $r->nip,
+				$r->fullname,
+				$r->project,
+				$r->project_sub,
+				$r->area,
+
+				$r->gaji_umk,
+				$r->gaji_pokok,
+				$r->bpjs_tk_deduction + $r->bpjs_tk + $r->jaminan_pensiun_deduction + $r->jaminan_pensiun,
+				$r->bpjs_ks_deduction + $r->bpjs_ks
+			);
+		}
 
 
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $employee->num_rows(),
+			"recordsFiltered" => $employee->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
 
-
-
-
-
-
-
-
-
-
-	public function update_downloader($id)
+	// Validate and update status info in database // status info
+	public function tandai_download()
 	{
 		/* Define return | here result is used to return user data and error for error message */
 		// $status_id = $this->uri->segment(4);
-		// $session = $this->session->userdata('username');
+		$session = $this->session->userdata('username');
 		// if(empty($session)){ 
 		// 	redirect('admin/');
 		// }
+		$upload_id = $this->uri->segment(4);
 
-
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
 
 		$datas = array(
-			'down_bpjs_by' => $session['employee_id'],
-			'down_bpjs_on' =>  date("Y-m-d h:i:s"),
+			'release' => $session['user_id'],
+			'release_date' =>  date("Y-m-d h:i:s"),
 		);
 
-		$this->Import_model->update_download_bpjs($datas, $id);
+		$this->Import_model->update_release_saltab($datas, $upload_id);
 
 
 		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
@@ -1642,2122 +3015,187 @@ class Traxes extends MY_Controller
 
 	}
 
-	/*
-    |-------------------------------------------------------------------
-    | Import Excel saltab
-    |-------------------------------------------------------------------
-    |
-    */
-	function report_summary()
+
+	public function delete()
 	{
-		//ambil parameter yg di post sebagai acuan
-		$nik = $this->input->post('nik');
-		$project = $this->input->post('project');
-		$sub_project = $this->input->post('sub_project');
-		$saltab_from = $this->input->post('saltab_from');
-		$saltab_to = $this->input->post('saltab_to');
-		$periode_salary = $this->input->post('periode_salary');
 
-		//load data Project
-		$nama_project = "";
-		$projects = $this->Project_model->read_single_project($project);
-		if (!is_null($projects)) {
-			$nama_project = $projects[0]->title;
-		} else {
-			$nama_project = '--';
-		}
-
-		//load data Sub Project
-		$nama_sub_project = "";
-		if ($sub_project == 0) {
-			$nama_sub_project = '-ALL-';
-		} else {
-			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
-			if (!is_null($subprojects)) {
-				$nama_sub_project = $subprojects[0]->sub_project_name;
+		if ($this->input->post('is_ajax') == 2) {
+			$session = $this->session->userdata('username');
+			if (empty($session)) {
+				redirect('admin/');
+			}
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+			$id = $this->uri->segment(4);
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+			$result = $this->Pkwt_model->delete_pkwt_cancel($id);
+			if (isset($id)) {
+				$Return['result'] = 'Delete PKWT Tolak berhasil.';
 			} else {
-				$nama_sub_project = '--';
+				$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');
 			}
-		}
-
-		$this->load->helper('file');
-
-		/* Allowed MIME(s) File */
-		$file_mimes = array(
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-		);
-
-		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
-
-			$array_file = explode('.', $_FILES['file_excel']['name']);
-			$extension  = end($array_file);
-
-			if ('csv' == $extension) {
-				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
-			} else {
-				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
-			}
-
-			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
-			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
-			// $sheet_data = array_map('trim', $sheet_data);
-			$sheet_data = array_filter($sheet_data);
-			$array_data  = [];
-			$array_data_final  = [];
-			$data        = [];
-			$header_tabel_saltab = $sheet_data[0];
-			$header_tabel_saltab = array_filter($header_tabel_saltab);
-
-			// echo '<pre>';
-			// print_r(array_filter($header_tabel_saltab));
-			// echo '</pre>';
-
-			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
-			// echo '<pre>';
-			// print_r($header_tabel_saltab);
-			// echo '</pre>';
-			// $header_tabel_saltab = array_filter($header_tabel_saltab);
-			$length_header = count($header_tabel_saltab);
-			$jumlah_data = count($sheet_data) - 2;
-			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
-
-			// echo '<pre>';
-			// print_r($sheet_data);
-			// echo '</pre>';
-
-			//susun array batch saltab
-			$data_batch = array(
-				'periode_cutoff_from'    => $saltab_from,
-				'periode_cutoff_to'      => $saltab_to,
-				'periode_salary'      	 => $periode_salary,
-				'project_id'        	 => $project,
-				'project_name'        	 => $nama_project,
-				'sub_project_id'         => $sub_project,
-				'sub_project_name'       => $nama_sub_project,
-				'total_mpp'        	 	 => $jumlah_data,
-				'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($nik),
-				'upload_by_id'        	 => $nik,
-				'upload_ip'        	 	 => $this->get_client_ip(),
-			);
-
-			//susun array untuk cek apakah sudah ada data batch yg sama
-			$data_batch_cek = array(
-				'periode_cutoff_from'    => $saltab_from,
-				'periode_cutoff_to'      => $saltab_to,
-				'periode_salary'      	 => $periode_salary,
-				'project_id'        	 => $project,
-				'project_name'        	 => $nama_project,
-				'sub_project_id'         => $sub_project,
-				'sub_project_name'       => $nama_sub_project,
-			);
-
-			$id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
-
-			//susun array untuk cek apakah sudah ada data batch yg sama
-			$data_batch_cek_request_open = array(
-				'periode_saltab_from'    => $saltab_from,
-				'periode_saltab_to'      => $saltab_to,
-				'tanggal_gajian'      	 => $periode_salary,
-				'project_id'        	 => $project,
-				'project_name'        	 => $nama_project,
-				'sub_project_id'         => $sub_project,
-				'sub_project_name'       => $nama_sub_project,
-			);
-
-			$this->Import_model->update_request_open_import($data_batch_cek_request_open);
-
-			if ($id_batch_awal != "") {
-				$this->Import_model->delete_batch_saltab($id_batch_awal);
-			}
-
-			// $data_batch += ['id' => $id_batch_awal];
-
-			if ($data_batch != '') {
-				$this->Import_model->insert_saltab_batch($data_batch);
-			}
-
-			$id_batch = $this->Import_model->get_id_saltab_batch($data_batch);
-
-			//susun array saltab detail
-			for ($i = 2; $i < count($sheet_data); $i++) {
-				$data += ['uploadid' => $id_batch];
-				for ($j = 0; $j < $length_header; $j++) {
-					if ($header_tabel_saltab[$j] == "nip") {
-						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
-							// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-							$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-							$trimmed_nip = trim($trimmed_nip, ' ');
-							$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-						} else {
-							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
-								// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-								$trimmed_nip = trim($trimmed_nip, ' ');
-								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
-								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
-								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
-								$j = $j + 1;
-							} else {
-								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-								$trimmed_nip = trim($trimmed_nip, ' ');
-								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-							}
-						}
-						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
-					}
-					if ($header_tabel_saltab[$j] == "adjustment_pph") {
-						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-						$trimmed_nip = trim($trimmed_nip, ' ');
-						$trimmed_nip = abs(doubleval($trimmed_nip));
-						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-					} else {
-						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-						$trimmed_nip = trim($trimmed_nip, ' ');
-						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-					}
-				}
-				$array_data[] = $data;
-				$data = array();
-			}
-
-			if ($nama_sub_project == "-ALL-") {
-				if (!empty($array_data)) {
-					// echo '<pre>';
-					// print_r($array_data);
-					// echo '</pre>';
-					$this->Import_model->insert_saltab_detail($array_data);
-				}
-			} else {
-				foreach ($array_data as $array_data) {
-					$array_data['sub_project'] = $nama_sub_project;
-					$array_data_final[] = $array_data;
-				}
-				if (!empty($array_data_final)) {
-					$this->Import_model->insert_saltab_detail($array_data_final);
-				}
-			}
-
-			$tes_query = $this->db->last_query();
-
-
-			// if ($array_data != '') {
-			// 	$this->Import_model->insert_saltab_detail($array_data);
-			// }
-
-			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
-
-			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
-			// echo '<pre>';
-			// print_r($tes_query);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r("NIK : " . $nik);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r($array_data);
-			// echo '</pre>';
-			// echo '<pre>';
-			// print_r($header_tabel_saltab);
-			// echo '</pre>';
-		} else {
-			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
-			print_r("gagal import");
-			print_r($_FILES['file_excel']['name']);
-		}
-
-		//$this->view_batch_saltab_temporary($id_batch);
-		//redirect('/');
-
-		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
-	}
-
-	function view_batch_saltab_temporary($id_batch = null)
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
-
-		$data['title'] = 'Preview E-Saltab | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/importesaltab') . "'>Import E-SALTAB</a> | Preview E-Saltab";
-
-		$session = $this->session->userdata('username');
-
-		$data['id_batch'] = $id_batch;
-		$data['batch_saltab'] = $this->Import_model->get_saltab_batch($id_batch);
-
-		if (!empty($session)) {
-			$data['subview'] = $this->load->view("admin/import_excel/preview_esaltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
-
-
-	function view_batch_bupot($id_batch = null)
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
-
-		$data['title'] = 'VIEW DETAIL BUPOT | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/import_bupot') . "'>MANAGE BUPOT</a> | VIEW DETAIL BUPOT";
-
-		$session = $this->session->userdata('username');
-		// $data['path_url'] = 'hrpremium_import';
-
-		$data['id_batch'] = $id_batch;
-		$data['batch_bupot'] = $this->Import_model->get_bupot_batch($id_batch);
-
-		$nama_project_only = "";
-		$projects = $this->Project_model->read_single_project_name($data['batch_bupot']['project_id']);
-		if (!is_null($projects)) {
-			$nama_project_only = $projects[0]->title;
-		} else {
-			$nama_project_only = '';
-		}
-
-		$data['nama_project_only'] = $nama_project_only;
-
-		if (!empty($session)) {
-			$data['subview'] = $this->load->view("admin/import_excel/preview_bupot", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
-
-
-	function view_batch_saltab_release($id_batch = null)
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
-
-		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/manage_esaltab') . "'>Manage E-SALTAB</a> | Detail E-Saltab";
-
-		$session = $this->session->userdata('username');
-
-		$data['id_batch'] = $id_batch;
-		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
-
-		if (!empty($session)) {
-			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
-
-	function view_batch_saltab_release_download($id_batch = null)
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
-
-		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/download_esaltab') . "'>Download E-SALTAB</a> | Detail E-Saltab";
-
-		$session = $this->session->userdata('username');
-
-		$data['id_batch'] = $id_batch;
-		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
-
-		if (!empty($session)) {
-			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab_download", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/');
-		}
-	}
-
-	// Function to get the client IP address
-	function get_client_ip()
-	{
-		$ipaddress = '';
-		if (isset($_SERVER['HTTP_CLIENT_IP']))
-			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
-		else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-		else if (isset($_SERVER['HTTP_X_FORWARDED']))
-			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
-		else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
-		else if (isset($_SERVER['HTTP_FORWARDED']))
-			$ipaddress = $_SERVER['HTTP_FORWARDED'];
-		else if (isset($_SERVER['REMOTE_ADDR']))
-			$ipaddress = $_SERVER['REMOTE_ADDR'];
-		else
-			$ipaddress = 'UNKNOWN';
-		return $ipaddress;
-	}
-
-	// Validate and add info in database
-	public function import_newemp()
-	{
-
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		// $config['allowed_types'] = 'csv';
-		// 	$this->load->library('upload', $config);
-		//validate whether uploaded file is a csv file
-
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-					// check file size
-					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
-
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-						//skip first line
-						// fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
-						$lastnik = $this->Employees_model->get_maxid();
-						$formula4 = substr($lastnik, 5);
-
-						//parse data from csv file line by line
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-							// $options = array('cost' => 12);
-							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
-
-							if ($line[2] == 'HO' || $line[2] == 'INHOUSE' || $line[2] == 'IN-HOUSE') {
-								$formula2 = '2';
-							} else {
-								$formula2 = '3';
-							}
-
-							$formula3 = sprintf("%03d", $line[3]);
-
-
-
-							$ids = '2' . $formula2 . $formula3 . (int)$formula4 + 1;
-							// $ids = (int)$formula4+1;
-
-
-							$data = array(
-								'uploadid' => $uploadid,
-								'employee_id' => $ids, // auto
-								'fullname' => $line[1],
-								'company_id' => '2',
-								'location_id' => '3', //ho-area
-								'department_id' => $line[2], //divisi
-								'designation_id' => $line[3], //jabatan
-								'date_of_joining' => $line[4],
-								'ktp_no' => $line[0],
-
-							);
-							$result = $this->Employees_model->addtemp($data);
-
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-							$resultdel = $this->Employees_model->delete_temp_by_employeeid();
-							$formula4++;
-						}
-						//close opened csv file
-						fclose($csvFile);
-
-
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
 			$this->output($Return);
 		}
-
-
-		redirect('admin/ImportExcelEmployees?upid=' . $uploadid);
 	}
 
-
-	// Validate and add info in database
-	public function import_eslip()
+	public function printExcel($project, $sub_project, $status,  $searchVal, $session_id)
 	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$employee_id = $session['employee_id'];
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		// $config['allowed_types'] = 'csv';
-		// 	$this->load->library('upload', $config);
-		//validate whether uploaded file is a csv file
+		$postData = array();
 
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		//variabel filter (diambil dari post ajax di view)
+		$postData['project'] = $project;
+		$postData['sub_project'] = $sub_project;
+		$postData['status'] = $status;
+		$postData['session_id'] = $session_id;
+		$postData['nama_file'] = 'Data Karyawan';
+		if ($searchVal == '-no_input-') {
+			$postData['filter'] = '';
 		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-					// check file size
-					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
-
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-						//skip first line
-						// fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
-						$lastnik = $this->Employees_model->get_maxid();
-						$formula4 = substr($lastnik, 5);
-
-
-						//parse data from csv file line by line
-						//while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-							// $options = array('cost' => 12);
-							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
-
-							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
-							// 	$formula2 = '2';
-							// } else {
-							// 	$formula2 = '3';
-							// }
-
-							// $formula3 = sprintf("%03d", $line[3]);
-
-							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
-							// $ids = (int)$formula4+1;
-
-
-							$data = array(
-								'uploadid' 								=> $uploadid,
-								'nip' 										=> $line[0],
-								'fullname' 								=> str_replace("'", " ", $line[1]),
-								'periode' 								=> str_replace("'", " ", $line[2]),
-								'project' 								=> $line[3],
-								'project_sub' 						=> $line[4],
-								'area' 										=> str_replace("'", " ", $line[5]),
-								'status_emp' 							=> $line[6],
-								'hari_kerja' 							=> $line[7],
-								'gaji_umk' 								=> $line[8],
-								'gaji_pokok' 							=> $line[9],
-								'allow_jabatan' 					=> $line[10],
-								'allow_area' 							=> $line[11],
-								'allow_masakerja' 				=> $line[12],
-								'allow_konsumsi' 					=> $line[13],
-								'allow_transport' 				=> $line[14],
-								'allow_rent' 							=> $line[15],
-								'allow_comunication' 			=> $line[16],
-								'allow_parking' 					=> $line[17],
-								'allow_residence_cost' 		=> $line[18],
-								'allow_akomodasi' 				=> $line[19],
-								'allow_device' 						=> $line[20],
-								'allow_kasir' 						=> $line[21],
-								'allow_trans_meal' 				=> $line[22],
-								'allow_trans_rent' 				=> $line[23],
-								'allow_vitamin' 					=> $line[24],
-								'allow_grooming'					=> $line[25],
-								'allow_others'						=> $line[26],
-								'allow_operation' 				=> $line[27],
-								'over_salary' 						=> $line[28],
-								'penyesuaian_umk' 				=> $line[29],
-								'insentive'								=> $line[30],
-								'overtime' 								=> $line[31],
-								'overtime_holiday' 				=> $line[32],
-								'overtime_national_day' 	=> $line[33],
-								'overtime_rapel' 					=> $line[34],
-								'kompensasi' 							=> $line[35],
-								'bonus' 									=> $line[36],
-								'uuck' 										=> $line[37],
-								'thr' 										=> $line[38],
-								'bpjs_tk_deduction' 			=> $line[39],
-								'bpjs_ks_deduction' 			=> $line[40],
-								'jaminan_pensiun_deduction' => $line[41],
-								'pendapatan' 							=> $line[42],
-								'bpjs_tk' 								=> $line[43],
-								'bpjs_ks' 								=> $line[44],
-								'jaminan_pensiun' 				=> $line[45],
-								'deposit' 								=> $line[46],
-								'pph' 										=> $line[47],
-								'pph_thr' 								=> $line[48],
-								'penalty_late' 						=> $line[49],
-								'penalty_alfa' 						=> $line[50],
-								'penalty_attend' 					=> $line[51],
-								'mix_oplos' 							=> $line[52],
-								'pot_trip_malang' 				=> $line[53],
-								'pot_device' 							=> $line[54],
-								'pot_kpi' 								=> $line[55],
-								'deduction' 							=> $line[56],
-								'simpanan_pokok' 					=> $line[57],
-								'simpanan_wajib_koperasi' => $line[58],
-								'pembayaran_pinjaman' 		=> $line[59],
-								'biaya_admin_bank' 				=> $line[60],
-								'adjustment' 							=> $line[61],
-								'adjustment_dlk' 					=> $line[62],
-								'total' 									=> $line[63],
-								'createdby' 							=> $employee_id,
-
-							);
-							$result = $this->Import_model->addtemp($data);
-
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-							$resultdel = $this->Import_model->delete_temp_by_nip();
-							// $formula4++;
-						}
-						//close opened csv file
-						fclose($csvFile);
-
-
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
-			$this->output($Return);
+			$postData['filter'] = urldecode($searchVal);
 		}
 
-		redirect('admin/Importexceleslip?upid=' . $uploadid);
-	}
-
-
-
-	// Validate and add info in database
-	public function import_ratecard()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$employee_id = $session['employee_id'];
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-
-
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-					// check file size
-					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
-
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-						//skip first line
-						// fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
-						// $lastnik = $this->Employees_model->get_maxid();
-						// $formula4 = substr($lastnik,5);
-
-						//parse data from csv file line by line
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-							// $options = array('cost' => 12);
-							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
-
-							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
-							// 	$formula2 = '2';
-							// } else {
-							// 	$formula2 = '3';
-							// }
-
-							// $formula3 = sprintf("%03d", $line[3]);
-
-							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
-							// $ids = (int)$formula4+1;
-
-
-							$data = array(
-								'uploadid' 						=> $uploadid,
-								'company_id' 					=> $line[1],
-								'nama_pt' 						=> 'PT Siprama Cakrawala',
-								'periode' 						=> $line[2], //periode
-								'date_periode_start' 	=> $line[3], //start date
-								'date_periode_end' 		=> $line[4], //start date
-								'project_id' 					=> $line[5], //project id
-								'project' 						=> $line[6], //project
-								'sub_project_id' 			=> $line[7], //sub project id
-								'sub_project' 				=> $line[8], // sub project
-								'kota' 								=> $line[9], //kota
-								'posisi_jabatan' 			=> $line[10], //jabatan
-								'jumlah_mpp' 					=> $line[11], //jumlah mpp
-								'gaji_pokok' 					=> $line[12], //gapok
-								'hari_kerja' 					=> $line[13], //hari kerja
-								'dm_grade' 						=> $line[14], // dm_grade
-								'allow_grade' 				=> $line[15], //grade
-								'dm_masa_kerja' 			=> $line[16], // dm_grade
-								'allow_masa_kerja' 		=> $line[17], //grade
-								'dm_konsumsi' 				=> $line[18], //dm_konsumsi
-								'allow_konsumsi' 			=> $line[19], //konsumsi
-								'dm_transport' 				=> $line[20], //dm_transport
-								'allow_transport' 		=> $line[21], //transport
-								'dm_rent' 						=> $line[22], //dm_sewa
-								'allow_rent' 					=> $line[23], //sewa
-								'dm_comunication' 		=> $line[24], //
-								'allow_comunication'	=> $line[25], //
-								'dm_parking'					=> $line[26], //dm_parkir
-								'allow_parking' 			=> $line[27], //parkir
-								'dm_resicance' 				=> $line[28], //dm_residance
-								'allow_residance' 		=> $line[29], //allow resicande
-								'dm_device' 					=> $line[30], //dm_device
-								'allow_device' 				=> $line[31], //device
-								'dm_kasir' 						=> $line[32], //dm kasair
-								'allow_kasir' 				=> $line[33], //allow kasir
-								'dm_trans_meal' 			=> $line[34], //dm_transmeal
-								'allow_trans_meal' 		=> $line[35], //transmeal
-								'dm_medicine' 				=> $line[36], //dm_medical
-								'allow_medicine' 			=> $line[37], //medical
-								'total_allow' 				=> $line[38], //total_tunjangan
-								'gaji_bersih' 				=> $line[39], //gaji bersih
-								'kompensasi' 					=> $line[40], //kompensasi
-								'kompensasi_pt' 			=> $line[41], //kompensasi client
-								'bpjs_tk' 						=> $line[42], //bpjs tk
-								'bpjs_ks' 						=> $line[43], //bpjs ks
-								'insentive' 					=> $line[44], //insentive
-								'total' 							=> $line[45], //total
-								'grand_total' 				=> $line[46], //grand_total
-
-								'createdby' => $employee_id,
-								'createdon' => date('Y-m-d h:i:s'),
-
-
-							);
-							$result = $this->Import_model->addratecardtemp($data);
-
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-							$resultdel = $this->Import_model->delete_temp_by_pt();
-							// $formula4++;
-						}
-						//close opened csv file
-						fclose($csvFile);
-
-
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
-			$this->output($Return);
-		}
-
-
-		redirect('admin/Importexcelratecard?upid=' . $uploadid);
-	}
-
-
-	// import bupot
-	public function import_bupot()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'MANAJEMEN BUPOT | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'MANAJEMEN BUPOT';
-		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_bpjs';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('1300', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/import_bupot", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-	// import bpjs
-	public function import_bpjs()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'MANAJEMEN BPJS | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'MANAJEMEN BPJS';
-		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_bpjs';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('1400', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/import_bpjs", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-	public function history_upload_ratecard_list()
-	{
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if (!empty($session)) {
-			$this->load->view("admin/import_excel/import_ratecard", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-
-
-
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		// if($user_info[0]->user_role_id==1){
-		// 	$location = $this->Location_model->get_locations();
-		// } else {
-		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
-		// }
-		$history_eslip = $this->Import_model->get_all_ratecard();
-
-		$data = array();
-
-		foreach ($history_eslip->result() as $r) {
-			$uploadid = $r->uploadid;
-			$up_date = $r->up_date;
-			$periode = $r->periode;
-			$project = $r->project;
-			$project_sub = $this->Xin_model->clean_post($r->sub_project);
-			$createdby = $r->createdby;
-
-			$preiode_param 			= str_replace(" ", "", $r->periode);
-			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
-			$project_sub_param 	= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->sub_project)));
-
-			// get created
-			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
-			if (!is_null($empname)) {
-				$fullname = $empname[0]->first_name;
-			} else {
-				$fullname = '--';
-			}
-
-			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
-				if ($session['user_id'] == '1') {
-
-					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-				} else {
-
-					$view_data = '';
-				}
-			} else {
-				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-			}
-
-
-			$data[] = array(
-				$view_data,
-				$up_date,
-				$periode,
-				$project,
-				$project_sub,
-				$fullname,
-			);
-		}
-
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $history_eslip->num_rows(),
-			"recordsFiltered" => $history_eslip->num_rows(),
-			"data" => $data
-		);
-		echo json_encode($output);
-		exit();
-	}
-
-
-	// expired page
-	public function importsaltab()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['title'] = 'Import Saltab to BPJS | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Import Saltab to BPJS';
-		$data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_saltab';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('481', $role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/import_excel/import_saltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-	public function history_upload_eslip_list()
-	{
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if (!empty($session)) {
-			$this->load->view("admin/import_excel/import_eslip", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-
-
-
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		// if($user_info[0]->user_role_id==1){
-		// 	$location = $this->Location_model->get_locations();
-		// } else {
-		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
-		// }
-		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
-
-		$data = array();
-
-		foreach ($history_eslip->result() as $r) {
-			$uploadid = $r->uploadid;
-			$up_date = $r->up_date;
-			$periode = $r->periode;
-			$project = $r->project;
-			$project_sub = $this->Xin_model->clean_post($r->project_sub);
-			$total_mp = $r->total_mp;
-			$createdby = $r->createdby;
-
-			$preiode_param = str_replace(" ", "", $r->periode);
-			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
-			$project_sub_param = str_replace("]", "", str_replace("[", "", str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)))));
-
-			// get created
-			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
-			if (!is_null($empname)) {
-				$fullname = $empname[0]->first_name;
-			} else {
-				$fullname = '--';
-			}
-
-			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
-				if ($session['user_id'] == '1') {
-
-					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-				} else {
-
-					$view_data = '';
-				}
-			} else {
-				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-			}
-
-
-			$data[] = array(
-				$view_data,
-				$up_date,
-				$periode,
-				$project,
-				$project_sub,
-				$total_mp,
-				$fullname,
-			);
-		}
-
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $history_eslip->num_rows(),
-			"recordsFiltered" => $history_eslip->num_rows(),
-			"data" => $data
-		);
-		echo json_encode($output);
-		exit();
-	}
-
-	public function history_upload_saltab_list()
-	{
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if (!empty($session)) {
-			$this->load->view("admin/import_excel/import_saltab", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-
-
-
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		// if($user_info[0]->user_role_id==1){
-		// 	$location = $this->Location_model->get_locations();
-		// } else {
-		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
-		// }
-		$history_eslip = $this->Import_model->get_all_saltab();
-
-		$data = array();
-
-		foreach ($history_eslip->result() as $r) {
-			$uploadid = $r->uploadid;
-			$up_date = $r->up_date;
-			$periode = $r->periode;
-			$project = $r->project;
-			$project_sub = $this->Xin_model->clean_post($r->project_sub);
-			$total_mp = $r->total_mp;
-			$createdby = $r->createdby;
-
-			$preiode_param = str_replace(" ", "", $r->periode);
-			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
-			$project_sub_param = str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)));
-
-			// get created
-			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
-			if (!is_null($empname)) {
-				$fullname = $empname[0]->first_name;
-			} else {
-				$fullname = '--';
-			}
-
-			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
-				if ($session['user_id'] == '1') {
-
-					$view_data = '<a href="' . site_url() . 'admin/importexcelsaltab/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-				} else {
-
-					$view_data = '';
-				}
-			} else {
-				$view_data = '<a href="' . site_url() . 'admin/importexcelsaltab/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-			}
-
-
-			$data[] = array(
-				$view_data,
-				$up_date,
-				$periode,
-				$project,
-				$project_sub,
-				$total_mp,
-				$fullname,
-			);
-		}
-
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $history_eslip->num_rows(),
-			"recordsFiltered" => $history_eslip->num_rows(),
-			"data" => $data
-		);
-		echo json_encode($output);
-		exit();
-	}
-
-
-	// Validate and add info in database
-	public function import_saltab()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$employee_id = $session['employee_id'];
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		// $config['allowed_types'] = 'csv';
-		// 	$this->load->library('upload', $config);
-		//validate whether uploaded file is a csv file
-
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-					// check file size
-					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
-
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-						//skip first line
-						// fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
-						$lastnik = $this->Employees_model->get_maxid();
-						$formula4 = substr($lastnik, 5);
-
-						//parse data from csv file line by line
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-							// $options = array('cost' => 12);
-							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
-
-							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
-							// 	$formula2 = '2';
-							// } else {
-							// 	$formula2 = '3';
-							// }
-
-							// $formula3 = sprintf("%03d", $line[3]);
-
-							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
-							// $ids = (int)$formula4+1;
-
-
-							$data = array(
-								'uploadid' 								=> $uploadid,
-								'nip' 										=> $line[0],
-								'fullname' 								=> $line[1],
-								'periode' 								=> $line[2],
-								'project' 								=> $line[3],
-								'project_sub' 						=> $line[4],
-								'area' 										=> $line[5],
-								'status_emp' 							=> $line[6],
-								'hari_kerja' 							=> $line[7],
-								'gaji_umk' 								=> $line[8],
-								'gaji_pokok' 							=> $line[9],
-
-
-								'allow_jabatan' 					=> $line[10],
-								'allow_area' 							=> $line[11],
-								'allow_masakerja' 				=> $line[12],
-								'allow_konsumsi' 					=> $line[13],
-								'allow_transport' 				=> $line[14],
-								'allow_rent' 							=> $line[15],
-								'allow_comunication' 			=> $line[16],
-								'allow_parking' 					=> $line[17],
-								'allow_residence_cost' 		=> $line[18],
-								'allow_akomodasi' 				=> $line[19],
-								'allow_device' 						=> $line[20],
-								'allow_kasir' 						=> $line[21],
-								'allow_trans_meal' 				=> $line[22],
-								'allow_trans_rent' 				=> $line[23],
-								'allow_vitamin' 					=> $line[24],
-								'allow_grooming'					=> $line[25],
-								'allow_others'						=> $line[26],
-								'allow_operation' 				=> $line[27],
-
-								'over_salary' 						=> $line[28],
-								'penyesuaian_umk' 				=> $line[29],
-								'insentive'								=> $line[30],
-								'overtime' 								=> $line[31],
-								'overtime_holiday' 				=> $line[32],
-								'overtime_national_day' 	=> $line[33],
-								'overtime_rapel' 					=> $line[34],
-								'kompensasi' 							=> $line[35],
-								'bonus' 									=> $line[36],
-								'uuck' 										=> $line[37],
-								'thr' 										=> $line[38],
-								'bpjs_tk_deduction' 			=> $line[39],
-								'bpjs_ks_deduction' 			=> $line[40],
-								'jaminan_pensiun_deduction' => $line[41],
-								'pendapatan' 							=> $line[42],
-								'bpjs_tk' 								=> $line[43],
-								'bpjs_ks' 								=> $line[44],
-								'jaminan_pensiun' 				=> $line[45],
-								'deposit' 								=> $line[46],
-								'pph' 										=> $line[47],
-								'pph_thr' 								=> $line[48],
-								'penalty_late' 						=> $line[49],
-								'penalty_alfa' 						=> $line[50],
-								'penalty_attend' 					=> $line[51],
-								'mix_oplos' 							=> $line[52],
-								'pot_trip_malang' 				=> $line[53],
-								'pot_device' 							=> $line[54],
-								'pot_kpi' 								=> $line[55],
-								'deduction' 							=> $line[56],
-								'simpanan_pokok' 					=> $line[57],
-								'simpanan_wajib_koperasi' => $line[58],
-								'pembayaran_pinjaman' 		=> $line[59],
-								'biaya_admin_bank' 				=> $line[60],
-								'adjustment' 							=> $line[61],
-								'adjustment_dlk' 					=> $line[62],
-								'total' 									=> $line[63],
-								'createdby' 							=> $employee_id,
-
-							);
-							$result = $this->Import_model->add_saltab_temp($data);
-
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-							$resultdel = $this->Import_model->delete_saltabtemp_by_nip();
-							// $formula4++;
-						}
-						//close opened csv file
-						fclose($csvFile);
-
-
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
-			$this->output($Return);
-		}
-
-		redirect('admin/Importexcelsaltab?upid=' . $uploadid);
-	}
-
-	// expired page
-	public function bpjs()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['title'] = 'E-Slip To BPJS | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'E-Slip to BPJS';
-		$data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_eslip_bpjs';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('477', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/bpjs/eslip_bpjs_list", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-	public function history_upload_eslip_bpjs()
-	{
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if (!empty($session)) {
-			$this->load->view("admin/bpjs/eslip_bpjs_list", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-
-
-
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		// if($user_info[0]->user_role_id==1){
-		// 	$location = $this->Location_model->get_locations();
-		// } else {
-		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
-		// }
-		$history_eslip = $this->Import_model->get_eslip_project();
-
-		$data = array();
-
-		foreach ($history_eslip->result() as $r) {
-			$uploadid = $r->uploadid;
-			$up_date = $r->up_date;
-			$periode = $r->periode;
-			$project = $r->project;
-			$project_sub = $this->Xin_model->clean_post($r->project_sub);
-			$total_mp = $r->total_mp;
-			$createdby = $r->createdby;
-
-			$preiode_param = str_replace(" ", "", $r->periode);
-			$project_param = str_replace(" ", "", $r->project);
-			$project_sub_param = str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)));
-
-			// get created
-			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
-			if (!is_null($empname)) {
-				$fullname = $empname[0]->first_name;
-			} else {
-				$fullname = '--';
-			}
-
-			$view_data = '<a href="' . site_url() . 'admin/reports/saltab_bpjs/?upid=' . $uploadid . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-
-			$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_edit') . '"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-usermobile_id="' . $uploadid . '"><span class="fas fa-pencil-alt"></span></button></span>';
-
-			$data[] = array(
-				$view_data,
-				$up_date,
-				$periode,
-				$project,
-				$project_sub,
-				$total_mp,
-				$fullname,
-				$edit
-
-			);
-		}
-
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $history_eslip->num_rows(),
-			"recordsFiltered" => $history_eslip->num_rows(),
-			"data" => $data
-		);
-		echo json_encode($output);
-		exit();
-	}
-
-
-	public function read()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['title'] = $this->Xin_model->site_title();
-
-		// $keywords = preg_split("/[\s,]+/", $this->input->get('department_id'));
-		// $keystring = $this->input->get('department_id');
-
-		// 	if(!is_null($keywords[0])){
-
-		// 		$read_employee = $this->Employees_model->read_employee_info_by_nik($keywords[0]);
-		// 		$read_usermobile = $this->Usersmobile_model->read_users_mobile_by_nik($keywords[0]);
-
-		// 		$full_name = $read_employee[0]->first_name;
-
-		// 		$all_projects = $this->Project_model->get_projects();
-		// 		$all_usertype = $this->Usersmobile_model->get_usertype();
-		// 		$all_area = $this->Xin_model->get_area();
-		// 		// $all_area = $this->Usersmobile_model->get_district();
-
-		// 	}
-
-		// if(is_numeric($keywords[0])) {
-
-		// 	$id = $keywords[0];
-		// 	$id = $this->security->xss_clean($id);
-
-
-		// }
-
-		$data = array(
-			'usermobile_id' => 'DIALOG'
-			// 'fullname' => $full_name,
-			// 'usertype_id' => $read_usermobile[0]->usertype_id,
-			// 'project_id' => $read_usermobile[0]->project_id,
-			// 'areaid' => $read_usermobile[0]->areaid,
-			// 'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
-			// 'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
-			// 'device_id' => $read_usermobile[0]->device_id_one,
-			// 'all_usertype' => $all_usertype,
-			// 'all_projects' => $all_projects,
-			// 'all_area' => $all_area
-		);
-
-		$this->load->view('admin/usermobile/dialog_usermobile', $data);
-		// $session = $this->session->userdata('username');
-
-		// if(!empty($session)){
-		// 	$this->load->view('admin/usermobile/dialog_usermobile', $data);
-		// } else {
-		// 	redirect('admin/');
-		// }
-
-	}
-
-	//manage saltab release
-	public function manage_esaltab()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'Manage E-SALTAB | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Manage E-SALTAB';
-		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		//$data['path_url'] = 'hrpremium_download_esaltab';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('513', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/manage_esaltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-	//konfigurasi import saltab
-	public function konfig_import_esaltab()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'Konfigurasi Import E-SALTAB | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Konfigurasi Import E-SALTAB';
-		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		//$data['path_url'] = 'hrpremium_download_esaltab';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('512', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/manage_import_esaltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-	//download saltab release
-	public function download_esaltab()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Download E-SALTAB';
-		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		//$data['path_url'] = 'hrpremium_download_esaltab';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('514', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/download_esaltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-	// import saltab
-	public function importesaltab()
-	{
-
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		$data['title'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = 'Import E-SALTAB';
-		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
-		// $data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_esaltab';
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('511', $role_resources_ids)) {
-			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/import_excel/import_esaltab", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
-	}
-
-
-	public function history_upload_esaltab_list()
-	{
-
-		$data['title'] = $this->Xin_model->site_title();
-		$session = $this->session->userdata('username');
-		if (!empty($session)) {
-			$this->load->view("admin/import_excel/import_esaltab", $data);
-		} else {
-			redirect('admin/');
-		}
-		// Datatables Variables
-		$draw = intval($this->input->get("draw"));
-		$start = intval($this->input->get("start"));
-		$length = intval($this->input->get("length"));
-
-
-
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$user_info = $this->Xin_model->read_user_info($session['user_id']);
-		// if($user_info[0]->user_role_id==1){
-		// 	$location = $this->Location_model->get_locations();
-		// } else {
-		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
-		// }
-		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
-
-		$data = array();
-
-		foreach ($history_eslip->result() as $r) {
-			$uploadid = $r->uploadid;
-			$up_date = $r->up_date;
-			$periode = $r->periode;
-			$project = $r->project;
-			$project_sub = $this->Xin_model->clean_post($r->project_sub);
-			$total_mp = $r->total_mp;
-			$createdby = $r->createdby;
-
-			$preiode_param = str_replace(" ", "", $r->periode);
-			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
-			$project_sub_param = str_replace("]", "", str_replace("[", "", str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)))));
-
-			// get created
-			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
-			if (!is_null($empname)) {
-				$fullname = $empname[0]->first_name;
-			} else {
-				$fullname = '--';
-			}
-
-			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
-				if ($session['user_id'] == '1') {
-
-					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-				} else {
-
-					$view_data = '';
-				}
-			} else {
-				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
-			}
-
-
-			$data[] = array(
-				$view_data,
-				$up_date,
-				$periode,
-				$project,
-				$project_sub,
-				$total_mp,
-				$fullname,
-			);
-		}
-
-		$output = array(
-			"draw" => $draw,
-			"recordsTotal" => $history_eslip->num_rows(),
-			"recordsFiltered" => $history_eslip->num_rows(),
-			"data" => $data
-		);
-		echo json_encode($output);
-		exit();
-	}
-
-
-	// Validate and add info in database
-	public function import_eslip2()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-		$employee_id = $session['employee_id'];
-		// if($this->input->post('is_ajax')=='3') {		
-		/* Define return | here result is used to return user data and error for error message */
-		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
-		$Return['csrf_hash'] = $this->security->get_csrf_hash();
-		// $config['allowed_types'] = 'csv';
-		// 	$this->load->library('upload', $config);
-		//validate whether uploaded file is a csv file
-
-		$csvMimes =  array(
-
-			'text/x-comma-separated-values',
-			'text/comma-separated-values',
-			'text/semicolon-separated-values',
-			'application/octet-stream',
-			'application/vnd.ms-excel',
-			'application/x-csv',
-			'text/x-csv',
-			'text/csv',
-			'application/csv',
-			'application/excel',
-			'application/vnd.msexcel',
-			'text/plain'
-
-		);
-
-		if ($_FILES['file']['name'] === '') {
-			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
-		} else {
-			if (in_array($_FILES['file']['type'], $csvMimes)) {
-				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
-
-					// check file size
-					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
-						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
-					} else {
-
-						//open uploaded csv file with read only mode
-						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
-
-						//skip first line
-						// fgetcsv($csvFile,0,';');
-						$d = new DateTime();
-						$datetimestamp = $d->format("YmdHisv");
-						$uploadid = $datetimestamp;
-						$lastnik = $this->Employees_model->get_maxid();
-						$formula4 = substr($lastnik, 5);
-
-						//parse data from csv file line by line
-						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
-
-							// $options = array('cost' => 12);
-							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
-
-							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
-							// 	$formula2 = '2';
-							// } else {
-							// 	$formula2 = '3';
-							// }
-
-							// $formula3 = sprintf("%03d", $line[3]);
-
-							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
-							// $ids = (int)$formula4+1;
-
-
-							$data = array(
-								'uploadid' 								=> $uploadid,
-								'nip' 										=> $line[0],
-								'fullname' 								=> str_replace("'", " ", $line[1]),
-								'periode' 								=> str_replace("'", " ", $line[2]),
-								'project' 								=> $line[3],
-								'project_sub' 						=> $line[4],
-								'area' 										=> str_replace("'", " ", $line[5]),
-								'status_emp' 							=> $line[6],
-								'hari_kerja' 							=> $line[7],
-								'gaji_umk' 								=> $line[8],
-								'gaji_pokok' 							=> $line[9],
-								'allow_jabatan' 					=> $line[10],
-								'allow_area' 							=> $line[11],
-								'allow_masakerja' 				=> $line[12],
-								'allow_konsumsi' 					=> $line[13],
-								'allow_transport' 				=> $line[14],
-								'allow_rent' 							=> $line[15],
-								'allow_comunication' 			=> $line[16],
-								'allow_parking' 					=> $line[17],
-								'allow_residence_cost' 		=> $line[18],
-								'allow_akomodasi' 				=> $line[19],
-								'allow_device' 						=> $line[20],
-								'allow_kasir' 						=> $line[21],
-								'allow_trans_meal' 				=> $line[22],
-								'allow_trans_rent' 				=> $line[23],
-								'allow_vitamin' 					=> $line[24],
-								'allow_grooming'					=> $line[25],
-								'allow_others'						=> $line[26],
-								'allow_operation' 				=> $line[27],
-								'over_salary' 						=> $line[28],
-								'penyesuaian_umk' 				=> $line[29],
-								'insentive'								=> $line[30],
-								'overtime' 								=> $line[31],
-								'overtime_holiday' 				=> $line[32],
-								'overtime_national_day' 	=> $line[33],
-								'overtime_rapel' 					=> $line[34],
-								'kompensasi' 							=> $line[35],
-								'bonus' 									=> $line[36],
-								'uuck' 										=> $line[37],
-								'thr' 										=> $line[38],
-								'bpjs_tk_deduction' 			=> $line[39],
-								'bpjs_ks_deduction' 			=> $line[40],
-								'jaminan_pensiun_deduction' => $line[41],
-								'pendapatan' 							=> $line[42],
-								'bpjs_tk' 								=> $line[43],
-								'bpjs_ks' 								=> $line[44],
-								'jaminan_pensiun' 				=> $line[45],
-								'deposit' 								=> $line[46],
-								'pph' 										=> $line[47],
-								'pph_thr' 								=> $line[48],
-								'penalty_late' 						=> $line[49],
-								'penalty_alfa' 						=> $line[50],
-								'penalty_attend' 					=> $line[51],
-								'mix_oplos' 							=> $line[52],
-								'pot_trip_malang' 				=> $line[53],
-								'pot_device' 							=> $line[54],
-								'pot_kpi' 								=> $line[55],
-								'deduction' 							=> $line[56],
-								'simpanan_pokok' 					=> $line[57],
-								'simpanan_wajib_koperasi' => $line[58],
-								'pembayaran_pinjaman' 		=> $line[59],
-								'biaya_admin_bank' 				=> $line[60],
-								'adjustment' 							=> $line[61],
-								'adjustment_dlk' 					=> $line[62],
-								'total' 									=> $line[63],
-								'createdby' 							=> $employee_id,
-
-							);
-							$result = $this->Import_model->addtemp($data);
-
-							// $bank_account_data = array(
-							// 'account_title' => 'Rekening',
-							// 'account_number' => $line[18], //NO. REK
-							// 'bank_name' => $line[19],
-							// 'employee_id' => $last_insert_id,
-							// 'created_at' => date('d-m-Y'),
-							// );
-							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
-
-							$resultdel = $this->Import_model->delete_temp_by_nip();
-							// $formula4++;
-						}
-						//close opened csv file
-						fclose($csvFile);
-
-
-						$Return['result'] = $this->lang->line('xin_success_attendance_import');
-					}
-				} else {
-					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
-				}
-			} else {
-				$Return['error'] = $this->lang->line('xin_error_invalid_file');
-			}
-		} // file empty
-
-		if ($Return['error'] != '') {
-			$this->output($Return);
-		}
-
-		redirect('admin/Importexceleslip?upid=' . $uploadid);
-	}
-
-	//mengambil Json data validasi employee request
-	public function request_open_import()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
-
-		$postData = $this->input->post();
-
-		$nama_project = "";
-		$projects = $this->Project_model->read_single_project($postData['project_id']);
-		if (!is_null($projects)) {
-			$nama_project = $projects[0]->title;
-		} else {
-			$nama_project = '--';
-		}
-
-		//load data Sub Project
-		$nama_sub_project = "";
-		if ($postData['sub_project_id'] == 0) {
-			$nama_sub_project = '-ALL-';
-		} else {
-			$subprojects = $this->Subproject_model->read_single_subproject($postData['sub_project_id']);
-			if (!is_null($subprojects)) {
-				$nama_sub_project = $subprojects[0]->sub_project_name;
-			} else {
-				$nama_sub_project = '--';
-			}
-		}
-
-		//Input untuk Database
-		$datarequest = [
-			'request_by_id'     	=> $postData['employee_id'],
-			'request_by_name'       => $postData['request_by_name'],
-			'request_on'      		=> $postData['tgl_request'],
-			'tanggal_gajian'        => $postData['tgl_gajian'],
-			'project_id'       	  	=> $postData['project_id'],
-			'project_name'       	=> $nama_project,
-			'sub_project_id'      	=> $postData['sub_project_id'],
-			'sub_project_name'      => $nama_sub_project,
-			'periode_saltab_from'   => $postData['periode_saltab_from'],
-			'periode_saltab_to'     => $postData['periode_saltab_to'],
-			'note'          		=> $postData['note_open'],
-			'status'          		=> '1',
+		// echo $postData['filter'];
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Data Karyawan'); //nama Spreadsheet yg baru dibuat
+
+		//data satu row yg mau di isi
+		$rowArray = [
+			'STATUS',
+			'NIP',
+			'PIN',
+			'NIK',
+			'NAMA LENGKAP',
+			'PERUSAHAAN/PT',
+			'DEPARTMENT',
+			'POSISI/JABATAN',
+			'PROJECT/PRINCIPLE',
+			'SUB PROJECT/ENTITAS',
+			'AREA/PENEMPATAN',
+			'REGION',
+			'TEMPAT LAHIR',
+			'TANGGAL LAHIR',
+			'TANGGAL BERGABUNG',
+			'MULAI KONTRAK',
+			'AKHIR KONTRAK',
+			'GAJI POKOK',
+			'TANGGAL RESIGN',
+			'JENIS KELAMIN',
+			'STATUS KAWIN',
+			'AGAMA',
+			'EMAIL',
+			'NOMOR KONTAK',
+			'SEKOLAH/UNIV',
+			'TINGKAT PENDIDIKAN',
+			'JURUSAN',
+			'ALAMAT KTP',
+			'ALAMAT DOMISILI',
+			'NO KK',
+			'NO KTP',
+			'NO NPWP',
+			'BPJS TK',
+			'BPJS KS',
+			'NAMA IBU KANDUNG',
+			'NAMA KONTAK DARURAT',
+			'HUB. KONTAK DARURAT',
+			'NOMOR KONTAK DARURAT',
+			'NAMA BANK',
+			'NO REKENING',
+			'NAMA PEMILIK REKENING',
+			'FOTO KTP',
+			'FOTO KK',
+			'FOTO NPWP',
+			'FOTO IJAZAH',
+			'DOKUMEN SKCK',
+			'DOKUMEN CV',
+			'DOKUMEN PAKLARING',
+			'PKWT',
+			'NO KONTRAK',
+			'TANGGAL UPLOAD PKWT',
 		];
 
-		// get data 
-		$data = $this->Import_model->insert_request_open_import($datarequest);
-
-		if (empty($data)) {
-			$response = array(
-				'pesan' 	=> "Gagal",
+		$length_array = count($rowArray);
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$rowArray,   // The data to set
+				NULL,
+				'A1'
 			);
-		} else {
-			$response = array(
-				'pesan' 	=> "Berhasil",
-				'data'		=> $data,
-			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 		}
+		//set background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle('A1:AW1')
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
 
-		//echo "data berhasil masuk";
-		echo json_encode($response);
-		echo "<pre>";
-		print_r($response);
-		echo "</pre>";
-	}
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
 
-	//mengambil Json data validasi employee request
-	public function cek_request_open_import()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
+		//$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR);
 
-		$postData = $this->input->post();
+		// Get data
+		$data = $this->Employees_model->get_employee_print($postData);
+		$length_data = count($data);
 
-		//Cek Request ACC
-		$datarequest = [
-			'tanggal_gajian'        => $postData['tgl_gajian'],
-			'project_id'       	  	=> $postData['project_id'],
-			'sub_project_id'      	=> $postData['sub_project_id'],
-			'periode_saltab_from'   => $postData['periode_saltab_from'],
-			'periode_saltab_to'     => $postData['periode_saltab_to']
-		];
-
-		// get data 
-		$data = $this->Import_model->cek_request_open_import($datarequest);
-
-		//cek pengaturan lock manual
-		$project_id = $postData['project_id'];
-
-		//cek pengaturan lock otomatis
-		$jam_sekarang = $postData['jam_sekarang'];
-
-		if (empty($data)) {
-			//cek pengaturan lock manual
-			$project_id = $postData['project_id'];
-			$data2 = $this->Import_model->cek_request_open_import_manual($project_id);
-
-			if (empty($data2)) {
-				//cek pengaturan lock otomatis
-				$jam_sekarang = $postData['jam_sekarang'];
-
-				if ($jam_sekarang >= 12) {
-					$response = array(
-						'status'	=> "100",
-						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Tidak Diset. Jam lebih dari 12",
-					);
-				} else {
-					$response = array(
-						'status'	=> "101",
-						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Tidak Diset. Jam blm 12",
-					);
-				}
-			} else {
-				if ($jam_sekarang >= $data2['jam']) {
-					$response = array(
-						'status'	=> "102",
-						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Diset. Jam melebihi angka yang di set",
-						'data'		=> $data2,
-					);
-				} else {
-					$response = array(
-						'status'	=> "103",
-						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Diset. Jam tidak melebihi angka yang di set",
-						'data'		=> $data2,
-					);
-				}
-			}
-		} else {
-			if ($data['status'] == 1) {
-				$response = array(
-					'status'	=> "104",
-					'pesan' 	=> "LOCK IMPORT. Ada Request Blm ACC. Tidak Boleh Request",
-					'data'		=> $data,
-				);
-			} else if ($data['status'] == 0) {
-				$response = array(
-					'status'	=> "105",
-					'pesan' 	=> "OPEN IMPORT. Ada Request dan di ACC",
-					'data'		=> $data,
-				);
-			} else if ($data['status'] == 2) {
-				$response = array(
-					'status'	=> "106",
-					'pesan' 	=> "LOCK IMPORT. Ada Request dan ditolak. Boleh request ulang",
-					'data'		=> $data,
-				);
-			} else {
-				$response = array(
-					'status'	=> "107",
-					'pesan' 	=> "LOCK IMPORT. Ada Request dan berhasil upload. Boleh request ulang",
-					'data'		=> $data,
-				);
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 2])->setvalueExplicit($data[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
 			}
 		}
+		//$data = var_dump(json_decode($data_temp, true));
 
-		// //echo "data berhasil masuk";
-		echo json_encode($response);
-		// echo "<pre>";
-		// print_r($response);
-		// echo "</pre>";
-	}
+		// if (!is_array(end($data))) {
+		// 	$data = [$data];
+		// }
 
-	//mengambil Json data eslip release
-	public function get_data_eslip_release()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
+		$jumlah = count($data) + 1;
 
-		$postData = $this->input->post();
+		//var_dump($data);
 
-		//Cek variabel post
-		$datarequest = [
-			'id'        => $postData['id']
-		];
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data,  // The data to set
+		// 		NULL,        // Array values with this value will not be set
+		// 		'A2',
+		// 		false,
+		// 		false         // Top left coordinate of the worksheet range where
+		// 		//    we want to set these values (default is A1)
+		// 	);
 
-		// get data rekening
-		$data = $this->Import_model->get_data_eslip_release($datarequest);
 
-		if (empty($data)) {
-			$response = array(
-				'status'	=> "201",
-				'pesan' 	=> "Karyawan tidak ditemukan",
-			);
-		} else {
-			$full_name = "";
-			$user = $this->Xin_model->read_user_info($data['eslip_release_by']);
-			if (empty($user)) {
-				$full_name = "";
-			} else {
-				$full_name = strtoupper($user[0]->first_name);
-			}
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
 
-			if ((empty($data['eslip_release_on'])) || ($data['eslip_release_on'] == "")) {
-				$eslip_release_on_text = "";
-			} else {
-				$eslip_release_on_array = explode(" ", $data['eslip_release_on']);
-				$eslip_release_on_text = $this->Xin_model->tgl_indo($data['eslip_release_on']) . " " . $eslip_release_on_array[1];
-			}
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+		// $spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-			$data2 = array(
-				'tanggal_penggajian'	=> $this->Xin_model->tgl_indo($data['periode_salary']),
-				'periode_salary'		=> $data['periode_salary'],
-				'release_by'			=> $data['release_by'],
-				'sub_project_name'		=> $data['sub_project_name'],
-				'project_name'			=> $data['project_name'],
-				'total_mpp'				=> $data['total_mpp'],
-				'periode_cutoff'		=> $this->Xin_model->tgl_indo($data['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data['periode_cutoff_to']),
-				'tanggal_terbit'		=> $this->Xin_model->tgl_indo($data['eslip_release']),
-				'eslip_release_by'		=> $full_name,
-				// 'eslip_release_on'		=> $eslip_release_on_array[1],
-				'eslip_release_on'		=> $eslip_release_on_text,
-			);
 
-			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data2,
-			);
-		}
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
 
-		echo json_encode($response);
-	}
+		$filename = $postData['nama_file'];
 
-	//mengambil Json data bupot
-	public function get_data_batch_bupot()
-	{
-		$session = $this->session->userdata('username');
-		if (empty($session)) {
-			redirect('admin/');
-		}
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
 
-		$postData = $this->input->post();
 
-		//Cek variabel post
-		$datarequest = [
-			'id_batch'        => $postData['id_batch']
-		];
-
-		// get data bupot
-		$data = $this->Import_model->get_data_batch_bupot($datarequest);
-
-		if (empty($data)) {
-			$response = array(
-				'status'	=> "201",
-				'pesan' 	=> "Bupot tidak ditemukan",
-			);
-		} else {
-			$data2 = array(
-				'id_batch'				=> $data['id_batch'],
-				'periode_bupot'			=> $data['periode_bupot'],
-				'project_name'			=> $data['project_name'],
-				'sub_project_name'		=> $data['sub_project_name'],
-				'jumlah_data'			=> $data['jumlah_data'],
-				'created_by'			=> $data['created_by'],
-				'created_on'			=> $this->Xin_model->tgl_indo($data['created_on']),
-				'release_by'			=> $data['release_by'],
-				'release_on'			=> $this->Xin_model->tgl_indo($data['release_on']),
-			);
-
-			$response = array(
-				'status'	=> "200",
-				'pesan' 	=> "Berhasil Fetch Data",
-				'data'		=> $data2,
-			);
-		}
-
-		echo json_encode($response);
+		$writer->save('php://output');
 	}
 }

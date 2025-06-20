@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class Traxes_report_summary extends MY_Controller {
+class Traxes_report_order extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -31,8 +31,8 @@ class Traxes_report_summary extends MY_Controller {
 		$this->load->database();
 		$this->load->library('form_validation');
 		$this->load->model("Xin_model");
-		$this->load->model("Traxes_model");
 		$this->load->model("Project_model");
+		$this->load->model("Traxes_model");
 	}
 	
 	/*Function to set JSON output*/
@@ -51,13 +51,14 @@ class Traxes_report_summary extends MY_Controller {
 		}
 
 			$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = 'Report | Traxes Resume';
-			$data['breadcrumbs'] = 'REPORT SUMMARY';
+			$data['title'] = 'Report | Traxes Sellout';
+			$data['breadcrumbs'] = 'REPORT SELLOUT/ORDER';
 			$data['path_url'] = 'emp_view';
 			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
 		if(in_array('490',$role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/traxes/report_traxes_summary", $data, TRUE);
+
+			$data['subview'] = $this->load->view("admin/traxes/report_traxes_order", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -66,33 +67,41 @@ class Traxes_report_summary extends MY_Controller {
 
 
 	//load datatables Employee
-	public function list_summary()
+	public function list_tx_order()
 	{
 		// POST data
 		$postData = $this->input->post();
 
 		// Get data
-		$data = $this->Traxes_model->get_list_summary($postData);
+		$data = $this->Traxes_model->get_list_tx_order($postData);
 		echo json_encode($data);
 	}
 
 
-	//load datatables Employee
-	public function list_sumary_cio()
+	// get company > departments
+	public function get_subprojects()
 	{
-		// POST data
-		$postData = $this->input->post();
-		// print_r($postData);
-		// die();
-		// Get data
-		$data = $this->Traxes_model->get_summary_cio($postData);
 
-		echo json_encode($data);
+		$data['title'] = $this->Xin_model->site_title();
+		$id = $this->uri->segment(4);
+
+		$data = array(
+			'project_id' => $id
+		);
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/reports/report_get_subprojects", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
 	}
-
 
 // get company > departments
-	public function get_subprojects()
+	public function get_subprojects2()
 	{
 		$postData = $this->input->post();
 
@@ -104,16 +113,17 @@ class Traxes_report_summary extends MY_Controller {
 	}
 
 
-	public function printExcel($project, $sub_project, $periode, $searchVal, $session_id)
+	public function printExcel($project, $sub_project, $sdate, $edate,  $searchVal, $session_id)
 	{
 		$postData = array();
 
 		//variabel filter (diambil dari post ajax di view)
 		$postData['project'] = $project;
 		$postData['sub_project'] = urldecode($sub_project);
-		$postData['periode'] = $periode;
+		$postData['sdate'] = $sdate;
+		$postData['edate'] = $edate;
 		$postData['session_id'] = $session_id;
-		$postData['nama_file'] = 'TRAXES REPORT SUMMARY';
+		$postData['nama_file'] = 'TRAXES REPORT SELLOUT';
 		if ($searchVal == '-no_input-') {
 			$postData['filter'] = '';
 		} else {
@@ -123,78 +133,31 @@ class Traxes_report_summary extends MY_Controller {
 		// echo $postData['filter'];
 
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('TRAXES REPORT SUMMARY'); //nama Spreadsheet yg baru dibuat
+		$spreadsheet->getActiveSheet()->setTitle('TRAXES REPORT SELLOUT'); //nama Spreadsheet yg baru dibuat
 
 		//data satu row yg mau di isi
 		$rowArray = [
 			'NIP',
 			'NAMA LENGKAP',
-			'PROJECT/GOLONGAN',
-			'SUB PROJECT/WITEL',
+			'PROJECT',
+
+			'SUB PROJECT',
+			'POSISI/JABATAN',
 			'AREA/PENEMPATAN',
-			'PERIODE',
-			'1-IN',
-			'1-OT',
-			'2-IN',
-			'2-OT',
-			'3-IN',
-			'3-OT',
-			'4-IN',
-			'4-OT',
-			'5-IN',
-			'5-OT',
-			'6-IN',
-			'6-OT',
-			'7-IN',
-			'7-OT',
-			'8-IN',
-			'8-OT',
-			'9-IN',
-			'9-OT',
-			'10-IN',
-			'10-OT',
-			'11-IN',
-			'11-OT',
-			'12-IN',
-			'12-OT',
-			'13-IN',
-			'13-OT',
-			'14-IN',
-			'14-OT',
-			'15-IN',
-			'15-OT',
-			'16-IN',
-			'16-OT',
-			'17-IN',
-			'17-OT',
-			'18-IN',
-			'18-OT',
-			'19-IN',
-			'19-OT',
-			'20-IN',
-			'20-OT',
-			'21-IN',
-			'21-OT',
-			'22-IN',
-			'22-OT',
-			'23-IN',
-			'23-OT',
-			'24-IN',
-			'24-OT',
-			'25-IN',
-			'25-OT',
-			'26-IN',
-			'26-OT',
-			'27-IN',
-			'27-OT',
-			'28-IN',
-			'28-OT',
-			'29-IN',
-			'29-OT',
-			'30-IN',
-			'30-OT',
-			'31-IN',
-			'31-OT',
+
+			'ID TOKO/LOKASI',
+			'NAMA TOKO/LOKASI',
+			'KODE SKU',
+
+			'PRODUK/MATERIAL',
+			'BRAND',
+			'POIN',
+
+			'JUMLAH',
+			'HARGA-SATUAN',
+			'TOTAL',
+			
+			'TANGGAL PENJUALAN'
 		];
 
 		$length_array = count($rowArray);
@@ -225,7 +188,7 @@ class Traxes_report_summary extends MY_Controller {
 
 		// Get data
 		// $data = $this->Employees_model->get_employee_print($postData);
-		$data = $this->Traxes_model->get_summary_print($postData);
+		$data = $this->Traxes_model->get_order_print($postData);
 
 		$length_data = count($data);
 
@@ -245,18 +208,6 @@ class Traxes_report_summary extends MY_Controller {
 		$jumlah = count($data) + 1;
 
 		//var_dump($data);
-
-		// $spreadsheet->getActiveSheet()
-		// 	->fromArray(
-		// 		$data,  // The data to set
-		// 		NULL,        // Array values with this value will not be set
-		// 		'A2',
-		// 		false,
-		// 		false         // Top left coordinate of the worksheet range where
-		// 		//    we want to set these values (default is A1)
-		// 	);
-
-
 		//set wrap text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
 
@@ -283,6 +234,8 @@ class Traxes_report_summary extends MY_Controller {
 
 		$writer->save('php://output');
 	}
+
+
 
 
 }

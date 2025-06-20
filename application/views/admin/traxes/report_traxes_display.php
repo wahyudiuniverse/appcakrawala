@@ -8,6 +8,7 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
 
+
 <!-- MODAL EDIT REKENING BANK -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -79,6 +80,8 @@
   </div>
 </div>
 
+
+
 <hr class="border-light m-0 mb-3">
 
 <!-- SECTION FILTER -->
@@ -129,25 +132,15 @@
       </div>
 
 
-      <div class="col-md-3">
-        <div class="form-group project-option">
-          <label class="form-label">Periode</label>
-          <select class="form-control select_hrm" data-live-search="true" name="periode" id="aj_periode" data-placeholder="Project" required>
-            <option value="0">-Pilih Periode-</option>
-            <?php $now = new DateTime('now');
-                for ($i = 0; $i < 3; $i++) {
-                $date = $now->sub(new DateInterval('P' . $i . 'M'));
-            ?>
+          <div class="col-md mb-3">
+              <label class="form-label">Tanggal Awal</label>
+              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
+          </div>
             
-              <option value="<?php echo $date->format('Y-m'); ?>"> <?php echo $date->format('F Y'); ?></option>
-            
-            <?php
-              }
-            ?>
-
-          </select>
-        </div>
-      </div>
+            <div class="col-md mb-3">
+              <label class="form-label">Tanggal Akhir</label>
+              <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
+            </div>
 
 
       <div class="col-md-3">
@@ -170,7 +163,7 @@
     <div class="card">
       <div class="card-header with-elements">
         <div class="col-md-6">
-          <span class="card-header-title mr-2"><strong>TABEL CHECKIN-OUT</strong></span>
+          <span class="card-header-title mr-2"><strong>TABEL DISPLAY</strong></span>
         </div>
 
         <div class="col-md-6">
@@ -189,47 +182,16 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
-                <th colspan="5" style="text-align: center;">EMPLOYEE</th>
-                <th colspan="31" style="text-align: center;"><span id="kolom_bulan">BULAN</span></th>
-              </tr>
-              <tr>
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
-                <th>Project/Golongan</th>
-                <th>Sub Project/Witel</th>
-                <th>Area/Penempatan</th>
-                <th style="text-align: center;">1</th>
-                <th style="text-align: center;">2</th>
-                <th style="text-align: center;">3</th>
-                <th style="text-align: center;">4</th>
-                <th style="text-align: center;">5</th>
-                <th style="text-align: center;">6</th>
-                <th style="text-align: center;">7</th>
-                <th style="text-align: center;">8</th>
-                <th style="text-align: center;">9</th>
-                <th style="text-align: center;">10</th>
-                <th style="text-align: center;">11</th>
-                <th style="text-align: center;">12</th>
-                <th style="text-align: center;">13</th>
-                <th style="text-align: center;">14</th>
-                <th style="text-align: center;">15</th>
-                <th style="text-align: center;">16</th>
-                <th style="text-align: center;">17</th>
-                <th style="text-align: center;">18</th>
-                <th style="text-align: center;">19</th>
-                <th style="text-align: center;">20</th>
-                <th style="text-align: center;">21</th>
-                <th style="text-align: center;">22</th>
-                <th style="text-align: center;">23</th>
-                <th style="text-align: center;">24</th>
-                <th style="text-align: center;">25</th>
-                <th style="text-align: center;">26</th>
-                <th style="text-align: center;">27</th>
-                <th style="text-align: center;">28</th>
-                <th style="text-align: center;">29</th>
-                <th style="text-align: center;">30</th>
-                <th style="text-align: center;">31</th>
-
+                <th>Project</th>
+                <th>Sub Project</th>
+                <th>Posisi/Jabatan</th>
+                <th>Toko</th>
+                <th>Tanggal</th>
+                <th>Foto Display 1</th>
+                <th>Foto Display 2</th>
+                <th>Foto Display 3</th>
               </tr>
             </thead>
           </table>
@@ -269,11 +231,10 @@
     // });
 
 
-    var project = document.getElementById("aj_project").value;
-    var sub_project = document.getElementById("aj_sub_project").value;
-    var periode = document.getElementById("aj_periode").value;
-    var search_periode_from = "";
-    var search_periode_to = "";
+    var project = "";
+    var sub_project = "";
+    var sdate = "";
+    var edate = "";
 
     employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
 
@@ -290,20 +251,8 @@
 
     var project     = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var periode     = document.getElementById("aj_periode").value;
-
-    // convert periode ke bahasa indonesia
-    // code nya
-
-    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    const d = new Date(periode).toLocaleString('id-ID',{month:'long', year:'numeric'})
-    // document.write("The current month is " + monthNames[d.getMonth()]);
-    // var periodeIndo = monthNames[d.getMonth();
-
-
-    //ganti value kolom bulan di datatable
-    // $("#kolom_bulan").html(d);
+    var sdate       =  $('#aj_sdate').val();
+    var edate       = $('#aj_edate').val();
 
     var searchVal = $('#tabel_employees_filter').find('input').val();
 
@@ -331,13 +280,14 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Traxes_report_summary/list_sumary_cio',
+          'url': '<?= base_url() ?>admin/Traxes_report_display/list_tx_display',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,
             project: project,
             sub_project: sub_project,
-            periode: periode,
+            sdate: sdate,
+            edate: edate,
             //base_url_catat: base_url_catat
           },
           error: function(xhr, ajaxOptions, thrownError) {
@@ -345,9 +295,8 @@
             alert("responseText :" + xhr.responseText);
           },
 
-
-
         },
+
         'columns': [{
             data: 'employee_id',
             "orderable": false
@@ -368,157 +317,33 @@
             //searchable: true
           },
           {
-            data: 'penempatan',
+            data: 'jabatan_name',
+            "orderable": false
+          },
+          {
+            data: 'customer_name',
             "orderable": false,
           },
           {
-            data: '1io',
+            data: 'tanggal',
             "orderable": false,
           },
           {
-            data: '2io',
+            data: 'display',
             "orderable": false,
           },
           {
-            data: '3io',
+            data: 'display2',
             "orderable": false,
           },
           {
-            data: '4io',
+            data: 'display3',
             "orderable": false,
           },
-          {
-            data: '5io',
-            "orderable": false,
-          },
-          {
-            data: '6io',
-            "orderable": false,
-          },
-          {
-            data: '7io',
-            "orderable": false,
-          },
-          {
-            data: '8io',
-            "orderable": false,
-          },
-          {
-            data: '9io',
-            "orderable": false,
-          },
-          {
-            data: '10io',
-            "orderable": false,
-          },
-          {
-            data: '11io',
-            "orderable": false,
-          },
-          {
-            data: '12io',
-            "orderable": false,
-          },
-          {
-            data: '13io',
-            "orderable": false,
-          },
-          {
-            data: '14io',
-            "orderable": false,
-          },
-          {
-            data: '15io',
-            "orderable": false,
-          },
-          {
-            data: '16io',
-            "orderable": false,
-          },
-          {
-            data: '17io',
-            "orderable": false,
-          },
-          {
-            data: '18io',
-            "orderable": false,
-          },
-          {
-            data: '19io',
-            "orderable": false,
-          },
-          {
-            data: '20io',
-            "orderable": false,
-          },
-          {
-            data: '21io',
-            "orderable": false,
-          },
-          {
-            data: '22io',
-            "orderable": false,
-          },
-          {
-            data: '23io',
-            "orderable": false,
-          },
-          {
-            data: '24io',
-            "orderable": false,
-          },
-          {
-            data: '25io',
-            "orderable": false,
-          },
-          {
-            data: '26io',
-            "orderable": false,
-          },
-          {
-            data: '27io',
-            "orderable": false,
-          },
-          {
-            data: '28io',
-            "orderable": false,
-          },
-          {
-            data: '29io',
-            "orderable": false,
-          },
-          {
-            data: '30io',
-            "orderable": false,
-          },
-          {
-            data: '31io',
-            "orderable": false,
-          },
-        ],
-
-        "columnDefs": [
-        {
-          // "targets": [6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60],
-          "targets": [5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35],
-          "createdCell": function(td, cellData, rowData, row, col) {
-            
-
-            if(cellData == "" || cellData == " "){
-              $(td).css('background-color', '#fafafa') //abu-abu
-            } else if(cellData < "08:16"){
-              $(td).css('background-color', '#d1ffcd') //hijau
-            } else if (cellData >= "08:16") {
-              $(td).css('background-color', '#f8eeb6') //kuning
-            }
-          }
-        },
-      ]
-
+        ]
       }).on('search.dt', () => eventFired('Search'));
 
       $('#tombol_filter').attr("disabled", false);
-       $("#kolom_bulan").html("PERIODE : "+d.toUpperCase());
       $('#tombol_filter').removeAttr("data-loading");
     }
 
@@ -533,7 +358,10 @@
   document.getElementById("button_download_data").onclick = function(e) {
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var periode = document.getElementById("aj_periode").value;
+    // var sub_project = sub_project.replace(" ","");
+    
+    var sdate       =  $('#aj_sdate').val();
+    var edate       = $('#aj_edate').val();
 
     // ambil input search dari datatable
     var filter = $('.dataTables_filter input').val(); //cara 1
@@ -545,20 +373,39 @@
 
     var text_pesan = "Project: " + project;
     text_pesan = text_pesan + "\nSub Project: " + sub_project;
-    text_pesan = text_pesan + "\nStatus: " + periode;
+    text_pesan = text_pesan + "\nSdate: " + sdate;
+    text_pesan = text_pesan + "\nEdate: " + edate;
     text_pesan = text_pesan + "\nSearch: " + searchVal;
-    // alert(text_pesan);
+    // alert(sub_project);
 
-    window.open('<?php echo base_url(); ?>admin/Traxes_report_summary/printExcel/' + project + '/' + sub_project + '/' + periode + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Traxes_report_display/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
   };
 
+  //-----lihat employee-----
+  function viewEmployee(id) {
+    //alert("masuk fungsi lihat. id: " + id);
+    window.open('<?= base_url() ?>admin/employees/emp_view/' + id, "_blank");
+  }
+
+  //-----lihat dokumen employee-----
+  function viewDocumentEmployee(id) {
+    //alert("masuk fungsi lihat. id: " + id);
+    $('#dokumenModal').appendTo("body").modal('show');
+    // $('#dokumenModal').modal('show');
+    // window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
+  }
+
+  // employee_table.on('search.dt', function() {
+  //   alert("ada search");
+  // });
 
   function eventFired(type) {
     var searchVal = $('#tabel_employees_filter').find('input').val();
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var periode = document.getElementById("aj_periode").value;
+    var sdate       = $("#aj_sdate").val();
+    var edate       = $("#aj_edate").val();
     // alert(searchVal.length);
 
     if ((searchVal.length <= 2) && (project == "0")) {
@@ -584,7 +431,7 @@
 
         // AJAX request Jabatan
         $.ajax({
-            url: '<?= base_url() ?>admin/Traxes_report_summary/get_subprojects/',
+            url: '<?= base_url() ?>admin/Traxes_report_cio/get_subprojects2/',
             method: 'post',
             data: {
                 [csrfName]: csrfHash,

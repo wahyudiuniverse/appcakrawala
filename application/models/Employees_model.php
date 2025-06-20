@@ -939,6 +939,31 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil id bank untuk api verifikasi
+	function get_id_bank_verifikasi($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else if ($id == "") {
+			return "";
+		} else {
+			$this->db->select('bank_code_verification_api');
+			$this->db->from('mt_bank');
+			$this->db->where('secid', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bank_code_verification_api'];
+			}
+		}
+	}
+
 	//ubah tanggal YYYY-MM-DD diubah jadi MM/DD/YYYY
 	function ubah_format_tanggal($tanggal_lahir)
 	{
@@ -6263,7 +6288,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	public function get_pin($postData)
 	{
 		$this->db->select('first_name,employee_id,private_code');
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6277,7 +6302,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	public function get_jabatan($postData)
 	{
 		$this->db->select('first_name,employee_id,designation_id');
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6333,7 +6358,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('deactive_date');
 		$this->db->select('deactive_reason');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6353,7 +6378,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('location_id');
 		$this->db->select('date_of_joining');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6368,7 +6393,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	{
 		$this->db->select('ktp_no');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6377,7 +6402,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 
 		$this->db->select('*');
 
-		$this->db->from('xin_employee_emergency',);
+		$this->db->from('xin_employee_emergency');
 		$this->db->where('employee_request_nik', $query['ktp_no']);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6398,7 +6423,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('pemilik_rek');
 		$this->db->select('filename_rek');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6414,7 +6439,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('bpjs_tk_no');
 		$this->db->select('bpjs_ks_no');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6429,7 +6454,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	{
 		$this->db->select('verification_id');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6447,7 +6472,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('pemilik_rek');
 		$this->db->select('filename_rek');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6470,7 +6495,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('filename_rek');
 		$this->db->select('profile_picture');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6771,7 +6796,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('alamat_ktp');
 		$this->db->select('alamat_domisili');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6811,7 +6836,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('location_id');
 		$this->db->select('date_of_joining');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6827,7 +6852,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		//ambil ktp karyawan
 		$this->db->select('ktp_no');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6837,7 +6862,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		//cek apakah sudah ada data?
 		$this->db->select('*');
 
-		$this->db->from('xin_employee_emergency',);
+		$this->db->from('xin_employee_emergency');
 		$this->db->where('employee_request_nik', $query['ktp_no']);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6856,7 +6881,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		//fetch data terbaru
 		$this->db->select('*');
 
-		$this->db->from('xin_employee_emergency',);
+		$this->db->from('xin_employee_emergency');
 		$this->db->where('employee_request_nik', $query['ktp_no']);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6877,7 +6902,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('bpjs_tk_no');
 		$this->db->select('bpjs_ks_no');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6897,7 +6922,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		//fetch data terbaru
 		$this->db->select('status_resign');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6920,7 +6945,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('pemilik_rek');
 		$this->db->select('filename_rek');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6943,7 +6968,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('pemilik_rek');
 		$this->db->select('filename_rek');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -6971,7 +6996,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('filename_rek');
 		$this->db->select('profile_picture');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -7003,7 +7028,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		// //fetch data terbaru
 		$this->db->select('*');
 
-		$this->db->from('xin_employees',);
+		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -7021,7 +7046,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		// //fetch data terbaru
 		$this->db->select('*');
 
-		$this->db->from('xin_projects_akses',);
+		$this->db->from('xin_projects_akses');
 		$this->db->where('project_id', $project_id);
 		$this->db->where('nip', $session['employee_id']);
 		// $this->db->where($searchQuery);
