@@ -554,6 +554,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_akomodsasi' => $result[0]->allowance_akomodasi,
 			'allow_kasir' => $result[0]->allowance_kasir,
 			'allow_operational' => $result[0]->allowance_operation,
+			'allow_skill' => $result[0]->allowance_skill,
 			
 			// 'status_employee' => $result[0]->status_employee,
 			// 'deactive_by' => $result[0]->deactive_by,
@@ -648,14 +649,15 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
 							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
 							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
-							$tunjangan_operational 							= $this->input->post('tunjangan_operational');
+							$tunjangan_operational 				= $this->input->post('tunjangan_operational');
+							$tunjangan_keahlian 					= $this->input->post('tunjangan_keahlian');
 							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
-							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
-							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
-							$hari_kerja 							= $this->input->post('hari_kerja');
-							$cut_start 							= $this->input->post('cut_start');
-							$cut_off 							= $this->input->post('cut_off');
-							$date_payment 							= $this->input->post('date_payment');
+							$pkwt_end_date 								= $this->input->post('pkwt_end_date');
+							$waktu_kontrak 								= $this->input->post('waktu_kontrak');
+							$hari_kerja 									= $this->input->post('hari_kerja');
+							$cut_start 										= $this->input->post('cut_start');
+							$cut_off 											= $this->input->post('cut_off');
+							$date_payment 								= $this->input->post('date_payment');
 						}
 
 
@@ -684,14 +686,15 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allow_residence_cost'						=> $tunjangan_tempat_tinggal,
 								'allow_device' 							=> $tunjangan_device,
 								
-								'allow_medichine' 						=> $tunjangan_kesehatan,
+								'allow_medichine' 					=> $tunjangan_kesehatan,
 								'allow_akomodsasi' 					=> $tunjangan_akomodasi,
 								'allow_kasir' 							=> $tunjangan_kasir,
-								'allow_operational' 					=> $tunjangan_operational,
-								'contract_start' 										=> $join_date_pkwt,
-								'contract_end' 											=> $pkwt_end_date,
-								'contract_periode' 								=> $waktu_kontrak,
-								'hari_kerja' 										=> $hari_kerja,
+								'allow_operational' 				=> $tunjangan_operational,
+								'allow_skill' 							=> $tunjangan_keahlian,
+								'contract_start' 						=> $join_date_pkwt,
+								'contract_end' 							=> $pkwt_end_date,
+								'contract_periode' 					=> $waktu_kontrak,
+								'hari_kerja' 								=> $hari_kerja,
 								'cut_start' 					=> $cut_start,
 								'cut_off' 						=> $cut_off,
 								'date_payment' 				=> $date_payment,
@@ -724,6 +727,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allowance_akomodasi' 					=> $tunjangan_akomodasi,
 								'allowance_kasir' 							=> $tunjangan_kasir,
 								'allowance_operation' 					=> $tunjangan_operational,
+								'allowance_skill' 							=> $tunjangan_keahlian,
 								'from_date' 										=> $join_date_pkwt,
 								'to_date' 											=> $pkwt_end_date,
 								'waktu_kontrak' 								=> $waktu_kontrak,
@@ -838,6 +842,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_medichine 			= $pkwt_info[0]->allowance_medicine;
 			$allow_akomodsasi 		= $pkwt_info[0]->allowance_akomodasi;
 			$allow_operational 		= $pkwt_info[0]->allowance_operation;
+			$allow_skill 					= $pkwt_info[0]->allowance_skill;
 
 		} else {
 			$contract_start = '';
@@ -866,6 +871,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_medichine 			= '';
 			$allow_akomodsasi 		= '';
 			$allow_operational 		= '';
+			$allow_skill 					= '';
 		}
 
 

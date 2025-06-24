@@ -3369,7 +3369,7 @@ class Employees_model extends CI_Model
 		FROM xin_employees
 		WHERE request_resign_by is not null
 	    AND project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')
-		ORDER BY request_resign_date DESC LIMIT 50;";
+		ORDER BY request_resign_date DESC LIMIT 10;";
 
 		$query = $this->db->query($sql);
 		return $query;

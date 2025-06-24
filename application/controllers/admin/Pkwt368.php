@@ -1394,12 +1394,15 @@ class Pkwt368 extends MY_Controller
 								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
 							</tr>
 
-							<br>
 							<tr>
 								<td >8.</td>
 								<td colspan="20">Jika karyawan melanggar & menerima SP 1, SP 2 dan berakibat pada SPHK. Maka karyawan tidak berhak menuntut/mendapat hak kompensasi. Serta perusahaan berhak memutuskan kontrak kerja dengan karyawan tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
+
+							<br><br><br><br>
+							<br><br><br>
+
 							<tr>
 								<td >9.</td>
 								<td colspan="20">Jika karyawan melakukan tindakan merugikan perusahaan secara disengaja maupun tidak disengaja maka karyawan tersebut tidak berhak mendapat/menuntut kompensasi terhadap perusahaan, serta perusahaan berhak memutus kontrak dengan karyawan tersebut. Adapun perbuatan yang dimaksud adalah:</td>
@@ -1441,6 +1444,12 @@ class Pkwt368 extends MY_Controller
 							<tr>
 								<td >12.</td>
 								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Apabila karyawan tidak masuk kerja (kecuali cuti yang sudah disetujui oleh Coordinator Helper), maka karyawan bersedia dikenakan pemotongan gaji sebesar Rp 150.000,- (seratus lima puluh ribu rupiah) per ketidak hadiran dan selanjutnya pemotongan gaji tersebut akan diberikan kepada Backup Helper yang menggantikan tugas karyawan.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1516,7 +1525,7 @@ class Pkwt368 extends MY_Controller
 				<br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br>
+				<br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

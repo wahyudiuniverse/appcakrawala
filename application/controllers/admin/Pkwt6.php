@@ -248,6 +248,7 @@ class Pkwt6 extends MY_Controller
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_skill =	$this->Xin_model->rupiah($pkwt[0]->allowance_skill);
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -1696,13 +1697,22 @@ class Pkwt6 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_skill!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Pelatihan</td>
+							<td colspan="3"> : '.$allowance_skill.',- Per Hari</td>
+						</tr>';
+				}
+
 
 				if($allowance_operation!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Pelatihan</td>
-							<td colspan="3"> : '.$allowance_operation.',- Per Hari</td>
+							<td>Tunjangan Operational</td>
+							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
 						</tr>';
 				}
 

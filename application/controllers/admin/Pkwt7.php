@@ -248,6 +248,7 @@ class Pkwt7 extends MY_Controller
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_skill =	$this->Xin_model->rupiah($pkwt[0]->allowance_skill);
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -1600,7 +1601,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
 						</tr>';
 				}
 				
@@ -1609,7 +1610,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1618,7 +1619,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_rent.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1673,7 +1674,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
 						</tr>';
 				}
 
@@ -1696,13 +1697,22 @@ class Pkwt7 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_skill!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Pelatihan</td>
+							<td colspan="3"> : '.$allowance_skill.',- Per Hari</td>
+						</tr>';
+				}
+
 
 				if($allowance_operation!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Pelatihan</td>
-							<td colspan="3"> : '.$allowance_operation.',- Per Hari</td>
+							<td>Tunjangan Operational</td>
+							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
 						</tr>';
 				}
 

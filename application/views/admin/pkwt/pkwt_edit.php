@@ -7,10 +7,10 @@
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']);?>
 <?php $system = $this->Xin_model->read_setting_info(1);?>
-<?php $count_emp_request_cancel = $this->Xin_model->count_emp_request_cancel($session['employee_id']);?>
-<?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae($session['employee_id']);?>
-<?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom($session['employee_id']);?>
-<?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']);?>
+<?php $count_emp_request_cancel = 0;?>
+<?php $count_emp_request_nae = 0;?>
+<?php $count_emp_request_nom = 0;?>
+<?php $count_emp_request_hrd = 0;?>
 
 
 
@@ -442,6 +442,21 @@
                 </div>
               </div>
               
+              <div class="row">
+
+
+                <!--TUNJANGAN PELATIHAN/KEAHLIAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_keahlian" class="control-label">Tunjangan Pelatihan<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_keahlian" type="text" value="<?php echo $allow_skill;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+
+
+
+
+              </div>
 
             </div>
 

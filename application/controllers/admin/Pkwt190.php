@@ -245,6 +245,7 @@ class Pkwt190 extends MY_Controller
 					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
 					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
+					$allowance_transrent =	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
 					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
 					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
 					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
@@ -1658,6 +1659,16 @@ class Pkwt190 extends MY_Controller
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
 							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+						</tr>';
+				}
+
+
+				if($allowance_transrent!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Transport-Rental</td>
+							<td colspan="3"> : '.$allowance_transrent.',- Per Bulan</td>
 						</tr>';
 				}
 
