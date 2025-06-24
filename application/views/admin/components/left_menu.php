@@ -1055,51 +1055,51 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   <!-- BUDGET -->
   <?php
   if (
-  in_array('71', $role_resources_ids)
+    in_array('71', $role_resources_ids)
   ) {
   ?>
-  <li class="<?php if (!empty($arr_mod['budgeting_open'])) echo $arr_mod['budgeting_open']; ?> sidenav-item">
-    <a href="#" class="sidenav-link sidenav-toggle">
-      <i class="sidenav-icon ion ion-logo-buffer"></i>
-      <div>BUDGETTING</div>
-    </a>
+    <li class="<?php if (!empty($arr_mod['budgeting_open'])) echo $arr_mod['budgeting_open']; ?> sidenav-item">
+      <a href="#" class="sidenav-link sidenav-toggle">
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>BUDGETTING</div>
+      </a>
 
-    <ul class="sidenav-menu">
-      <?php
-      if (in_array('711', $role_resources_ids)) {
-      ?>
-      <li class="sidenav-item <?php if (!empty($arr_mod['pengajuan_sp_active'])) echo $arr_mod['pengajuan_sp_active']; ?>">
-        <a class="sidenav-link" href="<?php echo site_url('admin/budget/budget'); ?>">Pengajuan SP
-        </a>
-      </li>
-      <?php
-      }
-      ?>
+      <ul class="sidenav-menu">
+        <?php
+        if (in_array('711', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['pengajuan_sp_active'])) echo $arr_mod['pengajuan_sp_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/budget/report2'); ?>">Pengajuan Budgetting
+            </a>
+          </li>
+        <?php
+        }
+        ?>
 
-      <?php
-      if (in_array('712', $role_resources_ids)) {
-      ?>
-      <li class="sidenav-item <?php if (!empty($arr_mod['budget_invoice_active'])) echo $arr_mod['budget_invoice_active']; ?>">
-        <a class="sidenav-link" href="<?php echo site_url('admin/budget/actual'); ?>">Invoice
-        </a>
-      </li>
-      <?php
-      }
-      ?>
+        <?php
+        if (in_array('712', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['budget_invoice_active'])) echo $arr_mod['budget_invoice_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/budget/po'); ?>">PO Budgetting
+            </a>
+          </li>
+        <?php
+        }
+        ?>
 
-      <?php
-      if (in_array('713', $role_resources_ids)) {
-      ?>
-      <li class="sidenav-item <?php if (!empty($arr_mod['budget_report_active'])) echo $arr_mod['budget_report_active']; ?>">
-        <a class="sidenav-link" href="<?php echo site_url('admin/budget/report'); ?>">Report Budgetting
-        </a>
-      </li>
-      <?php
-      }
-      ?>
+        <?php
+        if (in_array('713', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['budget_report_active'])) echo $arr_mod['budget_report_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/budget/report_invoice'); ?>">Report Invoice
+            </a>
+          </li>
+        <?php
+        }
+        ?>
 
-    </ul>
-  </li>
+      </ul>
+    </li>
 
   <?php
   }

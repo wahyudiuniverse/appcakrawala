@@ -36,6 +36,11 @@ class Budget_model extends CI_Model
         return $this->db->get('xin_companies')->result();
     }
 
+    public function get_all_pt2()
+    {
+        return $this->db->get('xin_companies')->result();
+    }
+
     public function get_all_areas()
     {
         $this->db->select('id, area'); // sesuaikan dengan nama kolom di tabelmu
@@ -79,6 +84,23 @@ class Budget_model extends CI_Model
         return $query->result();
     }
 
+    public function get_unique2($column)
+    {
+        $this->db->group_by($column);
+        $this->db->select($column);
+        $query = $this->db->get('pengajuan_budgetting');
+        return $query->result();
+    }
+
+    public function get_unique3($column)
+    {
+        $this->db->group_by($column);
+        $this->db->select($column);
+        $query = $this->db->get('po_budgetting');
+        return $query->result();
+    }
+
+
 
     public function get_budget_data($tahun, $pt, $area)
     {
@@ -115,10 +137,59 @@ class Budget_model extends CI_Model
         return $this->db->get()->result();
     }
 
+
+    public function get_budget_data2($tahun, $pt, $area)
+    {
+        $this->db->select('*');
+        $this->db->from('pengajuan_budgetting');
+        $this->db->where('tahun', $tahun);
+        $this->db->where('pt', $pt);
+        $this->db->where('area', $area);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    public function get_budget_data3($tahun, $pt, $area)
+    {
+        $this->db->select('*');
+        $this->db->from('po_budgetting');
+        $this->db->where('tahun', $tahun);
+        $this->db->where('pt', $pt);
+        $this->db->where('area', $area);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    // public function get_budget_data4($tahun, $pt, $area)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('report_invoice_budgetting');
+    //     $this->db->where('tahun', $tahun);
+    //     $this->db->where('pt', $pt);
+    //     $this->db->where('area', $area);
+    //     $query = $this->db->get();
+    //     return $query->result();
+    // }
+
+
     public function insert_budget_target($data)
     {
         return $this->db->insert('mt_budget_target', $data);
     }
+
+
+    public function insert_budget_target2($data)
+    {
+        return $this->db->insert('pengajuan_budgetting', $data);
+    }
+
+    public function insert_budget_target3($data)
+    {
+        return $this->db->insert('po_budgetting', $data);
+    }
+
+
+
     public function insert_pt($pt)
     {
         $data = ['name' => $pt];
@@ -137,6 +208,7 @@ class Budget_model extends CI_Model
             return false; // Gagal insert
         }
     }
+
 
     public function get_tahun_list()
     {
@@ -159,6 +231,43 @@ class Budget_model extends CI_Model
         return $query->result_array(); // Mengembalikan data dalam bentuk array
     }
 
+    public function get_pt_by_tahun2($tahun)
+    {
+        // Query untuk mengambil data PT berdasarkan tahun
+        $this->db->group_by('pt');
+        $this->db->select('pt');
+        $this->db->from('pengajuan_budgetting');  // Ganti dengan tabel yang sesuai
+        $this->db->where('tahun', $tahun);
+        $query = $this->db->get();
+
+        return $query->result_array(); // Mengembalikan data dalam bentuk array
+    }
+
+    public function get_pt_by_tahun3($tahun)
+    {
+        // Query untuk mengambil data PT berdasarkan tahun
+        $this->db->group_by('pt');
+        $this->db->select('pt');
+        $this->db->from('po_budgetting');  // Ganti dengan tabel yang sesuai
+        $this->db->where('tahun', $tahun);
+        $query = $this->db->get();
+
+        return $query->result_array(); // Mengembalikan data dalam bentuk array
+    }
+
+    public function get_pt_by_tahun4($tahun)
+    {
+        // Query untuk mengambil data PT berdasarkan tahun
+        $this->db->group_by('pt');
+        $this->db->select('pt');
+        $this->db->from('report_invoice_budgetting');  // Ganti dengan tabel yang sesuai
+        $this->db->where('tahun', $tahun);
+        $query = $this->db->get();
+
+        return $query->result_array(); // Mengembalikan data dalam bentuk array
+    }
+
+
     public function get_area_by_tahun_pt($tahun, $pt)
     {
         return $this->db->select('DISTINCT(area)')
@@ -179,6 +288,36 @@ class Budget_model extends CI_Model
         return $query->result_array();
     }
 
+
+    public function get_area_by_pt2($pt)
+    {
+        $this->db->group_by('area');
+        $this->db->select('id_pengajuan, area');
+        $this->db->from('pengajuan_budgetting'); // Ganti dengan nama tabel area kamu
+        $this->db->where('pt', $pt);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_area_by_pt3($pt)
+    {
+        $this->db->group_by('area');
+        $this->db->select('id_po, area');
+        $this->db->from('po_budgetting'); // Ganti dengan nama tabel area kamu
+        $this->db->where('pt', $pt);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+
+    public function get_area_by_pt4($pt)
+    {
+        $this->db->group_by('area');
+        $this->db->select('id_invoice, area');
+        $this->db->from('report_invoice_budgetting'); // Ganti dengan nama tabel area kamu
+        $this->db->where('pt', $pt);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 
     public function simpan_actual_data2($data)
     {
@@ -209,16 +348,107 @@ class Budget_model extends CI_Model
         }
     }
 
+    public function simpan_actual_data3($data)
+    {
+        return $this->db->insert('mt_budget_actual', $data);
+    }
 
-    public function is_duplicate_budget($tahun, $pt, $area, $bulan)
+
+    public function is_duplicate_pengajuan_budgetting($tahun, $pt, $area, $periode)
     {
         $this->db->where([
             'tahun' => $tahun,
             'pt' => $pt,
             'area' => $area,
-            'bulan' => $bulan
+            'periode' => $periode
         ]);
-        $query = $this->db->get('mt_budget_target');
+        $query = $this->db->get('pengajuan_budgetting');
         return $query->num_rows() > 0;
+    }
+
+    public function is_duplicate_po_budgetting($tahun, $pt, $area, $periode)
+    {
+        $this->db->where([
+            'tahun' => $tahun,
+            'pt' => $pt,
+            'area' => $area,
+            'periode' => $periode
+        ]);
+        $query = $this->db->get('po_budgetting');
+        return $query->num_rows() > 0;
+    }
+
+
+
+    // Fungsi untuk mengambil detail invoice berdasarkan ID
+    // public function get_invoice_by_id($id)
+    // {
+    //     // Menyusun query untuk mendapatkan detail invoice
+    //     $this->db->select('invoice_number, invoice_date, invoice_amount');  // Kolom-kolom yang diperlukan
+    //     $this->db->from('invoice');  // Nama tabel invoice (ganti sesuai dengan nama tabel Anda)
+    //     $this->db->where('id', $id);  // Kondisi pencarian berdasarkan ID
+
+    //     $query = $this->db->get();
+
+    //     if ($query->num_rows() > 0) {
+    //         return $query->row_array();  // Mengembalikan satu baris hasil
+    //     } else {
+    //         return false;  // Jika tidak ada data
+    //     }
+    // }
+
+    public function get_invoice_by_param($tahun, $pt, $area, $bulan)
+    {
+        return $this->db->get_where('mt_budget_actual', [
+            'tahun' => $tahun,
+            'pt'    => $pt,
+            'area'  => $area,
+            'bulan' => $bulan
+        ])->result();
+    }
+
+    // Mengambil data dari tabel pengajuan_budgetting berdasarkan filter
+    public function get_pengajuan_budgetting($tahun, $pt, $area, $periode)
+    {
+        $this->db->select('tahun, pt, area, project_id, jmlh_ps_psb_dan_pda, total_nilai_psb_dan_pda, total_nilai_pekerjaan_lainlain, total_nilai_pendapatan_dipengajuan');
+        $this->db->from('pengajuan_budgetting');
+        $this->db->where('tahun', $tahun);
+        $this->db->where('pt', $pt);
+        $this->db->where('area', $area);
+        $this->db->where('periode', $periode);
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+    // Memasukkan data ke tabel po_budgetting
+    public function insert_budget_target4($data)
+    {
+        return $this->db->insert('po_budgetting', $data);
+    }
+
+
+
+
+    // Ambil semua project_id dari tabel pengajuan_budgetting
+    public function get_all_projects()
+    {
+        return $this->db->select('project_id')->get('pengajuan_budgetting')->result();
+    }
+
+    public function get_pengajuan_by_projectid($project_id)
+    {
+        return $this->db->get_where('pengajuan_budgetting', ['project_id' => $project_id])->row();
+    }
+
+    public function save_po_budgetting($data)
+    {
+        return $this->db->insert('po_budgetting', $data);
+    }
+
+    public function get_all_pengajuan()
+    {
+        // Ambil semua data pengajuan_budgetting
+        $query = $this->db->get('pengajuan_budgetting');
+        return $query->result(); // Mengembalikan data dalam bentuk array
     }
 }
