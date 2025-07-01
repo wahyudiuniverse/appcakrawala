@@ -163,7 +163,7 @@
     <div class="card">
       <div class="card-header with-elements">
         <div class="col-md-6">
-          <span class="card-header-title mr-2"><strong>TABEL SELL-OUT</strong></span>
+          <span class="card-header-title mr-2"><strong>TABEL SELL-IN</strong></span>
         </div>
 
         <div class="col-md-6">
@@ -185,15 +185,17 @@
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
+                <th>Sub Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>Toko</th>
+                <th>ID Toko</th>
+                <th>Nama Toko</th>
                 <th>Produk/Material</th>
-                <th>Jumlah</th>
-                <th>Harga</th>
-                <th>Total</th>
-                <th>Tanggal Order</th>
+                <th>Tanggal Stock</th>
+                <th>Stock QTY</th>
+                <th>Stock Akhir</th>
               </tr>
+
             </thead>
           </table>
         </div>
@@ -281,7 +283,7 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Traxes_report_order/list_tx_order',
+          'url': '<?= base_url() ?>admin/Traxes_report_stock/list_tx_stock',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,

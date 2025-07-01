@@ -1219,6 +1219,8 @@ class Employee_request_hrd extends MY_Controller
 		$allow_akomodsasi		= $employee_request['allow_akomodsasi'];
 		$allow_kasir			= $employee_request['allow_kasir'];
 		$allow_operational		= $employee_request['allow_operational'];
+		$allow_skill			= $employee_request['allow_skill'];
+		$allow_training			= $employee_request['allow_training'];
 
 		$cut_start 				= $employee_request['cut_start'];
 		$cut_off				= $employee_request['cut_off'];
@@ -1238,7 +1240,7 @@ class Employee_request_hrd extends MY_Controller
 		$approved_nomon 		= $employee_request['approved_nomon'];
 
 		//NIP
-		$employee_id = '2' . $employee_request['location_id'] . $employee_request['department'] . sprintf("%05d", $count_nip[0]->newcount);
+		$employee_id = $employee_request['company_id'] . $employee_request['location_id'] . $employee_request['department'] . sprintf("%05d", $count_nip[0]->newcount);
 		//PIN
 		$private_code = rand(100000, 999999);
 		//Pass

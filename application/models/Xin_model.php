@@ -739,6 +739,14 @@ class Xin_model extends CI_Model
 			$arr['traxes_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
+		} else if ($mClass == 'traxes_report_order') {
+			$arr['traxes_order_active'] = 'active';
+			$arr['reports_open'] = 'open';
+			return $arr;
+		}  else if ($mClass == 'traxes_report_stock') {
+			$arr['traxes_stock_active'] = 'active';
+			$arr['reports_open'] = 'open';
+			return $arr;
 		} else if ($mClass == 'traxes_report_summary') {
 			$arr['traxes_summary_active'] = 'active';
 			$arr['reports_open'] = 'open';

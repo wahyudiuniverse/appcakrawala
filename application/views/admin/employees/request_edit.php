@@ -8,7 +8,7 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 <?php $system = $this->Xin_model->read_setting_info(1);
 $sub_project_id = $sub_project; ?>
-<?php $count_emp_request_cancel = $this->Xin_model->count_emp_request_cancel($session['employee_id']); ?>
+<?php $count_emp_request_cancel = '-'; ?>
 <?php $count_emp_request_nae = $this->Xin_model->count_emp_request_nae($session['employee_id']); ?>
 <?php $count_emp_request_nom = $this->Xin_model->count_emp_request_nom($session['employee_id']); ?>
 <?php $count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']); ?>
@@ -814,6 +814,15 @@ $sub_project_id = $sub_project; ?>
                     <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_operational); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah15">
                   </div>
                 </div>
+
+                <!--TUNJANGAN KEAHLIAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_keahlian" class="control-label">Tunjangan Keahlian<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_keahlian" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_skill); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah18">
+                  </div>
+                </div>
+
               </div>
 
 
@@ -832,6 +841,14 @@ $sub_project_id = $sub_project; ?>
                   <div class="form-group">
                     <label for="tunjangan_trans_rent" class="control-label">Tunjangan Transport & Rental<i class="hrpremium-asterisk">*</i></label>
                     <input class="form-control" placeholder="0" name="tunjangan_trans_rent" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_trans_rent); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah17">
+                  </div>
+                </div>
+
+                <!--TUNJANGAN PELATIHAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_pelatihan" class="control-label">Tunjangan Pelatihan<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_pelatihan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_training); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah19">
                   </div>
                 </div>
 
@@ -1052,6 +1069,16 @@ $sub_project_id = $sub_project; ?>
   var rupiah17 = document.getElementById("rupiah17");
   rupiah17.addEventListener("keyup", function(e) {
     rupiah17.value = convertRupiah(this.value);
+  });
+
+  var rupiah18 = document.getElementById("rupiah18");
+  rupiah18.addEventListener("keyup", function(e) {
+    rupiah18.value = convertRupiah(this.value);
+  });
+
+  var rupiah19 = document.getElementById("rupiah19");
+  rupiah19.addEventListener("keyup", function(e) {
+    rupiah19.value = convertRupiah(this.value);
   });
 
 
