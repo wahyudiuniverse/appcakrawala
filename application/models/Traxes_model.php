@@ -10,7 +10,6 @@ class Traxes_model extends CI_Model
 		$this->load->database();
 	}
 
-
 	function get_list_tx_cio($postData = null)
 	{
 
@@ -1826,6 +1825,31 @@ class Traxes_model extends CI_Model
 		}
 	}
 
+
+	// Function to add record in table
+	public function add_user_mobile($data){
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$dbtraxes->insert('xin_user_mobile', $data);
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	// check employeeID
+	public function check_usermobile($id) {
+	
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$sql = 'SELECT * FROM xin_user_mobile WHERE employee_id = ?';
+		$binds = array($id);
+		$query = $dbtraxes->query($sql, $binds);
+		return $query->num_rows();
+	}
+	
 	// Function to update record in table
 	public function update_record_newtraxes($data, $id)
 	{

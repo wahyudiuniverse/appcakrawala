@@ -321,6 +321,7 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
     </div>
   </div>
 
+
   <!-- TUNJANGAN -->
   <?php if ($allowance_grade != "0") { ?>
     <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
@@ -552,114 +553,52 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
 
 
 
-  <!-- FOTO KTP -->
   <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
-      <!-- APPROVED -->
+      <!-- REQUESTED -->
       <div class="col-sm-4">
         <div>
-          <label for="no_transaksi">KTP</label>
+          <label for="no_transaksi">Dokumen</label>
         </div>
       </div>
       <div class="col-sm-4">
         <div>
-          <label for="plant"><?php echo '<a href="' . base_url() . 'uploads/document/ktp/' . $ktp . '" target="_blank"> ' . $ktp . '</a>'; ?></label>
+          <?php if($ktp=='' || $ktp=='0'){?>
+            <button type="button" class="btn btn-xs btn-secondary">KTP</button>
+          <?php } else { ?>
+            <a href="<?php echo base_url() . 'uploads/document/ktp/' . $ktp;?>" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">KTP</button></a>
+          <?php } ?>
+
+          <?php if($kk=='' || $kk=='0'){?>
+             <a href="#" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">KK</button></a>
+          <?php } else { ?>
+            <a href="<?php echo base_url() . 'uploads/document/kk/' . $kk;?>" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">KK</button></a>
+          <?php } ?>
+
+          <?php if($skck=='' || $skck=='0'){?>
+            <button type="button" class="btn btn-xs btn-secondary">SKCK</button>
+          <?php } else { ?>
+            <a href="<?php echo base_url() . 'uploads/document/skck/' . $skck;?>" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">SKCK</button></a>
+          <?php } ?>
+
+          <?php if($ijazah=='' || $ijazah=='0'){?>
+            <button type="button" class="btn btn-xs btn-secondary">IJAZAH</button>
+          <?php } else { ?>
+            <a href="<?php echo base_url() . 'uploads/document/ijazah/' . $ijazah;?>" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">IJAZAH</button></a>
+          <?php } ?>
+
+          <?php if($cv=='' || $cv=='0'){?>
+            <button type="button" class="btn btn-xs btn-secondary">CV</button>
+          <?php } else { ?>
+            <a href="<?php echo base_url() . 'uploads/document/cv/' . $cv;?>" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">CV</button></a>
+          <?php } ?>
+
         </div>
       </div>
     </div>
   </div>
 
-  <!-- FOTO KK -->
-  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">KK</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="' . base_url() . 'uploads/document/kk/' . $kk . '" target="_blank"> ' . $kk . '</a>'; ?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOTO SKCK -->
-  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">SKCK</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="' . base_url() . 'uploads/document/skck/' . $skck . '" target="_blank"> ' . $skck . '</a>'; ?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOTO IJAZAH -->
-  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">IJAZAH</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="' . base_url() . 'uploads/document/ijazah/' . $ijazah . '" target="_blank"> ' . $ijazah . '</a>'; ?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CV -->
-  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">CV</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="' . $cv . '" target="_blank"> ' . $cv . '</a>'; ?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- PAKLARING -->
-  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Paklaring</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="' . base_url() . 'uploads/document/paklaring/' . $paklaring . '" target="_blank"> ' . $paklaring . '</a>'; ?></label>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">

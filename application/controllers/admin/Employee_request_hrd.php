@@ -1382,6 +1382,8 @@ class Employee_request_hrd extends MY_Controller
 				'allow_akomodsasi'			=> $allow_akomodsasi,
 				'allow_kasir'				=> $allow_kasir,
 				'allow_operational'			=> $allow_operational,
+				'allow_skill'				=> $allow_skill,
+				'allow_training'			=> $allow_training,
 
 				'cut_start' 				=> $cut_start,
 				'cut_off'					=> $cut_off,

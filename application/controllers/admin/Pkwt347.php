@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt127 extends MY_Controller 
+class Pkwt347 extends MY_Controller 
 {
 
    /*Function to set JSON output*/

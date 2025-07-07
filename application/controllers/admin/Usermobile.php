@@ -251,7 +251,7 @@ class Usermobile extends MY_Controller
 			$Return['error'] = 'Project Kosong..!';
 		} else if($this->input->post('penempatan')==='') {
 			$Return['error'] = 'Area/Penempatan Kosong..!';
-		} else if($this->Employees_model->check_usermobile($this->input->post('employee_id')) > 0) {
+		} else if($this->Traxes_model->check_usermobile($this->input->post('employee_id')) > 0) {
 			$Return['error'] = $this->lang->line('xin_employee_id_already_exist');
 		}
 
@@ -282,7 +282,7 @@ class Usermobile extends MY_Controller
 			'createdon' 		=> date('Y-m-d h:i:s'),
 		);
 
-		$result = $this->Usersmobile_model->add($data);
+		$result = $this->Traxes_model->add_user_mobile($data);
 		if ($result == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_add_usermobile');
 		} else {

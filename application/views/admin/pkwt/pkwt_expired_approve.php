@@ -53,14 +53,14 @@ if($e_status=='1'){
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="fullname"><?php echo $this->lang->line('xin_employees_full_name').'APPROVE';?><i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="fullname" type="text" value="<?php echo $fullname; ?>">
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name');?>" name="fullname" type="text" value="<?php echo $fullname; ?>" disabled>
                   </div>
                 </div>
 
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nama_ibu">Nama Ibu<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nama Ibu" name="nama_ibu" type="text" value="<?php echo $nama_ibu; ?>">
+                    <input class="form-control" placeholder="Nama Ibu" name="nama_ibu" type="text" value="<?php echo $nama_ibu; ?>" disabled>
                   </div>
                 </div>
               </div>
@@ -71,7 +71,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_hp" class="control-label">Tempat Lahir<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Tempat Lahir" name="tempat_lahir" type="text" value="<?php echo $tempat_lahir; ?>">
+                    <input class="form-control" placeholder="Tempat Lahir" name="tempat_lahir" type="text" value="<?php echo $tempat_lahir; ?>" disabled>
                   </div>
                 </div>
 
@@ -79,7 +79,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                   <label for="date_of_birth">Tanggal Lahir<i class="hrpremium-asterisk">*</i></label>
-                  <input class="form-control date" readonly placeholder="Tanggal Lahir" name="date_of_birth" type="text" value="<?php echo $tanggal_lahir; ?>">
+                  <input class="form-control date" readonly placeholder="Tanggal Lahir" name="date_of_birth" type="text" value="<?php echo $tanggal_lahir; ?>" disabled>
                   </div>
                 </div>
 
@@ -92,7 +92,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                                   <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_gender');?>*</label>
-                                  <select class="form-control" name="gender" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>">
+                                  <select class="form-control" name="gender" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_employee_gender');?>" disabled>
                                     <option value="">Jenis Kelamin</option>
                                     <option value="L"<?php if($gender=='L'){ echo 'selected';}?>><?php echo $this->lang->line('xin_gender_male');?></option>
                                     <option value="P"<?php if($gender=='P'){ echo 'selected';}?>><?php echo $this->lang->line('xin_gender_female');?></option>
@@ -106,7 +106,7 @@ if($e_status=='1'){
                                   <label class="form-label control-label">Agama/Kepercayaan*</label>
 
 
-                                  <select class="form-control" name="ethnicity" data-plugin="xin_select">
+                                  <select class="form-control" name="ethnicity" data-plugin="xin_select" disabled>
                                   <option value=""></option>
                                               <?php foreach($all_ethnicity as $eth):?>
                                               <option value="<?php echo $eth->ethnicity_type_id;?>" <?php if($ethnicity_type==$eth->ethnicity_type_id):?> selected <?php endif; ?> ><?php echo $eth->type;?></option>
@@ -123,7 +123,7 @@ if($e_status=='1'){
                                   <label class="form-label control-label"><?php echo $this->lang->line('xin_employee_mstatus');?>*</label>
 
 
-                                  <select class="form-control" name="marital_status" data-plugin="xin_select">
+                                  <select class="form-control" name="marital_status" data-plugin="xin_select" disabled>
                                   <option value=""></option>
                                               <option value="1" <?php if($marital_status=='1'):?> selected <?php endif; ?>>Belum Menikah</option>
                                               <option value="2" <?php if($marital_status=='2'):?> selected <?php endif; ?>>Janda/Duda (0 Anak)</option>
@@ -147,7 +147,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="<?php echo $ktp_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" type="text" value="<?php echo $ktp_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
                   </div>
                 </div>
 
@@ -155,7 +155,7 @@ if($e_status=='1'){
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="alamat_ktp"><?php echo $this->lang->line('xin_address_1');?><i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_ktp" type="text" value="<?php echo $alamat_ktp;?>">
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_ktp" type="text" value="<?php echo $alamat_ktp;?>" disabled>
                   </div>
                 </div>
 
@@ -167,7 +167,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="<?php echo $kk_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="Nomor KK" name="nomor_kk" type="text" value="<?php echo $kk_no;?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
                   </div>
                 </div>
 
@@ -175,7 +175,7 @@ if($e_status=='1'){
                 <div class="col-md-8">
                   <div class="form-group">
                     <label for="alamat_domisili">Alamat Domisili</i></label>
-                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_domisili" type="text" value="<?php echo $alamat_domisili;?>">
+                    <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1');?>" name="alamat_domisili" type="text" value="<?php echo $alamat_domisili;?>" disabled>
                   </div>
                 </div>
 
@@ -187,7 +187,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                   <label for="npwp">NPWP<i class="hrpremium-asterisk"></i></label>
-                  <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="<?php echo $npwp_no;?>">
+                  <input class="form-control" placeholder="NPWP" name="npwp" type="text" value="<?php echo $npwp_no;?>" disabled>
                   </div>
                 </div>
 
@@ -195,7 +195,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="nomor_hp" class="control-label">Nomor HP/Whatsapp<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="<?php echo $contact_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                    <input class="form-control" placeholder="08xxxxxx" name="nomor_hp" type="text" value="<?php echo $contact_no;?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" disabled>
                   </div>
                 </div>
 
@@ -203,7 +203,7 @@ if($e_status=='1'){
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="email" class="control-label">Email<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="example@mail.com" name="email" type="text" value="<?php echo $email;?>">
+                    <input class="form-control" placeholder="example@mail.com" name="email" type="text" value="<?php echo $email;?>" disabled>
                   </div>
                 </div>
 
@@ -572,6 +572,8 @@ if($e_status=='1'){
 
         <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.'AJUKAN PERPANJANG PKWT')); ?> 
         </div>
+
+
         <?php echo form_close(); ?> 
       </div>
     </div>
