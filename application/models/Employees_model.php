@@ -1033,6 +1033,8 @@ class Employees_model extends CI_Model
 	//get validation status kolom
 	function get_valiadation_status($id, $column)
 	{
+		//nik =  nik
+		//
 		$this->db->select('*');
 		$this->db->from('log_employee_verification');
 		$this->db->where('id_employee_request', $id);
@@ -1116,8 +1118,10 @@ class Employees_model extends CI_Model
 			$this->db->update('xin_employee_request', $data);
 		}
 
-
 		$this->db->insert('log_employee_verification', $datalock);
+
+
+		
 	}
 
 	//un validasi employee request

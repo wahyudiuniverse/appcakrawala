@@ -120,6 +120,8 @@ $(document).ready(function() {
 					xin_table.api().ajax.reload(function(){ 
 						toastr.success(JSON.result);
 					}, true);
+					
+					$('#button_approve_pkwtexpired').attr("hidden",true);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					// $('#xin-formx')[0].reset(); // To reset form fields
 					$('.add-form').removeClass('show');

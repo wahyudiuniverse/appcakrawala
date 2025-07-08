@@ -843,6 +843,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_akomodsasi 		= $pkwt_info[0]->allowance_akomodasi;
 			$allow_operational 		= $pkwt_info[0]->allowance_operation;
 			$allow_skill 					= $pkwt_info[0]->allowance_skill;
+			$allow_training 			= $pkwt_info[0]->allowance_training;
 
 		} else {
 			$contract_start = '';
@@ -872,6 +873,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_akomodsasi 		= '';
 			$allow_operational 		= '';
 			$allow_skill 					= '';
+			$allow_training 			= '';
 		}
 
 
@@ -939,6 +941,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,
 			'allow_operational' => $result[0]->allow_operational,
+			'allow_training' => $result[0]->allow_training,
+			'allow_skill' => $result[0]->allow_skill,
 
 			);
 		
@@ -1165,7 +1169,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 					if($this->input->post('gaji_pokok')=='') {
 						$Return['error'] = 'Gaji Pokok Kosong..!';
-					} 
+					}
 
 						// $Return['error'] = 'Gaji Pokok Kosong..!';
 					// else if ($this->input->post('nama_ibu')=='') {
@@ -1267,14 +1271,16 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
 							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
 							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
-							$tunjangan_operational 							= $this->input->post('tunjangan_operational');
+							$tunjangan_operational 				= $this->input->post('tunjangan_operational');
+							$tunjangan_keahlian 				= $this->input->post('tunjangan_keahlian');
+							$tunjangan_pelatihan 				= $this->input->post('tunjangan_pelatihan');
 							
 							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
 							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
 							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
-							$hari_kerja 							= $this->input->post('hari_kerja');
-							$cut_start 							= $this->input->post('cut_start');
-							$cut_off 							= $this->input->post('cut_off');
+							$hari_kerja 								= $this->input->post('hari_kerja');
+							$cut_start 									= $this->input->post('cut_start');
+							$cut_off 										= $this->input->post('cut_off');
 							$date_payment 							= $this->input->post('date_payment');
 
 							// $date_exp_pkwt		= $this->input->post('date_exp_pkwt');
@@ -1317,39 +1323,43 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'tgl_payment'						=> $date_payment,
 							'start_period_payment' 	=> $cut_start,
 							'end_period_payment'		=> $cut_off,
-							'basic_pay' 						=> $gaji_pokok,
-							'dm_allow_grade' 				=> 'Month',
-							'allowance_grade'				=> $tunjangan_jabatan,
-							'dm_allow_area' 				=> 'Month',
-							'allowance_area'				=> $tunjangan_area,
-							'dm_allow_masakerja' 		=> 'Month',
-							'allowance_masakerja' 	=> $tunjangan_masakerja,
-							'dm_allow_transmeal' 		=> 'Month',
-							'allowance_transmeal' 	=> $tunjangan_makan_trans,
-							'dm_allow_transrent' 		=> 'Month',
-							'allowance_transrent' 	=> $tunjangan_trans_rental,
-							'dm_allow_meal' 				=> 'Month',
-							'allowance_meal' 				=> $tunjangan_makan,
-							'dm_allow_transport' 		=> 'Month',
-							'allowance_transport' 	=> $tunjangan_transport,
-							'dm_allow_komunikasi' 	=> 'Month',
-							'allowance_komunikasi' 	=> $tunjangan_komunikasi,
-							'dm_allow_laptop' 			=> 'Month',
-							'allowance_laptop' 			=> $tunjangan_device,
-							'dm_allow_residance' 		=> 'Month',
-							'allowance_residance' 	=> $tunjangan_tempat_tinggal,
-							'dm_allow_rent' 				=> 'Month',
-							'allowance_rent' 				=> $tunjangan_rental,
-							'dm_allow_park' 				=> 'Month',
-							'allowance_park' 				=> $tunjangan_parkir,
-							'dm_allow_medicine' 		=> 'Month',
-							'allowance_medicine' 		=> $tunjangan_kesehatan,
-							'dm_allow_akomodasi' 		=> 'Month',
-							'allowance_akomodasi' 	=> $tunjangan_akomodasi,
-							'dm_allow_kasir' 				=> 'Month',
-							'allowance_kasir' 			=> $tunjangan_kasir,
-							'dm_allow_operation' 		=> 'Month',
-							'allowance_operation' 	=> $tunjangan_operational,
+							'basic_pay' 						=> str_replace(".", "", $gaji_pokok),
+							'dm_allow_grade' 				=> 'Bulan',
+							'allowance_grade'				=> str_replace(".", "", $tunjangan_jabatan),
+							'dm_allow_area' 				=> 'Bulan',
+							'allowance_area'				=> str_replace(".", "", $tunjangan_area),
+							'dm_allow_masakerja' 		=> 'Bulan',
+							'allowance_masakerja' 	=> str_replace(".", "", $tunjangan_masakerja),
+							'dm_allow_transmeal' 		=> 'Bulan',
+							'allowance_transmeal' 	=> str_replace(".", "", $tunjangan_makan_trans),
+							'dm_allow_transrent' 		=> 'Bulan',
+							'allowance_transrent' 	=> str_replace(".", "", $tunjangan_trans_rental),
+							'dm_allow_meal' 				=> 'Bulan',
+							'allowance_meal' 				=> str_replace(".", "", $tunjangan_makan),
+							'dm_allow_transport' 		=> 'Bulan',
+							'allowance_transport' 	=> str_replace(".", "", $tunjangan_transport),
+							'dm_allow_komunikasi' 	=> 'Bulan',
+							'allowance_komunikasi' 	=> str_replace(".", "", $tunjangan_komunikasi),
+							'dm_allow_laptop' 			=> 'Bulan',
+							'allowance_laptop' 			=> str_replace(".", "", $tunjangan_device),
+							'dm_allow_residance' 		=> 'Bulan',
+							'allowance_residance' 	=> str_replace(".", "", $tunjangan_tempat_tinggal),
+							'dm_allow_rent' 				=> 'Bulan',
+							'allowance_rent' 				=> str_replace(".", "", $tunjangan_rental),
+							'dm_allow_park' 				=> 'Bulan',
+							'allowance_park' 				=> str_replace(".", "", $tunjangan_parkir),
+							'dm_allow_medicine' 		=> 'Bulan',
+							'allowance_medicine' 		=> str_replace(".", "", $tunjangan_kesehatan),
+							'dm_allow_akomodasi' 		=> 'Bulan',
+							'allowance_akomodasi' 	=> str_replace(".", "", $tunjangan_akomodasi),
+							'dm_allow_kasir' 				=> 'Bulan',
+							'allowance_kasir' 			=> str_replace(".", "", $tunjangan_kasir),
+							'dm_allow_operation' 		=> 'Bulan',
+							'allowance_operation' 	=> str_replace(".", "", $tunjangan_operational),
+							'dm_allow_skill' 				=> 'Bulan',
+							'allowance_skill' 			=> str_replace(".", "", $tunjangan_keahlian),
+							'dm_allow_training' 		=> 'Bulan',
+							'allowance_training' 		=> str_replace(".", "", $tunjangan_pelatihan),
 							'img_esign'							=> $image_name,
 
 							'sign_nip'							=> '21300033',
@@ -1357,12 +1367,12 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'sign_jabatan'					=> 'HR & GA MANAGER',
 							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
 							'contract_type_id'			=> $jenis_dokumen, //1 pkwt, 2 tkhl
-							'request_pkwt' => $session['user_id'],
-							'request_date' => date('Y-m-d h:i:s'),
-							'approve_nae' => $session['user_id'],
-							'approve_nae_date' => date('Y-m-d h:i:s'),
-							'approve_nom' =>  $session['user_id'],
-							'approve_nom_date' => date('Y-m-d h:i:s')
+							'request_pkwt' 					=> $session['user_id'],
+							'request_date' 					=> date('Y-m-d h:i:s'),
+							'approve_nae' 					=> $session['user_id'],
+							'approve_nae_date' 			=> date('Y-m-d h:i:s'),
+							'approve_nom' 					=> $session['user_id'],
+							'approve_nom_date' 			=> date('Y-m-d h:i:s')
 
 						);
 
@@ -1378,8 +1388,6 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 				} //end start
 				
-
-
 				//$Return['result'] = 'Permintaan Karyawan Baru berhasil di Ubah..';
 
 				$this->output($Return);

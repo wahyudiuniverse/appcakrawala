@@ -114,7 +114,13 @@
             <option value="0">-ALL-</option>
             <?php foreach ($all_projects as $proj) { ?>
               <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
+              
             <?php } ?>
+            <?php if($session['employee_id']=='20528398'){?>
+
+                <option value="22"> [INHOUSE] PT. SIPRAMA CAKRAWALA</option>
+              <?php } ?>
+              
           </select>
         </div>
       </div>
