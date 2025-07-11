@@ -105,12 +105,23 @@ $(document).ready(function() {
 			contentType: false,
 			cache: false,
 			processData:false,
+
+			beforeSend: function() {
+				$('#approve_new_emp').attr("hidden",true);
+								// $('#editKontakModal').modal('show');
+								// $('.info-modal-edit-JO').attr("hidden", false);
+								// $('.isi-modal-edit-JO').attr("hidden", true);
+								// $('.info-modal-edit-JO').html(loading_html_text);
+								// $('#button_save_JO').attr("hidden", true);
+								// $('#button_delete_JO').attr("hidden", true);
+							},
 			success: function(JSON)
 			{
 				if (JSON.error != '') {
 					toastr.error(JSON.error);
 					$('input[name="csrf_hrpremium"]').val(JSON.csrf_hash);
 					$('.save').prop('disabled', false);
+					$('#approve_new_emp').attr("hidden",false);
 					Ladda.stopAll();
 				} else {
 					xin_table.api().ajax.reload(function(){ 

@@ -639,7 +639,7 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
 
 
     <?php if (in_array('382', $role_resources_ids)) { ?>
-      <button type="submit" class="btn btn-primary save">APPROVE HRD</button>
+      <button type="submit" id="approve_new_emp" class="btn btn-primary save">APPROVE HRD</button>
     <?php } ?>
 
   </div>
@@ -677,6 +677,18 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
           contentType: false,
           cache: false,
           processData: false,
+
+
+          beforeSend: function() {
+            $('#approve_new_emp').attr("hidden",true);
+                    // $('#editKontakModal').modal('show');
+                    // $('.info-modal-edit-JO').attr("hidden", false);
+                    // $('.isi-modal-edit-JO').attr("hidden", true);
+                    // $('.info-modal-edit-JO').html(loading_html_text);
+                    // $('#button_save_JO').attr("hidden", true);
+                    // $('#button_delete_JO').attr("hidden", true);
+                  },
+
           success: function(response) {
             alert("Karyawan Berhasil di Approve");
             Ladda.stopAll();
@@ -728,6 +740,8 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
             // }
           },
           error: function(xhr, status, error) {
+
+            $('#approve_new_emp').attr("hidden",false);
             var pesan = xhr.responseText;
             alert(pesan);
             toastr.error(JSON.error);
