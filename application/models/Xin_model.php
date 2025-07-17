@@ -751,6 +751,10 @@ class Xin_model extends CI_Model
 			$arr['traxes_summary_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
+		}  else if ($mClass == 'traxes_report_display') {
+			$arr['traxes_display_active'] = 'active';
+			$arr['reports_open'] = 'open';
+			return $arr;
 		} else if ($mClass == 'reports'  && $mMethod == 'roles') {
 			$arr['reports_active'] = 'active';
 			$arr['reports_open'] = 'open';

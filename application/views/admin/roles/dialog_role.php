@@ -3509,6 +3509,33 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 									} ?>"
 						},
 
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Display Report",
+							add_info: "Laporan Display",
+							value: "114",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('114', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>"
+						},
+						
+
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Resume Report",
+							add_info: "Laporan Bulanan",
+							value: "113",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('113', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>"
+						},
+
 						// USER ROLL
 						{
 							id: "",

@@ -1445,7 +1445,18 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('112', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['traxes_stock_active'])) echo $arr_mod['traxes_stock_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_stock/'); ?>"> Sellout Report
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_stock/'); ?>"> Sellin Report
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('114', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['traxes_display_active'])) echo $arr_mod['traxes_display_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_display/'); ?>"> Display Report
             </a>
           </li>
         <?php
@@ -1462,19 +1473,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         <?php
         }
         ?>
-
-
-        <?php
-        if (in_array('112', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['remployees_active'])) echo $arr_mod['remployees_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_report_display/'); ?>"> Display Report
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
+        
         <?php
         if (in_array('105', $role_resources_ids)) {
         ?>
