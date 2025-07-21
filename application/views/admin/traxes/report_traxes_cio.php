@@ -118,7 +118,8 @@
             <?php } ?>
             <?php if($session['employee_id']=='20528398'){?>
 
-                <option value="22"> [INHOUSE] PT. SIPRAMA CAKRAWALA</option>
+                <option value="22"> [SC] PT. SIPRAMA CAKRAWALA</option>
+                <option value="95"> [KAC] PT. KRISTA AULIA CAKRAWALA</option>
               <?php } ?>
               
           </select>

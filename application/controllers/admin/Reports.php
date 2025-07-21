@@ -3077,9 +3077,6 @@ class Reports extends MY_Controller
 			'TEMPAT LAHIR',
 			'TANGGAL LAHIR',
 			'TANGGAL BERGABUNG',
-			'MULAI KONTRAK',
-			'AKHIR KONTRAK',
-			'GAJI POKOK',
 			'TANGGAL RESIGN',
 			'JENIS KELAMIN',
 			'STATUS KAWIN',
@@ -3103,6 +3100,8 @@ class Reports extends MY_Controller
 			'NAMA BANK',
 			'NO REKENING',
 			'NAMA PEMILIK REKENING',
+
+			'FOTO PROFILE',
 			'FOTO KTP',
 			'FOTO KK',
 			'FOTO NPWP',
@@ -3110,8 +3109,30 @@ class Reports extends MY_Controller
 			'DOKUMEN SKCK',
 			'DOKUMEN CV',
 			'DOKUMEN PAKLARING',
-			'PKWT',
-			'NO KONTRAK',
+
+			'GAJI POKOK',
+			'TUNJ. JABATAN',
+			'TUNJ. AREA',
+			'TUNJ. MASA KERJA',
+			'TUNJ. MAKAN',
+			'TUNJ. TRANSPORT',
+			'TUNJ. RENTAL',
+			'TUNJ. KOMUNIKASI',
+			'TUNJ. PARKIR',
+			'TUNJ. TEMPAT TINGGAL',
+			'TUNJ. LAPTOP',
+			'TUNJ. KASIR',
+			'TUNJ. TRANS-MAKAN',
+			'TUNJ. TRANS-RENTAL',
+			'TUNJ. KESEHATAN',
+			'TUNJ. AKOMODASI',
+			'TUNJ. KEAHLIAN',
+			'TUNJ. OPERASIONAL',
+			'TUNJ. PELATIHAN',
+			'NO. PKWT',
+			'MULAI KONTRAK',
+			'AKHIR KONTRAK',
+			'DOKUMEN PKWT',
 			'TANGGAL UPLOAD PKWT',
 		];
 
@@ -3131,7 +3152,7 @@ class Reports extends MY_Controller
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle('A1:AW1')
+			->getStyle('A1:BR1')
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()

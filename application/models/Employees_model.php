@@ -2675,9 +2675,6 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.tempat_lahir');
 		$this->db->select('xin_employees.date_of_birth');
 		$this->db->select('xin_employees.date_of_joining');
-		$this->db->select('xin_employees.contract_start');
-		$this->db->select('xin_employees.contract_end');
-		$this->db->select('xin_employees.basic_salary');
 		$this->db->select('xin_employees.date_of_leaving');
 		$this->db->select('xin_employees.gender');
 		$this->db->select('xin_employees.marital_status');
@@ -2705,11 +2702,33 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.filename_skck');
 		$this->db->select('xin_employees.filename_cv');
 		$this->db->select('xin_employees.filename_paklaring');
+
+		$this->db->select('b.no_surat');
 		$this->db->select('b.from_date');
 		$this->db->select('b.to_date');
+
+		$this->db->select('b.basic_pay as basic_salary');
+		$this->db->select('b.allowance_grade');
+		$this->db->select('b.allowance_area');
+		$this->db->select('b.allowance_masakerja');
+		$this->db->select('b.allowance_meal');
+		$this->db->select('b.allowance_transport');
+		$this->db->select('b.allowance_rent');
+		$this->db->select('b.allowance_komunikasi');
+		$this->db->select('b.allowance_park');
+		$this->db->select('b.allowance_residance');
+		$this->db->select('b.allowance_laptop');
+		$this->db->select('b.allowance_kasir');
+		$this->db->select('b.allowance_transmeal');
+		$this->db->select('b.allowance_transrent');
+		$this->db->select('b.allowance_medicine');
+		$this->db->select('b.allowance_akomodasi');
+		$this->db->select('b.allowance_skill');
+		$this->db->select('b.allowance_operation');
+		$this->db->select('b.allowance_training');
+
 		$this->db->select('b.file_name');
 		$this->db->select('b.upload_pkwt');
-		$this->db->select('b.no_surat');
 
 		$this->db->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
@@ -2877,68 +2896,51 @@ class Employees_model extends CI_Model
 				}
 			}
 			if ($level_record <= $level_user) {
-				$text_gaji = "**********";
-				$text_pin = "**********";
+				$text_gaji 			= "**********";
+				$text_pin 			= "**********";
+				$allow_grade 		= "**********";
+				$allow_area 		= "**********";
+				$allow_masa 		= "**********";
+				$allow_meal 		= "**********";
+				$allow_trans 		= "**********";
+				$allow_rent 		= "**********";
+				$allow_kom 			= "**********";
+				$allow_park 		= "**********";
+				$allow_res 			= "**********";
+				$allow_dev 			= "**********";
+				$allow_kasir 		= "**********";
+				$allow_transmeal 	= "**********";
+				$allow_transrent 	= "**********";
+				$allow_medi 		= "**********";
+				$allow_akom 		= "**********";
+				$allow_skill 		= "**********";
+				$allow_ops 			= "**********";
+				$allow_training 	= "**********";
+
 			} else {
-				$text_gaji = $record->basic_salary;
-				$text_pin = $record->private_code;
+
+				$text_gaji 			= $record->basic_salary;
+				$text_pin 			= $record->private_code;
+				$allow_grade 		= $record->allowance_grade;
+				$allow_area 		= $record->allowance_area;
+				$allow_masa 		= $record->allowance_masakerja;
+				$allow_meal 		= $record->allowance_meal;
+				$allow_trans 		= $record->allowance_transport;
+				$allow_rent 		= $record->allowance_rent;
+				$allow_kom 			= $record->allowance_komunikasi;
+				$allow_park 		= $record->allowance_park;
+				$allow_res 			= $record->allowance_residance;
+				$allow_dev 			= $record->allowance_laptop;
+				$allow_kasir 		= $record->allowance_kasir;
+				$allow_transmeal 	= $record->allowance_transmeal;
+				$allow_transrent 	= $record->allowance_transrent;
+				$allow_medi 		= $record->allowance_medicine;
+				$allow_akom 		= $record->allowance_akomodasi;
+				$allow_skill 		= $record->allowance_skill;
+				$allow_ops 			= $record->allowance_operation;
+				$allow_training 	= $record->allowance_training;
 			}
 
-			// if ("B" >= "D2") {
-			// 	$text_gaji = "**********";
-			// } else {
-			// 	$text_gaji = $record->basic_salary . " ";
-			// }
-
-			// $data[] = array(
-			// 	"status" => $text_resign,
-			// 	"nip" => $record->employee_id,
-			// 	"nama" => strtoupper($record->first_name),
-			// 	"company_name" => strtoupper($this->get_nama_company($record->company_id)),
-			// 	"department_name" => strtoupper($this->get_nama_department($record->department_id)),
-			// 	"jabatan" => strtoupper($record->designation_name),
-			// 	"project" => strtoupper($this->get_nama_project($record->project_id)),
-			// 	"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
-			// 	"area" => strtoupper($record->penempatan),
-			// 	"region" => strtoupper($record->region),
-			// 	"tempat_lahir" => strtoupper($record->tempat_lahir),
-			// 	"date_of_birth" => $this->Xin_model->tgl_indo($record->date_of_birth),
-			// 	"date_of_joining" => $this->Xin_model->tgl_indo($record->date_of_joining),
-			// 	"contract_start" => $this->Xin_model->tgl_indo($record->contract_start),
-			// 	"contract_end" => $this->Xin_model->tgl_indo($record->contract_end),
-			// 	"basic_salary" => $text_gaji,
-			// 	"date_of_leaving" => $this->Xin_model->tgl_indo($record->date_of_leaving),
-			// 	"gender" => $record->gender,
-			// 	"text_marital" => $text_marital,
-			// 	"agama" => strtoupper($this->get_nama_agama($record->ethnicity_type)),
-			// 	"email" => strtoupper($record->email),
-			// 	"contact_no" => $record->contact_no,
-			// 	"pendidikan" => strtoupper($this->get_nama_pendidikan($record->last_edu)),
-			// 	"alamat_ktp" => strtoupper($record->alamat_ktp),
-			// 	"alamat_domisili" => strtoupper($record->alamat_domisili),
-			// 	"no_kk" => $record->kk_no . " ",
-			// 	"no_ktp" => $record->ktp_no,
-			// 	"no_npwp" => $record->npwp_no . " ",
-			// 	"bpjs_tk" => $record->bpjs_tk_no . " ",
-			// 	"bpjs_ks" => $record->bpjs_ks_no . " ",
-			// 	"nama_ibu" => strtoupper($record->ibu_kandung),
-			// 	"nama_kontak" => strtoupper($this->get_nama_kontak_darurat($record->ktp_no)),
-			// 	"hubungan_kontak" => strtoupper($this->get_hubungan_kontak_darurat($record->ktp_no)),
-			// 	"nomor_kontak" => $this->get_nomor_kontak_darurat($record->ktp_no) . " ",
-			// 	"nama_bank" => strtoupper($this->get_nama_bank($record->bank_name)),
-			// 	"no_rekening" => $record->nomor_rek . " ",
-			// 	"pemilik_rekening" => strtoupper($record->pemilik_rek),
-			// 	"foto_ktp" => $text_ktp,
-			// 	"foto_kk" => $text_kk,
-			// 	"foto_npwp" => $text_npwp,
-			// 	"foto_ijazah" => $text_ijazah,
-			// 	"foto_skck" => $text_skck,
-			// 	"foto_cv" => $text_cv,
-			// 	"foto_paklaring" => $text_paklaring,
-			// 	"dokumen_pkwt" => $this->get_link_pkwt($record->employee_id),
-			// 	"tanggal_pkwt" => $this->get_tanggal_pkwt($record->employee_id),
-			// 	// $this->get_nama_karyawan($record->upload_by)
-			// );
 
 			$data[] = array(
 				$text_resign,
@@ -2957,9 +2959,6 @@ class Employees_model extends CI_Model
 				strtoupper($record->tempat_lahir),
 				$this->Xin_model->tgl_indo($record->date_of_birth),
 				$this->Xin_model->tgl_indo($record->date_of_joining),
-				$this->Xin_model->tgl_indo($record->from_date),
-				$this->Xin_model->tgl_indo($record->to_date),
-				$text_gaji,
 				$this->Xin_model->tgl_indo($record->date_of_leaving),
 				$record->gender,
 				$text_marital,
@@ -2983,6 +2982,7 @@ class Employees_model extends CI_Model
 				strtoupper($this->get_nama_bank($record->bank_name)),
 				$record->nomor_rek,
 				strtoupper($record->pemilik_rek),
+
 				$text_profile_picture,
 				$text_ktp,
 				$text_kk,
@@ -2991,10 +2991,32 @@ class Employees_model extends CI_Model
 				$text_skck,
 				$text_cv,
 				$text_paklaring,
-				$record->file_name,
+
+				$text_gaji,
+				$allow_grade,
+				$allow_area,
+				$allow_masa,
+				$allow_meal,
+				$allow_trans,
+				$allow_rent,
+				$allow_kom,
+				$allow_park,
+				$allow_res,
+				$allow_dev,
+				$allow_kasir,
+				$allow_transmeal,
+				$allow_transrent,
+				$allow_medi,
+				$allow_akom,
+				$allow_skill,
+				$allow_ops,
+				$allow_training,
+
 				$record->no_surat,
-				$record->upload_pkwt,
-				// $this->get_tanggal_pkwt($record->upload_pkwt),
+				$this->Xin_model->tgl_indo($record->from_date),
+				$this->Xin_model->tgl_indo($record->to_date),
+				$record->file_name,
+				$this->get_tanggal_pkwt($record->upload_pkwt)
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
