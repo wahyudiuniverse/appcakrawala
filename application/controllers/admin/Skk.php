@@ -246,7 +246,7 @@ class Skk extends MY_Controller {
 
 		$docid = date('ymdHis');
 		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
-		$domain = 'https://apps-cakrawala.com/esign/sk/'.$docid;
+		$domain = 'https://upayatehnik.com/esign/sk/'.$docid;
 		$params['data'] = $domain; //data yang akan di jadikan QR CODE
 		$params['level'] = 'H'; //H=High
 		$params['size'] = 10;
@@ -581,7 +581,7 @@ class Skk extends MY_Controller {
 
 
 
-			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '22529370' && $nip != '21306162' && $nip != '21500027' && $nip != '21309963' && $blacklist != 3){
+			if($waktu_kerja>=3 && $nip !='21305471' && $nip != '22529370' && $nip != '21306162' && $nip != '21500027' && $nip != '21309963' && $nip != '24531421' && $blacklist != 3){
 
 			$tbl_2 = '
 

@@ -105,6 +105,17 @@ class Employees_model extends CI_Model
 	}
 
 
+	// get all employees
+	public function get_employees_aktif_level()
+	{
+		$query = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name
+			FROM xin_employees emp
+			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+			WHERE pos.level not in ('E1','E2')
+			AND emp.status_resign = 1");
+		return $query->result();
+	}
+
 	public function get_empdeactive_byproject($id)
 	{
 		$query = $this->db->query("SELECT user_id, employee_id, CONCAT( employee_id, '-', first_name) AS fullname, project_id, date_of_leaving,month(date_of_leaving) bln_skrng
@@ -650,6 +661,7 @@ class Employees_model extends CI_Model
 			$this->db->select('max(contract_id) as max_contract_id');
 			$this->db->from('xin_employee_contract');
 			$this->db->where('employee_id', $id);
+			$this->db->where('cancel_stat', 0);
 			// $this->db->order_by('createdon', 'desc');
 			// $this->db->limit(1);
 
@@ -1011,6 +1023,29 @@ class Employees_model extends CI_Model
 				return "";
 			} else {
 				return $query['designation_name'];
+			}
+		}
+	}
+
+	//ambil nama jabatan
+	function get_ktp_karyawan($id)
+	{
+		if (empty($id)) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('ktp_no');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['designation_name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['ktp_no'];
 			}
 		}
 	}
@@ -2750,13 +2785,14 @@ class Employees_model extends CI_Model
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		// $this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
-		$this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		$this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract WHERE status_pkwt = 1 GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
 		$tes_query = $this->db->last_query();
 
 		$data = array();
 
 		foreach ($records as $record) {
+			
 			$text_periode_from = "";
 			$text_periode_to = "";
 			$text_periode = "";
@@ -3016,7 +3052,8 @@ class Employees_model extends CI_Model
 				$this->Xin_model->tgl_indo($record->from_date),
 				$this->Xin_model->tgl_indo($record->to_date),
 				$record->file_name,
-				$this->get_tanggal_pkwt($record->upload_pkwt)
+				$record->upload_pkwt,
+				// $this->get_tanggal_pkwt($record->upload_pkwt)
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
@@ -3142,7 +3179,7 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_employees.project_id');
 			$this->db->select('xin_employees.sub_project_id');
 			$this->db->select('xin_employees.designation_id');
-			// $this->db->select('xin_designations.designation_id');
+			$this->db->select('xin_employees.date_of_joining');
 			$this->db->select('xin_designations.designation_name');
 			$this->db->select('xin_employees.penempatan');
 			//$this->db->select('b.from_date');
@@ -3297,6 +3334,7 @@ class Employees_model extends CI_Model
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
 					"penempatan" => strtoupper($record->penempatan),
+					"join" => strtoupper($record->date_of_joining),
 					"periode" => $this->get_periode_pkwt($record->employee_id),
 					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)

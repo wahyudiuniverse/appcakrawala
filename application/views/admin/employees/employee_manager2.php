@@ -864,7 +864,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   </div>
 </div>
 
-<!-- MODAL UPLOAD DOKUMEN PRIBADI -->
+<!-- MODAL UPLOAD REKENING BANK -->
 <div class="modal fade" id="uploadDokumenModal" tabindex="-1" role="dialog" aria-labelledby="uploadDokumenModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -4271,7 +4271,13 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     // alert(uniqueid);
     // alert(sub_project);
 
-    var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
+    var d = new Date();
+    var time = d.getTime();
+
+    var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid + '?' + time;
+
+
+    // var link_eslip = '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid;
     var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE KONTRAK</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + 'https://apps-cakrawala.com/admin/pkwt1/view/bYqHsn9BkHeoaumXMggr' + '&embedded=true"></embed>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="https://docs.google.com/viewerng/viewer?url=' + link_eslip + '&embedded=true"></embed>';
@@ -4299,8 +4305,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
   function open_addendum(id) {
     //testing
     // alert(id);
+    var d = new Date();
+    var time = d.getTime();
 
-    var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
+    var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id + '?' + time;
+
+    // var link_eslip = '<?= base_url() ?>admin/addendum/cetak/' + id;
     var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE ADDENDUM</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
@@ -4675,7 +4685,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
                         }; ?>
 
         if (tes_role == "1") {
-          var tombol_upload_kk_tabel = '<button onclick="upload_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
+          var tombol_upload_kk_tabel = '<button onclick="upload_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
         } else {
           var tombol_upload_kk_tabel = '';
         }

@@ -26,13 +26,11 @@ class Project_model extends CI_Model
 	public function list_akses_project()
 	{
 
-		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title, pro.priority
-			FROM xin_projects_akses pros
-			LEFT JOIN xin_employees emp ON emp.employee_id = pros.nip
-			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-			LEFT JOIN xin_projects pro ON pro.project_id = pros.project_id
-			ORDER BY pros.secid DESC
-			LIMIT 5;";
+		$sql = "SELECT pa.secid, pa.nip, emp.first_name, pos.designation_name, pro.title, pro.priority
+					FROM (SELECT secid, nip, project_id FROM `xin_projects_akses` ORDER by secid DESC limit 10) pa
+					LEFT JOIN xin_employees emp ON emp.employee_id = pa.nip
+					LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+					LEFT JOIN xin_projects pro ON pro.project_id = pa.project_id;";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;
@@ -42,13 +40,11 @@ class Project_model extends CI_Model
 	public function list_akses_project_nip($nip)
 	{
 
-		$sql = "SELECT pros.secid, pros.nip, emp.first_name, pos.designation_name, pro.title, pro.priority
-			FROM xin_projects_akses pros
-			LEFT JOIN xin_employees emp ON emp.employee_id = pros.nip
-			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-			LEFT JOIN xin_projects pro ON pro.project_id = pros.project_id
-            WHERE pros.nip = '$nip'
-            ORDER BY pro.title ASC";
+		$sql = "SELECT pa.secid, pa.nip, emp.first_name, pos.designation_name, pro.title, pro.priority
+				FROM (SELECT secid, nip, project_id FROM `xin_projects_akses` WHERE nip = '$nip' ORDER by secid DESC) pa
+				LEFT JOIN xin_employees emp ON emp.employee_id = pa.nip
+				LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+				LEFT JOIN xin_projects pro ON pro.project_id = pa.project_id;";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;

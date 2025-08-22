@@ -446,7 +446,7 @@ ORDER BY contract_id DESC LIMIT 1";
 			AND cancel_stat = 0
 	        -- AND project in (8,97,90,106,94,46,74)
 	        AND project = '$project'
-	        LIMIT 50";
+	        LIMIT 100";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;
@@ -527,7 +527,7 @@ ORDER BY contract_id DESC LIMIT 1";
 			AND project = '$project_id'
 			-- AND date_format(approve_hrd_date, '%Y-%m-%d') = '$datefrom'  
 			AND DATE_FORMAT(approve_hrd_date, '%Y-%m-%d') BETWEEN '$datefrom' AND '$enddate'
-			AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
+			-- AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID')";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;

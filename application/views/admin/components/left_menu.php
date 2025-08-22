@@ -278,7 +278,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         ?>
 
         <?php
-        if (in_array('470', $role_resources_ids)) { ?>
+        if (in_array('472', $role_resources_ids)) { ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['man_client_active'])) echo $arr_mod['man_client_active']; ?>">
             <a href="<?php echo site_url('admin/reports/manage_client'); ?>" class="sidenav-link">
               <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
@@ -812,15 +812,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   <?php
   if (
     in_array('12', $role_resources_ids)
-    || in_array('14', $role_resources_ids)
-    || in_array('15', $role_resources_ids)
-    || in_array('16', $role_resources_ids)
-    || in_array('17', $role_resources_ids)
-    || in_array('18', $role_resources_ids)
-    || in_array('19', $role_resources_ids)
-    || in_array('20', $role_resources_ids)
-    || in_array('21', $role_resources_ids)
-    || in_array('22', $role_resources_ids)
+    || in_array('121', $role_resources_ids)
   ) {
   ?>
     <li class="<?php if (!empty($arr_mod['emp_open'])) echo $arr_mod['emp_open']; ?> sidenav-item">
@@ -829,27 +821,12 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         <div><?php echo $this->lang->line('xin_hr'); ?></div>
       </a>
       <ul class="sidenav-menu">
-        <?php
-        if ($system[0]->module_awards == 'true') {
-        ?>
-          <?php
-          if (in_array('14', $role_resources_ids)) {
-          ?>
-            <li class="sidenav-item <?php if (!empty($arr_mod['awar_active'])) echo $arr_mod['awar_active']; ?>">
-              <a class="sidenav-link" href="<?php echo site_url('admin/awards'); ?>"> <?php echo $this->lang->line('left_awards'); ?> </a>
-            </li>
-          <?php
-          }
-          ?>
-        <?php
-        }
-        ?>
 
         <?php
-        if (in_array('15', $role_resources_ids)) {
+        if (in_array('121', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['tra_active'])) echo $arr_mod['tra_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/transfers'); ?>"> <?php echo $this->lang->line('left_transfers'); ?> </a>
+            <a class="sidenav-link" href="<?php echo site_url('admin/transfers'); ?>"> Billing Area </a>
           </li>
         <?php
         }
@@ -865,22 +842,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         }
         ?>
 
-        <?php
-        if ($system[0]->module_travel == 'true') {
-        ?>
-          <?php
-          if (in_array('17', $role_resources_ids)) {
-          ?>
-            <li class="sidenav-item <?php if (!empty($arr_mod['trav_active'])) echo $arr_mod['trav_active']; ?>">
-              <a class="sidenav-link" href="<?php echo site_url('admin/travel'); ?>"> <?php echo $this->lang->line('left_travels'); ?> </a>
-            </li>
-          <?php
-          }
-          ?>
-
-        <?php
-        }
-        ?>
 
         <?php
         if (in_array('18', $role_resources_ids)) {
@@ -922,15 +883,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         }
         ?>
 
-        <?php
-        if (in_array('22', $role_resources_ids) || $reports_to > 0) {
-        ?>
-          <li class="<?php if (!empty($arr_mod['emp_ll_active'])) echo $arr_mod['emp_ll_active']; ?> sidenav-item">
-            <a href="<?php echo site_url('admin/employees_last_login'); ?>" class="sidenav-link"> <?php echo $this->lang->line('left_employees_last_login'); ?></a>
-          </li>
-        <?php
-        }
-        ?>
       </ul>
     </li>
   <?php

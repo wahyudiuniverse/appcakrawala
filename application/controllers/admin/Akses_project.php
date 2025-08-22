@@ -77,7 +77,6 @@ class Akses_project extends MY_Controller {
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$user_info = $this->Xin_model->read_user_info($session['user_id']);
 
-
 			if($nip=="0" || is_null($nip)){
 				$aksesproject = $this->Project_model->list_akses_project();
 				// $usermobile = $this->Usersmobile_model->user_mobile_limit();
@@ -86,8 +85,7 @@ class Akses_project extends MY_Controller {
 				// $usermobile = $this->Usersmobile_model->user_mobile_limit_fillter($company_id, $project_id, $subproject_id);
 			}
 
-			
-
+		
 		$data = array();
 
       foreach($aksesproject->result() as $r) {
@@ -97,7 +95,7 @@ class Akses_project extends MY_Controller {
       $nama_lengkap = $r->first_name;
       $nama_posisi = $r->designation_name;
       // $project_id = $r->project_id;
-      $project_name = '['.$r->priority.'] ' $r->title;
+      $project_name = '['.$r->priority.'] '.$r->title;
 
 			// $posisi = $this->Employees_model->read_employee_jabatan($r->nip);
 			// if(!is_null($posisi)){
