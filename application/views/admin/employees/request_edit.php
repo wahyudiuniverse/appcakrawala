@@ -535,7 +535,7 @@ $sub_project_id = $sub_project; ?>
 								$tesfile1 = base_url('/uploads/document/ktp/') . "default.jpg";
 								$file_ada = "";
 							} else {
-								if (strpos($ktp, "https://") != false) {
+								if (strpos($ktp, "https") != false) {
 									$tesfile1 = $ktp . "?" . $t;
 								} else {
 									$tesfile1 = base_url('/uploads/document/ktp/') . $ktp . "?" . $t;
@@ -567,7 +567,7 @@ $sub_project_id = $sub_project; ?>
 							} else {
 								$file_ada = "ada";
 								// $kk = '';
-								if (strpos($kk, "https://") != false) {
+								if (strpos($kk, "https") != false) {
 									$tesfile2 = $kk . "?" . $t;
 								} else {
 									$tesfile2 = base_url('/uploads/document/kk/') . $kk . "?" . $t;
@@ -596,7 +596,7 @@ $sub_project_id = $sub_project; ?>
 							} else {
 								$file_ada = "ada";
 								// $file_npwp = '';
-								if (strpos($file_npwp, "https://") != false) {
+								if (strpos($file_npwp, "https") != false) {
 									$tesfile3 = $file_npwp . "?" . $t;
 								} else {
 									$tesfile3 = base_url('/uploads/document/npwp/') . $file_npwp . "?" . $t;
@@ -623,7 +623,7 @@ $sub_project_id = $sub_project; ?>
 							} else {
 								$file_ada = "ada";
 								// $ijazah = '';
-								if (strpos($ijazah, "https://") != false) {
+								if (strpos($ijazah, "https") != false) {
 									$tesfile4 = $ijazah . "?" . $t;
 								} else {
 									$tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t;
@@ -652,7 +652,7 @@ $sub_project_id = $sub_project; ?>
 							} else {
 								$file_ada = "ada";
 								// $civi = '';
-								if (strpos($civi, "https://") != false) {
+								if (strpos($civi, "https") != false) {
 									$tesfile5 = $civi . "?" . $t;
 								} else {
 									$tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t;
@@ -681,7 +681,7 @@ $sub_project_id = $sub_project; ?>
 							} else {
 								$file_ada = "ada";
 								// $skck = '';
-								if (strpos($skck, "https://") != false) {
+								if (strpos($skck, "https") != false) {
 									$tesfile6 = $skck . "?" . $t;
 								} else {
 									$tesfile6 = base_url('/uploads/document/skck/') . $skck . "?" . $t;
