@@ -641,6 +641,7 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
   //-----cek apakah checkbox di checklist-----
   function cek_ganti_periode(obj) {
     if ($(obj).is(":checked")) {
+			// alert('<?php //echo $employee[0]->user_id; ?>');
       //alert("Yes checked"); //when checked
       document.getElementById("kontrak_start_new").removeAttribute("hidden");
       document.getElementById("kontrak_end_new").removeAttribute("hidden");
@@ -665,6 +666,9 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
     var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
     var tgl_terbit = document.getElementById("tanggal_addendum").value;
     var id_addendum = '<?php echo $addendum['id']; ?>';
+		var karyawan_id = '<?php echo $employee[0]->user_id; ?>';
+
+		// alert(karyawan_id);
 
     //kalau tanggal terbit tidak diisi, diisi dengan tanggal hari ini
     if (tgl_terbit == "") {
@@ -688,6 +692,7 @@ See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quic
       method: 'post',
       data: {
         [csrfName]: csrfHash,
+				karyawan_id: karyawan_id,
         tgl_terbit: tgl_terbit,
         id_addendum: id_addendum,
         isi: isi_encode,

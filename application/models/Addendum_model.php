@@ -4,520 +4,540 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Addendum_model extends CI_Model
 {
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->load->database();
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->database();
+	}
 
 
 
-    //ambil data employee berdasarkan id (secid)
-    public function getAddendumTemplate()
-    {
-        //$otherdb = $this->load->database('default', TRUE);
+	//ambil data employee berdasarkan id (secid)
+	public function getAddendumTemplate()
+	{
+		//$otherdb = $this->load->database('default', TRUE);
 
-        $this->db->select('*');
-        $this->db->from('xin_contract_addendum');
-        $this->db->where('id', '0');
+		$this->db->select('*');
+		$this->db->from('xin_contract_addendum');
+		$this->db->where('id', '0');
 
-        $query = $this->db->get()->row_array();
+		$query = $this->db->get()->row_array();
 
-        return $query;
-    }
+		return $query;
+	}
 
-    //hitung nomor terakhir addendum
-    function count_addendum()
-    {
-        $sql = "SELECT MAX(SUBSTRING(no_addendum, 1, 5)) + 1 AS newcount FROM xin_contract_addendum;";
-        $query = $this->db->query($sql);
-        // return $query->num_rows();
-        $res = $query->result();
-        return $res;
-    }
+	//hitung nomor terakhir addendum
+	function count_addendum()
+	{
+		$sql = "SELECT MAX(SUBSTRING(no_addendum, 1, 5)) + 1 AS newcount FROM xin_contract_addendum;";
+		$query = $this->db->query($sql);
+		// return $query->num_rows();
+		$res = $query->result();
+		return $res;
+	}
 
-    // get single employee
-    public function read_employee($id)
-    {
-        $this->db->select('*');
-        $this->db->from('xin_employees');
-        $this->db->where('user_id', $id);
+	// get single employee
+	public function read_employee($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employees');
+		$this->db->where('user_id', $id);
 
-        $query = $this->db->get()->row_array();
+		$query = $this->db->get()->row_array();
 
-        return $query;
-    }
+		return $query;
+	}
 
-    // get single employee by NIP
-    public function read_employee_by_nip($id)
-    {
-        $this->db->select('*');
-        $this->db->from('xin_employees');
-        $this->db->where('employee_id', $id);
+	// get single employee by NIP
+	public function read_employee_by_nip($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employees');
+		$this->db->where('employee_id', $id);
 
-        $query = $this->db->get()->row_array();
+		$query = $this->db->get()->row_array();
 
-        return $query;
-    }
+		return $query;
+	}
 
-    //ambil kontrak berdasarkan id kontrak
-    public function getContract($id)
-    {
-        $this->db->select('*');
-        $this->db->from('xin_employee_contract');
-        $this->db->where('contract_id', $id);
+	//ambil kontrak berdasarkan id kontrak
+	public function getContract($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_employee_contract');
+		$this->db->where('contract_id', $id);
 
-        $query = $this->db->get()->row_array();
+		$query = $this->db->get()->row_array();
 
-        return $query;
-    }
+		return $query;
+	}
 
-    //ambil addendum berdasarkan id addendum
-    public function getAddendum($id)
-    {
-        $this->db->select('*');
-        $this->db->from('xin_contract_addendum');
-        $this->db->where('id', $id);
+	//ambil addendum berdasarkan id addendum
+	public function getAddendum($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_contract_addendum');
+		$this->db->where('id', $id);
 
-        $query = $this->db->get()->row_array();
+		$query = $this->db->get()->row_array();
 
-        return $query;
-    }
+		return $query;
+	}
 
-    //ambil addendum berdasarkan id karyawan
-    public function getAddendumbyEmployee($id)
-    {
-        $this->db->select('*');
-        $this->db->from('xin_contract_addendum');
-        $this->db->where('karyawan_id', $id);
+	//ambil addendum berdasarkan id karyawan
+	public function getAddendumbyEmployee($id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_contract_addendum');
+		$this->db->where('karyawan_id', $id);
 
-        $query = $this->db->get()->result_array();
+		$query = $this->db->get()->result_array();
 
-        return $query;
-    }
+		return $query;
+	}
 
-    //ambil nama project
-    function get_nama_project($proj_id)
-    {
-        if ($proj_id == null) {
-            return "";
-        } else if ($proj_id == 0) {
-            return "";
-        } else {
-            $this->db->select('*');
-            $this->db->from('xin_projects');
-            $this->db->where('project_id', $proj_id);
+	//ambil nama project
+	function get_nama_project($proj_id)
+	{
+		if ($proj_id == null) {
+			return "";
+		} else if ($proj_id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_projects');
+			$this->db->where('project_id', $proj_id);
 
-            $query = $this->db->get()->row_array();
+			$query = $this->db->get()->row_array();
 
-            if ($query['title'] == null) {
-                return "";
-            } else {
-                return $query['title'];
-            }
-            //return $query['title'];
-        }
-    }
+			if ($query['title'] == null) {
+				return "";
+			} else {
+				return $query['title'];
+			}
+			//return $query['title'];
+		}
+	}
 
-    //ambil nama sub project
-    function get_nama_sub_project($id)
-    {
-        if ($id == null) {
-            return "";
-        } else if ($id == 0) {
-            return "";
-        } else {
-            $this->db->select('*');
-            $this->db->from('xin_projects_sub');
-            $this->db->where('secid', $id);
+	//ambil nama sub project
+	function get_nama_sub_project($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_projects_sub');
+			$this->db->where('secid', $id);
 
-            $query = $this->db->get()->row_array();
+			$query = $this->db->get()->row_array();
 
-            //return $query['sub_project_name'];
-            if ($query['sub_project_name'] == null) {
-                return "";
-            } else {
-                return $query['sub_project_name'];
-            }
-        }
-    }
+			//return $query['sub_project_name'];
+			if ($query['sub_project_name'] == null) {
+				return "";
+			} else {
+				return $query['sub_project_name'];
+			}
+		}
+	}
 
-    //ambil nama jabatan
-    function get_nama_jabatan($id)
-    {
-        if ($id == null) {
-            return "";
-        } else if ($id == 0) {
-            return "";
-        } else {
-            $this->db->select('*');
-            $this->db->from('xin_designations');
-            $this->db->where('designation_id', $id);
+	//ambil nama jabatan
+	function get_nama_jabatan($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_designations');
+			$this->db->where('designation_id', $id);
 
-            $query = $this->db->get()->row_array();
+			$query = $this->db->get()->row_array();
 
-            //return $query['designation_name'];
-            if ($query['designation_name'] == null) {
-                return "";
-            } else {
-                return $query['designation_name'];
-            }
-        }
-    }
+			//return $query['designation_name'];
+			if ($query['designation_name'] == null) {
+				return "";
+			} else {
+				return $query['designation_name'];
+			}
+		}
+	}
 
-    //ambil nama employee
-    function get_nama_karyawan($id)
-    {
-        if ($id == null) {
-            return "";
-        } else if ($id == 0) {
-            return "";
-        } else {
-            $this->db->select('*');
-            $this->db->from('xin_employees');
-            $this->db->where('user_id', $id);
+	//ambil nama employee
+	function get_nama_karyawan($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->from('xin_employees');
+			$this->db->where('user_id', $id);
 
-            $query = $this->db->get()->row_array();
+			$query = $this->db->get()->row_array();
 
-            //return $query['designation_name'];
-            if ($query['first_name'] == null) {
-                return "";
-            } else {
-                return $query['first_name'];
-            }
-        }
-    }
+			//return $query['designation_name'];
+			if ($query['first_name'] == null) {
+				return "";
+			} else {
+				return $query['first_name'];
+			}
+		}
+	}
 
-    //mengisi data file upload untuk data addendum
-    public function isiFileUpload($id, $file, $time)
-    {
-        //Input untuk Database
-        $dataaddendum = [
-            "file_signed"                 => $file,
-            "file_signed_time"            => $time
-        ];
+	//mengisi data file upload untuk data addendum
+	public function isiFileUpload($id, $file, $time)
+	{
+		//Input untuk Database
+		$dataaddendum = [
+			"file_signed"                 => $file,
+			"file_signed_time"            => $time
+		];
 
-        //$otherdb = $this->load->database('default', TRUE);
+		//$otherdb = $this->load->database('default', TRUE);
 
-        $this->db->where('id', $id);
-        $this->db->update('xin_contract_addendum', $dataaddendum);
-    }
+		$this->db->where('id', $id);
+		$this->db->update('xin_contract_addendum', $dataaddendum);
+	}
 
-    //add addendum
-    public function add_addendum($data)
-    {
-        //Input untuk Database
-        $dataaddendum = [
-            'pkwt_id' => $data['pkwt_id'],
-            'karyawan_id' => $data['karyawan_id'],
-            'no_addendum' => $data['no_addendum'],
-            'tgl_terbit' => $data['tgl_terbit'],
-            'isi' => $data['isi'],
-            'esign' => $data['esign'],
-            'urutan' => $data['urutan'],
-            'kontrak_start_new' => $data['kontrak_start_new'],
-            'kontrak_end_new' => $data['kontrak_end_new'],
-            'periode_new' => $data['periode_new'],
-            'created_by' => $data['created_by'],
-            'created_time' => $data['created_time']
-        ];
+	//add addendum
+	public function add_addendum($data)
+	{
+		//insert addendum di Database
+		$dataaddendum = [
+			'pkwt_id' => $data['pkwt_id'],
+			'karyawan_id' => $data['karyawan_id'],
+			'no_addendum' => $data['no_addendum'],
+			'tgl_terbit' => $data['tgl_terbit'],
+			'isi' => $data['isi'],
+			'esign' => $data['esign'],
+			'urutan' => $data['urutan'],
+			'kontrak_start_new' => $data['kontrak_start_new'],
+			'kontrak_end_new' => $data['kontrak_end_new'],
+			'periode_new' => $data['periode_new'],
+			'created_by' => $data['created_by'],
+			'created_time' => $data['created_time']
+		];
 
-        $this->db->insert('xin_contract_addendum', $dataaddendum);
+		$this->db->insert('xin_contract_addendum', $dataaddendum);
 
-        //return null;
-    }
+		//Update data employees
+		$dataaddendum = [
+			'contract_start' => $data['kontrak_start_new'],
+			'contract_end' => $data['kontrak_end_new'],
+			'contract_periode' => $data['periode_new'],
+		];
 
-    //add addendum
-    public function add_addendum_new($data)
-    {
-        //Input untuk Database
-        $dataaddendum = [
-            'pkwt_id' => $data['pkwt_id'],
-            'karyawan_id' => $data['karyawan_id']
-        ];
+		$this->db->where('user_id', $data['karyawan_id']);
+		$this->db->update('xin_employees', $dataaddendum);
 
-        $this->db->insert('xin_contract_addendum', $dataaddendum);
+		//return null;
+	}
 
-        //return null;
-    }
+	//add addendum
+	public function add_addendum_new($data)
+	{
+		//Input untuk Database
+		$dataaddendum = [
+			'pkwt_id' => $data['pkwt_id'],
+			'karyawan_id' => $data['karyawan_id']
+		];
 
-    //update addendum
-    public function update_addendum($data)
-    {
-        //Input untuk Database
-        $dataaddendum = [
-            'tgl_terbit' => $data['tgl_terbit'],
-            'kontrak_start_new' => $data['kontrak_start_new'],
-            'kontrak_end_new' => $data['kontrak_end_new'],
-            'periode_new' => $data['periode_new'],
-            'isi' => $data['isi']
-        ];
+		$this->db->insert('xin_contract_addendum', $dataaddendum);
 
-        $this->db->where('id', $data['id_addendum']);
-        $this->db->update('xin_contract_addendum', $dataaddendum);
+		//return null;
+	}
 
-        //return null;
-    }
+	//update addendum
+	public function update_addendum($data)
+	{
+		//Input untuk Database
+		$dataaddendum = [
+			'tgl_terbit' => $data['tgl_terbit'],
+			'kontrak_start_new' => $data['kontrak_start_new'],
+			'kontrak_end_new' => $data['kontrak_end_new'],
+			'periode_new' => $data['periode_new'],
+			'isi' => $data['isi']
+		];
 
-    //hapus addendum
-    function delete_addendum($postData = null)
-    {
-        $id = $postData['id'];
-        if ($id == null) {
-            return "";
-        } else if ($id == 0) {
-            return "";
-        } else {
-            $this->db->where('id', $id);
-            $this->db->delete('xin_contract_addendum');
+		$this->db->where('id', $data['id_addendum']);
+		$this->db->update('xin_contract_addendum', $dataaddendum);
 
-            return "Sukses";
-        }
-    }
+		//Update data employees
+		$dataaddendum = [
+			'contract_start' => $data['kontrak_start_new'],
+			'contract_end' => $data['kontrak_end_new'],
+			'contract_periode' => $data['periode_new'],
+		];
 
-    //urutan addendum
-    function urutan_addendum($karyawan_id, $pkwt_id)
-    {
-        ## Hitung Total number of records dari addendum
-        $this->db->select('count(*) as allcount');
-        $this->db->where('karyawan_id', $karyawan_id);
-        $this->db->where('pkwt_id', $pkwt_id);
-        $records = $this->db->get('xin_contract_addendum')->result();
-        if ($records[0]->allcount == 0) {
-            return 1;
-        } else {
-            return $records[0]->allcount + 1;
-        }
-    }
+		$this->db->where('user_id', $data['karyawan_id']);
+		$this->db->update('xin_employees', $dataaddendum);
 
-    /*
+		//return null;
+	}
+
+	//hapus addendum
+	function delete_addendum($postData = null)
+	{
+		$id = $postData['id'];
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->where('id', $id);
+			$this->db->delete('xin_contract_addendum');
+
+			return "Sukses";
+		}
+	}
+
+	//urutan addendum
+	function urutan_addendum($karyawan_id, $pkwt_id)
+	{
+		## Hitung Total number of records dari addendum
+		$this->db->select('count(*) as allcount');
+		$this->db->where('karyawan_id', $karyawan_id);
+		$this->db->where('pkwt_id', $pkwt_id);
+		$records = $this->db->get('xin_contract_addendum')->result();
+		if ($records[0]->allcount == 0) {
+			return 1;
+		} else {
+			return $records[0]->allcount + 1;
+		}
+	}
+
+	/*
 	* persiapan data untuk datatable pagination
 	* data list addendum berdasarkan pkwt
 	* 
 	* @author Fadla Qamara
 	*/
-    function get_list_addendum($postData = null)
-    {
+	function get_list_addendum($postData = null)
+	{
 
-        $response = array();
+		$response = array();
 
-        ## Read value
-        $draw = $postData['draw'];
-        $start = $postData['start'];
-        $rowperpage = $postData['length']; // Rows display per page
-        $columnIndex = $postData['order'][0]['column']; // Column index
-        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
-        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
-        $searchValue = $postData['search']['value']; // Search value
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
 
-        //variabel filter (diambil dari post ajax di view)
-        $nip = $postData['nip'];
-        $emp_id = $postData['emp_id'];
-        $contract_id = $postData['contract_id'];
-        $idsession = $postData['idsession'];
+		//variabel filter (diambil dari post ajax di view)
+		$nip = $postData['nip'];
+		$emp_id = $postData['emp_id'];
+		$contract_id = $postData['contract_id'];
+		$idsession = $postData['idsession'];
 
 
-        ## Search 
-        $searchQuery = "";
-        if ($searchValue != '') {
-            $searchQuery = " (no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
-        }
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
+		}
 
-        ## Kondisi Default 
-        $kondisiDefaultQuery = "(
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(
 			karyawan_id = " . $emp_id . "
 		AND	pkwt_id = " . $contract_id . "
 		)";
 
-        ## Total number of records without filtering
-        $this->db->select('count(*) as allcount');
-        $this->db->where($kondisiDefaultQuery);
-        $records = $this->db->get('xin_contract_addendum')->result();
-        $totalRecords = $records[0]->allcount;
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$records = $this->db->get('xin_contract_addendum')->result();
+		$totalRecords = $records[0]->allcount;
 
-        ## Total number of record with filtering
-        $this->db->select('count(*) as allcount');
-        $this->db->where($kondisiDefaultQuery);
-        if ($searchQuery != '') {
-            $this->db->where($searchQuery);
-        }
-        $records = $this->db->get('xin_contract_addendum')->result();
-        $totalRecordwithFilter = $records[0]->allcount;
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_contract_addendum')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
 
-        ## Fetch records
-        $this->db->select('*');
-        $this->db->where($kondisiDefaultQuery);
-        if ($searchQuery != '') {
-            $this->db->where($searchQuery);
-        }
-        $this->db->order_by($columnName, $columnSortOrder);
-        $this->db->limit($rowperpage, $start);
-        $records = $this->db->get('xin_contract_addendum')->result();
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_contract_addendum')->result();
 
-        #Debugging variable
-        //$tes_query = $this->db->last_query();
+		#Debugging variable
+		//$tes_query = $this->db->last_query();
 
-        $data = array();
+		$data = array();
 
-        foreach ($records as $record) {
-            // $addendum_id = $this->secure->encrypt_url($record->id);
-            // $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+		foreach ($records as $record) {
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
-            $view = '<button id="tesbutton" type="button" onclick="lihatAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-            $editReq = '<button type="button" onclick="editAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
-            $delete = '<button type="button" onclick="deleteAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+			$view = '<button id="tesbutton" type="button" onclick="lihatAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$editReq = '<button type="button" onclick="editAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
+			$delete = '<button type="button" onclick="deleteAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
-            // $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
-            $data[] = array(
-                "aksi" => $view . " " . $editReq . " " . $delete,
-                "no_addendum" => $record->no_addendum,
-                "tgl_terbit" => $record->tgl_terbit,
-                "created_by" => $this->get_nama_karyawan($record->created_by),
-            );
-        }
+			$data[] = array(
+				"aksi" => $view . " " . $editReq . " " . $delete,
+				"no_addendum" => $record->no_addendum,
+				"tgl_terbit" => $record->tgl_terbit,
+				"created_by" => $this->get_nama_karyawan($record->created_by),
+			);
+		}
 
-        ## Response
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordwithFilter,
-            "aaData" => $data
-        );
-        //print_r($this->db->last_query());
-        //die;
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
 
-        return $response;
-    }
+		return $response;
+	}
 
-    /*
+	/*
 	* persiapan data untuk datatable pagination
 	* data list report addendum
 	* 
 	* @author Fadla Qamara
 	*/
-    function get_list_report_addendum($postData = null)
-    {
+	function get_list_report_addendum($postData = null)
+	{
 
-        $response = array();
+		$response = array();
 
-        ## Read value
-        $draw = $postData['draw'];
-        $start = $postData['start'];
-        $rowperpage = $postData['length']; // Rows display per page
-        $columnIndex = $postData['order'][0]['column']; // Column index
-        $columnName = $postData['columns'][$columnIndex]['data']; // Column name
-        $columnSortOrder = $postData['order'][0]['dir']; // asc or desc
-        $searchValue = $postData['search']['value']; // Search value
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
 
-        //variabel filter (diambil dari post ajax di view)
-        $idsession = $postData['idsession'];
-
-
-        ## Search 
-        $searchQuery = "";
-        if ($searchValue != '') {
-            $searchQuery = " (designation_name like '%" . $searchValue .  "%' or priority like '%" . $searchValue .  "%' or title like '%" . $searchValue .  "%' or xin_employees.employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue .  "%' or no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
-        }
-
-        ## Kondisi Default 
-        $kondisiDefaultQuery = "(xin_employees.employee_id in (SELECT distinct(`employee_id`) FROM `xin_employee_contract` order by `createdon` desc)";
-        // $kondisiDefaultQuery = "(xin_employees.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
-        // $kondisiDefaultQuery = "(
-        // 	karyawan_id = " . $emp_id . "
-        // AND	pkwt_id = " . $contract_id . "
-        // )";
+		//variabel filter (diambil dari post ajax di view)
+		$idsession = $postData['idsession'];
 
 
-        ## Total number of records without filtering
-        $this->db->select('count(*) as allcount');
-        // $this->db->where($kondisiDefaultQuery);
-        // $records = $this->db->get('xin_contract_addendum')->result();
-        $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
-        $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
-        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-        $this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
-        $this->db->from('xin_contract_addendum');
-        $records = $this->db->get()->result();
-        $totalRecords = $records[0]->allcount;
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (designation_name like '%" . $searchValue .  "%' or priority like '%" . $searchValue .  "%' or title like '%" . $searchValue .  "%' or xin_employees.employee_id like '%" . $searchValue .  "%' or first_name like '%" . $searchValue .  "%' or no_addendum like '%" . $searchValue .  "%' or tgl_terbit like '%" . $searchValue . "%') ";
+		}
 
-        ## Total number of record with filtering
-        $this->db->select('count(*) as allcount');
-        // $this->db->where($kondisiDefaultQuery);
-        if ($searchQuery != '') {
-            $this->db->where($searchQuery);
-        }
-        // $records = $this->db->get('xin_contract_addendum')->result();
-        $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
-        $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
-        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-        $this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
-        $this->db->from('xin_contract_addendum');
-        $records = $this->db->get()->result();
-        $totalRecordwithFilter = $records[0]->allcount;
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(xin_employees.employee_id in (SELECT distinct(`employee_id`) FROM `xin_employee_contract` order by `createdon` desc)";
+		// $kondisiDefaultQuery = "(xin_employees.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+		// $kondisiDefaultQuery = "(
+		// 	karyawan_id = " . $emp_id . "
+		// AND	pkwt_id = " . $contract_id . "
+		// )";
 
-        ## Fetch records
-        // $this->db->select('*');
-        $this->db->select('xin_contract_addendum.id');
-        $this->db->select('xin_employees.first_name');
-        $this->db->select('xin_employees.employee_id');
-        $this->db->select('xin_projects.title');
-        $this->db->select('xin_projects.priority');
-        $this->db->select('xin_contract_addendum.no_addendum');
-        $this->db->select('xin_contract_addendum.tgl_terbit');
-        $this->db->select('xin_contract_addendum.created_by');
-        $this->db->select('xin_designations.designation_name');
-        $this->db->select('xin_employee_contract.no_surat');
-        // $this->db->where($kondisiDefaultQuery);
-        if ($searchQuery != '') {
-            $this->db->where($searchQuery);
-        }
-        $this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
-        $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
-        $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
-        $this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
-        $this->db->order_by($columnName, $columnSortOrder);
-        $this->db->limit($rowperpage, $start);
-        // $records = $this->db->get('xin_contract_addendum')->result();
-        $this->db->from('xin_contract_addendum');
-        $records = $this->db->get()->result();
 
-        #Debugging variable
-        $tes_query = $this->db->last_query();
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		// $this->db->where($kondisiDefaultQuery);
+		// $records = $this->db->get('xin_contract_addendum')->result();
+		$this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
+		$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
+		$this->db->from('xin_contract_addendum');
+		$records = $this->db->get()->result();
+		$totalRecords = $records[0]->allcount;
 
-        $data = array();
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		// $this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		// $records = $this->db->get('xin_contract_addendum')->result();
+		$this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
+		$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
+		$this->db->from('xin_contract_addendum');
+		$records = $this->db->get()->result();
+		$totalRecordwithFilter = $records[0]->allcount;
 
-        foreach ($records as $record) {
-            // $addendum_id = $this->secure->encrypt_url($record->id);
-            // $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+		## Fetch records
+		// $this->db->select('*');
+		$this->db->select('xin_contract_addendum.id');
+		$this->db->select('xin_employees.first_name');
+		$this->db->select('xin_employees.employee_id');
+		$this->db->select('xin_projects.title');
+		$this->db->select('xin_projects.priority');
+		$this->db->select('xin_contract_addendum.no_addendum');
+		$this->db->select('xin_contract_addendum.tgl_terbit');
+		$this->db->select('xin_contract_addendum.created_by');
+		$this->db->select('xin_designations.designation_name');
+		$this->db->select('xin_employee_contract.no_surat');
+		// $this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->join('xin_employees', 'xin_employees.user_id = xin_contract_addendum.karyawan_id');
+		$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->join('xin_employee_contract', 'xin_employee_contract.contract_id = xin_contract_addendum.pkwt_id');
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		// $records = $this->db->get('xin_contract_addendum')->result();
+		$this->db->from('xin_contract_addendum');
+		$records = $this->db->get()->result();
 
-            $view = '<button id="tesbutton" type="button" onclick="lihatAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-            $editReq = '<button type="button" onclick="editAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
-            $delete = '<button type="button" onclick="deleteAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+		#Debugging variable
+		$tes_query = $this->db->last_query();
 
-            // $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+		$data = array();
 
-            $data[] = array(
-                "aksi" => $view . " " . $editReq . " " . $delete,
-                "first_name" => "<strong>(" . $record->employee_id . ")</strong> " . $record->first_name,
-                "title" => "<strong>(" . $record->priority . ") " . $record->title . "</strong> - " . $record->designation_name,
-                "no_surat" => $record->no_surat,
-                "no_addendum" => $record->no_addendum,
-                "tgl_terbit" => $record->tgl_terbit,
-                "created_by" => $this->get_nama_karyawan($record->created_by),
-            );
-        }
+		foreach ($records as $record) {
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
-        ## Response
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $totalRecordwithFilter,
-            "aaData" => $data
-        );
-        //print_r($this->db->last_query());
-        //die;
+			$view = '<button id="tesbutton" type="button" onclick="lihatAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$editReq = '<button type="button" onclick="editAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
+			$delete = '<button type="button" onclick="deleteAddendum(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
-        return $response;
-    }
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " " . $editReq . " " . $delete,
+				"first_name" => "<strong>(" . $record->employee_id . ")</strong> " . $record->first_name,
+				"title" => "<strong>(" . $record->priority . ") " . $record->title . "</strong> - " . $record->designation_name,
+				"no_surat" => $record->no_surat,
+				"no_addendum" => $record->no_addendum,
+				"tgl_terbit" => $record->tgl_terbit,
+				"created_by" => $this->get_nama_karyawan($record->created_by),
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
 }
