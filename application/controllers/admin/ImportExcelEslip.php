@@ -734,6 +734,7 @@ class Importexceleslip extends MY_Controller
 					'allow_grooming' => $allow_grooming,
 					'allow_others' => $allow_others,
 					'allow_operation' => $allow_operation,
+					'allow_operation' => $allow_operation,
 
 					'over_salary' => $over_salary,
 					'penyesuaian_umk' => $penyesuaian_umk,
@@ -1404,6 +1405,38 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Tunjangan Kesehatan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($allow_keahlian!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Keahlian</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_keahlian).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($allow_pelatihan!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Keahlian</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pelatihan).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -2246,20 +2279,23 @@ class Importexceleslip extends MY_Controller
 				$allow_transport = $eslip[0]->allow_transport;
 				$allow_rent = $eslip[0]->allow_rent;
 				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
+				$allow_parking 			= $eslip[0]->allow_parking;
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_medicine;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
+				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
+				$allow_device 			= $eslip[0]->allow_device;
+				$allow_kasir 				= $eslip[0]->allow_kasir;
+				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
+				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
+				$allow_vitamin 			= $eslip[0]->allow_medicine;
+				$allow_grooming 		= $eslip[0]->allow_grooming;
+				$allow_others 			= $eslip[0]->allow_others;
+				$allow_operation 		= $eslip[0]->allow_operation;
+				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
+
 				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
+				$insentive_taktentu = $eslip[0]->insentive_taktentu;
 				$overtime = $eslip[0]->overtime;
 				$overtime_holiday = $eslip[0]->overtime_holiday;
 				$overtime_national_day = $eslip[0]->overtime_national_day;
@@ -2655,6 +2691,22 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+
+			if($allow_kehadiran!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kehadiran</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kehadiran).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($allow_others!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2710,6 +2762,21 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Insentif</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($insentive_taktentu!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Insentif Taktentu</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive_taktentu).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -4875,18 +4942,21 @@ class Importexceleslip extends MY_Controller
 				$allow_comunication = $eslip[0]->allow_comunication;
 				$allow_parking = $eslip[0]->allow_parking;
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_medicine;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
+				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
+				$allow_device 			= $eslip[0]->allow_device;
+				$allow_kasir 				= $eslip[0]->allow_kasir;
+				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
+				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
+				$allow_vitamin 			= $eslip[0]->allow_medicine;
+				$allow_grooming 		= $eslip[0]->allow_grooming;
+				$allow_others 			= $eslip[0]->allow_others;
+				$allow_operation 		= $eslip[0]->allow_operation; 
+				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
+
 				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
 				$insentive = $eslip[0]->insentive;
+				$insentive_taktentu = $eslip[0]->insentive_taktentu;
 				$overtime = $eslip[0]->overtime;
 				$overtime_holiday = $eslip[0]->overtime_holiday;
 				$overtime_national_day = $eslip[0]->overtime_national_day;
@@ -4937,48 +5007,6 @@ class Importexceleslip extends MY_Controller
 					$deduction_name = 'Deduction';
 				}
 	
-
-				// $pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				// $transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				// $armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
-
-				// } else {
-				// 	redirect('admin/');
-				// }
 				
 			} else {
 				redirect('admin/');
@@ -5318,6 +5346,23 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+
+			if($allow_kehadiran!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kehadiran</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kehadiran).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
 			if($allow_others!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -5334,7 +5379,7 @@ class Importexceleslip extends MY_Controller
 			}
 
 
-			if($allow_operation!=0){	
+			if($allow_operation!=0){
 			$tbl_2 .= '
 				<tr>
 					<td>
@@ -5373,6 +5418,21 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Insentif</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($insentive_taktentu!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Insentif Taktentu</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive_taktentu).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>

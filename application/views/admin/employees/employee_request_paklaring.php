@@ -319,7 +319,7 @@
             "orderable": false,
           },
           {
-            data: 'periode',
+            data: 'status_sk',
             "orderable": false,
           },
         ]
@@ -408,6 +408,7 @@
   }
 </script>
 
+<!-- Tombol Download Data -->
 <script type="text/javascript">
   document.getElementById("button_download_data").onclick = function(e) {
     var project = document.getElementById("aj_project").value;
@@ -471,7 +472,7 @@
   }
 </script>
 
-
+<!-- Project - Sub Project -->
 <script>
   // Project Vacant Change - Jabatan vacant
     $('#aj_project').change(function() {
@@ -496,7 +497,7 @@
 
                 // Add options
                 $.each(res, function(index, data) {
-                    $('#aj_sub_project').append('<option value="' + data['sub_project_name'] + '" style="text-wrap: wrap;">' + data['sub_project_name'] + '</option>');
+                    $('#aj_sub_project').append('<option value="' + data['project_id'] + '" style="text-wrap: wrap;">' + data['sub_project_name'] + '</option>');
                 });
 
                 // alert("Company name: " + res["company"]["company_name"]);

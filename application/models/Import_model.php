@@ -462,7 +462,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$records = $this->db->get()->row_array();
 
-		return $records['alias'];
+
+		if (empty($records)) {
+			return "";
+		} else {
+			return $records['alias'];
+		}
+
 	}
 
 	public function get_nama_kolom_detail_bupot($nama_tabel)
@@ -3156,7 +3162,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$copypaste = '*Payroll Notification -> Elektronik SLIP.*%0a%0a
 
-				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Juli 2025 - 31 Juli 2025, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
+				Yang Terhormat Bapak/Ibu Karyawan PT. Siprama Cakrawala, telah terbit dokumen E-SLIP Periode 1 Agustus 2025 - 31 Agustus 2025, segera Login C.I.S untuk melihat lebih lengkap.%0a%0a
 
 				Lakukan Pembaharuan PIN anda secara berkala, dengan cara Login C.I.S kemudian akses Menu My Profile dan Ubah PIN.%0a%0a
 

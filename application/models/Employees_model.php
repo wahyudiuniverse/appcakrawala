@@ -689,6 +689,56 @@ class Employees_model extends CI_Model
 		}
 	}
 
+
+	//ambil SK terakhir
+	function get_skk($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(secid) as max_secid');
+			$this->db->from('xin_qrcode_skk');
+			$this->db->where('nip', $id);
+			// $this->db->where('cancel_stat', 0);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				$this->db->select('jenis_dokumen');
+				$this->db->select('nomor_dokumen');
+				$this->db->select('approve_hrd');
+				$this->db->select('approve_hrd_date');
+				$this->db->select('cancel_status');
+				$this->db->from('xin_qrcode_skk');
+				$this->db->where('secid', $query['max_secid']);
+				// $this->db->order_by('createdon', 'desc');
+				// $this->db->limit(1);
+
+				$query2 = $this->db->get()->row_array();
+				if (empty($query2)) {
+					return "";
+				} else {
+					if($query2['cancel_status'] == 1){
+						$status_sk = 'Ditolak HRD';
+					} else if ($query2['approve_hrd'] == null) {
+						$status_sk = 'Review HRD';
+					} else {
+						$status_sk = 'SK Sudah Terbit';
+					}
+					return $status_sk;
+				}
+
+			}
+		}
+	}
+
 	//ambil nama kontak darurat
 	function get_nama_kontak_darurat($id)
 	{
@@ -3336,6 +3386,7 @@ class Employees_model extends CI_Model
 					"penempatan" => strtoupper($record->penempatan),
 					"join" => strtoupper($record->date_of_joining),
 					"periode" => $this->get_periode_pkwt($record->employee_id),
+					"status_sk" => $this->get_skk($record->employee_id),
 					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
 				);

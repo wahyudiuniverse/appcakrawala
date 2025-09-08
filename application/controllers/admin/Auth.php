@@ -407,7 +407,8 @@ class Auth extends MY_Controller
 								"fullname" => $isNIKExists->FULLNAME,
 								"status_emp" => $isNIKExists->STATUS_EMP,
 								"userrole" => $isNIKExists->USERROLE,
-								"approle" => $isNIKExists->APPROLE
+								"approle" => $isNIKExists->APPROLE,
+								"project_akses" => $isNIKExists->PROJECT_ID
 
 							);
 
@@ -426,13 +427,22 @@ class Auth extends MY_Controller
 
 
     private function isNIKExists($nip, $pin) {
-        $q = $this->db->query("
-        	SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources 
+//         $q = $this->db->query("
+//         	SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources 
+// FROM xin_employees emp
+// LEFT JOIN xin_user_roles approle ON approle.role_id=emp.user_role_id
+// WHERE employee_id = $nip 
+// AND private_code = $pin 
+// AND is_active = 1;");
+
+        $q = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources, ps.project_id
 FROM xin_employees emp
 LEFT JOIN xin_user_roles approle ON approle.role_id=emp.user_role_id
-WHERE employee_id = $nip 
-AND private_code = $pin 
-AND is_active = 1;");
+LEFT JOIN (SELECT nip, GROUP_CONCAT(project_id ORDER BY project_id ASC SEPARATOR ', ') AS project_id FROM xin_projects_akses WHERE nip = $nip) ps ON ps.nip = emp.employee_id
+WHERE emp.employee_id = $nip 
+AND emp.private_code = $pin 
+AND emp.is_active = 1;");
+
 
         $status = 1;
         $employeeID = $fullname = $message = null;
@@ -446,6 +456,7 @@ AND is_active = 1;");
             $fullname = $rows->first_name;
             $userRole = $rows->user_role_id;
             $appRole = $rows->role_resources;
+            $project_id = $rows->project_id;
             if($rows->status_employee==1){
             	$status_emp = "AKTIF";
             } else if ($rows->status_employee==2){
@@ -470,6 +481,7 @@ AND is_active = 1;");
             					$status_emp = "";	
 								$userRole = "";
 								$appRole = "";
+								$project_id = "";
 
             } 
 
@@ -482,6 +494,7 @@ AND is_active = 1;");
             			$status_emp = "";
 						$userRole = "";
 						$appRole = "";
+						$project_id = "";
 				
         }
       
@@ -493,6 +506,7 @@ AND is_active = 1;");
             'STATUS_EMP' => $status_emp,
             'USERROLE' => $userRole,
             'APPROLE' => $appRole,
+            'PROJECT_ID' => $project_id,
         ];
     }
 

@@ -21,7 +21,6 @@ class Esign extends MY_Controller {
 		$this->load->model("Users_model");
 		$this->load->model("Employees_model");
 		$this->load->model("Designation_model");
-		$this->load->model("Department_model");
 		$this->load->model("Pkwt_model");
 		$this->load->model("Esign_model");
 		$this->load->helper('string');
@@ -116,13 +115,15 @@ class Esign extends MY_Controller {
 		$data['all_designation'] = $this->Xin_model->get_designations();
 		$data['all_project'] = $this->Xin_model->get_projects();
 		$data['nodoc']= $srcdoc[0]->no_surat;
+		$data['emp_id'] = $srcdoc[0]->employee_id;
+		$data['fullname'] = $this->Employees_model->get_nama_karyawan_by_nip($srcdoc[0]->employee_id);
+		$data['ktp_no'] = $this->Employees_model->get_ktp_karyawan($srcdoc[0]->employee_id);
 
 		$data['sign_fullname']= $srcdoc[0]->sign_fullname;
 		$data['sign_nip'] = $srcdoc[0]->sign_nip;
-		$data['emp_id'] = $srcdoc[0]->employee_id;
-		$data['fullname'] = $srcdoc[0]->first_name;
-		
+		$data['sign_jabatan'] = $srcdoc[0]->sign_jabatan;	
 		$data['sign_company'] = $this->Company_model->read_company_information($srcdoc[0]->company);
+		
 		$data['release_date']= $this->Xin_model->tgl_indo(substr($srcdoc[0]->approve_hrd_date,0,10));
 		$data['path_url'] = 'job_create_user';
 		$data['subview'] = $this->load->view("frontend/hrpremium/esign_view", $data, TRUE);

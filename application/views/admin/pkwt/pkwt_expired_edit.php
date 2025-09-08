@@ -338,15 +338,6 @@
 
               <div class="row">
 
-
-                <!--TUNJANGAN MAKAN TRANSPORT-->
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label for="tunjangan_makan_trans" class="control-label">Tunjangan Makan & Transport<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="<?php echo $allow_trans_meal;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
-                  </div>
-                </div>
-
                 <!--TUNJANGAN MAKAN-->
                 <div class="col-md-3">
                   <div class="form-group">
@@ -370,10 +361,6 @@
                     <input class="form-control" placeholder="0" name="tunjangan_komunikasi" type="text" value="<?php echo $allow_comunication;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-
 
                 <!--TUNJANGAN DEVICE-->
                 <div class="col-md-3">
@@ -382,6 +369,10 @@
                     <input class="form-control" placeholder="0" name="tunjangan_device" type="text" value="<?php echo $allow_device;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
+
+              </div>
+
+              <div class="row">
 
                 <!--TUNJANGAN TEMPAT TINGGAL-->
                 <div class="col-md-3">
@@ -406,10 +397,6 @@
                     <input class="form-control" placeholder="0" name="tunjangan_parkir" type="text" value="<?php echo $allow_parking;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
-              </div>
-
-              <div class="row">
-
 
                 <!--TUNJANGAN KESEHATAN-->
                 <div class="col-md-3">
@@ -418,6 +405,11 @@
                     <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="<?php echo $allow_medichine;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
+
+              </div>
+
+              <div class="row">
+
 
 
                 <!--TUNJANGAN AKOMODASI-->
@@ -443,9 +435,28 @@
                     <input class="form-control" placeholder="0" name="tunjangan_operational" type="text" value="<?php echo $allow_operational;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
+
+                <!--TUNJANGAN KEAHLIAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_keahlian" class="control-label">Tunjangan Keahlian<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_keahlian" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_skill); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah18">
+                  </div>
+                </div>
+
               </div>
               
+
               <div class="row">
+
+                <!--TUNJANGAN MAKAN TRANSPORT-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_makan_trans" class="control-label">Tunjangan Makan & Transport<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_makan_trans" type="text" value="<?php echo $allow_trans_meal;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                  </div>
+                </div>
+
                 <!--TUNJANGAN TRANSPORT RENTAL-->
                 <div class="col-md-3">
                   <div class="form-group">
@@ -453,6 +464,15 @@
                     <input class="form-control" placeholder="0" name="tunjangan_trans_rental" type="text" value="<?php echo $allow_trans_rent;?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                   </div>
                 </div>
+
+                <!--TUNJANGAN PELATIHAN-->
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tunjangan_pelatihan" class="control-label">Tunjangan Pelatihan<i class="hrpremium-asterisk">*</i></label>
+                    <input class="form-control" placeholder="0" name="tunjangan_pelatihan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_training); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah19">
+                  </div>
+                </div>
+
               </div>
 
 
@@ -461,7 +481,6 @@
             <div class="col-md-4">
               <div class="row">
                 <!--PERUSAHAAN-->
-
 
                 <!--TANGGAL MULAI KONTRAK-->
                 <div class="col-md-6">
