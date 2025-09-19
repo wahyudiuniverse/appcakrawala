@@ -1024,6 +1024,7 @@ class Traxes_model extends CI_Model
 			$dbtraxes->select('xin_mobile_order.jabatan');
 			$dbtraxes->select('xin_mobile_order.penempatan');
 			$dbtraxes->select('xin_mobile_order.material_id');
+			$dbtraxes->select('xin_sku_material.barcode');
 			$dbtraxes->select('xin_sku_material.nama_material');
 			$dbtraxes->select('xin_sku_material.brand');
 			$dbtraxes->select('xin_sku_material.poin');
@@ -1072,6 +1073,7 @@ class Traxes_model extends CI_Model
 					"jabatan_name" => strtoupper($record->jabatan),
 					"penempatan" => strtoupper($record->penempatan),
 					"material_id" => strtoupper($record->material_id),
+					"barcode" => strtoupper($record->barcode),
 					"nama_material" => strtoupper($record->nama_material),
 					"brand" => strtoupper($record->brand),
 					"poin" => strtoupper($record->poin),
@@ -1181,6 +1183,7 @@ class Traxes_model extends CI_Model
 			$dbtraxes->select('xin_mobile_order.customer_id');
 			$dbtraxes->select('xin_mobile_order.customer_name');
 			$dbtraxes->select('xin_mobile_order.material_id');
+			$dbtraxes->select('xin_sku_material.barcode');
 			$dbtraxes->select('xin_sku_material.nama_material');
 			$dbtraxes->select('xin_sku_material.brand');
 			$dbtraxes->select('xin_sku_material.poin');
@@ -1228,6 +1231,7 @@ class Traxes_model extends CI_Model
 				strtoupper($record->customer_name),
 				strtoupper($record->material_id),
 				
+				strtoupper($record->barcode),
 				strtoupper($record->nama_material),
 				strtoupper($record->brand),
 				strtoupper($record->poin),

@@ -91,6 +91,7 @@ class Esign extends MY_Controller {
 		$data['ktp_no'] = $srcdoc[0]->ktp_no;
 		$data['sign_fullname']= $srcdoc[0]->sign_fullname;
 		$data['sign_nip'] = $srcdoc[0]->sign_nip;
+		$data['sign_jabatan'] = $srcdoc[0]->sign_jabatan;
 		$data['sign_company'] = $this->Company_model->read_company_information($srcdoc[0]->sign_company);
 		$data['release_date']= $this->Xin_model->tgl_indo(substr($srcdoc[0]->createdon,0,10));
 		$data['path_url'] = 'job_create_user';

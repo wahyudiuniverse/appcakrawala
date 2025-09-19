@@ -19,7 +19,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Style;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-class Traxes_report_order extends MY_Controller {
+class Employee_history_join extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -32,7 +32,7 @@ class Traxes_report_order extends MY_Controller {
 		$this->load->library('form_validation');
 		$this->load->model("Xin_model");
 		$this->load->model("Project_model");
-		$this->load->model("Traxes_model");
+		$this->load->model("Employees_model");
 	}
 	
 	/*Function to set JSON output*/
@@ -51,14 +51,14 @@ class Traxes_report_order extends MY_Controller {
 		}
 
 			$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = 'Report | Traxes Sellout';
-			$data['breadcrumbs'] = 'REPORT SELLOUT/ORDER';
+			$data['title'] = 'Report | History Employees Join';
+			$data['breadcrumbs'] = 'Report History Employees New Join';
 			$data['path_url'] = 'emp_view';
 			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-		if(in_array('111',$role_resources_ids)) {
+		if(in_array('110',$role_resources_ids)) {
 
-			$data['subview'] = $this->load->view("admin/traxes/report_traxes_order", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/hrd/employee_history_join", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -67,13 +67,13 @@ class Traxes_report_order extends MY_Controller {
 
 
 	//load datatables Employee
-	public function list_tx_order()
+	public function list_new_join()
 	{
 		// POST data
 		$postData = $this->input->post();
 
 		// Get data
-		$data = $this->Traxes_model->get_list_tx_order($postData);
+		$data = $this->Employees_model->get_list_new_join($postData);
 		echo json_encode($data);
 	}
 
@@ -123,7 +123,7 @@ class Traxes_report_order extends MY_Controller {
 		$postData['sdate'] = $sdate;
 		$postData['edate'] = $edate;
 		$postData['session_id'] = $session_id;
-		$postData['nama_file'] = 'TRAXES REPORT SELLOUT';
+		$postData['nama_file'] = 'HISTORY JOIN EMPLOYEE REPORT';
 		if ($searchVal == '-no_input-') {
 			$postData['filter'] = '';
 		} else {
@@ -133,32 +133,17 @@ class Traxes_report_order extends MY_Controller {
 		// echo $postData['filter'];
 
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('TRAXES REPORT SELLOUT'); //nama Spreadsheet yg baru dibuat
+		$spreadsheet->getActiveSheet()->setTitle('HISTORY JOIN EMPLOYEE REPORT'); //nama Spreadsheet yg baru dibuat
 
 		//data satu row yg mau di isi
 		$rowArray = [
 			'NIP',
 			'NAMA LENGKAP',
 			'PROJECT',
-
-			'SUB PROJECT',
 			'POSISI/JABATAN',
 			'AREA/PENEMPATAN',
-
-			'ID TOKO/LOKASI',
-			'NAMA TOKO/LOKASI',
-			'KODE SKU',
-
-			'GTIN',
-			'PRODUK/MATERIAL',
-			'BRAND',
-			'POIN',
-
-			'JUMLAH',
-			'HARGA-SATUAN',
-			'TOTAL',
-			
-			'TANGGAL PENJUALAN'
+			'TANGGAL BERGABUNG',
+			'INTERVIWER'
 		];
 
 		$length_array = count($rowArray);
@@ -189,7 +174,7 @@ class Traxes_report_order extends MY_Controller {
 
 		// Get data
 		// $data = $this->Employees_model->get_employee_print($postData);
-		$data = $this->Traxes_model->get_order_print($postData);
+		$data = $this->Employees_model->get_new_join_print($postData);
 
 		$length_data = count($data);
 
@@ -209,6 +194,18 @@ class Traxes_report_order extends MY_Controller {
 		$jumlah = count($data) + 1;
 
 		//var_dump($data);
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data,  // The data to set
+		// 		NULL,        // Array values with this value will not be set
+		// 		'A2',
+		// 		false,
+		// 		false         // Top left coordinate of the worksheet range where
+		// 		//    we want to set these values (default is A1)
+		// 	);
+
+
 		//set wrap text untuk row ke 1
 		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
 

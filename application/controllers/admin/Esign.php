@@ -239,7 +239,7 @@ class Esign extends MY_Controller {
 			}
 		
 			$data = array(
-			'department_name' => $this->input->post('department_name'),
+			'department_name' => $this->input->post('department_name'), 
 			'company_id' => $this->input->post('company_id'),
 			'location_id' => $this->input->post('location_id'),
 			'employee_id' => $this->input->post('employee_id'),

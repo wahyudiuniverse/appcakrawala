@@ -2219,14 +2219,27 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 								else : echo '';
 								endif;
 							} ?>",
-					items: [{
+					items: [
+								{
 									id: "",
 									class: "role-checkbox-modal custom-control-input",
-									text: "Billing",
+									text: "Riwayat Karyawan Baru",
 									add_info: "<?php echo $this->lang->line('xin_role_enable'); ?>",
 									value: "121",
 									check: "<?php if (isset($_GET['role_id'])) {
 												if (in_array('121', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "Billing",
+									add_info: "<?php echo $this->lang->line('xin_role_enable'); ?>",
+									value: "122",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('122', $role_resources_ids)) : echo 'checked';
 												else : echo '';
 												endif;
 											} ?>"

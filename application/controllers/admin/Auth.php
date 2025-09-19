@@ -408,7 +408,8 @@ class Auth extends MY_Controller
 								"status_emp" => $isNIKExists->STATUS_EMP,
 								"userrole" => $isNIKExists->USERROLE,
 								"approle" => $isNIKExists->APPROLE,
-								"project_akses" => $isNIKExists->PROJECT_ID
+								"project_akses" => $isNIKExists->PROJECT_ID,
+								"profile_picture" => $isNIKExists->PROFILE_PICTURE
 
 							);
 
@@ -457,6 +458,7 @@ AND emp.is_active = 1;");
             $userRole = $rows->user_role_id;
             $appRole = $rows->role_resources;
             $project_id = $rows->project_id;
+            $profile_picture = 'https://apps-cakrawala.com/uploads/profile/'.$rows->profile_picture;
             if($rows->status_employee==1){
             	$status_emp = "AKTIF";
             } else if ($rows->status_employee==2){
@@ -482,6 +484,7 @@ AND emp.is_active = 1;");
 								$userRole = "";
 								$appRole = "";
 								$project_id = "";
+								$profile_picture = "";
 
             } 
 
@@ -495,6 +498,7 @@ AND emp.is_active = 1;");
 						$userRole = "";
 						$appRole = "";
 						$project_id = "";
+						$profile_picture = "";
 				
         }
       
@@ -507,6 +511,7 @@ AND emp.is_active = 1;");
             'USERROLE' => $userRole,
             'APPROLE' => $appRole,
             'PROJECT_ID' => $project_id,
+            'PROFILE_PICTURE' => $profile_picture,
         ];
     }
 

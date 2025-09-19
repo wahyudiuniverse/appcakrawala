@@ -102,8 +102,6 @@
 
   <div class="card-body border-bottom-blue ">
 
-    <?php echo form_open_multipart('/admin/importexcel/import_saltab2/'); ?>
-
     <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 
     <div class="form-row">
@@ -114,12 +112,19 @@
             <option value="0">-ALL-</option>
             <?php foreach ($all_projects as $proj) { ?>
               <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
+              
             <?php } ?>
+            <?php if($session['employee_id']=='20528398'){?>
+
+                <option value="22"> [SC] PT. SIPRAMA CAKRAWALA</option>
+                <option value="95"> [KAC] PT. KRISTA AULIA CAKRAWALA</option>
+              <?php } ?>
+              
           </select>
         </div>
       </div>
 
-      <div class="col-md-3" id="subproject_ajax">
+      <div class="col-md-3" id="subproject_ajax" hidden>
         <label class="form-label">Sub Project/Witel</label>
         <select class="form-control select_hrm" data-live-search="true" name="sub_project_id" id="aj_sub_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
@@ -152,7 +157,6 @@
       </div>
     </div>
 
-    <?php echo form_close(); ?>
 
   </div>
 </div>
@@ -163,7 +167,7 @@
     <div class="card">
       <div class="card-header with-elements">
         <div class="col-md-6">
-          <span class="card-header-title mr-2"><strong>TABEL SELL-OUT</strong></span>
+          <span class="card-header-title mr-2"><strong>TABEL HISTORY JOIN</strong></span>
         </div>
 
         <div class="col-md-6">
@@ -187,13 +191,8 @@
                 <th>Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>Toko</th>
-                <th>GTIN</th>
-                <th>Produk/Material</th>
-                <th>Jumlah</th>
-                <th>Harga</th>
-                <th>Total</th>
-                <th>Tanggal Order</th>
+                <th>Tanggal Bergabung</th>
+                <th>Interviewer</th>
               </tr>
             </thead>
           </table>
@@ -258,8 +257,14 @@
 
     var searchVal = $('#tabel_employees_filter').find('input').val();
 
-    if ((searchVal == "") && (project == "0")) {
-      $('#button_download_data').attr("hidden", true);
+    // alert(project);
+    // alert(sub_project);
+    // alert(sdate);
+    // alert(edate);
+    // alert(searchVal);
+
+    if ((searchVal == "")) {
+      $('#button_download_data').attr("hidden", false);
 
     } else {
       $('#button_download_data').attr("hidden", false);
@@ -282,7 +287,7 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Traxes_report_order/list_tx_order',
+          'url': '<?= base_url() ?>admin/Employee_history_join/list_new_join',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,
@@ -296,6 +301,8 @@
             alert("Status :" + xhr.status);
             alert("responseText :" + xhr.responseText);
           },
+
+
 
         },
         'columns': [{
@@ -321,31 +328,11 @@
             "orderable": false,
           },
           {
-            data: 'customer_name',
+            data: 'date_of_joining',
             "orderable": false,
           },
           {
-            data: 'barcode',
-            "orderable": false,
-          },
-          {
-            data: 'nama_material',
-            "orderable": false,
-          },
-          {
-            data: 'qty',
-            "orderable": false,
-          },
-          {
-            data: 'price',
-            "orderable": false,
-          },
-          {
-            data: 'total',
-            "orderable": false,
-          },
-          {
-            data: 'order_date',
+            data: 'nama_interviewer',
             "orderable": false,
           },
         ]
@@ -386,7 +373,7 @@
     text_pesan = text_pesan + "\nSearch: " + searchVal;
     // alert(sub_project);
 
-    window.open('<?php echo base_url(); ?>admin/Traxes_report_order/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Employee_history_join/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
   };
 
@@ -416,8 +403,8 @@
     var edate       = $("#aj_edate").val();
     // alert(searchVal.length);
 
-    if ((searchVal.length <= 2) && (project == "0")) {
-      $('#button_download_data').attr("hidden", true);
+    if ((searchVal.length <= 2)) {
+      $('#button_download_data').attr("hidden", false);
     } else {
 
       $('#button_download_data').attr("hidden", false);

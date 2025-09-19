@@ -3413,6 +3413,313 @@ class Employees_model extends CI_Model
 	}
 
 
+	function get_list_new_join($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project 		= $postData['project'];
+		$sub_project 	= $postData['sub_project'];
+		$sdate 			= $postData['sdate'];
+		$edate 			= $postData['edate'];
+		$session_id 	= $postData['session_id'];
+
+		if ($sub_project == "0") {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' 
+					or xin_employees.first_name like '%" . $searchValue . "%' 
+					or xin_employees.penempatan like '%" . $searchValue . "%') ";
+				}
+			}
+
+			## Filter
+			// $filterProject = "";
+			// if (($project != null) && ($project != "") && ($project != '0')) {
+			// 	$filterProject = "xin_employees.project_id = '" . $project . "'";
+			// } else {
+			// 	$filterProject = "";
+			// }
+
+
+			$filterPeriode = "";
+			if (($sdate != null) && ($edate != "")) {
+				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
+				$filterPeriode = "DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+
+				// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
+
+			} else {
+				$filterPeriode = "";
+			}
+
+			$kondisiDefaultQuery = "";
+
+			## Total number of records without filtering
+			$this->db->select('count(*) as allcount');
+			// if ($filterProject != '') {
+			// 	$this->db->where($filterProject);
+			// }
+			// if ($filterSubProject != '') {
+			// 	$this->db->where($filterSubProject);
+			// }
+			if ($filterPeriode != '') {
+				$this->db->where($filterPeriode);
+			}
+			// $dbtraxes->where($kondisiDefaultQuery);
+			$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_employees')->result();
+			$totalRecords = $records[0]->allcount;
+
+			## Total number of record with filtering
+			$this->db->select('count(*) as allcount');
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			// if ($filterProject != '') {
+			// 	$this->db->where($filterProject);
+			// }
+			// if ($filterSubProject != '') {
+			// 	$this->db->where($filterSubProject);
+			// }
+			if ($filterPeriode != '') {
+				$this->db->where($filterPeriode);
+			}
+			$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
+			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_employees')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
+
+			## Fetch records
+			// $this->db->select('*');
+			$this->db->select('xin_employees.user_id');
+			$this->db->select('xin_employees.employee_id');
+			$this->db->select('xin_employees.first_name');
+			$this->db->select('xin_employees.project_id');
+			$this->db->select('xin_employees.employee_id');
+			$this->db->select('xin_projects.title');
+			// $this->db->select('xin_employees.designation_id');
+			$this->db->select('xin_designations.designation_name');
+			$this->db->select('xin_employees.employee_id');
+			$this->db->select('xin_employees.penempatan');
+			$this->db->select('xin_employees.date_of_joining');
+			$this->db->select('xin_employees.id_screening');
+			// $this->db->select('tx_cio.date_cio');
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			// if ($filterProject != '') {
+			// 	$this->db->where($filterProject);
+			// }
+			// if ($filterSubProject != '') {
+			// 	$this->db->where($filterSubProject);
+			// }
+			if ($filterPeriode != '') {
+				$this->db->where($filterPeriode);
+			}
+
+
+			$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
+			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$this->db->limit($rowperpage, $start);
+			$records = $this->db->get('xin_employees')->result();
+
+			#Debugging variable
+			$tes_query = $this->db->last_query();
+			//print_r($tes_query);
+
+			$data = array();
+
+			foreach ($records as $record) {
+
+				//cek interviewer
+				// $nik_validation = "0";
+				// $jo_interviewer = $this->Jo_model->get_jo_interviewer($record->id_screening);
+				// if (is_null($jo_interviewer)) {
+				// 	$nama_interviewer = "-";
+				// } else {
+				// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
+				// }
+
+
+
+				$data[] = array(
+					"employee_id" => $record->employee_id,
+					"fullname" => strtoupper($record->first_name),
+					"project_name" => strtoupper($record->title),
+					"jabatan_name" => strtoupper($record->designation_name),
+					"penempatan" => strtoupper($record->penempatan),
+					"date_of_joining" => strtoupper($record->date_of_joining),
+					"nama_interviewer" => strtoupper($record->id_screening)
+				);
+
+			}
+		} else {
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
+		}
+
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+
+	function get_new_join_print($postData = null)
+	{
+
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		// $sub_project = str_replace($postData['sub_project']," ","");
+		$sub_project = $postData['sub_project'];
+		// $sub_project = 'HELPER DRIVER';
+		$sdate = $postData['sdate'];
+		$edate = $postData['edate'];
+		$filter = $postData['filter'];
+		$session_id = $postData['session_id'];
+
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' 
+					or xin_employees.first_name like '%" . $searchValue . "%' 
+					or xin_employees.penempatan like '%" . $searchValue . "%') ";
+		}
+
+		## Filter
+		// $filterProject = "";
+		// if (($project != null) && ($project != "") && ($project != '0')) {
+		// 	$filterProject = "(
+		// 		project_id = " . $project . "
+		// 	)";
+		// } else {
+		// 	$filterProject = "";
+		// }
+
+		// $filterSubProject = "";
+		// if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+		// 	// $filterSubProject = "(
+		// 	// 	REPLACE(tx_cio.sub_project_name,' ','' = '" . $sub_project . "'
+		// 	// )";
+		// 	$filterSubProject = "(
+		// 		sub_project_name = '" . $sub_project . "'
+		// 	)";
+
+		// } else {
+		// 	$filterSubProject = "";
+		// }
+
+		$filterStatus = "";
+		if (($sdate != null) && ($sdate != "") && ($sdate != '0')) {
+			$filterStatus = "(
+				DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'
+			)";
+
+			// $filterStatus = "(
+			// 	DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'
+			// )";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "";
+
+		## Fetch records
+		// $this->db->select('*');
+
+			$this->db->select('xin_employees.user_id');
+			$this->db->select('xin_employees.employee_id');
+			$this->db->select('xin_employees.first_name');
+			$this->db->select('xin_employees.project_id');
+			$this->db->select('xin_projects.title');
+			$this->db->select('xin_employees.designation_id');
+			$this->db->select('xin_designations.designation_name');
+			$this->db->select('xin_employees.penempatan');
+			$this->db->select('xin_employees.date_of_joining');
+			$this->db->select('xin_employees.id_screening');
+
+
+
+		// $dbtraxes->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		// if ($filterProject != '') {
+		// 	$dbtraxes->where($filterProject);
+		// }
+		// if ($filterSubProject != '') {
+		// 	$dbtraxes->where($filterSubProject);
+		// }
+		if ($filterStatus != '') {
+			$this->db->where($filterStatus);
+		}
+			$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
+			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		// $this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		// $this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		$records = $this->db->get('xin_employees')->result();
+		$tes_query = $this->db->last_query();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			
+
+			$data[] = array(
+				$record->employee_id,
+				trim(strtoupper($record->first_name), " "),
+				strtoupper($record->title),
+				strtoupper($record->designation_name),
+				strtoupper($record->penempatan),
+				strtoupper($record->date_of_joining),
+				strtoupper($record->id_screening),
+
+			);
+		}
+
+		//print_r($this->db->last_query());
+		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
+
+		return $data;
+		//json_encode($data);
+	}
+
+
 	public function get_req_empproject($empID)
 	{
 		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id in (SELECT distinct(project) FROM xin_employee_request 
@@ -3671,10 +3978,10 @@ class Employees_model extends CI_Model
 	{
 
 		$sql = 'SELECT max(date_of_joining), emp.employee_id, emp.first_name, emp.designation_id, pos.designation_name, emp.project_id,pro.priority, pro.title, emp.company_id,emp.ktp_no, emp.status_resign
-FROM xin_employees emp
-LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
-WHERE ktp_no = ?';
+	FROM xin_employees emp
+	LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+	LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
+	WHERE ktp_no = ?';
 		$binds = array($nik);
 		$query = $this->db->query($sql, $binds);
 

@@ -822,21 +822,22 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
       </a>
       <ul class="sidenav-menu">
 
+
         <?php
         if (in_array('121', $role_resources_ids)) {
         ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['tra_active'])) echo $arr_mod['tra_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/transfers'); ?>"> Billing Area </a>
+          <li class="sidenav-item <?php if (!empty($arr_mod['res_active'])) echo $arr_mod['res_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/employee_history_join'); ?>"> Riwayat Karyawan Baru</a>
           </li>
         <?php
         }
         ?>
 
         <?php
-        if (in_array('16', $role_resources_ids)) {
+        if (in_array('122', $role_resources_ids)) {
         ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['res_active'])) echo $arr_mod['res_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/resignation'); ?>"> <?php echo $this->lang->line('left_resignations'); ?> </a>
+          <li class="sidenav-item <?php if (!empty($arr_mod['tra_active'])) echo $arr_mod['tra_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/billing_area'); ?>"> Billing Area </a>
           </li>
         <?php
         }
