@@ -145,16 +145,15 @@ class Billing_model extends CI_Model
 				}
 			}
 
-			// $filterPeriode = "";
-			// if (($sdate != null) && ($edate != "")) {
-			// 	// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
-			// 	$filterPeriode = "DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+			$periode = "";
+			if (($periode != null) && ($periode != "")) {
+				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
+				// $filterPeriode = "DATE_FORMAT(xin_saltab.periode_salary, '%Y-%m') = '".$periode."'";
+				$filterPeriode = "DATE_FORMAT(xin_saltab.periode_salary, '%Y-%m') = '".$periode."'";
 
-			// 	// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
-
-			// } else {
-			// 	$filterPeriode = "";
-			// }
+			} else {
+				$filterPeriode = "";
+			}
 
 			$kondisiDefaultQuery = "";
 
@@ -228,7 +227,7 @@ class Billing_model extends CI_Model
 
 			#Debugging variable
 			$tes_query = $this->db->last_query();
-			//print_r($tes_query);
+			// print_r($tes_query);
 
 			$data = array();
 
