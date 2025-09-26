@@ -436,7 +436,7 @@ class Auth extends MY_Controller
 // AND private_code = $pin 
 // AND is_active = 1;");
 
-        $q = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources, ps.project_id
+        $q = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources, ps.project_id, emp.profile_picture
 FROM xin_employees emp
 LEFT JOIN xin_user_roles approle ON approle.role_id=emp.user_role_id
 LEFT JOIN (SELECT nip, GROUP_CONCAT(project_id ORDER BY project_id ASC SEPARATOR ', ') AS project_id FROM xin_projects_akses WHERE nip = $nip) ps ON ps.nip = emp.employee_id

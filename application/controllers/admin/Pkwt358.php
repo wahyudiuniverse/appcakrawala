@@ -346,7 +346,7 @@ class Pkwt358 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="20">Bahwa Perusahaan bermaksud menggunakan jasa Mitra untuk melakukan pekerjaan sebagai <b>'.$jabatan.'</b> di klien perusahaan yaitu <b>'.$client.'</b> Penempatan di Bali (area Kuta, Legian, Seminyak, dan sekitarnya). Lokasi penempatan kerja akan ditentukan kemudian.</td>
+								<td colspan="20">Bahwa Perusahaan bermaksud menggunakan jasa Mitra untuk melakukan pekerjaan sebagai <b>'.$jabatan.'</b> di klien perusahaan yaitu <b>'.$client.'</b> Penempatan di '.$penempatan.'. Lokasi penempatan kerja akan ditentukan kemudian.</td>
 							</tr>
 
 							<tr>

@@ -1163,6 +1163,8 @@ class Employee_request_hrd extends MY_Controller
 		$employee_request = $this->Employees_model->read_employee_request2($id);
 
 		$verification_id 		= $employee_request['secid'];
+		$id_kandidat	 		= $employee_request['id_kandidat'];
+		$id_screening	 		= $employee_request['id_screening'];
 		$last_edu				= $employee_request['last_edu'];
 		$jurusan				= $employee_request['jurusan'];
 		$school_name			= $employee_request['school_name'];
@@ -1325,6 +1327,8 @@ class Employee_request_hrd extends MY_Controller
 			$data_migrate = array(
 
 				'verification_id'			=> $verification_id,
+				'id_kandidat'				=> $id_kandidat,
+				'id_screening'				=> $id_screening,
 				'last_edu'					=> $last_edu,
 				'edu_prodi_name'			=> $jurusan,
 				'edu_school_name'			=> $school_name,

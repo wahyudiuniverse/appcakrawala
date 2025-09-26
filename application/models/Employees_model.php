@@ -1026,6 +1026,55 @@ class Employees_model extends CI_Model
 		}
 	}
 
+
+	//ambil nama pendidikan
+	function get_bpjs_tk_no($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select_max('id');
+			$this->db->select('bpjs_ketenagakerjaan');
+			$this->db->from('xin_bpjs');
+			$this->db->where('nip', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bpjs_ketenagakerjaan'];
+			}
+		}
+	}
+
+	//ambil nama pendidikan
+	function get_bpjs_ks_no($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select_max('id');
+			$this->db->select('bpjs_kesehatan');
+			$this->db->from('xin_bpjs');
+			$this->db->where('nip', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bpjs_kesehatan'];
+			}
+		}
+	}
+
 	//ubah tanggal YYYY-MM-DD diubah jadi MM/DD/YYYY
 	function ubah_format_tanggal($tanggal_lahir)
 	{
@@ -3059,8 +3108,8 @@ class Employees_model extends CI_Model
 				$record->kk_no,
 				$record->ktp_no,
 				$record->npwp_no,
-				$record->bpjs_tk_no,
-				$record->bpjs_ks_no,
+				$this->get_bpjs_tk_no($record->employee_id),
+				$this->get_bpjs_ks_no($record->employee_id),
 				strtoupper($record->ibu_kandung),
 				strtoupper($this->get_nama_kontak_darurat($record->ktp_no)),
 				strtoupper($this->get_hubungan_kontak_darurat($record->ktp_no)),
@@ -4166,6 +4215,7 @@ class Employees_model extends CI_Model
 	// get saltab by NIP v.2
 	public function read_saltab_by_nip2($id)
 	{
+		$id = (int) $id;
 
 		$sql = "
 			
