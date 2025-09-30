@@ -1163,7 +1163,7 @@ $leave_user = $this->Xin_model->read_user_info($session['user_id']);
                         <div class="col-md-3">
                           <div class="form-group">
                             <label class="form-label control-label">Tunjangan Kesehatan</label>
-                            <input class="form-control" placeholder="0" name="allow_medicine" type="text" value="<?php echo $allow_medichine; ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                            <input class="form-control" placeholder="0" name="allow_medicine" type="text" value="<?php echo $allow_medicine; ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                           </div>
                         </div>
                         <div class="col-md-3">

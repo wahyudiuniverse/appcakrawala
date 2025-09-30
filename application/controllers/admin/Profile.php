@@ -180,7 +180,7 @@ class Profile extends MY_Controller
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_rent' => $result[0]->allow_rent,
 			'allow_parking' => $result[0]->allow_parking,
-			'allow_medichine' => $result[0]->allow_medichine,
+			'allow_medicine' => $result[0]->allow_medicine,
 
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,

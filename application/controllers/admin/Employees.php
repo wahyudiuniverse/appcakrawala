@@ -1284,7 +1284,7 @@ class Employees extends MY_Controller
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_rent' => $result[0]->allow_rent,
 			'allow_parking' => $result[0]->allow_parking,
-			'allow_medichine' => $result[0]->allow_medichine,
+			'allow_medicine' => $result[0]->allow_medicine,
 
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,
@@ -1781,7 +1781,7 @@ class Employees extends MY_Controller
 				'allow_residence_cost' => $this->input->post('tunjangan_tempat_tinggal'),
 				'allow_rent' => $this->input->post('allow_rent'),
 				'allow_parking' => $this->input->post('allow_parking'),
-				'allow_medichine' => $this->input->post('allow_medicine'),
+				'allow_medicine' => $this->input->post('allow_medicine'),
 				'allow_akomodsasi' => $this->input->post('allow_akomodasi'),
 				'allow_kasir' => $this->input->post('allow_kasir'),
 				'allow_operational' => $this->input->post('allow_operation'),
@@ -3640,7 +3640,7 @@ class Employees extends MY_Controller
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_rent' => $result[0]->allow_rent,
 			'allow_parking' => $result[0]->allow_parking,
-			'allow_medichine' => $result[0]->allow_medichine,
+			'allow_medicine' => $result[0]->allow_medicine,
 
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,
@@ -8574,7 +8574,7 @@ class Employees extends MY_Controller
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_rent' => $result[0]->allow_rent,
 			'allow_parking' => $result[0]->allow_parking,
-			'allow_medichine' => $result[0]->allow_medichine,
+			'allow_medicine' => $result[0]->allow_medicine,
 
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,

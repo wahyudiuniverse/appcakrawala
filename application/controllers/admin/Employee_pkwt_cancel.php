@@ -550,7 +550,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_residence_cost'=> $result[0]->allowance_residance,
 			'allow_rent' 					=> $result[0]->allowance_rent,
 			'allow_parking' 			=> $result[0]->allowance_park,
-			'allow_medichine' 		=> $result[0]->allowance_medicine,
+			'allow_medicine' 			=> $result[0]->allowance_medicine,
 			'allow_akomodsasi' 		=> $result[0]->allowance_akomodasi,
 			'allow_kasir' 				=> $result[0]->allowance_kasir,
 			'allow_operational' 	=> $result[0]->allowance_operation,
@@ -655,7 +655,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allow_residence_cost'	=> $tunjangan_tempat_tinggal,
 								'allow_device' 					=> $tunjangan_device,
 								
-								'allow_medichine' 					=> $tunjangan_kesehatan,
+								'allow_medicine' 						=> $tunjangan_kesehatan,
 								'allow_akomodsasi' 					=> $tunjangan_akomodasi,
 								'allow_kasir' 							=> $tunjangan_kasir,
 								'allow_operational' 				=> $tunjangan_operational,
@@ -811,7 +811,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_kasir 					= $pkwt_info[0]->allowance_kasir;
 			$allow_trans_meal 		= $pkwt_info[0]->allowance_transmeal;
 			$allow_trans_rent 		= $pkwt_info[0]->allowance_transrent;
-			$allow_medichine 			= $pkwt_info[0]->allowance_medicine;
+			$allow_medicine 			= $pkwt_info[0]->allowance_medicine;
 			$allow_akomodsasi 		= $pkwt_info[0]->allowance_akomodasi;
 			$allow_operational 		= $pkwt_info[0]->allowance_operation;
 			$allow_skill 					= $pkwt_info[0]->allowance_skill;
@@ -841,7 +841,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_kasir 					= '';
 			$allow_trans_meal 		= '';
 			$allow_trans_rent 		= '';
-			$allow_medichine 			= '';
+			$allow_medicine 			= '';
 			$allow_akomodsasi 		= '';
 			$allow_operational 		= '';
 			$allow_skill 					= '';
@@ -909,7 +909,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_rent' => $result[0]->allow_rent,
 			'allow_parking' => $result[0]->allow_parking,
-			'allow_medichine' => $result[0]->allow_medichine,
+			'allow_medicine' => $result[0]->allow_medicine,
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'allow_kasir' => $result[0]->allow_kasir,
 			'allow_operational' => $result[0]->allow_operational,
@@ -1079,7 +1079,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allow_residence_cost'=> $tunjangan_tempat_tinggal,
 								'allow_device' 				=> $tunjangan_device,
 								
-								'allow_medichine' 		=> $tunjangan_kesehatan,
+								'allow_medicine' 			=> $tunjangan_kesehatan,
 								'allow_akomodsasi' 		=> $tunjangan_akomodasi,
 								'allow_kasir' 				=> $tunjangan_kasir,
 								'allow_operational' 	=> $tunjangan_operational,

@@ -323,7 +323,7 @@ class Employee_request_tkhl extends MY_Controller {
 							$allow_residence_cost	= $this->input->post('tunjangan_tempat_tinggal');
 							$allow_rental					= $this->input->post('tunjangan_rental');
 							$allow_parking				= $this->input->post('tunjangan_parkir');
-							$allow_medichine			= $this->input->post('tunjangan_kesehatan');
+							$allow_medicine			= $this->input->post('tunjangan_kesehatan');
 							$allow_akomodsasi			= $this->input->post('tunjangan_akomodasi');
 							$allow_kasir 					= $this->input->post('tunjangan_kasir');
 							$allow_operational		= $this->input->post('tunjangan_operational');
@@ -375,7 +375,7 @@ class Employee_request_tkhl extends MY_Controller {
 								'allow_residence_cost'	=> $allow_residence_cost,
 								'allow_rent'						=> $allow_rental,
 								'allow_parking'					=> $allow_parking,
-								'allow_medichine'				=> $allow_medichine,
+								'allow_medicine'				=> $allow_medicine,
 								'allow_akomodsasi'			=> $allow_akomodsasi,
 								'allow_kasir'						=> $allow_kasir,
 								'allow_operational'			=> $allow_operational,
@@ -466,7 +466,7 @@ class Employee_request_tkhl extends MY_Controller {
 				'dm_allow_park' => $result[0]->dm_allow_park,
 				'allowance_park' => $result[0]->allow_parking,
 				'dm_allow_medicine' => $result[0]->dm_allow_medicine,
-				'allowance_medicine' => $result[0]->allow_medichine,
+				'allowance_medicine' => $result[0]->allow_medicine,
 				'dm_allow_akomodasi' => $result[0]->dm_allow_akomodasi,
 				'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 				'dm_allow_kasir' => $result[0]->dm_allow_kasir,
@@ -589,7 +589,7 @@ class Employee_request_tkhl extends MY_Controller {
 					$allow_residence_cost	= $employee_request[0]->allow_residence_cost;
 					$allow_rent						= $employee_request[0]->allow_rent;
 					$allow_parking				= $employee_request[0]->allow_parking;
-					$allow_medichine			= $employee_request[0]->allow_medichine;
+					$allow_medicine			= $employee_request[0]->allow_medicine;
 					$allow_akomodsasi			= $employee_request[0]->allow_akomodsasi;
 					$allow_kasir					= $employee_request[0]->allow_kasir;
 					$allow_operational		= $employee_request[0]->allow_operational;
@@ -717,7 +717,7 @@ class Employee_request_tkhl extends MY_Controller {
 											'allow_residence_cost'	=> $allow_residence_cost,
 											'allow_rent'						=> $allow_rent,
 											'allow_parking'					=> $allow_parking,
-											'allow_medichine'				=> $allow_medichine,
+											'allow_medicine'				=> $allow_medicine,
 											'allow_akomodsasi'			=> $allow_akomodsasi,
 											'allow_kasir'						=> $allow_kasir,
 											'allow_operational'			=> $allow_operational,
@@ -784,7 +784,7 @@ class Employee_request_tkhl extends MY_Controller {
 										'dm_allow_park' 				=> 'Month',
 										'allowance_park' 				=> $allow_parking,
 										'dm_allow_medicine' 		=> 'Month',
-										'allowance_medicine' 		=> $allow_medichine,
+										'allowance_medicine' 		=> $allow_medicine,
 										'dm_allow_akomodasi' 		=> 'Month',
 										'allowance_akomodasi' 	=> $allow_akomodsasi,
 										'dm_allow_kasir' 				=> 'Month',

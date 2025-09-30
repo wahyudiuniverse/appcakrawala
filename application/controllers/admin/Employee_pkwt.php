@@ -569,7 +569,7 @@ class Employee_pkwt extends MY_Controller {
 					// $dm_parking = strtoupper($this->input->post('dm_parking'));
 					$allow_parking = strtoupper($this->input->post('allow_parking'));
 					// $dm_medicine = strtoupper($this->input->post('dm_medicine'));
-					$allow_medichine = strtoupper($this->input->post('allow_medichine'));
+					$allow_medicine = strtoupper($this->input->post('allow_medicine'));
 					// $dm_akomodsasi = strtoupper($this->input->post('dm_akomodsasi'));
 					$allow_akomodsasi = strtoupper($this->input->post('allow_akomodsasi'));
 					// $dm_kasir = strtoupper($this->input->post('dm_kasir'));
@@ -627,7 +627,7 @@ class Employee_pkwt extends MY_Controller {
 							'dm_allow_park' 				=> 'Month',
 							'allowance_park' 				=> $allow_parking,
 							'dm_allow_medicine' 		=> 'Month',
-							'allowance_medicine' 		=> $allow_medichine,
+							'allowance_medicine' 		=> $allow_medicine,
 							'dm_allow_akomodasi' 		=> 'Month',
 							'allowance_akomodasi' 	=> $allow_akomodsasi,
 							'dm_allow_kasir' 				=> 'Month',

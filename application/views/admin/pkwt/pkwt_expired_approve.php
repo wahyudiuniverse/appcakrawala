@@ -429,7 +429,7 @@ if($e_status=='1'){
                 <div class="col-md-3">
                   <div class="form-group">
                     <label for="tunjangan_kesehatan" class="control-label">Tunjangan Kesehatan<i class="hrpremium-asterisk">*</i></label>
-                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_medichine);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah12">
+                    <input class="form-control" placeholder="0" name="tunjangan_kesehatan" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_medicine);?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah12">
                   </div>
                 </div>
 

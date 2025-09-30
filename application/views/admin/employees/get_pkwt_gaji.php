@@ -233,7 +233,7 @@
                 </div>
                 <?php } ?>
 
-                <?php if($result[0]->allow_medichine!=0 || $result[0]->allow_medichine!=null) { ?>
+                <?php if($result[0]->allow_medicine!=0 || $result[0]->allow_medicine!=null) { ?>
                 <!--PROJECT-->
                 <div class="col-md-3">
                   <div class="form-group">
@@ -244,8 +244,8 @@
                 <!--PROJECT-->  
                 <div class="col-md-8">
                   <div class="form-group" >
-                    <label for="allow_medichine">: <?php echo $result[0]->allow_medichine;?></label>
-                    <input name="allow_medichine" type="text" value="<?php echo $result[0]->allow_medichine;?>" hidden>
+                    <label for="allow_medicine">: <?php echo $result[0]->allow_medicine;?></label>
+                    <input name="allow_medicine" type="text" value="<?php echo $result[0]->allow_medicine;?>" hidden>
                   </div>
                 </div>
                 <?php } ?>

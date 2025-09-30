@@ -394,7 +394,7 @@ class employee_request_cancelled extends MY_Controller
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_rent' => $result[0]->allow_rent,
 			'allow_parking' => $result[0]->allow_parking,
-			'allow_medichine' => $result[0]->allow_medichine,
+			'allow_medicine' => $result[0]->allow_medicine,
 			'allow_training' => $result[0]->allow_training,
 
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
@@ -594,7 +594,7 @@ class employee_request_cancelled extends MY_Controller
 					'allow_residence_cost' 		=> str_replace(".", "", $tunjangan_tempat_tinggal),
 					'allow_rent' 				=> str_replace(".", "", $tunjangan_rental),
 					'allow_parking' 			=> str_replace(".", "", $tunjangan_parkir),
-					'allow_medichine' 			=> str_replace(".", "", $tunjangan_kesehatan),
+					'allow_medicine' 			=> str_replace(".", "", $tunjangan_kesehatan),
 					'allow_akomodsasi' 			=> str_replace(".", "", $tunjangan_akomodasi),
 					'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
 					'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
@@ -659,7 +659,7 @@ class employee_request_cancelled extends MY_Controller
 					'allow_residence_cost' 		=> str_replace(".", "", $tunjangan_tempat_tinggal),
 					'allow_rent' 				=> str_replace(".", "", $tunjangan_rental),
 					'allow_parking' 			=> str_replace(".", "", $tunjangan_parkir),
-					'allow_medichine' 			=> str_replace(".", "", $tunjangan_kesehatan),
+					'allow_medicine' 			=> str_replace(".", "", $tunjangan_kesehatan),
 					'allow_akomodsasi' 			=> str_replace(".", "", $tunjangan_akomodasi),
 					'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
 					'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
@@ -1016,7 +1016,7 @@ class employee_request_cancelled extends MY_Controller
 				// $allow_residence_cost	= $this->Xin_model->clean_number($this->input->post('tunjangan_tempat_tinggal'));
 				// $allow_rental					= $this->Xin_model->clean_number($this->input->post('tunjangan_rental'));
 				// $allow_parking				= $this->Xin_model->clean_number($this->input->post('tunjangan_parkir'));
-				// $allow_medichine			= $this->Xin_model->clean_number($this->input->post('tunjangan_kesehatan'));
+				// $allow_medicine			= $this->Xin_model->clean_number($this->input->post('tunjangan_kesehatan'));
 				// $allow_akomodsasi			= $this->Xin_model->clean_number($this->input->post('tunjangan_akomodasi'));
 				// $allow_kasir 					= $this->Xin_model->clean_number($this->input->post('tunjangan_kasir'));
 				// $allow_operational		= $this->Xin_model->clean_number($this->input->post('tunjangan_operational'));
@@ -1075,7 +1075,7 @@ class employee_request_cancelled extends MY_Controller
 					// 'allow_residence_cost'	=> $allow_residence_cost,
 					// 'allow_rent'						=> $allow_rental,
 					// 'allow_parking'					=> $allow_parking,
-					// 'allow_medichine'				=> $allow_medichine,
+					// 'allow_medicine'				=> $allow_medicine,
 					// 'allow_akomodsasi'			=> $allow_akomodsasi,
 					// 'allow_kasir'						=> $allow_kasir,
 					// 'allow_operational'			=> $allow_operational,
@@ -1168,7 +1168,7 @@ class employee_request_cancelled extends MY_Controller
 			'dm_allow_park' => $result[0]->dm_allow_park,
 			'allowance_park' => $result[0]->allow_parking,
 			'dm_allow_medicine' => $result[0]->dm_allow_medicine,
-			'allowance_medicine' => $result[0]->allow_medichine,
+			'allowance_medicine' => $result[0]->allow_medicine,
 			'dm_allow_akomodasi' => $result[0]->dm_allow_akomodasi,
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
 			'dm_allow_kasir' => $result[0]->dm_allow_kasir,
