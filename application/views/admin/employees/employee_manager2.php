@@ -1673,7 +1673,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 																<tr>
 																	<th scope="row" style="width: 30%">Action</th>
 																	<td>
-																		<button onclick="lihat_sk(<?php echo $sk['secid']; ?>,<?php echo $sk['nip']; ?>)" class="btn btn-sm btn-outline-primary mr-1 my-1">Lihat SK</button>
+																		<button onclick="lihat_sk(<?php echo $sk['secid']; ?>,<?php echo $sk['nip']; ?>)" class="btn btn-sm btn-outline-primary mr-1 my-1">Lihat Paklaring</button>
+																		<?php echo $dok_exit_clearance; ?>
+																		<?php echo $dok_resign_letter; ?>
+																		<?php echo $dok_over_hand; ?>
 																	</td>
 																</tr>
 															</tbody>

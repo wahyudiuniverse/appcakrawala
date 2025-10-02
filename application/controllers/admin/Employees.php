@@ -8446,6 +8446,29 @@ class Employees extends MY_Controller
 			$button_resign = '<button id="button_resign" class="btn btn-block btn-sm btn-danger ladda-button mx-0 mt-1" data-style="expand-right">UNDEFINED</button>';
 		}
 
+		//Dokumen exit clearance
+		if ((is_null($result[0]->dok_exit_clearance)) || ($result[0]->dok_exit_clearance == '')) {
+			$dok_exit_clearance = '';
+		} else {
+			$dok_exit_clearance = '<a href="' . base_url() . $result[0]->dok_exit_clearance . '" target="_blank"><button class="btn btn-sm btn-outline-primary mr-1 my-1">Download Exit Clearance</button></a>';
+		}
+
+		//Dokumen resign letter
+		if ((is_null($result[0]->dok_resign_letter)) || ($result[0]->dok_resign_letter == '')) {
+			$dok_resign_letter = '';
+		} else {
+			$dok_resign_letter = '<a href="' . base_url() . $result[0]->dok_resign_letter . '" target="_blank"><button class="btn btn-sm btn-outline-primary mr-1 my-1">Download Resign Letter</button></a>';
+			// $dok_resign_letter = base_url() . $result[0]->dok_resign_letter;
+		}
+
+		//Dokumen hand over
+		if ((is_null($result[0]->dok_over_hand)) || ($result[0]->dok_over_hand == '')) {
+			$dok_over_hand = '';
+		} else {
+			$dok_over_hand = '<a href="' . base_url() . $result[0]->dok_over_hand . '" target="_blank"><button class="btn btn-sm btn-outline-primary mr-1 my-1">Download Hand Over</button></a>';
+			// $dok_over_hand = base_url() . $result[0]->dok_over_hand;
+		}
+
 
 		$data = array(
 			//Pages Attributes
@@ -8542,6 +8565,15 @@ class Employees extends MY_Controller
 
 			//Dokumen BUPOT
 			'bupot' 	=> $this->Import_model->get_all_bupot_by_nik($result[0]->ktp_no),
+
+			//Dokumen exit clearance
+			'dok_exit_clearance' 	=> $dok_exit_clearance,
+
+			//Dokumen resign letter
+			'dok_resign_letter' 	=> $dok_resign_letter,
+
+			//Dokumen hand over
+			'dok_over_hand' 	=> $dok_over_hand,
 
 			'filename_pkwt' => $result[0]->filename_pkwt,
 			'list_bank' => $this->Xin_model->get_bank_code(),
