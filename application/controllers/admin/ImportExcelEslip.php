@@ -1411,38 +1411,6 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
-
-			if($allow_keahlian!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Keahlian</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_keahlian).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_pelatihan!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Keahlian</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pelatihan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
 			if($allow_grooming!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2273,24 +2241,37 @@ class Importexceleslip extends MY_Controller
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$gaji_diterima = $eslip[0]->gaji_diterima;
 
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
-				$allow_rent = $eslip[0]->allow_rent;
+				$allow_jabatan 		= $eslip[0]->allow_jabatan;
+				$allow_keahlian 	= $eslip[0]->allow_keahlian;
+				$allow_area 			= $eslip[0]->allow_area;
+
+				$allow_masakerja 	= $eslip[0]->allow_masakerja;
+				$allow_konsumsi 	= $eslip[0]->allow_konsumsi;
+				$allow_transport 	= $eslip[0]->allow_transport;
+
+				$allow_rent 				= $eslip[0]->allow_rent;
 				$allow_comunication = $eslip[0]->allow_comunication;
 				$allow_parking 			= $eslip[0]->allow_parking;
+
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
 				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
 				$allow_device 			= $eslip[0]->allow_device;
+
 				$allow_kasir 				= $eslip[0]->allow_kasir;
 				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
 				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
-				$allow_vitamin 			= $eslip[0]->allow_medicine;
+
+				$allow_medicine 			= $eslip[0]->allow_medicine;
 				$allow_grooming 		= $eslip[0]->allow_grooming;
-				$allow_others 			= $eslip[0]->allow_others;
-				$allow_operation 		= $eslip[0]->allow_operation;
 				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
+
+				$allow_operation 		= $eslip[0]->allow_operation;
+				$allow_pelatihan 		= $eslip[0]->allow_pelatihan;
+				$allow_kinerja 			= $eslip[0]->allow_kinerja;
+
+				$allow_disiplin 		= $eslip[0]->allow_disiplin;
+				$allow_others 			= $eslip[0]->allow_others;
+				$allow_pph 					= $eslip[0]->allow_pph;
 
 				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
@@ -2470,6 +2451,36 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Tunjangan Jabatan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
+
+				if($allow_keahlian!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Keahlian</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_keahlian).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
+
+				if($allow_area!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Area</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_area).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -2661,7 +2672,7 @@ class Importexceleslip extends MY_Controller
 			}
 
 
-			if($allow_vitamin!=0){	
+			if($allow_medicine!=0){	
 			$tbl_2 .= '
 				<tr>
 					<td>
@@ -2669,7 +2680,7 @@ class Importexceleslip extends MY_Controller
 							<tr>
 								<td colspan="4">Tunjangan Kesehatan</td>
 								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_medicine).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -2707,6 +2718,67 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($allow_operation!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Operational</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_pelatihan!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Pelatihan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pelatihan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_kinerja!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kinerja</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kinerja).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($allow_disiplin!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Disiplin</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_disiplin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($allow_others!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2722,21 +2794,21 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
-
-			if($allow_operation!=0){	
+			if($allow_pph!=0){	
 			$tbl_2 .= '
 				<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Operational</td>
+								<td colspan="4">Tunjangan PPH</td>
 								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pph).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
 				</tr>';
 			}
+
 
 			if($penyesuaian_umk!=0){	
 			$tbl_2 .= '
@@ -3642,7 +3714,7 @@ class Importexceleslip extends MY_Controller
 				$allow_kasir = $eslip[0]->allow_kasir;
 				$allow_trans_meal = $eslip[0]->allow_trans_meal;
 				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_medicine;
+				$allow_medicine = $eslip[0]->allow_medicine;
 				$allow_grooming = $eslip[0]->allow_grooming;
 				$allow_others = $eslip[0]->allow_others;
 				$allow_operation = $eslip[0]->allow_operation;
@@ -4935,23 +5007,36 @@ class Importexceleslip extends MY_Controller
 				$gaji_diterima = $eslip[0]->gaji_diterima;
 
 				$allow_jabatan = $eslip[0]->allow_jabatan;
+				$allow_keahlian 	= $eslip[0]->allow_keahlian;
+				$allow_area 			= $eslip[0]->allow_area;
+
 				$allow_masakerja = $eslip[0]->allow_masakerja;
 				$allow_konsumsi = $eslip[0]->allow_konsumsi;
 				$allow_transport = $eslip[0]->allow_transport;
+
 				$allow_rent = $eslip[0]->allow_rent;
 				$allow_comunication = $eslip[0]->allow_comunication;
 				$allow_parking = $eslip[0]->allow_parking;
+
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
-				$allow_device 			= $eslip[0]->allow_device;
-				$allow_kasir 				= $eslip[0]->allow_kasir;
-				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
-				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
-				$allow_vitamin 			= $eslip[0]->allow_medicine;
-				$allow_grooming 		= $eslip[0]->allow_grooming;
-				$allow_others 			= $eslip[0]->allow_others;
-				$allow_operation 		= $eslip[0]->allow_operation; 
+				$allow_akomodasi = $eslip[0]->allow_akomodasi;
+				$allow_device = $eslip[0]->allow_device;
+
+				$allow_kasir = $eslip[0]->allow_kasir;
+				$allow_trans_meal = $eslip[0]->allow_trans_meal;
+				$allow_trans_rent = $eslip[0]->allow_trans_rent;
+
+				$allow_medicine = $eslip[0]->allow_medicine;
+				$allow_grooming = $eslip[0]->allow_grooming;
 				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
+
+				$allow_operation = $eslip[0]->allow_operation;
+				$allow_pelatihan 		= $eslip[0]->allow_pelatihan;
+				$allow_kinerja 			= $eslip[0]->allow_kinerja;
+
+				$allow_disiplin 		= $eslip[0]->allow_disiplin;
+				$allow_others = $eslip[0]->allow_others;
+				$allow_pph 					= $eslip[0]->allow_pph;
 
 				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
@@ -5125,6 +5210,36 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Tunjangan Jabatan</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
+
+				if($allow_keahlian!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Keahlian</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_keahlian).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
+
+				if($allow_area!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Area</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_area).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -5316,7 +5431,7 @@ class Importexceleslip extends MY_Controller
 			}
 
 
-			if($allow_vitamin!=0){	
+			if($allow_medicine!=0){	
 			$tbl_2 .= '
 				<tr>
 					<td>
@@ -5324,7 +5439,7 @@ class Importexceleslip extends MY_Controller
 							<tr>
 								<td colspan="4">Tunjangan Kesehatan</td>
 								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_medicine).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -5362,6 +5477,66 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($allow_operation!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Operational</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_pelatihan!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Pelatihan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pelatihan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_kinerja!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kinerja</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kinerja).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($allow_disiplin!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Disiplin</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_disiplin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
 
 			if($allow_others!=0){	
 			$tbl_2 .= '
@@ -5378,16 +5553,15 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
-
-			if($allow_operation!=0){
+			if($allow_pph!=0){	
 			$tbl_2 .= '
 				<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Operational</td>
+								<td colspan="4">Tunjangan PPH</td>
 								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pph).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -6267,23 +6441,39 @@ class Importexceleslip extends MY_Controller
 				$gaji_umk = $eslip[0]->gaji_umk;
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$gaji_diterima = $eslip[0]->gaji_diterima;
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
-				$allow_rent = $eslip[0]->allow_rent;
+
+				$allow_jabatan 		= $eslip[0]->allow_jabatan;
+				$allow_keahlian 	= $eslip[0]->allow_keahlian;
+				$allow_area 			= $eslip[0]->allow_area;
+
+				$allow_masakerja 	= $eslip[0]->allow_masakerja;
+				$allow_konsumsi 	= $eslip[0]->allow_konsumsi;
+				$allow_transport 	= $eslip[0]->allow_transport;
+
+				$allow_rent 				= $eslip[0]->allow_rent;
 				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
+				$allow_parking 			= $eslip[0]->allow_parking;
+
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
-				$allow_vitamin = $eslip[0]->allow_vitamin;
-				$allow_grooming = $eslip[0]->allow_grooming;
-				$allow_others = $eslip[0]->allow_others;
-				$allow_operation = $eslip[0]->allow_operation;
+				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
+				$allow_device 			= $eslip[0]->allow_device;
+
+				$allow_kasir 				= $eslip[0]->allow_kasir;
+				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
+				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
+
+				$allow_medicine 			= $eslip[0]->allow_medicine;
+				$allow_grooming 		= $eslip[0]->allow_grooming;
+				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
+
+				$allow_operation 		= $eslip[0]->allow_operation;
+				$allow_pelatihan 		= $eslip[0]->allow_pelatihan;
+				$allow_kinerja 			= $eslip[0]->allow_kinerja;
+
+				$allow_disiplin 		= $eslip[0]->allow_disiplin;
+				$allow_others 			= $eslip[0]->allow_others;
+				$allow_pph 					= $eslip[0]->allow_pph;
+
 
 				$over_salary = $eslip[0]->over_salary;
 				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
@@ -6494,6 +6684,36 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 				}
 
+				if($allow_keahlian!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Keahlian</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_keahlian).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
+
+				if($allow_area!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Area</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_area).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
+
 				if($allow_masakerja!=0){
 				$tbl_2 .= '
 				<tr>
@@ -6679,7 +6899,7 @@ class Importexceleslip extends MY_Controller
 			}
 
 
-			if($allow_vitamin!=0){	
+			if($allow_medicine!=0){	
 			$tbl_2 .= '
 				<tr>
 					<td>
@@ -6687,7 +6907,7 @@ class Importexceleslip extends MY_Controller
 							<tr>
 								<td colspan="4">Tunjangan Kesehatan</td>
 								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_vitamin).' &nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_medicine).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -6709,15 +6929,16 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
-			if($allow_others!=0){	
+
+			if($allow_kehadiran!=0){
 			$tbl_2 .= '
 				<tr>
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Lain-lain</td>
+								<td colspan="4">Tunjangan Kehadiran</td>
 								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kehadiran).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -6733,6 +6954,82 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Tunjangan Operational</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_pelatihan!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Pelatihan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pelatihan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_kinerja!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Kinerja</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kinerja).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($allow_disiplin!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Disiplin</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_disiplin).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_others!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Lain-lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_pph!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan PPH</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pph).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>

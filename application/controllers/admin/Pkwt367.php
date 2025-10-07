@@ -468,7 +468,7 @@ class Pkwt367 extends MY_Controller
 
 							<tr>
 								<td colspan="0"></td>
-								<td colspan="20">Note:<br>Minimal Visit Per hari 12 toko/ Hari</td>
+								<td colspan="20">Note:<br><b>Minimal Visit Per hari 15 toko/ Hari</b></td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -481,6 +481,8 @@ class Pkwt367 extends MY_Controller
 								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
 							</tr>
 							
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td>6.</td>
@@ -574,7 +576,157 @@ class Pkwt367 extends MY_Controller
 				
 				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 
+				$tbl_kk = '
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
 
+					<div style="text-align: center; text-justify: inter-word;">
+						<b><u>KOMITMEN KERJA</u></b>
+					</div>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Yang bertanda tangan dibawah ini menerangkan bahwa :</td>
+							</tr>
+
+				</table>
+
+				<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0">
+					<tr>
+						<td></td>
+						<td colspan="2">NIP</td>
+						<td colspan="10"> : <b>'.$employee_id.'</b></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2">Nama</td>
+						<td colspan="10"> : <b>'.$namalengkap.'</b></td>
+					</tr>
+
+					<tr>
+						<td></td>
+						<td colspan="2">Jabatan</td>
+						<td colspan="10"> : <b>'.$jabatan.'</b></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2">Project</td>
+						<td colspan="10"> : <b>'.$client.'</b></td>
+					</tr>
+
+
+					<tr>
+						<td></td>
+						<td colspan="10">dalam hal ini bertindak untuk dan atas nama diri sendiri, selanjutnya dalam perjanjian kemitraan ini disebut <b>Mitra</b></td>
+						<td colspan="0"></td>
+					</tr>
+
+				</table>
+				<br>
+				<br>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Bersama surat ini saya berkomitmen untuk / apabila :</td>
+							</tr>			
+				</table>
+				<br>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Bekerja sesuai dengan target harian yaitu visit 15 toko per hari</td>
+							</tr>
+
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Bersedia tidak dibayar jika tidak mencapai target visit harian di hari tersebut.</td>
+							</tr>
+							
+							<tr>
+								<td>3.</td>
+								<td colspan="20">Bersedia menjalankan segala macam ketentuan kerja atau SOP yang berlaku.</td>
+							</tr>
+							<tr>
+								<td>4.</td>
+								<td colspan="20">Bersedia menjaga nama baik perusahaan penyedia jasa maupun brand dengan tidak berbuat hal – hal yang merugikan atau mencoreng saat kerja.</td>
+							</tr>
+							<tr>
+								<td>5.</td>
+								<td colspan="20">Bertanggung jawab untuk menjaga dan tidak merusak segala macam inventaris kerja.</td>
+							</tr>
+
+							<tr>
+								<td>6.</td>
+								<td colspan="20">Mengerjakan report kerja sesuai dengan arahan yang telah disampaikan.</td>
+							</tr>
+							<tr>
+								<td>7.</td>
+								<td colspan="20">Absen kerja dimulai pukul 08.00 WIB di toko pertama.</td>
+							</tr>
+							<tr>
+								<td>8.</td>
+								<td colspan="20">Bersedia bekerja 7 jam kerja 1 jam istirahat.</td>
+							</tr>
+							<tr>
+								<td>9.</td>
+								<td colspan="20">Bersedia menerima sanksi sesuai aturan Perusahaan apabila melanggar SOP pekerjaan.</td>
+							</tr>
+							<tr>
+								<td>10.</td>
+								<td colspan="20">Hari kerja Senin – Sabtu dan libur pada hari Minggu.</td>
+							</tr>
+				</table>
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Demikian surat komitmen ini dibuat untuk dapat dipergunakan dengan sebagaimana semestinya
+								</td>
+							</tr>			
+				</table>
+				<br><br><br>
+
+
+						<table cellpadding="2" cellspacing="0" border="0">
+
+							<tr>
+								<td>Mengetahui,</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>PT. SIPRAMA CAKRAWALA</td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<td>
+								<br><br><b><br><br><br><br><u>.......................................</u></b></td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<td>Karyawan</td>
+								<td></td>
+							</tr>
+
+						</table>
+
+
+
+				<br>';
+
+				$pdf->writeHTML($tbl_kk, true, false, false, false, '');
 			
 				// $fname = strtolower($fname);
 				// $pay_month = strtolower(date("F Y"));

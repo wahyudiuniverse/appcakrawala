@@ -116,7 +116,7 @@
               <option value="<?php echo $proj->project_id; ?>"> <?php echo $proj->title; ?></option>
               
             <?php } ?>
-            <?php if($session['employee_id']=='20528398'){?>
+            <?php if($session['employee_id']=='20528398' || $session['employee_id']=='21531414'  ){?>
 
                 <option value="22"> [SC] PT. SIPRAMA CAKRAWALA</option>
                 <option value="95"> [KAC] PT. KRISTA AULIA CAKRAWALA</option>

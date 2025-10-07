@@ -381,25 +381,39 @@ class employee_request_cancelled extends MY_Controller
 			'cut_off' => $result[0]->cut_off,
 			'date_payment' => $result[0]->date_payment,
 			'basic_salary' => $result[0]->gaji_pokok,
+
 			'allow_jabatan' => $result[0]->allow_jabatan,
 			'allow_skill' => $result[0]->allow_skill,
 			'allow_area' => $result[0]->allow_area,
+
 			'allow_masakerja' => $result[0]->allow_masakerja,
-			'allow_trans_meal' => $result[0]->allow_trans_meal,
-			'allow_trans_rent' => $result[0]->allow_trans_rent,
 			'allow_konsumsi' => $result[0]->allow_konsumsi,
 			'allow_transport' => $result[0]->allow_transport,
-			'allow_comunication' => $result[0]->allow_comunication,
-			'allow_device' => $result[0]->allow_device,
-			'allow_residence_cost' => $result[0]->allow_residence_cost,
-			'allow_rent' => $result[0]->allow_rent,
-			'allow_parking' => $result[0]->allow_parking,
-			'allow_medicine' => $result[0]->allow_medicine,
-			'allow_training' => $result[0]->allow_training,
 
+			'allow_rent' => $result[0]->allow_rent,
+			'allow_comunication' => $result[0]->allow_comunication,
+			'allow_parking' => $result[0]->allow_parking,
+
+			'allow_residence_cost' => $result[0]->allow_residence_cost,
 			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
+			'allow_device' => $result[0]->allow_device,
+
 			'allow_kasir' => $result[0]->allow_kasir,
+			'allow_trans_meal' => $result[0]->allow_trans_meal,
+			'allow_trans_rent' => $result[0]->allow_trans_rent,
+			
+			'allow_medicine' => $result[0]->allow_medicine,
+			'allow_grooming' => $result[0]->allow_grooming,
+			'allow_kehadiran' => $result[0]->allow_kehadiran,
+
 			'allow_operational' => $result[0]->allow_operational,
+			'allow_training' => $result[0]->allow_training,
+			'allow_kinerja' => $result[0]->allow_kinerja,
+
+			'allow_disiplin' => $result[0]->allow_disiplin,
+			'allow_others' => $result[0]->allow_others,
+			'allow_pph' => $result[0]->allow_pph,
+
 			'e_status' => $result[0]->e_status,
 			'location_id' => $result[0]->location_id,
 
@@ -514,21 +528,33 @@ class employee_request_cancelled extends MY_Controller
 			$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
 			$tunjangan_area 							= $this->input->post('tunjangan_area');
 			$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
-			$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
-			$tunjangan_trans_rental 							= $this->input->post('tunjangan_trans_rent');
+			
 			$tunjangan_makan 							= $this->input->post('tunjangan_makan');
 			$tunjangan_transport 							= $this->input->post('tunjangan_transport');
 			$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
 			$tunjangan_device 							= $this->input->post('tunjangan_device');
+
 			$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
 			$tunjangan_rental 							= $this->input->post('tunjangan_rental');
 			$tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
 			$tunjangan_kesehatan 						= $this->input->post('tunjangan_kesehatan');
+
 			$tunjangan_akomodasi 						= $this->input->post('tunjangan_akomodasi');
 			$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
 			$tunjangan_operational 						= $this->input->post('tunjangan_operational');
 			$tunjangan_keahlian 						= $this->input->post('tunjangan_keahlian');
-			$tunjangan_pelatihan 						= $this->input->post('tunjangan_pelatihan');
+
+			$tunjangan_makan_trans 				= $this->input->post('tunjangan_makan_trans');
+			$tunjangan_trans_rental 			= $this->input->post('tunjangan_trans_rent');
+			$tunjangan_pelatihan 				= $this->input->post('tunjangan_pelatihan');
+			$tunjangan_grooming 				= $this->input->post('tunjangan_grooming');
+
+			$tunjangan_kehadiran 				= $this->input->post('tunjangan_kehadiran');
+			$tunjangan_kinerja 					= $this->input->post('tunjangan_kinerja');
+			$tunjangan_disiplin 				= $this->input->post('tunjangan_disiplin');
+			$tunjangan_others 					= $this->input->post('tunjangan_others');
+
+
 			$join_date_pkwt 							= $this->input->post('join_date_pkwt');
 			$pkwt_end_date 							= $this->input->post('pkwt_end_date');
 			$waktu_kontrak 							= $this->input->post('waktu_kontrak');
@@ -585,8 +611,7 @@ class employee_request_cancelled extends MY_Controller
 					'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
 					'allow_area' 				=> str_replace(".", "", $tunjangan_area),
 					'allow_masakerja' 			=> str_replace(".", "", $tunjangan_masakerja),
-					'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
-					'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
+					
 					'allow_konsumsi' 			=> str_replace(".", "", $tunjangan_makan),
 					'allow_transport' 			=> str_replace(".", "", $tunjangan_transport),
 					'allow_comunication' 		=> str_replace(".", "", $tunjangan_komunikasi),
@@ -599,7 +624,14 @@ class employee_request_cancelled extends MY_Controller
 					'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
 					'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
 					'allow_skill' 				=> str_replace(".", "", $tunjangan_keahlian),
+					'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
+					'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
 					'allow_training' 			=> str_replace(".", "", $tunjangan_pelatihan),
+					'allow_grooming' 			=> str_replace(".", "", $tunjangan_grooming),
+					'allow_kehadiran' 			=> str_replace(".", "", $tunjangan_kehadiran),
+					'allow_kinerja' 			=> str_replace(".", "", $tunjangan_kinerja),
+					'allow_disiplin' 			=> str_replace(".", "", $tunjangan_disiplin),
+					'allow_others' 				=> str_replace(".", "", $tunjangan_others),
 
 					'dm_allow_jabatan' 			=> $option_gaji,
 
@@ -650,8 +682,6 @@ class employee_request_cancelled extends MY_Controller
 					'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
 					'allow_area' 				=> str_replace(".", "", $tunjangan_area),
 					'allow_masakerja' 			=> str_replace(".", "", $tunjangan_masakerja),
-					'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
-					'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
 					'allow_konsumsi' 			=> str_replace(".", "", $tunjangan_makan),
 					'allow_transport' 			=> str_replace(".", "", $tunjangan_transport),
 					'allow_comunication' 		=> str_replace(".", "", $tunjangan_komunikasi),
@@ -664,7 +694,15 @@ class employee_request_cancelled extends MY_Controller
 					'allow_kasir' 				=> str_replace(".", "", $tunjangan_kasir),
 					'allow_operational' 		=> str_replace(".", "", $tunjangan_operational),
 					'allow_skill' 				=> str_replace(".", "", $tunjangan_keahlian),
+					'allow_trans_meal' 			=> str_replace(".", "", $tunjangan_makan_trans),
+					'allow_trans_rent' 			=> str_replace(".", "", $tunjangan_trans_rental),
 					'allow_training' 			=> str_replace(".", "", $tunjangan_pelatihan),
+					'allow_grooming' 			=> str_replace(".", "", $tunjangan_grooming),
+
+					'allow_kehadiran' 			=> str_replace(".", "", $tunjangan_kehadiran),
+					'allow_kinerja' 			=> str_replace(".", "", $tunjangan_kinerja),
+					'allow_disiplin' 			=> str_replace(".", "", $tunjangan_disiplin),
+					'allow_others' 				=> str_replace(".", "", $tunjangan_others),
 
 					'dm_allow_jabatan' 			=> $option_gaji,
 
@@ -693,8 +731,6 @@ class employee_request_cancelled extends MY_Controller
 		} else {
 			$Return['error'] = $this->lang->line('xin_error_msg');
 		}
-
-
 
 		$this->output($Return);
 		exit;
@@ -1141,41 +1177,63 @@ class employee_request_cancelled extends MY_Controller
 			'alamat_ktp' => $result[0]->alamat_ktp,
 			'penempatan' => $result[0]->penempatan,
 
-			'waktu_kontrak' => $result[0]->contract_periode . ' (Bulan)',
-			'begin' => $result[0]->contract_start . ' s/d ' . $result[0]->contract_end,
-			'hari_kerja' => $result[0]->hari_kerja,
-			'basic_pay' => $result[0]->gaji_pokok,
-			'dm_allow_grade' => $result[0]->dm_allow_jabatan,
-			'allowance_grade' => $result[0]->allow_jabatan,
-			'dm_allow_area' => $result[0]->dm_allow_area,
-			'allowance_area' => $result[0]->allow_area,
-			'dm_allow_masakerja' => $result[0]->dm_allow_masakerja,
-			'allowance_masakerja' => $result[0]->allow_masakerja,
-			'dm_allow_transmeal' => $result[0]->dm_allow_transmeal,
-			'allowance_transmeal' => $result[0]->allow_trans_meal,
-			'dm_allow_meal' => $result[0]->dm_allow_konsumsi,
-			'allowance_meal' => $result[0]->allow_konsumsi,
-			'dm_allow_transport' => $result[0]->dm_allow_transport,
-			'allowance_transport' => $result[0]->allow_transport,
-			'dm_allow_komunikasi' => $result[0]->dm_allow_comunication,
-			'allowance_komunikasi' => $result[0]->allow_comunication,
-			'dm_allow_laptop' => $result[0]->dm_allow_device,
-			'allowance_laptop' => $result[0]->allow_device,
-			'dm_allow_residance' => $result[0]->dm_allow_residance,
-			'allowance_residance' => $result[0]->allow_residence_cost,
-			'dm_allow_rent' => $result[0]->dm_allow_rent,
-			'allowance_rent' => $result[0]->allow_rent,
-			'dm_allow_park' => $result[0]->dm_allow_park,
-			'allowance_park' => $result[0]->allow_parking,
-			'dm_allow_medicine' => $result[0]->dm_allow_medicine,
-			'allowance_medicine' => $result[0]->allow_medicine,
-			'dm_allow_akomodasi' => $result[0]->dm_allow_akomodasi,
-			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
-			'dm_allow_kasir' => $result[0]->dm_allow_kasir,
-			'allowance_kasir' => $result[0]->allow_kasir,
-			'dm_allow_operational' => $result[0]->dm_allow_operational,
-			'allow_operational' => $result[0]->allow_operational,
+			'waktu_kontrak' 		=> $result[0]->contract_periode . ' (Bulan)',
+			'begin' 				=> $result[0]->contract_start . ' s/d ' . $result[0]->contract_end,
+			'hari_kerja' 			=> $result[0]->hari_kerja,
+			'basic_pay' 			=> $result[0]->gaji_pokok,
 
+			'allowance_grade' 		=> $result[0]->allow_jabatan,
+			'dm_allow_grade' 		=> $result[0]->dm_allow_jabatan,
+			'allowance_area' 		=> $result[0]->allow_area,
+			'dm_allow_area' 		=> $result[0]->dm_allow_area,
+			'allowance_masakerja' 	=> $result[0]->allow_masakerja,
+			'dm_allow_masakerja' 	=> $result[0]->dm_allow_masakerja,
+
+			'allowance_meal' 		=> $result[0]->allow_konsumsi,
+			'dm_allow_meal' 		=> $result[0]->dm_allow_konsumsi,
+			'allowance_transport' 	=> $result[0]->allow_transport,
+			'dm_allow_transport' 	=> $result[0]->dm_allow_transport,
+			'allowance_komunikasi' 	=> $result[0]->allow_comunication,
+			'dm_allow_komunikasi' 	=> $result[0]->dm_allow_comunication,
+			'allowance_laptop' 		=> $result[0]->allow_device,
+			'dm_allow_laptop' 		=> $result[0]->dm_allow_device,
+
+			'allowance_residance' 	=> $result[0]->allow_residence_cost,
+			'dm_allow_residance' 	=> $result[0]->dm_allow_residance,
+			'allowance_rent' 		=> $result[0]->allow_rent,
+			'dm_allow_rent' 		=> $result[0]->dm_allow_rent,
+			'allowance_park' 		=> $result[0]->allow_parking,
+			'dm_allow_park' 		=> $result[0]->dm_allow_park,
+			'allowance_medicine' 	=> $result[0]->allow_medicine,
+			'dm_allow_medicine' 	=> $result[0]->dm_allow_medicine,
+
+			'allow_akomodsasi' 		=> $result[0]->allow_akomodsasi,
+			'dm_allow_akomodasi' 	=> $result[0]->dm_allow_akomodasi,
+			'allowance_kasir' 		=> $result[0]->allow_kasir,
+			'dm_allow_kasir' 		=> $result[0]->dm_allow_kasir,
+			'allow_operational' 	=> $result[0]->allow_operational,
+			'dm_allow_operational' 	=> $result[0]->dm_allow_operational,
+			'allow_skill' 			=> $result[0]->allow_skill,
+			'dm_allow_skill' 		=> $result[0]->dm_allow_skill,
+
+			'allow_trans_meal' 		=> $result[0]->allow_trans_meal,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_transmeal,
+			'allow_trans_rent' 		=> $result[0]->allow_trans_rent,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_transrent,
+			'allowance_transmeal' 	=> $result[0]->allow_grooming,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_grooming,
+			'allowance_transmeal' 	=> $result[0]->allow_kehadiran,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_kehadiran,
+
+			'allowance_transmeal' 	=> $result[0]->allow_training,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_training,
+			'allowance_transmeal' 	=> $result[0]->allow_kinerja,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_kinerja,
+			'allowance_transmeal' 	=> $result[0]->allow_disiplin,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_disiplin,
+			'allowance_transmeal' 	=> $result[0]->allow_others,
+			'dm_allow_transmeal' 	=> $result[0]->dm_allow_others,
+			
 			'ktp' => $result[0]->ktp,
 			'kk' => $result[0]->kk,
 			'skck' => $result[0]->skck,

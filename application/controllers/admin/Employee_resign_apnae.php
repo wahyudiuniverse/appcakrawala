@@ -437,7 +437,9 @@ class employee_resign_apnae extends MY_Controller {
 				$data_up = array(
 					// 'migrasi' => '1',
 					'approve_resignnae' =>  $session['user_id'],
-					'approve_resignnae_on' => date("Y-m-d h:i:s")
+					'approve_resignnae_on' => date("Y-m-d h:i:s"),
+					'approve_resignnom' =>  $session['user_id'],
+					'approve_resignnom_on' => date("Y-m-d h:i:s")
 
 				);
 			}
