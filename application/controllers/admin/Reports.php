@@ -55,6 +55,7 @@ class Reports extends MY_Controller
 		$this->load->model("Designation_model");
 		$this->load->model("Pkwt_model");
 		$this->load->model("Bpjs_model");
+		$this->load->model("Clients_model");
 	}
 
 	// reports
@@ -238,6 +239,235 @@ class Reports extends MY_Controller
 		$data = $this->Employees_model->get_list_employees($postData);
 
 		echo json_encode($data);
+	}
+
+	// client report
+	public function manage_client()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = 'Manage Client' . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Manage Client';
+		$data['path_url'] = 'manage_client';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		if (in_array('1200', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/manage_client", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//load datatables Client
+	public function list_clients()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Clients_model->get_list_clients($postData);
+
+		echo json_encode($data);
+	}
+
+	//save Nama PT Client
+	public function save_client_name()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'company_name'      => strtoupper(trim($postData['nama_pt'])),
+			'address_1'        	=> strtoupper(trim($postData['alamat_pt'])),
+		];
+
+		// save data diri
+		$data = $this->Clients_model->save_client_name($datarequest);
+
+		echo json_encode($data);
+	}
+
+	//save Nomor NPWP Client
+	public function save_dokumen_client()
+	{
+		$postData = $this->input->post();
+
+		// update data NPWP Client
+		$data = $this->Clients_model->save_dokumen_client($postData);
+
+		// echo json_encode($data);
+	}
+
+	//save Kontak Client
+	public function save_kontak_client()
+	{
+		$postData = $this->input->post();
+
+		// update data NPWP Client
+		$data = $this->Clients_model->save_kontak_client($postData);
+
+		// echo json_encode($data);
+	}
+
+	//save detail project
+	public function save_project_detail()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'title' 		=> strtoupper(trim($postData['nama_project'])),
+			'client_id' 	=> strtoupper(trim($postData['id_client'])),
+			'doc_id' 		=> strtoupper(trim($postData['jenis_dokumen'])),
+			'company_id' 	=> strtoupper(trim($postData['perusahaan_id'])),
+			'priority' 		=> strtoupper(trim($postData['alias_project'])),
+			'added_by' 		=> strtoupper(trim($postData['created_by'])),
+			'created_at' 	=> date('Y-m-d')
+		];
+
+		// save data diri
+		$data = $this->Clients_model->save_project_detail($datarequest);
+
+		echo json_encode($data);
+	}
+
+	function upload_dokumen_client()
+	{
+		$postData = $this->input->post();
+		$image = $_FILES;
+		foreach ($image as $key => $img) {
+			$ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+			$name = pathinfo($img['name'], PATHINFO_FILENAME);
+			$yearmonth = date('Y/m');
+			if ($name == "npwp") {
+				if (!is_dir('./uploads/document_client/npwp/' . $yearmonth)) {
+					mkdir('./uploads/document_client/npwp/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document_client/npwp/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['id_client'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document_client/npwp/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						$this->Clients_model->save_dokumen($file_data, $postData['id_client'], $name);
+					}
+				}
+			} else if ($name == "ktp") {
+				if (!is_dir('./uploads/document_client/ktp/' . $yearmonth)) {
+					mkdir('./uploads/document_client/ktp/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document_client/ktp/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['id_client'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document_client/ktp/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						$this->Registrasi_model->save_dokumen($file_data, $postData['id_client'], $name);
+					}
+				}
+			}
+		}
+		// $this->load->view('imgtest');
+	}
+
+	function upload_dokumen_project()
+	{
+		$postData = $this->input->post();
+		$image = $_FILES;
+		foreach ($image as $key => $img) {
+			$ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+			$name = pathinfo($img['name'], PATHINFO_FILENAME);
+			$yearmonth = date('Y/m');
+			if ($name == "npwp") {
+				if (!is_dir('./uploads/document_client/npwp/' . $yearmonth)) {
+					mkdir('./uploads/document_client/npwp/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document_client/npwp/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['id_client'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document_client/npwp/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						$this->Clients_model->save_dokumen($file_data, $postData['id_client'], $name);
+					}
+				}
+			} else if ($name == "ktp") {
+				if (!is_dir('./uploads/document_client/ktp/' . $yearmonth)) {
+					mkdir('./uploads/document_client/ktp/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document_client/ktp/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['id_client'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document_client/ktp/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						$this->Registrasi_model->save_dokumen($file_data, $postData['id_client'], $name);
+					}
+				}
+			}
+		}
+		// $this->load->view('imgtest');
 	}
 
 
