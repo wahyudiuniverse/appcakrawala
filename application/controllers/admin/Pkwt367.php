@@ -680,11 +680,11 @@ class Pkwt367 extends MY_Controller
 							</tr>
 							<tr>
 								<td>9.</td>
-								<td colspan="20">Bersedia menerima sanksi sesuai aturan Perusahaan apabila melanggar SOP pekerjaan.</td>
+								<td colspan="20">Hari kerja Senin – Sabtu dan libur pada hari Minggu.</td>
 							</tr>
 							<tr>
 								<td>10.</td>
-								<td colspan="20">Hari kerja Senin – Sabtu dan libur pada hari Minggu.</td>
+								<td colspan="20">Bersedia menerima sanksi sesuai aturan Perusahaan apabila melanggar SOP pekerjaan.</td>
 							</tr>
 				</table>
 				<br>

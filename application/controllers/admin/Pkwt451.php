@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt399 extends MY_Controller 
+class Pkwt451 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -390,26 +390,78 @@ class Pkwt399 extends MY_Controller
 							<tr>
 								<td>4.</td>
 								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+							</tr>
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
 							</tr>';
+
+
+						if($allowance_meal!="Rp 0"){	
+						$tbl_2 .= '
+					
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+							</tr>';
+						}
+
+						if($allowance_transport!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+							</tr>';
+
+						}
+
+						if($allowance_rent!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+							</tr>';
+						}
+
+						if($allowance_komunikasi!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+							</tr>';
+						}
+
+						if($allowance_operation!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+							</tr>';
+						}
 
 						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan sebesar '.$basicpay.'.</td>
+								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
 							</tr>
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Tunjangan Makan Harian yang didapatkan sebesar '.$allowance_meal.'.</td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Tunjangan Pulsa Harian yang didapatkan sebesar '.$allowance_komunikasi.'.</td>
+								<td colspan="20">Komisi lain-lain berupa insentive dimana akan diberikan apabila mencapai target sesuai dengan skema yang berlaku:</td>
 							</tr>
 
 							<br>
@@ -418,22 +470,22 @@ class Pkwt399 extends MY_Controller
 								<td>5.</td>
 								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan.</td>
 							</tr>
-
+							
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td>6.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 							
-							<br><br><br><br>
-
+							<br>
 							<tr>
 								<td>7.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
 							
 							<br>
-							
 							<tr>
 								<td>8.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
@@ -448,16 +500,14 @@ class Pkwt399 extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="1">b.</td>
-								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga.</td>
+								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga..</td>
 							</tr>
 							<tr>
 								<td></td>
 								<td colspan="1">c.</td>
 								<td colspan="20">Mencemarkan nama baik perusahaan.</td>
 							</tr>
-
-							<br>
-
+<br>
 							<tr>
 								<td colspan="20">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
 								<td colspan="0"></td>
@@ -516,13 +566,164 @@ class Pkwt399 extends MY_Controller
 				
 				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 
+				$tbl_kk = '
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br>
+					<div style="text-align: center; text-justify: inter-word;">
+						<b><u>SURAT KOMITMEN KERJA</u></b>
+					</div>
+				<br>
 
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Yang bertanda tangan dibawah ini menerangkan bahwa :</td>
+							</tr>
+
+				</table>
+
+				<br>
+				<br>
+
+				<table cellpadding="2" cellspacing="0" border="0">
+					<tr>
+						<td></td>
+						<td colspan="2">NIP</td>
+						<td colspan="10"> : <b>'.$employee_id.'</b></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2">Nama</td>
+						<td colspan="10"> : <b>'.$namalengkap.'</b></td>
+					</tr>
+
+					<tr>
+						<td></td>
+						<td colspan="2">Jabatan</td>
+						<td colspan="10"> : <b>'.$jabatan.'</b></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2">Periode Kerja</td>
+						<td colspan="10"> : <b>'.$tglmulaipkwt.'</b> - <b>'.$tglakhirpkwt.'.</b></td>
+					</tr>
+
+					<tr>
+						<td></td>
+						<td colspan="2">Jam Kerja</td>
+						<td colspan="10"> : ................................<b></b></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td colspan="2">Produk</td>
+						<td colspan="10"> : ................................<b></b></td>
+					</tr>
+				</table>
+				<br>
+				<br>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Bersama surat ini saya berkomitmen untuk / apabila :</td>
+							</tr>			
+				</table>
+				<br>
+
+
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+							<tr>
+								<td>1.</td>
+								<td colspan="20">Wajib absen masuk pada pukul 09:00 – 18:00 menggunakan aplikasi Traxes dan wajib share ke group reporting setiap harinya</td>
+							</tr>
+
+							<tr>
+								<td>2.</td>
+								<td colspan="20">Bersedia dilakukan pemotongan gaji apabila tidak masuk kerja, baik karena sakit (dengan atau tanpa surat dokter) maupun izin.</td>
+							</tr>
+							
+							<tr>
+								<td>3.</td>
+								<td colspan="20">Berkomitmen menyelesaikan event sesuai dengan periode yang sudah di tentukan.</td>
+							</tr>
+							<tr>
+								<td>4.</td>
+								<td colspan="20">Apabila berhenti bekerja sebelum berakhirnya periode event atau tidak masuk lebih dari 2 hari, maka bersedia gaji tidak di keluarkan.</td>
+							</tr>
+							<tr>
+								<td>5.</td>
+								<td colspan="20">Wajib menjaga nama baik Brand dan PT Siprama Cakrawala pada saat jam kerja berlangsung dan dilarang keras melakukan hal-hal yang merugikan serta mencoreng nama baik.</td>
+							</tr>
+
+							<tr>
+								<td>6.</td>
+								<td colspan="20">Bersedia menjalani SOP yang di berlakukan baik dari toko maupun perusahaan.</td>
+							</tr>
+							<tr>
+								<td>7.</td>
+								<td colspan="20">Bersedia mencari backup ketika izin atau tidak masuk kerja.</td>
+							</tr>
+							<tr>
+								<td>8.</td>
+								<td colspan="20">Wajib mengerjakan segala macam reporting yang di butuhkan.</td>
+							</tr>
+							<tr>
+								<td>9.</td>
+								<td colspan="20">Bersedia apabila melanggar segala peraturan yang berlaku maka, atas nama di atas menerima sanksi yang tertera pada surat perjanjian ini maupun peraturan perusahaan yang berlaku.</td>
+							</tr>
+							<tr>
+								<td>10.</td>
+								<td colspan="20">Jika periode event sudah berakhir, bersedia mengembalikan segala macam aset sampling dan seragam.</td>
+							</tr>
+				</table>
+				<br>
+				<br>
+				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
+							<tr>
+								<td>Demikian surat komitmen ini dibuat untuk dapat dipergunakan dengan sebagaimana semestinya</td>
+							</tr>			
+				</table>
+				<br><br><br>
+
+
+						<table cellpadding="2" cellspacing="0" border="0">
+
+							<tr>
+								<td>Mengetahui,</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>PT. SIPRAMA CAKRAWALA</td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<td><br><br><br><br><br><br><b><u>.......................................</u></b></td>
+								<td><br><br><br><br><br><br><b><u>.......................................</u></b></td>
+							</tr>
+
+							<tr>
+								<td>National Account Executive</td>
+								<td>Karyawan</td>
+							</tr>
+
+						</table>
+
+
+
+				<br>';
+
+				$pdf->writeHTML($tbl_kk, true, false, false, false, '');
 			
 				// $fname = strtolower($fname);
 				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

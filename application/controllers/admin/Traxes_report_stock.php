@@ -45,24 +45,27 @@ class Traxes_report_stock extends MY_Controller {
 	}
 	
 	public function index() {
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
 
-			$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = 'Report | Traxes Sellin';
-			$data['breadcrumbs'] = 'REPORT SELLIN/STOCK';
-			$data['path_url'] = 'emp_view';
-			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		redirect('server_error');
+		
+		// $session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
 
-		if(in_array('111',$role_resources_ids)) {
+		// 	$role_resources_ids = $this->Xin_model->user_role_resource();
+		// 	$data['title'] = 'Report | Traxes Sellin';
+		// 	$data['breadcrumbs'] = 'REPORT SELLIN/STOCK';
+		// 	$data['path_url'] = 'emp_view';
+		// 	$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-			$data['subview'] = $this->load->view("admin/traxes/report_traxes_stock", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-			} else {
-				redirect('admin/dashboard');
-			}
+		// if(in_array('111',$role_resources_ids)) {
+
+		// 	$data['subview'] = $this->load->view("admin/traxes/report_traxes_stock", $data, TRUE);
+		// 	$this->load->view('admin/layout/layout_main', $data); //page load
+		// 	} else {
+		// 		redirect('admin/dashboard');
+		// 	}
   	}
 
 
@@ -123,7 +126,7 @@ class Traxes_report_stock extends MY_Controller {
 		$postData['sdate'] = $sdate;
 		$postData['edate'] = $edate;
 		$postData['session_id'] = $session_id;
-		$postData['nama_file'] = 'TRAXES REPORT SELLOUT';
+		$postData['nama_file'] = 'TRAXES REPORT SELLIN';
 		if ($searchVal == '-no_input-') {
 			$postData['filter'] = '';
 		} else {
@@ -133,7 +136,7 @@ class Traxes_report_stock extends MY_Controller {
 		// echo $postData['filter'];
 
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('TRAXES REPORT SELLOUT'); //nama Spreadsheet yg baru dibuat
+		$spreadsheet->getActiveSheet()->setTitle('TRAXES REPORT SELLIN'); //nama Spreadsheet yg baru dibuat
 
 		//data satu row yg mau di isi
 		$rowArray = [
@@ -141,23 +144,17 @@ class Traxes_report_stock extends MY_Controller {
 			'NAMA LENGKAP',
 			'PROJECT',
 
-			'SUB PROJECT',
 			'POSISI/JABATAN',
 			'AREA/PENEMPATAN',
 
 			'ID TOKO/LOKASI',
 			'NAMA TOKO/LOKASI',
-			'KODE SKU',
 
 			'PRODUK/MATERIAL',
-			'BRAND',
-			'POIN',
-
-			'JUMLAH',
-			'HARGA-SATUAN',
-			'TOTAL',
-			
-			'TANGGAL PENJUALAN'
+			'TANGGAL STOCK',
+			'STOCK AWAL',
+			'STOCK AKHIR',
+			'EXPIRED DATE'
 		];
 
 		$length_array = count($rowArray);
@@ -188,7 +185,7 @@ class Traxes_report_stock extends MY_Controller {
 
 		// Get data
 		// $data = $this->Employees_model->get_employee_print($postData);
-		$data = $this->Traxes_model->get_order_print($postData);
+		$data = $this->Traxes_model->get_stock_print($postData);
 
 		$length_data = count($data);
 

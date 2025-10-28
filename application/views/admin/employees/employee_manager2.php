@@ -2454,7 +2454,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 			'* %0a%0aSilahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.' +
 			'%0aLink C.I.S : https://apps-cakrawala.com/admin%0a' +
 			'Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu *My Profile* kemudian *Ubah Pin*%0a%0a' +
-			'*INFO HRD di Nomor Whatsapp: 085175168275* %0a' +
+			'*INFO HRD di Nomor Whatsapp: 0881010250138* %0a' +
 			'*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a' +
 			'Terima kasih.';
 

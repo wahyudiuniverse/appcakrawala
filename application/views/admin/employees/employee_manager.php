@@ -71,7 +71,7 @@
 
       Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu *My Profile* kemudian *Ubah Pin*%0a%0a
 
-      *INFO HRD di Nomor Whatsapp: 085175168275* %0a
+      *INFO HRD di Nomor Whatsapp: 0881010250138* %0a
       *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
       
       Terima kasih.';

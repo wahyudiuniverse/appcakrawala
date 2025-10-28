@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt399 extends MY_Controller 
+class Pkwt416 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -390,26 +390,78 @@ class Pkwt399 extends MY_Controller
 							<tr>
 								<td>4.</td>
 								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+							</tr>
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
 							</tr>';
+
+
+						if($allowance_meal!="Rp 0"){	
+						$tbl_2 .= '
+					
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+							</tr>';
+						}
+
+						if($allowance_transport!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+							</tr>';
+
+						}
+
+						if($allowance_rent!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+							</tr>';
+						}
+
+						if($allowance_komunikasi!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+							</tr>';
+						}
+
+						if($allowance_operation!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+							</tr>';
+						}
 
 						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan sebesar '.$basicpay.'.</td>
+								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
 							</tr>
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Tunjangan Makan Harian yang didapatkan sebesar '.$allowance_meal.'.</td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Tunjangan Pulsa Harian yang didapatkan sebesar '.$allowance_komunikasi.'.</td>
+								<td colspan="20">Komisi lain-lain berupa insentive dimana akan diberikan apabila mencapai target sesuai dengan skema yang berlaku:</td>
 							</tr>
 
 							<br>
@@ -418,22 +470,22 @@ class Pkwt399 extends MY_Controller
 								<td>5.</td>
 								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan.</td>
 							</tr>
-
+							
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td>6.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 							
-							<br><br><br><br>
-
+							<br>
 							<tr>
 								<td>7.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
 							
 							<br>
-							
 							<tr>
 								<td>8.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
@@ -448,16 +500,14 @@ class Pkwt399 extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="1">b.</td>
-								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga.</td>
+								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga..</td>
 							</tr>
 							<tr>
 								<td></td>
 								<td colspan="1">c.</td>
 								<td colspan="20">Mencemarkan nama baik perusahaan.</td>
 							</tr>
-
-							<br>
-
+<br>
 							<tr>
 								<td colspan="20">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
 								<td colspan="0"></td>
@@ -515,14 +565,11 @@ class Pkwt399 extends MY_Controller
 
 				
 				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-
 			
 				// $fname = strtolower($fname);
 				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

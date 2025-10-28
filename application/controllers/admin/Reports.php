@@ -214,7 +214,7 @@ class Reports extends MY_Controller
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['title'] = $this->lang->line('xin_manage_employees') . ' | ' . $this->Xin_model->site_title();
-		$data['breadcrumbs'] = $this->lang->line('xin_manage_employees');
+		$data['breadcrumbs'] = 'DATABASE KARYAWAN';
 		$data['path_url'] = 'reports_man_employees';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
@@ -2190,7 +2190,7 @@ class Reports extends MY_Controller
 				Link C.I.S : https://apps-cakrawala.com/admin%0a
 				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
 
-				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*INFO HRD di Nomor Whatsapp: 0881010250138* %0a
 				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
 				
 				Terima kasih.';
@@ -2208,7 +2208,7 @@ class Reports extends MY_Controller
 				Link C.I.S : https://apps-cakrawala.com/admin%0a
 				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT Kemitraan bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
 
-				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*INFO HRD di Nomor Whatsapp: 0881010250138* %0a
 				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
 				
 				Terima kasih.';
@@ -2229,6 +2229,7 @@ class Reports extends MY_Controller
 				$no,
 				$view_pkwt . ' ' . $editReq . ' ' . $delete,
 				$r->employee_id,
+				$pin,
 				$fullname . '#<br>' . $whatsapp,
 				$nama_project,
 				$nama_subproject,

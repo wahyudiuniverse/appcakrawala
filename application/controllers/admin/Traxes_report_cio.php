@@ -45,24 +45,26 @@ class Traxes_report_cio extends MY_Controller {
 	}
 	
 	public function index() {
-		$session = $this->session->userdata('username');
-		if(empty($session)){ 
-			redirect('admin/');
-		}
+		redirect('server_error');
 
-			$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = 'Report | Traxes Check IN-OUT';
-			$data['breadcrumbs'] = 'Report Check In-Out';
-			$data['path_url'] = 'emp_view';
-			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+			// $session = $this->session->userdata('username');
+			// if(empty($session)){ 
+			// 	redirect('admin/');
+			// }
 
-		if(in_array('110',$role_resources_ids)) {
+			// 	$role_resources_ids = $this->Xin_model->user_role_resource();
+			// 	$data['title'] = 'Report | Traxes Check IN-OUT';
+			// 	$data['breadcrumbs'] = 'Report Check In-Out';
+			// 	$data['path_url'] = 'emp_view';
+			// 	$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-			$data['subview'] = $this->load->view("admin/traxes/report_traxes_cio", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
+			// if(in_array('110',$role_resources_ids)) {
+
+			// 	$data['subview'] = $this->load->view("admin/traxes/report_traxes_cio", $data, TRUE);
+			// 	$this->load->view('admin/layout/layout_main', $data); //page load
+			// } else {
+			// 	redirect('admin/dashboard');
+			// }
   	}
 
 

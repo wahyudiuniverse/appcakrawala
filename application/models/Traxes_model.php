@@ -1283,14 +1283,16 @@ class Traxes_model extends CI_Model
 			$searchQuery = "";
 			if ($searchValue != '') {
 				if (strlen($searchValue) >= 3) {
-					$searchQuery = " (xin_mobile_order.employee_id like '%" . $searchValue .  "%' or xin_mobile_order.employee_name like '%" . $searchValue . "%' or xin_mobile_order.customer_name like '%" . $searchValue . "%')";
+					$searchQuery = " (mp_sku_customer.employee_id like '%" . $searchValue .  "%' 
+					or mp_sku_customer.employee_name like '%" . $searchValue . "%' 
+					or mp_sku_customer.customer_name like '%" . $searchValue . "%')";
 				}
 			}
 
 			## Filter
 			$filterProject = "";
 			if (($project != null) && ($project != "") && ($project != '0')) {
-				$filterProject = "xin_mobile_order.project_id = '" . $project . "'";
+				$filterProject = "mp_sku_customer.project_id = '" . $project . "'";
 			} else {
 				$filterProject = "";
 			}
@@ -1298,7 +1300,7 @@ class Traxes_model extends CI_Model
 			$filterSubProject = "";
 			if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
 				// $filterSubProject = "tx_cio.sub_project_id = '" . $sub_project . "'";
-				$filterSubProject = "xin_mobile_order.sub_project = '".$sub_project."'";
+				$filterSubProject = "mp_sku_customer.sub_project = '".$sub_project."'";
 			} else {
 				$filterSubProject = "";
 			}
@@ -1306,7 +1308,7 @@ class Traxes_model extends CI_Model
 			$filterPeriode = "";
 			if (($sdate != null) && ($edate != "")) {
 				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
-				$filterPeriode = "DATE_FORMAT(xin_mobile_order.order_date, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+				$filterPeriode = "DATE_FORMAT(mp_sku_customer.stock_date, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
 
 				// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
 
@@ -1334,8 +1336,8 @@ class Traxes_model extends CI_Model
 				$dbtraxes->where($filterPeriode);
 			}
 			// $dbtraxes->where($kondisiDefaultQuery);
-			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
-			$records = $dbtraxes->get('xin_mobile_order')->result();
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = mp_sku_customer.material_id', 'left');
+			$records = $dbtraxes->get('mp_sku_customer')->result();
 			$totalRecords = $records[0]->allcount;
 
 			## Total number of record with filtering
@@ -1353,30 +1355,30 @@ class Traxes_model extends CI_Model
 			if ($filterPeriode != '') {
 				$dbtraxes->where($filterPeriode);
 			}
-			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
-			$records = $dbtraxes->get('xin_mobile_order')->result();
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = mp_sku_customer.material_id', 'left');
+			$records = $dbtraxes->get('mp_sku_customer')->result();
 			$totalRecordwithFilter = $records[0]->allcount;
 
 			## Fetch records
 			// $this->db->select('*');
-			$dbtraxes->select('xin_mobile_order.secid');
-			$dbtraxes->select('xin_mobile_order.customer_id');
-			$dbtraxes->select('xin_mobile_order.customer_name');
-			$dbtraxes->select('xin_mobile_order.employee_id');
-			$dbtraxes->select('xin_mobile_order.employee_name');
-			$dbtraxes->select('xin_mobile_order.project_id');
-			$dbtraxes->select('xin_mobile_order.project_name');
-			$dbtraxes->select('xin_mobile_order.sub_project');
-			$dbtraxes->select('xin_mobile_order.jabatan');
-			$dbtraxes->select('xin_mobile_order.penempatan');
-			$dbtraxes->select('xin_mobile_order.material_id');
+			$dbtraxes->select('mp_sku_customer.secid');
+			$dbtraxes->select('mp_sku_customer.customer_id');
+			$dbtraxes->select('mp_sku_customer.customer_name');
+			$dbtraxes->select('mp_sku_customer.employee_id');
+			$dbtraxes->select('mp_sku_customer.employee_name');
+			$dbtraxes->select('mp_sku_customer.project_id');
+			$dbtraxes->select('mp_sku_customer.project_name');
+			$dbtraxes->select('mp_sku_customer.sub_project');
+			$dbtraxes->select('mp_sku_customer.jabatan');
+			$dbtraxes->select('mp_sku_customer.penempatan');
+			$dbtraxes->select('mp_sku_customer.material_id');
 			$dbtraxes->select('xin_sku_material.nama_material');
-			$dbtraxes->select('xin_sku_material.brand');
-			$dbtraxes->select('xin_sku_material.poin');
-			$dbtraxes->select('xin_mobile_order.qty');
-			$dbtraxes->select('xin_mobile_order.price');
-			$dbtraxes->select('xin_mobile_order.total');
-			$dbtraxes->select('xin_mobile_order.order_date');
+			// $dbtraxes->select('xin_sku_material.brand');
+			// $dbtraxes->select('xin_sku_material.poin');
+			$dbtraxes->select('mp_sku_customer.stock_date');
+			$dbtraxes->select('mp_sku_customer.stock_qty');
+			$dbtraxes->select('mp_sku_customer.stock_out');
+			$dbtraxes->select('mp_sku_customer.exp_date');
 
 			// $dbtraxes->where($kondisiDefaultQuery);
 			if ($searchQuery != '') {
@@ -1392,9 +1394,9 @@ class Traxes_model extends CI_Model
 				$dbtraxes->where($filterPeriode);
 			}
 
-			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = xin_mobile_order.material_id', 'left');
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = mp_sku_customer.material_id', 'left');
 			$dbtraxes->limit($rowperpage, $start);
-			$records = $dbtraxes->get('xin_mobile_order')->result();
+			$records = $dbtraxes->get('mp_sku_customer')->result();
 
 			#Debugging variable
 			$tes_query = $dbtraxes->last_query();
@@ -1407,24 +1409,22 @@ class Traxes_model extends CI_Model
 
 
 				$data[] = array(
-					"aksi" => $record->secid,
-					"employee_id" => $record->employee_id,
-					"fullname" => strtoupper($record->employee_name),
-					"customer_id" => strtoupper($record->customer_id),
+					"aksi" 			=> $record->secid,
+					"employee_id" 	=> $record->employee_id,
+					"fullname" 		=> strtoupper($record->employee_name),
+					"customer_id" 	=> strtoupper($record->customer_id),
 					"customer_name" => strtoupper($record->customer_name),
-					"project_id" => strtoupper($record->project_id),
-					"project_name" => strtoupper($record->project_name),
-					"sub_project_name" => strtoupper($record->sub_project),
-					"jabatan_name" => strtoupper($record->jabatan),
-					"penempatan" => strtoupper($record->penempatan),
-					"material_id" => strtoupper($record->material_id),
-					"nama_material" => strtoupper($record->nama_material),
-					"brand" => strtoupper($record->brand),
-					"poin" => strtoupper($record->poin),
-					"qty" => strtoupper($record->qty),
-					"price" => strtoupper($record->price),
-					"total" => strtoupper($record->total),
-					"order_date" => strtoupper($record->order_date),
+					"project_id" 	=> strtoupper($record->project_id),
+					"project_name" 	=> strtoupper($record->project_name),
+					"sub_project_name" 	=> strtoupper($record->sub_project),
+					"jabatan_name" 		=> strtoupper($record->jabatan),
+					"penempatan" 		=> strtoupper($record->penempatan),
+					"material_id" 		=> strtoupper($record->material_id),
+					"nama_material" 	=> strtoupper($record->nama_material),
+					"stock_date" 		=> strtoupper($record->stock_date),
+					"stock_qty" 		=> strtoupper($record->stock_qty),
+					"stock_out" 		=> strtoupper($record->stock_out),
+					"exp_date" 			=> strtoupper($record->exp_date),
 
 				);
 
@@ -1448,6 +1448,151 @@ class Traxes_model extends CI_Model
 		//die;
 
 		return $response;
+	}
+
+	function get_stock_print($postData = null)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$sdate = $postData['sdate'];
+		$edate = $postData['edate'];
+		$filter = $postData['filter'];
+		$session_id = $postData['session_id'];
+
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+			$searchQuery = " (mp_sku_customer.employee_id like '%" . $filter .  "%' 
+			or mp_sku_customer.employee_name like '%" . $filter . "%' 
+			or mp_sku_customer.customer_name like '%" . $filter . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterSubProject = "";
+		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+			// $filterSubProject = "(
+			// 	REPLACE(tx_cio.sub_project_name,' ','' = '" . $sub_project . "'
+			// )";
+			$filterSubProject = "(
+				sub_project = '" . $sub_project . "'
+			)";
+
+		} else {
+			$filterSubProject = "";
+		}
+
+		$filterStatus = "";
+		if (($sdate != null) && ($sdate != "") && ($sdate != '0')) {
+			$filterStatus = "(
+				DATE_FORMAT(mp_sku_customer.stock_date, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'
+			)";
+
+			// $filterStatus = "(
+			// 	DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'
+			// )";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "";
+
+		## Fetch records
+		// $this->db->select('*');
+
+
+			$dbtraxes->select('mp_sku_customer.secid');
+			$dbtraxes->select('mp_sku_customer.customer_id');
+			$dbtraxes->select('mp_sku_customer.customer_name');
+			$dbtraxes->select('mp_sku_customer.employee_id');
+			$dbtraxes->select('mp_sku_customer.employee_name');
+			$dbtraxes->select('mp_sku_customer.project_id');
+			$dbtraxes->select('mp_sku_customer.project_name');
+			$dbtraxes->select('mp_sku_customer.sub_project');
+			$dbtraxes->select('mp_sku_customer.jabatan');
+			$dbtraxes->select('mp_sku_customer.penempatan');
+			$dbtraxes->select('mp_sku_customer.material_id');
+			$dbtraxes->select('xin_sku_material.nama_material');
+			// $dbtraxes->select('xin_sku_material.brand');
+			// $dbtraxes->select('xin_sku_material.poin');
+			$dbtraxes->select('mp_sku_customer.stock_date');
+			$dbtraxes->select('mp_sku_customer.stock_qty');
+			$dbtraxes->select('mp_sku_customer.stock_out');
+			$dbtraxes->select('mp_sku_customer.exp_date');
+
+
+
+
+		// $dbtraxes->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$dbtraxes->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$dbtraxes->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$dbtraxes->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$dbtraxes->where($filterStatus);
+		}
+
+			$dbtraxes->join('xin_sku_material', 'xin_sku_material.kode_sku = mp_sku_customer.material_id', 'left');
+
+		$records = $dbtraxes->get('mp_sku_customer')->result();
+		$tes_query = $dbtraxes->last_query();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			
+
+			$data[] = array(
+				$record->employee_id,
+				trim(strtoupper($record->employee_name), " "),
+				strtoupper($record->project_name),
+
+				// strtoupper($record->sub_project),
+				strtoupper($record->jabatan),
+				strtoupper($record->penempatan),
+				
+				strtoupper($record->customer_id),
+				strtoupper($record->customer_name),
+				strtoupper($record->nama_material),
+				strtoupper($record->stock_date),
+				strtoupper($record->stock_qty),
+				
+				strtoupper($record->stock_out),
+				strtoupper($record->exp_date),
+
+			);
+		}
+
+		//print_r($this->db->last_query());
+		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
+
+		return $data;
+		//json_encode($data);
 	}
 
 

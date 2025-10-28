@@ -542,20 +542,31 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'allow_jabatan' 			=> $result[0]->allowance_grade,
 			'allow_area' 					=> $result[0]->allowance_area,
 			'allow_masakerja' 		=> $result[0]->allowance_masakerja,
-			'allow_trans_meal' 		=> $result[0]->allowance_transmeal,
+			
 			'allow_konsumsi' 			=> $result[0]->allowance_meal,
 			'allow_transport' 		=> $result[0]->allowance_transport,
 			'allow_comunication' 	=> $result[0]->allowance_komunikasi,
 			'allow_device' 				=> $result[0]->allowance_laptop,
+
 			'allow_residence_cost'=> $result[0]->allowance_residance,
 			'allow_rent' 					=> $result[0]->allowance_rent,
 			'allow_parking' 			=> $result[0]->allowance_park,
 			'allow_medicine' 			=> $result[0]->allowance_medicine,
+
 			'allow_akomodsasi' 		=> $result[0]->allowance_akomodasi,
 			'allow_kasir' 				=> $result[0]->allowance_kasir,
 			'allow_operational' 	=> $result[0]->allowance_operation,
 			'allow_skill' 				=> $result[0]->allowance_skill,
+
+			'allow_trans_meal' 		=> $result[0]->allowance_transmeal,
+			'allow_trans_rent' 		=> $result[0]->allowance_transrent,
 			'allow_training' 			=> $result[0]->allowance_training,
+			'allow_grooming' 			=> $result[0]->allowance_grooming,
+
+			'allow_kehadiran' 		=> $result[0]->allowance_kehadiran,
+			'allow_kinerja' 			=> $result[0]->allowance_kinerja,
+			'allow_disiplin' 			=> $result[0]->allowance_disiplin,
+			'allow_others' 				=> $result[0]->allowance_others,
 		
 			);
 
@@ -816,6 +827,11 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_operational 		= $pkwt_info[0]->allowance_operation;
 			$allow_skill 					= $pkwt_info[0]->allowance_skill;
 			$allow_training 			= $pkwt_info[0]->allowance_training;
+			$allow_grooming 			= $pkwt_info[0]->allowance_grooming;
+			$allow_kehadiran 			= $pkwt_info[0]->allowance_kehadiran;
+			$allow_kinerja 				= $pkwt_info[0]->allowance_kinerja;
+			$allow_disiplin 			= $pkwt_info[0]->allowance_disiplin;
+			$allow_others 				= $pkwt_info[0]->allowance_others;
 
 		} else {
 			$contract_start = '';
@@ -846,6 +862,11 @@ class Employee_pkwt_cancel extends MY_Controller {
 			$allow_operational 		= '';
 			$allow_skill 					= '';
 			$allow_training 			= '';
+			$allow_grooming 			= '';
+			$allow_kehadiran 			= '';
+			$allow_kinerja 				= '';
+			$allow_disiplin 			= '';
+			$allow_others 				= '';
 		}
 
 
@@ -899,22 +920,27 @@ class Employee_pkwt_cancel extends MY_Controller {
 			'basic_salary' => $basic_salary,
 			'allow_jabatan' => $result[0]->allow_jabatan,
 			'allow_area' => $result[0]->allow_area,
-			'allow_masakerja' => $result[0]->allow_masakerja,
-			'allow_trans_meal' => $result[0]->allow_trans_meal,
-			'allow_trans_rent' => $result[0]->allow_trans_rent,
-			'allow_konsumsi' => $result[0]->allow_konsumsi,
-			'allow_transport' => $result[0]->allow_transport,
-			'allow_comunication' => $result[0]->allow_comunication,
-			'allow_device' => $result[0]->allow_device,
+			'allow_masakerja' 		=> $result[0]->allow_masakerja,
+			'allow_trans_meal' 		=> $result[0]->allow_trans_meal,
+			'allow_trans_rent' 		=> $result[0]->allow_trans_rent,
+			'allow_konsumsi' 			=> $result[0]->allow_konsumsi,
+			'allow_transport' 		=> $result[0]->allow_transport,
+			'allow_comunication' 	=> $result[0]->allow_comunication,
+			'allow_device' 				=> $result[0]->allow_device,
 			'allow_residence_cost' => $result[0]->allow_residence_cost,
-			'allow_rent' => $result[0]->allow_rent,
-			'allow_parking' => $result[0]->allow_parking,
-			'allow_medicine' => $result[0]->allow_medicine,
-			'allow_akomodsasi' => $result[0]->allow_akomodsasi,
-			'allow_kasir' => $result[0]->allow_kasir,
-			'allow_operational' => $result[0]->allow_operational,
-			'allow_training' => $result[0]->allow_training,
-			'allow_skill' => $result[0]->allow_skill,
+			'allow_rent' 					=> $result[0]->allow_rent,
+			'allow_parking' 			=> $result[0]->allow_parking,
+			'allow_medicine' 			=> $result[0]->allow_medicine,
+			'allow_akomodsasi' 		=> $result[0]->allow_akomodsasi,
+			'allow_kasir' 				=> $result[0]->allow_kasir,
+			'allow_operational' 	=> $result[0]->allow_operational,
+			'allow_training' 	=> $result[0]->allow_training,
+			'allow_skill' 		=> $result[0]->allow_skill,
+			'allow_grooming' 	=> $result[0]->allow_grooming,
+			'allow_kehadiran' => $result[0]->allow_kehadiran,
+			'allow_kinerja' 	=> $result[0]->allow_kinerja,
+			'allow_disiplin' 	=> $result[0]->allow_disiplin,
+			'allow_others' 		=> $result[0]->allow_others,
 
 			);
 		
@@ -1145,6 +1171,10 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 					if($this->input->post('gaji_pokok')=='') {
 						$Return['error'] = 'Gaji Pokok Kosong..!';
+					} else if($this->input->post('join_date_pkwt')=='') {
+						$Return['error'] = 'Periode Kontrak Awal Kosong..!';
+					} else if($this->input->post('pkwt_end_date')==''){
+						$Return['error'] = 'Periode Kontrak Akhir Kosong..!';
 					}
 
 						// $Return['error'] = 'Gaji Pokok Kosong..!';
@@ -1235,22 +1265,32 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
 							$tunjangan_area 							= $this->input->post('tunjangan_area');
 							$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
+							
 							$tunjangan_makan 							= $this->input->post('tunjangan_makan');
 							$tunjangan_transport 							= $this->input->post('tunjangan_transport');
 							$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
-							$tunjangan_makan_trans 							= $this->input->post('tunjangan_makan_trans');
-							$tunjangan_trans_rental 							= $this->input->post('tunjangan_trans_rental');
 							$tunjangan_device 							= $this->input->post('tunjangan_device');
+							
 							$tunjangan_tempat_tinggal 							= $this->input->post('tunjangan_tempat_tinggal');
 							$tunjangan_rental 							= $this->input->post('tunjangan_rental');
 							$tunjangan_parkir 							= $this->input->post('tunjangan_parkir');
 							$tunjangan_kesehatan 							= $this->input->post('tunjangan_kesehatan');
+
 							$tunjangan_akomodasi 							= $this->input->post('tunjangan_akomodasi');
 							$tunjangan_kasir 							= $this->input->post('tunjangan_kasir');
 							$tunjangan_operational 				= $this->input->post('tunjangan_operational');
 							$tunjangan_keahlian 				= $this->input->post('tunjangan_keahlian');
+
+							$tunjangan_makan_trans 			= $this->input->post('tunjangan_makan_trans');
+							$tunjangan_trans_rental 		= $this->input->post('tunjangan_trans_rental');
 							$tunjangan_pelatihan 				= $this->input->post('tunjangan_pelatihan');
-							
+							$tunjangan_grooming 				= $this->input->post('tunjangan_grooming');
+
+							$tunjangan_kehadiran 				= $this->input->post('tunjangan_kehadiran');
+							$tunjangan_kinerja 					= $this->input->post('tunjangan_kinerja');
+							$tunjangan_disiplin 				= $this->input->post('tunjangan_disiplin');
+							$tunjangan_others 					= $this->input->post('tunjangan_others');
+
 							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
 							$pkwt_end_date 							= $this->input->post('pkwt_end_date');
 							$waktu_kontrak 							= $this->input->post('waktu_kontrak');
@@ -1336,6 +1376,18 @@ class Employee_pkwt_cancel extends MY_Controller {
 							'allowance_skill' 			=> str_replace(".", "", $tunjangan_keahlian),
 							'dm_allow_training' 		=> 'Bulan',
 							'allowance_training' 		=> str_replace(".", "", $tunjangan_pelatihan),
+							'dm_allow_grooming' 		=> 'Bulan',
+							'allowance_grooming' 		=> str_replace(".", "", $tunjangan_grooming),
+
+							'dm_allow_kehadiran' 				=> 'Bulan',
+							'allowance_kehadiran' 			=> str_replace(".", "", $tunjangan_kehadiran),
+							'dm_allow_kinerja' 					=> 'Bulan',
+							'allowance_kinerja' 				=> str_replace(".", "", $tunjangan_kinerja),
+							'dm_allow_disiplin' 				=> 'Bulan',
+							'allowance_disiplin' 				=> str_replace(".", "", $tunjangan_disiplin),
+							'dm_allow_others' 					=> 'Bulan',
+							'allowance_others' 					=> str_replace(".", "", $tunjangan_others),
+
 							'img_esign'							=> $image_name,
 
 							'sign_nip'							=> '24536132',

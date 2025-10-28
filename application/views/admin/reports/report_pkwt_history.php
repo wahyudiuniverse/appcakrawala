@@ -125,6 +125,7 @@
                 <th>No.</th>
                 <th>Status</th>
                 <th>NIP</th>
+                <th>PIN</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
                 <th>Sub Project</th>

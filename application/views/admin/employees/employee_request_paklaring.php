@@ -26,22 +26,45 @@
             <div class="row">
               <table class="table table-striped col-md-12">
                 <tbody>
+
+                  <tr>
+                    <td style='width:25%'><strong>NIP / Nama Lengkap <span class="icon-verify-bank"></span></strong></td>
+                      
+                    <td ><strong><span class="icon-verify-bank" id="fullname_modal" name="fullname_modal"></span></strong></td>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style='width:25%'><strong>KTP / Nama PT. <span class="icon-verify-bank"></span></strong></td>
+                    <td ><strong><span class="icon-verify-bank" id="nikpt_modal" name="nikpt_modal"></span></strong></td>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style='width:25%'><strong>Project / Posisi <span class="icon-verify-bank"></span></strong></td>
+                    <td ><strong><span class="icon-verify-bank" id="propos_modal" name="propos_modal"></span></strong></td>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style='width:25%'><strong>Periode Kontrak Terakhir <span class="icon-verify-bank"></span></strong></td>
+                    <td ><strong><span class="icon-verify-bank" id="periode_modal" name="periode_modal"></span></strong></td>
+                    </td>
+                  </tr>
+
                   <tr>
                     <td style='width:25%'><strong>Tanggal Bergabung / Date of Join <span class="icon-verify-bank"></span></strong></td>
                     <td style='width:75%'>
                       
-                      <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
-
-                      <span id='pesan_nama_bank'></span>
-                      <input hidden name="nama_bank" id="nama_bank" placeholder="Nomor Rekening Bank" type="text" value="">
+                      <input class="form-control date" readonly placeholder="Tanggal Bergabung" id="joindate_field" name="joindate_field" type="text" value="">
                     </td>
                   </tr>
                   <tr>
                     <td><strong>Tanggal Berakhir / Date of Leave <span class="icon-verify-norek"></span></strong></td>
                     <td>
                       
-                      <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
-                      <span id='pesan_nomor_rekening'></span>
+                      <input class="form-control date" readonly placeholder="Tanggal Resign" id="leavedate_field" name="leavedate_field" type="text" value="">
+                      <span id='pesan_date_of_leave'></span>
                     </td>
                   </tr>
 
@@ -116,7 +139,7 @@
         </div>
       </div>
 
-      <div class="col-md-3" id="subproject_ajax">
+      <div class="col-md-3" id="subproject_ajax" hidden>
         <label class="form-label">Sub Project</label>
         <select class="form-control select_hrm" data-live-search="true" name="sub_project_id" id="aj_sub_project"  data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
           <option value="0">--ALL--</option>
@@ -129,11 +152,10 @@
       </div>
 
       <div class="col-md-3">
-        <label class="form-label">Status Pengajuan</label>
-        <select class="form-control select_hrm" name="status" id="aj_status" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status'); ?>">
-          <option value="0">Belum Diajukan</option>
-          <option value="1">Proses Approval</option>
-        </select>
+        <label class="form-label">NIP / KTP / Nama Lengkap</label>
+        <input class="form-control" placeholder="Cari NIP / KTP / NAMA LENGKAP" name="keyword" id="aj_keyword" type="text" value="">
+                  
+
       </div>
 
       <div class="col-md-3">
@@ -180,11 +202,11 @@
                 <th>NIK</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
-                <th>Sub Project</th>
                 <th>Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>Join Date</th>
-                <th>Status Paklaring</th>
+                <th>Tanggal Bergabung</th>
+                <th>Tanggal Resign</th>
+                <th>Status Pengajuan</th>
               </tr>
             </thead>
           </table>
@@ -218,7 +240,7 @@
 
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var status = document.getElementById("aj_status").value;
+    var status = document.getElementById("aj_keyword").value;
     var search_periode_from = "";
     var search_periode_to = "";
 
@@ -237,7 +259,7 @@
 
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var status = document.getElementById("aj_status").value;
+    var status = document.getElementById("aj_keyword").value;
 
     var searchVal = $('#tabel_employees_filter').find('input').val();
 
@@ -303,10 +325,6 @@
             "orderable": false
           },
           {
-            data: 'sub_project',
-            "orderable": false,
-          },
-          {
             data: 'designation_name',
             "orderable": false,
           },
@@ -316,6 +334,10 @@
           },
           {
             data: 'join',
+            "orderable": false,
+          },
+          {
+            data: 'leave',
             "orderable": false,
           },
           {
@@ -339,6 +361,8 @@
 <!-- Tombol Open Form Pengajuan -->
 <script type="text/javascript">
   function open_pengajuan(nip) {
+
+    // alert(nip);
     // AJAX untuk ambil data buku tabungan employee terupdate
     $.ajax({
       url: '<?= base_url() ?>admin/Employee_resign_new/get_data_employee/',
@@ -348,10 +372,10 @@
         nip: nip,
       },
       beforeSend: function() {
-        $('#judul-modal-edit').html("File Buku Tabungan");
-        $('#button_download_dokumen_conditional').html("");
-        $('.isi-modal').html(loading_html_text);
-        $('#button_save_pin').attr("hidden", true);
+        $('#judul-modal-edit').html("File Exit Clearance");
+        // $('#button_download_dokumen_conditional').html("");
+        // $('.isi-modal').html(loading_html_text);
+        // $('#button_save_pin').attr("hidden", true);
         $('#editRekeningModal').appendTo("body").modal('show');
 
         // $('#editRekeningModal').modal('show');
@@ -361,37 +385,45 @@
         // $('#button_save_rekening').attr("hidden", true);
       },
       success: function(response) {
-
+        // alert("TES1");
         var res = jQuery.parseJSON(response);
 
-        if (res['status']['filename_rek'] == "200") {
-          var nama_file = res['data']['filename_rek'];
-          var tipe_file = nama_file.substr(-3, 3);
-          var atribut = "";
-          var height = '';
-          var d = new Date();
-          var time = d.getTime();
-          nama_file = nama_file + "?" + time;
+        if (res['status'] == "200") {
 
-          if (tipe_file == "pdf") {
-            atribut = "application/pdf";
-            height = 'height="500px"';
-          } else {
-            atribut = "image/jpg";
-          }
+          $('#fullname_modal').html(res['data']['employee_id'] + ' / ' +res['data']['first_name']);
+          $('#nikpt_modal').html(res['data']['ktp_no'] + ' / ' +res['data']['company_name']);
+          $('#propos_modal').html(res['data']['project_name'] + ' / ' +res['data']['designation_name']);
+          $('#periode_modal').html(res['data']['periode']);
+          $('#joindate_field').val(res['data']['join_date']);
+          $('#leavedate_field').val(res['data']['leave_date']);
+          // var nama_file = res['data']['filename_rek'];
+          // var tipe_file = nama_file.substr(-3, 3);
+          // var atribut = "";
+          // var height = '';
+          // var d = new Date();
+          // var time = d.getTime();
+          // nama_file = nama_file + "?" + time;
 
-          var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
+          // if (tipe_file == "pdf") {
+          //   atribut = "application/pdf";
+          //   height = 'height="500px"';
+          // } else {
+          //   atribut = "image/jpg";
+          // }
+
+          // var html_text = '<embed ' + height + ' class="col-md-12" type="' + atribut + '" src="' + nama_file + '"></embed>';
 
           // var html_text = '<iframe src="http://localhost/appcakrawala/uploads/document/rekening/' + res['data']['filename_rek'] + '" style="zoom:1.00" frameborder="0" height="400" width="99.6%"></iframe>';
-          $('.isi-modal').html(html_text);
-          $('#button_save_pin').attr("hidden", true);
+          // $('.isi-modal').html(html_text);
+          // $('#button_save_pin').attr("hidden", true);
         } else {
-          html_text = res['pesan']['filename_rek'];
-          $('.isi-modal').html(html_text);
-          $('#button_save_pin').attr("hidden", true);
+          html_text = res['pesan'];
+          // $('.isi-modal').html(html_text);
+          // $('#button_save_pin').attr("hidden", true);
         }
       },
       error: function(xhr, status, error) {
+        alert("error");
         html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
         html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
         // html_text = "Gagal fetch data. Kode error: " + xhr.status;
@@ -413,7 +445,7 @@
   document.getElementById("button_download_data").onclick = function(e) {
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var status = document.getElementById("aj_status").value;
+    var status = document.getElementById("aj_keyword").value;
 
     // ambil input search dari datatable
     var filter = $('.dataTables_filter input').val(); //cara 1
@@ -455,7 +487,7 @@
     var searchVal = $('#tabel_employees_filter').find('input').val();
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
-    var status = document.getElementById("aj_status").value;
+    var status = document.getElementById("aj_keyword").value;
     // alert(searchVal.length);
 
     if ((searchVal.length <= 2) && (project == "0")) {

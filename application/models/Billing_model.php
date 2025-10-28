@@ -135,7 +135,7 @@ class Billing_model extends CI_Model
 		$region 		= $postData['region'];
 		$session_id 	= $postData['session_id'];
 
-		if ($periode == "0") {
+		// if ($periode == "0") {
 			## Search 
 			$searchQuery = "";
 			if ($searchValue != '') {
@@ -145,12 +145,9 @@ class Billing_model extends CI_Model
 				}
 			}
 
-			$periode = "";
-			if (($periode != null) && ($periode != "")) {
-				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
-				// $filterPeriode = "DATE_FORMAT(xin_saltab.periode_salary, '%Y-%m') = '".$periode."'";
-				$filterPeriode = "DATE_FORMAT(xin_saltab.periode_salary, '%Y-%m') = '".$periode."'";
-
+			$filterPeriode = "";
+			if (($periode != null) && ($periode != "") && ($periode != "0")) {
+				$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '".$periode."'";
 			} else {
 				$filterPeriode = "";
 			}
@@ -169,8 +166,10 @@ class Billing_model extends CI_Model
 				$this->db->where($filterPeriode);
 			}
 			// $dbtraxes->where($kondisiDefaultQuery);
-			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab_bulk_release.uploadid', 'left');
+			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
 			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			// $this->db->group_by('xin_saltab_bulk_release.project_id');
+			$this->db->group_by('xin_saltab.billing_area');
 			$records = $this->db->get('xin_saltab')->result();
 			$totalRecords = $records[0]->allcount;
 
@@ -180,38 +179,46 @@ class Billing_model extends CI_Model
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
 			}
-			// if ($filterProject != '') {
-			// 	$this->db->where($filterProject);
-			// }
+			$filterPeriode = "";
+			if (($periode != null) && ($periode != "") && ($periode != "0")) {
+				$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '".$periode."'";
+			} else {
+				$filterPeriode = "";
+			}
 			// if ($filterSubProject != '') {
 			// 	$this->db->where($filterSubProject);
 			// }
 			if ($filterPeriode != '') {
 				$this->db->where($filterPeriode);
 			}
-			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab_bulk_release.uploadid', 'left');
+			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
 			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			// $this->db->group_by('xin_saltab_bulk_release.project_id');
+			$this->db->group_by('xin_saltab.billing_area');
 			$records = $this->db->get('xin_saltab')->result();
 			$totalRecordwithFilter = $records[0]->allcount;
 
 			## Fetch records
 			// $this->db->select('*');
-			$this->db->select('xin_saltab_bulk_release.periode_salary');
+			$this->db->select("DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') AS periode_salary ");
 			$this->db->select('xin_saltab.nip_am');
 			$this->db->select('xin_saltab.nama_am');
 			$this->db->select('xin_saltab.billing_area');
 			$this->db->select('xin_saltab_bulk_release.project_id');
 			$this->db->select('xin_saltab_bulk_release.project_name');
-			$this->db->select('xin_saltab.secid');
-			$this->db->select('xin_saltab.total_thp');
+			$this->db->select("COUNT(xin_saltab.secid) AS total_mpp");
+			$this->db->select("SUM(xin_saltab.total_thp) AS total_thp");
 
 			// $this->db->select('tx_cio.date_cio');
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
 			}
-			// if ($filterProject != '') {
-			// 	$this->db->where($filterProject);
-			// }
+			$filterPeriode = "";
+			if (($periode != null) && ($periode != "") && ($periode != "0")) {
+				$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '".$periode."'";
+			} else {
+				$filterPeriode = "";
+			}
 			// if ($filterSubProject != '') {
 			// 	$this->db->where($filterSubProject);
 			// }
@@ -220,16 +227,19 @@ class Billing_model extends CI_Model
 			}
 
 
-			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab_bulk_release.uploadid', 'left');
+			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
 			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			// $this->db->group_by('xin_saltab_bulk_release.project_id');
+			$this->db->group_by('xin_saltab.billing_area');
 			$this->db->limit($rowperpage, $start);
 			$records = $this->db->get('xin_saltab')->result();
 
 			#Debugging variable
 			$tes_query = $this->db->last_query();
 			// print_r($tes_query);
-
+			// echo "<script>console.log('Debug Objects: " . $tes_query . "' );</script>";
 			$data = array();
+
 
 			foreach ($records as $record) {
 
@@ -242,6 +252,7 @@ class Billing_model extends CI_Model
 				// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
 				// }
 
+				$totalthp = 'Rp. '.$this->Xin_model->rupiah_titik($record->total_thp).'-,';
 
 
 				$data[] = array(
@@ -249,21 +260,21 @@ class Billing_model extends CI_Model
 					"nip_am" 		=> strtoupper($record->nip_am),
 					"nama_am" 		=> strtoupper($record->nama_am),
 					"billing_area" 	=> strtoupper($record->billing_area),
-					"project_id" 	=> strtoupper($record->project_id),
 					"project_name" 	=> strtoupper($record->project_name),
-					"total_mpp" 	=> strtoupper($record->total_thp),
-					"total_billing" => strtoupper($record->total_thp),
-					"fee_percen" 	=> strtoupper($record->total_thp),
-					"fee_value" 	=> strtoupper($record->total_thp),
-					"total" 		=> strtoupper($record->total_thp)
+					"total_mpp" 	=> $record->total_mpp,
+					"total_billing" => $totalthp,
+					"fee_percen" 	=> '8%',
+					"fee_value" 	=> "0",
+					"total" 		=> "0"
 				);
 
 			}
-		} else {
-			$totalRecords = 0;
-			$totalRecordwithFilter = 0;
-			$data = array();
-		}
+		// } 
+		// else {
+		// 	$totalRecords = 0;
+		// 	$totalRecordwithFilter = 0;
+		// 	$data = array();
+		// }
 
 
 		## Response

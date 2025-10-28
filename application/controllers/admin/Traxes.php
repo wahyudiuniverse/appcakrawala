@@ -1959,7 +1959,7 @@ class Traxes extends MY_Controller
 				Link C.I.S : https://apps-cakrawala.com/admin%0a
 				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
 
-				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*INFO HRD di Nomor Whatsapp: 0881010250138* %0a
 				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
 				
 				Terima kasih.';
@@ -1977,7 +1977,7 @@ class Traxes extends MY_Controller
 				Link C.I.S : https://apps-cakrawala.com/admin%0a
 				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT Kemitraan bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
 
-				*INFO HRD di Nomor Whatsapp: 085175168275* %0a
+				*INFO HRD di Nomor Whatsapp: 0881010250138* %0a
 				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
 				
 				Terima kasih.';

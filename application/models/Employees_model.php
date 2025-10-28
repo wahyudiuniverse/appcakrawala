@@ -723,7 +723,7 @@ class Employees_model extends CI_Model
 
 				$query2 = $this->db->get()->row_array();
 				if (empty($query2)) {
-					return "";
+					return "Tidak Ada Pengajuan";
 				} else {
 					if($query2['cancel_status'] == 1){
 						$status_sk = 'Ditolak HRD';
@@ -3193,12 +3193,15 @@ class Employees_model extends CI_Model
 		$status = $postData['status'];
 		$session_id = $postData['session_id'];
 
-		if ($project != "0") {
+		if ($project!=5) {
 			## Search 
 			$searchQuery = "";
 			if ($searchValue != '') {
 				if (strlen($searchValue) >= 3) {
-					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' or xin_employees.first_name like '%" . $searchValue . "%' or xin_designations.designation_name like '%" . $searchValue . "%' or xin_employees.ktp_no like '%" . $searchValue . "%') ";
+					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' 
+					or xin_employees.first_name like '%" . $searchValue . "%' 
+					or xin_designations.designation_name like '%" . $searchValue . "%' 
+					or xin_employees.ktp_no like '%" . $searchValue . "%') ";
 				}
 			}
 
@@ -3219,7 +3222,10 @@ class Employees_model extends CI_Model
 
 			$filterStatus = "";
 			if (($status != null) && ($status != "")) {
-				$filterStatus = "xin_employees.request_paklaring = '" . $status . "'";
+				$filterStatus = "xin_employees.employee_id LIKE '%" . $status . "%' 
+				or xin_employees.first_name LIKE '%" . $status . "%' 
+				or xin_employees.ktp_no LIKE '%" . $status . "%'";
+				// $filterStatus = "nip LIKE '%$status%' OR ktp LIKE '%$status%' OR employee_name LIKE '%$status%'";
 			} else {
 				$filterStatus = "";
 			}
@@ -3230,16 +3236,15 @@ class Employees_model extends CI_Model
 			// 	karyawan_id = " . $emp_id . "
 			// AND	pkwt_id = " . $contract_id . "
 			// )";
-			$kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
+			// $kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
+			$kondisiDefaultQuery = "`xin_employees.user_id` != '99'";
 
 			## Total number of records without filtering
 			$this->db->select('count(*) as allcount');
 			if ($filterProject != '') {
 				$this->db->where($filterProject);
 			}
-			if ($filterSubProject != '') {
-				$this->db->where($filterSubProject);
-			}
+
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
 			}
@@ -3257,9 +3262,6 @@ class Employees_model extends CI_Model
 			if ($filterProject != '') {
 				$this->db->where($filterProject);
 			}
-			if ($filterSubProject != '') {
-				$this->db->where($filterSubProject);
-			}
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
 			}
@@ -3276,13 +3278,11 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_employees.ktp_no');
 			$this->db->select('xin_employees.first_name');
 			$this->db->select('xin_employees.project_id');
-			$this->db->select('xin_employees.sub_project_id');
 			$this->db->select('xin_employees.designation_id');
 			$this->db->select('xin_employees.date_of_joining');
+			$this->db->select('xin_employees.date_of_leaving');
 			$this->db->select('xin_designations.designation_name');
 			$this->db->select('xin_employees.penempatan');
-			//$this->db->select('b.from_date');
-			//$this->db->select('b.to_date');
 			$this->db->select('xin_employees.contract_start');
 			$this->db->select('xin_employees.contract_end');
 			$this->db->select('xin_employees.private_code');
@@ -3294,9 +3294,6 @@ class Employees_model extends CI_Model
 			}
 			if ($filterProject != '') {
 				$this->db->where($filterProject);
-			}
-			if ($filterSubProject != '') {
-				$this->db->where($filterSubProject);
 			}
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
@@ -3357,21 +3354,34 @@ class Employees_model extends CI_Model
 				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
 				// }
 
-				$text_resign = "";
+					$open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
+
+					$open_profile = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
+
+					$open_profile_blacklist = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
+					$text_resign = "";
+
 				if (empty($record->status_resign) || ($record->status_resign == "")) {
-					$text_resign = "";
+					$text_resign 	= "";
+					$action 		= "";
 				} else if ($record->status_resign == "1") {
-					$text_resign = " - [AKTIF]";
+					$text_resign 	= " - [AKTIF]";
+					$action 		= $open_profile;
 				} else if ($record->status_resign == "2") {
-					$text_resign = " - [RESIGN]";
+					$text_resign 	= " - [RESIGN]";
+					$action 		= $open_pengajuan;
 				} else if ($record->status_resign == "3") {
-					$text_resign = " - [BLACKLIST]";
+					$text_resign 	= " - [BLACKLIST]";
+					$action 		= $open_profile_blacklist;
 				} else if ($record->status_resign == "4") {
-					$text_resign = " - [END CONTRACT]";
+					$text_resign 	= " - [END CONTRACT]";
+					$action 		= $open_pengajuan;
 				} else if ($record->status_resign == "5") {
-					$text_resign = " - [DEACTIVE]";
+					$text_resign 	= " - [DEACTIVE]";
+					$action 		= $open_pengajuan;
 				} else {
-					$text_resign = "";
+					$text_resign 	= "";
+					$action 		= "";
 				}
 
 				//cek komparasi string
@@ -3419,21 +3429,21 @@ class Employees_model extends CI_Model
 				// $editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				// $delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
-				$open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
+				// $open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
 
 
 				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 				$data[] = array(
-					"aksi" => $open_pengajuan,
+					"aksi" => $action,
 					"employee_id" => $record->employee_id . $text_resign,
 					"ktp_no" => $record->ktp_no . $validate_nik,
 					"first_name" => strtoupper($record->first_name),
 					"project" => strtoupper($this->get_nama_project($record->project_id)),
-					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
 					"penempatan" => strtoupper($record->penempatan),
 					"join" => strtoupper($record->date_of_joining),
+					"leave" => strtoupper($record->date_of_leaving),
 					"periode" => $this->get_periode_pkwt($record->employee_id),
 					"status_sk" => $this->get_skk($record->employee_id),
 					// "pincode" => $text_pin,
@@ -4026,11 +4036,12 @@ class Employees_model extends CI_Model
 	public function checknik($nik)
 	{
 
-		$sql = 'SELECT max(date_of_joining), emp.employee_id, emp.first_name, emp.designation_id, pos.designation_name, emp.project_id,pro.priority, pro.title, emp.company_id,emp.ktp_no, emp.status_resign
+		$sql = 'SELECT date_of_joining, emp.employee_id, emp.first_name, emp.designation_id, pos.designation_name, emp.project_id,pro.priority, pro.title, emp.company_id,emp.ktp_no, emp.status_resign
 	FROM xin_employees emp
 	LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
 	LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
-	WHERE ktp_no = ?';
+	WHERE ktp_no = ? ORDER BY user_id DESC
+	LIMIT 1';
 		$binds = array($nik);
 		$query = $this->db->query($sql, $binds);
 

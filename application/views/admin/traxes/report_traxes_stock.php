@@ -185,7 +185,6 @@
                 <th>NIP</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
-                <th>Sub Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
                 <th>ID Toko</th>
@@ -194,6 +193,7 @@
                 <th>Tanggal Stock</th>
                 <th>Stock QTY</th>
                 <th>Stock Akhir</th>
+                <th>Expired Date</th>
               </tr>
 
             </thead>
@@ -298,6 +298,9 @@
             alert("responseText :" + xhr.responseText);
           },
 
+
+
+
         },
         'columns': [{
             data: 'employee_id',
@@ -322,6 +325,10 @@
             "orderable": false,
           },
           {
+            data: 'customer_id',
+            "orderable": false,
+          },
+          {
             data: 'customer_name',
             "orderable": false,
           },
@@ -330,19 +337,19 @@
             "orderable": false,
           },
           {
-            data: 'qty',
+            data: 'stock_date',
             "orderable": false,
           },
           {
-            data: 'price',
+            data: 'stock_qty',
             "orderable": false,
           },
           {
-            data: 'total',
+            data: 'stock_out',
             "orderable": false,
           },
           {
-            data: 'order_date',
+            data: 'exp_date',
             "orderable": false,
           },
         ]
@@ -383,7 +390,7 @@
     text_pesan = text_pesan + "\nSearch: " + searchVal;
     // alert(sub_project);
 
-    window.open('<?php echo base_url(); ?>admin/Traxes_report_order/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Traxes_report_stock/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
   };
 
