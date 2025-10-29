@@ -258,7 +258,7 @@ class Reports extends MY_Controller
 		$data['all_departments'] = $this->Department_model->all_departments();
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['all_designations'] = $this->Designation_model->all_designations();
-		if (in_array('1200', $role_resources_ids)) {
+		if (in_array('490', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/manage_client", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {

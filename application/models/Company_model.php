@@ -86,7 +86,42 @@
 			return false;
 		}
 	}
-	
+
+	//save data Kontak client
+	public function save_pengajuan_skk($postData)
+	{
+		//Cek variabel post
+		$data = [
+
+			'employee_name'     => trim($postData['employee_name']),
+			'doc_id'      		=> '0',
+			'nip'    			=> trim($postData['employee_id']),
+			'jenis_dokumen'     => trim($postData['jenis_dokumen']),
+			'nomor_dokumen'     => trim($postData['nomor_dokumen']),
+			'ktp'     			=> trim($postData['ktp']),
+			'posisi_jabatan'    => trim($postData['posisi_jabatan']),
+			'project_id'     	=> trim($postData['project_id']),
+			'project_name'     	=> trim($postData['project_name']),
+			'company'     		=> trim($postData['company_id']),
+			'company_name'     	=> trim($postData['company_name']),
+			'join_date'     	=> trim($postData['join_date']),
+			'resign_date'     	=> trim($postData['resign_date']),
+			'bpjs_join'     	=> trim($postData['bpjs_join']),
+			'bpjs_date'     	=> trim($postData['bpjs_date']),
+			'resign_status'		=> trim($postData['resign_status']),
+			'exit_clearance'	=> trim($postData['exit_clearance']),
+			'resign_letter'		=> trim($postData['resign_letter']),
+
+			// 'is_active'      	=> "1",
+			// 'status_finish'    	=> "1",
+		];
+		
+		$this->db->insert('xin_qrcode_skk', $data);
+		//update data
+		// $this->db->where('client_id', $postData['id_client']);
+		// $this->db->update('xin_clients', $datarequest);
+	}
+
 	// Function to add record in table
 	public function add_document($data){
 		$this->db->insert('xin_company_documents', $data);

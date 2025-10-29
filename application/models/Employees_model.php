@@ -3353,8 +3353,13 @@ class Employees_model extends CI_Model
 				// } else {
 				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
 				// }
+				$get_skk_status = $this->get_skk($record->employee_id);
+
 
 					$open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
+
+					$status_pengajuan = '<h8><span style="color:#01b9a8;font-weight:bold;">SUDAH DIAJUKAN</span></h8>';
+
 
 					$open_profile = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
 
@@ -3369,16 +3374,41 @@ class Employees_model extends CI_Model
 					$action 		= $open_profile;
 				} else if ($record->status_resign == "2") {
 					$text_resign 	= " - [RESIGN]";
-					$action 		= $open_pengajuan;
+					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+						$action 		= $status_pengajuan;
+					} else {
+						$action 		= $open_pengajuan;
+					}
 				} else if ($record->status_resign == "3") {
 					$text_resign 	= " - [BLACKLIST]";
-					$action 		= $open_profile_blacklist;
+
+					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+						$action 		= $status_pengajuan;
+					} else {
+						$action 		= $open_pengajuan;
+					}
+
+					// $action 		= $open_profile_blacklist;
 				} else if ($record->status_resign == "4") {
 					$text_resign 	= " - [END CONTRACT]";
 					$action 		= $open_pengajuan;
+
+					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+						$action 		= $status_pengajuan;
+					} else {
+						$action 		= $open_pengajuan;
+					}
+
 				} else if ($record->status_resign == "5") {
 					$text_resign 	= " - [DEACTIVE]";
-					$action 		= $open_pengajuan;
+
+					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+						$action 		= $status_pengajuan;
+					} else {
+						$action 		= $open_pengajuan;
+					}
+
+					// $action 		= $open_pengajuan;
 				} else {
 					$text_resign 	= "";
 					$action 		= "";
