@@ -25,19 +25,19 @@ class Billing_model extends CI_Model
 	public function get_region_billing($empID)
 	{
 		$query = $this->db->query("SELECT DISTINCT(billing_area) as billing_area FROM xin_saltab order by billing_area asc");
-				return $query->result();
+		return $query->result();
 	}
 
 	public function get_am_billing($empID)
 	{
 		$query = $this->db->query("SELECT DISTINCT(nama_am) as nama_am FROM xin_saltab order by nama_am asc");
-				return $query->result();
+		return $query->result();
 	}
 
 	public function get_periode_billing($empID)
 	{
 		$query = $this->db->query("SELECT DISTINCT(DATE_FORMAT(periode_salary, '%Y-%m')) as periode FROM xin_saltab_bulk_release ORDER BY periode DESC LIMIT 12");
-				return $query->result();
+		return $query->result();
 	}
 
 	// monitoring request
@@ -136,139 +136,187 @@ class Billing_model extends CI_Model
 		$session_id 	= $postData['session_id'];
 
 		// if ($periode == "0") {
-			## Search 
-			$searchQuery = "";
-			if ($searchValue != '') {
-				if (strlen($searchValue) >= 3) {
-					$searchQuery = " (xin_saltab.billing_area like '%" . $searchValue .  "%' 
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			// if (strlen($searchValue) >= 3) {
+				$searchQuery = " (xin_saltab.billing_area like '%" . $searchValue .  "%' 
 					or xin_saltab.nama_am like '%" . $searchValue . "%') ";
-				}
-			}
+			// }
+		}
 
+		// $filterPeriode = "";
+		// if (($periode != null) && ($periode != "") && ($periode != "0")) {
+		// 	$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '" . $periode . "'";
+		// } else {
+		// 	$filterPeriode = "";
+		// }
+
+		$filterPeriode = "";
+		if (($periode != null) && ($periode != "") && ($periode != "0")) {
+			$filterPeriode = "xin_saltab_bulk_release.periode_salary LIKE '%" . $periode . "%'";
+		} else {
 			$filterPeriode = "";
-			if (($periode != null) && ($periode != "") && ($periode != "0")) {
-				$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '".$periode."'";
-			} else {
-				$filterPeriode = "";
-			}
+		}
 
-			$kondisiDefaultQuery = "";
+		$filterAM = "";
+		if (($am != null) && ($am != "") && ($am != "0")) {
+			$filterAM = "xin_saltab.nama_am = '" . $am . "'";
+		} else {
+			$filterAM = "";
+		}
 
-			## Total number of records without filtering
-			$this->db->select('count(*) as allcount');
-			// if ($filterProject != '') {
-			// 	$this->db->where($filterProject);
+		$filterRegion = "";
+		if (($region != null) && ($region != "") && ($region != "0")) {
+			$filterRegion = "xin_saltab.billing_area = '" . $region . "'";
+		} else {
+			$filterRegion = "";
+		}
+
+		$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		// $this->db->select('xin_saltab.billing_area');
+		// if ($filterProject != '') {
+		// 	$this->db->where($filterProject);
+		// }
+		// if ($filterSubProject != '') {
+		// 	$this->db->where($filterSubProject);
+		// }
+		if ($filterPeriode != '') {
+			$this->db->where($filterPeriode);
+		}
+		if ($filterAM != '') {
+			$this->db->where($filterAM);
+		}
+		if ($filterRegion != '') {
+			$this->db->where($filterRegion);
+		}
+		// $dbtraxes->where($kondisiDefaultQuery);
+		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		// $this->db->group_by('xin_saltab_bulk_release.project_id');
+		$this->db->group_by('xin_saltab.billing_area');
+		$this->db->group_by('xin_saltab_bulk_release.id');
+		$records = $this->db->get('xin_saltab')->result();
+		// $totalRecords = $records[0]->allcount;
+		$totalRecords = count($records);
+
+		// $tes_query =count($records);
+		// $tes_query = $this->db->last_query();
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		// $this->db->select('xin_saltab.billing_area');
+		// $dbtraxes->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		// $filterPeriode = "";
+		// if (($periode != null) && ($periode != "") && ($periode != "0")) {
+		// 	$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '" . $periode . "'";
+		// } else {
+		// 	$filterPeriode = "";
+		// }
+		// if ($filterSubProject != '') {
+		// 	$this->db->where($filterSubProject);
+		// }
+		if ($filterPeriode != '') {
+			$this->db->where($filterPeriode);
+		}
+		if ($filterAM != '') {
+			$this->db->where($filterAM);
+		}
+		if ($filterRegion != '') {
+			$this->db->where($filterRegion);
+		}
+		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		// $this->db->group_by('xin_saltab_bulk_release.project_id');
+		$this->db->group_by('xin_saltab.billing_area');
+		$this->db->group_by('xin_saltab_bulk_release.id');
+		$records = $this->db->get('xin_saltab')->result();
+		// $totalRecordwithFilter = $records[0]->allcount;
+		$totalRecordwithFilter = count($records);
+
+		## Fetch records
+		// $this->db->select('*');
+		$this->db->select("DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') AS periode_salary ");
+		$this->db->select('xin_saltab.nip_am');
+		$this->db->select('xin_saltab.nama_am');
+		$this->db->select('xin_saltab.billing_area');
+		$this->db->select('xin_saltab_bulk_release.project_id');
+		$this->db->select('xin_saltab_bulk_release.project_name');
+		$this->db->select('xin_saltab_bulk_release.sub_project_name');
+		$this->db->select("COUNT(xin_saltab.secid) AS total_mpp");
+		$this->db->select("SUM(xin_saltab.total_thp) AS total_thp"); //diganti kolom total 1
+
+		// $this->db->select('tx_cio.date_cio');
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		// $filterPeriode = "";
+		// if (($periode != null) && ($periode != "") && ($periode != "0")) {
+		// 	$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '" . $periode . "'";
+		// } else {
+		// 	$filterPeriode = "";
+		// }
+		// if ($filterSubProject != '') {
+		// 	$this->db->where($filterSubProject);
+		// }
+		if ($filterPeriode != '') {
+			$this->db->where($filterPeriode);
+		}
+		if ($filterAM != '') {
+			$this->db->where($filterAM);
+		}
+		if ($filterRegion != '') {
+			$this->db->where($filterRegion);
+		}
+		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		// $this->db->group_by('xin_saltab_bulk_release.project_id');
+		$this->db->group_by('xin_saltab.billing_area');
+		$this->db->group_by('xin_saltab_bulk_release.id');
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_saltab')->result();
+
+		#Debugging variable
+		// $tes_query = $this->db->last_query();
+		// print_r($tes_query);
+		// echo "<script>console.log('Debug Objects: " . $tes_query . "' );</script>";
+		$data = array();
+
+
+		foreach ($records as $record) {
+
+			//cek interviewer
+			// $nik_validation = "0";
+			// $jo_interviewer = $this->Jo_model->get_jo_interviewer($record->id_screening);
+			// if (is_null($jo_interviewer)) {
+			// 	$nama_interviewer = "-";
+			// } else {
+			// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
 			// }
-			// if ($filterSubProject != '') {
-			// 	$this->db->where($filterSubProject);
-			// }
-			if ($filterPeriode != '') {
-				$this->db->where($filterPeriode);
-			}
-			// $dbtraxes->where($kondisiDefaultQuery);
-			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
-			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-			// $this->db->group_by('xin_saltab_bulk_release.project_id');
-			$this->db->group_by('xin_saltab.billing_area');
-			$records = $this->db->get('xin_saltab')->result();
-			$totalRecords = $records[0]->allcount;
 
-			## Total number of record with filtering
-			$this->db->select('count(*) as allcount');
-			// $dbtraxes->where($kondisiDefaultQuery);
-			if ($searchQuery != '') {
-				$this->db->where($searchQuery);
-			}
-			$filterPeriode = "";
-			if (($periode != null) && ($periode != "") && ($periode != "0")) {
-				$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '".$periode."'";
-			} else {
-				$filterPeriode = "";
-			}
-			// if ($filterSubProject != '') {
-			// 	$this->db->where($filterSubProject);
-			// }
-			if ($filterPeriode != '') {
-				$this->db->where($filterPeriode);
-			}
-			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
-			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-			// $this->db->group_by('xin_saltab_bulk_release.project_id');
-			$this->db->group_by('xin_saltab.billing_area');
-			$records = $this->db->get('xin_saltab')->result();
-			$totalRecordwithFilter = $records[0]->allcount;
-
-			## Fetch records
-			// $this->db->select('*');
-			$this->db->select("DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') AS periode_salary ");
-			$this->db->select('xin_saltab.nip_am');
-			$this->db->select('xin_saltab.nama_am');
-			$this->db->select('xin_saltab.billing_area');
-			$this->db->select('xin_saltab_bulk_release.project_id');
-			$this->db->select('xin_saltab_bulk_release.project_name');
-			$this->db->select("COUNT(xin_saltab.secid) AS total_mpp");
-			$this->db->select("SUM(xin_saltab.total_thp) AS total_thp");
-
-			// $this->db->select('tx_cio.date_cio');
-			if ($searchQuery != '') {
-				$this->db->where($searchQuery);
-			}
-			$filterPeriode = "";
-			if (($periode != null) && ($periode != "") && ($periode != "0")) {
-				$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '".$periode."'";
-			} else {
-				$filterPeriode = "";
-			}
-			// if ($filterSubProject != '') {
-			// 	$this->db->where($filterSubProject);
-			// }
-			if ($filterPeriode != '') {
-				$this->db->where($filterPeriode);
-			}
+			$totalthp = 'Rp. ' . $this->Xin_model->rupiah_titik($record->total_thp) . '-,';
 
 
-			$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
-			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-			// $this->db->group_by('xin_saltab_bulk_release.project_id');
-			$this->db->group_by('xin_saltab.billing_area');
-			$this->db->limit($rowperpage, $start);
-			$records = $this->db->get('xin_saltab')->result();
-
-			#Debugging variable
-			$tes_query = $this->db->last_query();
-			// print_r($tes_query);
-			// echo "<script>console.log('Debug Objects: " . $tes_query . "' );</script>";
-			$data = array();
-
-
-			foreach ($records as $record) {
-
-				//cek interviewer
-				// $nik_validation = "0";
-				// $jo_interviewer = $this->Jo_model->get_jo_interviewer($record->id_screening);
-				// if (is_null($jo_interviewer)) {
-				// 	$nama_interviewer = "-";
-				// } else {
-				// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
-				// }
-
-				$totalthp = 'Rp. '.$this->Xin_model->rupiah_titik($record->total_thp).'-,';
-
-
-				$data[] = array(
-					"periode" 		=> $record->periode_salary,
-					"nip_am" 		=> strtoupper($record->nip_am),
-					"nama_am" 		=> strtoupper($record->nama_am),
-					"billing_area" 	=> strtoupper($record->billing_area),
-					"project_name" 	=> strtoupper($record->project_name),
-					"total_mpp" 	=> $record->total_mpp,
-					"total_billing" => $totalthp,
-					"fee_percen" 	=> '8%',
-					"fee_value" 	=> "0",
-					"total" 		=> "0"
-				);
-
-			}
+			$data[] = array(
+				"periode" 		=> $record->periode_salary,
+				"nip_am" 		=> strtoupper($record->nip_am),
+				"nama_am" 		=> strtoupper($record->nama_am),
+				"billing_area" 	=> strtoupper($record->billing_area),
+				"project_name" 	=> strtoupper($record->project_name),
+				"sub_project_name" 	=> strtoupper($record->sub_project_name),
+				"total_mpp" 	=> $record->total_mpp,
+				"total_billing" => $totalthp,
+				"fee_percen" 	=> '8%',
+				"fee_value" 	=> "0",
+				"total" 		=> "0"
+			);
+		}
 		// } 
 		// else {
 		// 	$totalRecords = 0;

@@ -39,7 +39,7 @@
         <div class="form-group project-option">
           <label class="form-label">PERIODE</label>
           <select class="form-control select_hrm" data-live-search="true" name="periode_bill" id="aj_periode" data-plugin="select_hrm" data-placeholder="Periode" required>
-            <option value="0">-ALL-</option>
+            <!-- <option value="0">-ALL-</option> -->
             <?php foreach ($periode_billing as $bill) { ?>
               <option value="<?php echo $bill->periode; ?>"> <?php echo $bill->periode; ?></option>
 
@@ -56,9 +56,7 @@
             <option value="0">-ALL-</option>
             <?php foreach ($am_billing as $bill) { ?>
               <option value="<?php echo $bill->nama_am; ?>"> <?php echo $bill->nama_am; ?></option>
-
             <?php } ?>
-
           </select>
         </div>
       </div>
@@ -82,7 +80,7 @@
         <div class="form-group">
           <!-- button submit -->
           <label class="form-label">&nbsp;</label>
-          <button type="button" name="filter_employee" id="filter_employee" class="btn btn-primary btn-block"><i class="fa fa-search"></i> FILTER</button>
+          <button type="button" name="filter_employee" id="filter_employee" class="btn btn-primary btn-block"><i class="fa fa-search"></i> SHOW DATA</button>
         </div>
       </div>
 
@@ -130,6 +128,7 @@
                 <th>Area Manager</th>
                 <th>Billing Area</th>
                 <th>Project Name</th>
+								<th>Sub Project Name</th>
                 <th>Total MPP</th>
                 <th>Total Billing</th>
                 <th>Fee (%)</th>
@@ -272,10 +271,10 @@
 
     var searchVal = $('#tabel_employees_filter').find('input').val();
     // alert(periode);
-    // alert(am);
+    alert(am);
     // alert(region);
     // alert(searchVal);
-    alert(searchVal);
+    // alert(searchVal);
 
     // if ((searchVal == "")) {
     //  $('#button_download_data').attr("hidden", false);
@@ -333,6 +332,10 @@
         },
         {
           data: 'project_name',
+          "orderable": false,
+        },
+        {
+          data: 'sub_project_name',
           "orderable": false,
         },
         {
