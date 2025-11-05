@@ -2727,6 +2727,7 @@ class ImportExcel extends MY_Controller
 		$saltab_from = $this->input->post('saltab_from');
 		$saltab_to = $this->input->post('saltab_to');
 		$periode_salary = $this->input->post('periode_salary');
+		$fee = $this->input->post('fee');
 
 		//load data Project
 		$nama_project = "";
@@ -2813,6 +2814,7 @@ class ImportExcel extends MY_Controller
 				'sub_project_id'         => $sub_project,
 				'sub_project_name'       => $nama_sub_project,
 				'total_mpp'        	 	 => $jumlah_data,
+				'fee'        	 	 	 => $fee,
 				'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($nik),
 				'upload_by_id'        	 => $nik,
 				'upload_ip'        	 	 => $this->get_client_ip(),

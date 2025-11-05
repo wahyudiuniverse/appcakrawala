@@ -79,7 +79,7 @@ if (in_array('511', $role_resources_ids)) {
       <input type="hidden" id="nik" name="nik" value=<?php echo $session['employee_id']; ?>>
 
       <div class="form-row">
-        <div class="col-md-8">
+        <div class="col-md-4">
           <div class="form-group">
             <fieldset class="form-group">
               <label for="file_excel">Upload File<font color="#FF0000">*</font></label>
@@ -94,6 +94,14 @@ if (in_array('511', $role_resources_ids)) {
             <!-- input periode -->
             <label class="form-label">Tanggal Penggajian<font color="#FF0000">*</font></label>
             <input type="text" class="form-control date" name="periode_salary" id="periode_salary" placeholder="Tanggal Penggajian" required>
+          </div>
+        </div>
+
+				<div class="col-md-4">
+          <div class="form-group">
+            <!-- input periode -->
+            <label class="form-label">Fee (dalam %)<font color="#FF0000">*</font></label>
+            <input type="text" class="form-control" name="fee" id="fee" placeholder="Fee (dalam %)" required>
           </div>
         </div>
       </div>
@@ -525,7 +533,7 @@ if (in_array('511', $role_resources_ids)) {
           },
           error: function(xhr, status, error) {
             // var res = jQuery.parseJSON(response);
-            kondisi = "Gagal ajax. Hari ini sudah lewat dari jam 12.<br>Waktu server: " + hari_ini2 + "<br><br>";
+            kondisi = "Gagal Import: Tanggal penggajian sudah lewat.</br>Silahkan ajukan untuk membuka kunci import saltab.<br>Waktu server: " + hari_ini2 + "<br><br>";
             $('.pesan-modal').html(kondisi + html_text);
             $('.pesan-request-modal').html(pesan_request);
             $('#requestOpenModal').appendTo("body").modal('show');
