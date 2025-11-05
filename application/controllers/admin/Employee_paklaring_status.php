@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Employee_resign_new extends MY_Controller {
+class Employee_paklaring_status extends MY_Controller {
 	
 	 public function __construct() {
         parent::__construct();
@@ -21,15 +21,15 @@ class Employee_resign_new extends MY_Controller {
 		$this->load->helper('html');
 		$this->load->database();
 		$this->load->library('form_validation');
-		$this->load->model("Traxes_model");
+		// $this->load->model("Traxes_model");
 		$this->load->model("Project_model");	
 		$this->load->model("Employees_model");
-		$this->load->model("Designation_model");
+		// $this->load->model("Designation_model");
 		
 		$this->load->model("Company_model");
 		$this->load->model("Xin_model");
-		$this->load->model("Esign_model");
-		$this->load->model("Custom_fields_model");
+		// $this->load->model("Esign_model");
+		// $this->load->model("Custom_fields_model");
 		$this->load->model("Employees_model");
 		$this->load->model("Location_model");
 	}
@@ -50,8 +50,8 @@ class Employee_resign_new extends MY_Controller {
 		}
 
 			$role_resources_ids = $this->Xin_model->user_role_resource();
-			$data['title'] = 'Pengajuan Paklaring | '.$this->Xin_model->site_title();
-			$data['breadcrumbs'] = 'PENGAJUAN PAKLARING';
+			$data['title'] = 'Status Pengajuan Paklaring | '.$this->Xin_model->site_title();
+			$data['breadcrumbs'] = 'STATUS PENGAJUAN PAKLARING';
 			$data['path_url'] = 'emp_view';
 
 			// $data['all_companies'] = $this->Xin_model->get_companies();
@@ -62,7 +62,7 @@ class Employee_resign_new extends MY_Controller {
 			// $data['all_designations'] = $this->Designation_model->all_designations();
 		if(in_array('490',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
-			$data['subview'] = $this->load->view("admin/employees/employee_request_paklaring", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/paklaring/employee_paklaring_status", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -78,18 +78,19 @@ class Employee_resign_new extends MY_Controller {
 		$postData = $this->input->post();
 
 		// Get data
-		$data = $this->Employees_model->get_list_employees_resign($postData);
+		// $data = $this->Employees_model->get_list_employees_resign($postData);
+		$data = $this->Employees_model->get_list_skk_status($postData);
 		echo json_encode($data);
 	}
 
 
 	//save Kontak Client
-	public function save_pengajuan_skk()
+	public function update_pengajuan_skk()
 	{
 		$postData = $this->input->post();
 
 		// update data NPWP Client
-		$data = $this->Company_model->save_pengajuan_skk($postData);
+		$data = $this->Company_model->update_pengajuan_skk($postData);
 
 		// echo json_encode($data);
 	}
@@ -108,7 +109,7 @@ class Employee_resign_new extends MY_Controller {
 
 
 	//mengambil Json data dokumen kontrak ttd employee
-	public function get_data_employee()
+	public function get_data_skk()
 	{
 		$session = $this->session->userdata('username');
 		if (empty($session)) {
@@ -119,36 +120,50 @@ class Employee_resign_new extends MY_Controller {
 
 		//Cek variabel post
 		$datarequest = [
-			'employee_id'        => $postData['nip']
+			'secid'        => $postData['secid']
 		];
 
 		// get data diri
-		$data = $this->Employees_model->get_data_karyawan_resign($datarequest);
+		$data = $this->Employees_model->get_data_pengajuan_skk($datarequest);
 
 		if (empty($data)) {
 			$response = array(
 				'status'	=> "201",
-				'pesan' 	=> "Karyawan tidak ditemukan",
+				'pesan' 	=> "Paklaring tidak ditemukan",
 			);
 		} else {
 
 			$status = "200"; //file ditemukan
 			$pesan = "Berhasil Fetch Data";
+
+			$tanggal_mulai = new DateTime($data['join_date']);
+			$tanggal_selesai = new DateTime($data['resign_date']);
+
+			// Hitung selisih
+			// $selisih = $tanggal_mulai->diff($tanggal_selesai);
+			$selisih = $tanggal_mulai->diff($tanggal_selesai)->days;
+
+
+			// $selisih_hari = date_diff(date_create($data['resign_date'])-date_create($data['join_date']));
 			$data_resign = array(
-				'employee_id'					=> $data['employee_id'],
-				'first_name'					=> $data['first_name'],
-				'ktp_no'							=> $data['ktp_no'],
-				'company_id'					=> $data['company_id'],
-				'company_name'				=> $this->Employees_model->get_nama_company($data['company_id']),
+				'secid'					=> $data['secid'],
+				'employee_id'					=> $data['nip'],
+				'first_name'					=> $data['employee_name'],
+				'ktp_no'							=> $data['ktp'],
+				'company_id'					=> $data['company'],
+				'company_name'				=> $data['company_name'],
 				'project_id'					=> $data['project_id'],
-				'project_name'				=> $this->Employees_model->get_nama_project($data['project_id']),
-				'designation_id'			=> $data['designation_id'],
-				'designation_name'		=> $this->Employees_model->get_nama_jabatan($data['designation_id']),
+				'project_name'				=> $data['project_name'],
+				'designation_name'		=> $data['posisi_jabatan'],
 				'penempatan'					=> $data['penempatan'],
-				'periode'							=> $data['contract_start'] . ' - ' . $data['contract_end'],
-				'join_date'						=> $data['date_of_joining'],
-				'leave_date'					=> $data['date_of_leaving'],
-				'status_resign'					=> $data['status_resign'],
+				'join_date'						=> $data['join_date'],
+				'resign_date'					=> $data['resign_date'],
+				'working_days'				=> $selisih,
+				'status_resign'				=> $data['resign_status'],
+				'link_exit_clearance'			=> $data['exit_clearance'],
+				'link_surat_resign'			=> $data['resign_letter'],
+				'exit_clearance'			=> '<embed class="form-group col-md-12" id="output_exitclearance" type="application/pdf" src="'.$data['exit_clearance'].'"></embed>',
+				'surat_resign'			=> '<embed class="form-group col-md-12" id="output_surat_resign" type="application/pdf" src="'.$data['resign_letter'].'"></embed>',
 
 			);
 

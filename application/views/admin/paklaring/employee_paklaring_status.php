@@ -52,12 +52,6 @@
                   </tr>
 
                   <tr>
-                    <td style='width:25%'><strong>Periode Kontrak Terakhir <span class="icon-verify-bank"></span></strong></td>
-                    <td ><strong><span class="icon-verify-bank" id="periode_modal" name="periode_modal"></span></strong></td>
-                    </td>
-                  </tr>
-
-                  <tr>
                     <td style='width:25%'><strong>Tanggal Bergabung / Date of Join <span class="icon-verify-bank"></span></strong></td>
                     <td style='width:75%'>
                       
@@ -71,6 +65,22 @@
                       
                       <input class="form-control date" readonly placeholder="Tanggal Resign" id="leavedate_field" name="leavedate_field" type="text" value="">
                       <span id='pesan_leavedate'></span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td><strong>Jenis Dokumen<span class="icon-verify-norek"></span></strong></td>
+                    <td>
+
+                      <select name="jenis_dokumen" id="jenis_dokumen" class="form-control" data-plugin="xin_select" data-placeholder="Jenis Dokumen">
+                        
+                        <option value="2"> SK Kerja & BPJS</option>
+                        <option value="1"> BPJS Only</option>
+
+                      </select>
+                      <small style='color:#DD086C;'><i>* Lama Kerja karyawan diatas 3 Bulan / 90 Hari, Berhak mendapatkan SK Kerja.</i></small>
+
+
                     </td>
                   </tr>
 
@@ -94,6 +104,9 @@
                     <td style="width:25%">Dokumen Exit Clearance <font color="#FF0000">*</font>
                     </td>
                     <td style="width:75%">
+                     <span class="icon-verify-bank" id="output_exitclearance" name="output_exitclearance"></span>
+                      
+
                       <input type="file" class="filepond filepond-input-multiple" multiple id="file_exitclear" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
                       <span><small class="text-muted">File bertipe jpg, jpeg, png atau pdf. Ukuran maksimal 5 MB</small></span>
                       </br><span id='pesan_file_exitclear'></span>
@@ -106,6 +119,7 @@
                     <td style="width:25%">Surat Pengunduran Diri <font color="#FF0000">*</font>
                     </td>
                     <td style="width:75%">
+                      <span class="icon-verify-bank" id="output_surat_resign" name="output_surat_resign"></span>
                       <input type="file" class="filepond filepond-input-multiple" multiple id="file_resign" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
                       <span><small class="text-muted">File bertipe jpg, jpeg, png atau pdf. Ukuran maksimal 5 MB</small></span>
                       </br><span id='pesan_file_resign'></span>
@@ -119,16 +133,15 @@
               </table>
 
 
+                <input hidden type="text" id="field_secid" value="0">
                 <input hidden type="text" id="field_employee_id" value="0">
                 <input hidden type="text" id="field_fullname" value="0">
                 <input hidden type="text" id="field_ktp" value="0">
                 <input hidden type="text" id="field_jabatan" value="0">
-                <input hidden type="text" id="field_penempatan" value="0">
                 <input hidden type="text" id="field_project_id" value="0">
                 <input hidden type="text" id="field_project_name" value="0">
                 <input hidden type="text" id="field_company_id" value="0">
                 <input hidden type="text" id="field_company_name" value="0">
-                <input hidden type="text" id="field_request_date" value="<?php echo date('Y-m-d h:i:s');?>">
 
             </div>
           </div>
@@ -142,10 +155,10 @@
 
               <button
                 type="button"
-                onclick="next_kontak_client()"
+                onclick="release_paklaring()"
                 class="btn btn-success btn-label float-right ms-auto">
                 <i
-                  class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>AJUKAN PAKLARING
+                  class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>RELEASE PAKLARING
               </button>
 
         <!-- <button id='button_save_rekening' name='button_save_rekening' type='submit' class='btn btn-primary'>AJUKAN PAKLARING</button> -->
@@ -257,9 +270,10 @@
                 <th>Project</th>
                 <th>Jabatan</th>
                 <th>Area/Penempatan</th>
-                <th>Tanggal Bergabung</th>
-                <th>Tanggal Resign</th>
-                <th>Status Pengajuan</th>
+                <th>Tanggal Pengajuan</th>
+                <th>Diajukan Oleh</th>
+                <th>Tanggal Ditolak</th>
+                <th>Keterangan Ditolak</th>
               </tr>
             </thead>
           </table>
@@ -331,9 +345,9 @@
     FilePondPluginImagePreview
   );
 
-  //create object filepond untuk npwp
+  //create object filepond untuk Exit Clearance
   var pond_exitclear = FilePond.create(document.querySelector('input[id="file_exitclear"]'), {
-    labelIdle: 'Drag & Drop file Exit Clearance atau klik <span class="filepond--label-action">Browse</span>',
+    labelIdle: 'Drag & Drop file Exit Clearance untuk Edit atau klik <span class="filepond--label-action">Browse</span>',
     imagePreviewHeight: 170,
     maxFileSize: "5MB",
     acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
@@ -345,9 +359,9 @@
     }
   });
 
-  //create object filepond untuk npwp
+  //create object filepond untuk Surat Resign
   var pond_resign = FilePond.create(document.querySelector('input[id="file_resign"]'), {
-    labelIdle: 'Drag & Drop file Surat Resign atau klik <span class="filepond--label-action">Browse</span>',
+    labelIdle: 'Drag & Drop file Surat Resign untuk Edit atau klik <span class="filepond--label-action">Browse</span>',
     imagePreviewHeight: 170,
     maxFileSize: "5MB",
     acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
@@ -394,7 +408,7 @@
         //   [4, 'asc']
         // ],
         'ajax': {
-          'url': '<?= base_url() ?>admin/Employee_resign_new/list_employees',
+          'url': '<?= base_url() ?>admin/Employee_paklaring_status/list_employees',
           data: {
             [csrfName]: csrfHash,
             session_id: session_id,
@@ -440,17 +454,22 @@
             "orderable": false,
           },
           {
-            data: 'join',
+            data: 'request_date',
             "orderable": false,
           },
           {
-            data: 'leave',
+            data: 'request_by',
             "orderable": false,
           },
           {
-            data: 'status_sk',
+            data: 'cancel_date',
             "orderable": false,
           },
+          {
+            data: 'cancel_description',
+            "orderable": false,
+          },
+
         ]
       }).on('search.dt', () => eventFired('Search'));
 
@@ -467,18 +486,18 @@
 
 <!-- Tombol Open Form Pengajuan -->
 <script type="text/javascript">
-  function open_pengajuan(nip) {
+  function open_approve(secid) {
 
     pond_exitclear.removeFile();
     pond_resign.removeFile();
     // alert(nip);
     // AJAX untuk ambil data buku tabungan employee terupdate
     $.ajax({
-      url: '<?= base_url() ?>admin/Employee_resign_new/get_data_employee/',
+      url: '<?= base_url() ?>admin/Employee_paklaring_status/get_data_skk/',
       method: 'post',
       data: {
         [csrfName]: csrfHash,
-        nip: nip,
+        secid: secid,
       },
       beforeSend: function() {
         $('#judul-modal-edit').html("File Exit Clearance");
@@ -560,19 +579,24 @@
           $('#fullname_modal').html(res['data']['employee_id'] + ' / ' +res['data']['first_name']);
           $('#nikpt_modal').html(res['data']['ktp_no'] + ' / ' +res['data']['company_name']);
           $('#propos_modal').html(res['data']['project_name'] + ' / ' +res['data']['designation_name']);
-          $('#periode_modal').html(res['data']['periode']);
           $('#joindate_field').val(res['data']['join_date']);
-          $('#leavedate_field').val(res['data']['leave_date']);
+          $('#leavedate_field').val(res['data']['resign_date']);
 
+          $('#field_secid').val(res['data']['secid']);
           $('#field_employee_id').val(res['data']['employee_id']);
           $('#field_fullname').val(res['data']['first_name']);
           $('#field_ktp').val(res['data']['ktp_no']);
           $('#field_jabatan').val(res['data']['designation_name']);
-          $('#field_penempatan').val(res['data']['penempatan']);
           $('#field_project_id').val(res['data']['project_id']);
           $('#field_project_name').val(res['data']['project_name']);
           $('#field_company_id').val(res['data']['company_id']);
           $('#field_company_name').val(res['data']['company_name']);
+
+          $('#link_file_exitclear').val(res['data']['link_exit_clearance']);
+          $('#link_file_resign').val(res['data']['link_surat_resign']);
+
+          $('#output_exitclearance').html(res['data']['exit_clearance']);
+          $('#output_surat_resign').html(res['data']['surat_resign']);
 
           $('#status_resign_select').val(res['data']['status_resign']).change();
           if(res['data']['status_resign']=="2"){
@@ -587,6 +611,22 @@
             $('#input_exit_clearance').attr("hidden", false);
             $('#input_surat_resign').attr("hidden", true);
           }
+
+          if(res['data']['working_days'] >= 90){
+            $('#jenis_dokumen').val('2').change();
+          } else {
+            $('#jenis_dokumen').val('1').change();
+          }
+
+          // $('pesan_jenis_dokumen').val(res['data']['woking_periode']);
+
+
+            // $('#jenis_dokumen').val('1').change();
+
+          // pesan_jenisdok = "<small style='color:#FF0000;'>PERIODE KERJA</small>";
+          // $('#pesan_jenis_dokumen').focus();
+          // $('#pesan_jenis_dokumen').html(pesan_jenisdok);
+
 
 
         } else {
@@ -636,33 +676,40 @@
 
 <!-- button next kontak client -->
 <script>
-  function next_kontak_client() {
-    var request_by = '<?php echo $session['employee_id']; ?>';
+  function nomorBulanKeRomawi(bulan) {
+  const romawi = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+  // Pastikan nomor bulan berada dalam rentang yang benar (0-11)
+  if (bulan >= 0 && bulan < 12) {
+    return romawi[bulan];
+  } else {
+    return "Bulan tidak valid";
+  }
+}
+
+  function release_paklaring() {
+    var secid = $("#field_secid").val();
     var employee_id = $("#field_employee_id").val();
     var employee_name = $("#field_fullname").val();
     var ktp = $("#field_ktp").val();
     var jabatan = $("#field_jabatan").val();
-    var penempatan = $("#field_penempatan").val();
     var project_id = $("#field_project_id").val();
     var project_name = $("#field_project_name").val();
     var company_id = $("#field_company_id").val();
     var company_name = $("#field_company_name").val();
+
     var join_date = $("#joindate_field").val();
     var resign_date = $("#leavedate_field").val();
     var bpjs_join = $("#joindate_field").val();
     var bpjs_date = $("#leavedate_field").val();
+    var jenis_dokumen = $("#jenis_dokumen").val();
     var resign_status = $("#status_resign_select").val();
     var exit_clearance = $("#link_file_exitclear").val();
     var resign_letter = $("#link_file_resign").val();
-    var request_date = $("#field_request_date").val();
 
 
-
+    const uniqueTimestamp = Date.now();
     var pesan_joindate ="";
     var pesan_leavedate ="";
-
-
-    alert("Penempatan: " + penempatan);
 
     if (join_date == "") {
           pesan_joindate = "<small style='color:#FF0000;'>Tanggal Bergabung tidak boleh kosong..!</small>";
@@ -676,27 +723,43 @@
     $('#pesan_joindate').html(pesan_joindate);
     $('#pesan_leavedate').html(pesan_leavedate);
 
+    // cara menentukan nomor dokumen
+    const tanggal = new Date();
+    const nomorBulan = tanggal.getMonth();
+    const bulanRomawi = nomorBulanKeRomawi(nomorBulan);
+
+    if($("#field_company_id").val()=='2'){
+      var ns = 'REF-HRD/SC/'+bulanRomawi+'2025';
+    } else if ($("#field_company_id").val()=='3'){
+      var ns = 'REF-HRD/KAC/'+bulanRomawi+'2025';
+    } else if ($("#field_company_id").val()=='4'){
+      var ns = 'REF-HRD/MATA/'+bulanRomawi+'/'+'2025';
+    } else {
+      var ns = 'REF-HRD/ONECORP/'+bulanRomawi+'2025';
+    }
+    
+    var nomor_surat = '00'+secid+'/'+ns;
+    var session_id = '<?php echo $session['employee_id']; ?>';
 
     if(pesan_joindate!="" || pesan_leavedate!=""){
 
     } else {
     // AJAX untuk save data diri
       $.ajax({
-        url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+        // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+        url: '<?= base_url() ?>admin/Employee_paklaring_status/update_pengajuan_skk/',
         method: 'post',
         data: {
           [csrfName]: csrfHash,
-          employee_id: employee_id,
-          employee_name: employee_name,
-          jenis_dokumen: '0',
-          nomor_dokumen: '0',
-          ktp: ktp,
-          posisi_jabatan: jabatan,
-          penempatan : penempatan,
-          project_id: project_id,
-          project_name: project_name,
-          company: company_id,
-          company_name: company_name,
+          secid: secid,
+          docid: uniqueTimestamp,
+          jenis_dokumen: jenis_dokumen,
+          nomor_dokumen: nomor_surat,
+          // posisi_jabatan: jabatan,
+          // project_id: project_id,
+          // project_name: project_name,
+          // company: company_id,
+          // company_name: company_name,
           join_date: join_date,
           resign_date: resign_date,
           bpjs_join: bpjs_join,
@@ -704,9 +767,9 @@
           resign_status: resign_status,
           exit_clearance: exit_clearance,
           resign_letter: resign_letter,
-          request_resign_by : request_by,
-          request_resign_date : request_date,
+          session_hrd: session_id,
 
+          // employee_id: employee_id,
         },
         beforeSend: function() {},
         success: function() {

@@ -568,17 +568,6 @@ class Pkwt453 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin - Jumat 	8 Jam Kerja<br>•	Hari libur Sabtu-Minggu</td>
-							</tr>
 
 							<tr>
 								<td ></td>
@@ -589,13 +578,7 @@ class Pkwt453 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
-								<td colspan="0"></td>
+								<td colspan="20"><br>•	Hari Senin – Sabtu 	<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
 							</tr>
 
 				</table>

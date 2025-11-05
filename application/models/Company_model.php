@@ -100,6 +100,7 @@
 			'nomor_dokumen'     => trim($postData['nomor_dokumen']),
 			'ktp'     			=> trim($postData['ktp']),
 			'posisi_jabatan'    => trim($postData['posisi_jabatan']),
+			'penempatan'    	=> trim($postData['penempatan']),
 			'project_id'     	=> trim($postData['project_id']),
 			'project_name'     	=> trim($postData['project_name']),
 			'company'     		=> trim($postData['company_id']),
@@ -111,6 +112,8 @@
 			'resign_status'		=> trim($postData['resign_status']),
 			'exit_clearance'	=> trim($postData['exit_clearance']),
 			'resign_letter'		=> trim($postData['resign_letter']),
+			'request_resign_date'	=> trim($postData['request_resign_date']),
+			'request_resign_by'		=> trim($postData['request_resign_by']),
 
 			// 'is_active'      	=> "1",
 			// 'status_finish'    	=> "1",
@@ -120,6 +123,37 @@
 		//update data
 		// $this->db->where('client_id', $postData['id_client']);
 		// $this->db->update('xin_clients', $datarequest);
+	}
+
+
+	//save data Kontak client
+	public function update_pengajuan_skk($postData)
+	{
+		//Cek variabel post
+		$data = [
+			'doc_id'      		=> trim($postData['docid']),
+			'jenis_dokumen'     => trim($postData['jenis_dokumen']),
+			'nomor_dokumen'     => trim($postData['nomor_dokumen']),
+			'join_date'     	=> trim($postData['join_date']),
+			'resign_date'     	=> trim($postData['resign_date']),
+			'bpjs_join'     	=> trim($postData['bpjs_join']),
+			'bpjs_date'     	=> trim($postData['bpjs_date']),
+			'resign_status'		=> trim($postData['resign_status']),
+			'exit_clearance'	=> trim($postData['exit_clearance']),
+			'resign_letter'		=> trim($postData['resign_letter']),
+			'approve_hrd'		=> trim($postData['session_hrd']),
+			'approve_hrd_date'	=> date("Y-m-d h:m:i"),
+			'sign_nip'			=> '24536132',
+			'sign_fullname'		=> 'PAMUNGKAS SUSANTO',
+			'sign_jabatan'		=> 'SM HRD & GA',
+			'sign_company'		=> trim($postData['company_id']),
+			// 'qr_code'			=> trim($postData['request_resign_by']),
+		];
+		
+		// $this->db->insert('xin_qrcode_skk', $data);
+		//update data
+		$this->db->where('secid', $postData['secid']);
+		$this->db->update('xin_qrcode_skk', $data);
 	}
 
 	// Function to add record in table

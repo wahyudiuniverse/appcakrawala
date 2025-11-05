@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt454 extends MY_Controller 
+class Pkwt459 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -560,6 +560,7 @@ class Pkwt454 extends MY_Controller
 				<br>
 				</table>
 
+
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td >4.4</td>
@@ -567,6 +568,17 @@ class Pkwt454 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td ></td>
+								<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0"></td>
+								<td colspan="20"><br>•	Hari Senin - Jumat 	8 Jam Kerja<br>•	Hari libur Sabtu-Minggu</td>
+							</tr>
 
 							<tr>
 								<td ></td>
@@ -577,7 +589,13 @@ class Pkwt454 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin – Sabtu 	<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
+								<td colspan="20"><br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
+								<td colspan="0"></td>
 							</tr>
 
 				</table>
@@ -1435,18 +1453,6 @@ class Pkwt454 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
-							<tr>
-								<td >13.</td>
-								<td colspan="20">Apabila pekerja tidak masuk kerja tanpa keterangan yang sah, termasuk ketidakhadiran karena sakit meskipun disertai Surat Keterangan Dokter (SKD) maupun cuti, maka upah pada hari ketidakhadiran tersebut tidak dibayarkan.</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td >14.</td>
-								<td colspan="20">Apabila dalam satu bulan karyawan bekerja kurang dari 5 (lima) hari kerja, maka perusahaan tidak berkewajiban membayarkan iuran BPJS (Ketenagakerjaan dan/atau Kesehatan) untuk periode tersebut.</td>
-								<td colspan="0"></td>
-							</tr>
-
 				</table>
 
 				<br><br>
@@ -1624,7 +1630,7 @@ class Pkwt454 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1642,7 +1648,7 @@ class Pkwt454 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
 						</tr>';
 				}
 

@@ -88,7 +88,7 @@
 
 
       <div class="col-md-3">
-        <div class="form-check-inline" id="button_download_data">
+        <div class="form-check-inline" id="box_group_project">
           <input class="form-check-input align-middle" type="checkbox" role="switch" id="opsi_download_image">
           <label class="form-check-label" for="opsi_download_image">GROUP BY PROJECT</label>
         </div>
@@ -129,7 +129,6 @@
                 <th>NIP</th>
                 <th>Area Manager</th>
                 <th>Billing Area</th>
-                <th>Project ID</th>
                 <th>Project Name</th>
                 <th>Total MPP</th>
                 <th>Total Billing</th>
@@ -169,18 +168,88 @@
     });
 
 
-    // $('[data-plugin="select_hrm"]').select2($(this).attr('data-options'));
-    // $('[data-plugin="select_hrm"]').select2({
-    //   width: '100%'
-    // });
-
-
     var periode = "";
     var am = "";
     var region = "";
     // var edate = "";
 
-    employee_table = $('#tabel_employees').DataTable();
+    // employee_table = $('#tabel_employees').DataTable();
+    employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
+
+    // employee_table = $('#tabel_employees').DataTable({
+    //   //"bDestroy": true,
+    //   'processing': true,
+    //   'serverSide': true,
+    //   // 'stateSave': true,
+    //   'bFilter': true,
+    //   'serverMethod': 'post',
+    //   //'dom': 'plBfrtip',
+    //   'dom': 'lfrtip',
+    //   //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+    //   //'columnDefs': [{
+    //   //  targets: 11,
+    //   //  type: 'date-eu'
+    //   //}],
+    //   // 'order': [
+    //   //   [4, 'asc']
+    //   // ],
+    //   'ajax': {
+    //     'url': '<?= base_url() ?>admin/Billing/list_billing',
+    //     data: {
+    //       [csrfName]: csrfHash,
+    //       session_id: session_id,
+    //       periode: periode,
+    //       am: am,
+    //       region: region,
+    //       //base_url_catat: base_url_catat
+    //     },
+    //     error: function(xhr, ajaxOptions, thrownError) {
+    //       alert("Status :" + xhr.status);
+    //       alert("responseText :" + xhr.responseText);
+    //     },
+    //   },
+    //   'columns': [{
+    //       data: 'periode',
+    //       "orderable": false
+    //     },
+    //     {
+    //       data: 'nip_am',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'nama_am',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'billing_area',
+    //       "orderable": false
+    //     },
+    //     {
+    //       data: 'project_name',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'total_mpp',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'total_billing',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'fee_percen',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'fee_value',
+    //       "orderable": false,
+    //     },
+    //     {
+    //       data: 'total',
+    //       "orderable": false,
+    //     },
+    //   ],
+    // });
 
   });
 </script>
@@ -191,109 +260,107 @@
   document.getElementById("filter_employee").onclick = function(e) {
     employee_table.destroy();
 
-    // e.preventDefault();
+    e.preventDefault();
 
     var periode = document.getElementById("aj_periode").value;
     var am = document.getElementById("aj_am").value;
     var region = document.getElementById("aj_region").value;
-    // var searchVal = $('#tabel_employees_filter').find('input').val();
-    var searchVal = "";
+    // var searchVal = $('.tabel_employees_filter input').val();
+    // var searchVal = $("#tabel_employees_filter").find("input").val();
+    // var searchVal = "";
 
 
-    alert(periode);
-    alert(am);
-    alert(region);
-    alert(searchVal);
+    var searchVal = $('#tabel_employees_filter').find('input').val();
+    // alert(periode);
+    // alert(am);
+    // alert(region);
     // alert(searchVal);
+    alert(searchVal);
 
-    if ((searchVal == "")) {
-      $('#button_download_data').attr("hidden", false);
+    // if ((searchVal == "")) {
+    //  $('#button_download_data').attr("hidden", false);
 
-    } else {
-      $('#button_download_data').attr("hidden", false);
+    // } else {
+    $('#button_download_data').attr("hidden", false);
 
-      employee_table = $('#tabel_employees').DataTable({
-        //"bDestroy": true,
-        'processing': true,
-        'serverSide': true,
-        // 'stateSave': true,
-        'bFilter': true,
-        'serverMethod': 'post',
-        //'dom': 'plBfrtip',
-        'dom': 'lfrtip',
-        //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
-        //'columnDefs': [{
-        //  targets: 11,
-        //  type: 'date-eu'
-        //}],
-        // 'order': [
-        //   [4, 'asc']
-        // ],
-        'ajax': {
-          'url': '<?= base_url() ?>admin/Billing/list_billing',
-          data: {
-            [csrfName]: csrfHash,
-            session_id: session_id,
-            periode: periode,
-            am: am,
-            region: region,
-            //base_url_catat: base_url_catat
-          },
-          error: function(xhr, ajaxOptions, thrownError) {
-            alert("Status :" + xhr.status);
-            alert("responseText :" + xhr.responseText);
-          },
+    employee_table = $('#tabel_employees').DataTable({
+      //"bDestroy": true,
+      'processing': true,
+      'serverSide': true,
+      // 'stateSave': true,
+      'bFilter': true,
+      'serverMethod': 'post',
+      //'dom': 'plBfrtip',
+      'dom': 'lfrtip',
+      //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+      //'columnDefs': [{
+      //  targets: 11,
+      //  type: 'date-eu'
+      //}],
+      // 'order': [
+      //   [4, 'asc']
+      // ],
+      'ajax': {
+        'url': '<?= base_url() ?>admin/Billing/list_billing',
+        data: {
+          [csrfName]: csrfHash,
+          session_id: session_id,
+          periode: periode,
+          am: am,
+          region: region,
+          //base_url_catat: base_url_catat
         },
-        'columns': [{
-            data: 'periode',
-            "orderable": false
-          },
-          {
-            data: 'nip_am',
-            "orderable": false,
-          },
-          {
-            data: 'nama_am',
-            "orderable": false,
-          },
-          {
-            data: 'billing_area',
-            "orderable": false
-          },
-          {
-            data: 'project_id',
-            "orderable": false,
-          },
-          {
-            data: 'project_name',
-            "orderable": false,
-          },
-          {
-            data: 'total_mpp',
-            "orderable": false,
-          },
-          {
-            data: 'total_billing',
-            "orderable": false,
-          },
-          {
-            data: 'fee_percen',
-            "orderable": false,
-          },
-          {
-            data: 'fee_value',
-            "orderable": false,
-          },
-          {
-            data: 'total',
-            "orderable": false,
-          },
-        ],
-      });
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert("Status :" + xhr.status);
+          alert("responseText :" + xhr.responseText);
+        },
+      },
+      'columns': [{
+          data: 'periode',
+          "orderable": false
+        },
+        {
+          data: 'nip_am',
+          "orderable": false,
+        },
+        {
+          data: 'nama_am',
+          "orderable": false,
+        },
+        {
+          data: 'billing_area',
+          "orderable": false
+        },
+        {
+          data: 'project_name',
+          "orderable": false,
+        },
+        {
+          data: 'total_mpp',
+          "orderable": false,
+        },
+        {
+          data: 'total_billing',
+          "orderable": false,
+        },
+        {
+          data: 'fee_percen',
+          "orderable": false,
+        },
+        {
+          data: 'fee_value',
+          "orderable": false,
+        },
+        {
+          data: 'total',
+          "orderable": false,
+        },
+      ],
+    }).on('search.dt', () => eventFired('Search'));
 
-      $('#tombol_filter').attr("disabled", false);
-      $('#tombol_filter').removeAttr("data-loading");
-    }
+    $('#tombol_filter').attr("disabled", false);
+    $('#tombol_filter').removeAttr("data-loading");
+    // }
 
     // alert(project);
     // alert(sub_project);
@@ -303,32 +370,33 @@
 
 
 <script type="text/javascript">
-  // document.getElementById("button_download_data").onclick = function(e) {
-  //   var project = document.getElementById("aj_project").value;
-  //   var sub_project = document.getElementById("aj_sub_project").value;
-  //   // var sub_project = sub_project.replace(" ","");
+  document.getElementById("button_download_data").onclick = function(e) {
+    var project = document.getElementById("aj_periode").value;
+    var am = document.getElementById("aj_am").value;
+    var region = document.getElementById("aj_region").value;
+    // var sub_project = sub_project.replace(" ","");
 
-  //   var sdate       =  $('#aj_sdate').val();
-  //   var edate       = $('#aj_edate').val();
+    // var sdate       =  $('#aj_sdate').val();
+    // var edate       = $('#aj_edate').val();
 
-  //   // ambil input search dari datatable
-  //   var filter = $('.dataTables_filter input').val(); //cara 1
-  //   var searchVal = $('#tabel_employees_filter').find('input').val(); //cara 2
+    // ambil input search dari datatable
+    var filter = $('.dataTables_filter input').val(); //cara 1
+    var searchVal = $('#tabel_employees_filter').find('input').val(); //cara 2
 
-  //   if (searchVal == "") {
-  //     searchVal = "-no_input-";
-  //   }
+    if (searchVal == "") {
+      searchVal = "-no_input-";
+    }
 
-  //   var text_pesan = "Project: " + project;
-  //   text_pesan = text_pesan + "\nSub Project: " + sub_project;
-  //   text_pesan = text_pesan + "\nSdate: " + sdate;
-  //   text_pesan = text_pesan + "\nEdate: " + edate;
-  //   text_pesan = text_pesan + "\nSearch: " + searchVal;
-  //   // alert(sub_project);
+    var text_pesan = "Project: " + project;
+    text_pesan = text_pesan + "\nSub Project: " + sub_project;
+    text_pesan = text_pesan + "\nSdate: " + sdate;
+    text_pesan = text_pesan + "\nEdate: " + edate;
+    text_pesan = text_pesan + "\nSearch: " + searchVal;
+    // alert(sub_project);
 
-  //   window.open('<?php echo base_url(); ?>admin/Employee_history_join/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Employee_history_join/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
 
-  // };
+  };
 
   //-----lihat employee-----
   function viewEmployee(id) {
@@ -342,6 +410,28 @@
     $('#dokumenModal').appendTo("body").modal('show');
     // $('#dokumenModal').modal('show');
     // window.open('<?= base_url() ?>admin/employees/emp_edit/' + id, "_blank");
+  }
+
+
+  function eventFired(type) {
+    var searchVal = $('#tabel_employees_filter').find('input').val();
+    var periode = document.getElementById("aj_periode").value;
+    var am = document.getElementById("aj_am").value;
+    var region = document.getElementById("aj_region").value;
+
+    // alert(searchVal.length);
+
+    if ((searchVal.length <= 2)) {
+      $('#button_download_data').attr("hidden", false);
+    } else {
+
+      $('#button_download_data').attr("hidden", false);
+    }
+    // let n = document.querySelector('#demo_info');
+    // n.innerHTML +=
+    //   '<div>' + type + ' event - ' + new Date().getTime() + '</div>';
+    // n.scrollTop = n.scrollHeight;
+
   }
 
   // employee_table.on('search.dt', function() {

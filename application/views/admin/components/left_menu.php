@@ -513,6 +513,48 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
       <ul class="sidenav-menu">
 
+
+        <?php
+        if (in_array('491', $role_resources_ids)) { ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['resign_req_emp_active'])) echo $arr_mod['resign_req_emp_active']; ?>">
+            <a href="<?php echo site_url('admin/employee_resign_new'); ?>" class="sidenav-link">
+              <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+              <div>Pengajuan Paklaring</div>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+
+        <?php
+        if (in_array('491', $role_resources_ids)) { ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['resign_req_emp_active'])) echo $arr_mod['resign_req_emp_active']; ?>">
+            <a href="<?php echo site_url('admin/employee_paklaring_status'); ?>" class="sidenav-link">
+              <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+              <div>Status Pengajuan Paklaring</div>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('491', $role_resources_ids)) { ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['resign_req_emp_active'])) echo $arr_mod['resign_req_emp_active']; ?>">
+            <a href="<?php echo site_url('admin/employee_paklaring_report'); ?>" class="sidenav-link">
+              <!-- <i class="sidenav-icon fa fa-calculator"></i> -->
+              <i class="sidenav-icon ion ion-logo-buffer"></i>
+              <div>Report Paklaring</div>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+
         <?php
         if (in_array('491', $role_resources_ids)) { ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['resign_req_emp_active'])) echo $arr_mod['resign_req_emp_active']; ?>">
@@ -837,7 +879,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
         if (in_array('122', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['tra_active'])) echo $arr_mod['tra_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/billing_area'); ?>"> Billing Area </a>
+            <a class="sidenav-link" href="<?php echo site_url('admin/billing'); ?>"> Billing Area </a>
           </li>
         <?php
         }

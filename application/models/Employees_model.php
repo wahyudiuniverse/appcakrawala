@@ -4036,6 +4036,345 @@ class Employees_model extends CI_Model
 		return $query;
 	}
 
+
+	function get_list_skk_status($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$status = $postData['status'];
+		$session_id = $postData['session_id'];
+
+		if ($project!=5) {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+					$searchQuery = " (xin_qrcode_skk.nip like '%" . $searchValue .  "%' 
+					or xin_qrcode_skk.employee_name like '%" . $searchValue . "%' 
+					or xin_qrcode_skk.ktp like '%" . $searchValue . "%') ";
+				}
+			}
+
+			## Filter
+			$filterProject = "";
+			if (($project != null) && ($project != "") && ($project != '0')) {
+				$filterProject = "xin_qrcode_skk.project_id = '" . $project . "'";
+			} else {
+				$filterProject = "";
+			}
+
+			$filterSubProject = "";
+			if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+				$filterSubProject = "xin_qrcode_skk.project_id = '" . $sub_project . "'";
+			} else {
+				$filterSubProject = "";
+			}
+
+			$filterStatus = "";
+			if (($status != null) && ($status != "")) {
+				$filterStatus = "xin_qrcode_skk.nip LIKE '%" . $status . "%' 
+				or xin_qrcode_skk.employee_name LIKE '%" . $status . "%' 
+				or xin_qrcode_skk.ktp LIKE '%" . $status . "%'";
+				// $filterStatus = "nip LIKE '%$status%' OR ktp LIKE '%$status%' OR employee_name LIKE '%$status%'";
+			} else {
+				$filterStatus = "";
+			}
+
+			## Kondisi Default 
+			// $kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+			// $kondisiDefaultQuery = "(
+			// 	karyawan_id = " . $emp_id . "
+			// AND	pkwt_id = " . $contract_id . "
+			// )";
+			// $kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
+			$kondisiDefaultQuery = "`xin_qrcode_skk.approve_hrd` is null";
+
+			## Total number of records without filtering
+			$this->db->select('count(*) as allcount');
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			$this->db->where($kondisiDefaultQuery);
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_qrcode_skk')->result();
+			$totalRecords = $records[0]->allcount;
+
+			## Total number of record with filtering
+			$this->db->select('count(*) as allcount');
+			$this->db->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_qrcode_skk')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
+
+			## Fetch records
+			// $this->db->select('*');
+			$this->db->select('xin_qrcode_skk.secid');
+			$this->db->select('xin_qrcode_skk.nip');
+			$this->db->select('xin_qrcode_skk.ktp');
+			$this->db->select('xin_qrcode_skk.employee_name');
+			$this->db->select('xin_qrcode_skk.posisi_jabatan');
+			$this->db->select('xin_qrcode_skk.penempatan');
+			$this->db->select('xin_qrcode_skk.project_name');
+			$this->db->select('xin_qrcode_skk.company_name');
+			$this->db->select('xin_qrcode_skk.request_resign_date');
+			$this->db->select('xin_qrcode_skk.request_resign_by');
+			$this->db->select('xin_qrcode_skk.cancel_status');
+			$this->db->select('xin_qrcode_skk.cancel_date');
+			$this->db->select('xin_qrcode_skk.cancel_description');
+
+			// $this->db->select('xin_projects.priority');
+			// $this->db->select('xin_designations.designation_name');
+			$this->db->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			// $this->db->order_by($columnName, $columnSortOrder);
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			//$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+			// $this->db->join('(select max(contract_id), employee_id from xin_employee_contract group by employee_id) b', 'b.employee_id = xin_employees.employee_id', 'inner');
+			$this->db->limit($rowperpage, $start);
+			$records = $this->db->get('xin_qrcode_skk')->result();
+
+			#Debugging variable
+			$tes_query = $this->db->last_query();
+			//print_r($tes_query);
+
+			$data = array();
+
+			foreach ($records as $record) {
+				//verification id
+				// $actual_verification_id = "";
+				// if ((is_null($record->verification_id)) || ($record->verification_id == "") || ($record->verification_id == "0")) {
+				// 	$actual_verification_id = "e_" . $record->user_id;
+				// } else {
+				// 	$actual_verification_id = $record->verification_id;
+				// }
+
+				// //cek status validation ke database
+				// $nik_validation = "0";
+				// $nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+				// if (is_null($nik_validation_query)) {
+				// 	$nik_validation = "0";
+				// } else {
+				// 	$nik_validation = $nik_validation_query['status'];
+				// }
+
+				// $validate_nik = "";
+				// if($nik_validation == "1"){
+				// 	$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				// } else {
+				// 	$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				// }
+				// $text_periode_from = "";
+				// $text_periode_to = "";
+				// $text_periode = "";
+				// if (empty($record->from_date) || ($record->from_date == "")) {
+				// 	$text_periode_from = "";
+				// } else {
+				// 	$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
+				// }
+				// if (empty($record->to_date) || ($record->to_date == "")) {
+				// 	$text_periode_to = "";
+				// } else {
+				// 	$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
+				// }
+				// if (($text_periode_from == "") && ($text_periode_to == "")) {
+				// 	$text_periode = "";
+				// } else {
+				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
+				// }
+				// $get_skk_status = $this->get_skk($record->secid);
+
+
+					$open_approve = '<button onclick="open_approve(' . $record->secid . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
+
+					$open_cancel = '<h8><span style="color:#f45555;font-weight:bold;">DITOLAK HRD</span></h8>';
+
+
+					// $open_profile = '<button onclick="viewEmployee(' . $record->secid . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
+
+					// $open_profile_blacklist = '<button onclick="viewEmployee(' . $record->secid . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
+					// $text_resign = "";
+
+				if ($record->cancel_status == 1){
+					$action = $open_cancel;
+				} else {
+					$action = $open_approve;
+				}
+				// if (empty($record->status_resign) || ($record->status_resign == "")) {
+				// 	$text_resign 	= "";
+				// 	$action 		= "";
+				// } else if ($record->status_resign == "1") {
+				// 	$text_resign 	= " - [AKTIF]";
+				// 	$action 		= $open_profile;
+				// } else if ($record->status_resign == "2") {
+				// 	$text_resign 	= " - [RESIGN]";
+				// 	if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+				// 		$action 		= $status_pengajuan;
+				// 	} else {
+				// 		$action 		= $open_pengajuan;
+				// 	}
+				// } else if ($record->status_resign == "3") {
+				// 	$text_resign 	= " - [BLACKLIST]";
+
+				// 	if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+				// 		$action 		= $status_pengajuan;
+				// 	} else {
+				// 		$action 		= $open_pengajuan;
+				// 	}
+
+				// 	// $action 		= $open_profile_blacklist;
+				// } else if ($record->status_resign == "4") {
+				// 	$text_resign 	= " - [END CONTRACT]";
+				// 	$action 		= $open_pengajuan;
+
+				// 	if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+				// 		$action 		= $status_pengajuan;
+				// 	} else {
+				// 		$action 		= $open_pengajuan;
+				// 	}
+
+				// } else if ($record->status_resign == "5") {
+				// 	$text_resign 	= " - [DEACTIVE]";
+
+				// 	if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+				// 		$action 		= $status_pengajuan;
+				// 	} else {
+				// 		$action 		= $open_pengajuan;
+				// 	}
+
+				// 	// $action 		= $open_pengajuan;
+				// } else {
+				// 	$text_resign 	= "";
+				// 	$action 		= "";
+				// }
+
+				//cek komparasi string
+				// $teskomparasi_1 = "A";
+				// $teskomparasi_2 = "C2";
+				// $hasilkomparasi = "";
+
+				// if ($teskomparasi_2 < $teskomparasi_1) {
+				// 	$hasilkomparasi = "2 lebih kecil";
+				// } else {
+				// 	$hasilkomparasi = "2 lebih besar";
+				// }
+
+				// $text_pin = "";
+				// $id_jabatan_user = $this->get_id_jabatan($session_id);
+				// $level_record = $this->get_level($record->designation_id);
+				// $level_user = $this->get_level($id_jabatan_user);
+
+				// if (empty($level_user) || $level_user == "") {
+				// 	$level_user = "Z9";
+				// } else {
+				// 	if (strlen($level_user) == 1) {
+				// 		$level_user = $level_user . "0";
+				// 	}
+				// }
+
+				// if (empty($level_record) || $level_record == "") {
+				// 	$level_record = "Z9";
+				// } else {
+				// 	if (strlen($level_record) == 1) {
+				// 		$level_record = $level_record . "0";
+				// 	}
+				// }
+
+				// if ($level_record <= $level_user) {
+				// 	$text_pin = "**********";
+				// } else {
+				// 	$text_pin = $record->private_code;
+				// }
+
+				// $addendum_id = $this->secure->encrypt_url($record->id);
+				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+				// $view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >AJUKAN PAKLARING</button>';
+				// $viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
+				// $editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+				// $delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+				// $open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
+
+
+				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+				$data[] = array(
+					"aksi" => $action,
+					"employee_id" => $record->nip,
+					"ktp_no" => $record->ktp,
+					"first_name" => strtoupper($record->employee_name),
+					"company_name" => strtoupper($record->company_name),
+					"project" => strtoupper($record->project_name),
+					"designation_name" => strtoupper($record->posisi_jabatan),
+					"penempatan" => strtoupper($record->penempatan),
+					"request_date" => strtoupper($record->request_resign_date),
+					"request_by" => strtoupper($record->request_resign_by),
+					"cancel_date" => strtoupper($record->cancel_date),
+					"cancel_description" => strtoupper($record->cancel_description),
+
+					// "join" => strtoupper($record->date_of_joining),
+					// "leave" => strtoupper($record->date_of_leaving),
+					// "periode" => $this->get_periode_pkwt($record->employee_id),
+					// "status_sk" => $this->get_skk($record->employee_id),
+					// "pincode" => $text_pin,
+					// $this->get_nama_karyawan($record->upload_by)
+				);
+			}
+		} else {
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
+		}
+
+
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
 	// get all employes
 	public function get_employees_master()
 	{
@@ -7029,6 +7368,20 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('*');
 
 		$this->db->from('xin_employees');
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data SKK xin_qrcode_skk
+	public function get_data_pengajuan_skk($postData)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_qrcode_skk');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);

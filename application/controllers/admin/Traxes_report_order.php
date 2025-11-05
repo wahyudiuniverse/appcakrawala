@@ -66,7 +66,7 @@ class Traxes_report_order extends MY_Controller {
 		} else {
 			redirect('admin/dashboard');
 		}
-  	}
+  }
 
 
 	//load datatables Employee
