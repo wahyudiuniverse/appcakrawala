@@ -85,13 +85,12 @@
       </div>
 
 
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
         <div class="form-check-inline" id="box_group_project">
           <input class="form-check-input align-middle" type="checkbox" role="switch" id="opsi_download_image">
           <label class="form-check-label" for="opsi_download_image">GROUP BY PROJECT</label>
         </div>
-
-      </div>
+      </div> -->
     </div>
 
 
@@ -269,9 +268,10 @@
     // var searchVal = "";
 
 
-    var searchVal = $('#tabel_employees_filter').find('input').val();
+		var searchVal = $('#tabel_employees_filter input').val();
+    // var searchVal = $('#tabel_employees_filter').find('input').val();
     // alert(periode);
-    alert(am);
+    // alert(am);
     // alert(region);
     // alert(searchVal);
     // alert(searchVal);
@@ -296,9 +296,9 @@
       //  targets: 11,
       //  type: 'date-eu'
       //}],
-      // 'order': [
-      //   [4, 'asc']
-      // ],
+      'order': [
+        [2, 'asc']
+      ],
       'ajax': {
         'url': '<?= base_url() ?>admin/Billing/list_billing',
         data: {
@@ -320,23 +320,23 @@
         },
         {
           data: 'nip_am',
-          "orderable": false,
+          // "orderable": false,
         },
         {
           data: 'nama_am',
-          "orderable": false,
+          // "orderable": false,
         },
         {
           data: 'billing_area',
-          "orderable": false
+          // "orderable": false
         },
         {
           data: 'project_name',
-          "orderable": false,
+          // "orderable": false,
         },
         {
           data: 'sub_project_name',
-          "orderable": false,
+          // "orderable": false,
         },
         {
           data: 'total_mpp',
@@ -374,7 +374,7 @@
 
 <script type="text/javascript">
   document.getElementById("button_download_data").onclick = function(e) {
-    var project = document.getElementById("aj_periode").value;
+    var periode = document.getElementById("aj_periode").value;
     var am = document.getElementById("aj_am").value;
     var region = document.getElementById("aj_region").value;
     // var sub_project = sub_project.replace(" ","");
@@ -383,21 +383,23 @@
     // var edate       = $('#aj_edate').val();
 
     // ambil input search dari datatable
-    var filter = $('.dataTables_filter input').val(); //cara 1
+    // var filter = $('.dataTables_filter input').val(); //cara 1
     var searchVal = $('#tabel_employees_filter').find('input').val(); //cara 2
+
+		// alert(searchVal);
 
     if (searchVal == "") {
       searchVal = "-no_input-";
     }
 
-    var text_pesan = "Project: " + project;
-    text_pesan = text_pesan + "\nSub Project: " + sub_project;
-    text_pesan = text_pesan + "\nSdate: " + sdate;
-    text_pesan = text_pesan + "\nEdate: " + edate;
-    text_pesan = text_pesan + "\nSearch: " + searchVal;
-    // alert(sub_project);
+    // var text_pesan = "Project: " + project;
+    // text_pesan = text_pesan + "\nSub Project: " + sub_project;
+    // text_pesan = text_pesan + "\nSdate: " + sdate;
+    // text_pesan = text_pesan + "\nEdate: " + edate;
+    // text_pesan = text_pesan + "\nSearch: " + searchVal;
+    // // alert(sub_project);
 
-    window.open('<?php echo base_url(); ?>admin/Employee_history_join/printExcel/' + project + '/' + sub_project + '/' + sdate + '/' + edate + '/' + searchVal + '/' + session_id + '/', '_self');
+    window.open('<?php echo base_url(); ?>admin/Billing/printExcel/' + periode + '/' + am + '/' + region + '/' + searchVal + '/', '_self');
 
   };
 

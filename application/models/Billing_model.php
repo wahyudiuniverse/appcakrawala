@@ -139,10 +139,15 @@ class Billing_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
-			// if (strlen($searchValue) >= 3) {
-				$searchQuery = " (xin_saltab.billing_area like '%" . $searchValue .  "%' 
-					or xin_saltab.nama_am like '%" . $searchValue . "%') ";
-			// }
+			if (strlen($searchValue) >= 3) {
+				$searchQuery = " (
+					xin_saltab.billing_area like '%" . $searchValue .  "%' 
+					or xin_saltab.nama_am like '%" . $searchValue . "%'
+					or xin_saltab.nip_am like '%" . $searchValue . "%'
+					or xin_saltab_bulk_release.project_name like '%" . $searchValue . "%'
+					or xin_saltab_bulk_release.sub_project_name like '%" . $searchValue . "%'
+					) ";
+			}
 		}
 
 		// $filterPeriode = "";
@@ -178,12 +183,6 @@ class Billing_model extends CI_Model
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		// $this->db->select('xin_saltab.billing_area');
-		// if ($filterProject != '') {
-		// 	$this->db->where($filterProject);
-		// }
-		// if ($filterSubProject != '') {
-		// 	$this->db->where($filterSubProject);
-		// }
 		if ($filterPeriode != '') {
 			$this->db->where($filterPeriode);
 		}
@@ -213,15 +212,6 @@ class Billing_model extends CI_Model
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		// $filterPeriode = "";
-		// if (($periode != null) && ($periode != "") && ($periode != "0")) {
-		// 	$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '" . $periode . "'";
-		// } else {
-		// 	$filterPeriode = "";
-		// }
-		// if ($filterSubProject != '') {
-		// 	$this->db->where($filterSubProject);
-		// }
 		if ($filterPeriode != '') {
 			$this->db->where($filterPeriode);
 		}
@@ -249,22 +239,14 @@ class Billing_model extends CI_Model
 		$this->db->select('xin_saltab_bulk_release.project_id');
 		$this->db->select('xin_saltab_bulk_release.project_name');
 		$this->db->select('xin_saltab_bulk_release.sub_project_name');
+		$this->db->select('xin_saltab_bulk_release.fee');
 		$this->db->select("COUNT(xin_saltab.secid) AS total_mpp");
-		$this->db->select("SUM(xin_saltab.total_thp) AS total_thp"); //diganti kolom total 1
+		$this->db->select("SUM(xin_saltab.total_1) AS total_1"); //diganti kolom total 1
 
 		// $this->db->select('tx_cio.date_cio');
 		if ($searchQuery != '') {
 			$this->db->where($searchQuery);
 		}
-		// $filterPeriode = "";
-		// if (($periode != null) && ($periode != "") && ($periode != "0")) {
-		// 	$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '" . $periode . "'";
-		// } else {
-		// 	$filterPeriode = "";
-		// }
-		// if ($filterSubProject != '') {
-		// 	$this->db->where($filterSubProject);
-		// }
 		if ($filterPeriode != '') {
 			$this->db->where($filterPeriode);
 		}
@@ -280,6 +262,7 @@ class Billing_model extends CI_Model
 		$this->db->group_by('xin_saltab.billing_area');
 		$this->db->group_by('xin_saltab_bulk_release.id');
 		$this->db->limit($rowperpage, $start);
+		$this->db->order_by($columnName, $columnSortOrder);
 		$records = $this->db->get('xin_saltab')->result();
 
 		#Debugging variable
@@ -300,7 +283,11 @@ class Billing_model extends CI_Model
 			// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
 			// }
 
-			$totalthp = 'Rp. ' . $this->Xin_model->rupiah_titik($record->total_thp) . '-,';
+			$totalthp = 'Rp. ' . $this->Xin_model->rupiah_titik($record->total_1) . '-,';
+			$fee_value_raw = (($record->fee / 100) * $record->total_1);
+			$fee_value = 'Rp. ' . $this->Xin_model->rupiah_titik($fee_value_raw) . '-,';
+			$total_raw = $record->total_1 + $fee_value_raw;
+			$total = 'Rp. ' . $this->Xin_model->rupiah_titik($total_raw) . '-,';
 
 
 			$data[] = array(
@@ -312,9 +299,9 @@ class Billing_model extends CI_Model
 				"sub_project_name" 	=> strtoupper($record->sub_project_name),
 				"total_mpp" 	=> $record->total_mpp,
 				"total_billing" => $totalthp,
-				"fee_percen" 	=> '8%',
-				"fee_value" 	=> "0",
-				"total" 		=> "0"
+				"fee_percen" 	=> $record->fee . '%',
+				"fee_value" 	=> $fee_value,
+				"total" 		=> $total
 			);
 		}
 		// } 
@@ -338,7 +325,129 @@ class Billing_model extends CI_Model
 		return $response;
 	}
 
+	function get_list_billing_print($postData = null)
+	{
 
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$periode 		= $postData['periode'];
+		$am 			= $postData['am'];
+		$region 		= $postData['region'];
+		$searchValue 	= $postData['filter'];
+
+		// if ($periode == "0") {
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			if (strlen($searchValue) >= 3) {
+				$searchQuery = " (
+					xin_saltab.billing_area like '%" . $searchValue .  "%' 
+					or xin_saltab.nama_am like '%" . $searchValue . "%'
+					or xin_saltab.nip_am like '%" . $searchValue . "%'
+					or xin_saltab_bulk_release.project_name like '%" . $searchValue . "%'
+					or xin_saltab_bulk_release.sub_project_name like '%" . $searchValue . "%'
+					) ";
+			}
+		}
+
+		// $filterPeriode = "";
+		// if (($periode != null) && ($periode != "") && ($periode != "0")) {
+		// 	$filterPeriode = "DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') = '" . $periode . "'";
+		// } else {
+		// 	$filterPeriode = "";
+		// }
+
+		$filterPeriode = "";
+		if (($periode != null) && ($periode != "") && ($periode != "0")) {
+			$filterPeriode = "xin_saltab_bulk_release.periode_salary LIKE '%" . $periode . "%'";
+		} else {
+			$filterPeriode = "";
+		}
+
+		$filterAM = "";
+		if (($am != null) && ($am != "") && ($am != "0")) {
+			$filterAM = "xin_saltab.nama_am = '" . $am . "'";
+		} else {
+			$filterAM = "";
+		}
+
+		$filterRegion = "";
+		if (($region != null) && ($region != "") && ($region != "0")) {
+			$filterRegion = "xin_saltab.billing_area = '" . $region . "'";
+		} else {
+			$filterRegion = "";
+		}
+
+		$kondisiDefaultQuery = "";
+
+		## Fetch records
+		// $this->db->select('*');
+		$this->db->select("DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') AS periode_salary ");
+		$this->db->select('xin_saltab.nip_am');
+		$this->db->select('xin_saltab.nama_am');
+		$this->db->select('xin_saltab.billing_area');
+		$this->db->select('xin_saltab_bulk_release.project_id');
+		$this->db->select('xin_saltab_bulk_release.project_name');
+		$this->db->select('xin_saltab_bulk_release.sub_project_name');
+		$this->db->select('xin_saltab_bulk_release.fee');
+		$this->db->select("COUNT(xin_saltab.secid) AS total_mpp");
+		$this->db->select("SUM(xin_saltab.total_1) AS total_1"); //diganti kolom total 1
+
+		// $this->db->select('tx_cio.date_cio');
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterPeriode != '') {
+			$this->db->where($filterPeriode);
+		}
+		if ($filterAM != '') {
+			$this->db->where($filterAM);
+		}
+		if ($filterRegion != '') {
+			$this->db->where($filterRegion);
+		}
+		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		// $this->db->group_by('xin_saltab_bulk_release.project_id');
+		$this->db->group_by('xin_saltab.billing_area');
+		$this->db->group_by('xin_saltab_bulk_release.id');
+		$this->db->order_by('xin_saltab.nama_am', 'asc');
+		$records = $this->db->get('xin_saltab')->result();
+
+		#Debugging variable
+		// $tes_query = $this->db->last_query();
+		// print_r($tes_query);
+		// echo "<script>console.log('Debug Objects: " . $tes_query . "' );</script>";
+		$data = array();
+
+
+		foreach ($records as $record) {
+			$totalthp = 'Rp. ' . $this->Xin_model->rupiah_titik($record->total_1) . '-,';
+			$fee_value_raw = (($record->fee / 100) * $record->total_1);
+			$fee_value = 'Rp. ' . $this->Xin_model->rupiah_titik($fee_value_raw) . '-,';
+			$total_raw = $record->total_1 + $fee_value_raw;
+			$total = 'Rp. ' . $this->Xin_model->rupiah_titik($total_raw) . '-,';
+
+			$data[] = array(
+				$record->periode_salary,
+				strtoupper($record->nip_am),
+				strtoupper($record->nama_am),
+				strtoupper($record->billing_area),
+				strtoupper($record->project_name),
+				strtoupper($record->sub_project_name),
+				$record->total_mpp,
+				$record->total_1,
+				$record->fee . '%',
+				$fee_value_raw,
+				$total_raw
+			);
+		}
+		//print_r($this->db->last_query());
+		//die;
+
+		return $data;
+	}
 
 	public function read_project_information($id)
 	{

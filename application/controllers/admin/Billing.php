@@ -116,17 +116,30 @@ class Billing extends MY_Controller {
 	}
 
 
-	public function printExcel($project, $sub_project, $sdate, $edate,  $searchVal, $session_id)
+	public function printExcel($periode, $am, $region, $searchVal)
 	{
 		$postData = array();
 
 		//variabel filter (diambil dari post ajax di view)
-		$postData['project'] = $project;
-		$postData['sub_project'] = urldecode($sub_project);
-		$postData['sdate'] = $sdate;
-		$postData['edate'] = $edate;
-		$postData['session_id'] = $session_id;
-		$postData['nama_file'] = 'HISTORY JOIN EMPLOYEE REPORT';
+		// $postData['periode'] = urldecode($periode);
+		if ($periode == '0') {
+			$postData['periode'] = '';
+		} else {
+			$postData['periode'] = urldecode($periode);
+		}
+		// $postData['am'] = urldecode($am);
+		if ($am == '0') {
+			$postData['am'] = '';
+		} else {
+			$postData['am'] = urldecode($am);
+		}
+		// $postData['region'] = urldecode($region);
+		if ($region == '0') {
+			$postData['region'] = '';
+		} else {
+			$postData['region'] = urldecode($region);
+		}
+		$postData['nama_file'] = 'BILLING AREA';
 		if ($searchVal == '-no_input-') {
 			$postData['filter'] = '';
 		} else {
@@ -136,17 +149,21 @@ class Billing extends MY_Controller {
 		// echo $postData['filter'];
 
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('HISTORY JOIN EMPLOYEE REPORT'); //nama Spreadsheet yg baru dibuat
+		$spreadsheet->getActiveSheet()->setTitle('BILLING AREA'); //nama Spreadsheet yg baru dibuat
 
 		//data satu row yg mau di isi
 		$rowArray = [
+			'PERIODE',
 			'NIP',
-			'NAMA LENGKAP',
-			'PROJECT',
-			'POSISI/JABATAN',
-			'AREA/PENEMPATAN',
-			'TANGGAL BERGABUNG',
-			'INTERVIWER'
+			'AREA MANAGER',
+			'BILLING AREA',
+			'PROJECT NAME',
+			'SUB PROJECT NAME',
+			'TOTAL MPP',
+			'TOTAL BILLING',
+			'FEE (%)',
+			'FEE (Rp.)',
+			'TOTAL'
 		];
 
 		$length_array = count($rowArray);
@@ -177,7 +194,7 @@ class Billing extends MY_Controller {
 
 		// Get data
 		// $data = $this->Employees_model->get_employee_print($postData);
-		$data = $this->Employees_model->get_new_join_print($postData);
+		$data = $this->Billing_model->get_list_billing_print($postData);
 
 		$length_data = count($data);
 
