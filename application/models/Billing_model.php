@@ -194,6 +194,7 @@ class Billing_model extends CI_Model
 		}
 		// $dbtraxes->where($kondisiDefaultQuery);
 		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_cutoff_from,periode_cutoff_to,periode_salary) b', 'xin_saltab_bulk_release.id = b.maxid', 'inner');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		// $this->db->group_by('xin_saltab_bulk_release.project_id');
 		$this->db->group_by('xin_saltab.billing_area');
@@ -222,6 +223,7 @@ class Billing_model extends CI_Model
 			$this->db->where($filterRegion);
 		}
 		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_cutoff_from,periode_cutoff_to,periode_salary) b', 'xin_saltab_bulk_release.id = b.maxid', 'inner');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		// $this->db->group_by('xin_saltab_bulk_release.project_id');
 		$this->db->group_by('xin_saltab.billing_area');
@@ -233,6 +235,7 @@ class Billing_model extends CI_Model
 		## Fetch records
 		// $this->db->select('*');
 		$this->db->select("DATE_FORMAT(xin_saltab_bulk_release.periode_salary, '%Y-%m') AS periode_salary ");
+		$this->db->select('xin_saltab_bulk_release.id');
 		$this->db->select('xin_saltab.nip_am');
 		$this->db->select('xin_saltab.nama_am');
 		$this->db->select('xin_saltab.billing_area');
@@ -257,6 +260,7 @@ class Billing_model extends CI_Model
 			$this->db->where($filterRegion);
 		}
 		$this->db->join('xin_saltab_bulk_release', 'xin_saltab_bulk_release.id = xin_saltab.uploadid', 'left');
+		$this->db->join('(select max(id) as maxid from xin_saltab_bulk_release group by project_id,sub_project_id,periode_cutoff_from,periode_cutoff_to,periode_salary) b', 'xin_saltab_bulk_release.id = b.maxid', 'inner');
 		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		// $this->db->group_by('xin_saltab_bulk_release.project_id');
 		$this->db->group_by('xin_saltab.billing_area');
@@ -283,6 +287,19 @@ class Billing_model extends CI_Model
 			// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
 			// }
 
+			$view = '<button id="tesbutton" type="button" onclick="lihatBatchSaltabRelease(' . $record->id . ')" class="btn btn-block btn-xs btn-outline-twitter" >VIEW SALTAB</button>';
+			$download_raw = '<button type="button" onclick="downloadBatchSaltabRelease(' . $record->id . ')" class=" btn-block btn-xs btn-outline-success" ><i class="fa fa-download"></i> SALTAB</button>';
+			$delete = '<button type="button" onclick="deleteBatchSaltabRelease(' . $record->id . ')" class="btn btn-block btn-sm btn-outline-danger" >DELETE</button>';
+
+			$button_download = '<div class="btn-group mt-2">
+      			<button type="button" class="btn btn-xs btn-outline-success dropdown-toggle" data-toggle="dropdown">
+      				DOWNLOAD <span class="caret"></span></button>
+      				<ul class="dropdown-menu" role="menu" style="width: 100px;background-color:#faf7f0;">
+					<span style="color:#3F72D5;">DOWNLOAD OPTION:</span>
+        				<li class="mb-1">' . $download_raw . '</li>
+      				</ul>
+    		</div>';
+
 			$totalthp = 'Rp. ' . $this->Xin_model->rupiah_titik($record->total_1) . '-,';
 			$fee_value_raw = (($record->fee / 100) * $record->total_1);
 			$fee_value = 'Rp. ' . $this->Xin_model->rupiah_titik($fee_value_raw) . '-,';
@@ -296,7 +313,7 @@ class Billing_model extends CI_Model
 				"nama_am" 		=> strtoupper($record->nama_am),
 				"billing_area" 	=> strtoupper($record->billing_area),
 				"project_name" 	=> strtoupper($record->project_name),
-				"sub_project_name" 	=> strtoupper($record->sub_project_name),
+				"sub_project_name" 	=> strtoupper($record->sub_project_name) . "</br>" . $view . $button_download,
 				"total_mpp" 	=> $record->total_mpp,
 				"total_billing" => $totalthp,
 				"fee_percen" 	=> $record->fee . '%',

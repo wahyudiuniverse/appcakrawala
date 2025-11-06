@@ -403,6 +403,19 @@
 
   };
 
+	//-----lihat addendum----- 
+  function lihatBatchSaltabRelease(id) {
+    //alert("masuk fungsi lihat. id: " + id);
+    window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_release_download/' + id, "_blank");
+  }
+
+  //-----download raw data saltab-----
+  function downloadBatchSaltabRelease(id) {
+    //alert("masuk fungsi download. id: " + id);downloadDetailSaltab
+    // window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
+    window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltabRelease/' + id, "_self");
+  }
+
   //-----lihat employee-----
   function viewEmployee(id) {
     //alert("masuk fungsi lihat. id: " + id);
