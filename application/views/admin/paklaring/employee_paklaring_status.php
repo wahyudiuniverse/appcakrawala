@@ -129,6 +129,32 @@
                   </tr>
 
 
+                  <tr style="background: gold;">
+                    <td><strong>Tolak Pengajuan <span class="icon-verify-norek"></span></strong></td>
+                    <td>
+
+                      <select name="status_tolak" id="status_tolak" class="form-control" data-plugin="xin_select" data-placeholder="Status Tolak Pengajuan">
+                        
+                        <option value="0"> Tidak</option>
+                        <option value="1"> Yes Tolak</option>
+
+                      </select>
+
+
+                    </td>
+                  </tr>
+
+
+                  <tr id="keterangan_tolak" style="background: gold;" hidden>
+                    <td><strong>Isi Keterangan Tolak <span class="icon-verify-norek"></span></strong></td>
+                    <td>
+
+                      <textarea class="form-control textarea" placeholder="Jelaskan alasan penolakan pengajuan." name="isi_tolak" id="isi_tolak" cols="30" rows="5"></textarea>
+                      <span id='pesan_isi_tolak'></span>
+                    </td>
+                  </tr>
+
+
                 </tbody>
               </table>
 
@@ -154,7 +180,15 @@
         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Tutup</button>
 
               <button
-                type="button"
+                type="button" id="btn_tolak"
+                onclick="tolak_paklaring()"
+                class="btn btn-warning btn-label float-right ms-auto" hidden>
+                <i
+                  class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>TOLAK PENGAJUAN
+              </button>
+
+              <button
+                type="button" id="btn_approve"
                 onclick="release_paklaring()"
                 class="btn btn-success btn-label float-right ms-auto">
                 <i
@@ -314,16 +348,166 @@
                 // dropdownParent: $("#container_modal_mulai_screening")
             });
 
+
+
+  //global variable
+  var tabel_client;
+  var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
+    csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+  var session_id = '<?php echo $session['employee_id']; ?>';
+
+  FilePond.registerPlugin(
+    FilePondPluginFileEncode,
+    FilePondPluginFileValidateType,
+    FilePondPluginFileValidateSize,
+    FilePondPluginFileRename,
+    // FilePondPluginImageEdit,
+    FilePondPluginImageExifOrientation,
+    FilePondPluginImagePreview
+  );
+
+  //create object filepond untuk Exit Clearance
+  var pond_exitclear = FilePond.create(document.querySelector('input[id="file_exitclear"]'), {
+    labelIdle: 'Drag & Drop file Exit Clearance untuk Edit atau klik <span class="filepond--label-action">Browse</span>',
+    imagePreviewHeight: 170,
+    maxFileSize: "5MB",
+    acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+    imageCropAspectRatio: "1:1",
+    imageResizeTargetWidth: 200,
+    imageResizeTargetHeight: 200,
+    fileRenameFunction: (file) => {
+      return `exit${file.extension}`;
+    }
+  });
+
+  //create object filepond untuk Surat Resign
+  var pond_resign = FilePond.create(document.querySelector('input[id="file_resign"]'), {
+    labelIdle: 'Drag & Drop file Surat Resign untuk Edit atau klik <span class="filepond--label-action">Browse</span>',
+    imagePreviewHeight: 170,
+    maxFileSize: "5MB",
+    acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+    imageCropAspectRatio: "1:1",
+    imageResizeTargetWidth: 200,
+    imageResizeTargetHeight: 200,
+    fileRenameFunction: (file) => {
+      return `resign${file.extension}`;
+    }
+  });
+
+
+
+    // var project = document.getElementById("aj_project").value;
+    // var sub_project = document.getElementById("aj_sub_project").value;
+    // var status = document.getElementById("aj_keyword").value;
+
+
     var project = document.getElementById("aj_project").value;
     var sub_project = document.getElementById("aj_sub_project").value;
     var status = document.getElementById("aj_keyword").value;
     var search_periode_from = "";
     var search_periode_to = "";
+    var searchVal = $('#tabel_employees_filter').find('input').val();
 
     employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
 
+    employee_table.destroy();
+
+    // e.preventDefault();
+      $('#button_download_data').attr("hidden", false);
+
+      employee_table = $('#tabel_employees').DataTable({
+        //"bDestroy": true,
+        'processing': true,
+        'serverSide': true,
+        // 'stateSave': true,
+        'bFilter': true,
+        'serverMethod': 'post',
+        //'dom': 'plBfrtip',
+        'dom': 'lfrtip',
+        //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+        //'columnDefs': [{
+        //  targets: 11,
+        //  type: 'date-eu'
+        //}],
+        // 'order': [
+        //   [4, 'asc']
+        // ],
+        'ajax': {
+          'url': '<?= base_url() ?>admin/Employee_paklaring_status/list_employees',
+          data: {
+            [csrfName]: csrfHash,
+            session_id: session_id,
+            project: project,
+            sub_project: sub_project,
+            status: status,
+            //base_url_catat: base_url_catat
+          },
+          error: function(xhr, ajaxOptions, thrownError) {
+            alert("Status :" + xhr.status);
+            alert("responseText :" + xhr.responseText);
+          },
+        },
+        'columns': [{
+            data: 'aksi',
+            "orderable": false
+          },
+          {
+            data: 'employee_id',
+            "orderable": false,
+            //searchable: true
+          },
+          {
+            data: 'ktp_no',
+            "orderable": false,
+            //searchable: true
+          },
+          {
+            data: 'first_name',
+            "orderable": false,
+            //searchable: true
+          },
+          {
+            data: 'project',
+            "orderable": false
+          },
+          {
+            data: 'designation_name',
+            "orderable": false,
+          },
+          {
+            data: 'penempatan',
+            "orderable": false,
+          },
+          {
+            data: 'request_date',
+            "orderable": false,
+          },
+          {
+            data: 'request_by',
+            "orderable": false,
+          },
+          {
+            data: 'cancel_date',
+            "orderable": false,
+          },
+          {
+            data: 'cancel_description',
+            "orderable": false,
+          },
+
+        ]
+      }).on('search.dt', () => eventFired('Search'));
+
+      $('#tombol_filter').attr("disabled", false);
+      $('#tombol_filter').removeAttr("data-loading");
+    
+
+
+
+
   });
 </script>
+
 
 
 <!-- Tombol Filter -->
@@ -374,6 +558,8 @@
   });
 
   document.getElementById("filter_employee").onclick = function(e) {
+
+
     employee_table.destroy();
 
     e.preventDefault();
@@ -671,6 +857,25 @@
             $('#input_surat_resign').attr("hidden", true);
     }
   });
+
+
+  $('#status_tolak').change(function() {
+    var status_t = $(this).val();
+
+    // alert("Jabatan: " + jabatan);
+
+    if ((status_t == "1")) {
+            $('#keterangan_tolak').attr("hidden", false);
+            $('#btn_tolak').attr("hidden", false);
+            $('#btn_approve').attr("hidden", true);
+    } else {
+
+            $('#keterangan_tolak').attr("hidden", true);
+            $('#btn_tolak').attr("hidden", true);
+            $('#btn_approve').attr("hidden", false);
+    }
+  });
+
 </script>
 
 
@@ -729,13 +934,13 @@
     const bulanRomawi = nomorBulanKeRomawi(nomorBulan);
 
     if($("#field_company_id").val()=='2'){
-      var ns = 'REF-HRD/SC/'+bulanRomawi+'2025';
+      var ns = 'REF-HRD/SC/'+bulanRomawi+'/'+'2025';
     } else if ($("#field_company_id").val()=='3'){
-      var ns = 'REF-HRD/KAC/'+bulanRomawi+'2025';
+      var ns = 'REF-HRD/KAC/'+bulanRomawi+'/'+'2025';
     } else if ($("#field_company_id").val()=='4'){
       var ns = 'REF-HRD/MATA/'+bulanRomawi+'/'+'2025';
     } else {
-      var ns = 'REF-HRD/ONECORP/'+bulanRomawi+'2025';
+      var ns = 'REF-HRD/ONECORP/'+bulanRomawi+'/'+'2025';
     }
     
     var nomor_surat = '00'+secid+'/'+ns;
@@ -755,11 +960,6 @@
           docid: uniqueTimestamp,
           jenis_dokumen: jenis_dokumen,
           nomor_dokumen: nomor_surat,
-          // posisi_jabatan: jabatan,
-          // project_id: project_id,
-          // project_name: project_name,
-          // company: company_id,
-          // company_name: company_name,
           join_date: join_date,
           resign_date: resign_date,
           bpjs_join: bpjs_join,
@@ -768,8 +968,9 @@
           exit_clearance: exit_clearance,
           resign_letter: resign_letter,
           session_hrd: session_id,
+          company_id: company_id,
+          company_name : company_name,
 
-          // employee_id: employee_id,
         },
         beforeSend: function() {},
         success: function() {
@@ -787,6 +988,65 @@
     }
 
   }
+
+
+
+  function tolak_paklaring() {
+    var secid = $("#field_secid").val();
+    var isi_tolak = $("#isi_tolak").val();
+
+    const today = new Date();
+
+    // Ambil masing-masing komponen
+    const tahun = today.getFullYear();           // Contoh: 2025
+    const bulan = String(today.getMonth() + 1).padStart(2, '0'); // Contoh: 11 (bulan dimulai dari 0)
+    const tanggal = String(today.getDate()).padStart(2, '0'); 
+    const formatTanggal = `${tahun}-${bulan}-${tanggal}`;
+
+    var pesan_isi_tolak ="";
+
+    if (isi_tolak == "") {
+          pesan_isi_tolak = "<small style='color:#FF0000;'>Alasan ditolak kosong..!</small>";
+          $('#pesan_perusahaan_id_modal').focus();
+    }
+
+    $('#pesan_isi_tolak').html(pesan_isi_tolak)
+
+
+    if(pesan_isi_tolak!=""){
+
+    } else {
+    // AJAX untuk save data diri
+      $.ajax({
+        // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+        url: '<?= base_url() ?>admin/Employee_paklaring_status/update_tolak_pengajuan/',
+        method: 'post',
+        data: {
+          [csrfName]: csrfHash,
+          secid: secid,
+          cancel_description: isi_tolak,
+          cancel_date: formatTanggal,
+          cancel_status: '1',
+
+        },
+        beforeSend: function() {},
+        success: function() {
+
+          employee_table.ajax.reload(null, true);
+          // tabel_employees.ajax.reload(null, false);
+
+          alert("Behasil simpan Pengajuan Paklaring");
+          $('#editRekeningModal').modal('hide');
+        },
+        error: function(xhr, status, error) {
+          alert("error save kontak client");
+        }
+      });
+    }
+
+  }
+</script>
+
 </script>
 
 <!-- Tombol Download Data -->

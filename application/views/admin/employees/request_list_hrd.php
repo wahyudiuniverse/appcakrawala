@@ -16,28 +16,6 @@
 ?>
 <!-- $data['list_bank'] = $this->Xin_model->get_bank_code(); -->
 
-<div id="smartwizard-2" class="smartwizard-example sw-main sw-theme-default">
-  <ul class="nav nav-tabs step-anchor">
-
-    <?php if (in_array('378', $role_resources_ids)) { ?>
-      <li class="nav-item active"> <a href="<?php echo site_url('admin/employee_request_hrd/'); ?>" data-link-data="<?php echo site_url('admin/employee_request_hrd/'); ?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN BARU <?php echo '(' . $count_emp_request_hrd . ')'; ?>
-        </a> </li>
-    <?php } ?>
-
-    <!-- <?php if (in_array('312', $role_resources_ids)) { ?>
-      <li class="nav-item clickable"> <a href="<?php echo site_url('admin/employee_request_tkhl/'); ?>" data-link-data="<?php echo site_url('admin/employee_request_tkhl/'); ?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>KARYAWAN TKHL <?php echo '(' . $count_emp_request_tkhl . ')'; ?>
-        </a> </li>
-    <?php } ?> -->
-
-    <?php if (in_array('338', $role_resources_ids)) { ?>
-      <li class="nav-item clickable"> <a href="<?php echo site_url('admin/Employee_request_cancelled/'); ?>" data-link-data="<?php echo site_url('admin/Employee_request_cancelled/'); ?>" class="mb-3 nav-link hrpremium-link"> <span class="sw-icon ion ion-ios-paper"></span>DITOLAK <?php echo '(' . $count_emp_request_cancel . ')'; ?>
-        </a> </li>
-    <?php } ?>
-
-
-  </ul>
-</div>
-
 <hr class="border-light m-0 mb-3">
 <?php $employee_id = $this->Xin_model->generate_random_employeeid(); ?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode(); ?>
@@ -64,71 +42,6 @@
       ?>
       <div class="form-row">
 
-        <div class="col-md mb-3">
-          <label class="form-label">Golongan</label>
-          <select class="form-control" name="golongan" id="golongan" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
-            <option value="0">--ALL--</option>
-            <option value="1">PKWT</option>
-            <option value="2">TKHL</option>
-          </select>
-        </div>
-
-        <div class="col-md mb-3">
-          <label class="form-label">Kategori</label>
-          <select class="form-control" name="kategori" id="kategori" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
-            <option value="0">--ALL--</option>
-            <option value="1">In House</option>
-            <option value="2">Area</option>
-            <option value="3">Ratecard</option>
-            <option value="4">Project</option>
-          </select>
-        </div>
-
-        <div class="col-md mb-3">
-          <label class="form-label">Projects</label>
-          <select class="form-control" name="project_id" id="aj_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
-            <option value="0">--ALL--</option>
-            <?php foreach ($all_projects as $proj) { ?>
-              <option value="<?php echo $proj->project_id; ?>" <?php if ($project_karyawan == $proj->project_id) {
-                                                                  echo " selected";
-                                                                } ?>> <?php echo $proj->title; ?></option>
-            <?php } ?>
-          </select>
-        </div>
-
-        <div class="col-md mb-3" id="subproject_ajax" hidden>
-          <label class="form-label">Sub Projects</label>
-          <select class="form-control" name="sub_project_id" id="aj_subproject" data-plugin="xin_select" data-placeholder="Sub Project">
-            <option value="0">--</option>
-          </select>
-        </div>
-
-        <div class="col-md mb-3" id="areaemp_ajax" hidden>
-          <label class="form-label">Area/Penempatan</label>
-          <select class="form-control" name="area_emp" id="aj_area_emp" data-plugin="xin_select" data-placeholder="Area/Penempatan">
-            <option value="0">--</option>
-          </select>
-        </div>
-
-        <div class="col-md mb-3" hidden>
-          <label class="form-label"><?php echo $this->lang->line('xin_select_date'); ?></label>
-          <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date'); ?>" readonly id="start_date" name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d'); ?>">
-        </div>
-
-        <div class="col-md mb-3" hidden>
-          <label class="form-label"><?php echo $this->lang->line('xin_select_date'); ?></label>
-          <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date'); ?>" readonly id="end_date" name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d'); ?>">
-        </div>
-
-        <div class="col-md mb-3" hidden>
-          <label class="form-label">NIP/FULLNAME/KTP</label>
-          <input class="form-control" placeholder="Cari: Nama Lengkap/NIP/KTP" name="searchkey" id="aj_searchkey" type="text" value="0">
-        </div>
-
-        <div class="col-md col-xl-2 mb-4">
-          <label class="form-label d-none d-md-block">&nbsp;</label>
-          <button type="submit" class="btn btn-secondary btn-block">FILTER</button>
-        </div>
 
 
       </div>
@@ -187,7 +100,7 @@
                             } ?>>Project</option>
         </select>
       </div>
-      <!-- <?php echo print_r($this->db->last_query()); ?> -->
+      <!-- <?php //echo print_r($this->db->last_query()); ?> -->
 
       <div class="col-md mb-3">
         <label class="form-label">Projects</label>
@@ -213,11 +126,7 @@
 <?php echo form_close(); ?>
 
 
-<!-- <?php echo print_r($this->db->last_query()); ?> -->
-<!-- <i class='ion ion-checkmark-circle-outline'></i> -->
-<!-- <span class="ion-md-speedometer"></span> -->
-<!-- <span class="icon-[ion--checkmark-circle-outline]"></span> -->
-<!-- <span class="ion--checkmark-circle-outline"></span> -->
+<!-- <?php //echo print_r($this->db->last_query()); ?> -->
 
 <div class="row m-b-1 <?php echo $get_animate; ?>">
   <div class="col-md-12">
@@ -344,30 +253,6 @@
         });
         //end
 
-        // //search pkwt atau tkhl
-        // $('#golongan').on('change', function() {
-        //   var golongan_select = document.getElementById("golongan").value;
-        //   var search_golongan = "@golo-" + golongan_select;
-        //   alert(search_golongan);
-        //   table.search(search_golongan).draw();
-        // });
-        // //search kategori
-        // $('#kategori').on('change', function() {
-        //   var kategori_select = document.getElementById("kategori").value;
-        //   var search_kategori = "@kateg-" + kategori_select;
-        //   alert(search_kategori);
-        //   table.search(search_kategori).draw();
-        // });
-        // //serarch by project filter
-        // $('#aj_project').on('change', function() {
-        //   var project_id = document.getElementById("aj_project").value;
-        //   var search_project = "@proj-" + project_id;
-        //   alert(search_project);
-        //   //table.search(this.value).draw();
-        //   table.search(search_project).draw();
-        //   //table.draw();
-        // });
-
 
       });
 
@@ -391,32 +276,3 @@
         printExcel();
       });
     </script>
-
-    <!-- <div class="card">
->>>>>>> 2d4f66631bc9c9b90ebea3165a7c99143d8f0ac9
-      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> <?php echo $this->lang->line('xin_companies'); ?></span> </div>
-      <div class="card-body">
-        <div class="box-datatable table-responsive">
-          <table class="datatables-demo table table-striped table-bordered" id="xin_table">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th><?php echo $this->lang->line('xin_request_employee_status'); ?></th>
-                <th>NIK-KTP</th>
-                <th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name'); ?></th>
-                <th><?php echo $this->lang->line('left_projects'); ?></th>
-                <th><?php echo $this->lang->line('left_sub_projects'); ?></th>
-                <th><?php echo $this->lang->line('left_department'); ?></th>
-                <th><?php echo $this->lang->line('left_designation'); ?></th>
-                <th>Nomor HP</th>
-                <th><?php echo $this->lang->line('xin_placement'); ?></th>
-                <th><?php echo $this->lang->line('xin_employee_doj'); ?></th>
-                <th> Tanggal Register</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

@@ -19,7 +19,7 @@ class Esign_model extends CI_Model {
 	}
 
 	 public function read_skk($id) {
-		$sql = "SELECT secid, doc_id, jenis_dokumen, nomor_dokumen, nip, join_date, resign_date, bpjs_date, TIMESTAMPDIFF(MONTH, join_date, resign_date) AS waktu_kerja, qr_code, sign_fullname,sign_jabatan,sign_company, createdby, createdon FROM xin_qrcode_skk WHERE secid = ? ";
+		$sql = "SELECT * FROM xin_qrcode_skk WHERE secid = ? ";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 		if ($query->num_rows() > 0) {
@@ -28,7 +28,6 @@ class Esign_model extends CI_Model {
 			return null;
 		}
 	}
-
 
 	// get single employee by NIP
 	public function read_skk_by_nip($id) {

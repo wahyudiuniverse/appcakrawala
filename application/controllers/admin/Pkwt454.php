@@ -577,7 +577,7 @@ class Pkwt454 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin – Sabtu 	<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
+								<td colspan="20"><br>•	Hari Senin – Sabtu 	<br>•	Hari libur Minggu</td>
 							</tr>
 
 				</table>

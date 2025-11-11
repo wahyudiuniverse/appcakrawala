@@ -21,6 +21,7 @@ class Employee_paklaring_status extends MY_Controller {
 		$this->load->helper('html');
 		$this->load->database();
 		$this->load->library('form_validation');
+			$this->load->library('ciqrcode');
 		// $this->load->model("Traxes_model");
 		$this->load->model("Project_model");	
 		$this->load->model("Employees_model");
@@ -60,7 +61,7 @@ class Employee_paklaring_status extends MY_Controller {
 
 			// $data['all_departments'] = $this->Department_model->all_departments();
 			// $data['all_designations'] = $this->Designation_model->all_designations();
-		if(in_array('490',$role_resources_ids)) {
+		if(in_array('378',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/paklaring/employee_paklaring_status", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -89,8 +90,50 @@ class Employee_paklaring_status extends MY_Controller {
 	{
 		$postData = $this->input->post();
 
+		$config['cacheable']	= true; //boolean, the default is true
+		$config['cachedir']		= './uploads/qrcode/skk/'; //string, the default is application/cache/
+		$config['errorlog']		= './uploads/qrcode/skk/'; //string, the default is application/logs/
+		$config['imagedir']		= './uploads/qrcode/skk/images/'; //direktori penyimpanan qr code
+		$config['quality']		= true; //boolean, the default is true
+		$config['size']			= '1024'; //interger, the default is 1024
+		$config['black']		= array(224,255,255); // array, default is array(255,255,255)
+		$config['white']		= array(70,130,180); // array, default is array(0,0,0)
+		$this->ciqrcode->initialize($config);
+
+		// $nomor_surat = $postData['nomor_dokumen'];
+		$docid = $postData['uniqueTimestamp'];
+		$yearmonth = date('Y/m');
+
+		$path_qr = $config['imagedir']. $yearmonth. '/';
+					//kalau blm ada folder path nya
+			if (!file_exists($path_qr)) {
+				mkdir($path_qr, 0777, true);
+			}
+
+		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
+		$domain = base_url().'esign/sk/'.$docid;
+		$params['data'] = $domain; //data yang akan di jadikan QR CODE
+		$params['level'] = 'H'; //H=High
+		$params['size'] = 10;
+		$params['savename'] = FCPATH.$config['imagedir']. $yearmonth . '/'.$image_name; //simpan image QR CODE ke folder assets/images/
+		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+		$url_qr = '/uploads/qrcode/skk/images/'.$yearmonth.'/'.$image_name;
+
+
 		// update data NPWP Client
-		$data = $this->Company_model->update_pengajuan_skk($postData);
+		$data = $this->Company_model->update_pengajuan_skk($postData,$url_qr);
+
+		// echo json_encode($data);
+	}
+
+
+	//save Kontak Client
+	public function update_tolak_pengajuan()
+	{
+		$postData = $this->input->post();
+
+		// update data NPWP Client
+		$data = $this->Company_model->update_tolak_pengajuan_skk($postData);
 
 		// echo json_encode($data);
 	}

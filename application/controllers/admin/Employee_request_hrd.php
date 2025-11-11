@@ -80,8 +80,9 @@ class Employee_request_hrd extends MY_Controller
 		$data['all_departments'] = $this->Department_model->all_departments();
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['list_bank'] = $this->Xin_model->get_bank_code();
+		$count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']);
 
-		$data['breadcrumbs'] = $this->lang->line('xin_request_employee');
+		$data['breadcrumbs'] = 'KARYAWAN BARU ( '.$count_emp_request_hrd.' )';
 		$data['path_url'] = 'emp_request_hrd';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		//$role_resources_ids = is_null($role_resources_ids_temp) ? 0 : $role_resources_ids_temp;

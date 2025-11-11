@@ -517,6 +517,7 @@
                   // select the right value in the response here and return
                   // return res;
                   var serverResponse = jQuery.parseJSON(res);
+                  alert(serverResponse['0']['link_file']);
                   $('#link_file_exitclear').val(serverResponse['0']['link_file']);
                   // serverResponse = JSON.parse(res);
                   // console.log(serverResponse['0']['link_file']);
@@ -656,13 +657,14 @@
     var resign_letter = $("#link_file_resign").val();
     var request_date = $("#field_request_date").val();
 
+    alert(exit_clearance);
 
 
     var pesan_joindate ="";
     var pesan_leavedate ="";
 
 
-    alert("Penempatan: " + penempatan);
+    // alert("Penempatan: " + penempatan);
 
     if (join_date == "") {
           pesan_joindate = "<small style='color:#FF0000;'>Tanggal Bergabung tidak boleh kosong..!</small>";

@@ -87,8 +87,8 @@ class Pkwt437 extends MY_Controller
 
 		if($pkwt[0]->approve_hrd != null){
 
-					$logo_cover = 'tcpdf_logo_sc.png';
-					$header_namae = 'PT. Siprama Cakrawala';
+					$logo_cover = 'tcpdf_logo_kac.png';
+					$header_namae = 'PT. Krista Aulia Cakrawala';
 
 
 				// set document information
@@ -96,7 +96,7 @@ class Pkwt437 extends MY_Controller
 				$pdf->SetAuthor('HRCakrawala');
 				// $baseurl=base_url();
 
-				$header_namae = 'PT. Siprama Cakrawala';
+				$header_namae = 'PT. Krista Aulia Cakrawala';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
@@ -122,7 +122,7 @@ class Pkwt437 extends MY_Controller
 				$pdf->setImageScale(10);
 
 				$pdf->SetAuthor('HRCakrawala');
-				$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
+				$pdf->SetTitle('PT. Krista Aulia Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
 				$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
 				$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
 				// set font
@@ -273,7 +273,7 @@ class Pkwt437 extends MY_Controller
 							</tr>
 							<br>
 							<tr>
-								<td><b>PT. SIPRAMA CAKRAWALA</b>, yang berdudukan Gedung Graha Krista Aulia Cakrawala Jl Andara Raya No.20 Pangkalan Jati Baru Kec. Cinere Kota Depok, Jawa Barat 16513, yang dalam hal ini diwakili oleh <b>'.$sign_fullname.'</b> dalam kedudukannya sebagai Senior Manager HR dari dan oleh karenanya sah bertindak untuk dan atas nama <b>PT. SIPRAMA CAKRAWALA</b>, selanjutnya dalam perjanjian kemitraan ini disebut Perusahaan.</td>
+								<td><b>PT. KRISTA AULIA CAKRAWALA</b>, yang berdudukan Gedung Graha Krista Aulia Cakrawala Jl Andara Raya No.20 Pangkalan Jati Baru Kec. Cinere Kota Depok, Jawa Barat 16513, yang dalam hal ini diwakili oleh <b>'.$sign_fullname.'</b> dalam kedudukannya sebagai Senior Manager HR dari dan oleh karenanya sah bertindak untuk dan atas nama <b>PT. KRISTA AULIA CAKRAWALA</b>, selanjutnya dalam perjanjian kemitraan ini disebut Perusahaan.</td>
 							</tr>
 
 				</table>

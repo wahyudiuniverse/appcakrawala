@@ -74,7 +74,6 @@ class Xin_model extends CI_Model
 
 
 
-
 	public function get_bank()
 	{
 		$query = $this->db->query("SELECT * from mt_bank");
@@ -1493,6 +1492,20 @@ class Xin_model extends CI_Model
 	{
 
 		$sql = 'SELECT * FROM xin_employee_bankaccount WHERE employee_id = ?';
+		$binds = array($id);
+		$query = $this->db->query($sql, $binds);
+
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
+	}
+	// get alamat ktp
+	public function read_alamat_ktp($id)
+	{
+
+		$sql = 'SELECT * FROM xin_projects_sub WHERE secid = ?';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 

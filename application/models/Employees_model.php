@@ -552,6 +552,30 @@ class Employees_model extends CI_Model
 		}
 	}
 
+
+	//ambil alamat ktp
+	function get_alamat_ktp($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('alamat_ktp');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['alamat_ktp'];
+			}
+		}
+	}
+
 	//ambil level jabatan
 	function get_level($id)
 	{
@@ -1733,10 +1757,10 @@ class Employees_model extends CI_Model
 
 		$kondisiDefaultQuery = "(
 			request_empby = 1
-		AND	approved_naeby = 1
-		AND approved_nomby = 1
-		AND approved_hrdby is null
-		AND cancel_stat = 0
+			AND	approved_naeby = 1
+			AND approved_nomby = 1
+			AND approved_hrdby is null
+			AND cancel_stat = 0
 		)";
 		//AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $idsession . ")
 
@@ -3230,13 +3254,7 @@ class Employees_model extends CI_Model
 				$filterStatus = "";
 			}
 
-			## Kondisi Default 
-			// $kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
-			// $kondisiDefaultQuery = "(
-			// 	karyawan_id = " . $emp_id . "
-			// AND	pkwt_id = " . $contract_id . "
-			// )";
-			// $kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
+			## Kondisi Default
 			$kondisiDefaultQuery = "`xin_employees.user_id` != '99'";
 
 			## Total number of records without filtering
@@ -4062,9 +4080,9 @@ class Employees_model extends CI_Model
 			$searchQuery = "";
 			if ($searchValue != '') {
 				if (strlen($searchValue) >= 3) {
-					$searchQuery = " (xin_qrcode_skk.nip like '%" . $searchValue .  "%' 
-					or xin_qrcode_skk.employee_name like '%" . $searchValue . "%' 
-					or xin_qrcode_skk.ktp like '%" . $searchValue . "%') ";
+					$searchQuery = " (xin_qrcode_skk.employee_name like '%" . $searchValue .  "%' 
+					or xin_qrcode_skk.ktp like '%" . $searchValue . "%' 
+					or xin_qrcode_skk.nip like '%" . $searchValue . "%') ";
 				}
 			}
 
@@ -4100,7 +4118,7 @@ class Employees_model extends CI_Model
 			// AND	pkwt_id = " . $contract_id . "
 			// )";
 			// $kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
-			$kondisiDefaultQuery = "`xin_qrcode_skk.approve_hrd` is null";
+			$kondisiDefaultQuery = "xin_qrcode_skk.approve_hrd is null AND xin_qrcode_skk.doc_id = 0";
 
 			## Total number of records without filtering
 			$this->db->select('count(*) as allcount');
@@ -4168,8 +4186,8 @@ class Employees_model extends CI_Model
 			$records = $this->db->get('xin_qrcode_skk')->result();
 
 			#Debugging variable
-			$tes_query = $this->db->last_query();
-			//print_r($tes_query);
+			// $tes_query = $this->db->last_query();
+			// print_r($tes_query);
 
 			$data = array();
 
