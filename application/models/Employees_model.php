@@ -4165,6 +4165,8 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_qrcode_skk.cancel_status');
 			$this->db->select('xin_qrcode_skk.cancel_date');
 			$this->db->select('xin_qrcode_skk.cancel_description');
+			$this->db->select('xin_qrcode_skk.modifiedby');
+			$this->db->select('xin_qrcode_skk.modifiedon');
 
 			// $this->db->select('xin_projects.priority');
 			// $this->db->select('xin_designations.designation_name');
@@ -4236,9 +4238,17 @@ class Employees_model extends CI_Model
 				// $get_skk_status = $this->get_skk($record->secid);
 
 
-					$open_approve = '<button onclick="open_approve(' . $record->secid . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
+					$open_approve = '<button onclick="open_approve(' . $record->secid . ' , 0)" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
+
+					$revisiinfo = 'Revisi Oleh ( '.$record->modifiedby.' : '.$record->modifiedon.' )';
+					$modifiedby = '<span style="color:#40bcfe; font-size: 12px; line-height: 0.1;">'.$revisiinfo.'</span>';
 
 					$open_cancel = '<h8><span style="color:#f45555;font-weight:bold;">DITOLAK HRD</span></h8>';
+
+					$open_revisi = '<button onclick="deleteSkk(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENGAJUAN</button>';
+
+					$open_remove = '<button onclick="deleteSkk(' . $record->secid . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">HAPUS</button>';
+
 
 
 					// $open_profile = '<button onclick="viewEmployee(' . $record->secid . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
@@ -4247,9 +4257,9 @@ class Employees_model extends CI_Model
 					// $text_resign = "";
 
 				if ($record->cancel_status == 1){
-					$action = $open_cancel;
+					$action = $open_cancel. ' ' .$open_revisi;
 				} else {
-					$action = $open_approve;
+					$action = $open_approve. '<br>' . $open_remove;
 				}
 				// if (empty($record->status_resign) || ($record->status_resign == "")) {
 				// 	$text_resign 	= "";
@@ -4361,7 +4371,7 @@ class Employees_model extends CI_Model
 					"penempatan" => strtoupper($record->penempatan),
 					"request_date" => strtoupper($record->request_resign_date),
 					"request_by" => strtoupper($record->request_resign_by),
-					"cancel_date" => strtoupper($record->cancel_date),
+					"cancel_date" => strtoupper($record->cancel_date). '<br>' . $modifiedby,
 					"cancel_description" => strtoupper($record->cancel_description),
 
 					// "join" => strtoupper($record->date_of_joining),
@@ -5145,6 +5155,13 @@ ORDER BY jab.designation_id ASC";
 		} else {
 			return false;
 		}
+	}
+
+	// Function to Delete selected record from table
+	public function delete_skk($postData)
+	{
+		$this->db->where('secid', $postData['id']);
+		$this->db->delete('xin_qrcode_skk');
 	}
 
 	// Function to Delete selected record from table

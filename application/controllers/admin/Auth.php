@@ -86,12 +86,14 @@ class Auth extends MY_Controller
 				'user_id' => $result[0]->user_id,
 				'username' => $result[0]->username,
 				'employee_id' => $result[0]->employee_id,
+				'employee_name' => $result[0]->first_name,
 				'email' => $result[0]->email,
 				);
 				// Add user data in session
 				$this->session->set_userdata('user_id', $session_data);
 				$this->session->set_userdata('username', $session_data);
 				$this->session->set_userdata('employee_id', $session_data);
+				$this->session->set_userdata('employee_name', $session_data);
 				$Return['result'] = $this->lang->line('xin_success_logged_in');
 				
 				// update last login info

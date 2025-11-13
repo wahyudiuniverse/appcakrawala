@@ -14,12 +14,12 @@
 <link rel="stylesheet" href="<?= base_url() ?>assets/assets_data_karyawan/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css" type="text/css" />
 
 
-<!-- MODAL EXITCLEARANCE -->
+<!-- MODAL APPROVE PENGAJUAN -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editRekeningModalLabel">DIALOG PENGAJUAN PAKLARING</h5>
+        <h5 class="modal-title" id="judul_dialog">DIALOG PENGAJUAN PAKLARING</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -31,6 +31,14 @@
             <div class="row">
               <table class="table table-striped col-md-12">
                 <tbody>
+
+
+                  <tr style="background: gold;" id="info_keterangan_tolak">
+                    <td style='width:25%'><strong>Revisi Pengajuan <span class="icon-verify-bank"></span></strong></td>
+                      
+                    <td ><strong><span class="icon-verify-bank" id="note_revisi_modal" name="note_revisi_modal"></span></strong></td>
+                    </td>
+                  </tr>
 
                   <tr>
                     <td style='width:25%'><strong>NIP / Nama Lengkap <span class="icon-verify-bank"></span></strong></td>
@@ -129,7 +137,7 @@
                   </tr>
 
 
-                  <tr style="background: gold;">
+                  <tr style="background: gold;" id="select_tolak_pengajuan">
                     <td><strong>Tolak Pengajuan <span class="icon-verify-norek"></span></strong></td>
                     <td>
 
@@ -160,6 +168,7 @@
 
 
                 <input hidden type="text" id="field_secid" value="0">
+                <input hidden type="text" id="field_is_revisi" value="0">
                 <input hidden type="text" id="field_employee_id" value="0">
                 <input hidden type="text" id="field_fullname" value="0">
                 <input hidden type="text" id="field_ktp" value="0">
@@ -187,9 +196,19 @@
                   class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>TOLAK PENGAJUAN
               </button>
 
+
+              <button
+                type="button" id="btn_revisi"
+                onclick="release_paklaring(1)"
+                class="btn btn-success btn-label float-right ms-auto">
+                <i
+                  class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>SAVE REVISI PENGAJUAN
+              </button>
+
+
               <button
                 type="button" id="btn_approve"
-                onclick="release_paklaring()"
+                onclick="release_paklaring(0)"
                 class="btn btn-success btn-label float-right ms-auto">
                 <i
                   class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>RELEASE PAKLARING
@@ -299,7 +318,6 @@
               <tr>
                 <th>Aksi</th>
                 <th>NIP - Status</th>
-                <th>NIK</th>
                 <th>Nama Lengkap</th>
                 <th>Project</th>
                 <th>Jabatan</th>
@@ -453,11 +471,6 @@
           },
           {
             data: 'employee_id',
-            "orderable": false,
-            //searchable: true
-          },
-          {
-            data: 'ktp_no',
             "orderable": false,
             //searchable: true
           },
@@ -618,11 +631,6 @@
             //searchable: true
           },
           {
-            data: 'ktp_no',
-            "orderable": false,
-            //searchable: true
-          },
-          {
             data: 'first_name',
             "orderable": false,
             //searchable: true
@@ -672,8 +680,28 @@
 
 <!-- Tombol Open Form Pengajuan -->
 <script type="text/javascript">
-  function open_approve(secid) {
+  function open_approve(secid, is_revisi) {
 
+
+    if(is_revisi==1){
+      $('#btn_revisi').attr("hidden", false);
+      $('#btn_approve').attr("hidden", true);
+      $('#btn_tolak').attr("hidden", true);
+
+      $('#select_tolak_pengajuan').attr("hidden", true);
+      $('#keterangan_tolak').attr("hidden", true);
+      $('#info_keterangan_tolak').attr("hidden", false);
+      $('#judul_dialog').html("DIALOG REVISI PENGAJUAN");
+
+    } else {
+      $('#btn_revisi').attr("hidden", true);
+      $('#btn_approve').attr("hidden", false);
+      $('#btn_tolak').attr("hidden", true);
+      $('#select_tolak_pengajuan').attr("hidden", false);
+      $('#keterangan_tolak').attr("hidden", true);
+      $('#info_keterangan_tolak').attr("hidden", true);
+      $('#judul_dialog').html("DIALOG PENGAJUAN PAKLARING");
+    }
     pond_exitclear.removeFile();
     pond_resign.removeFile();
     // alert(nip);
@@ -762,6 +790,7 @@
 
         if (res['status'] == "200") {
 
+          $('#note_revisi_modal').html(res['data']['note_cancel']);
           $('#fullname_modal').html(res['data']['employee_id'] + ' / ' +res['data']['first_name']);
           $('#nikpt_modal').html(res['data']['ktp_no'] + ' / ' +res['data']['company_name']);
           $('#propos_modal').html(res['data']['project_name'] + ' / ' +res['data']['designation_name']);
@@ -769,6 +798,7 @@
           $('#leavedate_field').val(res['data']['resign_date']);
 
           $('#field_secid').val(res['data']['secid']);
+          $('#field_is_revisi').val(is_revisi);
           $('#field_employee_id').val(res['data']['employee_id']);
           $('#field_fullname').val(res['data']['first_name']);
           $('#field_ktp').val(res['data']['ktp_no']);
@@ -840,6 +870,30 @@
 </script>
 
 <script>
+  
+  //-----delete addendum-----
+  function deleteSkk(id) {
+    //alert("masuk fungsi delete addendum");
+    // AJAX request
+    $.ajax({
+      url: '<?= base_url() ?>admin/Employee_paklaring_status/delete_pengajuan_skk/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        id: id
+      },
+      success: function(response) {
+        alert("Berhasil Delete Pengajuan SKK");
+        employee_table.ajax.reload(null, true);
+      },
+      error: function() {
+        alert("Gagal Delete Pengajuan SKK");
+      }
+    });
+  }
+</script>
+
+<script>
   $('#status_resign_select').change(function() {
     var status_r = $(this).val();
 
@@ -866,12 +920,16 @@
 
     if ((status_t == "1")) {
             $('#keterangan_tolak').attr("hidden", false);
+            $('#info_keterangan_tolak').attr("hidden", true);
             $('#btn_tolak').attr("hidden", false);
+            $('#btn_revisi').attr("hidden", true);
             $('#btn_approve').attr("hidden", true);
     } else {
 
             $('#keterangan_tolak').attr("hidden", true);
+            $('#info_keterangan_tolak').attr("hidden", false);
             $('#btn_tolak').attr("hidden", true);
+            $('#btn_revisi').attr("hidden", true);
             $('#btn_approve').attr("hidden", false);
     }
   });
@@ -891,7 +949,7 @@
   }
 }
 
-  function release_paklaring() {
+  function release_paklaring(is_revisi) {
     var secid = $("#field_secid").val();
     var employee_id = $("#field_employee_id").val();
     var employee_name = $("#field_fullname").val();
@@ -910,6 +968,7 @@
     var resign_status = $("#status_resign_select").val();
     var exit_clearance = $("#link_file_exitclear").val();
     var resign_letter = $("#link_file_resign").val();
+    var cancel_description = $("#isi_tolak").val();
 
 
     const uniqueTimestamp = Date.now();
@@ -944,47 +1003,89 @@
     }
     
     var nomor_surat = '00'+secid+'/'+ns;
-    var session_id = '<?php echo $session['employee_id']; ?>';
+    var session_id = '<?php echo $session['employee_name']; ?>';
 
     if(pesan_joindate!="" || pesan_leavedate!=""){
 
     } else {
-    // AJAX untuk save data diri
-      $.ajax({
-        // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
-        url: '<?= base_url() ?>admin/Employee_paklaring_status/update_pengajuan_skk/',
-        method: 'post',
-        data: {
-          [csrfName]: csrfHash,
-          secid: secid,
-          docid: uniqueTimestamp,
-          jenis_dokumen: jenis_dokumen,
-          nomor_dokumen: nomor_surat,
-          join_date: join_date,
-          resign_date: resign_date,
-          bpjs_join: bpjs_join,
-          bpjs_date: bpjs_date,
-          resign_status: resign_status,
-          exit_clearance: exit_clearance,
-          resign_letter: resign_letter,
-          session_hrd: session_id,
-          company_id: company_id,
-          company_name : company_name,
 
-        },
-        beforeSend: function() {},
-        success: function() {
+        if (is_revisi==0){
 
-          employee_table.ajax.reload(null, true);
-          // tabel_employees.ajax.reload(null, false);
+          // AJAX untuk save data diri
+          $.ajax({
+            // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+            url: '<?= base_url() ?>admin/Employee_paklaring_status/update_pengajuan_skk/',
+            method: 'post',
+            data: {
+              [csrfName]: csrfHash,
+              secid: secid,
+              docid: uniqueTimestamp,
+              jenis_dokumen: jenis_dokumen,
+              nomor_dokumen: nomor_surat,
+              join_date: join_date,
+              resign_date: resign_date,
+              bpjs_join: bpjs_join,
+              bpjs_date: bpjs_date,
+              resign_status: resign_status,
+              exit_clearance: exit_clearance,
+              resign_letter: resign_letter,
+              session_hrd: session_id,
+              company_id: company_id,
+              company_name : company_name,
 
-          alert("Behasil simpan Pengajuan Paklaring");
-          $('#editRekeningModal').modal('hide');
-        },
-        error: function(xhr, status, error) {
-          alert("error save kontak client");
+            },
+            beforeSend: function() {},
+            success: function() {
+
+              employee_table.ajax.reload(null, true);
+              // tabel_employees.ajax.reload(null, false);
+
+              alert("Behasil simpan Pengajuan Paklaring");
+              $('#editRekeningModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+              alert("error save kontak client");
+            }
+          });
+        } else {
+
+
+          // AJAX untuk save data diri
+          $.ajax({
+            // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+            url: '<?= base_url() ?>admin/Employee_paklaring_status/update_revisi_skk/',
+            method: 'post',
+            data: {
+              [csrfName]: csrfHash,
+              secid: secid,
+              jenis_dokumen: jenis_dokumen,
+              join_date: join_date,
+              resign_date: resign_date,
+              bpjs_join: bpjs_join,
+              bpjs_date: bpjs_date,
+              resign_status: resign_status,
+              exit_clearance: exit_clearance,
+              resign_letter: resign_letter,
+              cancel_status: 0,
+              modifiedby: session_id,
+
+            },
+            beforeSend: function() {},
+            success: function() {
+
+              employee_table.ajax.reload(null, true);
+              // tabel_employees.ajax.reload(null, false);
+
+              alert("Revisi Behasil disimpan");
+              $('#editRekeningModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+              alert("error save kontak client");
+            }
+          });
+
         }
-      });
+
     }
 
   }

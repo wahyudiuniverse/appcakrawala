@@ -159,6 +159,30 @@
 
 
 	//save data Kontak client
+	public function update_revisi_skk($postData)
+	{
+		//Cek variabel post
+		$data = [
+			'jenis_dokumen'     => trim($postData['jenis_dokumen']),
+			'join_date'     	=> trim($postData['join_date']),
+			'resign_date'     	=> trim($postData['resign_date']),
+			'bpjs_join'     	=> trim($postData['bpjs_join']),
+			'bpjs_date'     	=> trim($postData['bpjs_date']),
+			'resign_status'		=> trim($postData['resign_status']),
+			'exit_clearance'	=> trim($postData['exit_clearance']),
+			'resign_letter'		=> trim($postData['resign_letter']),
+			'cancel_status'		=> 0,
+			'modifiedby'		=> trim($postData['modifiedby']),
+			'modifiedon'		=> date("Y-m-d h:m:i"),
+		];
+		
+		// $this->db->insert('xin_qrcode_skk', $data);
+		//update data
+		$this->db->where('secid', $postData['secid']);
+		$this->db->update('xin_qrcode_skk', $data);
+	}
+
+	//save data Kontak client
 	public function update_tolak_pengajuan_skk($postData)
 	{
 		//Cek variabel post

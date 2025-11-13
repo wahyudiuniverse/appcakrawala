@@ -128,6 +128,18 @@ class Employee_paklaring_status extends MY_Controller {
 
 
 	//save Kontak Client
+	public function update_revisi_skk()
+	{
+		$postData = $this->input->post();
+
+		// update data NPWP Client
+		$data = $this->Company_model->update_revisi_skk($postData);
+
+		// echo json_encode($data);
+	}
+
+
+	//save Kontak Client
 	public function update_tolak_pengajuan()
 	{
 		$postData = $this->input->post();
@@ -136,6 +148,20 @@ class Employee_paklaring_status extends MY_Controller {
 		$data = $this->Company_model->update_tolak_pengajuan_skk($postData);
 
 		// echo json_encode($data);
+	}
+
+
+	//delete addendum
+	public function delete_pengajuan_skk()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Employees_model->delete_skk($postData);
+
+		echo json_encode($data);
 	}
 
 // get company > departments
@@ -207,6 +233,7 @@ class Employee_paklaring_status extends MY_Controller {
 				'link_surat_resign'			=> $data['resign_letter'],
 				'exit_clearance'			=> '<embed class="form-group col-md-12" id="output_exitclearance" type="application/pdf" src="'.$data['exit_clearance'].'"></embed>',
 				'surat_resign'			=> '<embed class="form-group col-md-12" id="output_surat_resign" type="application/pdf" src="'.$data['resign_letter'].'"></embed>',
+				'note_cancel'			=> '<i>Catatan: </i><br>'. $data['cancel_description'],
 
 			);
 

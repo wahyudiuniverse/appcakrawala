@@ -4437,7 +4437,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		// alert(secid);
 		// alert(nip);
 
-		var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
+		// var link_eslip = '<?= base_url() ?>admin/skk/view/' + secid + '/' + nip;
+		var link_eslip = '<?= base_url() ?>admin/dokumen_skk/view/' + secid;
 		var html_text = '<a href="' + link_eslip + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE SURAT KETERANGAN</button></a></br><object height="500px" data="' + link_eslip + '" type="application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
 		// var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
 		// var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
