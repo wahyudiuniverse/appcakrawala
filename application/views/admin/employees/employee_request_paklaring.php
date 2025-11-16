@@ -286,6 +286,7 @@
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>',
     csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
   var session_id = '<?php echo $session['employee_id']; ?>';
+  var session_fullname = '<?php echo $session['employee_name']; ?>';
 
   var loading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
   var loading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
@@ -517,7 +518,7 @@
                   // select the right value in the response here and return
                   // return res;
                   var serverResponse = jQuery.parseJSON(res);
-                  alert(serverResponse['0']['link_file']);
+                  // alert(serverResponse['0']['link_file']);
                   $('#link_file_exitclear').val(serverResponse['0']['link_file']);
                   // serverResponse = JSON.parse(res);
                   // console.log(serverResponse['0']['link_file']);
@@ -638,7 +639,7 @@
 <!-- button next kontak client -->
 <script>
   function next_kontak_client() {
-    var request_by = '<?php echo $session['employee_id']; ?>';
+    var request_by = '<?php echo $session['employee_name']; ?>';  
     var employee_id = $("#field_employee_id").val();
     var employee_name = $("#field_fullname").val();
     var ktp = $("#field_ktp").val();
@@ -657,7 +658,7 @@
     var resign_letter = $("#link_file_resign").val();
     var request_date = $("#field_request_date").val();
 
-    alert(exit_clearance);
+    // alert(exit_clearance);
 
 
     var pesan_joindate ="";

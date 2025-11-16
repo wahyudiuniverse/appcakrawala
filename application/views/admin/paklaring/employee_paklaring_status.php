@@ -875,21 +875,52 @@
   function deleteSkk(id) {
     //alert("masuk fungsi delete addendum");
     // AJAX request
-    $.ajax({
-      url: '<?= base_url() ?>admin/Employee_paklaring_status/delete_pengajuan_skk/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        id: id
-      },
-      success: function(response) {
-        alert("Berhasil Delete Pengajuan SKK");
-        employee_table.ajax.reload(null, true);
-      },
-      error: function() {
-        alert("Gagal Delete Pengajuan SKK");
-      }
-    });
+
+    var session_id = '<?php echo $session['employee_name']; ?>';
+
+          // AJAX untuk save data diri
+          $.ajax({
+
+            url: '<?= base_url() ?>admin/Employee_paklaring_status/delete_pengajuan_skk/',
+            method: 'post',
+            data: {
+              [csrfName]: csrfHash,
+              secid: id,
+              remove_status: 1,
+              remove_by: session_id,
+
+            },
+            beforeSend: function() {},
+            success: function() {
+
+              // employee_table.ajax.reload(null, true);
+              // tabel_employees.ajax.reload(null, false);
+
+              alert("Berhasil Delete Pengajuan SKK");
+              employee_table.ajax.reload(null, true);
+            },
+            error: function(xhr, status, error) {
+              alert("Gagal Delete Pengajuan SKK");
+            }
+          });
+
+
+    // $.ajax({
+    //   url: '<?= base_url() ?>admin/Employee_paklaring_status/delete_pengajuan_skk/',
+    //   method: 'post',
+    //   data: {
+    //     [csrfName]: csrfHash,
+    //     id: id,
+    //     id: id
+    //   },
+    //   success: function(response) {
+    //     alert("Berhasil Delete Pengajuan SKK");
+    //     employee_table.ajax.reload(null, true);
+    //   },
+    //   error: function() {
+    //     alert("Gagal Delete Pengajuan SKK");
+    //   }
+    // });
   }
 </script>
 
@@ -1136,11 +1167,11 @@
           employee_table.ajax.reload(null, true);
           // tabel_employees.ajax.reload(null, false);
 
-          alert("Behasil simpan Pengajuan Paklaring");
+          alert("Behasil Menolak Pengajuan");
           $('#editRekeningModal').modal('hide');
         },
         error: function(xhr, status, error) {
-          alert("error save kontak client");
+          alert("error save tolak pengajuan");
         }
       });
     }

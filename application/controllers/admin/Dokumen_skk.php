@@ -415,6 +415,7 @@ class Dokumen_skk extends MY_Controller {
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$vskk = $this->uri->segment(4);
+		// $vskk = $this->uri->segment(3);
 		// $vpin = $this->uri->segment(5);
 		// $employee_id = $this->uri->segment(5);
 		// print_r($vskk);

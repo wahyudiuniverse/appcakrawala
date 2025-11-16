@@ -243,9 +243,9 @@ function get_list_skk_report($postData = null)
 			$searchQuery = "";
 			if ($searchValue != '') {
 				if (strlen($searchValue) >= 3) {
-					$searchQuery = " (xin_qrcode_skk.nip like '%" . $searchValue .  "%' 
-					or xin_qrcode_skk.employee_name like '%" . $searchValue . "%'
-					or xin_qrcode_skk.ktp like '%" . $searchValue . "%') ";
+					$searchQuery = " (xin_qrcode_skk.employee_name like '%" . $searchValue .  "%' 
+					or xin_qrcode_skk.ktp like '%" . $searchValue . "%'
+					or xin_qrcode_skk.nip like '%" . $searchValue . "%') ";
 				}
 			}
 
@@ -296,7 +296,6 @@ function get_list_skk_report($postData = null)
 
 			## Total number of record with filtering
 			$this->db->select('count(*) as allcount');
-			$this->db->where($kondisiDefaultQuery);
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
 			}
@@ -309,6 +308,7 @@ function get_list_skk_report($postData = null)
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
 			}
+			$this->db->where($kondisiDefaultQuery);
 			// $dbtraxes->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 			$records = $this->db->get('xin_qrcode_skk')->result();
 			$totalRecordwithFilter = $records[0]->allcount;
@@ -331,7 +331,6 @@ function get_list_skk_report($postData = null)
 			// $dbtraxes->select('tx_cio.datetimephone_in');
 			// $dbtraxes->select('tx_cio.latitude_in');
 			// $dbtraxes->select('tx_cio.datetimephone_out');
-			$this->db->where($kondisiDefaultQuery);
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
 			}
@@ -344,6 +343,7 @@ function get_list_skk_report($postData = null)
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
 			}
+			$this->db->where($kondisiDefaultQuery);
 			// $this->db->order_by($columnName, $columnSortOrder);
 			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 			//$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
@@ -462,7 +462,7 @@ function get_list_skk_report($postData = null)
 				// $editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				// $delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
-				$open_sk = '<button onclick="lihat_sk(' . $record->secid . '/'. $record->nip .')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">'.$record->nomor_dokumen.'</button>';
+				$open_sk = '<button onclick="lihat_sk(' . $record->secid . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">'.$record->nomor_dokumen.'</button>';
 
 
 				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';

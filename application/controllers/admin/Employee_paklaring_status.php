@@ -161,7 +161,7 @@ class Employee_paklaring_status extends MY_Controller {
 		// Get data
 		$data = $this->Employees_model->delete_skk($postData);
 
-		echo json_encode($data);
+		// echo json_encode($data);
 	}
 
 // get company > departments

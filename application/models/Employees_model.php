@@ -725,7 +725,7 @@ class Employees_model extends CI_Model
 			$this->db->select('max(secid) as max_secid');
 			$this->db->from('xin_qrcode_skk');
 			$this->db->where('nip', $id);
-			// $this->db->where('cancel_stat', 0);
+			$this->db->where('remove_status', 0);
 			// $this->db->order_by('createdon', 'desc');
 			// $this->db->limit(1);
 
@@ -1169,6 +1169,31 @@ class Employees_model extends CI_Model
 				return "";
 			} else {
 				return $query['ktp_no'];
+			}
+		}
+	}
+
+
+	//ambil akses profile
+	function get_akses_profile($employee_id, $project_id)
+	{
+		if ($employee_id == null || $project_id == null) {
+			return "0";
+		} else if ($employee_id == 0 || $project_id == 0) {
+			return "0";
+		} else {
+			$this->db->select('secid');
+			$this->db->from('xin_projects_akses');
+			$this->db->where('nip', $employee_id);
+			$this->db->where('project_id', $project_id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['sub_project_name'];
+			if (empty($query)) {
+				return "0";
+			} else {
+				return "1";
 			}
 		}
 	}
@@ -3372,6 +3397,7 @@ class Employees_model extends CI_Model
 				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
 				// }
 				$get_skk_status = $this->get_skk($record->employee_id);
+				$check_akses = $this->get_akses_profile($session_id, $record->project_id);
 
 
 					$open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
@@ -3382,7 +3408,13 @@ class Employees_model extends CI_Model
 					$open_profile = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
 
 					$open_profile_blacklist = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
+
+
+					$not_akses_profile = '<h8><span style="color:#606060;font-weight:bold;">AKSES DIBATASI</span></h8>';
+
 					$text_resign = "";
+
+					
 
 				if (empty($record->status_resign) || ($record->status_resign == "")) {
 					$text_resign 	= "";
@@ -3430,6 +3462,11 @@ class Employees_model extends CI_Model
 				} else {
 					$text_resign 	= "";
 					$action 		= "";
+				}
+
+				if($check_akses == 0){
+
+					$action 		= $not_akses_profile;
 				}
 
 				//cek komparasi string
@@ -4118,7 +4155,7 @@ class Employees_model extends CI_Model
 			// AND	pkwt_id = " . $contract_id . "
 			// )";
 			// $kondisiDefaultQuery = "`xin_employees.user_id` != '1'";
-			$kondisiDefaultQuery = "xin_qrcode_skk.approve_hrd is null AND xin_qrcode_skk.doc_id = 0";
+			$kondisiDefaultQuery = "xin_qrcode_skk.approve_hrd is null AND xin_qrcode_skk.doc_id = 0 AND xin_qrcode_skk.remove_status = 0";
 
 			## Total number of records without filtering
 			$this->db->select('count(*) as allcount');
@@ -4158,6 +4195,7 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_qrcode_skk.employee_name');
 			$this->db->select('xin_qrcode_skk.posisi_jabatan');
 			$this->db->select('xin_qrcode_skk.penempatan');
+			$this->db->select('xin_qrcode_skk.project_id');
 			$this->db->select('xin_qrcode_skk.project_name');
 			$this->db->select('xin_qrcode_skk.company_name');
 			$this->db->select('xin_qrcode_skk.request_resign_date');
@@ -4194,48 +4232,8 @@ class Employees_model extends CI_Model
 			$data = array();
 
 			foreach ($records as $record) {
-				//verification id
-				// $actual_verification_id = "";
-				// if ((is_null($record->verification_id)) || ($record->verification_id == "") || ($record->verification_id == "0")) {
-				// 	$actual_verification_id = "e_" . $record->user_id;
-				// } else {
-				// 	$actual_verification_id = $record->verification_id;
-				// }
 
-				// //cek status validation ke database
-				// $nik_validation = "0";
-				// $nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
-				// if (is_null($nik_validation_query)) {
-				// 	$nik_validation = "0";
-				// } else {
-				// 	$nik_validation = $nik_validation_query['status'];
-				// }
-
-				// $validate_nik = "";
-				// if($nik_validation == "1"){
-				// 	$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				// } else {
-				// 	$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				// }
-				// $text_periode_from = "";
-				// $text_periode_to = "";
-				// $text_periode = "";
-				// if (empty($record->from_date) || ($record->from_date == "")) {
-				// 	$text_periode_from = "";
-				// } else {
-				// 	$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
-				// }
-				// if (empty($record->to_date) || ($record->to_date == "")) {
-				// 	$text_periode_to = "";
-				// } else {
-				// 	$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
-				// }
-				// if (($text_periode_from == "") && ($text_periode_to == "")) {
-				// 	$text_periode = "";
-				// } else {
-				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
-				// }
-				// $get_skk_status = $this->get_skk($record->secid);
+				$check_akses = $this->get_akses_profile($session_id, $record->project_id);
 
 
 					$open_approve = '<button onclick="open_approve(' . $record->secid . ' , 0)" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
@@ -4245,21 +4243,33 @@ class Employees_model extends CI_Model
 
 					$open_cancel = '<h8><span style="color:#f45555;font-weight:bold;">DITOLAK HRD</span></h8>';
 
-					$open_revisi = '<button onclick="deleteSkk(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENGAJUAN</button>';
+					$open_revisi = '<button onclick="open_approve(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENGAJUAN</button>';
 
 					$open_remove = '<button onclick="deleteSkk(' . $record->secid . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">HAPUS</button>';
 
+					$not_akses_profile = '<h8><span style="color:#606060;font-weight:bold;">AKSES DIBATASI</span></h8>';
 
-
-					// $open_profile = '<button onclick="viewEmployee(' . $record->secid . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
-
-					// $open_profile_blacklist = '<button onclick="viewEmployee(' . $record->secid . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
-					// $text_resign = "";
+					$menunggu_approve_hrd = '<h8><span style="color:#e91e63;font-weight:bold;">Menunggu Approve HRD</span></h8>';
 
 				if ($record->cancel_status == 1){
-					$action = $open_cancel. ' ' .$open_revisi;
+
+					if($session_id == 21528204 || $session_id == 1){
+						$action = $open_cancel. ' ' .$open_revisi;
+					} else {
+						// $action = $menunggu_approve_hrd;
+						$action = $open_cancel. ' ' .$open_revisi;
+
+					}
+
 				} else {
-					$action = $open_approve. '<br>' . $open_remove;
+
+					if($session_id == 21528204 || $session_id == 1){
+						$action = $open_approve. '<br>'. $open_remove;
+					} else {
+						$action = $menunggu_approve_hrd;
+
+					}
+
 				}
 				// if (empty($record->status_resign) || ($record->status_resign == "")) {
 				// 	$text_resign 	= "";
@@ -4359,6 +4369,12 @@ class Employees_model extends CI_Model
 
 
 				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+
+				if($check_akses == 0){
+
+					$action 		= $not_akses_profile;
+				}
 
 				$data[] = array(
 					"aksi" => $action,
@@ -5160,8 +5176,29 @@ ORDER BY jab.designation_id ASC";
 	// Function to Delete selected record from table
 	public function delete_skk($postData)
 	{
-		$this->db->where('secid', $postData['id']);
-		$this->db->delete('xin_qrcode_skk');
+
+		//Cek variabel post
+		$data = [
+			'remove_status'		=> trim($postData['remove_status']),
+			'remove_by'			=> trim($postData['remove_by']),
+			'remove_on'			=> date("Y-m-d h:m:i"),
+		];
+		
+		// $this->db->insert('xin_qrcode_skk', $data);
+		//update data
+		$this->db->where('secid', $postData['secid']);
+		$this->db->update('xin_qrcode_skk', $data);
+
+		// $this->db->where('secid', $postData['id']);
+		// if ($this->db->update('xin_qrcode_skk', $data)) {
+		// 	return true;
+		// } else {
+		// 	return false;
+		// }
+
+
+		// $this->db->where('secid', $postData['id']);
+		// $this->db->delete('xin_qrcode_skk');
 	}
 
 	// Function to Delete selected record from table

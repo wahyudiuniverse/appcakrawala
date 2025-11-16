@@ -1061,6 +1061,10 @@ class Traxes_model extends CI_Model
 				//verification id
 
 
+
+					$open_revisi = '<button onclick="open_revisi(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENJUALAN</button>';
+
+
 				$data[] = array(
 					"aksi" => $record->secid,
 					"employee_id" => $record->employee_id,

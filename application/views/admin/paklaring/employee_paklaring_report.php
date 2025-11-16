@@ -475,7 +475,7 @@
 
 <!-- Tombol Lihat SK -->
 <script type="text/javascript">
-  function lihat_sk(secid, nip) {
+  function lihat_sk(secid) {
     //testing
     // alert(secid);
     // alert(nip);
