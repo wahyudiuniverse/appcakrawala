@@ -447,9 +447,9 @@
         //  targets: 11,
         //  type: 'date-eu'
         //}],
-        // 'order': [
-        //   [4, 'asc']
-        // ],
+        'order': [
+          [6, 'desc']
+        ],
         'ajax': {
           'url': '<?= base_url() ?>admin/Employee_paklaring_status/list_employees',
           data: {
@@ -470,13 +470,13 @@
             "orderable": true
           },
           {
-            data: 'employee_id',
-            "orderable": true,
+            data: 'nip',
+            //"orderable": false,
             //searchable: true
           },
           {
-            data: 'first_name',
-            "orderable": true,
+            data: 'employee_name',
+            //"orderable": false,
             //searchable: true
           },
           {
@@ -492,8 +492,8 @@
             "orderable": false,
           },
           {
-            data: 'request_date',
-            "orderable": false,
+            data: 'request_resign_date',
+            //"orderable": false,
           },
           {
             data: 'request_by',
@@ -603,9 +603,9 @@
         //  targets: 11,
         //  type: 'date-eu'
         //}],
-        // 'order': [
-        //   [4, 'asc']
-        // ],
+        'order': [
+          [6, 'desc']
+        ],
         'ajax': {
           'url': '<?= base_url() ?>admin/Employee_paklaring_status/list_employees',
           data: {
@@ -626,13 +626,13 @@
             "orderable": false
           },
           {
-            data: 'employee_id',
-            "orderable": false,
+            data: 'nip',
+            //"orderable": false,
             //searchable: true
           },
           {
-            data: 'first_name',
-            "orderable": false,
+            data: 'employee_name',
+            //"orderable": false,
             //searchable: true
           },
           {
@@ -648,8 +648,8 @@
             "orderable": false,
           },
           {
-            data: 'request_date',
-            "orderable": false,
+            data: 'request_resign_date',
+            //"orderable": false,
           },
           {
             data: 'request_by',
