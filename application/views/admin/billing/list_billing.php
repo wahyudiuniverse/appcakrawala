@@ -122,7 +122,7 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
-                <th>Periode</th>
+                <th>Periode Penggajian</th>
                 <th>NIP</th>
                 <th>Area Manager</th>
                 <th>Billing Area</th>
