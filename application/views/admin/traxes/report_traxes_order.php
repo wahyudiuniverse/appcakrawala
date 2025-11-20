@@ -10,11 +10,13 @@
 
 
 <!-- MODAL EDIT REKENING BANK -->
+
+<!-- MODAL APPROVE PENGAJUAN -->
 <div class="modal fade" id="editRekeningModal" tabindex="-1" role="dialog" aria-labelledby="editRekeningModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="editRekeningModalLabel">DIALOG PENGAJUAN PAKLARING</h5>
+        <h5 class="modal-title" id="judul_dialog">DIALOG REVISI PENJUALAN</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -22,47 +24,76 @@
       <div class="modal-body">
         <div class="isi-modal-edit-rekening">
           <div class="container" id="container_modal_rekening">
-            <?php $attributes = array('name' => 'rekening_form', 'id' => 'rekening_form', 'autocomplete' => 'off', 'class' => 'm-b-1'); ?>
-            <?php echo form_open_multipart('admin/profile/uploadaddendum/', $attributes); ?>
+
             <div class="row">
               <table class="table table-striped col-md-12">
                 <tbody>
-                  <tr>
-                    <td style='width:25%'><strong>Tanggal Bergabung / Date of Join <span class="icon-verify-bank"></span></strong></td>
-                    <td style='width:75%'>
-                      
-                      <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
 
-                      <span id='pesan_nama_bank'></span>
-                      <input hidden name="nama_bank" id="nama_bank" placeholder="Nomor Rekening Bank" type="text" value="">
-                    </td>
-                  </tr>
+
                   <tr>
-                    <td><strong>Tanggal Berakhir / Date of Leave <span class="icon-verify-norek"></span></strong></td>
-                    <td>
+                    <td style='width:25%'><strong>NIP / Nama Lengkap <span class="icon-verify-bank"></span></strong></td>
                       
-                      <input class="form-control date" readonly placeholder="Tanggal Resign" name="date_of_leave" type="text" value="">
-                      <span id='pesan_nomor_rekening'></span>
+                    <td ><strong><span class="icon-verify-bank" id="fullname_modal" name="fullname_modal"></span></strong></td>
                     </td>
                   </tr>
 
                   <tr>
-                    <td><strong>Upload Exitclearance</strong></td>
-                    <td>
-                      <div id="file_buku_tabungan_kosong" class="mb-2">BELUM ADA DATA. SILAHKAN UPLOAD DOKUMEN EXITCLEARANCE</div>
-                      
-                      <div id="form_upload_buku_tabungan" class="form-group">
-                        <fieldset class="form-group">
-                          <input type="file" class="form-control-file" id="buku_rekening" name="buku_rekening" accept="application/pdf, image/png, image/jpg, image/jpeg">
-                          <small>Jenis File: JPG, JPEG, PNG, PDF | Size MAX 5 MB</small>
-                        </fieldset>
-                      </div>
-                      <!-- <input class="form-control" type="file" id="buku_rekening" name="buku_rekening" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"> -->
-                      <span id='pesan_buku_rekening'></span>
+                    <td style='width:25%'><strong>Project / Posisi <span class="icon-verify-bank"></span></strong></td>
+                    <td ><strong><span class="icon-verify-bank" id="propos_modal" name="propos_modal"></span></strong></td>
                     </td>
                   </tr>
+
+                  <tr>
+                    <td style='width:25%'><strong>Toko/Outlet <span class="icon-verify-bank"></span></strong></td>
+                    <td ><strong><span class="icon-verify-bank" id="toko_modal" name="toko_modal"></span></strong></td>
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td style='width:25%'><strong>Produk/SKU Material <span class="icon-verify-bank"></span></strong></td>
+                    <td ><strong><span class="icon-verify-bank" id="material_modal" name="material_modal"></span></strong></td>
+                    </td>
+                  </tr>
+
+
+
+                  <tr style="background: #ffec83;">
+                    <td><strong> Jumlah Produk (QTY) <span class="icon-verify-norek"></span></strong></td>
+                    <td>
+
+                      <input style="text-align: right;" class="form-control" placeholder="Pastikan Jumlah Produk (QTY) angka." name="order_qty" id="order_qty"></input>
+                      <span id='pesan_isi_qty'></span>
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td style='width:25%'><strong> Harga Satuan @Rp.<span class="icon-verify-bank"></span></strong></td>
+                    <td style="text-align: right;"><strong><span class="icon-verify-bank" id="harga_satuan" name="harga_satuan"></span></strong></td>
+                    </td>
+                  </tr>
+
+                  <tr style="background: #ffec83;">
+                    <td><strong>Total Harga (Values) Rp.<span class="icon-verify-norek"></span></strong></td>
+                    <td>
+
+
+                      <input style="text-align: right;" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="Pastikan Total Harga (Value) angka." name="total_harga" id="total_harga"></input>
+                      <span id='pesan_total_harga'></span>
+                    </td>
+                  </tr>
+
+
                 </tbody>
               </table>
+
+
+                <input hidden type="text" id="field_secid" value="0">
+                <input hidden type="text" id="field_toko_id" value="0">
+                <input hidden type="text" id="field_employee_id" value="0">
+                <input hidden type="text" id="field_fullname" value="0">
+
             </div>
           </div>
         </div>
@@ -71,11 +102,19 @@
 
       </div>
       <div class="modal-footer">
-        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
-        <button id='button_save_rekening' name='button_save_rekening' type='submit' class='btn btn-primary'>Save Rekening</button>
+        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Tutup</button>
+
+      
+              <button
+                type="button" id="btn_revisi"
+                onclick="save_revisi()"
+                class="btn btn-success btn-label float-right ms-auto">
+                <i
+                  class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>SAVE REVISI PENJUALAN
+              </button>
+
       </div>
 
-      <?php echo form_close(); ?>
     </div>
   </div>
 </div>
@@ -182,13 +221,11 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
-                <th>NIP</th>
-                <th>Nama Lengkap</th>
+                <th>NIP/Nama Lengkap</th>
                 <th>Project</th>
                 <th>Posisi/Jabatan</th>
                 <th>Area/Penempatan</th>
                 <th>Toko</th>
-                <th>GTIN</th>
                 <th>Produk/Material</th>
                 <th>Jumlah</th>
                 <th>Harga</th>
@@ -203,6 +240,30 @@
   </div>
 </div>
 
+<script type="text/javascript">
+  var rupiah_tot = document.getElementById("total_harga");
+  rupiah_tot.addEventListener("keyup", function(e) {
+    rupiah_tot.value = convertRupiah(this.value);
+  });
+
+
+  function convertRupiah(angka, prefix) {
+    var number_string = angka.replace(/[^,\d]/g, "").toString(),
+      split = number_string.split(","),
+      sisa = split[0].length % 3,
+      rupiah = split[0].substr(0, sisa),
+      ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    if (ribuan) {
+      separator = sisa ? "." : "";
+      rupiah += separator + ribuan.join(".");
+    }
+
+    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+    return prefix == undefined ? rupiah : rupiah ? prefix + rupiah : "";
+  }
+
+</script>
 
 
 <script type="text/javascript">
@@ -299,10 +360,6 @@
 
         },
         'columns': [{
-            data: 'employee_id',
-            "orderable": false
-          },
-          {
             data: 'fullname',
             "orderable": false,
             //searchable: true
@@ -322,10 +379,6 @@
           },
           {
             data: 'customer_name',
-            "orderable": false,
-          },
-          {
-            data: 'barcode',
             "orderable": false,
           },
           {
@@ -430,6 +483,7 @@
   }
 </script>
 
+<!-- filter project to subproject -->
 <script>
   // Project Vacant Change - Jabatan vacant
     $('#aj_project').change(function() {
@@ -461,8 +515,160 @@
             }
         });
     });
+</script>
+
+
+<!-- Tombol Open Revisi Order -->
+<script type="text/javascript">
+  function open_revisi(secid) {
+
+
+    // alert(nip);
+    // AJAX untuk ambil data buku tabungan employee terupdate
+    $.ajax({
+      url: '<?= base_url() ?>admin/Traxes_report_order/get_data_sellout/',
+      method: 'post',
+      data: {
+        [csrfName]: csrfHash,
+        secid: secid,
+      },
+      beforeSend: function() {
+        // $('#judul-modal-edit').html("File Exit Clearance");
+        // $('#button_download_dokumen_conditional').html("");
+        // $('.isi-modal').html(loading_html_text);
+        // $('#button_save_pin').attr("hidden", true);
+        $('#editRekeningModal').appendTo("body").modal('show');
+
+        // $('#editRekeningModal').modal('show');
+        // $('.info-modal-edit-rekening').attr("hidden", false);
+        // $('.isi-modal-edit-rekening').attr("hidden", true);
+        // $('.info-modal-edit-rekening').html(loading_html_text);
+        // $('#button_save_rekening').attr("hidden", true);
+      },
+      success: function(response) {
+        // alert("TES1");
+        var res = jQuery.parseJSON(response);
+        const uniqueTimestamp = Date.now();
+
+
+
+        if (res['status'] == "200") {
+
+          $('#fullname_modal').html(res['data']['employee_id'] + ' / ' +res['data']['employee_name']);
+          $('#propos_modal').html(res['data']['project_name'] + ' / ' +res['data']['jabatan']);
+          $('#toko_modal').html(res['data']['customer_name']);
+          $('#material_modal').html(res['data']['material_name']);
+          $('#order_qty').val(res['data']['qty']);
+          $('#harga_satuan').html(res['data']['price']);
+          $('#total_harga').val(res['data']['total']);
+
+
+          $('#field_secid').val(res['data']['secid']);
+          $('#field_toko_id').val(res['data']['customer_id']);
+          $('#field_material_id').val(res['data']['material_id']);
+ 
+        } else {
+          html_text = res['pesan'];
+          // $('.isi-modal').html(html_text);
+          // $('#button_save_pin').attr("hidden", true);
+        }
+      },
+      error: function(xhr, status, error) {
+        alert("error");
+        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+        $('.isi-modal').html(html_text); //coba pake iframe
+        $('#button_save_pin').attr("hidden", true);
+      }
+    });
+
+  }
 
 </script>
+
+<script>
+  
+  function save_revisi() {
+    var secid = $("#field_secid").val();
+    // var employee_id = $("#field_employee_id").val();
+    // var employee_name = $("#field_fullname").val();
+    // var ktp = $("#field_ktp").val();
+    // var jabatan = $("#field_jabatan").val();
+    // var project_id = $("#field_project_id").val();
+    // var project_name = $("#field_project_name").val();
+    // var company_id = $("#field_company_id").val();
+    // var company_name = $("#field_company_name").val();
+
+    var qty = $("#order_qty").val();
+    var total_harga = $("#total_harga").val();
+
+    // var bpjs_join = $("#joindate_field").val();
+    // var bpjs_date = $("#leavedate_field").val();
+    // var jenis_dokumen = $("#jenis_dokumen").val();
+    // var resign_status = $("#status_resign_select").val();
+    // var exit_clearance = $("#link_file_exitclear").val();
+    // var resign_letter = $("#link_file_resign").val();
+    // var cancel_description = $("#isi_tolak").val();
+
+
+    // const uniqueTimestamp = Date.now();
+    var pesan_qty ="";
+    var pesan_total ="";
+
+    if (qty == "") {
+          pesan_qty = "<small style='color:#FF0000;'>Jumlah (QTY) produk tidak boleh kosong..!</small>";
+          $('#pesan_perusahaan_id_modal').focus();
+    }
+    if (total_harga == "") {
+          pesan_total = "<small style='color:#FF0000;'>Total Harga tidak boleh kosong..!</small>";
+          $('#pesan_leavedate').focus();
+    }
+
+    $('#pesan_isi_qty').html(pesan_qty);
+    $('#pesan_total_harga').html(pesan_total);
+
+  
+    var session_id = '<?php echo $session['employee_name']; ?>';
+
+    if(pesan_qty!="" || pesan_total!=""){
+
+    } else {
+
+          // AJAX untuk save data diri
+          $.ajax({
+            // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+            url: '<?= base_url() ?>admin/Traxes_report_order/update_sellout/',
+            method: 'post',
+            data: {
+              [csrfName]: csrfHash,
+              secid: secid,
+              qty: qty,
+              total: total_harga,
+              modifiedby: session_id,
+
+            },
+            beforeSend: function() {},
+            success: function() {
+
+              employee_table.ajax.reload(null, true);
+              // tabel_employees.ajax.reload(null, false);
+
+              alert("Behasil simpan Perubahan Penjualan");
+              $('#editRekeningModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+              alert("error save perubahan");
+            }
+          });
+        
+
+    }
+
+  }
+
+</script>
+
 
 <style type="text/css">
   

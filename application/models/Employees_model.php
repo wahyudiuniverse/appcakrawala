@@ -4218,7 +4218,7 @@ class Employees_model extends CI_Model
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
 			}
-			// $this->db->order_by($columnName, $columnSortOrder);
+			$this->db->order_by('xin_qrcode_skk.employee_name', 'ASC');
 			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 			//$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 			// $this->db->join('(select max(contract_id), employee_id from xin_employee_contract group by employee_id) b', 'b.employee_id = xin_employees.employee_id', 'inner');
@@ -4253,7 +4253,7 @@ class Employees_model extends CI_Model
 
 				if ($record->cancel_status == 1){
 
-					if($session_id == 21528204 || $session_id == 1){
+					if($session_id == 21528204 || $session_id == 1 || $session_id == 21532091){
 						$action = $open_cancel. ' ' .$open_revisi;
 					} else {
 						// $action = $menunggu_approve_hrd;
@@ -4263,7 +4263,7 @@ class Employees_model extends CI_Model
 
 				} else {
 
-					if($session_id == 21528204 || $session_id == 1){
+					if($session_id == 21528204 || $session_id == 1 || $session_id == 21532091){
 						$action = $open_approve. '<br>'. $open_remove;
 					} else {
 						$action = $menunggu_approve_hrd;

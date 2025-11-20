@@ -1688,7 +1688,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 																<tr>
 																	<th scope="row" style="width: 30%">QR Code</th>
 																	<td>
-																		<img src='<?= base_url() ?>assets/images/<?php echo $sk['qr_code']; ?>' width='150px'>
+																		<img src='<?= base_url().$sk['qr_code']; ?>' width='150px'>
 																		<?php //echo $sk['button_open']; 
 																		?>
 																		<?php //echo $sk['button_upload']; 

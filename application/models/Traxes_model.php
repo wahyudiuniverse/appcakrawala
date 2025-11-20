@@ -1062,13 +1062,18 @@ class Traxes_model extends CI_Model
 
 
 
-					$open_revisi = '<button onclick="open_revisi(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENJUALAN</button>';
+					$open_revisi = '<button onclick="open_revisi(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">EDIT SELLOUT</button>';
+					if($session_id=='24534600' || $session_id=='24528203' || $session_id='1'){
+						$order_date_modify = strtoupper($record->order_date). ' ' . $open_revisi; 
+					} else {
+						$order_date_modify = strtoupper($record->order_date);
+					}
 
 
 				$data[] = array(
 					"aksi" => $record->secid,
 					"employee_id" => $record->employee_id,
-					"fullname" => strtoupper($record->employee_name),
+					"fullname" => '['.$record->employee_id.']<br>'.strtoupper($record->employee_name),
 					"customer_id" => strtoupper($record->customer_id),
 					"customer_name" => strtoupper($record->customer_name),
 					"project_id" => strtoupper($record->project_id),
@@ -1078,13 +1083,13 @@ class Traxes_model extends CI_Model
 					"penempatan" => strtoupper($record->penempatan),
 					"material_id" => strtoupper($record->material_id),
 					"barcode" => strtoupper($record->barcode),
-					"nama_material" => strtoupper($record->nama_material),
+					"nama_material" => '['.strtoupper($record->barcode).']<br>'.strtoupper($record->nama_material),
 					"brand" => strtoupper($record->brand),
 					"poin" => strtoupper($record->poin),
 					"qty" => strtoupper($record->qty),
-					"price" => strtoupper($record->price),
-					"total" => strtoupper($record->total),
-					"order_date" => strtoupper($record->order_date),
+					"price" =>$this->Xin_model->rupiah_titik(strtoupper($record->price)),
+					"total" => $this->Xin_model->rupiah_titik(strtoupper($record->total)),
+					"order_date" => $order_date_modify,
 
 				);
 
@@ -1256,6 +1261,54 @@ class Traxes_model extends CI_Model
 
 		return $data;
 		//json_encode($data);
+	}
+
+
+	//ambil data SKK xin_qrcode_skk
+	public function get_data_sellout_model($postData)
+	{
+
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$dbtraxes->select('*');
+		$dbtraxes->from('xin_mobile_order');
+		$dbtraxes->where($postData);
+		$dbtraxes->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $dbtraxes->get()->row_array();
+
+		return $query;
+	}
+
+
+	//ambil nama produk / material
+	function get_product_name($id)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$dbtraxes->select('nama_material');
+			$dbtraxes->from('xin_sku_material');
+			$dbtraxes->where('kode_sku', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $dbtraxes->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['nama_material'];
+			}
+		}
 	}
 
 
@@ -2018,6 +2071,27 @@ class Traxes_model extends CI_Model
 		}
 	}
 	
+
+	//save data Kontak client
+	public function update_transaksi_order($postData)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		//Cek variabel post
+		$data = [
+			// 'secid'      	=> trim($postData['secid']),
+			'qty'     		=> trim($postData['qty']),
+			'total'     	=> str_replace(".", "", trim($postData['total'])),
+			'modifiedby'     => trim($postData['modifiedby']),
+			'modifiedon'	=> date("Y-m-d h:m:i"),
+		];
+		
+		// $this->db->insert('xin_qrcode_skk', $data);
+		//update data
+		$dbtraxes->where('secid', $postData['secid']);
+		$dbtraxes->update('xin_mobile_order', $data);
+	}
+
 	// Function to Delete selected record from table
 	public function delete_record_newtraxes($id)
 	{

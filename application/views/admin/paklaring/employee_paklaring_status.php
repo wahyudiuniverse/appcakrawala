@@ -318,7 +318,7 @@
               <tr>
                 <th>Aksi</th>
                 <th>NIP - Status</th>
-                <th>Nama Lengkap</th>
+                <th data-orderable="false">Nama Lengkap</th>
                 <th>Project</th>
                 <th>Jabatan</th>
                 <th>Area/Penempatan</th>
@@ -467,16 +467,16 @@
         },
         'columns': [{
             data: 'aksi',
-            "orderable": false
+            "orderable": true
           },
           {
             data: 'employee_id',
-            "orderable": false,
+            "orderable": true,
             //searchable: true
           },
           {
             data: 'first_name',
-            "orderable": false,
+            "orderable": true,
             //searchable: true
           },
           {

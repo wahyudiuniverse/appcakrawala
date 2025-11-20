@@ -103,6 +103,80 @@ class Traxes_report_order extends MY_Controller {
 		$length = intval($this->input->get("length"));
 	}
 
+
+	//mengambil Json data dokumen kontrak ttd employee
+	public function get_data_sellout()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'secid'        => $postData['secid']
+		];
+
+		// get data diri
+		$data = $this->Traxes_model->get_data_sellout_model($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Penjualan tidak ditemukan",
+			);
+		} else {
+
+			$status = "200"; //file ditemukan
+			$pesan = "Berhasil Fetch Data";
+
+			$data_resign = array(
+				'secid'					=> $data['secid'],
+				'employee_id'					=> $data['employee_id'],
+				'employee_name'				=> $data['employee_name'],
+				'customer_id'					=> $data['customer_id'],
+				'customer_name'				=> $data['customer_name'],
+				'project_id'					=> $data['project_id'],
+				'project_name'				=> $data['project_name'],
+				'jabatan'							=> $data['jabatan'],
+				'material_id'					=> $data['material_id'],
+				'material_name'				=> $this->Traxes_model->get_product_name($data['material_id']),
+				'qty'									=> $data['qty'],
+				'price'								=> $this->Xin_model->rupiah_titik($data['price']),
+				'total'								=> $this->Xin_model->rupiah_titik($data['total']),
+
+			);
+
+
+			$response = array(
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $data_resign,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+
+	//save Kontak Client
+	public function update_sellout()
+	{
+		$postData = $this->input->post();
+
+		$yearmonth = date('Y/m');
+
+		// update data NPWP Client
+		$data = $this->Traxes_model->update_transaksi_order($postData);
+
+		// echo json_encode($data);
+	}
+
 // get company > departments
 	public function get_subprojects2()
 	{

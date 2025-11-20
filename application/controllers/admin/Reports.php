@@ -2182,36 +2182,31 @@ class Reports extends MY_Controller
 				Nama Lengkap: *' . $fullname . '*%0a
 				NIP: *' . $r->employee_id . '*%0a
 				PIN: *' . $pin . '*%0a
-				PROJECT: *' . $nama_project . '* %0a%0a
+				PROJECT: *' . $nama_project . '*';
 
-				Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
+				// $copypaste = '*HRD Notification -> PKWT Digital.*%0a%0a
+				// Nama Lengkap: *' . $fullname . '*%0a
+				// NIP: *' . $r->employee_id . '*%0a
+				// PIN: *' . $pin . '*%0a
+				// PROJECT: *' . $nama_project . '* %0a%0a
 
-				Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
-				Link C.I.S : https://apps-cakrawala.com/admin%0a
-				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+				// Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen PKWT, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
 
-				*INFO HRD di Nomor Whatsapp: 0881010250138* %0a
-				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
+				// Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
+				// Link C.I.S : https://apps-cakrawala.com/admin%0a
+				// Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
+
+				// *INFO HRD di Nomor Whatsapp: 0881010250138* %0a
+				// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
 				
-				Terima kasih.';
+				// Terima kasih.';
 			} else {
 
 				$copypaste = '*HRD Notification -> KEMITRAAN DIGITAL.*%0a%0a
 				Nama Lengkap: *' . $fullname . '*%0a
 				NIP: *' . $r->employee_id . '*%0a
 				PIN: *' . $pin . '*%0a
-				PROJECT: *' . $nama_project . '* %0a%0a
-
-				Yang Terhormat Bapak/Ibu  dibawah naungan Cakrawala Group, telah terbit dokumen KEMITRAAN, segera unduh dan tanda tangan serta unggah kembali ke C.I.S maksimal H%2B3 dari pesan ini diterima.%0a%0a
-
-				Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.%0a
-				Link C.I.S : https://apps-cakrawala.com/admin%0a
-				Link Tutorial Tandatangan digital dan pengunggahan kembali PKWT Kemitraan bertanda tangan digital : https://pkwt.apps-cakrawala.com/app/%0a%0a
-
-				*INFO HRD di Nomor Whatsapp: 0881010250138* %0a
-				*IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
-				
-				Terima kasih.';
+				PROJECT: *' . $nama_project . '*';
 			}
 
 			$whatsapp = '<a href="https://wa.me/62' . $nowhatsapp . '?text=' . $copypaste . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">' . $nowhatsapp . '</button> </a>';

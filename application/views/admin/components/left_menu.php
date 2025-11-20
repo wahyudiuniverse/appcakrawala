@@ -613,48 +613,6 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   ?>
 
 
-
-  <!-- Surat Keterangan Kerja / Paklaring -->
-  <?php
-  if (in_array('486', $role_resources_ids) || in_array('499', $role_resources_ids)) {
-  ?>
-    <li class="<?php if (!empty($arr_mod['dokumen_open'])) echo $arr_mod['dokumen_open']; ?> sidenav-item">
-      <a href="#" class="sidenav-link sidenav-toggle">
-        <i class="sidenav-icon ion ion-logo-buffer"></i>
-        <div><?php echo $this->lang->line('xin_document_id'); ?></div>
-      </a>
-
-      <ul class="sidenav-menu">
-        <?php
-        if (in_array('487', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['skk_active'])) echo $arr_mod['skk_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/skk/'); ?>"> <?php echo $this->lang->line('xin_surat_keterangan_kerja'); ?> &nbsp; <span class="badge badge-success badge-pill">
-                <?php echo $count_emp_resign; ?>
-              </span>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-        <?php
-        if (in_array('499', $role_resources_ids)) {
-        ?>
-          <li class="sidenav-item <?php if (!empty($arr_mod['skk_report_active'])) echo $arr_mod['skk_report_active']; ?>">
-            <a class="sidenav-link" href="<?php echo site_url('admin/reports/skk_report'); ?>"> <?php echo $this->lang->line('xin_sk_report'); ?>
-            </a>
-          </li>
-        <?php
-        }
-        ?>
-
-      </ul>
-    </li>
-  <?php
-  }
-  ?>
-
-
   <!-- payroll -->
   <?php
   if ($system[0]->module_payroll == 'yes') {
