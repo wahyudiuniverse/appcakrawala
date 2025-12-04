@@ -45,6 +45,8 @@ class Traxes_report_cio extends MY_Controller {
 	}
 	
 	public function index() {
+
+		
 		// redirect('server_error');
 
 			$session = $this->session->userdata('username');
@@ -155,9 +157,17 @@ class Traxes_report_cio extends MY_Controller {
 			'JAM MASUK',
 			'WAKTU SISTEM MASUK',
 			'JARAK MASUK',
+
+			'LATITUDE IN',
+			'LONGITUDE IN',
+
 			'JAM KELUAR',
 			'WAKTU SISTEM KELUAR',
 			'JARAK KELUAR',
+
+			'LATITUDE OUT',
+			'LONGITUDE OUT',
+
 			'TOTAL JAM KERJA',
 			'KETERANGAN',
 			'FOTO MASUK',

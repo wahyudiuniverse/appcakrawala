@@ -544,48 +544,89 @@ class Pkwt393 extends MY_Controller
 								<td colspan="18"><b>PIHAK KEDUA</b> berkewajiban untuk mematuhi waktu kerja dan kehadiran/jadwal kerja sebagai mana dimaksud dalam pasal ini dan wajib mematuhi jadwal/jam kerja yang dikeluarkan oleh <b>PIHAK PERTAMA</b>. Dan atau akan diberikan sanksi jika tidak mematuhi jadwal/jam kerja tersebut.</td>
 							</tr>
 				<br>
-				</table>
+				</table>';
 
+				if($pkwt[0]->jabatan == 62){
 
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td >4.4</td>
-								<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
-								<td colspan="0"></td>
-							</tr>
+				$tbl_2 .= '
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+								<tr>
+									<td >4.4</td>
+									<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
+									<td colspan="0"></td>
+								</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
-								<td colspan="0"></td>
-							</tr>
+								<tr>
+									<td ></td>
+									<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
+									<td colspan="0"></td>
+								</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin - Jumat 	8 Jam Kerja<br>•	Hari libur Sabtu-Minggu</td>
-							</tr>
+								<tr>
+									<td ></td>
+									<td colspan="0"></td>
+									<td colspan="20"><br>•	Hari Senin - Jumat 	8 Jam Kerja<br>•	Hari libur Sabtu-Minggu</td>
+								</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:-</td>
-								<td colspan="0"></td>
-							</tr>
+								<tr>
+									<td ></td>
+									<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:-</td>
+									<td colspan="0"></td>
+								</tr>
+								<tr>
+									<td ></td>
+									<td colspan="0"></td>
+									<td colspan="20"><br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu (Terhitung Overtime)<br>•	Hari libur Minggu</td>
+								</tr>
+								<tr>
+									<td ></td>
+									<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
+									<td colspan="0"></td>
+								</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
-							</tr>
+					</table>';
+				} else {
+					
+				$tbl_2 .= '
+					<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
+								<tr>
+									<td >4.4</td>
+									<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
+									<td colspan="0"></td>
+								</tr>
 
-							<tr>
-								<td ></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
-								<td colspan="0"></td>
-							</tr>
+								<tr>
+									<td ></td>
+									<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
+									<td colspan="0"></td>
+								</tr>
 
-				</table>
+								<tr>
+									<td ></td>
+									<td colspan="0"></td>
+									<td colspan="20"><br>•	Hari Senin - Jumat 	8 Jam Kerja<br>•	Hari libur Sabtu-Minggu</td>
+								</tr>
 
+								<tr>
+									<td ></td>
+									<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:-</td>
+									<td colspan="0"></td>
+								</tr>
+								<tr>
+									<td ></td>
+									<td colspan="0"></td>
+									<td colspan="20"><br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu 5 - 6 Jam Kerja<br>•	Hari libur Minggu</td>
+								</tr>
+								<tr>
+									<td ></td>
+									<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
+									<td colspan="0"></td>
+								</tr>
+
+					</table>';
+				}
+
+				$tbl_2 .= '
 			<br>
 
 
@@ -1606,7 +1647,7 @@ class Pkwt393 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
 						</tr>';
 				}
 

@@ -299,6 +299,8 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 												endif;
 											} ?>"
 								},
+
+
 								{
 									id: "",
 									class: "role-checkbox-modal custom-control-input",
@@ -408,6 +410,19 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 							}]
 						},
 
+
+						{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
+									text: "Login JOB ORDER",
+									add_info: "",
+									value: "13",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('13', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+						},
 
 
 						{

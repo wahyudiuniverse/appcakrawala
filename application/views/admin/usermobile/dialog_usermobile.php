@@ -68,8 +68,13 @@ if(isset($_GET['jd']) && isset($_GET['department_id']) && $_GET['data']=='depart
   </div>
 
 	<div class="form-group">
-  	<label for="first_name"><?php echo $this->lang->line('xin_deviceid');?></label>
-    <input type="text" class="form-control" placeholder="Device ID" name="device_id" value="<?php echo $device_id ?>"/>
+  	<label for="first_name">Device ID <i>[ Isi 0 untuk reset device/hp ]</i></label>
+    <input type="text" class="form-control" placeholder="Device ID" name="device_id" value="<?php echo $device_id; ?>"/>
+  </div>
+
+	<div class="form-group">
+  	<label for="first_name">Enable Web [ 0 = Disable | 1 = Enable ]</label>
+    <input type="text" class="form-control" placeholder="Enabel Web for iOS" name="web_versi" value="<?php echo $web_versi; ?>"/>
   </div>
 
   <input type="hidden" name="employeeid" value="<?php echo $usermobile_id ?>"/>

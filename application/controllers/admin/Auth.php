@@ -380,7 +380,7 @@ class Auth extends MY_Controller
 	}
 
 
-
+	// API LOGIN UNTUK KARIR JO
     public function login_cis() {
         $status 			= 1; $message = ''; $data = null;
         $apiName 			= "apicakrawala/auth/login_cis";
@@ -439,12 +439,13 @@ class Auth extends MY_Controller
 // AND is_active = 1;");
 
         $q = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name, emp.is_active, emp.status_employee, emp.user_role_id, approle.role_resources, ps.project_id, emp.profile_picture
-FROM xin_employees emp
-LEFT JOIN xin_user_roles approle ON approle.role_id=emp.user_role_id
-LEFT JOIN (SELECT nip, GROUP_CONCAT(project_id ORDER BY project_id ASC SEPARATOR ', ') AS project_id FROM xin_projects_akses WHERE nip = $nip) ps ON ps.nip = emp.employee_id
-WHERE emp.employee_id = $nip 
-AND emp.private_code = $pin 
-AND emp.is_active = 1;");
+		FROM xin_employees emp
+		LEFT JOIN xin_user_roles approle ON approle.role_id=emp.user_role_id
+		LEFT JOIN (SELECT nip, GROUP_CONCAT(project_id ORDER BY project_id ASC SEPARATOR ', ') AS project_id FROM xin_projects_akses WHERE nip = $nip) ps ON ps.nip = emp.employee_id
+		WHERE emp.employee_id = $nip 
+		AND emp.private_code = $pin 
+		AND emp.is_active = 1
+        AND approle.role_resources LIKE '%,13,%';");
 
 
         $status = 1;

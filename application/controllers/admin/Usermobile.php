@@ -335,6 +335,7 @@ class Usermobile extends MY_Controller
 				'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
 				'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
 				'device_id' => $read_usermobile[0]->device_id_one,
+				'web_versi' => $read_usermobile[0]->enable_web_version,
 				'all_usertype' => $all_usertype,
 				'all_projects' => $all_projects,
 				// 'all_area' => $all_area
@@ -386,7 +387,7 @@ class Usermobile extends MY_Controller
 			'usertype_id' => $this->input->post('usertype'),
 			'project_id' => $this->input->post('project'),
 			'device_id_one' => $this->input->post('device_id'),
-			// 'device_id_one' => $this->input->post('device_id'),
+			'enable_web_version' => $this->input->post('web_versi'),
 			);
 
 			$result = $this->Traxes_model->update_record_newtraxes($data,$emp);

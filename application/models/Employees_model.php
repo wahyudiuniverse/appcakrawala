@@ -366,6 +366,30 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nama role
+	function get_nama_role($role_id)
+	{
+		if ($role_id == null) {
+			return "";
+		} else if ($role_id == 0) {
+			return "";
+		} else {
+			$this->db->select('role_id');
+			$this->db->select('role_name');
+			$this->db->from('xin_user_roles');
+			$this->db->where('role_id', $role_id);
+
+			$query = $this->db->get()->row_array();
+
+			if (empty($query)) {
+				return "";
+			} else {
+				return "[" . $query['role_id'] . "] " . $query['role_name'];
+			}
+			//return $query['title'];
+		}
+	}
+
 	//ambil nama karyawan
 	function get_nama_karyawan_by_nip($nip)
 	{
@@ -3864,6 +3888,170 @@ class Employees_model extends CI_Model
 	}
 
 
+
+	function get_list_employee_all($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = '';
+		// $sub_project = $postData['sub_project'];
+		// $status = $postData['status'];
+		$session_id = $postData['session_id'];
+
+		if ($project!=5) {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+
+					$searchQuery = "xin_employees.employee_id like '%" . $searchValue .  "%' 
+					or xin_employees.first_name LIKE '%" . $searchValue . "%'
+					or xin_employees.ktp_no like '%" . $searchValue . "%'";
+				}
+			}
+
+			## Filter
+			$filterProject = "";
+
+			$filterSubProject = "";
+
+			$filterStatus = "";
+
+			$kondisiDefaultQuery = "";
+
+			## Total number of records without filtering
+			$this->db->select('count(*) as allcount');
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			// $this->db->where($kondisiDefaultQuery);
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_employees')->result();
+			$totalRecords = $records[0]->allcount;
+
+			## Total number of record with filtering
+			$this->db->select('count(*) as allcount');
+			// $this->db->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			$records = $this->db->get('xin_employees')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
+
+			## Fetch records
+			// $this->db->select('*');
+			$this->db->select('xin_employees.user_id');
+			$this->db->select('xin_employees.employee_id');
+			$this->db->select('xin_employees.id_kandidat');
+			$this->db->select('xin_employees.first_name');
+			$this->db->select('xin_employees.id_screening');
+			$this->db->select('xin_employees.first_name');
+			$this->db->select('xin_employees.project_id');
+			$this->db->select('xin_employees.sub_project_id');
+			$this->db->select('xin_employees.ktp_no');
+			$this->db->select('xin_employees.date_of_joining');
+			$this->db->select('xin_employees.date_of_leaving');
+			$this->db->select('xin_employees.status_resign');
+			$this->db->select('xin_employees.contact_no');
+			$this->db->select('xin_employees.user_role_id');
+
+			// $this->db->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$this->db->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$this->db->where($filterProject);
+			}
+			if ($filterStatus != '') {
+				$this->db->where($filterStatus);
+			}
+			// $this->db->order_by('xin_qrcode_skk.employee_name', 'ASC');
+			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+			//$this->db->join('(SELECT contract_id, employee_id, from_date, to_date  FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+			// $this->db->join('(select max(contract_id), employee_id from xin_employee_contract group by employee_id) b', 'b.employee_id = xin_employees.employee_id', 'inner');
+			$this->db->limit($rowperpage, $start);
+			$records = $this->db->get('xin_employees')->result();
+
+			#Debugging variable
+			// $tes_query = $this->db->last_query();
+			// print_r($tes_query);
+
+
+			$data = array();
+
+			foreach ($records as $record) {
+
+				$identity = 'UID '.$record->user_id.'<br>JID '.$record->id_kandidat;
+				$ktp = $record->ktp_no.'<br>HP '.$record->contact_no;
+				$fullname = '<br>NIP '.$record->employee_id.'<br>'.$record->first_name;
+				$date_of 	= $record->date_of_joining.'<br>'. $record->date_of_leaving.'<br>'.$record->status_resign;
+				$project_name = $this->get_nama_project($record->project_id);
+				$role_name = $this->get_nama_role($record->user_role_id);
+
+
+				// 	$open_approve = '<button onclick="open_approve(' . $record->secid . ' , 0)" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
+
+
+				$data[] = array(
+
+					"identity" => $identity,
+					"ktp_no" => $ktp,
+					"first_name" => strtoupper($fullname),
+					"project" => strtoupper($project_name),
+					"join_date" => $date_of,
+					"user_role_id" => strtoupper($role_name),
+
+
+
+			// $this->db->select('xin_employees.id_screening');
+
+			// $this->db->select('xin_employees.user_role_id');
+
+				);
+			}
+		} else {
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
+		}
+
+
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+	
 	public function get_req_empproject($empID)
 	{
 		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id in (SELECT distinct(project) FROM xin_employee_request 

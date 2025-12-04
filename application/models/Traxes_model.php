@@ -126,8 +126,11 @@ class Traxes_model extends CI_Model
 			$dbtraxes->select('tx_cio.penempatan');
 			$dbtraxes->select('tx_cio.date_cio');
 			$dbtraxes->select('tx_cio.datetimephone_in');
-			$dbtraxes->select('tx_cio.latitude_in');
 			$dbtraxes->select('tx_cio.datetimephone_out');
+			$dbtraxes->select('tx_cio.latitude_in');
+			$dbtraxes->select('tx_cio.longitude_in');
+			$dbtraxes->select('tx_cio.latitude_out');
+			$dbtraxes->select('tx_cio.longitude_out');
 			// $dbtraxes->where($kondisiDefaultQuery);
 			if ($searchQuery != '') {
 				$dbtraxes->where($searchQuery);
@@ -278,6 +281,10 @@ class Traxes_model extends CI_Model
 					"customer_name" => strtoupper($record->customer_name),
 					"datetimephone_in" => strtoupper($record->datetimephone_in),
 					"datetimephone_out" => strtoupper($record->datetimephone_out),
+					"latitude_in" => strtoupper($record->latitude_in),
+					"longitude_in" => strtoupper($record->longitude_in),
+					"latitude_out" => strtoupper($record->latitude_out),
+					"longitude_out" => strtoupper($record->longitude_out),
 					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
 				);
@@ -396,6 +403,10 @@ class Traxes_model extends CI_Model
 		$dbtraxes->select('tx_cio.keterangan');
 		$dbtraxes->select('tx_cio.foto_in');
 		$dbtraxes->select('tx_cio.foto_out');
+		$dbtraxes->select('tx_cio.latitude_in');
+		$dbtraxes->select('tx_cio.longitude_in');
+		$dbtraxes->select('tx_cio.latitude_out');
+		$dbtraxes->select('tx_cio.longitude_out');
 
 
 		// $dbtraxes->where($kondisiDefaultQuery);
@@ -457,9 +468,17 @@ class Traxes_model extends CI_Model
 				strtoupper($record->datetimephone_in),
 				strtoupper($record->createdon),
 				strtoupper($record->distance_in),
+
+				strtoupper($record->latitude_in),
+				strtoupper($record->longitude_in),
+
 				strtoupper($record->datetimephone_out),
 				strtoupper($record->createdon_out),
 				strtoupper($record->distance_out),
+
+				strtoupper($record->latitude_out),
+				strtoupper($record->longitude_out),
+				
 				strtoupper($record->timestay),
 				strtoupper($record->keterangan),
 				'https://api.traxes.id/'.$record->foto_in,

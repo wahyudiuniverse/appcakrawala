@@ -46,8 +46,9 @@ class Traxes_report_display extends MY_Controller {
 	
 	public function index() {
 
-		redirect('server_error');
+		// redirect('server_error');
 		
+		redirect('time_restriction');
 		// $session = $this->session->userdata('username');
 		// if(empty($session)){ 
 		// 	redirect('admin/');

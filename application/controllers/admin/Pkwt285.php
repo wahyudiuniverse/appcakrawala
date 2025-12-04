@@ -22,7 +22,7 @@ class Pkwt285 extends MY_Controller
 		exit(json_encode($Return));
 	}
 	
-		public function __construct() {
+	public function __construct(){
           parent::__construct();
           //load the login model
           $this->load->model('Company_model');
@@ -43,7 +43,7 @@ class Pkwt285 extends MY_Controller
 			$this->load->library("pagination");
 			$this->load->library('Pdf');
 			$this->load->helper('string');
-    }
+     }
 	 
 	// invoices page
 	public function index() {
@@ -496,7 +496,7 @@ class Pkwt285 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>3.3</td>
-						<td colspan="18">Pembayaran gaji dilakukan setiap akhir bulan sesuai kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>, jika akhir bulan jatuh pada hari libur, maka pembayaran akan dilakukan 1 (satu) hari lebih awal. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
+						<td colspan="18">Pembayaran gaji dilakukan setiap akhir bulan sesuai kalender setiap bulannya dengan cara transfer Bank BCA/Mandiri <b>PIHAK KEDUA</b>. <b>PIHAK PERTAMA</b> hanya akan melakukan pembayaran hanya melalui rekening Bank BCA/Mandiri milik <b>PIHAK KEDUA</b> dan <b>PIHAK KEDUA</b> wajib menyerahkan nomer rekening Bank BCA/Mandiri atas nama <b>PIHAK KEDUA</b>, Kesalahan maupun keterlambatan pembayaran gaji akibat kelalaian maupun keterlambatan <b>PIHAK KEDUA</b> dalam menyerahkan nomer rekening nya atau diakibatkan kesalahan di Bank BCA/Mandiri bukan merupakan tanggung jawab dari <b>PIHAK PERTAMA</b>.</td>
 					</tr>
 				<br>
 					<tr>
@@ -562,7 +562,7 @@ class Pkwt285 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">•</td>
-								<td colspan="20">Hari Senin s/d Minggu</td>
+								<td colspan="20">Hari Senin s/d Sabtu</td>
 							</tr>
 
 							<tr>
@@ -570,7 +570,14 @@ class Pkwt285 extends MY_Controller
 								<td colspan="0">•</td>
 								<td colspan="20">Hari libur 1 Hari dalam 6 hari kerja/ di sesuaikan dengan klien</td>
 							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">•</td>
+								<td colspan="20">Toleransi terlambat 15 menit</td>
+							</tr>
 				</table>
+				<br>
 				<br>
 
 
@@ -643,6 +650,9 @@ class Pkwt285 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
+				<br>
+				<br>
+				<br>
 				<br>
 
 
@@ -783,6 +793,10 @@ class Pkwt285 extends MY_Controller
 							</tr>
 
 				<br>
+				<br>
+				<br>
+				<br>
+
 							<tr>
 								<td ></td>
 								<td colspan="18">Dalam hal pengunduran diri tidak diajukan dengan tata cara sebagaimana dimaksud dalam Huruf b ayat ini, maka <b>PIHAK PERTAMA</b> berhak untuk menahan upah terakhir dan surat keterangan kerja <b>PIHAK KEDUA</b> apabila belum menyelesaikan BASTP.</td>
@@ -839,9 +853,9 @@ class Pkwt285 extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
+
 				<br>
-
-
+				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
@@ -923,7 +937,12 @@ class Pkwt285 extends MY_Controller
 											<td colspan="8">Direksi / Komisaris</td>
 											<td colspan="9">: Rp. 150.000,-</td>
 										</tr>
-<br>
+
+												<br>
+												<br>
+												<br>
+												<br>
+												<br>
 
 										<tr>
 											<td colspan="1"></td>
@@ -955,14 +974,6 @@ class Pkwt285 extends MY_Controller
 							</tr>
 				</table>
 
-
-				<br>
-				<br>
-				<br>
-				<br>
-
-				<br>
-				<br>
 				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
@@ -1112,16 +1123,12 @@ class Pkwt285 extends MY_Controller
 								<td colspan="20"><b>PIHAK KEDUA</b> sebagai karyawan kontrak tidak dapat / tidak berhak mendapatkan pesangon/upah selama masa kerja jika masa kontrak berakhir maupun pengurangan karyawan yang diputuskan oleh <b>PIHAK PERTAMA</b> dan pihak User/Klien.</td>
 							</tr>
 				<br>
+				<br>
+
 							<tr>
 								<td>4.</td>
 								<td colspan="20"><b>PKWT</b> ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
 							</tr>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
 				<br>
 							<tr>
 								<td>5.</td>
@@ -1137,44 +1144,44 @@ class Pkwt285 extends MY_Controller
 								<td>7.</td>
 								<td colspan="20">Selama dalam hubungan kerja <b>PIHAK KEDUA</b> wajib mentaati dan melaksanakan ketentuan mengenai tata tertib, kedisiplinan dan kewajiban – kewajiban yang dibebankan kepada <b>PIHAK KEDUA</b>, sesuai dengan  ketentuan dalam peraturan perusahaan.</td>
 							</tr>
-				</table>
 				<br>
-				<br>
-
-
-
-				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 11<br>KEANGGOTAAN KOPERASI</b>
-				</div>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+								<td>8.</td>
+								<td colspan="20">Sehubungan dengan poin 7 terkait <b>PIHAK KEDUA</b> wajib menaati dan melaksanakan ketentuan mengenai tata tertib, kedisiplinan dan kewajiban – kewajiban yang dibebankan kepada <b>PIHAK KEDUA</b>, berikut jobdesc sesuai dengan masing – masing jabatan:</td>
+							</tr>
+
+				<br>
+
+							<tr>
+								<td></td>
+								<td colspan="20">
+
+									<img src="'.base_url().'assets/abc_job_desk_visit_toko.jpeg" alt="Trulli" width="320" height="150">
+
+				<br>
+				<br>
+
+									<img src="'.base_url().'assets/abc_job_desk_input_data.jpeg" alt="Trulli" width="370" height="90">
+				<br>
+				<br>
+									<img src="'.base_url().'assets/abc_team_leader.jpeg" alt="Trulli" width="400" height="100">
+				<br>
+				<br>
+									<img src="'.base_url().'assets/abc_team_leader_2.jpeg" alt="Trulli" width="310" height="65">
+
+				<br>
+								</td>
 							</tr>
 				</table>
 				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-					<tr>
-						<td>Simpanan Pokok</td>
-						<td colspan="3">: Rp. 50.000 (1 Kali)</td>
-					</tr>
-
-					<tr>
-						<td>Simpanan Wajib</td>
-						<td colspan="3">: Rp. 25.000/ Bulan</td>
-					</tr>
-				</table>
-
 				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Dengan mekanisme apabila sudah resign akan dikembalikan maksimal 1 bulan setelah resign.</td>
-							</tr>			
-				</table>
 				<br>
-
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
+				<br>
 				<br>
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
@@ -1238,6 +1245,20 @@ class Pkwt285 extends MY_Controller
 
 				$tbl_spb = '
 
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
+				<br>			<br>
 				<br>			<br>
 				<br>			<br>
 				<br>			<br>
@@ -1316,30 +1337,37 @@ class Pkwt285 extends MY_Controller
 								<td colspan="20">Bahwa saya akan melaksanakan kewajiban, tugas dan tanggung jawab dengan baik yang diberikan oleh Pimpinan Perusahaan atau atasan langsung maupun atasan dari atasan langsung saya, serta mengikuti/mentaati ketentuan jam kerja yang berlaku di Perusahaan.</td>
 							</tr>
 
+
 							<tr>
 								<td>2.</td>
-								<td colspan="20">Tidak datang terlambat tanpa alasan yang dapat diterima oleh Perusahaan, tidak meninggalkan tempat kerja tanpa sepengetahuan atasan, tidak mangkir dan sebagainya yang dapat merugikan Perusahaan.</td>
+								<td colspan="20">Apabila dalam waktu 1 minggu saya terlambat sebanyak 3 kali, maka saya bersedia diberikan Surat Peringatan dan akan masuk grup Pembinaan Khusus (Patsus).</td>
 							</tr>
 
 							<tr>
 								<td>3.</td>
-								<td colspan="20">Bahwa saya akan menjaga peralatan pekerjaan milik Perusahaan yang dipergunakan / dipercayakan kepada saya, sesuai tugas-tugas pekerjaan Perusahaan yang diberikan oleh atasan saya, ataupun oleh Pimpinan Perusahaan.</td>
+								<td colspan="20">Apabila dalam waktu 3 bulan saya berturut – turut izin atau alfa dan sakit, maka saya bersedia diberikan Surat Peringatan dan akan masuk grup Pembinaan Khusus (Patsus).</td>
 							</tr>
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Bahwa apabila sampai terjadi pelanggaran-pelanggaran terhadap ketentuan-ketentuan/tata tertib kerja yang berlaku, dan apabila sampai terjadi hal-hal yang merugikan Perusahaan disebabkan kelalaian, kesengajaan atau kecerobohan kerja saya, maka saya bersedia diberikan Surat Peringatan, dan bersedia menerima Pemutusan Hubungan Kerja sepihak sesuai dengan ketentuan yang berlaku di Perusahaan dan Peraturan Ketenagakerjaan.</td>
+								<td colspan="20">Bahwa saya akan menjaga peralatan pekerjaan milik Perusahaan yang dipergunakan / dipercayakan kepada saya, sesuai tugas-tugas pekerjaan Perusahaan yang diberikan oleh atasan saya, ataupun oleh Pimpinan Perusahaan.</td>
 							</tr>
 
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Dalam hal pengunduran diri, saya bersedia diberikan pinalty/sanksi administratif apabila saya mengundurkan diri tidak sesuai dengan ketentuan minimal mengajukan surat pengunduran diri 1 bulan sebelumnya. (sanksi administratif adalah sisa masa kontrak kerja saya dikali jumlah gaji yang diterima).</td>
+								<td colspan="20">Bahwa apabila sampai terjadi pelanggaran-pelanggaran terhadap ketentuan-ketentuan/tata tertib kerja yang berlaku, dan apabila sampai terjadi hal-hal yang merugikan Perusahaan disebabkan kelalaian, kesengajaan atau kecerobohan kerja saya, maka saya bersedia diberikan Surat Peringatan, dan bersedia menerima Pemutusan Hubungan Kerja sepihak sesuai dengan ketentuan yang berlaku di Perusahaan dan Peraturan Ketenagakerjaan.</td>
 							</tr>
 
 							<tr>
 								<td>6.</td>
+								<td colspan="20">Dalam hal pengunduran diri, saya bersedia diberikan pinalty/sanksi administratif apabila saya mengundurkan diri tidak sesuai dengan ketentuan minimal mengajukan surat pengunduran diri 1 bulan sebelumnya. (sanksi administratif adalah sisa gaji tidak dibayarkan).</td>
+							</tr>
+
+							<tr>
+								<td>7.</td>
 								<td colspan="20">Untuk Pendaftaran kepesertaan BPJS Kesehatan dan BPJS Ketenagakerjaan karyawan, Proses pendaftaran dari kami PT. Siprama Cakrawala akan dilakukan pendaftaran setelah pemotongan Gaji pertama karyawan.</td>
 							</tr>
+
 
 				</table>
 
@@ -1347,7 +1375,7 @@ class Pkwt285 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
-								<td >7.</td>
+								<td >8.</td>
 								<td colspan="20">Bahwa saya bersedia menjadi <b>Karyawan Kontrak</b> selama jangka waktu <b>'.$waktukontrak.'</b> bulan dengan ketentuan sebagai berikut :</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1380,7 +1408,7 @@ class Pkwt285 extends MY_Controller
 							</tr>
 
 							<tr>
-								<td >8.</td>
+								<td >9.</td>
 								<td colspan="20">Surat keterangan kerja tidak dapat dikeluarkan apabila karyawan bekerja dibawah 3 bulan dengan pengecualian:</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1394,15 +1422,18 @@ class Pkwt285 extends MY_Controller
 								<td colspan="0">b.</td>
 								<td colspan="20">Jika masa kontrak Cakrawala dengan Klien sudah habis, namun kontrak karyawan masih berjalan. Karyawan berhak mendapat surat keterangan kerja dengan catatan memiliki review baik selama bekerja.</td>
 							</tr>
-
+							<br>
+							<br>
+							<br>
+							<br>
 							<tr>
-								<td >9.</td>
+								<td >10.</td>
 								<td colspan="20">Jika karyawan melanggar & menerima SP 1, SP 2 dan berakibat pada SPHK. Maka karyawan tidak berhak menuntut/mendapat hak kompensasi. Serta perusahaan berhak memutuskan kontrak kerja dengan karyawan tersebut.</td>
 								<td colspan="0"></td>
 							</tr>
-	<br><br><br>
+							<br>
 							<tr>
-								<td >10.</td>
+								<td >11.</td>
 								<td colspan="20">Jika karyawan melakukan tindakan merugikan perusahaan secara disengaja maupun tidak disengaja maka karyawan tersebut tidak berhak mendapat/menuntut kompensasi terhadap perusahaan, serta perusahaan berhak memutus kontrak dengan karyawan tersebut. Adapun perbuatan yang dimaksud adalah:</td>
 								<td colspan="0"></td>
 							</tr>
@@ -1426,7 +1457,6 @@ class Pkwt285 extends MY_Controller
 								<td colspan="0">d.</td>
 								<td colspan="20">Memanipulasi data (Data Absen ataupun Data Penjualan) agar mendapatkan keuntungan pribadi sekaligus kerugian untuk perusahaan.</td>
 							</tr>
-
 							<tr>
 								<td ></td>
 								<td colspan="0">e.</td>
@@ -1434,8 +1464,8 @@ class Pkwt285 extends MY_Controller
 							</tr>
 
 							<tr>
-								<td >11.</td>
-								<td colspan="20">11.	Jika tidak menggunakan sistem Aplikasi dengan jangka waktu kurang dari 8 jam, maka diwajibkan:</td>
+								<td >12.</td>
+								<td colspan="20">Jika tidak menggunakan sistem Aplikasi dengan jangka waktu kurang dari 8 jam, maka diwajibkan:</td>
 								<td colspan="0"></td>
 							</tr>
 							<tr>
@@ -1450,20 +1480,72 @@ class Pkwt285 extends MY_Controller
 							</tr>
 
 							<tr>
-								<td >12.</td>
+								<td >13.</td>
 								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan diakhiri kontrak kerjasama.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
-								<td >13.</td>
+								<td >14.</td>
 								<td colspan="20">Apabila terjadi hubungan asmara diluar wajar/selingkuh yang berakibat terhadap produktivitas dan menggangu kinerja serta nama baik perusahaan maka karyawan bersedia untuk mengakhiri masa kerjasama</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
-								<td >14.</td>
+								<td >15.</td>
 								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Apabila tidak mencapai target visit selama waktu 2 bulan berturut – turut, maka saya bersedia diberikan Surat Peringatan dan masuk grup Pembinaan Khusus (Patsus)</td>
+								<td colspan="0"></td>
+							</tr>
+
+
+							<tr>
+								<td >17.</td>
+								<td colspan="20">Bahwa saya bersedia mematuhi peraturan grup Pembinaan Khusus, yaitu:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Tidak dapat izin selama 6 bulan (kecuali keluarga inti sakit/kedukaan).</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Check-in pertama wajib dilakukan 15 menit lebih awal, dengan batas maksimal pukul 07.45 WIB.</td>
+							</tr>
+
+							<tr>
+								<td ></td>
+								<td colspan="0">c.</td>
+								<td colspan="20">Tidak dapat mengikuti program cuti bersama (kecuali tanggal merah & libur nasional.</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">d.</td>
+								<td colspan="20">Apabila saya mengulangi pelanggaran yang sama, maka proses sanksi dimulai kembali dari poin 1 – 3.</td>
+							</tr>
+
+							<tr>
+								<td >18.</td>
+								<td colspan="20">Apabila tidak menjalankan jobdesc toko dan tidak menggunakan jobdesc T-Rec, maka saya bersedia mendapatkan sanksi berupa pemutusan hubungan kerja</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >19.</td>
+								<td colspan="20">Jika karyawan melakukan penolakan pemindahan posisi/jabatan, maka dianggap mengundurkan diri/resign</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >20.</td>
+								<td colspan="20">Karyawan dilarang keras mengikuti kegiatan Partai Politik, Ormas maupun Demonstrasi. Apabila terbukti melakukan hal tersebut, akan diberikan sanksi berupa pemutusan hubungan kerja.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1536,9 +1618,7 @@ class Pkwt285 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br>
+				<br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1634,7 +1714,7 @@ class Pkwt285 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1823,8 +1903,11 @@ class Pkwt285 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
+				// $fname = strtolower($fname);
+				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 
