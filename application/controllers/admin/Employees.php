@@ -1361,6 +1361,19 @@ class Employees extends MY_Controller
 		$length = intval($this->input->get("length"));
 	}
 
+
+	//save new pkwt
+	public function update_dokumen_pkwt()
+	{
+		$postData = $this->input->post();
+
+		// update data NPWP Client
+		$data = $this->Employees_model->update_dokumen_pkwt($postData);
+		// $data = $this->Company_model->update_revisi_skk($postData);
+
+		// echo json_encode($data);
+	}
+
 	/*  add and update employee details info */
 	// Validate and update info in database // basic info
 	public function basic_info()
@@ -10677,6 +10690,62 @@ class Employees extends MY_Controller
 		);
 
 		echo json_encode($response);
+	}
+
+
+	//mengambil Json data dokumen kontrak ttd employee
+	public function get_data_pkwt()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'contract_id' => $postData['contract_id']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_dokumen_kontrak($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Kontrak tidak ditemukan",
+			);
+		} else {
+
+			$status = "200"; //file ditemukan
+			$pesan = "Berhasil Fetch Data";
+
+			$data_kontrak = array(
+				'contract_id'					=> $data['contract_id'],
+				'status_pkwt'					=> $data['status_pkwt'],
+				'uniqueid'						=> $data['uniqueid'],
+				'employee_id'					=> $data['employee_id'],
+				'contract_type_id'				=> $data['contract_type_id'],
+				'from_date'						=> $data['from_date'],
+				'to_date'						=> $data['to_date'],
+				'no_surat'						=> $data['no_surat'],
+				'file_name'			=> '<embed class="form-group col-md-12" id="output_pkwt" type="application/pdf" src="'.$data['file_name'].'"></embed>',
+
+			);
+
+
+			$response = array(
+				'status'	=> $status,
+				'pesan' 	=> $pesan,
+				'data'		=> $data_kontrak,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
 	}
 
 	// save dokumen kontrak employee

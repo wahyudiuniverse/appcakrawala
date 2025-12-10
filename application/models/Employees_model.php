@@ -1254,6 +1254,20 @@ class Employees_model extends CI_Model
 		return $query;
 	}
 
+	//ambil PIN employee
+	public function check_employee_active($ktp)
+	{
+		$this->db->select('employee_id');
+		$this->db->from('xin_employees');
+		$this->db->where('ktp_no', $ktp);
+		$this->db->where('status_resign', 1);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+
 	//set Lock Kolom
 	public function setLockKolom($postData)
 	{
@@ -1748,6 +1762,13 @@ class Employees_model extends CI_Model
 				"allow_comunication" => $record->allow_comunication,
 				"allow_rent" => $record->allow_rent,
 				"allow_parking" => $record->allow_parking,
+
+				"allow_device" => $record->allow_device,
+				"allow_trans_meal" => $record->allow_trans_meal,
+				"allow_trans_rent" => $record->allow_trans_rent,
+				"allow_operational" => $record->allow_operational,
+				"catatan_hr" => $record->catatan_hr,
+
 				"request_empon" => $record->request_empon,
 				"ktp" => base_url() . "uploads/document/ktp/" . $record->ktp,
 				"kk" => base_url() . "uploads/document/kk/" . $record->kk,
@@ -2196,6 +2217,21 @@ class Employees_model extends CI_Model
 			}
 
 
+
+			$check_employee_active = $this->Employees_model->check_employee_active($record->nik_ktp);
+			if(is_null($check_employee_active)){
+					$alredy_active = '';
+
+			} else {
+				$alredy_active = '<a href="'.site_url().'admin/employees/emp_view/'.$check_employee_active['employee_id'].'" class="text-primary" target="_blank">
+
+				<button type="button" class="btn btn-xs btn-outline-danger">KARYAWAN AKTIF</button>
+
+				</a>';
+
+			}
+			
+
 			//cek status verifikasi
 			$nik_validation = "0";
 			$nik_validation_query = $this->Employees_model->get_valiadation_status($record->secid, 'nik');
@@ -2256,7 +2292,7 @@ class Employees_model extends CI_Model
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
 				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
 				// "fullname" => $record->fullname . $siap_approve,
-				"fullname" => $record->fullname . $status_verifikasi . $siap_approve,
+				"fullname" => $record->fullname . $status_verifikasi . $siap_approve . '<br>' . $alredy_active,
 				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
 				"penempatan" => $record->penempatan,
 				"project" => $this->get_nama_project($record->project),
@@ -3928,7 +3964,9 @@ class Employees_model extends CI_Model
 
 			$filterStatus = "";
 
-			$kondisiDefaultQuery = "";
+			$kondisiDefaultQuery = "xin_employees.employee_id not in (1)";
+
+
 
 			## Total number of records without filtering
 			$this->db->select('count(*) as allcount');
@@ -3939,14 +3977,14 @@ class Employees_model extends CI_Model
 			if ($filterStatus != '') {
 				$this->db->where($filterStatus);
 			}
-			// $this->db->where($kondisiDefaultQuery);
+			$this->db->where($kondisiDefaultQuery);
 			// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 			$records = $this->db->get('xin_employees')->result();
 			$totalRecords = $records[0]->allcount;
 
 			## Total number of record with filtering
 			$this->db->select('count(*) as allcount');
-			// $this->db->where($kondisiDefaultQuery);
+			$this->db->where($kondisiDefaultQuery);
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
 			}
@@ -3977,7 +4015,7 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_employees.contact_no');
 			$this->db->select('xin_employees.user_role_id');
 
-			// $this->db->where($kondisiDefaultQuery);
+			$this->db->where($kondisiDefaultQuery);
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
 			}
@@ -4002,10 +4040,13 @@ class Employees_model extends CI_Model
 			$data = array();
 
 			foreach ($records as $record) {
+				$nip = '<a href="'.site_url().'admin/employees/emp_view/'.$record->employee_id.'" class="text-primary" target="_blank">'.$record->employee_id.'</a>'; 
+
+				$whatsapp = '<a href="https://wa.me/62'.$record->contact_no.'?text=Hello.." class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$record->contact_no.'</button> </a>';
 
 				$identity = 'UID '.$record->user_id.'<br>JID '.$record->id_kandidat;
-				$ktp = $record->ktp_no.'<br>HP '.$record->contact_no;
-				$fullname = '<br>NIP '.$record->employee_id.'<br>'.$record->first_name;
+				$ktp = $record->ktp_no.$whatsapp;
+				$fullname = $nip.'<br>'.strtoupper(trim($record->first_name));
 				$date_of 	= $record->date_of_joining.'<br>'. $record->date_of_leaving.'<br>'.$record->status_resign;
 				$project_name = $this->get_nama_project($record->project_id);
 				$role_name = $this->get_nama_role($record->user_role_id);
@@ -4018,7 +4059,7 @@ class Employees_model extends CI_Model
 
 					"identity" => $identity,
 					"ktp_no" => $ktp,
-					"first_name" => strtoupper($fullname),
+					"first_name" => $fullname,
 					"project" => strtoupper($project_name),
 					"join_date" => $date_of,
 					"user_role_id" => strtoupper($role_name),
@@ -5337,6 +5378,21 @@ ORDER BY jab.designation_id ASC";
 		} else {
 			return false;
 		}
+	}
+
+
+	//update dokumen kontrak pkwt
+	public function update_dokumen_pkwt($postData)
+	{
+		//Cek variabel post
+		$data = [
+			'file_name'     	=> trim($postData['file_name']),
+			'upload_pkwt'     	=> trim($postData['upload_pkwt']),
+			'modifiedon'		=> date("Y-m-d h:m:i"),
+		];
+		
+		$this->db->where('contract_id', $postData['contract_id']);
+		$this->db->update('xin_employee_contract', $data);
 	}
 
 	// Function to add record in table
