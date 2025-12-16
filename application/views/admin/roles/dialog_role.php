@@ -1684,6 +1684,19 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 											} ?>"
 								}
 							]
+						},
+
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Rebuild QR Code",
+							add_info: "Generate New QR Code",
+							value: "14",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('14', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>",
 						}
 					]
 				},

@@ -86,24 +86,48 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
+
+
+
         <h5 class="modal-title" id="editModalLabel">
           <div class="judul-modal">
             <span id="judul-modal-edit"></span>
             <?php if (in_array('1016', $role_resources_ids)) { ?>
               <span id="button_download_dokumen_conditional">tes</span>
             <?php } ?>
+
+
           </div>
         </h5>
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+
       </div>
+
+
       <div class="modal-body">
         <!-- <iframe src="" style="zoom:0.60" frameborder="0" height="250" width="99.6%"></iframe> -->
         <div class="isi-modal"></div>
         <div class="pesan-isi-modal"></div>
       </div>
+
+
+
+                <input hidden type="text" id="field_secid" value="0">
+
       <div class="modal-footer">
+
+           <?php if (in_array('14', $role_resources_ids)) { ?>
+                <button
+                  type="button" id="btn_tolak"
+                  onclick="rebuild_qrcode()"
+                  class="btn btn-warning btn-label float-right ms-auto">
+                  <i
+                    class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>Rebuild QR
+                </button>
+          <?php } ?>
         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
         <button hidden id='button_save_pin' name='button_save_pin' type='button' class='btn btn-primary'>Save PIN</button>
       </div>
@@ -438,6 +462,43 @@
     // n.scrollTop = n.scrollHeight;
 
   }
+
+
+  function rebuild_qrcode() {
+    var secid = $("#field_secid").val();
+
+    const uniqueTimestamp = Date.now();
+    // cara menentukan nomor dokumen
+    var session_id = '<?php echo $session['employee_name']; ?>';
+
+          // AJAX untuk save data diri
+          $.ajax({
+            // url: '<?= base_url() ?>admin/Employee_resign_new/save_pengajuan_skk/',
+            url: '<?= base_url() ?>admin/Employee_paklaring_report/rebuild_qrcode_class/',
+            method: 'post',
+            data: {
+              [csrfName]: csrfHash,
+              secid: secid,
+              docid: uniqueTimestamp,
+
+            },
+            beforeSend: function() {},
+            success: function() {
+
+              // employee_table.ajax.reload(null, true);
+              // tabel_employees.ajax.reload(null, false);
+
+              alert("Behasil Rebuild QR Code");
+              $('#editModal').modal('hide');
+            },
+            error: function(xhr, status, error) {
+              alert("error generate qr code");
+            }
+          });
+      
+
+  }
+
 </script>
 
 <script>
@@ -485,6 +546,7 @@
     // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
     // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
 
+    $('#field_secid').val(secid);
     $('#judul-modal-edit').html("Lihat SK");
     $('#button_download_dokumen_conditional').html("");
     $('.isi-modal').html(html_text);

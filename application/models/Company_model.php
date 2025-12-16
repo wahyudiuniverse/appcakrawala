@@ -158,6 +158,22 @@
 	}
 
 
+	//save rebuild qrcode
+	public function rebuild_qrcode_skk($secid, $docid, $qr_code)
+	{
+		//Cek variabel post
+		$data = [
+			'doc_id'      		=> trim($docid),
+			'qr_code'			=> trim($qr_code),
+		];
+		
+		// $this->db->insert('xin_qrcode_skk', $data);
+		//update data
+		$this->db->where('secid', $secid);
+		$this->db->update('xin_qrcode_skk', $data);
+	}
+
+
 	//save data Kontak client
 	public function update_revisi_skk($postData)
 	{

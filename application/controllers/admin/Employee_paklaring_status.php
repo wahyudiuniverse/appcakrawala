@@ -85,7 +85,7 @@ class Employee_paklaring_status extends MY_Controller {
 	}
 
 
-	//save Kontak Client
+	//save qrcode
 	public function update_pengajuan_skk()
 	{
 		$postData = $this->input->post();
@@ -101,7 +101,7 @@ class Employee_paklaring_status extends MY_Controller {
 		$this->ciqrcode->initialize($config);
 
 		// $nomor_surat = $postData['nomor_dokumen'];
-		$docid = $postData['uniqueTimestamp'];
+		$docid = $postData['docid'];
 		$yearmonth = date('Y/m');
 
 		$path_qr = $config['imagedir']. $yearmonth. '/';
@@ -122,6 +122,48 @@ class Employee_paklaring_status extends MY_Controller {
 
 		// update data NPWP Client
 		$data = $this->Company_model->update_pengajuan_skk($postData,$url_qr);
+
+		// echo json_encode($data);
+	}
+
+
+	//re-build qrcode
+	public function rebuild_qrcode_skk()
+	{
+		$postData = $this->input->post();
+
+		$config['cacheable']	= true; //boolean, the default is true
+		$config['cachedir']		= './uploads/qrcode/skk/'; //string, the default is application/cache/
+		$config['errorlog']		= './uploads/qrcode/skk/'; //string, the default is application/logs/
+		$config['imagedir']		= './uploads/qrcode/skk/images/'; //direktori penyimpanan qr code
+		$config['quality']		= true; //boolean, the default is true
+		$config['size']			= '1024'; //interger, the default is 1024
+		$config['black']		= array(224,255,255); // array, default is array(255,255,255)
+		$config['white']		= array(70,130,180); // array, default is array(0,0,0)
+		$this->ciqrcode->initialize($config);
+
+		// $nomor_surat = $postData['nomor_dokumen'];
+		$docid = $postData['docid'];
+		$yearmonth = date('Y/m');
+
+		$path_qr = $config['imagedir']. $yearmonth. '/';
+					//kalau blm ada folder path nya
+			if (!file_exists($path_qr)) {
+				mkdir($path_qr, 0777, true);
+			}
+
+		$image_name='esign_skk'.date('ymdHis').'.png'; //buat name dari qr code sesuai dengan nim
+		$domain = base_url().'esign/sk/'.$docid;
+		$params['data'] = $domain; //data yang akan di jadikan QR CODE
+		$params['level'] = 'H'; //H=High
+		$params['size'] = 10;
+		$params['savename'] = FCPATH.$config['imagedir']. $yearmonth . '/'.$image_name; //simpan image QR CODE ke folder assets/images/
+		$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+		$url_qr = '/uploads/qrcode/skk/images/'.$yearmonth.'/'.$image_name;
+
+
+		// update data NPWP Client
+		$data = $this->Company_model->rebuild_qrcode_skk($docid,$url_qr);
 
 		// echo json_encode($data);
 	}

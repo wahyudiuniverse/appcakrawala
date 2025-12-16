@@ -5775,7 +5775,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
     var file_name 		= $("#link_file_pkwt").val();
     var upload_pkwt 	= $("#tanggal_upload_modal").val();
 
-    alert(contract_id);
+    // alert(contract_id);
 
           // AJAX untuk save data diri
           $.ajax({

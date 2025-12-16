@@ -797,7 +797,7 @@
           $('#joindate_field').val(res['data']['join_date']);
           $('#leavedate_field').val(res['data']['resign_date']);
 
-          $('#field_secid').val(res['data']['secid']);
+          $('#field_secid').val(res['data']['docid']);
           $('#field_is_revisi').val(is_revisi);
           $('#field_employee_id').val(res['data']['employee_id']);
           $('#field_fullname').val(res['data']['first_name']);
