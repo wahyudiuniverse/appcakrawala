@@ -82,7 +82,7 @@ class Employee_request_hrd extends MY_Controller
 		$data['list_bank'] = $this->Xin_model->get_bank_code();
 		$count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']);
 
-		$data['breadcrumbs'] = 'KARYAWAN BARU ( '.$count_emp_request_hrd.' )';
+		$data['breadcrumbs'] = 'KARYAWAN BARU ( ' . $count_emp_request_hrd . ' )';
 		$data['path_url'] = 'emp_request_hrd';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		//$role_resources_ids = is_null($role_resources_ids_temp) ? 0 : $role_resources_ids_temp;
@@ -1086,9 +1086,9 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'						=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-							'sign_nip'						=> '24536132',
-							'sign_fullname'					=> 'PAMUNGKAS SUSANTO',
-							'sign_jabatan'					=> 'HR & GA MANAGER',
+				'sign_nip'						=> '24536132',
+				'sign_fullname'					=> 'PAMUNGKAS SUSANTO',
+				'sign_jabatan'					=> 'HR & GA MANAGER',
 
 				'status_pkwt' => 1,
 				'createdon' => date('Y-m-d h:i:s'),
@@ -1481,9 +1481,9 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'				=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-							'sign_nip'						=> '24536132',
-							'sign_fullname'					=> 'PAMUNGKAS SUSANTO',
-							'sign_jabatan'					=> 'HR & GA MANAGER',
+				'sign_nip'						=> '24536132',
+				'sign_fullname'					=> 'PAMUNGKAS SUSANTO',
+				'sign_jabatan'					=> 'HR & GA MANAGER',
 
 				'status_pkwt' 				=> 1, //0 belum approve, 1 sudah approve
 				'contract_type_id'			=> $e_status, //1 pkwt, 2 tkhl
@@ -1506,6 +1506,7 @@ class Employee_request_hrd extends MY_Controller
 
 				'employee_id'			=> $employee_id,
 				'fullname'				=> $fullname,
+				'pin'					=> md5($private_code),
 				'company_id'			=> $company_id,
 				'company_name'			=> $this->Employees_model->get_nama_company($company_id),
 				'project_id' 			=> $project,
