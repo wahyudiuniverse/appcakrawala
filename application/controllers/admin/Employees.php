@@ -10721,6 +10721,12 @@ class Employees extends MY_Controller
 			$status = "200"; //file ditemukan
 			$pesan = "Berhasil Fetch Data";
 
+			if(($data['file_name'] == "") || ($data['file_name'] == null)){
+				$file_name = "";
+			} else {
+				$file_name = '<embed class="form-group col-md-12" id="output_pkwt" type="application/pdf" src="'.$data['file_name'].'"></embed>';
+			}
+
 			$data_kontrak = array(
 				'contract_id'					=> $data['contract_id'],
 				'status_pkwt'					=> $data['status_pkwt'],
@@ -10730,7 +10736,7 @@ class Employees extends MY_Controller
 				'from_date'						=> $data['from_date'],
 				'to_date'						=> $data['to_date'],
 				'no_surat'						=> $data['no_surat'],
-				'file_name'			=> '<embed class="form-group col-md-12" id="output_pkwt" type="application/pdf" src="'.$data['file_name'].'"></embed>',
+				'file_name'						=> $file_name,
 
 			);
 

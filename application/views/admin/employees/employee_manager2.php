@@ -45,7 +45,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
       </div>
       <div class="modal-body">
         <div class="isi-modal-edit-rekening">
-          <div class="container" id="container_modal_rekening">
+          <div class="container" id="container_edit_pkwt_modal">
 
             <div class="row">
               <table class="table table-striped col-md-12">
@@ -895,7 +895,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 									<tr>
 										<td style='width:25%'><strong>Nama Bank <span class="icon-verify-bank"></span></strong></td>
 										<td style='width:75%'>
-											<select class="form-control" id="nama_bank2" name="nama_bank2" data-plugin="select_modal_rekening" data-placeholder="Pilih Bank">
+											<select class="form-control" id="nama_bank2" name="nama_bank2" data-plugin="select_modal_rekening" placeholder="Pilih Bank">
 												<option value="">Pilih Bank</option>
 												<?php foreach ($list_bank as $bank): ?>
 													<option value="<?php echo $bank->secid; ?>"><?php echo strtoupper($bank->bank_name); ?></option>
