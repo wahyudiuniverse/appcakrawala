@@ -1439,6 +1439,18 @@ class Pkwt375 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Perhitungan sell-out dilakukan berdasarkan periode bulan Desember 2025 sampai dengan Maret 2026.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Insentif dari perhitungan tersebut akan direalisasikan setelah pelaksanaan event terkait, dengan batas waktu penyaluran paling lambat pada bulan Juni 2026.</td>
+								<td colspan="0"></td>
+							</tr>
+
 				</table>
 
 				<br><br>
@@ -1510,7 +1522,7 @@ class Pkwt375 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
