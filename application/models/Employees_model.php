@@ -721,6 +721,9 @@ class Employees_model extends CI_Model
 			} else {
 				$this->db->select('from_date');
 				$this->db->select('to_date');
+				$this->db->select('file_name');
+				$this->db->select('sub_project');
+				$this->db->select('uniqueid');
 				$this->db->from('xin_employee_contract');
 				$this->db->where('contract_id', $query['max_contract_id']);
 				// $this->db->order_by('createdon', 'desc');
@@ -730,9 +733,72 @@ class Employees_model extends CI_Model
 				if (empty($query2)) {
 					return "";
 				} else {
-					return $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']);
-				}
+					if ($query2['file_name'] != null) {
+						$local1 = "./uploads/document/pkwt/";
+						$local2 = "./uploads/document/";
+						$local3 = "./";
 
+						$record_database = $query2['file_name'];
+
+						$nama_file = "";
+						$status = "";
+						$pesan = "";
+
+
+						if (($query2['file_name'] == "") || (empty($query2['file_name'])) || ($query2['file_name'] == "0")) {
+							$nama_file = ""; //nilai di database kosong
+							$status = "202"; //file blm upload
+							$pesan = "File Belum Diupload";
+						} else {
+							if (file_exists($local1 . $record_database)) { //cek file di lokal
+								$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
+								$status = "200"; //file ditemukan
+								$pesan = "Berhasil Fetch Data";
+							} else {
+								if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+									$nama_file_rekening = base_url() . "uploads/document/" . $record_database;
+									$status_rekening = "200"; //file ditemukan
+									$pesan_rekening = "Berhasil Fetch Data";
+								} else {
+									if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+										$nama_file_rekening = base_url() . $record_database;
+										$status_rekening = "200"; //file ditemukan
+										$pesan_rekening = "Berhasil Fetch Data";
+									} else {
+										if (strpos($record_database, "http") === false) { //kalau ada http nya
+											$nama_file = ""; //record di database tanpa http
+											$status = "203"; //file tidak ditemukan
+											$pesan = "File Tidak Ditemukan";
+										} else {
+											$headers = get_headers($record_database);
+											$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+											if ($file_in_url_exist) {
+												$nama_file = $record_database; //tampil file skema lama dengan http
+												$status = "200"; //file ditemukan
+												$pesan = "Berhasil Fetch Data";
+											} else {
+												$nama_file = ""; //link mati atau tidak bisa dibuka
+												$status = "203"; //file tidak ditemukan
+												$pesan = "File Tidak Ditemukan";
+											}
+										}
+									}
+								}
+							}
+						}
+
+						// $file_name_kontrak = base_url() . "uploads/document/pkwt/" . $query2['file_name'];
+						$file_name_kontrak = $nama_file;
+						$button_kontrak = '</br><a href="' . $file_name_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
+					} else {
+						$file_name_kontrak = "";
+						$button_kontrak = "";
+					}
+
+					$file_name_draft_kontrak = base_url() . "admin/pkwt" . $query2['sub_project'] . "/view/" . $query2['uniqueid'];
+
+					return $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']) . '</br><a href="' . $file_name_draft_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button></a>' . $button_kontrak;
+				}
 			}
 		}
 	}
@@ -773,7 +839,7 @@ class Employees_model extends CI_Model
 				if (empty($query2)) {
 					return "Tidak Ada Pengajuan";
 				} else {
-					if($query2['cancel_status'] == 1){
+					if ($query2['cancel_status'] == 1) {
 						$status_sk = 'Ditolak HRD';
 					} else if ($query2['approve_hrd'] == null) {
 						$status_sk = 'Review HRD';
@@ -782,7 +848,6 @@ class Employees_model extends CI_Model
 					}
 					return $status_sk;
 				}
-
 			}
 		}
 	}
@@ -1340,9 +1405,6 @@ class Employees_model extends CI_Model
 		}
 
 		$this->db->insert('log_employee_verification', $datalock);
-
-
-		
 	}
 
 	//un validasi employee request
@@ -2219,18 +2281,16 @@ class Employees_model extends CI_Model
 
 
 			$check_employee_active = $this->Employees_model->check_employee_active($record->nik_ktp);
-			if(is_null($check_employee_active)){
-					$alredy_active = '';
-
+			if (is_null($check_employee_active)) {
+				$alredy_active = '';
 			} else {
-				$alredy_active = '<a href="'.site_url().'admin/employees/emp_view/'.$check_employee_active['employee_id'].'" class="text-primary" target="_blank">
+				$alredy_active = '<a href="' . site_url() . 'admin/employees/emp_view/' . $check_employee_active['employee_id'] . '" class="text-primary" target="_blank">
 
 				<button type="button" class="btn btn-xs btn-outline-danger">KARYAWAN AKTIF</button>
 
 				</a>';
-
 			}
-			
+
 
 			//cek status verifikasi
 			$nik_validation = "0";
@@ -2714,7 +2774,7 @@ class Employees_model extends CI_Model
 				}
 
 				$validate_nik = "";
-				if($nik_validation == "1"){
+				if ($nik_validation == "1") {
 					$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
 				} else {
 					$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
@@ -3000,7 +3060,7 @@ class Employees_model extends CI_Model
 		$data = array();
 
 		foreach ($records as $record) {
-			
+
 			$text_periode_from = "";
 			$text_periode_to = "";
 			$text_periode = "";
@@ -3160,7 +3220,6 @@ class Employees_model extends CI_Model
 				$allow_skill 		= "**********";
 				$allow_ops 			= "**********";
 				$allow_training 	= "**********";
-
 			} else {
 
 				$text_gaji 			= $record->basic_salary;
@@ -3302,7 +3361,7 @@ class Employees_model extends CI_Model
 		$status = $postData['status'];
 		$session_id = $postData['session_id'];
 
-		if ($project!=5) {
+		if ($project != 5) {
 			## Search 
 			$searchQuery = "";
 			if ($searchValue != '') {
@@ -3433,7 +3492,7 @@ class Employees_model extends CI_Model
 				}
 
 				$validate_nik = "";
-				if($nik_validation == "1"){
+				if ($nik_validation == "1") {
 					$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
 				} else {
 					$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
@@ -3460,21 +3519,21 @@ class Employees_model extends CI_Model
 				$check_akses = $this->get_akses_profile($session_id, $record->project_id);
 
 
-					$open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
+				$open_pengajuan = '<button onclick="open_pengajuan(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">AJUKAN PAKLARING</button>';
 
-					$status_pengajuan = '<h8><span style="color:#01b9a8;font-weight:bold;">SUDAH DIAJUKAN</span></h8>';
-
-
-					$open_profile = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
-
-					$open_profile_blacklist = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
+				$status_pengajuan = '<h8><span style="color:#01b9a8;font-weight:bold;">SUDAH DIAJUKAN</span></h8>';
 
 
-					$not_akses_profile = '<h8><span style="color:#606060;font-weight:bold;">AKSES DIBATASI</span></h8>';
+				$open_profile = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-success ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
 
-					$text_resign = "";
+				$open_profile_blacklist = '<button onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">BUKA PROFILE</button>';
 
-					
+
+				$not_akses_profile = '<h8><span style="color:#606060;font-weight:bold;">AKSES DIBATASI</span></h8>';
+
+				$text_resign = "";
+
+
 
 				if (empty($record->status_resign) || ($record->status_resign == "")) {
 					$text_resign 	= "";
@@ -3484,7 +3543,7 @@ class Employees_model extends CI_Model
 					$action 		= $open_profile;
 				} else if ($record->status_resign == "2") {
 					$text_resign 	= " - [RESIGN]";
-					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+					if ($get_skk_status == "Review HRD" || $get_skk_status == "SK Sudah Terbit") {
 						$action 		= $status_pengajuan;
 					} else {
 						$action 		= $open_pengajuan;
@@ -3492,7 +3551,7 @@ class Employees_model extends CI_Model
 				} else if ($record->status_resign == "3") {
 					$text_resign 	= " - [BLACKLIST]";
 
-					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+					if ($get_skk_status == "Review HRD" || $get_skk_status == "SK Sudah Terbit") {
 						$action 		= $status_pengajuan;
 					} else {
 						$action 		= $open_pengajuan;
@@ -3503,16 +3562,15 @@ class Employees_model extends CI_Model
 					$text_resign 	= " - [END CONTRACT]";
 					$action 		= $open_pengajuan;
 
-					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+					if ($get_skk_status == "Review HRD" || $get_skk_status == "SK Sudah Terbit") {
 						$action 		= $status_pengajuan;
 					} else {
 						$action 		= $open_pengajuan;
 					}
-
 				} else if ($record->status_resign == "5") {
 					$text_resign 	= " - [DEACTIVE]";
 
-					if($get_skk_status=="Review HRD" || $get_skk_status=="SK Sudah Terbit" ){
+					if ($get_skk_status == "Review HRD" || $get_skk_status == "SK Sudah Terbit") {
 						$action 		= $status_pengajuan;
 					} else {
 						$action 		= $open_pengajuan;
@@ -3524,7 +3582,7 @@ class Employees_model extends CI_Model
 					$action 		= "";
 				}
 
-				if($check_akses == 0){
+				if ($check_akses == 0) {
 
 					$action 		= $not_akses_profile;
 				}
@@ -3661,7 +3719,7 @@ class Employees_model extends CI_Model
 			$filterPeriode = "";
 			if (($sdate != null) && ($edate != "")) {
 				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
-				$filterPeriode = "DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+				$filterPeriode = "DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'";
 
 				// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
 
@@ -3770,7 +3828,6 @@ class Employees_model extends CI_Model
 					"date_of_joining" => strtoupper($record->date_of_joining),
 					"nama_interviewer" => strtoupper($record->id_screening)
 				);
-
 			}
 		} else {
 			$totalRecords = 0;
@@ -3817,7 +3874,7 @@ class Employees_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($filter != '') {
-					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' 
+			$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' 
 					or xin_employees.first_name like '%" . $searchValue . "%' 
 					or xin_employees.penempatan like '%" . $searchValue . "%') ";
 		}
@@ -3864,16 +3921,16 @@ class Employees_model extends CI_Model
 		## Fetch records
 		// $this->db->select('*');
 
-			$this->db->select('xin_employees.user_id');
-			$this->db->select('xin_employees.employee_id');
-			$this->db->select('xin_employees.first_name');
-			$this->db->select('xin_employees.project_id');
-			$this->db->select('xin_projects.title');
-			$this->db->select('xin_employees.designation_id');
-			$this->db->select('xin_designations.designation_name');
-			$this->db->select('xin_employees.penempatan');
-			$this->db->select('xin_employees.date_of_joining');
-			$this->db->select('xin_employees.id_screening');
+		$this->db->select('xin_employees.user_id');
+		$this->db->select('xin_employees.employee_id');
+		$this->db->select('xin_employees.first_name');
+		$this->db->select('xin_employees.project_id');
+		$this->db->select('xin_projects.title');
+		$this->db->select('xin_employees.designation_id');
+		$this->db->select('xin_designations.designation_name');
+		$this->db->select('xin_employees.penempatan');
+		$this->db->select('xin_employees.date_of_joining');
+		$this->db->select('xin_employees.id_screening');
 
 
 
@@ -3890,8 +3947,8 @@ class Employees_model extends CI_Model
 		if ($filterStatus != '') {
 			$this->db->where($filterStatus);
 		}
-			$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
-			$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
 		// $this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 		// $this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
 		$records = $this->db->get('xin_employees')->result();
@@ -3900,7 +3957,7 @@ class Employees_model extends CI_Model
 		$data = array();
 
 		foreach ($records as $record) {
-			
+
 
 			$data[] = array(
 				$record->employee_id,
@@ -3945,7 +4002,7 @@ class Employees_model extends CI_Model
 		// $status = $postData['status'];
 		$session_id = $postData['session_id'];
 
-		if ($project!=5) {
+		if ($project != 5) {
 			## Search 
 			$searchQuery = "";
 			if ($searchValue != '') {
@@ -4040,14 +4097,14 @@ class Employees_model extends CI_Model
 			$data = array();
 
 			foreach ($records as $record) {
-				$nip = '<a href="'.site_url().'admin/employees/emp_view/'.$record->employee_id.'" class="text-primary" target="_blank">'.$record->employee_id.'</a>'; 
+				$nip = '<a href="' . site_url() . 'admin/employees/emp_view/' . $record->employee_id . '" class="text-primary" target="_blank">' . $record->employee_id . '</a>';
 
-				$whatsapp = '<a href="https://wa.me/62'.$record->contact_no.'?text=Hello.." class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">'.$record->contact_no.'</button> </a>';
+				$whatsapp = '<a href="https://wa.me/62' . $record->contact_no . '?text=Hello.." class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">' . $record->contact_no . '</button> </a>';
 
-				$identity = 'UID '.$record->user_id.'<br>JID '.$record->id_kandidat;
-				$ktp = $record->ktp_no.$whatsapp;
-				$fullname = $nip.'<br>'.strtoupper(trim($record->first_name));
-				$date_of 	= $record->date_of_joining.'<br>'. $record->date_of_leaving.'<br>'.$record->status_resign;
+				$identity = 'UID ' . $record->user_id . '<br>JID ' . $record->id_kandidat;
+				$ktp = $record->ktp_no . $whatsapp;
+				$fullname = $nip . '<br>' . strtoupper(trim($record->first_name));
+				$date_of 	= $record->date_of_joining . '<br>' . $record->date_of_leaving . '<br>' . $record->status_resign;
 				$project_name = $this->get_nama_project($record->project_id);
 				$role_name = $this->get_nama_role($record->user_role_id);
 
@@ -4066,9 +4123,9 @@ class Employees_model extends CI_Model
 
 
 
-			// $this->db->select('xin_employees.id_screening');
+					// $this->db->select('xin_employees.id_screening');
 
-			// $this->db->select('xin_employees.user_role_id');
+					// $this->db->select('xin_employees.user_role_id');
 
 				);
 			}
@@ -4092,7 +4149,7 @@ class Employees_model extends CI_Model
 
 		return $response;
 	}
-	
+
 	public function get_req_empproject($empID)
 	{
 		$query = $this->db->query("SELECT project_id, CONCAT('[',priority,']', ' ', title) AS title from xin_projects WHERE project_id in (SELECT distinct(project) FROM xin_employee_request 
@@ -4341,7 +4398,7 @@ class Employees_model extends CI_Model
 		$status = $postData['status'];
 		$session_id = $postData['session_id'];
 
-		if ($project!=5) {
+		if ($project != 5) {
 			## Search 
 			$searchQuery = "";
 			if ($searchValue != '') {
@@ -4466,40 +4523,36 @@ class Employees_model extends CI_Model
 				$check_akses = $this->get_akses_profile($session_id, $record->project_id);
 
 
-					$open_approve = '<button onclick="open_approve(' . $record->secid . ' , 0)" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
+				$open_approve = '<button onclick="open_approve(' . $record->secid . ' , 0)" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">APPROVE HRD</button>';
 
-					$revisiinfo = 'Revisi Oleh ( '.$record->modifiedby.' : '.$record->modifiedon.' )';
-					$modifiedby = '<span style="color:#40bcfe; font-size: 12px; line-height: 0.1;">'.$revisiinfo.'</span>';
+				$revisiinfo = 'Revisi Oleh ( ' . $record->modifiedby . ' : ' . $record->modifiedon . ' )';
+				$modifiedby = '<span style="color:#40bcfe; font-size: 12px; line-height: 0.1;">' . $revisiinfo . '</span>';
 
-					$open_cancel = '<h8><span style="color:#f45555;font-weight:bold;">DITOLAK HRD</span></h8>';
+				$open_cancel = '<h8><span style="color:#f45555;font-weight:bold;">DITOLAK HRD</span></h8>';
 
-					$open_revisi = '<button onclick="open_approve(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENGAJUAN</button>';
+				$open_revisi = '<button onclick="open_approve(' . $record->secid . ', 1)" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">REVISI PENGAJUAN</button>';
 
-					$open_remove = '<button onclick="deleteSkk(' . $record->secid . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">HAPUS</button>';
+				$open_remove = '<button onclick="deleteSkk(' . $record->secid . ')" class="btn btn-sm btn-outline-danger ladda-button ml-0" data-style="expand-right">HAPUS</button>';
 
-					$not_akses_profile = '<h8><span style="color:#606060;font-weight:bold;">AKSES DIBATASI</span></h8>';
+				$not_akses_profile = '<h8><span style="color:#606060;font-weight:bold;">AKSES DIBATASI</span></h8>';
 
-					$menunggu_approve_hrd = '<h8><span style="color:#e91e63;font-weight:bold;">Menunggu Approve HRD</span></h8>';
+				$menunggu_approve_hrd = '<h8><span style="color:#e91e63;font-weight:bold;">Menunggu Approve HRD</span></h8>';
 
-				if ($record->cancel_status == 1){
+				if ($record->cancel_status == 1) {
 
-					if($session_id == 21528204 || $session_id == 1 || $session_id == 21532091){
-						$action = $open_cancel. ' ' .$open_revisi;
+					if ($session_id == 21528204 || $session_id == 1 || $session_id == 21532091) {
+						$action = $open_cancel . ' ' . $open_revisi;
 					} else {
 						// $action = $menunggu_approve_hrd;
-						$action = $open_cancel. ' ' .$open_revisi;
-
+						$action = $open_cancel . ' ' . $open_revisi;
 					}
-
 				} else {
 
-					if($session_id == 21528204 || $session_id == 1 || $session_id == 21532091){
-						$action = $open_approve. '<br>'. $open_remove;
+					if ($session_id == 21528204 || $session_id == 1 || $session_id == 21532091) {
+						$action = $open_approve . '<br>' . $open_remove;
 					} else {
 						$action = $menunggu_approve_hrd;
-
 					}
-
 				}
 				// if (empty($record->status_resign) || ($record->status_resign == "")) {
 				// 	$text_resign 	= "";
@@ -4601,7 +4654,7 @@ class Employees_model extends CI_Model
 				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 
-				if($check_akses == 0){
+				if ($check_akses == 0) {
 
 					$action 		= $not_akses_profile;
 				}
@@ -4617,7 +4670,7 @@ class Employees_model extends CI_Model
 					"penempatan" => strtoupper($record->penempatan),
 					"request_resign_date" => strtoupper($record->request_resign_date),
 					"request_by" => strtoupper($record->request_resign_by),
-					"cancel_date" => strtoupper($record->cancel_date). '<br>' . $modifiedby,
+					"cancel_date" => strtoupper($record->cancel_date) . '<br>' . $modifiedby,
 					"cancel_description" => strtoupper($record->cancel_description),
 
 					// "join" => strtoupper($record->date_of_joining),
@@ -5312,7 +5365,7 @@ ORDER BY jab.designation_id ASC";
 	public function add_traxes($data)
 	{
 
-      $dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
 
 		$dbtraxes->insert('xin_user_mobile', $data);
 		// $sql = "SELECT * FROM xin_user_mobile";
@@ -5327,11 +5380,11 @@ ORDER BY jab.designation_id ASC";
 		// }
 
 
-	  // $query = $cisdb->query("SELECT user_id, employee_id, first_name
-	// 	FROM xin_employees
-	// 	where project_id in (select DISTINCT(project_id) from xin_projects_akses where nip = '$nip')
-	// 	AND status_resign = 1");
-  	  // return $query->result();
+		// $query = $cisdb->query("SELECT user_id, employee_id, first_name
+		// 	FROM xin_employees
+		// 	where project_id in (select DISTINCT(project_id) from xin_projects_akses where nip = '$nip')
+		// 	AND status_resign = 1");
+		// return $query->result();
 	}
 
 	// Function to add record in table
@@ -5390,7 +5443,7 @@ ORDER BY jab.designation_id ASC";
 			'upload_pkwt'     	=> trim($postData['upload_pkwt']),
 			'modifiedon'		=> date("Y-m-d h:m:i"),
 		];
-		
+
 		$this->db->where('contract_id', $postData['contract_id']);
 		$this->db->update('xin_employee_contract', $data);
 	}
@@ -5428,7 +5481,7 @@ ORDER BY jab.designation_id ASC";
 			'remove_by'			=> trim($postData['remove_by']),
 			'remove_on'			=> date("Y-m-d h:m:i"),
 		];
-		
+
 		// $this->db->insert('xin_qrcode_skk', $data);
 		//update data
 		$this->db->where('secid', $postData['secid']);
@@ -7488,11 +7541,16 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 	//update PIN employee
 	public function update_pin($postData)
 	{
+		//update pin di database CIS
 		$this->db->set('private_code', $postData['pin_baru']);
 		$this->db->set('password', $postData['password_hash']);
 		$this->db->set('username', $postData['employee_id']);
 		$this->db->where('employee_id', $postData['employee_id']);
 		$this->db->update('xin_employees');
+
+		//update pin di database traxes
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+		$dbtraxes->insert('xin_user_mobile', $data);
 	}
 
 	//ambil data diri employee
@@ -8286,10 +8344,10 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 			request_resign_by NOT IN ('NULL','0')
 			AND approve_resignhrd IS NULL
 			AND cancel_resign_stat = 1
-			AND project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '". $idsession ."')
+			AND project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '" . $idsession . "')
 		)";
 		// $filterProject = "";
-			
+
 		//AND project in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $idsession . ")
 
 
@@ -8297,7 +8355,7 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		## Total number of records without filtering
 		$this->db->select('count(*) as allcount');
 		$this->db->where($kondisiDefaultQuery);
-		
+
 		$records = $this->db->get('xin_employees')->result();
 		$totalRecords = $records[0]->allcount;
 
