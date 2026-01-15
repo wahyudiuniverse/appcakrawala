@@ -350,7 +350,7 @@
 
 <!-- Tombol Send PIN -->
 <script type="text/javascript">
-	function send_pin(nomor_kontak, first_name, employee_id, private_code, project_name, penempatan) {
+	function send_pin(nomor_kontak, first_name, employee_id, private_code, project_name, penempatan, company_name) {
 		// alert("masuk button send pin");
 		// var first_name = '<?php //echo $first_name; 
 													?>';
@@ -364,8 +364,8 @@
 														?>';
 
 		var pesan_whatsapp = '*[ HR-SYSTEM NOTIFIKASI ]*\n\n' +
-			'Karyawan Aktif PT. Siprama Cakrawala:' +
-			'\n\nNama Lengkap: *' + first_name +
+			'Karyawan Aktif *' + company_name +
+			'*\n\nNama Lengkap: *' + first_name +
 			'*\nNIP: *' + employee_id +
 			'*\nPIN: *' + private_code +
 			'*\nPROJECT: *' + project_name +

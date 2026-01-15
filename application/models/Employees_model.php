@@ -698,6 +698,69 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil Company name dari kontrak terakhir
+	function get_company_name_from_pkwt($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(contract_id) as max_contract_id');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				$this->db->select('company');
+				$this->db->from('xin_employee_contract');
+				$this->db->where('contract_id', $query['max_contract_id']);
+				// $this->db->order_by('createdon', 'desc');
+				// $this->db->limit(1);
+
+
+				$query2 = $this->db->get()->row_array();
+				if (empty($query2)) {
+					return "";
+				} else {
+					return $this->get_company_name($query2['company']);
+				}
+			}
+		}
+	}
+
+	//ambil Company name table company
+	function get_company_name($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('name');
+			$this->db->where('company_id', $id);
+			$this->db->from('xin_companies');
+			
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['name'];
+			}
+		}
+	}
+
 	//ambil periode pkwt terakhir
 	function get_periode_pkwt($id)
 	{
@@ -2899,7 +2962,7 @@ class Employees_model extends CI_Model
 				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
 				$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-				$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
 				$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
 				$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
