@@ -11086,7 +11086,14 @@ class Employees extends MY_Controller
 		));
 		$response = curl_exec($curl);
 		curl_close($curl);
-		
+
+		$response_array = json_decode($response,true);
+
+		if($response_array['status'] = "200"){
+			//update status blast
+			$this->Employees_model->update_status_blast($postData['employee_id']);
+		}
+
 		echo $response;
 	}
 }

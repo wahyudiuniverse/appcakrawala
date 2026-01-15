@@ -405,6 +405,113 @@
 
 				if (res['status'] == "200") {
 					$('#isi-modal-process').html("<h2>Berhasil kirim PIN</h2>");
+
+					var searchVal_before = $('#tabel_employees_filter').find('input').val();
+
+					// alert("Searchval before: " + searchVal_before);
+
+					employee_table.destroy();
+
+					var project = document.getElementById("aj_project").value;
+					var sub_project = document.getElementById("aj_sub_project").value;
+					var status = document.getElementById("status").value;
+
+					// $('#tabel_employees_filter').find('input').val(searchVal_before);
+
+					var searchVal = $('#tabel_employees_filter').find('input').val();
+
+					// alert("Searchval after: " + searchVal);
+
+					if ((searchVal == "") && (project == "0")) {
+						$('#button_download_data').attr("hidden", true);
+
+					} else {
+						$('#button_download_data').attr("hidden", false);
+
+						employee_table = $('#tabel_employees').DataTable({
+							"search": {
+								"search": searchVal_before
+							},
+							//"bDestroy": true,
+							'processing': true,
+							'serverSide': true,
+							// 'stateSave': true,
+							'bFilter': true,
+							'serverMethod': 'post',
+							//'dom': 'plBfrtip',
+							'dom': 'lfrtip',
+							//"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+							//'columnDefs': [{
+							//  targets: 11,
+							//  type: 'date-eu'
+							//}],
+							// 'order': [
+							//   [4, 'asc']
+							// ],
+							'ajax': {
+								'url': '<?= base_url() ?>admin/reports/list_employees',
+								data: {
+									[csrfName]: csrfHash,
+									session_id: session_id,
+									project: project,
+									sub_project: sub_project,
+									status: status,
+									//base_url_catat: base_url_catat
+								},
+								error: function(xhr, ajaxOptions, thrownError) {
+									alert("Status :" + xhr.status);
+									alert("responseText :" + xhr.responseText);
+								},
+							},
+							'columns': [{
+									data: 'aksi',
+									"orderable": false
+								},
+								{
+									data: 'employee_id',
+									"orderable": false,
+									//searchable: true
+								},
+								{
+									data: 'pincode',
+									"orderable": false,
+								},
+								{
+									data: 'ktp_no',
+									"orderable": false,
+									//searchable: true
+								},
+								{
+									data: 'first_name',
+									"orderable": false,
+									//searchable: true
+								},
+								{
+									data: 'project',
+									"orderable": false
+								},
+								{
+									data: 'sub_project',
+									"orderable": false,
+								},
+								{
+									data: 'designation_name',
+									"orderable": false,
+								},
+								{
+									data: 'penempatan',
+									"orderable": false,
+								},
+								{
+									data: 'periode',
+									"orderable": false,
+								},
+							]
+						}).on('search.dt', () => eventFired('Search'));
+
+						$('#tombol_filter').attr("disabled", false);
+						$('#tombol_filter').removeAttr("data-loading");
+					}
 					// alert("Berhasil kirim PIN");
 				} else {
 					$('#isi-modal-process').html("<h2>Gagal kirim PIN</h2>");

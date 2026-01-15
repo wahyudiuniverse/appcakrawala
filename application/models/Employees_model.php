@@ -724,6 +724,8 @@ class Employees_model extends CI_Model
 				$this->db->select('file_name');
 				$this->db->select('sub_project');
 				$this->db->select('uniqueid');
+				$this->db->select('status_blast');
+				$this->db->select('blast_on');
 				$this->db->from('xin_employee_contract');
 				$this->db->where('contract_id', $query['max_contract_id']);
 				// $this->db->order_by('createdon', 'desc');
@@ -795,14 +797,51 @@ class Employees_model extends CI_Model
 						$button_kontrak = "";
 					}
 
+					if ($query2['status_blast'] == 1) {
+						$status_blast = "<br><font style='color: rgb(35, 37, 148);'><strong>[SUDAH BLAST on " . $query2['blast_on'] . "]</strong></font>";
+					} else {
+						$status_blast = "";
+					}
+
 					$file_name_draft_kontrak = base_url() . "admin/pkwt" . $query2['sub_project'] . "/view/" . $query2['uniqueid'];
 
-					return $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']) . '</br><a href="' . $file_name_draft_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button></a>' . $button_kontrak;
+					return $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']) . '</br><a href="' . $file_name_draft_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button></a>' . $button_kontrak . $status_blast;
 				}
 			}
 		}
 	}
 
+	//update status blast
+	function update_status_blast($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(contract_id) as max_contract_id');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			$this->db->where('cancel_stat', 0);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				$data = array(
+					'status_blast' => 1,
+					'blast_on' => date("Y-m-d H:i:s")
+				);
+
+				$this->db->where('contract_id', $query['max_contract_id']);
+				$this->db->update('xin_employee_contract', $data);
+			}
+		}
+	}
 
 	//ambil SK terakhir
 	function get_skk($id)
