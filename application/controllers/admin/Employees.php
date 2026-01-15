@@ -10721,10 +10721,10 @@ class Employees extends MY_Controller
 			$status = "200"; //file ditemukan
 			$pesan = "Berhasil Fetch Data";
 
-			if(($data['file_name'] == "") || ($data['file_name'] == null)){
+			if (($data['file_name'] == "") || ($data['file_name'] == null)) {
 				$file_name = "";
 			} else {
-				$file_name = '<embed class="form-group col-md-12" id="output_pkwt" type="application/pdf" src="'.$data['file_name'].'"></embed>';
+				$file_name = '<embed class="form-group col-md-12" id="output_pkwt" type="application/pdf" src="' . $data['file_name'] . '"></embed>';
 			}
 
 			$data_kontrak = array(
@@ -11051,5 +11051,42 @@ class Employees extends MY_Controller
 		$data = $this->Employees_model->un_valiadsi_employee_existing($postData);
 		echo json_encode($data);
 		//echo "data berhasil masuk";
+	}
+
+	//kirim pin menggunakan api whatsapp
+	public function send_pin()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		// $data = $this->Employees_model->un_valiadsi_employee_existing($postData);
+		// echo json_encode($data);
+		//echo "data berhasil masuk";nomor_kontak
+
+		$dataSending = array();
+		$dataSending["api_key"] = "MUSUCUGTQ4XTZWZB";
+		$dataSending["number_key"] = "5BpM7ZmvSaPmlC7l";
+		$dataSending["phone_no"] = $postData['nomor_kontak'];
+		$dataSending["message"] = $postData['pesan_whatsapp'];
+		$dataSending["wait_until_send"] = "1"; //This is an optional parameter, if you use this parameter the response will appear after sending the message is complete
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => 'https://api.watzap.id/v1/send_message',
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => '',
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 0,
+			CURLOPT_FOLLOWLOCATION => true,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => 'POST',
+			CURLOPT_POSTFIELDS => json_encode($dataSending),
+			CURLOPT_HTTPHEADER => array(
+				'Content-Type: application/json'
+			),
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
+		
+		echo $response;
 	}
 }

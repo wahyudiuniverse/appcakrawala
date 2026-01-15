@@ -2714,9 +2714,11 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_employees.verification_id');
 			$this->db->select('xin_employees.employee_id');
 			$this->db->select('xin_employees.status_resign');
+			$this->db->select('xin_employees.contact_no');
 			$this->db->select('xin_employees.ktp_no');
 			$this->db->select('xin_employees.first_name');
 			$this->db->select('xin_employees.project_id');
+			$this->db->select('xin_employees.private_code');
 			$this->db->select('xin_employees.sub_project_id');
 			$this->db->select('xin_employees.designation_id');
 			// $this->db->select('xin_designations.designation_id');
@@ -2858,6 +2860,7 @@ class Employees_model extends CI_Model
 				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
 				$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+				$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
 				$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
 				$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
@@ -2868,7 +2871,7 @@ class Employees_model extends CI_Model
 					"aksi" => $view,
 					"employee_id" => $record->employee_id . $text_resign,
 					"ktp_no" => $record->ktp_no . $validate_nik . $button_open_ktp,
-					"first_name" => strtoupper($record->first_name),
+					"first_name" => strtoupper($record->first_name) . $button_send_pin,
 					"project" => strtoupper($this->get_nama_project($record->project_id)),
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
