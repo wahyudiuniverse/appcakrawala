@@ -735,6 +735,57 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil Company name dari kontrak terakhir
+	function get_id_kontrak_terakhir($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('max(contract_id) as max_contract_id');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['max_contract_id'];
+			}
+		}
+	}
+
+	//ambil kontrak dari id kontrak
+	function get_kontrak_by_id($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('*');
+			$this->db->where('contract_id', $id);
+			$this->db->from('xin_employee_contract');
+
+			// $this->db->order_by('createdon', 'desc');
+			// $this->db->limit(1);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query;
+			}
+		}
+	}
+
 	//ambil Company name table company
 	function get_company_name($id)
 	{
@@ -746,7 +797,7 @@ class Employees_model extends CI_Model
 			$this->db->select('name');
 			$this->db->where('company_id', $id);
 			$this->db->from('xin_companies');
-			
+
 			// $this->db->order_by('createdon', 'desc');
 			// $this->db->limit(1);
 
@@ -835,16 +886,38 @@ class Employees_model extends CI_Model
 											$status = "203"; //file tidak ditemukan
 											$pesan = "File Tidak Ditemukan";
 										} else {
-											$headers = get_headers($record_database);
-											$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-											if ($file_in_url_exist) {
-												$nama_file = $record_database; //tampil file skema lama dengan http
-												$status = "200"; //file ditemukan
-												$pesan = "Berhasil Fetch Data";
-											} else {
+											// cek link pakai curl
+											// $url = "http://nonexistingrubbish-url.com";
+											// $curl = curl_init($url);
+											// curl_setopt($curl, CURLOPT_NOBODY, true);
+											// $result = curl_exec($curl);
+											// if ($result !== false) {
+											// 	$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+											// 	if ($statusCode == 404) {
+											// 		echo "URL Not Exists";
+											// 	} else {
+											// 		echo "URL Exists";
+											// 	}
+											// } else {
+											// 	echo "URL not Exists";
+											// }
+
+											$headers = @get_headers($record_database);
+											if ($headers == false) {
 												$nama_file = ""; //link mati atau tidak bisa dibuka
 												$status = "203"; //file tidak ditemukan
 												$pesan = "File Tidak Ditemukan";
+											} else {
+												$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+												if ($file_in_url_exist) {
+													$nama_file = $record_database; //tampil file skema lama dengan http
+													$status = "200"; //file ditemukan
+													$pesan = "Berhasil Fetch Data";
+												} else {
+													$nama_file = ""; //link mati atau tidak bisa dibuka
+													$status = "203"; //file tidak ditemukan
+													$pesan = "File Tidak Ditemukan";
+												}
 											}
 										}
 									}
@@ -853,8 +926,12 @@ class Employees_model extends CI_Model
 						}
 
 						// $file_name_kontrak = base_url() . "uploads/document/pkwt/" . $query2['file_name'];
-						$file_name_kontrak = $nama_file;
-						$button_kontrak = '</br><a href="' . $file_name_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
+						if ($nama_file == "") {
+							$button_kontrak = '</br><a href="#"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
+						} else {
+							$file_name_kontrak = $nama_file;
+							$button_kontrak = '</br><a href="' . $file_name_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
+						}
 					} else {
 						$file_name_kontrak = "";
 						$button_kontrak = "";
@@ -904,6 +981,57 @@ class Employees_model extends CI_Model
 				$this->db->update('xin_employee_contract', $data);
 			}
 		}
+	}
+
+	//cek status blast
+	function cek_status_blast()
+	{
+		// SELECT * FROM yourTableName ORDER BY id DESC LIMIT 1;
+
+		$this->db->select('*');
+		$this->db->order_by('id', 'desc');
+		$this->db->limit(1);
+
+		$this->db->from('log_blast_whatsapp');
+
+		$query = $this->db->get()->row_array();
+
+		//return $query['name'];
+		if (empty($query)) {
+			$data = array(
+				'status_blast' => 1,
+				'data' => null
+			);
+
+			return $data;
+		} else {
+			$waktu_sekarang = time();
+			$waktu_di_masa_lalu = strtotime($query['next_blast']);
+
+			if ($waktu_sekarang > $waktu_di_masa_lalu) {
+				$data = array(
+					'status_blast' => 1,
+					'data' => $query
+				);
+
+				return $data;
+			} else {
+				$data = array(
+					'status_blast' => 0,
+					'data' => $query
+				);
+
+				return $data;
+			}
+		}
+	}
+
+	//insert log blast
+	public function insert_log_blast($postData)
+	{
+		$this->db->insert('log_blast_whatsapp', $postData);
+
+		//return null;
 	}
 
 	//ambil SK terakhir
@@ -2962,7 +3090,7 @@ class Employees_model extends CI_Model
 				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
 				$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-				$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
 				$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
 				$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';

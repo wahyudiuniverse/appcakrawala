@@ -78,7 +78,7 @@
 				<div class="form-group row">
 					<!-- <pre>
             <?php //print_r($user_info); 
-						?>
+			?>
           </pre><br> -->
 					<div class="col-md-3">NIK <span class="icon-verify-nik"></span>
 					</div>
@@ -113,6 +113,9 @@
 </div>
 
 <!-- SECTION FILTER -->
+<!-- <pre>
+	<?php //print_r($session); ?>
+</pre> -->
 <div class="card border-blue">
 	<div class="card-header with-elements">
 		<div class="col-md-6">
@@ -153,8 +156,8 @@
 					<option value="0">--ALL--</option>
 					<!-- <?php foreach ($all_projects as $proj) { ?>
             <option value="<?php echo $proj->project_id; ?>" <?php if ($project_karyawan == $proj->project_id) {
-																																echo " selected";
-																															} ?>> <?php echo $proj->title; ?></option>
+																	echo " selected";
+																} ?>> <?php echo $proj->title; ?></option>
           <?php } ?> -->
 				</select>
 			</div>
@@ -350,18 +353,18 @@
 
 <!-- Tombol Send PIN -->
 <script type="text/javascript">
-	function send_pin(nomor_kontak, first_name, employee_id, private_code, project_name, penempatan, company_name) {
+	function send_pin(nomor_kontak, first_name, employee_id, private_code, project_name, penempatan, company_name, id_kontrak) {
 		// alert("masuk button send pin");
 		// var first_name = '<?php //echo $first_name; 
-													?>';
+								?>';
 		// var employee_id = '<?php //echo $employee_id; 
-													?>';
+								?>';
 		// var private_code = '<?php //echo $private_code; 
-														?>';
+								?>';
 		// var project_name = '<?php //echo $project_name; 
-														?>';
+								?>';
 		// var nomor_kontak = '<?php //echo $this->Xin_model->clean_post($contact_no); 
-														?>';
+								?>';
 
 		var pesan_whatsapp = '*[ HR-SYSTEM NOTIFIKASI ]*\n\n' +
 			'Karyawan Aktif *' + company_name +
@@ -390,6 +393,7 @@
 				private_code: private_code,
 				project_name: project_name,
 				penempatan: penempatan,
+				id_kontrak: id_kontrak,
 				pesan_whatsapp: pesan_whatsapp,
 			},
 			beforeSend: function() {
@@ -514,7 +518,10 @@
 					}
 					// alert("Berhasil kirim PIN");
 				} else {
-					$('#isi-modal-process').html("<h2>Gagal kirim PIN</h2>");
+					var message_gagal = "<h2>Gagal kirim PIN</h2>";
+					message_gagal = message_gagal + "<h3><br>Kode Error: " + res['status'];
+					message_gagal = message_gagal + "<br>" + res['message'] + "</h3>";
+					$('#isi-modal-process').html(message_gagal);
 					// alert("Gagal kirim whatsapp");
 				}
 

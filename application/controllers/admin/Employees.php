@@ -11056,44 +11056,96 @@ class Employees extends MY_Controller
 	//kirim pin menggunakan api whatsapp
 	public function send_pin()
 	{
+		$session = $this->session->userdata('username');
+		$blast_by = $session['employee_id'];
+		$blast_name = $session['employee_name'];
 		$postData = $this->input->post();
 
-		// get data 
-		// $data = $this->Employees_model->un_valiadsi_employee_existing($postData);
-		// echo json_encode($data);
-		//echo "data berhasil masuk";nomor_kontak
+		$status_blast = $this->Employees_model->cek_status_blast();
 
-		$dataSending = array();
-		$dataSending["api_key"] = "MUSUCUGTQ4XTZWZB";
-		$dataSending["number_key"] = "5BpM7ZmvSaPmlC7l";
-		$dataSending["phone_no"] = $postData['nomor_kontak'];
-		$dataSending["message"] = $postData['pesan_whatsapp'];
-		$dataSending["wait_until_send"] = "1"; //This is an optional parameter, if you use this parameter the response will appear after sending the message is complete
-		$curl = curl_init();
-		curl_setopt_array($curl, array(
-			CURLOPT_URL => 'https://api.watzap.id/v1/send_message',
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => '',
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 0,
-			CURLOPT_FOLLOWLOCATION => true,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => 'POST',
-			CURLOPT_POSTFIELDS => json_encode($dataSending),
-			CURLOPT_HTTPHEADER => array(
-				'Content-Type: application/json'
-			),
-		));
-		$response = curl_exec($curl);
-		curl_close($curl);
+		if ($status_blast['status_blast'] == 1) {
 
-		$response_array = json_decode($response,true);
+			// get data 
+			// $data = $this->Employees_model->un_valiadsi_employee_existing($postData);
+			// echo json_encode($data);
+			//echo "data berhasil masuk";nomor_kontak
 
-		if($response_array['status'] = "200"){
-			//update status blast
-			$this->Employees_model->update_status_blast($postData['employee_id']);
+			$dataSending = array();
+			$dataSending["api_key"] = "MUSUCUGTQ4XTZWZB";
+			$dataSending["number_key"] = "JOOsM0fOHMRtoK8S";
+			$dataSending["phone_no"] = $postData['nomor_kontak'];
+			$dataSending["message"] = $postData['pesan_whatsapp'];
+			$dataSending["wait_until_send"] = "1"; //This is an optional parameter, if you use this parameter the response will appear after sending the message is complete
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => 'https://api.watzap.id/v1/send_message',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_POSTFIELDS => json_encode($dataSending),
+				CURLOPT_HTTPHEADER => array(
+					'Content-Type: application/json'
+				),
+			));
+			$response = curl_exec($curl);
+			curl_close($curl);
+
+			$response_array = json_decode($response, true);
+
+			if ($response_array['status'] = "200") {
+				$blast_on = date("Y-m-d H:i:s");
+				$dateTime_blast_on = new DateTime($blast_on);
+				$dateTime_blast_on->modify('+5 minutes');
+				$next_blast = $dateTime_blast_on->format('Y-m-d H:i:s');
+
+				$data_kontrak = $this->Employees_model->get_kontrak_by_id($postData['id_kontrak']);
+
+				if ($data_kontrak == "") {
+					$project_id = "";
+					$sub_project_id = "";
+					$jabatan_id = "";
+				} else {
+					$project_id = $data_kontrak['project'];
+					$sub_project_id = $data_kontrak['sub_project'];
+					$jabatan_id = $data_kontrak['jabatan'];
+				}
+
+				$data_log_blast = array(
+					'id_kontrak' => $postData['id_kontrak'],
+					'nip' => $postData['employee_id'],
+					'nama' => $postData['first_name'],
+					'project_id' => $project_id,
+					'project_name' => $postData['project_name'],
+					'sub_project_id' => $sub_project_id,
+					'sub_project_name' => strtoupper($this->Employees_model->get_nama_sub_project($sub_project_id)),
+					'jabatan_id' => $jabatan_id,
+					'jabatan_name' => strtoupper($this->Employees_model->get_nama_jabatan($jabatan_id)),
+					'penempatan' => $postData['penempatan'],
+					'blast_by' => $blast_by,
+					'blast_name' => $blast_name,
+					'blast_on' => $blast_on,
+					'next_blast' => $next_blast,
+				);
+
+				//insert log blast
+				$this->Employees_model->insert_log_blast($data_log_blast);
+
+				//update status blast
+				$this->Employees_model->update_status_blast($postData['employee_id']);
+			}
+
+			echo $response;
+		} else if ($status_blast['status_blast'] == 0) {
+			$data = array(
+				'status' => 0,
+				'message' => "Masih jeda pengiriman. Anda bisa mengirim setelah waktu berikut: " . $status_blast['data']['next_blast']
+			);
+
+			echo json_encode($data);
 		}
-
-		echo $response;
 	}
 }
