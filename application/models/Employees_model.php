@@ -815,14 +815,32 @@ class Employees_model extends CI_Model
 	//ambil periode pkwt terakhir
 	function get_periode_pkwt($id)
 	{
+		$data = array(
+			'jumlah_kontrak' => "",
+			'tanggal_kontrak' => "",
+			'draft_kontrak' => "",
+			'button_kontrak' => "",
+			'status_blast' => "",
+		);
+
 		if ($id == null) {
-			return "";
+			return $data;
 		} else if ($id == 0) {
-			return "";
+			return $data;
 		} else {
+			//hitung jumlah kontrak
+			$this->db->select('count(*) as allcount');
+			$this->db->from('xin_employee_contract');
+			$this->db->where('employee_id', $id);
+			$this->db->where('status_pkwt', 1);
+			$this->db->where('cancel_stat', 0);
+			$query_count = $this->db->get()->row_array();
+
+
 			$this->db->select('max(contract_id) as max_contract_id');
 			$this->db->from('xin_employee_contract');
 			$this->db->where('employee_id', $id);
+			$this->db->where('status_pkwt', 1);
 			$this->db->where('cancel_stat', 0);
 			// $this->db->order_by('createdon', 'desc');
 			// $this->db->limit(1);
@@ -831,8 +849,9 @@ class Employees_model extends CI_Model
 
 			//return $query['name'];
 			if (empty($query)) {
-				return "";
+				return $data;
 			} else {
+				$this->db->select('contract_id');
 				$this->db->select('from_date');
 				$this->db->select('to_date');
 				$this->db->select('file_name');
@@ -847,7 +866,7 @@ class Employees_model extends CI_Model
 
 				$query2 = $this->db->get()->row_array();
 				if (empty($query2)) {
-					return "";
+					return $data;
 				} else {
 					if ($query2['file_name'] != null) {
 						$local1 = "./uploads/document/pkwt/";
@@ -860,78 +879,87 @@ class Employees_model extends CI_Model
 						$status = "";
 						$pesan = "";
 
-
 						if (($query2['file_name'] == "") || (empty($query2['file_name'])) || ($query2['file_name'] == "0")) {
-							$nama_file = ""; //nilai di database kosong
-							$status = "202"; //file blm upload
-							$pesan = "File Belum Diupload";
+							// $nama_file = ""; //nilai di database kosong
+							// $status = "202"; //file blm upload
+							// $pesan = "File Belum Diupload";
+							$button_kontrak = '';
 						} else {
-							if (file_exists($local1 . $record_database)) { //cek file di lokal
-								$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
-								$status = "200"; //file ditemukan
-								$pesan = "Berhasil Fetch Data";
-							} else {
-								if (file_exists($local2 . $record_database)) { //cek file di lokal 2
-									$nama_file_rekening = base_url() . "uploads/document/" . $record_database;
-									$status_rekening = "200"; //file ditemukan
-									$pesan_rekening = "Berhasil Fetch Data";
-								} else {
-									if (file_exists($local3 . $record_database)) { //cek file di lokal 3
-										$nama_file_rekening = base_url() . $record_database;
-										$status_rekening = "200"; //file ditemukan
-										$pesan_rekening = "Berhasil Fetch Data";
-									} else {
-										if (strpos($record_database, "http") === false) { //kalau ada http nya
-											$nama_file = ""; //record di database tanpa http
-											$status = "203"; //file tidak ditemukan
-											$pesan = "File Tidak Ditemukan";
-										} else {
-											// cek link pakai curl
-											// $url = "http://nonexistingrubbish-url.com";
-											// $curl = curl_init($url);
-											// curl_setopt($curl, CURLOPT_NOBODY, true);
-											// $result = curl_exec($curl);
-											// if ($result !== false) {
-											// 	$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-											// 	if ($statusCode == 404) {
-											// 		echo "URL Not Exists";
-											// 	} else {
-											// 		echo "URL Exists";
-											// 	}
-											// } else {
-											// 	echo "URL not Exists";
-											// }
-
-											$headers = @get_headers($record_database);
-											if ($headers == false) {
-												$nama_file = ""; //link mati atau tidak bisa dibuka
-												$status = "203"; //file tidak ditemukan
-												$pesan = "File Tidak Ditemukan";
-											} else {
-												$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-												if ($file_in_url_exist) {
-													$nama_file = $record_database; //tampil file skema lama dengan http
-													$status = "200"; //file ditemukan
-													$pesan = "Berhasil Fetch Data";
-												} else {
-													$nama_file = ""; //link mati atau tidak bisa dibuka
-													$status = "203"; //file tidak ditemukan
-													$pesan = "File Tidak Ditemukan";
-												}
-											}
-										}
-									}
-								}
-							}
+							$button_kontrak = '</br><button onclick="open_kontrak(\'' . $query2['contract_id'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button>';
 						}
 
-						// $file_name_kontrak = base_url() . "uploads/document/pkwt/" . $query2['file_name'];
-						if ($nama_file == "") {
-							$button_kontrak = '</br><a href="#"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
-						} else {
-							$file_name_kontrak = $nama_file;
-							$button_kontrak = '</br><a href="' . $file_name_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
-						}
+						//	// Cek ada file nya atau tidak
+						// 	if (($query2['file_name'] == "") || (empty($query2['file_name'])) || ($query2['file_name'] == "0")) {
+						// 		$nama_file = ""; //nilai di database kosong
+						// 		$status = "202"; //file blm upload
+						// 		$pesan = "File Belum Diupload";
+						// 	} else {
+						// 		if (file_exists($local1 . $record_database)) { //cek file di lokal
+						// 			$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
+						// 			$status = "200"; //file ditemukan
+						// 			$pesan = "Berhasil Fetch Data";
+						// 		} else {
+						// 			if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+						// 				$nama_file_rekening = base_url() . "uploads/document/" . $record_database;
+						// 				$status_rekening = "200"; //file ditemukan
+						// 				$pesan_rekening = "Berhasil Fetch Data";
+						// 			} else {
+						// 				if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+						// 					$nama_file_rekening = base_url() . $record_database;
+						// 					$status_rekening = "200"; //file ditemukan
+						// 					$pesan_rekening = "Berhasil Fetch Data";
+						// 				} else {
+						// 					if (strpos($record_database, "http") === false) { //kalau ada http nya
+						// 						$nama_file = ""; //record di database tanpa http
+						// 						$status = "203"; //file tidak ditemukan
+						// 						$pesan = "File Tidak Ditemukan";
+						// 					} else {
+						// 						// cek link pakai curl
+						// 						// $url = "http://nonexistingrubbish-url.com";
+						// 						// $curl = curl_init($url);
+						// 						// curl_setopt($curl, CURLOPT_NOBODY, true);
+						// 						// $result = curl_exec($curl);
+						// 						// if ($result !== false) {
+						// 						// 	$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+						// 						// 	if ($statusCode == 404) {
+						// 						// 		echo "URL Not Exists";
+						// 						// 	} else {
+						// 						// 		echo "URL Exists";
+						// 						// 	}
+						// 						// } else {
+						// 						// 	echo "URL not Exists";
+						// 						// }
+
+						// 						$headers = @get_headers($record_database);
+						// 						if ($headers == false) {
+						// 							$nama_file = ""; //link mati atau tidak bisa dibuka
+						// 							$status = "203"; //file tidak ditemukan
+						// 							$pesan = "File Tidak Ditemukan";
+						// 						} else {
+						// 							$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						// 							if ($file_in_url_exist) {
+						// 								$nama_file = $record_database; //tampil file skema lama dengan http
+						// 								$status = "200"; //file ditemukan
+						// 								$pesan = "Berhasil Fetch Data";
+						// 							} else {
+						// 								$nama_file = ""; //link mati atau tidak bisa dibuka
+						// 								$status = "203"; //file tidak ditemukan
+						// 								$pesan = "File Tidak Ditemukan";
+						// 							}
+						// 						}
+						// 					}
+						// 				}
+						// 			}
+						// 		}
+						// 	}
+
+						// 	// $file_name_kontrak = base_url() . "uploads/document/pkwt/" . $query2['file_name'];
+						// 	if ($nama_file == "") {
+						// 		$button_kontrak = '</br><a href="#"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
+						// 	} else {
+						// 		$file_name_kontrak = $nama_file;
+						// 		$button_kontrak = '</br><a href="' . $file_name_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button></a>';
+						// 	}
 					} else {
 						$file_name_kontrak = "";
 						$button_kontrak = "";
@@ -944,8 +972,18 @@ class Employees_model extends CI_Model
 					}
 
 					$file_name_draft_kontrak = base_url() . "admin/pkwt" . $query2['sub_project'] . "/view/" . $query2['uniqueid'];
+					// $button_draft_kontrak = '</br><a href="' . $file_name_draft_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button></a>';
+					$button_draft_kontrak = '</br><button onclick="open_draft_kontrak(\'' . $query2['uniqueid'] . '\',\'' . $query2['sub_project'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button>';
 
-					return $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']) . '</br><a href="' . $file_name_draft_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button></a>' . $button_kontrak . $status_blast;
+					$data = array(
+						'jumlah_kontrak' => $query_count['allcount'],
+						'tanggal_kontrak' => $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']),
+						'draft_kontrak' => $button_draft_kontrak,
+						'button_kontrak' => $button_kontrak,
+						'status_blast' => $status_blast,
+					);
+
+					return $data;
 				}
 			}
 		}
@@ -1724,6 +1762,60 @@ class Employees_model extends CI_Model
 		} else if ($postData['kolom'] == "pemilik_rekening") {
 			$data = array(
 				'pemilik_rek' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}  else if ($postData['kolom'] == "dokumen_ktp") {
+			$data = array(
+				'filename_ktp' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}  else if ($postData['kolom'] == "dokumen_kk") {
+			$data = array(
+				'filename_kk' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}  else if ($postData['kolom'] == "buku_rekening") {
+			$data = array(
+				'filename_rek' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}  else if ($postData['kolom'] == "ijazah") {
+			$data = array(
+				'filename_isd' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}  else if ($postData['kolom'] == "cv") {
+			$data = array(
+				'filename_cv' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}  else if ($postData['kolom'] == "skck") {
+			$data = array(
+				'filename_skck' => $postData['nilai_sesudah']
 			);
 			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
 				$data["verification_id"] = $postData['id_employee_request'];
@@ -2842,6 +2934,7 @@ class Employees_model extends CI_Model
 	*/
 	function get_list_employees($postData = null)
 	{
+		$role_resources_ids = $this->Xin_model->user_role_resource();
 
 		$response = array();
 
@@ -2996,7 +3089,7 @@ class Employees_model extends CI_Model
 					$actual_verification_id = $record->verification_id;
 				}
 
-				//cek status validation ke database
+				//cek status verifikasi
 				$nik_validation = "0";
 				$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
 				if (is_null($nik_validation_query)) {
@@ -3004,7 +3097,71 @@ class Employees_model extends CI_Model
 				} else {
 					$nik_validation = $nik_validation_query['status'];
 				}
+				$kk_validation = "0";
+				$kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
+				if (is_null($kk_validation_query)) {
+					$kk_validation = "0";
+				} else {
+					$kk_validation = $kk_validation_query['status'];
+				}
+				$nama_validation = "0";
+				$nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
+				if (is_null($nama_validation_query)) {
+					$nama_validation = "0";
+				} else {
+					$nama_validation = $nama_validation_query['status'];
+				}
+				$bank_validation = "0";
+				$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+				if (is_null($bank_validation_query)) {
+					$bank_validation = "0";
+				} else {
+					$bank_validation = $bank_validation_query['status'];
+				}
+				$norek_validation = "0";
+				$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+				if (is_null($norek_validation_query)) {
+					$norek_validation = "0";
+				} else {
+					$norek_validation = $norek_validation_query['status'];
+				}
+				$pemilik_rekening_validation = "0";
+				$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+				if (is_null($pemilik_rekening_validation_query)) {
+					$pemilik_rekening_validation = "0";
+				} else {
+					$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+				}
+				$buku_rekening_validation = "0";
+				$buku_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'buku_rekening');
+				if (is_null($buku_rekening_validation_query)) {
+					$buku_rekening_validation = "0";
+				} else {
+					$buku_rekening_validation = $buku_rekening_validation_query['status'];
+				}
+				$ijazah_validation = "0";
+				$ijazah_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'ijazah');
+				if (is_null($ijazah_query)) {
+					$ijazah_validation = "0";
+				} else {
+					$ijazah_validation = $ijazah_query['status'];
+				}
+				$cv_validation = "0";
+				$cv_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'cv');
+				if (is_null($cv_query)) {
+					$cv_validation = "0";
+				} else {
+					$cv_validation = $cv_query['status'];
+				}
+				$skck_validation = "0";
+				$skck_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'skck');
+				if (is_null($skck_query)) {
+					$skck_validation = "0";
+				} else {
+					$skck_validation = $skck_query['status'];
+				}
 
+				//assign checklist hijau kalau sudah diverifikasi
 				$validate_nik = "";
 				if ($nik_validation == "1") {
 					$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
@@ -3012,7 +3169,82 @@ class Employees_model extends CI_Model
 					$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 				}
 				$button_open_ktp = '<button onclick="open_ktp(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+				$validate_kk = "";
+				if ($kk_validation == "1") {
+					$validate_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_nama = "";
+				if ($nama_validation == "1") {
+					$validate_nama = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_nama = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_bank = "";
+				if ($bank_validation == "1") {
+					$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_norek = "";
+				if ($norek_validation == "1") {
+					$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_pemilik_rekening = "";
+				if ($pemilik_rekening_validation == "1") {
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_buku_rekening = "";
+				if ($buku_rekening_validation == "1") {
+					$validate_buku_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_buku_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_ijazah = "";
+				if ($ijazah_validation == "1") {
+					$validate_ijazah = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_ijazah = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_cv = "";
+				if ($cv_validation == "1") {
+					$validate_cv = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_cv = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_skck = "";
+				if ($skck_validation == "1") {
+					$validate_skck = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_skck = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
 
+				// //rangkai tabel verifikasi v.1 -> Tabel All verifikasi
+				// $tabel_verifikasi = "<table class='table table-striped col-md-12'>";
+				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>NIK</td><td>" . $validate_nik . "</td><td>SKCK</td><td>" . $validate_skck . "</td></tr>";
+				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>Nama</td><td>" . $validate_nama . "</td><td>Bank</td><td>" . $validate_bank . "</td></tr>";
+				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>KK</td><td>" . $validate_kk . "</td><td>No. Rek.</td><td>" . $validate_norek . "</td></tr>";
+				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>CV</td><td>" . $validate_cv . "</td><td>Nama Rek.</td><td>" . $validate_pemilik_rekening . "</td></tr>";
+				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>Ijazah</td><td>" . $validate_ijazah . "</td><td>Buku Tabungan</td><td>" . $validate_buku_rekening . "</td></tr>";
+				// $tabel_verifikasi = $tabel_verifikasi . "</table>";
+
+				//rangkai tabel verifikasi v.2 -> Tabel verifikasi
+				$tabel_verifikasi = "<table class='table table-striped col-md-12'>";
+				$tabel_verifikasi = $tabel_verifikasi . "<tr><td>NIK</td><td>" . $validate_nik . "</td><td>Ijazah</td><td>" . $validate_ijazah . "</td></tr>";
+				$tabel_verifikasi = $tabel_verifikasi . "<tr><td>KK</td><td>" . $validate_kk . "</td><td>CV</td><td>" . $validate_cv . "</td></tr>";
+				$tabel_verifikasi = $tabel_verifikasi . "<tr><td>No. Rek.</td><td>" . $validate_norek . "</td><td>SKCK</td><td>" . $validate_skck . "</td></tr>";
+				$tabel_verifikasi = $tabel_verifikasi . "<tr><td colspan='3'>Buku Tabungan</td><td>" . $validate_buku_rekening . "</td></tr>";
+				if (in_array('1000', $role_resources_ids)) {
+					$tabel_verifikasi = $tabel_verifikasi . "<tr><td colspan='4'><button type='button' onclick='verifikasi(" . $record->employee_id . ")' class='btn btn-xs btn-outline-twitter col-12' >Verifikasi data</button></td></tr>";
+				}
+				$tabel_verifikasi = $tabel_verifikasi . "</table>";
+
+				// $view = "<button type='button' onclick='verifikasi(" . $record->employee_id . ")' class='btn btn-xs btn-outline-twitter col-12' >Verifikasi data</button>";
 				// $text_periode_from = "";
 				// $text_periode_to = "";
 				// $text_periode = "";
@@ -3081,16 +3313,22 @@ class Employees_model extends CI_Model
 					}
 				}
 				if ($level_record <= $level_user) {
-					$text_pin = "**********";
+					$text_pin = " - **********";
 				} else {
-					$text_pin = $record->private_code;
+					$text_pin = " - " . $record->private_code;
 				}
+
+				$pkwt_periode = $this->get_periode_pkwt($record->employee_id);
 
 				// $addendum_id = $this->secure->encrypt_url($record->id);
 				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
 				$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-				$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				if ($pkwt_periode['jumlah_kontrak'] == 1) {
+					$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				} else {
+					$button_send_pin = "";
+				}
 				$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
 				$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
@@ -3099,15 +3337,16 @@ class Employees_model extends CI_Model
 
 				$data[] = array(
 					"aksi" => $view,
-					"employee_id" => $record->employee_id . $text_resign,
-					"ktp_no" => $record->ktp_no . $validate_nik . $button_open_ktp,
+					"employee_id" => $record->employee_id . $text_pin . $text_resign,
+					"ktp_no" => $record->ktp_no . $button_open_ktp,
 					"first_name" => strtoupper($record->first_name) . $button_send_pin,
+					"verifikasi" => $tabel_verifikasi,
 					"project" => strtoupper($this->get_nama_project($record->project_id)),
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
 					"penempatan" => strtoupper($record->penempatan),
-					"periode" => $this->get_periode_pkwt($record->employee_id),
-					"pincode" => $text_pin,
+					"periode" => "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['status_blast'],
+					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
 				);
 			}
@@ -3567,6 +3806,174 @@ class Employees_model extends CI_Model
 		//json_encode($data);
 	}
 
+	/*
+	* persiapan data export excel
+	* data request employee yang belum diapprove HRD dan belum ditolak HRD
+	* 
+	* @input array of variable from post
+	* @return array of employee data
+	* @author Fadla Qamara
+	*/
+	function get_employee_print_broadcast($postData = null)
+	{
+
+		$response = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$project = $postData['project'];
+		$sub_project = $postData['sub_project'];
+		$status = $postData['status'];
+		$filter = $postData['filter'];
+		$session_id = $postData['session_id'];
+
+		$filterProject = "";
+		$filterGolongan = "";
+		$filterKategori = "";
+
+		## Search 
+		$searchQuery = "";
+		if ($filter != '') {
+			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%' or xin_designations.designation_name like '%" . $filter . "%') ";
+		}
+
+		## Filter
+		$filterProject = "";
+		if (($project != null) && ($project != "") && ($project != '0')) {
+			$filterProject = "(
+				project_id = " . $project . "
+			)";
+		} else {
+			$filterProject = "";
+		}
+
+		$filterSubProject = "";
+		if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+			$filterSubProject = "(
+				sub_project_id = '" . $sub_project . "'
+			)";
+		} else {
+			$filterSubProject = "";
+		}
+
+		$filterStatus = "";
+		if (($status != null) && ($status != "") && ($status != '0')) {
+			$filterStatus = "(
+				status_resign = '" . $status . "'
+			)";
+		} else {
+			$filterStatus = "";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(xin_employees.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+
+		## Fetch records
+		// $this->db->select('*');
+		$this->db->select('xin_employees.employee_id');
+		$this->db->select('xin_employees.status_resign');
+		$this->db->select('xin_employees.private_code');
+		$this->db->select('xin_employees.ktp_no');
+		$this->db->select('xin_employees.first_name');
+		$this->db->select('xin_employees.designation_id');
+		$this->db->select('xin_designations.designation_name');
+		$this->db->select('xin_employees.project_id');
+		$this->db->select('xin_employees.sub_project_id');
+		$this->db->select('xin_employees.penempatan');
+		$this->db->select('xin_employees.contact_no');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		if ($filterProject != '') {
+			$this->db->where($filterProject);
+		}
+		if ($filterSubProject != '') {
+			$this->db->where($filterSubProject);
+		}
+		if ($filterStatus != '') {
+			$this->db->where($filterStatus);
+		}
+		// $this->db->join('xin_companies', 'xin_companies.company_id = xin_employees.company_id');
+		// $this->db->join('xin_departments', 'xin_departments.department_id = xin_employees.department_id');
+		// $this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id');
+		// $this->db->join('xin_projects_sub', 'xin_projects_sub.secid = xin_employees.sub_project_id');
+		// $this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id');
+		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
+		// $this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		// $this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract WHERE status_pkwt = 1 GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		$records = $this->db->get('xin_employees')->result();
+		$tes_query = $this->db->last_query();
+
+		$data = array();
+
+		foreach ($records as $record) {
+			$text_resign = "";
+			if (empty($record->status_resign) || ($record->status_resign == "")) {
+				$text_resign = "";
+			} else if ($record->status_resign == "1") {
+				$text_resign = "AKTIF";
+			} else if ($record->status_resign == "2") {
+				$text_resign = "RESIGN";
+			} else if ($record->status_resign == "3") {
+				$text_resign = "BLACKLIST";
+			} else if ($record->status_resign == "4") {
+				$text_resign = "END CONTRACT";
+			} else if ($record->status_resign == "5") {
+				$text_resign = "DEACTIVE";
+			} else {
+				$text_resign = "";
+			}
+
+			$text_pin = "";
+			$id_jabatan_user = $this->get_id_jabatan($session_id);
+			$level_record = $this->get_level($record->designation_id);
+			$level_user = $this->get_level($id_jabatan_user);
+
+			if (empty($level_user) || $level_user == "") {
+				$level_user = "Z9";
+			} else {
+				if (strlen($level_user) == 1) {
+					$level_user = $level_user . "0";
+				}
+			}
+
+			if (empty($level_record) || $level_record == "") {
+				$level_record = "Z9";
+			} else {
+				if (strlen($level_record) == 1) {
+					$level_record = $level_record . "0";
+				}
+			}
+			if ($level_record <= $level_user) {
+				$text_pin 			= "**********";
+			} else {
+				$text_pin 			= $record->private_code;
+			}
+
+
+			$data[] = array(
+				$text_resign,
+				$record->employee_id,
+				$text_pin,
+				$record->ktp_no,
+				trim(strtoupper($record->first_name), " "),
+				strtoupper($this->get_nama_project($record->project_id)),
+				strtoupper($this->get_nama_sub_project($record->sub_project_id)),
+				strtoupper($record->designation_name),
+				strtoupper($record->penempatan),
+				$record->contact_no
+			);
+		}
+
+		//print_r($this->db->last_query());
+		//die;
+		//var_dump($postData);
+		//var_dump($this->db->last_query());
+
+		return $data;
+		//json_encode($data);
+	}
+
 
 	/*
 	* persiapan data untuk datatable pagination
@@ -3851,6 +4258,9 @@ class Employees_model extends CI_Model
 						$level_record = $level_record . "0";
 					}
 				}
+
+				$pkwt = $this->get_periode_pkwt($record->employee_id);
+
 				// if ($level_record <= $level_user) {
 				// 	$text_pin = "**********";
 				// } else {
@@ -3880,7 +4290,7 @@ class Employees_model extends CI_Model
 					"penempatan" => strtoupper($record->penempatan),
 					"join" => strtoupper($record->date_of_joining),
 					"leave" => strtoupper($record->date_of_leaving),
-					"periode" => $this->get_periode_pkwt($record->employee_id),
+					"periode" => "Kontrak ke: " . $pkwt['jumlah_kontrak'] . "<br>" . $pkwt['tanggal_kontrak'] . $pkwt['draft_kontrak'] . $pkwt['button_kontrak'] . $pkwt['status_blast'],
 					"status_sk" => $this->get_skk($record->employee_id),
 					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
@@ -7782,13 +8192,15 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->update('xin_employees');
 
 		//update pin di database traxes
-		$dbtraxes = $this->load->database('dbtraxes', TRUE);
-		$dbtraxes->insert('xin_user_mobile', $data);
+		// $dbtraxes = $this->load->database('dbtraxes', TRUE);
+		// $dbtraxes->insert('xin_user_mobile', $data);
 	}
 
 	//ambil data diri employee
 	public function get_data_diri($postData)
 	{
+		$this->db->select('user_id');
+		$this->db->select('verification_id');
 		$this->db->select('employee_id');
 		$this->db->select('first_name');
 		$this->db->select('gender');
@@ -7815,6 +8227,13 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('bank_name');
 		$this->db->select('nomor_rek');
 		$this->db->select('pemilik_rek');
+
+		$this->db->select('filename_ktp');
+		$this->db->select('filename_kk');
+		$this->db->select('filename_cv');
+		$this->db->select('filename_skck');
+		$this->db->select('filename_isd');
+		$this->db->select('filename_rek');
 
 		$this->db->select('status_resign');
 		$this->db->select('date_resign_request');

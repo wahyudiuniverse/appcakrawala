@@ -8859,7 +8859,7 @@ class Employees extends MY_Controller
 			if (file_exists($record_database)) {
 				$pesan = "ada file"; //tampil file skema lama tanpa http
 			} else {
-				$headers = get_headers($record_database);
+				$headers = @get_headers($record_database);
 				$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false;
 				if ($file_in_url_exist) {
 					$pesan = "ada file"; //tampil file skema lama dengan http
@@ -8911,6 +8911,175 @@ class Employees extends MY_Controller
 				'pesan' 	=> "Karyawan tidak ditemukan",
 			);
 		} else {
+			//verification id
+			$actual_verification_id = "";
+			if ((is_null($data['verification_id'])) || ($data['verification_id'] == "") || ($data['verification_id'] == "0")) {
+				$actual_verification_id = "e_" . $data['user_id'];
+			} else {
+				$actual_verification_id = $data['verification_id'];
+			}
+
+			//cek status verifikasi
+			$nik_validation = "0";
+			$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+			if (is_null($nik_validation_query)) {
+				$nik_validation = "0";
+			} else {
+				$nik_validation = $nik_validation_query['status'];
+			}
+			$kk_validation = "0";
+			$kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
+			if (is_null($kk_validation_query)) {
+				$kk_validation = "0";
+			} else {
+				$kk_validation = $kk_validation_query['status'];
+			}
+			$nama_validation = "0";
+			$nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
+			if (is_null($nama_validation_query)) {
+				$nama_validation = "0";
+			} else {
+				$nama_validation = $nama_validation_query['status'];
+			}
+			$bank_validation = "0";
+			$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+			if (is_null($bank_validation_query)) {
+				$bank_validation = "0";
+			} else {
+				$bank_validation = $bank_validation_query['status'];
+			}
+			$norek_validation = "0";
+			$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+			if (is_null($norek_validation_query)) {
+				$norek_validation = "0";
+			} else {
+				$norek_validation = $norek_validation_query['status'];
+			}
+			$pemilik_rekening_validation = "0";
+			$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+			if (is_null($pemilik_rekening_validation_query)) {
+				$pemilik_rekening_validation = "0";
+			} else {
+				$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+			}
+			$dokumen_ktp_validation = "0";
+			$dokumen_ktp_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'dokumen_ktp');
+			if (is_null($dokumen_ktp_validation_query)) {
+				$dokumen_ktp_validation = "0";
+			} else {
+				$dokumen_ktp_validation = $dokumen_ktp_validation_query['status'];
+			}
+			$dokumen_kk_validation = "0";
+			$dokumen_kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'dokumen_kk');
+			if (is_null($dokumen_kk_validation_query)) {
+				$dokumen_kk_validation = "0";
+			} else {
+				$dokumen_kk_validation = $dokumen_kk_validation_query['status'];
+			}
+			$buku_rekening_validation = "0";
+			$buku_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'buku_rekening');
+			if (is_null($buku_rekening_validation_query)) {
+				$buku_rekening_validation = "0";
+			} else {
+				$buku_rekening_validation = $buku_rekening_validation_query['status'];
+			}
+			$ijazah_validation = "0";
+			$ijazah_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'ijazah');
+			if (is_null($ijazah_query)) {
+				$ijazah_validation = "0";
+			} else {
+				$ijazah_validation = $ijazah_query['status'];
+			}
+			$cv_validation = "0";
+			$cv_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'cv');
+			if (is_null($cv_query)) {
+				$cv_validation = "0";
+			} else {
+				$cv_validation = $cv_query['status'];
+			}
+			$skck_validation = "0";
+			$skck_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'skck');
+			if (is_null($skck_query)) {
+				$skck_validation = "0";
+			} else {
+				$skck_validation = $skck_query['status'];
+			}
+
+			//assign checklist hijau kalau sudah diverifikasi
+			$validate_nik = "";
+			if ($nik_validation == "1") {
+				$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			// $button_open_ktp = '<button onclick="open_ktp(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+			$validate_kk = "";
+			if ($kk_validation == "1") {
+				$validate_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_nama = "";
+			if ($nama_validation == "1") {
+				$validate_nama = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_nama = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_bank = "";
+			if ($bank_validation == "1") {
+				$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_norek = "";
+			if ($norek_validation == "1") {
+				$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_pemilik_rekening = "";
+			if ($pemilik_rekening_validation == "1") {
+				$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_dokumen_ktp = "";
+			if ($dokumen_ktp_validation == "1") {
+				$validate_dokumen_ktp = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_dokumen_ktp = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_dokumen_kk = "";
+			if ($dokumen_kk_validation == "1") {
+				$validate_dokumen_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_dokumen_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_buku_rekening = "";
+			if ($buku_rekening_validation == "1") {
+				$validate_buku_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_buku_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_ijazah = "";
+			if ($ijazah_validation == "1") {
+				$validate_ijazah = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_ijazah = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_cv = "";
+			if ($cv_validation == "1") {
+				$validate_cv = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_cv = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+			$validate_skck = "";
+			if ($skck_validation == "1") {
+				$validate_skck = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+			} else {
+				$validate_skck = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			}
+
 			//nama status resign
 			if ($data['status_resign'] == "1") {
 				$status_resign_name = "AKTIF";
@@ -8979,6 +9148,45 @@ class Employees extends MY_Controller
 				// 'deactive_date_seed' => '12-12-2025',
 				'deactive_date_text' => $deactive_date_text,
 				'deactive_reason'	=> $data['deactive_reason'],
+
+				//dokumen
+				'filename_ktp' 				=> $data['filename_ktp'],
+				'filename_kk' 				=> $data['filename_kk'],
+				'filename_cv' 				=> $data['filename_cv'],
+				'filename_skck' 			=> $data['filename_skck'],
+				'filename_isd' 				=> $data['filename_isd'],
+				'filename_rek' 				=> $data['filename_rek'],
+
+				//id verifikasi
+				'verification_id' 				=> $actual_verification_id,
+
+				//data status verifikasi
+				'nik_validation' 				=> $nik_validation,
+				'kk_validation' 				=> $kk_validation,
+				'nama_validation' 				=> $nama_validation,
+				'bank_validation' 				=> $bank_validation,
+				'norek_validation' 				=> $norek_validation,
+				'pemilik_rekening_validation' 	=> $pemilik_rekening_validation,
+				'dokumen_ktp_validation' 		=> $dokumen_ktp_validation,
+				'dokumen_kk_validation' 		=> $dokumen_kk_validation,
+				'buku_rekening_validation' 		=> $buku_rekening_validation,
+				'ijazah_validation' 			=> $ijazah_validation,
+				'cv_validation' 				=> $cv_validation,
+				'skck_validation' 				=> $skck_validation,
+
+				//icon status verifikasi 
+				'validate_nik' 					=> $validate_nik,
+				'validate_kk' 					=> $validate_kk,
+				'validate_nama' 				=> $validate_nama,
+				'validate_bank' 				=> $validate_bank,
+				'validate_norek' 				=> $validate_norek,
+				'validate_pemilik_rekening' 	=> $validate_pemilik_rekening,
+				'validate_dokumen_ktp' 			=> $validate_dokumen_ktp,
+				'validate_dokumen_kk' 			=> $validate_dokumen_kk,
+				'validate_buku_rekening' 		=> $validate_buku_rekening,
+				'validate_ijazah' 				=> $validate_ijazah,
+				'validate_cv' 					=> $validate_cv,
+				'validate_skck' 				=> $validate_skck,
 			);
 
 			$response = array(
@@ -9298,6 +9506,7 @@ class Employees extends MY_Controller
 			//cek file profile picture
 			$local1 = "./uploads/profile/";
 			$record_database = $data['profile_picture'];
+			$record_database_profile = $data['profile_picture'];
 			$nama_file_profile = "";
 			$status_profile = "";
 			$pesan_profile = "";
@@ -9320,17 +9529,33 @@ class Employees extends MY_Controller
 						$status_profile = "203"; //file tidak ditemukan
 						$pesan_profile = "File Tidak Ditemukan";
 					} else {
-						$headers = get_headers($record_database);
-						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-						if ($file_in_url_exist) {
-							$nama_file_profile = $record_database; //tampil file skema lama dengan http
-							$status_profile = "200"; //file ditemukan
-							$pesan_profile = "Berhasil Fetch Data";
-						} else {
-							$nama_file_profile = "tidak ada file"; //link mati atau tidak bisa dibuka
+						$headers = @get_headers($record_database);
+						if ($headers == false) {
+							$nama_file_profile = ""; //link mati atau tidak bisa dibuka
 							$status_profile = "203"; //file tidak ditemukan
 							$pesan_profile = "File Tidak Ditemukan";
+						} else {
+							$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+							if ($file_in_url_exist) {
+								$nama_file_profile = $record_database; //tampil file skema lama dengan http
+								$status_profile = "200"; //file ditemukan
+								$pesan_profile = "Berhasil Fetch Data";
+							} else {
+								$nama_file_profile = ""; //link mati atau tidak bisa dibuka
+								$status_profile = "203"; //file tidak ditemukan
+								$pesan_profile = "File Tidak Ditemukan";
+							}
 						}
+						// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+						// if ($file_in_url_exist) {
+						// 	$nama_file_profile = $record_database; //tampil file skema lama dengan http
+						// 	$status_profile = "200"; //file ditemukan
+						// 	$pesan_profile = "Berhasil Fetch Data";
+						// } else {
+						// 	$nama_file_profile = "tidak ada file"; //link mati atau tidak bisa dibuka
+						// 	$status_profile = "203"; //file tidak ditemukan
+						// 	$pesan_profile = "File Tidak Ditemukan";
+						// }
 					}
 				}
 			}
@@ -9340,6 +9565,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_isd'];
+			$record_database_ijazah = $data['filename_isd'];
 			$nama_file_ijazah = "";
 			$status_ijazah = "";
 			$pesan_ijazah = "";
@@ -9368,17 +9594,34 @@ class Employees extends MY_Controller
 								$status_ijazah = "203"; //file tidak ditemukan
 								$pesan_ijazah = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_ijazah = $record_database; //tampil file skema lama dengan http
-									$status_ijazah = "200"; //file ditemukan
-									$pesan_ijazah = "Berhasil Fetch Data";
-								} else {
-									$nama_file_ijazah = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_ijazah = ""; //link mati atau tidak bisa dibuka
 									$status_ijazah = "203"; //file tidak ditemukan
 									$pesan_ijazah = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_ijazah = $record_database; //tampil file skema lama dengan http
+										$status_ijazah = "200"; //file ditemukan
+										$pesan_ijazah = "Berhasil Fetch Data";
+									} else {
+										$nama_file_ijazah = ""; //link mati atau tidak bisa dibuka
+										$ststatus_ijazahatus = "203"; //file tidak ditemukan
+										$pesan_ijazah = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_ijazah = $record_database; //tampil file skema lama dengan http
+								// 	$status_ijazah = "200"; //file ditemukan
+								// 	$pesan_ijazah = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_ijazah = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_ijazah = "203"; //file tidak ditemukan
+								// 	$pesan_ijazah = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9390,6 +9633,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_skck'];
+			$record_database_skck = $data['filename_skck'];
 			$nama_file_skck = "";
 			$status_skck = "";
 			$pesan_skck = "";
@@ -9418,17 +9662,34 @@ class Employees extends MY_Controller
 								$status_skck = "203"; //file tidak ditemukan
 								$pesan_skck = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_skck = $record_database; //tampil file skema lama dengan http
-									$status_skck = "200"; //file ditemukan
-									$pesan_skck = "Berhasil Fetch Data";
-								} else {
-									$nama_file_skck = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_skck = ""; //link mati atau tidak bisa dibuka
 									$status_skck = "203"; //file tidak ditemukan
 									$pesan_skck = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_skck = $record_database; //tampil file skema lama dengan http
+										$status_skck = "200"; //file ditemukan
+										$pesan_skck = "Berhasil Fetch Data";
+									} else {
+										$nama_file_skck = ""; //link mati atau tidak bisa dibuka
+										$status_skck = "203"; //file tidak ditemukan
+										$pesan_skck = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_skck = $record_database; //tampil file skema lama dengan http
+								// 	$status_skck = "200"; //file ditemukan
+								// 	$pesan_skck = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_skck = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_skck = "203"; //file tidak ditemukan
+								// 	$pesan_skck = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9440,6 +9701,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_cv'];
+			$record_database_cv = $data['filename_cv'];
 			$nama_file_cv = "";
 			$status_cv = "";
 			$pesan_cv = "";
@@ -9468,17 +9730,34 @@ class Employees extends MY_Controller
 								$status_cv = "203"; //file tidak ditemukan
 								$pesan_cv = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = strpos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_cv = $record_database; //tampil file skema lama dengan http
-									$status_cv = "200"; //file ditemukan
-									$pesan_cv = "Berhasil Fetch Data";
-								} else {
-									$nama_file_cv = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_cv = ""; //link mati atau tidak bisa dibuka
 									$status_cv = "203"; //file tidak ditemukan
 									$pesan_cv = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_cv = $record_database; //tampil file skema lama dengan http
+										$status_cv = "200"; //file ditemukan
+										$pesan_cv = "Berhasil Fetch Data";
+									} else {
+										$nama_file_cv = ""; //link mati atau tidak bisa dibuka
+										$status_cv = "203"; //file tidak ditemukan
+										$pesan_cv = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = strpos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_cv = $record_database; //tampil file skema lama dengan http
+								// 	$status_cv = "200"; //file ditemukan
+								// 	$pesan_cv = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_cv = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_cv = "203"; //file tidak ditemukan
+								// 	$pesan_cv = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9491,6 +9770,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_npwp'];
+			$record_database_npwp = $data['filename_npwp'];
 			$nama_file_npwp = "";
 			$status_npwp = "";
 			$pesan_npwp = "";
@@ -9519,17 +9799,34 @@ class Employees extends MY_Controller
 								$status_npwp = "203"; //file tidak ditemukan
 								$pesan_npwp = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_npwp = $record_database; //tampil file skema lama dengan http
-									$status_npwp = "200"; //file ditemukan
-									$pesan_npwp = "Berhasil Fetch Data";
-								} else {
-									$nama_file_npwp = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_npwp = ""; //link mati atau tidak bisa dibuka
 									$status_npwp = "203"; //file tidak ditemukan
 									$pesan_npwp = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_npwp = $record_database; //tampil file skema lama dengan http
+										$status_npwp = "200"; //file ditemukan
+										$pesan_npwp = "Berhasil Fetch Data";
+									} else {
+										$nama_file_npwp = ""; //link mati atau tidak bisa dibuka
+										$status_npwp = "203"; //file tidak ditemukan
+										$pesan_npwp = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_npwp = $record_database; //tampil file skema lama dengan http
+								// 	$status_npwp = "200"; //file ditemukan
+								// 	$pesan_npwp = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_npwp = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_npwp = "203"; //file tidak ditemukan
+								// 	$pesan_npwp = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9541,6 +9838,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_kk'];
+			$record_database_kk = $data['filename_kk'];
 			$nama_file_kk = "";
 			$status_kk = "";
 			$pesan_kk = "";
@@ -9569,17 +9867,34 @@ class Employees extends MY_Controller
 								$status_kk = "203"; //file tidak ditemukan
 								$pesan_kk = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_kk = $record_database; //tampil file skema lama dengan http
-									$status_kk = "200"; //file ditemukan
-									$pesan_kk = "Berhasil Fetch Data";
-								} else {
-									$nama_file_kk = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_kk = ""; //link mati atau tidak bisa dibuka
 									$status_kk = "203"; //file tidak ditemukan
 									$pesan_kk = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_kk = $record_database; //tampil file skema lama dengan http
+										$status_kk = "200"; //file ditemukan
+										$pesan_kk = "Berhasil Fetch Data";
+									} else {
+										$nama_file_kk = ""; //link mati atau tidak bisa dibuka
+										$status_kk = "203"; //file tidak ditemukan
+										$pesan_kk = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_kk = $record_database; //tampil file skema lama dengan http
+								// 	$status_kk = "200"; //file ditemukan
+								// 	$pesan_kk = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_kk = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_kk = "203"; //file tidak ditemukan
+								// 	$pesan_kk = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9591,6 +9906,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_ktp'];
+			$record_database_ktp = $data['filename_ktp'];
 			$nama_file_ktp = "";
 			$status_ktp = "";
 			$pesan_ktp = "";
@@ -9619,17 +9935,34 @@ class Employees extends MY_Controller
 								$status_ktp = "203"; //file tidak ditemukan
 								$pesan_ktp = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_ktp = $record_database; //tampil file skema lama dengan http
-									$status_ktp = "200"; //file ditemukan
-									$pesan_ktp = "Berhasil Fetch Data";
-								} else {
-									$nama_file_ktp = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_ktp = ""; //link mati atau tidak bisa dibuka
 									$status_ktp = "203"; //file tidak ditemukan
 									$pesan_ktp = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_ktp = $record_database; //tampil file skema lama dengan http
+										$status_ktp = "200"; //file ditemukan
+										$pesan_ktp = "Berhasil Fetch Data";
+									} else {
+										$nama_file_ktp = ""; //link mati atau tidak bisa dibuka
+										$status_ktp = "203"; //file tidak ditemukan
+										$pesan_ktp = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_ktp = $record_database; //tampil file skema lama dengan http
+								// 	$status_ktp = "200"; //file ditemukan
+								// 	$pesan_ktp = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_ktp = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_ktp = "203"; //file tidak ditemukan
+								// 	$pesan_ktp = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9641,6 +9974,7 @@ class Employees extends MY_Controller
 			$local2 = "./uploads/document/";
 			$local3 = "./";
 			$record_database = $data['filename_rek'];
+			$record_database_rekening = $data['filename_rek'];
 			$nama_file_rekening = "";
 			$status_rekening = "";
 			$pesan_rekening = "";
@@ -9669,23 +10003,50 @@ class Employees extends MY_Controller
 								$status_rekening = "203"; //file tidak ditemukan
 								$pesan_rekening = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file_rekening = $record_database; //tampil file skema lama dengan http
-									$status_rekening = "200"; //file ditemukan
-									$pesan_rekening = "Berhasil Fetch Data";
-								} else {
-									$nama_file_rekening = "tidak ada file"; //link mati atau tidak bisa dibuka
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
+									$nama_file_rekening = ""; //link mati atau tidak bisa dibuka
 									$status_rekening = "203"; //file tidak ditemukan
 									$pesan_rekening = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file_rekening = $record_database; //tampil file skema lama dengan http
+										$status_rekening = "200"; //file ditemukan
+										$pesan_rekening = "Berhasil Fetch Data";
+									} else {
+										$nama_file_rekening = ""; //link mati atau tidak bisa dibuka
+										$status_rekening = "203"; //file tidak ditemukan
+										$pesan_rekening = "File Tidak Ditemukan";
+									}
 								}
+
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file_rekening = $record_database; //tampil file skema lama dengan http
+								// 	$status_rekening = "200"; //file ditemukan
+								// 	$pesan_rekening = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file_rekening = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status_rekening = "203"; //file tidak ditemukan
+								// 	$pesan_rekening = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
 				}
 			}
 
+			$database_record = array(
+				'filename_ktp' 		=> $record_database_ktp,
+				'filename_kk' 		=> $record_database_kk,
+				'filename_npwp' 	=> $record_database_npwp,
+				'filename_cv' 		=> $record_database_cv,
+				'filename_skck' 	=> $record_database_skck,
+				'filename_isd' 		=> $record_database_ijazah,
+				'filename_rek' 		=> $record_database_rekening,
+				'profile_picture' 	=> $record_database_profile,
+			);
 			$data_hasil = array(
 				'filename_ktp' 		=> $nama_file_ktp,
 				'filename_kk' 		=> $nama_file_kk,
@@ -9717,9 +10078,10 @@ class Employees extends MY_Controller
 				'profile_picture' 	=> $pesan_profile,
 			);
 			$response = array(
-				'status'	=> $status,
-				'pesan' 	=> $pesan,
-				'data'		=> $data_hasil,
+				'status'			=> $status,
+				'pesan' 			=> $pesan,
+				'data'				=> $data_hasil,
+				'database_record'	=> $database_record,
 			);
 		}
 
@@ -9750,7 +10112,7 @@ class Employees extends MY_Controller
 		if (empty($data)) {
 			$response = array(
 				'status'	=> "201",
-				'pesan' 	=> "Karyawan tidak ditemukan",
+				'pesan' 	=> "Kontrak tidak ditemukan",
 			);
 		} else {
 			$local1 = "./uploads/document/pkwt/";
@@ -9789,17 +10151,33 @@ class Employees extends MY_Controller
 								$status = "203"; //file tidak ditemukan
 								$pesan = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
-								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								if ($file_in_url_exist) {
-									$nama_file = $record_database; //tampil file skema lama dengan http
-									$status = "200"; //file ditemukan
-									$pesan = "Berhasil Fetch Data";
-								} else {
+								$headers = @get_headers($record_database);
+								if ($headers == false) {
 									$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
 									$status = "203"; //file tidak ditemukan
 									$pesan = "File Tidak Ditemukan";
+								} else {
+									$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+									if ($file_in_url_exist) {
+										$nama_file = $record_database; //tampil file skema lama dengan http
+										$status = "200"; //file ditemukan
+										$pesan = "Berhasil Fetch Data";
+									} else {
+										$nama_file = ""; //link mati atau tidak bisa dibuka
+										$status = "203"; //file tidak ditemukan
+										$pesan = "File Tidak Ditemukan";
+									}
 								}
+								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+								// if ($file_in_url_exist) {
+								// 	$nama_file = $record_database; //tampil file skema lama dengan http
+								// 	$status = "200"; //file ditemukan
+								// 	$pesan = "Berhasil Fetch Data";
+								// } else {
+								// 	$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+								// 	$status = "203"; //file tidak ditemukan
+								// 	$pesan = "File Tidak Ditemukan";
+								// }
 							}
 						}
 					}
@@ -9879,7 +10257,7 @@ class Employees extends MY_Controller
 								$status = "203"; //file tidak ditemukan
 								$pesan = "File Tidak Ditemukan";
 							} else {
-								$headers = get_headers($record_database);
+								$headers = @get_headers($record_database);
 								$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
 								if ($file_in_url_exist) {
 									$nama_file = $record_database; //tampil file skema lama dengan http
@@ -10692,6 +11070,221 @@ class Employees extends MY_Controller
 		echo json_encode($response);
 	}
 
+	function upload_dokumen()
+	{
+		$postData = $this->input->post();
+		$identifier = $postData['identifier'];
+		$image = $_FILES;
+		$return_file_data = array();
+		foreach ($image as $key => $img) {
+			$ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+			$name = pathinfo($img['name'], PATHINFO_FILENAME);
+			$yearmonth = date('Y/m');
+
+			if ($identifier == "ktp") {
+				// $path_dokumen = "./uploads/document/ktp/" . $yearmonth . '/';
+				if (!is_dir('./uploads/document/ktp/' . $yearmonth)) {
+					mkdir('./uploads/document/ktp/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/ktp/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document/ktp/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['id_screening'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/pasfoto/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+						);
+					}
+				}
+			} else if ($identifier == "kk") {
+				if (!is_dir('./uploads/document/kk/' . $yearmonth)) {
+					mkdir('./uploads/document/kk/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/kk/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document/kk/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+						);
+					}
+				}
+			} else if ($identifier == "rekening") {
+				if (!is_dir('./uploads/document/rekening/' . $yearmonth)) {
+					mkdir('./uploads/document/rekening/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/rekening/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document/rekening/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+						);
+					}
+				}
+			} else if ($identifier == "cv") {
+				if (!is_dir('./uploads/document/cv/' . $yearmonth)) {
+					mkdir('./uploads/document/cv/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/cv/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document/cv/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+						);
+					}
+				}
+			} else if ($identifier == "skck") {
+				if (!is_dir('./uploads/document/skck/' . $yearmonth)) {
+					mkdir('./uploads/document/skck/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/skck/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document/skck/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+						);
+					}
+				}
+			} else if ($identifier == "ijazah") {
+				if (!is_dir('./uploads/document/ijazah/' . $yearmonth)) {
+					mkdir('./uploads/document/ijazah/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/ijazah/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = $name . '_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$path_file = '/uploads/document/ijazah/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+						);
+					}
+				}
+			}
+		}
+
+		echo json_encode($return_file_data);
+		// $this->load->view('imgtest');
+	}
 
 	//mengambil Json data dokumen kontrak ttd employee
 	public function get_data_pkwt()
@@ -11096,7 +11689,7 @@ class Employees extends MY_Controller
 
 			$response_array = json_decode($response, true);
 
-			if ($response_array['status'] = "200") {
+			if ($response_array['status'] == "200") {
 				$blast_on = date("Y-m-d H:i:s");
 				$dateTime_blast_on = new DateTime($blast_on);
 				$dateTime_blast_on->modify('+5 minutes');

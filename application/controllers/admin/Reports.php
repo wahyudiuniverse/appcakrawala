@@ -215,11 +215,12 @@ class Reports extends MY_Controller
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$data['title'] = $this->lang->line('xin_manage_employees') . ' | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = 'DATABASE KARYAWAN';
-		$data['path_url'] = 'reports_man_employees';
+		$data['path_url'] = 'emp_view';
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['all_departments'] = $this->Department_model->all_departments();
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 		$data['all_designations'] = $this->Designation_model->all_designations();
+		$data['list_bank'] = $this->Xin_model->get_bank_code();
 		if (in_array('470', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/reports/manage_employees2", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -2138,7 +2139,6 @@ class Reports extends MY_Controller
 				$nowhatsapp = $emp[0]->contact_no;
 				$tkhl_status = $emp[0]->e_status;
 				$roleid = $emp[0]->user_role_id;
-
 			} else {
 
 				$pin = '--';
@@ -2163,7 +2163,7 @@ class Reports extends MY_Controller
 			// 	$nama_subproject = '--';
 			// }
 			$nama_subproject = '--';
-			
+
 			$designation = $this->Designation_model->read_designation_information($r->jabatan);
 			if (!is_null($designation)) {
 				$designation_name = $designation[0]->designation_name;
@@ -2198,7 +2198,7 @@ class Reports extends MY_Controller
 
 				// *INFO HRD di Nomor Whatsapp: 0881010250138* %0a
 				// *IT-CARE di Nomor Whatsapp: 085174123434* %0a%0a
-				
+
 				// Terima kasih.';
 			} else {
 
@@ -2411,7 +2411,7 @@ class Reports extends MY_Controller
 		$data['all_companies'] = $this->Xin_model->get_companies();
 
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
-		
+
 		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
 		if (in_array('377', $role_resources_ids)) {
@@ -2449,11 +2449,11 @@ class Reports extends MY_Controller
 
 
 		$getLevel = $this->Employees_model->getLevel($session['employee_id']);
-				  if(!is_null($getLevel)){
-				  	$level_id = $getLevel[0]->level;
-				  } else {
-					$level_id = '';	
-				  }
+		if (!is_null($getLevel)) {
+			$level_id = $getLevel[0]->level;
+		} else {
+			$level_id = '';
+		}
 
 		// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
 
@@ -2468,7 +2468,7 @@ class Reports extends MY_Controller
 
 			// $employee = $this->Pkwt_model->report_pkwt_expired_pro($project_id, $down_time, $session['employee_id']);
 
-			if ($searchkey != "") {
+			if (($searchkey != "0")) {
 
 				$employee = $this->Pkwt_model->report_pkwt_expired_key($finalkey, $session['employee_id']);
 			} else {
@@ -2520,7 +2520,7 @@ class Reports extends MY_Controller
 			}
 
 			// $level_employee = $this->Employee_model->get_level($r->jabatan);
-			
+
 			$readyHrd = $this->Pkwt_model->read_pkwt_pengajuan($r->employee_id);
 
 			if (!is_null($readyHrd)) {
@@ -2528,7 +2528,7 @@ class Reports extends MY_Controller
 				$terbitPkwt = '<a href="#" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-warning">SUDAH DIAJUKAN</button></a>';
 			} else {
 				// $terbitPkwt = $level_employee;
-				if($level_id >= $level_employee){
+				if ($level_id >= $level_employee) {
 					$terbitPkwt = '';
 				} else {
 
@@ -3390,6 +3390,126 @@ class Reports extends MY_Controller
 
 		// Get data
 		$data = $this->Employees_model->get_employee_print($postData);
+		$length_data = count($data);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 2])->setvalueExplicit($data[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+		//$data = var_dump(json_decode($data_temp, true));
+
+		// if (!is_array(end($data))) {
+		// 	$data = [$data];
+		// }
+
+		$jumlah = count($data) + 1;
+
+		//var_dump($data);
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data,  // The data to set
+		// 		NULL,        // Array values with this value will not be set
+		// 		'A2',
+		// 		false,
+		// 		false         // Top left coordinate of the worksheet range where
+		// 		//    we want to set these values (default is A1)
+		// 	);
+
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:1')->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+		$spreadsheet->getDefaultStyle()->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getDefaultStyle()->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+		// $spreadsheet->getActiveSheet()->getStyle('AC:AI')->getNumberFormat()->setFormatCode('Rp #,##0');
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:1')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+
+		$filename = $postData['nama_file'];
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+
+		$writer->save('php://output');
+	}
+
+	public function printExcelBroadcast($project, $sub_project, $status,  $searchVal, $session_id)
+	{
+		$postData = array();
+
+		//variabel filter (diambil dari post ajax di view)
+		$postData['project'] = $project;
+		$postData['sub_project'] = $sub_project;
+		$postData['status'] = $status;
+		$postData['session_id'] = $session_id;
+		$postData['nama_file'] = 'Data Karyawan Broadcast';
+		if ($searchVal == '-no_input-') {
+			$postData['filter'] = '';
+		} else {
+			$postData['filter'] = urldecode($searchVal);
+		}
+
+		// echo $postData['filter'];
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Data Karyawan'); //nama Spreadsheet yg baru dibuat
+
+		//data satu row yg mau di isi
+		$rowArray = [
+			'STATUS',
+			'NIP',
+			'PIN',
+			'NIK',
+			'NAMA LENGKAP',
+			'PROJECT/PRINCIPLE',
+			'SUB PROJECT/ENTITAS',
+			'POSISI/JABATAN',
+			'AREA/PENEMPATAN',
+			'NOMOR KONTAK'
+		];
+
+		$length_array = count($rowArray);
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$rowArray,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+		//set background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle('A1:BR1')
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//$spreadsheet->getActiveSheet()->getStyle('H')->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR);
+
+		// Get data
+		$data = $this->Employees_model->get_employee_print_broadcast($postData);
 		$length_data = count($data);
 
 		for ($i = 0; $i < $length_data; $i++) {
