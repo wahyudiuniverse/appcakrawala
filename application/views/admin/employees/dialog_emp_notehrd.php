@@ -46,7 +46,7 @@ if (isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data'] == 'compan
       </div>
       <div class="col-sm-4">
         <div>
-          <textarea name="ket_note" rows="3" cols="60" maxlength="250" placeholder="Maksimal Note: 250 character"></textarea>
+          <textarea name="ket_note" rows="3" cols="60" maxlength="250" placeholder="Maksimal Note: 250 character"><?php echo $catatan_hr; ?></textarea>
         </div>
       </div>
     </div>

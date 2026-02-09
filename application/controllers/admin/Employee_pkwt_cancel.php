@@ -632,7 +632,8 @@ class Employee_pkwt_cancel extends MY_Controller {
 							$tunjangan_keahlian 					= $this->input->post('tunjangan_keahlian');
 							$tunjangan_pelatihan 					= $this->input->post('tunjangan_pelatihan');
 							$tunjangan_disiplin 					= $this->input->post('tunjangan_disiplin');
-							$tunjangan_kinerja 					= $this->input->post('tunjangan_kinerja');
+							$tunjangan_kinerja 						= $this->input->post('tunjangan_kinerja');
+							$tunjangan_kehadiran 						= $this->input->post('tunjangan_kehadiran');
 							$join_date_pkwt 							= $this->input->post('join_date_pkwt');
 							$pkwt_end_date 								= $this->input->post('pkwt_end_date');
 							$waktu_kontrak 								= $this->input->post('waktu_kontrak');
@@ -676,6 +677,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allow_training' 						=> $tunjangan_pelatihan,
 								'allow_disiplin' 						=> $tunjangan_disiplin,
 								'allow_kinerja' 						=> $tunjangan_kinerja,
+								'allow_kehadiran' 					=> $tunjangan_kehadiran,
 								'contract_start' 						=> $join_date_pkwt,
 								'contract_end' 							=> $pkwt_end_date,
 								'contract_periode' 					=> $waktu_kontrak,
@@ -717,6 +719,7 @@ class Employee_pkwt_cancel extends MY_Controller {
 								'allowance_training' 						=> $tunjangan_pelatihan,
 								'allowance_disiplin' 						=> $tunjangan_disiplin,
 								'allowance_kinerja' 						=> $tunjangan_kinerja,
+								'allowance_kehadiran'						=> $tunjangan_kehadiran,
 								'from_date' 										=> $join_date_pkwt,
 								'to_date' 											=> $pkwt_end_date,
 								'waktu_kontrak' 								=> $waktu_kontrak,

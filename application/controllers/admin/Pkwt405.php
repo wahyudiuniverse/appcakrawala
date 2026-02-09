@@ -456,7 +456,7 @@ class Pkwt405 extends MY_Controller
 							<br>
 							<tr>
 								<td ></td>
-								<td colspan="20">Note : -Bpjs Kesehatan & Ketenagakerjaan akan didaftarkan setelah karyawan memiliki minimal 10 Hari Kerja, dan akan didaftarkan di bulan berikutnya(Proses Mendaftar). Efektif terdaftar (Muncul Nomor) maksimal di tanggal 10 1 bulan setelah bulan proses pendaftaran, Apabila terjadi sesuatu hal dalam jam operasional pekerjaan baik dalam kesehatan maupun keselamatan di lingkungan kerja akan menjadi beban mandiri yaitu Karyawan Tersebut.</td>
+								<td colspan="20">Note : -Bpjs Kesehatan & Ketenagakerjaan akan didaftarkan hari pertama karyawan bekerja.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -496,7 +496,7 @@ class Pkwt405 extends MY_Controller
 				<br>
 					<tr>
 						<td>3.4</td>
-						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang besarnya diperhitungkan secara pro-rata/proposional dan berdasarkan lamanya waktu kerja dikali 1 (satu) bulan gaji (bagi karyawan kontrak kebijakan mengenai THR disesuaikan dengan kesepakatan antara <b>PIHAK PERTAMA</b> dan Pihak User/Klien)</td>
+						<td colspan="18"><b>PIHAK KEDUA</b> berhak memperoleh Tunjangan Hari Raya (THR) yang besarnya diperhitungkan secara pro- rata/proposional dan berdasarkan lamanya waktu kerja dikali 1 (satu) bulan gaji sesuai dengan peraturan yang berlaku.</td>
 					</tr>
 				<br>
 					<tr>
@@ -632,7 +632,7 @@ class Pkwt405 extends MY_Controller
 								<td colspan="18">Bersedia melaksanakan tanggung jawab sebagai seorang Karyawan/Staff sesuai yang tertulis pada Instruksi Kerja dan SOP yang berlaku di perusahaan.</td>
 							</tr>
 				</table>
-<br>
+<br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
@@ -644,7 +644,7 @@ class Pkwt405 extends MY_Controller
 								<td><b>PIHAK KEDUA</b>, selama bekerja dan setelah tidak lagi bekerja pada <b>PIHAK PERTAMA</b>, wajib menjaga kerahasiaan dan tidak mengungkapkan informasi rahasia atau rahasia dagang milik <b>PIHAK PERTAMA</b> maupun perusahaan tempat <b>PIHAK KEDUA</b> ditempatkan, termasuk namun tidak terbatas pada dokumentasi, data, petunjuk teknis, gambar, sistem, metode, perangkat lunak, proses, daftar klien, program, strategi pemasaran, dan informasi keuangan. Informasi tersebut hanya boleh diakses dan digunakan oleh <b>PIHAK KEDUA</b> sejauh diperlukan untuk pelaksanaan tugasnya, dan hanya dapat dibagikan kepada pihak yang secara sah diberi wewenang oleh <b>PIHAK PERTAMA</b> atau klien dari <b>PIHAK PERTAMA</b> untuk mengetahui informasi tersebut</td>
 							</tr>			
 				</table>
-				<br><br>
+				<br><br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -767,14 +767,10 @@ class Pkwt405 extends MY_Controller
 								<td>j.</td>
 								<td colspan="18">diketahui memiliki catatan kriminal atau pernah melakukan kejahatan.</td>
 							</tr>
+
 				<br>
 							<tr>
 								<td>k.</td>
-								<td colspan="18">Pekerja yang melakukan mangkir sebagaimana dimaksud dalam undang-undang KetenagaKerjaan dapat diputuskan hubungan kerjanya karena dikualifikasikan mengundurkan diri.</td>
-							</tr>
-				<br>
-							<tr>
-								<td>l.</td>
 								<td colspan="18">Bila mana <b>PIHAK KEDUA</b> bermaksud mengundurkan diri sebelum berakhirnya jangka waktu PKWT ini, maka <b>PIHAK KEDUA</b> wajib :</td>
 							</tr>
 
@@ -789,7 +785,7 @@ class Pkwt405 extends MY_Controller
 								<td colspan="0">b)</td>
 								<td colspan="20">Menyelesaikan pekerjaanya sampai dengan tanggal pengunduran diri dengan dengan sebaik-baiknya serta melakukan serah terima pekerjaan kepada penggantinya atau pihak lain yang ditunjuk oleh <b>PIHAK KEDUA</b> atau dengan klient yang dibuktikan dengan Berita Acara Serah Terima Pekerjaan (BASTP).</td>
 							</tr>
-<br><br>
+<br>
 							<tr>
 								<td ></td>
 								<td colspan="20">Dalam hal pengunduran diri tidak diajukan dengan tata cara sebagaimana dimaksud dalam Huruf a ayat ini, maka PIHAK PERTAMA berhak untuk tidak membayarkan upah terakhir <b>PIHAK KEDUA</b> dan tidak memberikan surat referensi kerja kepada <b>PIHAK KEDUA</b>.</td>
@@ -812,8 +808,8 @@ class Pkwt405 extends MY_Controller
 
 				<br>
 							<tr>
-								<td>m.</td>
-								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Siprama Cakrawala.</td>
+								<td>l.</td>
+								<td colspan="18">Apabila karyawan dinyatakan hamil, maka karyawan bersedia direlokasi.</td>
 							</tr>
 
 				</table>
@@ -870,7 +866,7 @@ class Pkwt405 extends MY_Controller
 				<br>
 							<tr>
 								<td>2.</td>
-								<td colspan="20"><b>PIHAK PERTAMA</b> berhak tidak memberikan upah/gaji kepada <b>PIHAK KEDUA</b> jika didalam masa kerja kurang dari 2 minggu (14 hari kerja) dan atau pihak kedua mengundurkan diri sepihak tanpa pemberitahuan dahulu sebelumnya (sebagaimana tertera pada Pasal 7).</td>
+								<td colspan="20"><b>PIHAK PERTAMA</b> berhak memberikan upah/gaji kepada PIHAK KEDUA sesuai dengan hari kerja.</td>
 							</tr>
 				<br>
 							<tr>
@@ -884,7 +880,7 @@ class Pkwt405 extends MY_Controller
 								<td colspan="20">PKWT ini hanya dapat dirubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak.</td>
 							</tr>
 
-				<br><br><br><br><br><br>
+				<br>
 							<tr>
 								<td>5.</td>
 								<td colspan="20"><b>PKWT</b> ini hanya dapat diubah atau direvisi berdasarkan kesepakatan dan persetujuan tertulis salah satu pihak. <b>PIHAK KEDUA</b> dengan ini membebaskan <b>PIHAK PERTAMA</b> dan menyatakan bertanggung jawab atas timbulnya tuntutan, gugatan maupun permintaan ganti rugi dari <b>PIHAK PERTAMA</b> akibat kerugian finansial maupun non finansial dan langsung maupun tidak langsung yang diderita oleh <b>PIHAK PERTAMA</b> yang disebabkan oleh <b>PIHAK KEDUA</b> baik secara langsung maupun tidak langsung.</td>
@@ -894,10 +890,15 @@ class Pkwt405 extends MY_Controller
 								<td>6.</td>
 								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
 							</tr>
-				<br>
+				<br><br><br><br>
 							<tr>
 								<td>7.</td>
 								<td colspan="20">Selama dalam hubungan kerja <b>PIHAK KEDUA</b> wajib mentaati dan melaksanakan ketentuan mengenai tata tertib, kedisiplinan dan kewajiban – kewajiban yang dibebankan kepada <b>PIHAK KEDUA</b>, sesuai dengan  ketentuan dalam peraturan perusahaan.</td>
+							</tr>
+				<br>
+							<tr>
+								<td>8.</td>
+								<td colspan="20"><b>PIHAK KEDUA</b> harus menghindari situasi apapun yang dapat menimbulkan konflik kepentingan antara <b>PIHAK KEDUA</b> dan klien <b>PIHAK PERTAMA</b>, termasuk interaksi dengan karyawan klien <b>PIHAK PERTAMA</b> yang dapat menciptakan konflik kepentingan dengan kewajiban karyawan tersebut untuk bertindak demi kepentingan terbaik klien <b>PIHAK PERTAMA</b>. <b>PIHAK KEDUA</b> harus segera mengungkapkan secara tertulis kepada <b>PIHAK PERTAMA</b> setiap situasi konflik kepentingan yang potensial atau yang sudah ada dalam hubungannya dengan klien <b>PIHAK PERTAMA</b>.</td>
 							</tr>
 				</table>
 				<br>
@@ -995,7 +996,7 @@ class Pkwt405 extends MY_Controller
 				<br>
 				<br>			
 				<br>
-				<br>	
+				<br><br><br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1174,43 +1175,49 @@ class Pkwt405 extends MY_Controller
 
 							<tr>
 								<td >10.</td>
-								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan diakhiri kontrak kerjasama.</td>
+								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan direlokasi.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >11.</td>
-								<td colspan="20">Apabila terjadi hubungan asmara diluar wajar/selingkuh yang berakibat terhadap produktivitas dan menggangu kinerja serta nama baik perusahaan maka karyawan bersedia untuk mengakhiri masa kerjasama</td>
+								<td colspan="20">Jika karyawan dinyatakan hamil dan ada kejadian yang tidak diinginkan terjadi, maka hal tersebut menjadi tanggung jawab pribadi dan diluar tanggung jawab perusahaan</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
+								<td colspan="20">Apabila terjadi hubungan asmara diluar wajar/selingkuh yang berakibat terhadap produktivitas dan menggangu kinerja serta nama baik perusahaan maka karyawan bersedia untuk mengakhiri masa kerjasama</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
 								<td >13.</td>
+								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
 								<td colspan="20">Jika karyawan terbukti melakukan pinjaman online dan atau judi online tanpa sepengetahuan perusahaan, maka perusahaan berhak mengambil tindakan penyelesaian sesuai ketentuan peraturan perusahaan.</td>
 								<td colspan="0"></td>
 							</tr>
 
 
 							<tr>
-								<td >14.</td>
+								<td >15.</td>
 								<td colspan="20">Karyawan dilarang keras menggunakan, memiliki, menyimpan, mengedarkan, atau terlibat dalam bentuk apapun dalam penggunaan narkotika, psikotropika, dan zat adiktif lainnya. Apabila terbukti menggunakan narkotika, maka perusahaan berhak mengambil tindakan penyelesaian sesuai ketentuan peraturan perusahaan.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
-								<td >15.</td>
+								<td >16.</td>
 								<td colspan="20">Apabila hubungan kerja berakhir karena kontrak kerja berakhir sesuai jangka waktu yang telah disepakati, maka karyawan berhak menerima uang kompensasi. Apabila karyawan mengundurkan diri sebelum masa kontrak berakhir maka karyawan tidak berhak menerima uang kompensasi dan akan dikenakan biaya pinalty (sesuai dengan sisa masa kerja kontrak yang  berlaku). Dan apabila karyawan dinyatakan under performance sesuai hasil evaluasi dan di review resmi oleh perusahaan, maka karyawan tidak berhak menerima uang kompensasi.</td>
 								<td colspan="0"></td>
 							</tr>
 
 							<tr>
-								<td >16.</td>
+								<td >17.</td>
 								<td colspan="20">Saya bersedia memberikan data diri saya untuk kepentingan perusahaan dan pekerjaan.</td>
 								<td colspan="0"></td>
 							</tr>

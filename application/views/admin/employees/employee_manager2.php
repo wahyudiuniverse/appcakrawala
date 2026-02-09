@@ -1692,7 +1692,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 									<!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
 									<div class="tab-pane fade" id="dokumen-kontrak" role="tabpanel" aria-labelledby="dokumen-kontrak-tab">
 										<div class="row" id="isi-dokumen-kontrak-tabel">
-											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> </div>
+											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> <a href='https://apps-cakrawala.com/admin/employee_pkwt_cancel/pkwt_expired_edit/<?php echo $employee_id;?>/1' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>PERPANJANG KONTRAK</button></a></div>
+
+											
+
 
 											<?php foreach ($all_contract as $kontrak): ?>
 												<div class="card-header with-elements" <?php echo ($kontrak['jenis_dokumen'] == "ADDENDUM" ? 'style="background-color:#c0ebbc;"' : 'style="background-color:#bcbeeb;"'); ?>> <span class="card-header-title mr-2"> <strong> <?php echo $kontrak['jenis_dokumen']; ?>. Periode: <?php echo $kontrak['periode_start']; ?> - <?php echo $kontrak['periode_end']; ?></strong></span> </div>

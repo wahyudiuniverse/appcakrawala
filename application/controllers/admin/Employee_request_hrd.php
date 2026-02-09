@@ -762,6 +762,7 @@ class Employee_request_hrd extends MY_Controller
 			'ijazah' => $result[0]->ijazah,
 			'cv' => $result[0]->civi,
 			'paklaring' => $result[0]->paklaring,
+			'catatan_hr' => $result[0]->catatan_hr,
 
 			'idrequest' => $result[0]->secid,
 			'request_empby' => $this->Employees_model->read_employee_info($result[0]->request_empby),

@@ -1467,6 +1467,13 @@ class Pkwt264 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Apabila saya mengundurkan diri atau diberhentikan, maka saya tidak berhak menerima insentif</td>
+								<td colspan="0"></td>
+							</tr>
+
+
 				</table>
 
 				<br><br>
@@ -1538,7 +1545,7 @@ class Pkwt264 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br>
+				<br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

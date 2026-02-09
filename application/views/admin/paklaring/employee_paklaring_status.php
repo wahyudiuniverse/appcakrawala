@@ -797,7 +797,7 @@
           $('#joindate_field').val(res['data']['join_date']);
           $('#leavedate_field').val(res['data']['resign_date']);
 
-          $('#field_secid').val(res['data']['docid']);
+          $('#field_secid').val(res['data']['secid']);
           $('#field_is_revisi').val(is_revisi);
           $('#field_employee_id').val(res['data']['employee_id']);
           $('#field_fullname').val(res['data']['first_name']);
@@ -1035,7 +1035,7 @@
     
     var nomor_surat = '00'+secid+'/'+ns;
     var session_id = '<?php echo $session['employee_name']; ?>';
-
+    alert(secid);
     if(pesan_joindate!="" || pesan_leavedate!=""){
 
     } else {

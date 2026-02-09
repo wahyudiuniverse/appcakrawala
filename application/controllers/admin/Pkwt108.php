@@ -81,6 +81,15 @@ class Pkwt108 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+
+		// SPG
+		if ($pkwt[0]->jabatan=='93') {
+			redirect('admin/pkwt108designer/view/'.$pkwt[0]->uniqueid);
+
+		// TL
+		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);

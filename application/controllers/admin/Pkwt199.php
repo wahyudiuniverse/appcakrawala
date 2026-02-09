@@ -1393,6 +1393,12 @@ class Pkwt199 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Saya bersedia dan menyetujui adanya pemotongan deposit sebesar Rp 1.000.000,- (Satu Juta Rupiah) yang dilakukan sebanyak 2 (dua) kali pemotongan, masing – masing sebesar Rp 500.000,- (Lima Ratus Ribu Rupiah). Deposit tersebut akan dikembalikan apabila saya mengundurkan diri sesuai ketentuan perusahaan. Namun, deposit tidak akan dikembalikan apabila saya terbukti terbukti melakukan pelanggaran berat, seperti fraud atau bentuk kecurangan lainnya.</td>
+								<td colspan="0"></td>
+							</tr>
+
 				</table>
 
 				<br><br>
@@ -1464,7 +1470,7 @@ class Pkwt199 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

@@ -367,7 +367,7 @@ $new_date = date('d-M-Y', $strtotime);
   ?>
 
   <?php
-  if($projectid=='61' && $designation_id=='735'){
+  if($projectid=='0001' && $designation_id=='0001'){
     ?>
 
   <div class="col-sm-6 col-xl-4">
@@ -410,7 +410,7 @@ $new_date = date('d-M-Y', $strtotime);
   ?>
 
   <?php
-  if($projectid=='61' && $designation_id=='736'){
+  if($projectid=='0001' && $designation_id=='0001'){
     ?>
 
   <div class="col-sm-6 col-xl-4">

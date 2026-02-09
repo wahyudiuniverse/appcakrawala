@@ -1279,6 +1279,45 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
   }
   ?>
 
+
+  <!-- master traxes -->
+  <?php
+  if (in_array('59', $role_resources_ids)) {
+  ?>
+    <li class="<?php if (!empty($arr_mod['master_open'])) echo $arr_mod['master_open']; ?> sidenav-item">
+      <a href="#" class="sidenav-link sidenav-toggle">
+        <i class="sidenav-icon ion ion-logo-buffer"></i>
+        <div>Master Traxes</div>
+      </a>
+
+      <ul class="sidenav-menu">
+        <?php
+        if (in_array('59', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['project_active'])) echo $arr_mod['project_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_master_lokasi/'); ?>">Master Lokasi/Toko
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+        <?php
+        if (in_array('59', $role_resources_ids)) {
+        ?>
+          <li class="sidenav-item <?php if (!empty($arr_mod['project_active'])) echo $arr_mod['project_active']; ?>">
+            <a class="sidenav-link" href="<?php echo site_url('admin/traxes_master_produk'); ?>">Master Produk
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+      </ul>
+    </li>
+  <?php
+  }
+  ?>
+
   <!-- REPORT TRAXES -->
   <?php
   if (in_array('11', $role_resources_ids) || 

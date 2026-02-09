@@ -1996,6 +1996,210 @@ class Traxes_model extends CI_Model
 	}
 
 
+	function get_list_lokasi($postData = null)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		$project 		= $postData['project'];
+		$sub_project 	= $postData['sub_project'];
+		$session_id 	= $postData['session_id'];
+
+		if ($project != "0") {
+			## Search 
+			$searchQuery = "";
+			if ($searchValue != '') {
+				if (strlen($searchValue) >= 3) {
+					$searchQuery = " (xin_customer.customer_id like '%" . $searchValue .  "%' 
+					or xin_customer.customer_name like '%" . $searchValue . "%')";
+				}
+			}
+
+			## Filter
+			$filterProject = "";
+			if (($project != null) && ($project != "") && ($project != '0')) {
+				$filterProject = "xin_customer.project_id = '" . $project . "'";
+			} else {
+				$filterProject = "";
+			}
+
+			$filterSubProject = "";
+			if (($sub_project != null) && ($sub_project != "") && ($sub_project != '0')) {
+				// $filterSubProject = "tx_cio.sub_project_id = '" . $sub_project . "'";
+				$filterSubProject = "xin_customer.sub_project = '".$sub_project."'";
+			} else {
+				$filterSubProject = "";
+			}
+
+			$filterPeriode = "";
+			// if (($sdate != null) && ($edate != "")) {
+			// 	// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
+			// 	$filterPeriode = "DATE_FORMAT(mp_sku_customer.stock_date, '%Y-%m-%d') BETWEEN '".$sdate."' AND '".$edate."'";
+
+			// 	// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
+
+			// } else {
+			// 	$filterPeriode = "";
+			// }
+
+			## Kondisi Default 
+			// $kondisiDefaultQuery = "(project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")) AND `user_id` != '1'";
+			// $kondisiDefaultQuery = "(
+			// 	karyawan_id = " . $emp_id . "
+			// AND	pkwt_id = " . $contract_id . "
+			// )";
+			$kondisiDefaultQuery = "";
+
+			## Total number of records without filtering
+			$dbtraxes->select('count(*) as allcount');
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+			// $dbtraxes->where($kondisiDefaultQuery);
+			$dbtraxes->join('xin_projects', 'xin_projects.project_id = xin_customer.project_id', 'left');
+			$records = $dbtraxes->get('xin_customer')->result();
+			$totalRecords = $records[0]->allcount;
+
+			## Total number of record with filtering
+			$dbtraxes->select('count(*) as allcount');
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$dbtraxes->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+			$dbtraxes->join('xin_projects', 'xin_projects.project_id = xin_customer.project_id', 'left');
+			$records = $dbtraxes->get('xin_customer')->result();
+			$totalRecordwithFilter = $records[0]->allcount;
+
+			## Fetch records
+			// $this->db->select('*');
+			$dbtraxes->select('xin_customer.secid');
+			$dbtraxes->select('xin_customer.customer_id');
+			$dbtraxes->select('xin_customer.customer_name');
+			$dbtraxes->select('xin_customer.owner_name');
+			$dbtraxes->select('xin_customer.no_contact');
+			$dbtraxes->select('xin_customer.address');
+			$dbtraxes->select('xin_customer.city_id');
+			$dbtraxes->select('xin_customer.photo');
+			$dbtraxes->select('xin_customer.latitude');
+			$dbtraxes->select('xin_customer.longitude');
+			$dbtraxes->select('xin_customer.category');
+			$dbtraxes->select('xin_projects.title');
+			$dbtraxes->select('xin_customer.createdon');
+			$dbtraxes->select('xin_customer.createdby');
+			$dbtraxes->select('xin_customer.verify');
+
+			// $dbtraxes->where($kondisiDefaultQuery);
+			if ($searchQuery != '') {
+				$dbtraxes->where($searchQuery);
+			}
+			if ($filterProject != '') {
+				$dbtraxes->where($filterProject);
+			}
+			if ($filterSubProject != '') {
+				$dbtraxes->where($filterSubProject);
+			}
+			if ($filterPeriode != '') {
+				$dbtraxes->where($filterPeriode);
+			}
+
+			$dbtraxes->join('xin_projects', 'xin_projects.project_id = xin_customer.project_id', 'left');
+			$dbtraxes->limit($rowperpage, $start);
+			$records = $dbtraxes->get('xin_customer')->result();
+
+			#Debugging variable
+			$tes_query = $dbtraxes->last_query();
+			//print_r($tes_query);
+
+			$data = array();
+
+			foreach ($records as $record) {
+				//verification id
+
+				$open_lokasi = '<button onclick="open_lokasi(' . $record->secid . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Detail</button>';
+				if (strlen($record->address) > 80) {
+				    $address_final = substr($record->address, 0, 80) . '...';
+				} else {
+				    $address_final = $record->address;
+				}
+
+				$data[] = array(
+					"aksi" 			=> $open_lokasi,
+					"customer_id" 	=> strtoupper($record->customer_id),
+					"customer_name" => strtoupper($record->customer_name),
+					"project_name" 	=> strtoupper($record->title),
+					"city_name" 	=> strtoupper($record->city_id),
+					"address" 		=> $address_final,
+					"date_noo" 		=> $record->createdon,
+
+				);
+
+			}
+		} else {
+			$totalRecords = 0;
+			$totalRecordwithFilter = 0;
+			$data = array();
+		}
+
+
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+
+	//ambil data lokasi xin_customer
+	public function get_data_customer($postData)
+	{
+
+		$dbtraxes = $this->load->database('dbtraxes', TRUE);
+
+		$dbtraxes->select('*');
+		$dbtraxes->from('xin_customer');
+		$dbtraxes->where($postData);
+		$dbtraxes->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $dbtraxes->get()->row_array();
+
+		return $query;
+	}
+
 	public function user_mobile_limit_newtraxes()
 	{
 

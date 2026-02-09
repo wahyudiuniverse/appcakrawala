@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt460 extends MY_Controller 
+class Pkwt462 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -402,30 +402,6 @@ class Pkwt460 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_park.' Uang Parkir diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
 								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
 							</tr>
 
@@ -433,7 +409,7 @@ class Pkwt460 extends MY_Controller
 
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
+								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan.</td>
 							</tr>
 
 							<br>
@@ -443,9 +419,9 @@ class Pkwt460 extends MY_Controller
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 
-							<br>
-							<br>
-							<br>
+							<br><br>
+							<br><br>
+							<br><br>
 							<br>
 
 							<tr>
