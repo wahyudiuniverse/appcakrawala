@@ -9,7 +9,11 @@
 <?php
 if ($profile_picture != '' && $profile_picture != 'no file') {
 	$t = time();
-	$de_file = base_url() . 'uploads/profile/' . $profile_picture . '?' . $t;
+	if (strpos($profile_picture, "http") === false) {
+		$de_file = base_url() . 'uploads/profile/' . $profile_picture . '?' . $t;
+	} else {
+		$de_file = $profile_picture . '?' . $t;
+	}
 } else {
 	if ($gender == 'L') {
 		$de_file = base_url() . 'uploads/profile/default_male.jpg';
@@ -20,7 +24,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 ?>
 
 <!-- <pre>
-	<?php //print_r($user); 
+	<?php //print_r($all_kabupaten_kota); 
 	?>
 </pre> -->
 
@@ -35,83 +39,85 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- MODAL BARU UPLOAD PKWT -->
 <div class="modal fade" id="editPkwtModal" tabindex="-1" role="dialog" aria-labelledby="editPkwtModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="judul_dialog">DIALOG UPLAOD KONTRAK YANG SUDAH DITANDATANGANI</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="isi-modal-edit-rekening">
-          <div class="container" id="container_edit_pkwt_modal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="judul_dialog">DIALOG UPLAOD KONTRAK YANG SUDAH DITANDATANGANI</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="isi-modal-edit-rekening">
+					<div class="container" id="container_edit_pkwt_modal">
 
-            <div class="row">
-              <table class="table table-striped col-md-12">
-                <tbody>
-
-
-                  <tr>
-                    <td style='width:25%'><strong>Nomor Dokumen</strong></td>
-                      
-                    <td ><strong><span class="icon-verify-bank" id="nomor_kontrak_modal" name="nomor_kontrak_modal"></span></strong></td>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td style='width:25%'><strong>Periode Kontrak</strong></td>
-                      
-                    <td ><strong><span class="icon-verify-bank" id="periode_kontrak_modal" name="periode_kontrak_modal"></span></strong></td>
-                    </td>
-                  </tr>
-
-                  <tr id="input_exit_clearance">
-                    <td style="width:25%"><strong>Dokumen Kontrak</strong> <br><i><font color="#FF0000">*</font> Upload Dokumen Kontrak yang sudah ditandatangani.</i>
-                    </td>
-                    <td style="width:75%">
-                     <span id="output_pkwt" name="output_pkwt"></span>
-                      
-
-                      <input type="file" class="filepond filepond-input-multiple" multiple id="file_pkwt" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
-                      <span><small class="text-muted">File bertipe jpg, jpeg, png atau pdf. Ukuran maksimal 5 MB</small></span>
-                      </br><span id='pesan_file_pkwt'></span>
-                      <input hidden type="text" id="link_file_pkwt" value="0">
-                      <!-- <input hidden type="text" id="status_file_exitclear" value="0"> -->
-                    </td>
-                  </tr>
-
-                </tbody>
-              </table>
+						<div class="row">
+							<table class="table table-striped col-md-12">
+								<tbody>
 
 
-                <input hidden type="text" id="field_secid" value="0">
-                <input hidden type="text" id="field_employee_id" value="0">
+									<tr>
+										<td style='width:25%'><strong>Nomor Dokumen</strong></td>
+
+										<td><strong><span class="icon-verify-bank" id="nomor_kontrak_modal" name="nomor_kontrak_modal"></span></strong></td>
+										</td>
+									</tr>
+
+									<tr>
+										<td style='width:25%'><strong>Periode Kontrak</strong></td>
+
+										<td><strong><span class="icon-verify-bank" id="periode_kontrak_modal" name="periode_kontrak_modal"></span></strong></td>
+										</td>
+									</tr>
+
+									<tr id="input_exit_clearance">
+										<td style="width:25%"><strong>Dokumen Kontrak</strong> <br><i>
+												<font color="#FF0000">*</font> Upload Dokumen Kontrak yang sudah ditandatangani.
+											</i>
+										</td>
+										<td style="width:75%">
+											<span id="output_pkwt" name="output_pkwt"></span>
 
 
-            </div>
-          </div>
-        </div>
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_pkwt" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span><small class="text-muted">File bertipe jpg, jpeg, png atau pdf. Ukuran maksimal 5 MB</small></span>
+											</br><span id='pesan_file_pkwt'></span>
+											<input hidden type="text" id="link_file_pkwt" value="0">
+											<!-- <input hidden type="text" id="status_file_exitclear" value="0"> -->
+										</td>
+									</tr>
 
-        <div class="info-modal-edit-rekening"></div>
+								</tbody>
+							</table>
 
-      </div>
-      <div class="modal-footer">
-        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Tutup</button>
 
-              <button
-                type="button" id="btn_approve"
-                onclick="upload_file_pkwt()"
-                class="btn btn-success btn-label float-right ms-auto">
-                <i
-                  class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>SAVE PERUBAHAN
-              </button>
+							<input hidden type="text" id="field_secid" value="0">
+							<input hidden type="text" id="field_employee_id" value="0">
 
-        <!-- <button id='button_save_rekening' name='button_save_rekening' type='submit' class='btn btn-primary'>AJUKAN PAKLARING</button> -->
-      </div>
 
-    </div>
-  </div>
+						</div>
+					</div>
+				</div>
+
+				<div class="info-modal-edit-rekening"></div>
+
+			</div>
+			<div class="modal-footer">
+				<button type='button' class='btn btn-secondary' data-dismiss='modal'>Tutup</button>
+
+				<button
+					type="button" id="btn_approve"
+					onclick="upload_file_pkwt()"
+					class="btn btn-success btn-label float-right ms-auto">
+					<i
+						class="ri-arrow-right-line label-icon align-middle fs-16 ms-2"></i>SAVE PERUBAHAN
+				</button>
+
+				<!-- <button id='button_save_rekening' name='button_save_rekening' type='submit' class='btn btn-primary'>AJUKAN PAKLARING</button> -->
+			</div>
+
+		</div>
+	</div>
 </div>
 
 <!-- MODAL UNTUK VERIFIKASI -->
@@ -327,7 +333,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 			<div class="modal-body">
 				<!-- <pre>
           <?php //print_r($session); 
-					?>
+			?>
         </pre> -->
 				<div class="isi-modal-edit-data-diri">
 					<div class="container" id="container_modal">
@@ -501,6 +507,19 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 										</td>
 									</tr>
 									<tr>
+										<td><strong>Kota Domisili</strong></td>
+										<td>
+											<select class="form-control" id="kota_domisili_modal" name="kota_domisili_modal" data-plugin="select_modal" data-placeholder="Kota Domisili">
+												<option value="">Pilih Kota Domisili</option>
+												<?php foreach ($all_kabupaten_kota as $kota): ?>
+													<option value="<?php echo $kota['id_kab_kota_bps']; ?>" <?php //if ($marital_status == $marital->id_marital): echo "selected"; //endif; 
+																											?>>[<?php echo strtoupper($kota['provinsi']); ?>] <?php echo strtoupper($kota['nama']); ?></option>
+												<?php endforeach; ?>
+											</select>
+											<span id='pesan_kota_domisili_modal'></span>
+										</td>
+									</tr>
+									<tr>
 										<td><strong>Alamat Domisili</strong></td>
 										<td>
 											<textarea id="alamat_domisili_modal" name="alamat_domisili_modal" class='form-control' placeholder='Alamat Domisili' rows="4"></textarea>
@@ -589,6 +608,20 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 										<td>
 											<input id='penempatan_modal' name='penempatan_modal' type='text' class='form-control' placeholder='Area/Penempatan' value='<?php echo strtoupper($penempatan); ?>'>
 											<span id='pesan_penempatan_modal'></span>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>Region</strong></td>
+										<td>
+											<input id='region_modal' name='region_modal' type='text' class='form-control' placeholder='Region' value='<?php echo strtoupper($region_name); ?>'>
+											<span id='pesan_region_modal'></span>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>DC</strong></td>
+										<td>
+											<input id='dc_modal' name='dc_modal' type='text' class='form-control' placeholder='DC' value='<?php echo strtoupper($dc_name); ?>'>
+											<span id='pesan_dc_modal'></span>
 										</td>
 									</tr>
 									<tr>
@@ -683,6 +716,13 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 										<td>
 											<input id='nomor_kontak_modal' name='nomor_kontak_modal' type='text' class='form-control' placeholder='Area/Penempatan' value='<?php echo strtoupper($penempatan); ?>'>
 											<span id='pesan_nomor_kontak_modal'></span>
+										</td>
+									</tr>
+									<tr>
+										<td><strong>Alamat Kontak Darurat</strong></td>
+										<td>
+											<textarea id="alamat_kontak_modal" name="alamat_kontak_modal" class='form-control' placeholder='Alamat Kontak Darurat' rows="4"></textarea>
+											<span id='pesan_alamat_kontak_modal'></span>
 										</td>
 									</tr>
 								</tbody>
@@ -988,11 +1028,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 											<div id="input_upload_dokumen" class="form-group">
 
-                      <input type="file" class="filepond filepond-input-multiple" multiple id="file_dokumen" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
-                      <span><small class="text-muted">File bertipe jpg, jpeg, png atau pdf. Ukuran maksimal 5 MB</small></span>
-                      </br><span id='pesan_file_exitclear'></span>
-                      <input hidden type="text" id="link_file_exitclear" value="0">
-                      <input hidden type="text" id="status_file_exitclear" value="0">
+												<input type="file" class="filepond filepond-input-multiple" multiple id="file_dokumen" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+												<span><small class="text-muted">File bertipe jpg, jpeg, png atau pdf. Ukuran maksimal 5 MB</small></span>
+												</br><span id='pesan_file_exitclear'></span>
+												<input hidden type="text" id="link_file_exitclear" value="0">
+												<input hidden type="text" id="status_file_exitclear" value="0">
 
 											</div>
 
@@ -1269,6 +1309,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 															<td id="alamat_domisili_tabel"><?php echo $alamat_domisili; ?></td>
 														</tr>
 														<tr>
+															<th scope="row">Kota Domisili</th>
+															<td id="kota_domisili_tabel"><?php echo $kota_domisili; ?></td>
+														</tr>
+														<tr>
 															<th scope="row">Maps Alamat KTP</th>
 															<td id="alamat_ktp_tabel">
 																<iframe width='100%' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='https://maps.google.com/maps?q="<?php echo $alamat_domisili; ?>"&output=embed'></iframe>
@@ -1329,6 +1373,14 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 															<td id="penempatan_tabel"><?php echo $penempatan; ?></td>
 														</tr>
 														<tr>
+															<th scope="row" style="width: 30%">Region</th>
+															<td id="region_tabel"><?php echo $region_name; ?></td>
+														</tr>
+														<tr>
+															<th scope="row" style="width: 30%">DC</th>
+															<td id="dc_tabel"><?php echo $dc_name; ?></td>
+														</tr>
+														<tr>
 															<th scope="row">Kategori</th>
 															<td id="kategori_tabel"><?php echo $kategori; ?></td>
 														</tr>
@@ -1378,6 +1430,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 														<tr>
 															<th scope="row" style="width: 30%">Nomor Kontak</th>
 															<td id="nomor_kontak_darurat_tabel"><?php echo $nomor_kontak_darurat; ?></td>
+														</tr>
+														<tr>
+															<th scope="row">Alamat Kontak Darurat</th>
+															<td id="alamat_kontak_tabel"><?php echo $alamat_kontak; ?></td>
 														</tr>
 													</tbody>
 												</table>
@@ -1478,7 +1534,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 														<!-- <tr>
                               <th scope="row">Dokumen Paklaring (SK Kerja)</th>
                               <td><?php //echo $filename_paklaring; 
-																	?></td>
+									?></td>
                             </tr> -->
 													</tbody>
 												</table>
@@ -1500,7 +1556,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 										</div>
 
-										<?php if (($user[0]->user_role_id == "1") || ($user['0']->employee_id == "1") || ($user['0']->employee_id == "24535823")) { ?>
+										<?php if (($user[0]->user_role_id == "1") || ($user['0']->employee_id == "1") || ($user['0']->employee_id == "24535823") || ($user['0']->employee_id == "21300093")) { ?>
 											<div class="form-row">
 												<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN PRIBADI</strong></span> </div>
 												<!-- upload ktp -->
@@ -1526,11 +1582,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 													<label>Foto KTP</label>
 													<embed class="form-group col-md-12" id="output_ktp" type='<?php if (substr($parameterfile1, 0, 3) == "pdf") {
-																																											echo "application/pdf";
-																																										} else {
-																																											echo "image/jpg";
-																																										}
-																																										?>' src="<?php echo $tesfile1; ?>"></embed>
+																													echo "application/pdf";
+																												} else {
+																													echo "image/jpg";
+																												}
+																												?>' src="<?php echo $tesfile1; ?>"></embed>
 													<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile1; ?>" target="_blank">Buka File</a>
 												</div>
 
@@ -1555,11 +1611,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 													?>
 													<label>Foto KK</label>
 													<embed class="form-group col-md-12" id="output_kk" type='<?php if (substr($parameterfile2, 0, 3) == "pdf") {
-																																											echo "application/pdf";
-																																										} else {
-																																											echo "image/jpg";
-																																										}
-																																										?>' src="<?php echo $tesfile2; ?>"></embed>
+																													echo "application/pdf";
+																												} else {
+																													echo "image/jpg";
+																												}
+																												?>' src="<?php echo $tesfile2; ?>"></embed>
 													<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile2; ?>" target="_blank">Buka File</a>
 												</div>
 
@@ -1584,11 +1640,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 													?>
 													<label>Foto NPWP</label>
 													<embed class="form-group col-md-12" id="output_npwp" type='<?php if (substr($parameterfile3, 0, 3) == "pdf") {
-																																												echo "application/pdf";
-																																											} else {
-																																												echo "image/jpg";
-																																											}
-																																											?>' src="<?php echo $tesfile3; ?>"></embed>
+																													echo "application/pdf";
+																												} else {
+																													echo "image/jpg";
+																												}
+																												?>' src="<?php echo $tesfile3; ?>"></embed>
 													<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile3; ?>" target="_blank">Buka File</a>
 												</div>
 												<div class="form-group col-md-2">
@@ -1611,11 +1667,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 													?>
 													<label>Foto Ijazah</label>
 													<embed class="form-group col-md-12" id="output_ijazah" type='<?php if (substr($parameterfile4, 0, 3) == "pdf") {
-																																													echo "application/pdf";
-																																												} else {
-																																													echo "image/jpg";
-																																												}
-																																												?>' src="<?php echo $tesfile4; ?>"></embed>
+																														echo "application/pdf";
+																													} else {
+																														echo "image/jpg";
+																													}
+																													?>' src="<?php echo $tesfile4; ?>"></embed>
 													<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile4; ?>" target="_blank">Buka File</a>
 												</div>
 
@@ -1640,11 +1696,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 													?>
 													<label>Foto CV</label>
 													<embed class="form-group col-md-12" id="output_cv" type='<?php if (substr($parameterfile5, 0, 3) == "pdf") {
-																																											echo "application/pdf";
-																																										} else {
-																																											echo "image/jpg";
-																																										}
-																																										?>' src="<?php echo $tesfile5; ?>"></embed>
+																													echo "application/pdf";
+																												} else {
+																													echo "image/jpg";
+																												}
+																												?>' src="<?php echo $tesfile5; ?>"></embed>
 													<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile5; ?>" target="_blank">Buka File</a>
 												</div>
 
@@ -1669,11 +1725,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 													?>
 													<label>Foto SKCK</label>
 													<embed class="form-group col-md-12" id="output_skck" type='<?php if (substr($parameterfile6, 0, 3) == "pdf") {
-																																												echo "application/pdf";
-																																											} else {
-																																												echo "image/jpg";
-																																											}
-																																											?>' src="<?php echo $tesfile6; ?>"></embed>
+																													echo "application/pdf";
+																												} else {
+																													echo "image/jpg";
+																												}
+																												?>' src="<?php echo $tesfile6; ?>"></embed>
 													<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile6; ?>" target="_blank">Buka File</a>
 												</div>
 											</div>
@@ -1692,10 +1748,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 									<!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
 									<div class="tab-pane fade" id="dokumen-kontrak" role="tabpanel" aria-labelledby="dokumen-kontrak-tab">
 										<div class="row" id="isi-dokumen-kontrak-tabel">
-											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> <a href='https://apps-cakrawala.com/admin/employee_pkwt_cancel/pkwt_expired_edit/<?php echo $employee_id;?>/1' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>PERPANJANG KONTRAK</button></a></div>
-
-											
-
+											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> <a href='https://apps-cakrawala.com/admin/employee_pkwt_cancel/pkwt_expired_edit/<?php echo $employee_id; ?>/1' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>PERPANJANG KONTRAK</button></a></div>
 
 											<?php foreach ($all_contract as $kontrak): ?>
 												<div class="card-header with-elements" <?php echo ($kontrak['jenis_dokumen'] == "ADDENDUM" ? 'style="background-color:#c0ebbc;"' : 'style="background-color:#bcbeeb;"'); ?>> <span class="card-header-title mr-2"> <strong> <?php echo $kontrak['jenis_dokumen']; ?>. Periode: <?php echo $kontrak['periode_start']; ?> - <?php echo $kontrak['periode_end']; ?></strong></span> </div>
@@ -1759,7 +1812,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN SK</strong></span> </div>
 											<!-- <pre>
                         <?php //print_r($all_sk);
-												?>
+						?>
                       </pre> -->
 
 											<?php if (!is_null($all_sk)) {
@@ -1794,7 +1847,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 																<tr>
 																	<th scope="row" style="width: 30%">QR Code</th>
 																	<td>
-																		<img src='<?= base_url().$sk['qr_code']; ?>' width='150px'>
+																		<img src='<?= base_url() . $sk['qr_code']; ?>' width='150px'>
 																		<?php //echo $sk['button_open']; 
 																		?>
 																		<?php //echo $sk['button_upload']; 
@@ -1831,7 +1884,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN E-Slip</strong></span> </div>
 											<!-- <pre>
                         <?php //print_r($all_sk); 
-												?>
+						?>
                       </pre> -->
 
 											<?php if (empty($all_eslip)) { ?>
@@ -1897,7 +1950,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN BUPOT</strong></span> </div>
 											<!-- <pre>
                         <?php //print_r($all_sk); 
-												?>
+						?>
                       </pre> -->
 
 											<?php if (empty($bupot)) { ?>
@@ -2059,47 +2112,44 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 	// alert(nik_validation);
 
+	FilePond.registerPlugin(
+		FilePondPluginFileEncode,
+		FilePondPluginFileValidateType,
+		FilePondPluginFileValidateSize,
+		FilePondPluginFileRename,
+		// FilePondPluginImageEdit,
+		FilePondPluginImageExifOrientation,
+		FilePondPluginImagePreview
+	);
+
+	//create object filepond untuk npwp
+	var pond_dokumen = FilePond.create(document.querySelector('input[id="file_dokumen"]'), {
+		labelIdle: 'Drag & Drop file Dokumen atau klik <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "5MB",
+		acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `exit${file.extension}`;
+		}
+	});
 
 
-  FilePond.registerPlugin(
-    FilePondPluginFileEncode,
-    FilePondPluginFileValidateType,
-    FilePondPluginFileValidateSize,
-    FilePondPluginFileRename,
-    // FilePondPluginImageEdit,
-    FilePondPluginImageExifOrientation,
-    FilePondPluginImagePreview
-  );
-
-  //create object filepond untuk npwp
-  var pond_dokumen = FilePond.create(document.querySelector('input[id="file_dokumen"]'), {
-    labelIdle: 'Drag & Drop file Dokumen atau klik <span class="filepond--label-action">Browse</span>',
-    imagePreviewHeight: 170,
-    maxFileSize: "5MB",
-    acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
-    imageCropAspectRatio: "1:1",
-    imageResizeTargetWidth: 200,
-    imageResizeTargetHeight: 200,
-    fileRenameFunction: (file) => {
-      return `exit${file.extension}`;
-    }
-  });
-
-
-  //create object filepond untuk npwp
-  var pond_pkwt = FilePond.create(document.querySelector('input[id="file_pkwt"]'), {
-    labelIdle: 'Drag & Drop file Dokumen atau klik <span class="filepond--label-action">Browse</span>',
-    imagePreviewHeight: 170,
-    maxFileSize: "5MB",
-    acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
-    imageCropAspectRatio: "1:1",
-    imageResizeTargetWidth: 200,
-    imageResizeTargetHeight: 200,
-    fileRenameFunction: (file) => {
-      return `exit${file.extension}`;
-    }
-  });
-
+	//create object filepond untuk npwp
+	var pond_pkwt = FilePond.create(document.querySelector('input[id="file_pkwt"]'), {
+		labelIdle: 'Drag & Drop file Dokumen atau klik <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "5MB",
+		acceptedFileTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `exit${file.extension}`;
+		}
+	});
 </script>
 
 <script type="text/javascript">
@@ -2971,6 +3021,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		$('#pesan_ibu_kandung_modal').html("");
 		$('#pesan_alamat_ktp_modal').html("");
 		$('#pesan_alamat_domisili_modal').html("");
+		$('#pesan_kota_domisili_modal').html("");
 
 		// AJAX untuk ambil data employee terupdate
 		$.ajax({
@@ -3012,6 +3063,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					$('#ibu_kandung_modal').val(res['data']['ibu_kandung']);
 					$('#alamat_ktp_modal').val(res['data']['alamat_ktp']);
 					$('#alamat_domisili_modal').val(res['data']['alamat_domisili']);
+					$("#kota_domisili_modal").val(res['data']['id_kota_domisili']).change();
+					$('#kota_domisili_tabel').val(res['data']['nama_kota_domisili']);
 
 					$('.isi-modal-edit-data-diri').attr("hidden", false);
 					$('.info-modal-edit-data-diri').attr("hidden", true);
@@ -3064,6 +3117,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		var alamat_ktp = $("#alamat_ktp_modal").val();
 		var alamat_domisili = $("#alamat_domisili_modal").val();
 
+		var id_kota_domisili = $("#kota_domisili_modal").val();
+		var nama_kota_domisili = $("#kota_domisili_modal option:selected").text();
+		nama_kota_domisili = nama_kota_domisili.trim();
+
 		//-------testing-------
 		// alert("masuk button save Data Diri");
 		// alert('Server Time: '+ getServerTime());
@@ -3090,6 +3147,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		var pesan_ibu_kandung_modal = "";
 		var pesan_alamat_ktp_modal = "";
 		var pesan_alamat_domisili_modal = "";
+		var pesan_kota_domisili_modal = "";
 		if (nama_lengkap == "") {
 			pesan_first_name_modal = "<small style='color:#FF0000;'>Nama lengkap tidak boleh kosong</small>";
 			$('#first_name_modal').focus();
@@ -3170,6 +3228,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 			pesan_alamat_domisili_modal = "<small style='color:#FF0000;'>Alamat Domisili tidak boleh kosong</small>";
 			$('#alamat_domisili_modal').focus();
 		}
+		// if (id_kota_domisili == "") {
+		// 	pesan_kota_domisili_modal = "<small style='color:#FF0000;'>Alamat Domisili tidak boleh kosong</small>";
+		// 	$('#kota_domisili_modal').focus();
+		// }
 		$('#pesan_first_name_modal').html(pesan_first_name_modal);
 		$('#pesan_gender_modal').html(pesan_gender_modal);
 		$('#pesan_tempat_lahir_modal').html(pesan_tempat_lahir_modal);
@@ -3188,6 +3250,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		$('#pesan_ibu_kandung_modal').html(pesan_ibu_kandung_modal);
 		$('#pesan_alamat_ktp_modal').html(pesan_alamat_ktp_modal);
 		$('#pesan_alamat_domisili_modal').html(pesan_alamat_domisili_modal);
+		$('#pesan_kota_domisili_modal').html(pesan_kota_domisili_modal);
 
 		//-------action-------
 		if (
@@ -3195,8 +3258,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 			(pesan_date_of_birth_modal != "") || (pesan_last_edu_modal != "") || (pesan_ethnicity_modal != "") ||
 			(pesan_marital_status_modal != "") || (pesan_tinggi_badan_modal != "") || (pesan_berat_badan_modal != "") ||
 			(pesan_ktp_no_modal != "") || (pesan_kk_no_modal != "") || (pesan_edu_school_name_modal != "") || (pesan_edu_prodi_name_modal != "") ||
-			(pesan_npwp_no_modal != "") || (pesan_contact_no_modal != "") ||
-			(pesan_ibu_kandung_modal != "") || (pesan_alamat_ktp_modal != "") || (pesan_alamat_domisili_modal != "")
+			(pesan_npwp_no_modal != "") || (pesan_contact_no_modal != "") || (pesan_ibu_kandung_modal != "") ||
+			(pesan_alamat_ktp_modal != "") || (pesan_alamat_domisili_modal != "") || (pesan_kota_domisili_modal != "")
 		) { //kalau ada input kosong 
 			alert("Tidak boleh ada input kosong");
 		} else { //kalau semua terisi
@@ -3227,6 +3290,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					ibu_kandung: ibu_kandung,
 					alamat_ktp: alamat_ktp,
 					alamat_domisili: alamat_domisili,
+					id_kota_domisili: id_kota_domisili,
+					nama_kota_domisili: nama_kota_domisili,
 				},
 				beforeSend: function() {
 					$('#editDataDiriModal').modal('show');
@@ -3262,6 +3327,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 						$('#ibu_kandung_tabel').html(res['data']['ibu_kandung']);
 						$('#alamat_ktp_tabel').html(res['data']['alamat_ktp']);
 						$('#alamat_domisili_tabel').html(res['data']['alamat_domisili']);
+						$('#kota_domisili_tabel').html(res['data']['nama_kota_domisili']);
 
 						//tampilkan pesan sukses
 						$('.info-modal-edit-data-diri').attr("hidden", false);
@@ -3305,6 +3371,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		$('#pesan_penempatan_modal').html("");
 		$('#pesan_kategori_modal').html("");
 		$('#pesan_date_of_join_modal').html("");
+		$('#pesan_region_modal').html("");
+		$('#pesan_dc_modal').html("");
 
 		// AJAX untuk ambil data employee terupdate
 		$.ajax({
@@ -3330,6 +3398,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					$('#sub_project_modal').val(res['data']['sub_project_id']).change();
 					$("#jabatan_modal").val(res['data']['designation_id']).change();
 					$('#penempatan_modal').val(res['data']['penempatan']);
+					$('#region_modal').val(res['data']['region_name']);
+					$('#dc_modal').val(res['data']['dc_name']);
 					$('#kategori_modal').val(res['data']['location_id']).change();
 					$("#date_of_join_modal").val(res['data']['date_of_joining']);
 
@@ -3369,6 +3439,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		var sub_project = $("#sub_project_modal option:selected").val();
 		var jabatan = $("#jabatan_modal option:selected").val();
 		var penempatan = $("#penempatan_modal").val();
+		var region_name = $("#region_modal").val();
+		var dc_name = $("#dc_modal").val();
 		var kategori = $("#kategori_modal option:selected").val();
 		var date_of_join = $("#date_of_join_modal").val();
 		var role_id_karyawan = $("#role_modal").val();
@@ -3427,6 +3499,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					sub_project: sub_project,
 					jabatan: jabatan,
 					penempatan: penempatan,
+					region_name: region_name,
+					dc_name: dc_name,
 					kategori: kategori,
 					date_of_join: date_of_join,
 					role_id_karyawan: role_id_karyawan,
@@ -3448,6 +3522,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 						$('#jabatan_tabel').html(res['data']['designation_id']);
 						$('#jabatan_name_card').html("JABATAN: " + res['data']['designation_id']);
 						$('#penempatan_tabel').html(res['data']['penempatan']);
+						$('#region_tabel').html(res['data']['region_name']);
+						$('#dc_tabel').html(res['data']['dc_name']);
 						$('#kategori_tabel').html(res['data']['location_id']);
 						$('#kategori_name_card').html("KATEGORI: " + res['data']['location_id']);
 						$('#date_of_join_tabel').html(res['data']['date_of_joining']);
@@ -3490,6 +3566,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		$('#pesan_nama_kontak_modal').html("");
 		$('#pesan_hubungan_modal').html("");
 		$('#pesan_nomor_kontak_modal').html("");
+		$('#pesan_alamat_kontak_modal').html("");
 
 		// AJAX untuk ambil data employee terupdate
 		$.ajax({
@@ -3514,6 +3591,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					$('#nama_kontak_modal').val(res['data']['nama']);
 					$("#hubungan_modal").val(res['data']['hubungan']).change();
 					$('#nomor_kontak_modal').val(res['data']['no_kontak']);
+					$('#alamat_kontak_modal').val(res['data']['alamat']);
 
 					$('.isi-modal-edit-kontak').attr("hidden", false);
 					$('.info-modal-edit-kontak').attr("hidden", true);
@@ -3550,6 +3628,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		var nama_kontak_modal = $("#nama_kontak_modal").val();
 		var hubungan_modal = $("#hubungan_modal option:selected").val();
 		var nomor_kontak_modal = $("#nomor_kontak_modal").val();
+		var alamat_kontak_modal = $("#alamat_kontak_modal").val();
 
 		//-------testing-------
 		// alert("masuk button save Data Diri");
@@ -3592,6 +3671,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					nama_kontak: nama_kontak_modal,
 					hubungan: hubungan_modal,
 					nomor_kontak: nomor_kontak_modal,
+					alamat_kontak_modal: alamat_kontak_modal,
 				},
 				beforeSend: function() {
 					$('#editKontakModal').modal('show');
@@ -3609,6 +3689,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 						$('#nama_kontak_tabel').html(res['data']['nama']);
 						$('#hubungan_tabel').html(res['data']['hubungan']);
 						$('#nomor_kontak_darurat_tabel').html(res['data']['no_kontak']);
+						$('#alamat_kontak_tabel').html(res['data']['alamat']);
 
 						//tampilkan pesan sukses
 						$('.info-modal-edit-kontak').attr("hidden", false);
@@ -4889,10 +4970,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 				var res = jQuery.parseJSON(response);
 
 				var tes_role = <?php if (in_array('1008', $role_resources_ids)) {
-													echo "1";
-												} else {
-													echo "0";
-												}; ?>
+									echo "1";
+								} else {
+									echo "0";
+								}; ?>
 
 				if (tes_role == "1") {
 					var tombol_upload_ktp_tabel = '<button onclick="upload_ktp(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KTP</button>';
@@ -5025,10 +5106,10 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 				var res = jQuery.parseJSON(response);
 
 				var tes_role = <?php if (in_array('1008', $role_resources_ids)) {
-													echo "1";
-												} else {
-													echo "0";
-												}; ?>
+									echo "1";
+								} else {
+									echo "0";
+								}; ?>
 
 				if (tes_role == "1") {
 					var tombol_upload_kk_tabel = '<button onclick="upload_kk(' + employee_id + ')" class="btn btn-sm btn-outline-primary ladda-button ml-1" data-style="expand-right">Upload KK</button>';
@@ -5662,154 +5743,153 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 	function upload_kontrak(contract_id) {
 
 
-    // alert(nip);
-    // AJAX untuk ambil data kontrak employee terupdate
-    $.ajax({
+		// alert(nip);
+		// AJAX untuk ambil data kontrak employee terupdate
+		$.ajax({
 
 			url: '<?= base_url() ?>admin/Employees/get_data_pkwt/',
-      method: 'post',
-      data: {
-        [csrfName]: csrfHash,
-        contract_id: contract_id,
-      },
-      beforeSend: function() {
-        $('#judul-modal-edit').html("File Exit Clearance");
-        // $('#button_download_dokumen_conditional').html("");
-        // $('.isi-modal').html(loading_html_text);
-        // $('#button_save_pin').attr("hidden", true);
-        $('#editPkwtModal').appendTo("body").modal('show');
+			method: 'post',
+			data: {
+				[csrfName]: csrfHash,
+				contract_id: contract_id,
+			},
+			beforeSend: function() {
+				$('#judul-modal-edit').html("File Exit Clearance");
+				// $('#button_download_dokumen_conditional').html("");
+				// $('.isi-modal').html(loading_html_text);
+				// $('#button_save_pin').attr("hidden", true);
+				$('#editPkwtModal').appendTo("body").modal('show');
 
-        // $('#editRekeningModal').modal('show');
-        // $('.info-modal-edit-rekening').attr("hidden", false);
-        // $('.isi-modal-edit-rekening').attr("hidden", true);
-        // $('.info-modal-edit-rekening').html(loading_html_text);
-        // $('#button_save_rekening').attr("hidden", true);
-      },
-      success: function(response) {
-        // alert(response);
-        var res = jQuery.parseJSON(response);
-        const uniqueTimestamp = Date.now();
-
-
-        pond_pkwt.setOptions({
-            server: {
-              process: {
-                url: 'https://apps-cakrawala.com/upload/upload_dokumen',
-                // url: '<?= base_url() ?>admin/Employee_resign_new/list_employees',
-
-                method: 'POST',
-                ondata: (formData) => {
-                  formData.append('id_client', res);
-                  formData.append('nama_client', uniqueTimestamp);
-                  formData.append('identifier', 'cis_pkwt');
-                  formData.append([csrfName], csrfHash);
-                  return formData;
-                },
-                // onload: (response) => response.key,
-                onload: (res) => {
-                  // select the right value in the response here and return
-                  // return res;
-                  var serverResponse = jQuery.parseJSON(res);
-                  $('#link_file_pkwt').val(serverResponse['0']['link_file']);
-                  // serverResponse = JSON.parse(res);
-                  // console.log(serverResponse['0']['link_file']);
-                  // alert(serverResponse['0']['link_file']);
-                }
-              },
-            }
-          });
+				// $('#editRekeningModal').modal('show');
+				// $('.info-modal-edit-rekening').attr("hidden", false);
+				// $('.isi-modal-edit-rekening').attr("hidden", true);
+				// $('.info-modal-edit-rekening').html(loading_html_text);
+				// $('#button_save_rekening').attr("hidden", true);
+			},
+			success: function(response) {
+				// alert(response);
+				var res = jQuery.parseJSON(response);
+				const uniqueTimestamp = Date.now();
 
 
-					const formatDate = (date) => {
-					    const year = date.getFullYear();
-					    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-					    const day = String(date.getDate()).padStart(2, '0');
+				pond_pkwt.setOptions({
+					server: {
+						process: {
+							url: 'https://apps-cakrawala.com/upload/upload_dokumen',
+							// url: '<?= base_url() ?>admin/Employee_resign_new/list_employees',
 
-					    return `${year}-${month}-${day}`;
-					};
-
-					// Example usage
-					const currentDate = new Date();
-					// console.log(formatDate(currentDate));
-
-        if (res['status'] == "200") {
-
-          $('#nomor_kontrak_modal').html(res['data']['contract_id']+ ' - ' +res['data']['no_surat']);
-          $('#periode_kontrak_modal').html(res['data']['from_date']+ ' - ' +res['data']['to_date']);
-          // $('#tanggal_upload_modal').html(formatDate(currentDate));
-          $('#field_secid').val(res['data']['contract_id']);
-          $('#field_employee_id').val(res['data']['employee_id']);
-
-          $('#output_pkwt').html(res['data']['file_name']);
-
-          // $('pesan_jenis_dokumen').val(res['data']['woking_periode']);
-
-
-            // $('#jenis_dokumen').val('1').change();
-
-          // pesan_jenisdok = "<small style='color:#FF0000;'>PERIODE KERJA</small>";
-          // $('#pesan_jenis_dokumen').focus();
-          // $('#pesan_jenis_dokumen').html(pesan_jenisdok);
+							method: 'POST',
+							ondata: (formData) => {
+								formData.append('id_client', res);
+								formData.append('nama_client', uniqueTimestamp);
+								formData.append('identifier', 'cis_pkwt');
+								formData.append([csrfName], csrfHash);
+								return formData;
+							},
+							// onload: (response) => response.key,
+							onload: (res) => {
+								// select the right value in the response here and return
+								// return res;
+								var serverResponse = jQuery.parseJSON(res);
+								$('#link_file_pkwt').val(serverResponse['0']['link_file']);
+								// serverResponse = JSON.parse(res);
+								// console.log(serverResponse['0']['link_file']);
+								// alert(serverResponse['0']['link_file']);
+							}
+						},
+					}
+				});
 
 
+				const formatDate = (date) => {
+					const year = date.getFullYear();
+					const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+					const day = String(date.getDate()).padStart(2, '0');
 
-        } else {
-          html_text = res['pesan'];
-          // $('.isi-modal').html(html_text);
-          // $('#button_save_pin').attr("hidden", true);
-        }
-      },
-      error: function(xhr, status, error) {
-        alert("error");
-        html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-        html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-        // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-        $('.isi-modal').html(html_text); //coba pake iframe
-        $('#button_save_pin').attr("hidden", true);
-      }
-    });
+					return `${year}-${month}-${day}`;
+				};
+
+				// Example usage
+				const currentDate = new Date();
+				// console.log(formatDate(currentDate));
+
+				if (res['status'] == "200") {
+
+					$('#nomor_kontrak_modal').html(res['data']['contract_id'] + ' - ' + res['data']['no_surat']);
+					$('#periode_kontrak_modal').html(res['data']['from_date'] + ' - ' + res['data']['to_date']);
+					// $('#tanggal_upload_modal').html(formatDate(currentDate));
+					$('#field_secid').val(res['data']['contract_id']);
+					$('#field_employee_id').val(res['data']['employee_id']);
+
+					$('#output_pkwt').html(res['data']['file_name']);
+
+					// $('pesan_jenis_dokumen').val(res['data']['woking_periode']);
+
+
+					// $('#jenis_dokumen').val('1').change();
+
+					// pesan_jenisdok = "<small style='color:#FF0000;'>PERIODE KERJA</small>";
+					// $('#pesan_jenis_dokumen').focus();
+					// $('#pesan_jenis_dokumen').html(pesan_jenisdok);
+
+
+
+				} else {
+					html_text = res['pesan'];
+					// $('.isi-modal').html(html_text);
+					// $('#button_save_pin').attr("hidden", true);
+				}
+			},
+			error: function(xhr, status, error) {
+				alert("error");
+				html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+				html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+				// html_text = "Gagal fetch data. Kode error: " + xhr.status;
+				$('.isi-modal').html(html_text); //coba pake iframe
+				$('#button_save_pin').attr("hidden", true);
+			}
+		});
 
 	}
 
 
-  function upload_file_pkwt() {
-    var contract_id  	= $("#field_secid").val();
-    var employee_id 	= $("#field_employee_id").val();
-    var file_name 		= $("#link_file_pkwt").val();
-    var upload_pkwt 	= $("#tanggal_upload_modal").val();
+	function upload_file_pkwt() {
+		var contract_id = $("#field_secid").val();
+		var employee_id = $("#field_employee_id").val();
+		var file_name = $("#link_file_pkwt").val();
+		var upload_pkwt = $("#tanggal_upload_modal").val();
 
-    // alert(contract_id);
+		// alert(contract_id);
 
-          // AJAX untuk save data diri
-          $.ajax({
-            url: '<?= base_url() ?>admin/Employees/update_dokumen_pkwt/',
-            // url: '<?= base_url() ?>admin/Employee_paklaring_status/update_pengajuan_skk/',
-            method: 'post',
-            data: {
-              [csrfName]: csrfHash,
-              contract_id : contract_id ,
-              employee_id: employee_id,
-              file_name: file_name,
-              upload_pkwt: upload_pkwt,
+		// AJAX untuk save data diri
+		$.ajax({
+			url: '<?= base_url() ?>admin/Employees/update_dokumen_pkwt/',
+			// url: '<?= base_url() ?>admin/Employee_paklaring_status/update_pengajuan_skk/',
+			method: 'post',
+			data: {
+				[csrfName]: csrfHash,
+				contract_id: contract_id,
+				employee_id: employee_id,
+				file_name: file_name,
+				upload_pkwt: upload_pkwt,
 
-            },
-            beforeSend: function() {},
-            success: function() {
+			},
+			beforeSend: function() {},
+			success: function() {
 
-              // employee_table.ajax.reload(null, true);
-              // tabel_employees.ajax.reload(null, false);
+				// employee_table.ajax.reload(null, true);
+				// tabel_employees.ajax.reload(null, false);
 
-              alert("Behasil simpan Dokumen PKWT");
-              $('#editPkwtModal').modal('hide');
-            },
-            error: function(xhr, status, error) {
-              alert("error save kontak client");
-            }
-          });
-        
+				alert("Behasil simpan Dokumen PKWT");
+				$('#editPkwtModal').modal('hide');
+			},
+			error: function(xhr, status, error) {
+				alert("error save kontak client");
+			}
+		});
 
-  }
 
+	}
 </script>
 
 <!-- Tombol Upload Addendum -->
@@ -6288,69 +6368,68 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <!-- Event filepond-->
 <script>
-  document.addEventListener('FilePond:processfiles', (e) => {
-    // alert("selesai upload file");
-    // $('#button_next_dokumen_client').attr("hidden", false);
-    // console.log('FilePond ready for use', e.detail);
+	document.addEventListener('FilePond:processfiles', (e) => {
+		// alert("selesai upload file");
+		// $('#button_next_dokumen_client').attr("hidden", false);
+		// console.log('FilePond ready for use', e.detail);
 
-    // // get create method reference
-    // const { create } = e.detail;FilePond:processfilestart
-  });
+		// // get create method reference
+		// const { create } = e.detail;FilePond:processfilestart
+	});
 
-  document.addEventListener('FilePond:processfile', (e) => {
-    // alert("selesai upload file");
-    // $('#button_next_dokumen_client').attr("hidden", false);
-    // console.log('FilePond ready for use', e.detail);
+	document.addEventListener('FilePond:processfile', (e) => {
+		// alert("selesai upload file");
+		// $('#button_next_dokumen_client').attr("hidden", false);
+		// console.log('FilePond ready for use', e.detail);
 
-    // // get create method reference
-    // const { create } = e.detail;FilePond:processfilestart
-  });
+		// // get create method reference
+		// const { create } = e.detail;FilePond:processfilestart
+	});
 
-  document.addEventListener('FilePond:error', (e) => {
-    // alert("selesai upload file");
-    // $('#button_next_dokumen_client').attr("hidden", false);
-    // console.log('FilePond ready for use', e.detail);
+	document.addEventListener('FilePond:error', (e) => {
+		// alert("selesai upload file");
+		// $('#button_next_dokumen_client').attr("hidden", false);
+		// console.log('FilePond ready for use', e.detail);
 
-    // // get create method reference
-    // const { create } = e.detail;FilePond:processfilestart
-  });
+		// // get create method reference
+		// const { create } = e.detail;FilePond:processfilestart
+	});
 
-  document.addEventListener('FilePond:processfileabort', (e) => {
-    // alert("selesai upload file");
-    // $('#button_next_dokumen_client').attr("hidden", false);
-    // console.log('FilePond ready for use', e.detail);
+	document.addEventListener('FilePond:processfileabort', (e) => {
+		// alert("selesai upload file");
+		// $('#button_next_dokumen_client').attr("hidden", false);
+		// console.log('FilePond ready for use', e.detail);
 
-    // // get create method reference
-    // const { create } = e.detail;FilePond:processfilestart
-  });
+		// // get create method reference
+		// const { create } = e.detail;FilePond:processfilestart
+	});
 
-  document.addEventListener('FilePond:processfilestart', (e) => {
-    // alert("mulai upload file");
-    // $('#button_next_dokumen_client').attr("hidden", true);
-    // console.log('FilePond ready for use', e.detail);
+	document.addEventListener('FilePond:processfilestart', (e) => {
+		// alert("mulai upload file");
+		// $('#button_next_dokumen_client').attr("hidden", true);
+		// console.log('FilePond ready for use', e.detail);
 
-    // // get create method reference
-    // const { create } = e.detail;FilePond:addfilestart
-  });
+		// // get create method reference
+		// const { create } = e.detail;FilePond:addfilestart
+	});
 
-  document.addEventListener('FilePond:addfilestart', (e) => {
-    // alert("mulai add file");
-    // $('#button_next_dokumen_client').attr("hidden", true);
-    // console.log('FilePond ready for use', e.detail);
+	document.addEventListener('FilePond:addfilestart', (e) => {
+		// alert("mulai add file");
+		// $('#button_next_dokumen_client').attr("hidden", true);
+		// console.log('FilePond ready for use', e.detail);
 
-    // // get create method reference
-    // const { create } = e.detail;FilePond:addfilestart 
-  });
-
-
-  pond_pkwt.on('processfiles', (error, file) => {
-    $('#status_file_exitclear').val("1");
-  }); 
+		// // get create method reference
+		// const { create } = e.detail;FilePond:addfilestart 
+	});
 
 
-  pond_pkwt.on('removefile', (error, file) => {
-    // alert("remove file " + file['name']); ->
-    $('#status_file_exitclear').val("0");
-  });
+	pond_pkwt.on('processfiles', (error, file) => {
+		$('#status_file_exitclear').val("1");
+	});
 
+
+	pond_pkwt.on('removefile', (error, file) => {
+		// alert("remove file " + file['name']); ->
+		$('#status_file_exitclear').val("0");
+	});
 </script>

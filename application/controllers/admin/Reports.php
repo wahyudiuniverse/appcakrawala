@@ -3300,6 +3300,7 @@ class Reports extends MY_Controller
 			'SUB PROJECT/ENTITAS',
 			'AREA/PENEMPATAN',
 			'REGION',
+			'DC',
 			'TEMPAT LAHIR',
 			'TANGGAL LAHIR',
 			'TANGGAL BERGABUNG',
@@ -3378,7 +3379,7 @@ class Reports extends MY_Controller
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle('A1:BR1')
+			->getStyle('A1:BS1')
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()

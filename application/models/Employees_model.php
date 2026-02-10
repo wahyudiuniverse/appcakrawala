@@ -1213,6 +1213,52 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil alamat kontak darurat
+	function get_alamat_kontak_darurat($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('alamat');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('employee_request_nik', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['alamat'];
+			}
+		}
+	}
+
+	//ambil alamat kontak darurat2
+	function get_alamat_kontak_darurat2($id, $nip)
+	{
+		if (($id == null) || ($nip == null)) {
+			return "";
+		} else if (($id == 0) || ($nip == 0)) {
+			return "";
+		} else {
+			$this->db->select('alamat');
+			$this->db->from('xin_employee_emergency');
+			$this->db->where('nip', $nip);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return $this->get_alamat_kontak_darurat($id);
+			} else {
+				return $query['alamat'];
+			}
+		}
+	}
+
 	//ambil hubunan kontak darurat
 	function get_hubungan_kontak_darurat($id)
 	{
@@ -1670,6 +1716,36 @@ class Employees_model extends CI_Model
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+		}else if ($postData['kolom'] == "dokumen_ktp") {
+			$data = array(
+				'ktp' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "dokumen_kk") {
+			$data = array(
+				'kk' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "ijazah") {
+			$data = array(
+				'ijazah' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "cv") {
+			$data = array(
+				'civi' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
+		} else if ($postData['kolom'] == "skck") {
+			$data = array(
+				'skck' => $postData['nilai_sesudah']
+			);
+			$this->db->where('secid', $postData['id_employee_request']);
+			$this->db->update('xin_employee_request', $data);
 		}
 
 		$this->db->insert('log_employee_verification', $datalock);
@@ -1696,7 +1772,7 @@ class Employees_model extends CI_Model
 		//return null;
 	}
 
-	//validasi employee request
+	//validasi employee existing
 	public function valiadsi_employee_existing($postData)
 	{
 		//Input untuk Database
@@ -1768,7 +1844,7 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
-		}  else if ($postData['kolom'] == "dokumen_ktp") {
+		} else if ($postData['kolom'] == "dokumen_ktp") {
 			$data = array(
 				'filename_ktp' => $postData['nilai_sesudah']
 			);
@@ -1777,7 +1853,7 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
-		}  else if ($postData['kolom'] == "dokumen_kk") {
+		} else if ($postData['kolom'] == "dokumen_kk") {
 			$data = array(
 				'filename_kk' => $postData['nilai_sesudah']
 			);
@@ -1786,7 +1862,7 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
-		}  else if ($postData['kolom'] == "buku_rekening") {
+		} else if ($postData['kolom'] == "buku_rekening") {
 			$data = array(
 				'filename_rek' => $postData['nilai_sesudah']
 			);
@@ -1795,7 +1871,7 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
-		}  else if ($postData['kolom'] == "ijazah") {
+		} else if ($postData['kolom'] == "ijazah") {
 			$data = array(
 				'filename_isd' => $postData['nilai_sesudah']
 			);
@@ -1804,7 +1880,7 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
-		}  else if ($postData['kolom'] == "cv") {
+		} else if ($postData['kolom'] == "cv") {
 			$data = array(
 				'filename_cv' => $postData['nilai_sesudah']
 			);
@@ -1813,7 +1889,7 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
-		}  else if ($postData['kolom'] == "skck") {
+		} else if ($postData['kolom'] == "skck") {
 			$data = array(
 				'filename_skck' => $postData['nilai_sesudah']
 			);
@@ -1852,6 +1928,143 @@ class Employees_model extends CI_Model
 		$this->db->insert('log_employee_verification', $datalock);
 
 		//return null;
+	}
+
+	//validasi employee request
+	public function valiadsi_employee_request2($postData)
+	{
+		//Input untuk Database
+		$datalock = [
+			'id_employee_request'     => $postData['id_employee_request'],
+			'kolom'      			  => $postData['kolom'],
+			'nilai_sebelum'           => $postData['nilai_sebelum'],
+			'nilai_sesudah'       	  => $postData['nilai_sesudah'],
+			'status'      			  => $postData['status'],
+			'verified_by'             => $postData['verified_by'],
+			'verified_by_id'          => $postData['verified_by_id']
+		];
+
+		//get user varification_id info
+		$result = $this->read_employee_info_by_nik($postData['employee_id']);
+
+		//update data employee
+		if ($postData['kolom'] == "nik") {
+			$data = array(
+				'ktp_no' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "kk") {
+			$data = array(
+				'kk_no' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "nama") {
+			$data = array(
+				'first_name' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "bank") {
+			$data = array(
+				'bank_name' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "norek") {
+			$data = array(
+				'nomor_rek' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "pemilik_rekening") {
+			$data = array(
+				'pemilik_rek' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "dokumen_ktp") {
+			$data = array(
+				'filename_ktp' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "dokumen_kk") {
+			$data = array(
+				'filename_kk' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "buku_rekening") {
+			$data = array(
+				'filename_rek' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "ijazah") {
+			$data = array(
+				'filename_isd' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "cv") {
+			$data = array(
+				'filename_cv' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		} else if ($postData['kolom'] == "skck") {
+			$data = array(
+				'filename_skck' => $postData['nilai_sesudah']
+			);
+			if ((empty($result[0]->verification_id)) || ($result[0]->verification_id == "")) {
+				$data["verification_id"] = $postData['id_employee_request'];
+			}
+			$this->db->where('employee_id', $postData['employee_id']);
+			$this->db->update('xin_employees', $data);
+		}
+
+
+		$this->db->insert('log_employee_verification', $datalock);
+
+		//get user varification_id info
+		$result = $this->get_employee_array_by_nip($postData['employee_id']);
+
+		return $result;
 	}
 
 	/*
@@ -3398,7 +3611,7 @@ class Employees_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($filter != '') {
-			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%' or xin_designations.designation_name like '%" . $filter . "%') ";
+			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%' or xin_designations.designation_name like '%" . $filter . "%' or xin_employees.penempatan like '%" . $filter . "%') ";
 		}
 
 		## Filter
@@ -3446,7 +3659,8 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.project_id');
 		$this->db->select('xin_employees.sub_project_id');
 		$this->db->select('xin_employees.penempatan');
-		$this->db->select('xin_employees.region');
+		$this->db->select('xin_employees.region_name');
+		$this->db->select('xin_employees.dc_name');
 		$this->db->select('xin_employees.tempat_lahir');
 		$this->db->select('xin_employees.date_of_birth');
 		$this->db->select('xin_employees.date_of_joining');
@@ -3730,7 +3944,8 @@ class Employees_model extends CI_Model
 				strtoupper($this->get_nama_project($record->project_id)),
 				strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 				strtoupper($record->penempatan),
-				strtoupper($record->region),
+				strtoupper($record->region_name),
+				strtoupper($record->dc_name),
 				strtoupper($record->tempat_lahir),
 				$this->Xin_model->tgl_indo($record->date_of_birth),
 				$this->Xin_model->tgl_indo($record->date_of_joining),
@@ -3833,7 +4048,7 @@ class Employees_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($filter != '') {
-			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%' or xin_designations.designation_name like '%" . $filter . "%') ";
+			$searchQuery = " (xin_employees.employee_id like '%" . $filter .  "%' or xin_employees.first_name like '%" . $filter . "%' or xin_designations.designation_name like '%" . $filter . "%' or xin_employees.penempatan like '%" . $filter . "%') ";
 		}
 
 		## Filter
@@ -8223,6 +8438,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('ibu_kandung');
 		$this->db->select('alamat_ktp');
 		$this->db->select('alamat_domisili');
+		$this->db->select('id_kota_domisili');
+		$this->db->select('nama_kota_domisili');
 
 		$this->db->select('bank_name');
 		$this->db->select('nomor_rek');
@@ -8251,6 +8468,21 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		return $query;
 	}
 
+	//ambil data diri employee request
+	public function get_data_diri_request($postData)
+	{
+		$this->db->select('*');
+
+		$this->db->from('xin_employee_request');
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
 	//ambil data project employee
 	public function get_data_project($postData)
 	{
@@ -8258,6 +8490,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('sub_project_id');
 		$this->db->select('designation_id');
 		$this->db->select('penempatan');
+		$this->db->select('region_name');
+		$this->db->select('dc_name');
 		$this->db->select('location_id');
 		$this->db->select('date_of_joining');
 
@@ -8379,6 +8613,29 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('profile_picture');
 
 		$this->db->from('xin_employees');
+		$this->db->where($postData);
+		$this->db->limit(1);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//ambil data dokumen pribadi employee request
+	public function get_data_dokumen_pribadi_request($postData)
+	{
+		$this->db->select('gender');
+		$this->db->select('ktp');
+		$this->db->select('kk');
+		$this->db->select('file_npwp');
+		$this->db->select('skck');
+		$this->db->select('ijazah');
+		$this->db->select('civi');
+		$this->db->select('paklaring');
+		$this->db->select('foto_profile');
+
+		$this->db->from('xin_employee_request');
 		$this->db->where($postData);
 		$this->db->limit(1);
 		// $this->db->where($searchQuery);
@@ -8692,6 +8949,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('ibu_kandung');
 		$this->db->select('alamat_ktp');
 		$this->db->select('alamat_domisili');
+		$this->db->select('id_kota_domisili');
+		$this->db->select('nama_kota_domisili');
 
 		$this->db->from('xin_employees');
 		$this->db->where('employee_id', $nip);
@@ -8730,6 +8989,8 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		$this->db->select('sub_project_id');
 		$this->db->select('designation_id');
 		$this->db->select('penempatan');
+		$this->db->select('region_name');
+		$this->db->select('dc_name');
 		$this->db->select('location_id');
 		$this->db->select('date_of_joining');
 
@@ -9081,5 +9342,24 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		} else {
 			return false;
 		}
+	}
+
+	//mengambil data Kabupaten Kota dari JO
+	public function get_data_kabupaten_kota()
+	{
+		//$otherdb = $this->load->database('default', TRUE);
+		// $database_jo = $this->load->database('db_jo', TRUE);
+
+		$this->db->select('kabupaten_kota.*');
+		// $this->db->select('provinsi.id_bps');
+		$this->db->select('provinsi.nama as provinsi');
+		$this->db->join('provinsi', 'kabupaten_kota.id_prov_bps = provinsi.id_bps', 'left');
+		$query = $this->db->get('kabupaten_kota')->result_array();
+
+		return $query;
+
+		// $query = $this->db->get('projects')->result_array();
+
+		// return $query;
 	}
 }

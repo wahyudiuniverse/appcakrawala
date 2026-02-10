@@ -249,72 +249,168 @@ class employee_request_cancelled extends MY_Controller
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		$check_role = $this->Employees_model->read_employee_information($session['user_id']);
 
-		//cek status lock ke database
-		$nama_lock = "0";
-		$nama_lock_query = $this->Employees_model->get_lock_status($id, 'fullname');
-		if (is_null($nama_lock_query)) {
-			$nama_lock = "0";
-		} else {
-			$nama_lock = $nama_lock_query['status'];
-		}
-		$ktp_lock = "0";
-		$ktp_lock_query = $this->Employees_model->get_lock_status($id, 'ktp');
-		if (is_null($ktp_lock_query)) {
-			$ktp_lock = "0";
-		} else {
-			$ktp_lock = $ktp_lock_query['status'];
-		}
-		$kk_lock = "0";
-		$kk_lock_query = $this->Employees_model->get_lock_status($id, 'kk');
-		if (is_null($kk_lock_query)) {
-			$kk_lock = "0";
-		} else {
-			$kk_lock = $kk_lock_query['status'];
-		}
+		//verification id
+		$actual_verification_id = $id;
 
-
-		//cek status validation ke database
+		//cek status verifikasi ke database
 		$nik_validation = "0";
-		$nik_validation_query = $this->Employees_model->get_valiadation_status($id, 'nik');
+		$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
 		if (is_null($nik_validation_query)) {
 			$nik_validation = "0";
 		} else {
 			$nik_validation = $nik_validation_query['status'];
 		}
 		$kk_validation = "0";
-		$kk_validation_query = $this->Employees_model->get_valiadation_status($id, 'kk');
+		$kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
 		if (is_null($kk_validation_query)) {
 			$kk_validation = "0";
 		} else {
 			$kk_validation = $kk_validation_query['status'];
 		}
 		$nama_validation = "0";
-		$nama_validation_query = $this->Employees_model->get_valiadation_status($id, 'nama');
+		$nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
 		if (is_null($nama_validation_query)) {
 			$nama_validation = "0";
 		} else {
 			$nama_validation = $nama_validation_query['status'];
 		}
 		$bank_validation = "0";
-		$bank_validation_query = $this->Employees_model->get_valiadation_status($id, 'bank');
+		$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
 		if (is_null($bank_validation_query)) {
 			$bank_validation = "0";
 		} else {
 			$bank_validation = $bank_validation_query['status'];
 		}
 		$norek_validation = "0";
-		$norek_validation_query = $this->Employees_model->get_valiadation_status($id, 'norek');
+		$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
 		if (is_null($norek_validation_query)) {
 			$norek_validation = "0";
 		} else {
 			$norek_validation = $norek_validation_query['status'];
 		}
 		$pemilik_rekening_validation = "0";
-		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($id, 'pemilik_rekening');
+		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
 		if (is_null($pemilik_rekening_validation_query)) {
 			$pemilik_rekening_validation = "0";
 		} else {
 			$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+		}
+		$dokumen_ktp_validation = "0";
+		$dokumen_ktp_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'dokumen_ktp');
+		if (is_null($dokumen_ktp_validation_query)) {
+			$dokumen_ktp_validation = "0";
+		} else {
+			$dokumen_ktp_validation = $dokumen_ktp_validation_query['status'];
+		}
+		$dokumen_kk_validation = "0";
+		$dokumen_kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'dokumen_kk');
+		if (is_null($dokumen_kk_validation_query)) {
+			$dokumen_kk_validation = "0";
+		} else {
+			$dokumen_kk_validation = $dokumen_kk_validation_query['status'];
+		}
+		$buku_rekening_validation = "0";
+		$buku_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'buku_rekening');
+		if (is_null($buku_rekening_validation_query)) {
+			$buku_rekening_validation = "0";
+		} else {
+			$buku_rekening_validation = $buku_rekening_validation_query['status'];
+		}
+		$ijazah_validation = "0";
+		$ijazah_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'ijazah');
+		if (is_null($ijazah_query)) {
+			$ijazah_validation = "0";
+		} else {
+			$ijazah_validation = $ijazah_query['status'];
+		}
+		$cv_validation = "0";
+		$cv_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'cv');
+		if (is_null($cv_query)) {
+			$cv_validation = "0";
+		} else {
+			$cv_validation = $cv_query['status'];
+		}
+		$skck_validation = "0";
+		$skck_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'skck');
+		if (is_null($skck_query)) {
+			$skck_validation = "0";
+		} else {
+			$skck_validation = $skck_query['status'];
+		}
+
+		//assign checklist hijau kalau sudah diverifikasi
+		$validate_nik = "";
+		if ($nik_validation == "1") {
+			$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		// $button_open_ktp = '<button onclick="open_ktp(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+		$validate_kk = "";
+		if ($kk_validation == "1") {
+			$validate_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_nama = "";
+		if ($nama_validation == "1") {
+			$validate_nama = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_nama = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_bank = "";
+		if ($bank_validation == "1") {
+			$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_norek = "";
+		if ($norek_validation == "1") {
+			$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_pemilik_rekening = "";
+		if ($pemilik_rekening_validation == "1") {
+			$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_dokumen_ktp = "";
+		if ($dokumen_ktp_validation == "1") {
+			$validate_dokumen_ktp = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_dokumen_ktp = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_dokumen_kk = "";
+		if ($dokumen_kk_validation == "1") {
+			$validate_dokumen_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_dokumen_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_buku_rekening = "";
+		if ($buku_rekening_validation == "1") {
+			$validate_buku_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_buku_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_ijazah = "";
+		if ($ijazah_validation == "1") {
+			$validate_ijazah = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_ijazah = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_cv = "";
+		if ($cv_validation == "1") {
+			$validate_cv = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_cv = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_skck = "";
+		if ($skck_validation == "1") {
+			$validate_skck = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_skck = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 		}
 
 		$department = $this->Department_model->read_department_information($result[0]->department);
@@ -331,6 +427,517 @@ class employee_request_cancelled extends MY_Controller
 			$edesignation_name = '--';
 		}
 
+		// //----- CEK FILE -----
+		// //cek file profile picture
+		// $local1 = "./uploads/profile/";
+		// $record_database = $data['foto_profile'];
+		// $record_database_profile = $data['foto_profile'];
+		// $nama_file_profile = "";
+		// $status_profile = "";
+		// $pesan_profile = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	if ($data['gender'] == 'L') {
+		// 		$nama_file_profile = base_url() . "uploads/profile/default_male.jpg";
+		// 	} else {
+		// 		$nama_file_profile = base_url() . "uploads/profile/default_female.jpg";
+		// 	}
+		// 	$status_profile = "200"; //file blm upload
+		// 	$pesan_profile = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_profile = base_url() . "uploads/profile/" . $record_database;
+		// 		$status_profile = "200"; //file ditemukan
+		// 		$pesan_profile = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 			$nama_file_profile = "tidak ada file"; //record di database tanpa http
+		// 			$status_profile = "203"; //file tidak ditemukan
+		// 			$pesan_profile = "File Tidak Ditemukan";
+		// 		} else {
+		// 			$headers = @get_headers($record_database);
+		// 			if ($headers == false) {
+		// 				$nama_file_profile = ""; //link mati atau tidak bisa dibuka
+		// 				$status_profile = "203"; //file tidak ditemukan
+		// 				$pesan_profile = "File Tidak Ditemukan";
+		// 			} else {
+		// 				$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 				if ($file_in_url_exist) {
+		// 					$nama_file_profile = $record_database; //tampil file skema lama dengan http
+		// 					$status_profile = "200"; //file ditemukan
+		// 					$pesan_profile = "Berhasil Fetch Data";
+		// 				} else {
+		// 					$nama_file_profile = ""; //link mati atau tidak bisa dibuka
+		// 					$status_profile = "203"; //file tidak ditemukan
+		// 					$pesan_profile = "File Tidak Ditemukan";
+		// 				}
+		// 			}
+		// 			// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 			// if ($file_in_url_exist) {
+		// 			// 	$nama_file_profile = $record_database; //tampil file skema lama dengan http
+		// 			// 	$status_profile = "200"; //file ditemukan
+		// 			// 	$pesan_profile = "Berhasil Fetch Data";
+		// 			// } else {
+		// 			// 	$nama_file_profile = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 			// 	$status_profile = "203"; //file tidak ditemukan
+		// 			// 	$pesan_profile = "File Tidak Ditemukan";
+		// 			// }
+		// 		}
+		// 	}
+		// }
+
+		// //cek file ijazah
+		// $local1 = "./uploads/document/ijazah/";
+		// $local2 = "./uploads/document/";
+		// $local3 = "./";
+		// $record_database = $data['ijazah'];
+		// $record_database_ijazah = $data['ijazah'];
+		// $nama_file_ijazah = "";
+		// $status_ijazah = "";
+		// $pesan_ijazah = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	$nama_file_ijazah = "File Belum Diupload";
+		// 	$status_ijazah = "201"; //file blm upload
+		// 	$pesan_ijazah = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_ijazah = base_url() . "uploads/document/ijazah/" . $record_database;
+		// 		$status_ijazah = "200"; //file ditemukan
+		// 		$pesan_ijazah = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+		// 			$nama_file_ijazah = base_url() . "uploads/document/" . $record_database;
+		// 			$status_ijazah = "200"; //file ditemukan
+		// 			$pesan_ijazah = "Berhasil Fetch Data";
+		// 		} else {
+		// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+		// 				$nama_file_ijazah = base_url() . $record_database;
+		// 				$status_ijazah = "200"; //file ditemukan
+		// 				$pesan_ijazah = "Berhasil Fetch Data";
+		// 			} else {
+		// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 					$nama_file_ijazah = "tidak ada file"; //record di database tanpa http
+		// 					$status_ijazah = "203"; //file tidak ditemukan
+		// 					$pesan_ijazah = "File Tidak Ditemukan";
+		// 				} else {
+		// 					$headers = @get_headers($record_database);
+		// 					if ($headers == false) {
+		// 						$nama_file_ijazah = ""; //link mati atau tidak bisa dibuka
+		// 						$status_ijazah = "203"; //file tidak ditemukan
+		// 						$pesan_ijazah = "File Tidak Ditemukan";
+		// 					} else {
+		// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 						if ($file_in_url_exist) {
+		// 							$nama_file_ijazah = $record_database; //tampil file skema lama dengan http
+		// 							$status_ijazah = "200"; //file ditemukan
+		// 							$pesan_ijazah = "Berhasil Fetch Data";
+		// 						} else {
+		// 							$nama_file_ijazah = ""; //link mati atau tidak bisa dibuka
+		// 							$ststatus_ijazahatus = "203"; //file tidak ditemukan
+		// 							$pesan_ijazah = "File Tidak Ditemukan";
+		// 						}
+		// 					}
+
+		// 					// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 					// if ($file_in_url_exist) {
+		// 					// 	$nama_file_ijazah = $record_database; //tampil file skema lama dengan http
+		// 					// 	$status_ijazah = "200"; //file ditemukan
+		// 					// 	$pesan_ijazah = "Berhasil Fetch Data";
+		// 					// } else {
+		// 					// 	$nama_file_ijazah = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 					// 	$status_ijazah = "203"; //file tidak ditemukan
+		// 					// 	$pesan_ijazah = "File Tidak Ditemukan";
+		// 					// }
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// //cek file skck
+		// $local1 = "./uploads/document/skck/";
+		// $local2 = "./uploads/document/";
+		// $local3 = "./";
+		// $record_database = $data['skck'];
+		// $record_database_skck = $data['skck'];
+		// $nama_file_skck = "";
+		// $status_skck = "";
+		// $pesan_skck = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	$nama_file_skck = "File Belum Diupload";
+		// 	$status_skck = "201"; //file blm upload
+		// 	$pesan_skck = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_skck = base_url() . "uploads/document/skck/" . $record_database;
+		// 		$status_skck = "200"; //file ditemukan
+		// 		$pesan_skck = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+		// 			$nama_file_skck = base_url() . "uploads/document/" . $record_database;
+		// 			$status_skck = "200"; //file ditemukan
+		// 			$pesan_skck = "Berhasil Fetch Data";
+		// 		} else {
+		// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+		// 				$nama_file_skck = base_url() . $record_database;
+		// 				$status_skck = "200"; //file ditemukan
+		// 				$pesan_skck = "Berhasil Fetch Data";
+		// 			} else {
+		// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 					$nama_file_skck = "tidak ada file"; //record di database tanpa http
+		// 					$status_skck = "203"; //file tidak ditemukan
+		// 					$pesan_skck = "File Tidak Ditemukan";
+		// 				} else {
+		// 					$headers = @get_headers($record_database);
+		// 					if ($headers == false) {
+		// 						$nama_file_skck = ""; //link mati atau tidak bisa dibuka
+		// 						$status_skck = "203"; //file tidak ditemukan
+		// 						$pesan_skck = "File Tidak Ditemukan";
+		// 					} else {
+		// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 						if ($file_in_url_exist) {
+		// 							$nama_file_skck = $record_database; //tampil file skema lama dengan http
+		// 							$status_skck = "200"; //file ditemukan
+		// 							$pesan_skck = "Berhasil Fetch Data";
+		// 						} else {
+		// 							$nama_file_skck = ""; //link mati atau tidak bisa dibuka
+		// 							$status_skck = "203"; //file tidak ditemukan
+		// 							$pesan_skck = "File Tidak Ditemukan";
+		// 						}
+		// 					}
+
+		// 					// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 					// if ($file_in_url_exist) {
+		// 					// 	$nama_file_skck = $record_database; //tampil file skema lama dengan http
+		// 					// 	$status_skck = "200"; //file ditemukan
+		// 					// 	$pesan_skck = "Berhasil Fetch Data";
+		// 					// } else {
+		// 					// 	$nama_file_skck = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 					// 	$status_skck = "203"; //file tidak ditemukan
+		// 					// 	$pesan_skck = "File Tidak Ditemukan";
+		// 					// }
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// //cek file cv
+		// $local1 = "./uploads/document/cv/";
+		// $local2 = "./uploads/document/";
+		// $local3 = "./";
+		// $record_database = $data['civi'];
+		// $record_database_cv = $data['civi'];
+		// $nama_file_cv = "";
+		// $status_cv = "";
+		// $pesan_cv = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	$nama_file_cv = "File Belum Diupload";
+		// 	$status_cv = "201"; //file blm upload
+		// 	$pesan_cv = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_cv = base_url() . "uploads/document/cv/" . $record_database;
+		// 		$status_cv = "200"; //file ditemukan
+		// 		$pesan_cv = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+		// 			$nama_file_cv = base_url() . "uploads/document/" . $record_database;
+		// 			$status_cv = "200"; //file ditemukan
+		// 			$pesan_cv = "Berhasil Fetch Data";
+		// 		} else {
+		// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+		// 				$nama_file_cv = base_url() . $record_database;
+		// 				$status_cv = "200"; //file ditemukan
+		// 				$pesan_cv = "Berhasil Fetch Data";
+		// 			} else {
+		// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 					$nama_file_cv = "tidak ada file"; //record di database tanpa http
+		// 					$status_cv = "203"; //file tidak ditemukan
+		// 					$pesan_cv = "File Tidak Ditemukan";
+		// 				} else {
+		// 					$headers = @get_headers($record_database);
+		// 					if ($headers == false) {
+		// 						$nama_file_cv = ""; //link mati atau tidak bisa dibuka
+		// 						$status_cv = "203"; //file tidak ditemukan
+		// 						$pesan_cv = "File Tidak Ditemukan";
+		// 					} else {
+		// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 						if ($file_in_url_exist) {
+		// 							$nama_file_cv = $record_database; //tampil file skema lama dengan http
+		// 							$status_cv = "200"; //file ditemukan
+		// 							$pesan_cv = "Berhasil Fetch Data";
+		// 						} else {
+		// 							$nama_file_cv = ""; //link mati atau tidak bisa dibuka
+		// 							$status_cv = "203"; //file tidak ditemukan
+		// 							$pesan_cv = "File Tidak Ditemukan";
+		// 						}
+		// 					}
+
+		// 					// $file_in_url_exist = strpos($headers[0], "200 OK") ? true : false; //cek open link
+		// 					// if ($file_in_url_exist) {
+		// 					// 	$nama_file_cv = $record_database; //tampil file skema lama dengan http
+		// 					// 	$status_cv = "200"; //file ditemukan
+		// 					// 	$pesan_cv = "Berhasil Fetch Data";
+		// 					// } else {
+		// 					// 	$nama_file_cv = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 					// 	$status_cv = "203"; //file tidak ditemukan
+		// 					// 	$pesan_cv = "File Tidak Ditemukan";
+		// 					// }
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+
+		// //cek file npwp
+		// $local1 = "./uploads/document/npwp/";
+		// $local2 = "./uploads/document/";
+		// $local3 = "./";
+		// $record_database = $data['file_npwp'];
+		// $record_database_npwp = $data['file_npwp'];
+		// $nama_file_npwp = "";
+		// $status_npwp = "";
+		// $pesan_npwp = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	$nama_file_npwp = "File Belum Diupload";
+		// 	$status_npwp = "201"; //file blm upload
+		// 	$pesan_npwp = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_npwp = base_url() . "uploads/document/npwp/" . $record_database;
+		// 		$status_npwp = "200"; //file ditemukan
+		// 		$pesan_npwp = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+		// 			$nama_file_npwp = base_url() . "uploads/document/" . $record_database;
+		// 			$status_npwp = "200"; //file ditemukan
+		// 			$pesan_npwp = "Berhasil Fetch Data";
+		// 		} else {
+		// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+		// 				$nama_file_npwp = base_url() . $record_database;
+		// 				$status_npwp = "200"; //file ditemukan
+		// 				$pesan_npwp = "Berhasil Fetch Data";
+		// 			} else {
+		// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 					$nama_file_npwp = "tidak ada file"; //record di database tanpa http
+		// 					$status_npwp = "203"; //file tidak ditemukan
+		// 					$pesan_npwp = "File Tidak Ditemukan";
+		// 				} else {
+		// 					$headers = @get_headers($record_database);
+		// 					if ($headers == false) {
+		// 						$nama_file_npwp = ""; //link mati atau tidak bisa dibuka
+		// 						$status_npwp = "203"; //file tidak ditemukan
+		// 						$pesan_npwp = "File Tidak Ditemukan";
+		// 					} else {
+		// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 						if ($file_in_url_exist) {
+		// 							$nama_file_npwp = $record_database; //tampil file skema lama dengan http
+		// 							$status_npwp = "200"; //file ditemukan
+		// 							$pesan_npwp = "Berhasil Fetch Data";
+		// 						} else {
+		// 							$nama_file_npwp = ""; //link mati atau tidak bisa dibuka
+		// 							$status_npwp = "203"; //file tidak ditemukan
+		// 							$pesan_npwp = "File Tidak Ditemukan";
+		// 						}
+		// 					}
+
+		// 					// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 					// if ($file_in_url_exist) {
+		// 					// 	$nama_file_npwp = $record_database; //tampil file skema lama dengan http
+		// 					// 	$status_npwp = "200"; //file ditemukan
+		// 					// 	$pesan_npwp = "Berhasil Fetch Data";
+		// 					// } else {
+		// 					// 	$nama_file_npwp = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 					// 	$status_npwp = "203"; //file tidak ditemukan
+		// 					// 	$pesan_npwp = "File Tidak Ditemukan";
+		// 					// }
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// //cek file kk
+		// $local1 = "./uploads/document/kk/";
+		// $local2 = "./uploads/document/";
+		// $local3 = "./";
+		// $record_database = $data['kk'];
+		// $record_database_kk = $data['kk'];
+		// $nama_file_kk = "";
+		// $status_kk = "";
+		// $pesan_kk = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	$nama_file_kk = "File Belum Diupload";
+		// 	$status_kk = "201"; //file blm upload
+		// 	$pesan_kk = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_kk = base_url() . "uploads/document/kk/" . $record_database;
+		// 		$status_kk = "200"; //file ditemukan
+		// 		$pesan_kk = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+		// 			$nama_file_kk = base_url() . "uploads/document/" . $record_database;
+		// 			$status_kk = "200"; //file ditemukan
+		// 			$pesan_kk = "Berhasil Fetch Data";
+		// 		} else {
+		// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+		// 				$nama_file_kk = base_url() . $record_database;
+		// 				$status_kk = "200"; //file ditemukan
+		// 				$pesan_kk = "Berhasil Fetch Data";
+		// 			} else {
+		// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 					$nama_file_kk = "tidak ada file"; //record di database tanpa http
+		// 					$status_kk = "203"; //file tidak ditemukan
+		// 					$pesan_kk = "File Tidak Ditemukan";
+		// 				} else {
+		// 					$headers = @get_headers($record_database);
+		// 					if ($headers == false) {
+		// 						$nama_file_kk = ""; //link mati atau tidak bisa dibuka
+		// 						$status_kk = "203"; //file tidak ditemukan
+		// 						$pesan_kk = "File Tidak Ditemukan";
+		// 					} else {
+		// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 						if ($file_in_url_exist) {
+		// 							$nama_file_kk = $record_database; //tampil file skema lama dengan http
+		// 							$status_kk = "200"; //file ditemukan
+		// 							$pesan_kk = "Berhasil Fetch Data";
+		// 						} else {
+		// 							$nama_file_kk = ""; //link mati atau tidak bisa dibuka
+		// 							$status_kk = "203"; //file tidak ditemukan
+		// 							$pesan_kk = "File Tidak Ditemukan";
+		// 						}
+		// 					}
+
+		// 					// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 					// if ($file_in_url_exist) {
+		// 					// 	$nama_file_kk = $record_database; //tampil file skema lama dengan http
+		// 					// 	$status_kk = "200"; //file ditemukan
+		// 					// 	$pesan_kk = "Berhasil Fetch Data";
+		// 					// } else {
+		// 					// 	$nama_file_kk = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 					// 	$status_kk = "203"; //file tidak ditemukan
+		// 					// 	$pesan_kk = "File Tidak Ditemukan";
+		// 					// }
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// //cek file ktp
+		// $local1 = "./uploads/document/ktp/";
+		// $local2 = "./uploads/document/";
+		// $local3 = "./";
+		// $record_database = $data['ktp'];
+		// $record_database_ktp = $data['ktp'];
+		// $nama_file_ktp = "";
+		// $status_ktp = "";
+		// $pesan_ktp = "";
+		// if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+		// 	$nama_file_ktp = "File Belum Diupload";
+		// 	$status_ktp = "201"; //file blm upload
+		// 	$pesan_ktp = "File Belum Diupload";
+		// } else {
+		// 	if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+		// 		$nama_file_ktp = base_url() . "uploads/document/ktp/" . $record_database;
+		// 		$status_ktp = "200"; //file ditemukan
+		// 		$pesan_ktp = "Berhasil Fetch Data";
+		// 	} else {
+		// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+		// 			$nama_file_ktp = base_url() . "uploads/document/" . $record_database;
+		// 			$status_ktp = "200"; //file ditemukan
+		// 			$pesan_ktp = "Berhasil Fetch Data";
+		// 		} else {
+		// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+		// 				$nama_file_ktp = base_url() . $record_database;
+		// 				$status_ktp = "200"; //file ditemukan
+		// 				$pesan_ktp = "Berhasil Fetch Data";
+		// 			} else {
+		// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+		// 					$nama_file_ktp = "tidak ada file"; //record di database tanpa http
+		// 					$status_ktp = "203"; //file tidak ditemukan
+		// 					$pesan_ktp = "File Tidak Ditemukan";
+		// 				} else {
+		// 					$headers = @get_headers($record_database);
+		// 					if ($headers == false) {
+		// 						$nama_file_ktp = ""; //link mati atau tidak bisa dibuka
+		// 						$status_ktp = "203"; //file tidak ditemukan
+		// 						$pesan_ktp = "File Tidak Ditemukan";
+		// 					} else {
+		// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 						if ($file_in_url_exist) {
+		// 							$nama_file_ktp = $record_database; //tampil file skema lama dengan http
+		// 							$status_ktp = "200"; //file ditemukan
+		// 							$pesan_ktp = "Berhasil Fetch Data";
+		// 						} else {
+		// 							$nama_file_ktp = ""; //link mati atau tidak bisa dibuka
+		// 							$status_ktp = "203"; //file tidak ditemukan
+		// 							$pesan_ktp = "File Tidak Ditemukan";
+		// 						}
+		// 					}
+
+		// 					// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+		// 					// if ($file_in_url_exist) {
+		// 					// 	$nama_file_ktp = $record_database; //tampil file skema lama dengan http
+		// 					// 	$status_ktp = "200"; //file ditemukan
+		// 					// 	$pesan_ktp = "Berhasil Fetch Data";
+		// 					// } else {
+		// 					// 	$nama_file_ktp = "tidak ada file"; //link mati atau tidak bisa dibuka
+		// 					// 	$status_ktp = "203"; //file tidak ditemukan
+		// 					// 	$pesan_ktp = "File Tidak Ditemukan";
+		// 					// }
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+
+		// $database_record = array(
+		// 	'filename_ktp' 		=> $record_database_ktp,
+		// 	'filename_kk' 		=> $record_database_kk,
+		// 	'filename_npwp' 	=> $record_database_npwp,
+		// 	'filename_cv' 		=> $record_database_cv,
+		// 	'filename_skck' 	=> $record_database_skck,
+		// 	'filename_isd' 		=> $record_database_ijazah,
+		// 	'profile_picture' 	=> $record_database_profile,
+		// );
+		// $data_hasil = array(
+		// 	'filename_ktp' 		=> $nama_file_ktp,
+		// 	'filename_kk' 		=> $nama_file_kk,
+		// 	'filename_npwp' 	=> $nama_file_npwp,
+		// 	'filename_cv' 		=> $nama_file_cv,
+		// 	'filename_skck' 	=> $nama_file_skck,
+		// 	'filename_isd' 		=> $nama_file_ijazah,
+		// 	'profile_picture' 	=> $nama_file_profile,
+		// );
+		// $status = array(
+		// 	'filename_ktp' 		=> $status_ktp,
+		// 	'filename_kk' 		=> $status_kk,
+		// 	'filename_npwp' 	=> $status_npwp,
+		// 	'filename_cv' 		=> $status_cv,
+		// 	'filename_skck' 	=> $status_skck,
+		// 	'filename_isd' 		=> $status_ijazah,
+		// 	'profile_picture' 	=> $status_profile,
+		// );
+		// $pesan = array(
+		// 	'filename_ktp' 		=> $pesan_ktp,
+		// 	'filename_kk' 		=> $pesan_kk,
+		// 	'filename_npwp' 	=> $pesan_npwp,
+		// 	'filename_cv' 		=> $pesan_cv,
+		// 	'filename_skck' 	=> $pesan_skck,
+		// 	'filename_isd' 		=> $pesan_ijazah,
+		// 	'profile_picture' 	=> $pesan_profile,
+		// );
+		// $response = array(
+		// 	'status'			=> $status,
+		// 	'pesan' 			=> $pesan,
+		// 	'data'				=> $data_hasil,
+		// 	'database_record'	=> $database_record,
+		// );
+		// //----- END CEK FILE
+
 		$data = array(
 
 			'title' => 'Edit Permintaan Karyawan Baru',
@@ -343,7 +950,6 @@ class employee_request_cancelled extends MY_Controller
 			'nama_ibu' => $result[0]->nama_ibu,
 			'tempat_lahir' => $result[0]->tempat_lahir,
 			'tanggal_lahir' => $result[0]->tanggal_lahir,
-
 
 			'project_id' => $result[0]->project,
 			'project_list' => $this->Project_model->get_project_maping($session['employee_id']),
@@ -360,6 +966,9 @@ class employee_request_cancelled extends MY_Controller
 			'all_ethnicity' => $this->Xin_model->get_ethnicity_type_result(),
 			'marital_status' => $result[0]->status_kawin,
 			'list_marital' => $this->Employees_model->getAllMarital(),
+			'id_kota_domisili' => $result[0]->id_kota_domisili,
+			'nama_kota_domisili' => $result[0]->nama_kota_domisili,
+			'all_kabupaten_kota'	=> $this->Employees_model->get_data_kabupaten_kota(),
 
 			'ktp_no' => $result[0]->nik_ktp,
 			'kk_no' => $result[0]->no_kk,
@@ -401,7 +1010,7 @@ class employee_request_cancelled extends MY_Controller
 			'allow_kasir' => $result[0]->allow_kasir,
 			'allow_trans_meal' => $result[0]->allow_trans_meal,
 			'allow_trans_rent' => $result[0]->allow_trans_rent,
-			
+
 			'allow_medicine' => $result[0]->allow_medicine,
 			'allow_grooming' => $result[0]->allow_grooming,
 			'allow_kehadiran' => $result[0]->allow_kehadiran,
@@ -417,6 +1026,9 @@ class employee_request_cancelled extends MY_Controller
 			'e_status' => $result[0]->e_status,
 			'location_id' => $result[0]->location_id,
 
+			'region_name' => $result[0]->region_name,
+			'dc_name' => $result[0]->dc_name,
+
 			//variabel dokumen
 			'ktp'  => $result[0]->ktp,
 			'tipe_ktp' => substr($result[0]->ktp, -3, 3),
@@ -425,20 +1037,45 @@ class employee_request_cancelled extends MY_Controller
 			'file_npwp'  => $result[0]->file_npwp,
 			'skck'  => $result[0]->skck,
 			'ijazah'  => $result[0]->ijazah,
-			'civi'  => $result[0]->civi
+			'civi'  => $result[0]->civi,
 
+			//Kontak Darurat
+			'nama_kontak_darurat' => strtoupper($this->Employees_model->get_nama_kontak_darurat($result[0]->nik_ktp)),
+			'hubungan_kontak_darurat' => strtoupper($this->Employees_model->get_hubungan_kontak_darurat($result[0]->nik_ktp)),
+			// 'hubungan_kontak_darurat_id' => $this->Employees_model->get_data_kontak($result[0]->ktp_no),
+			'nomor_kontak_darurat' => $this->Employees_model->get_nomor_kontak_darurat($result[0]->nik_ktp),
+
+			//id verifikasi
+			'verification_id' 				=> $actual_verification_id,
+
+			//data status verifikasi
+			'nik_validation' 				=> $nik_validation,
+			'kk_validation' 				=> $kk_validation,
+			'nama_validation' 				=> $nama_validation,
+			'bank_validation' 				=> $bank_validation,
+			'norek_validation' 				=> $norek_validation,
+			'pemilik_rekening_validation' 	=> $pemilik_rekening_validation,
+			'dokumen_ktp_validation' 		=> $dokumen_ktp_validation,
+			'dokumen_kk_validation' 		=> $dokumen_kk_validation,
+			'buku_rekening_validation' 		=> $buku_rekening_validation,
+			'ijazah_validation' 			=> $ijazah_validation,
+			'cv_validation' 				=> $cv_validation,
+			'skck_validation' 				=> $skck_validation,
+
+			//icon status verifikasi 
+			'validate_nik' 					=> $validate_nik,
+			'validate_kk' 					=> $validate_kk,
+			'validate_nama' 				=> $validate_nama,
+			'validate_bank' 				=> $validate_bank,
+			'validate_norek' 				=> $validate_norek,
+			'validate_pemilik_rekening' 	=> $validate_pemilik_rekening,
+			'validate_dokumen_ktp' 			=> $validate_dokumen_ktp,
+			'validate_dokumen_kk' 			=> $validate_dokumen_kk,
+			'validate_buku_rekening' 		=> $validate_buku_rekening,
+			'validate_ijazah' 				=> $validate_ijazah,
+			'validate_cv' 					=> $validate_cv,
+			'validate_skck' 				=> $validate_skck,
 		);
-
-		$data['nama_lock'] = $nama_lock;
-		$data['ktp_lock'] = $ktp_lock;
-		$data['kk_lock'] = $kk_lock;
-
-		$data['nik_validation'] = $nik_validation;
-		$data['kk_validation'] = $kk_validation;
-		$data['nama_validation'] = $nama_validation;
-		$data['bank_validation'] = $bank_validation;
-		$data['norek_validation'] = $norek_validation;
-		$data['pemilik_rekening_validation'] = $pemilik_rekening_validation;
 
 		$data['subview'] = $this->load->view("admin/employees/request_edit", $data, TRUE);
 		// }
@@ -449,8 +1086,6 @@ class employee_request_cancelled extends MY_Controller
 		// } else {
 		// $data['subview'] = $this->load->view("admin/employees/employee_detail", $data, TRUE);
 		// }
-
-
 
 		$this->load->view('admin/layout/layout_main', $data); //page load
 
@@ -511,6 +1146,8 @@ class employee_request_cancelled extends MY_Controller
 			$alamat_ktp					= $this->input->post('alamat_ktp');
 			$nomor_kk						= $this->input->post('nomor_kk');
 			$alamat_domisili			= $this->input->post('alamat_domisili');
+			$nama_kota_domisili			= $this->input->post('nama_kota_domisili');
+			$id_kota_domisili			= $this->input->post('kota_domisili');
 			$npwp								= $this->input->post('npwp');
 			$nomor_hp						= $this->input->post('nomor_hp');
 			$email							= $this->input->post('email');
@@ -523,12 +1160,14 @@ class employee_request_cancelled extends MY_Controller
 			$posisi 							= $this->input->post('posisi');
 			$date_of_join 							= $this->input->post('date_of_join');
 			$penempatan 							= $this->input->post('penempatan');
+			$region 							= $this->input->post('region');
+			$dc 							= $this->input->post('dc');
 			$gaji_pokok 							= $this->input->post('gaji_pokok');
 
 			$tunjangan_jabatan 							= $this->input->post('tunjangan_jabatan');
 			$tunjangan_area 							= $this->input->post('tunjangan_area');
 			$tunjangan_masakerja 							= $this->input->post('tunjangan_masakerja');
-			
+
 			$tunjangan_makan 							= $this->input->post('tunjangan_makan');
 			$tunjangan_transport 							= $this->input->post('tunjangan_transport');
 			$tunjangan_komunikasi 							= $this->input->post('tunjangan_komunikasi');
@@ -577,7 +1216,7 @@ class employee_request_cancelled extends MY_Controller
 				$this->output($Return);
 			}
 
-			if($session['user_id']=='29222'){
+			if ($session['user_id'] == '29222') {
 
 				$data = array(
 					'fullname' 					=> $fullname,
@@ -592,6 +1231,8 @@ class employee_request_cancelled extends MY_Controller
 					'no_kk' 					=> $nomor_kk,
 
 					'alamat_domisili' 			=> $alamat_domisili,
+					'id_kota_domisili' 			=> $id_kota_domisili,
+					'nama_kota_domisili' 		=> $nama_kota_domisili,
 					'npwp' 						=> $npwp,
 					'contact_no' 				=> $nomor_hp,
 					'email' 					=> $email,
@@ -606,12 +1247,14 @@ class employee_request_cancelled extends MY_Controller
 
 					'doj' 						=> $date_of_join,
 					'penempatan' 				=> $penempatan,
+					'region_name' 				=> $region,
+					'dc_name' 					=> $dc,
 					'gaji_pokok' 				=> str_replace(".", "", $gaji_pokok),
 
 					'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
 					'allow_area' 				=> str_replace(".", "", $tunjangan_area),
 					'allow_masakerja' 			=> str_replace(".", "", $tunjangan_masakerja),
-					
+
 					'allow_konsumsi' 			=> str_replace(".", "", $tunjangan_makan),
 					'allow_transport' 			=> str_replace(".", "", $tunjangan_transport),
 					'allow_comunication' 		=> str_replace(".", "", $tunjangan_komunikasi),
@@ -646,8 +1289,7 @@ class employee_request_cancelled extends MY_Controller
 					'location_id' 				=> $location_id
 				);
 
-			$iresult = $this->Employees_model->update_request_employee($data, $idrequest);
-
+				$iresult = $this->Employees_model->update_request_employee($data, $idrequest);
 			} else {
 
 				$data = array(
@@ -663,6 +1305,8 @@ class employee_request_cancelled extends MY_Controller
 					'no_kk' 					=> $nomor_kk,
 
 					'alamat_domisili' 			=> $alamat_domisili,
+					'id_kota_domisili' 			=> $id_kota_domisili,
+					'nama_kota_domisili' 		=> $nama_kota_domisili,
 					'npwp' 						=> $npwp,
 					'contact_no' 				=> $nomor_hp,
 					'email' 					=> $email,
@@ -677,6 +1321,8 @@ class employee_request_cancelled extends MY_Controller
 
 					'doj' 						=> $date_of_join,
 					'penempatan' 				=> $penempatan,
+					'region_name' 				=> $region,
+					'dc_name' 					=> $dc,
 					'gaji_pokok' 				=> str_replace(".", "", $gaji_pokok),
 
 					'allow_jabatan' 			=> str_replace(".", "", $tunjangan_jabatan),
@@ -719,10 +1365,8 @@ class employee_request_cancelled extends MY_Controller
 					'modifiedon' 				=> date('Y-m-d h:i:s')
 				);
 
-			$iresult = $this->Employees_model->update_request_employee($data, $idrequest);
+				$iresult = $this->Employees_model->update_request_employee($data, $idrequest);
 			}
-
-
 		}
 
 		// $Return['result'] = ' ELSE DIBAWAH Permintaan Karyawan berhasil di Ubah..';
@@ -1233,7 +1877,7 @@ class employee_request_cancelled extends MY_Controller
 			'dm_allow_transmeal' 	=> $result[0]->dm_allow_disiplin,
 			'allowance_transmeal' 	=> $result[0]->allow_others,
 			'dm_allow_transmeal' 	=> $result[0]->dm_allow_others,
-			
+
 			'ktp' => $result[0]->ktp,
 			'kk' => $result[0]->kk,
 			'skck' => $result[0]->skck,

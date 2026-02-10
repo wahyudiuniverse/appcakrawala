@@ -717,6 +717,8 @@ class Employee_request_hrd extends MY_Controller
 			'contact_number' => $result[0]->nip,
 			'alamat_ktp' => $result[0]->alamat_ktp,
 			'penempatan' => $result[0]->penempatan,
+			'region_name' => $result[0]->region_name,
+			'dc_name' => $result[0]->dc_name,
 			'e_status' => $result[0]->e_status,
 
 			'waktu_kontrak' => $result[0]->contract_periode . ' (Bulan)',
@@ -1087,9 +1089,9 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'						=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-							'sign_nip'							=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR & GA MANAGER',
+				'sign_nip'							=> '21300033',
+				'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+				'sign_jabatan'					=> 'HR & GA MANAGER',
 
 				'status_pkwt' => 1,
 				'createdon' => date('Y-m-d h:i:s'),
@@ -1186,6 +1188,8 @@ class Employee_request_hrd extends MY_Controller
 		$nik_ktp 				= $employee_request['nik_ktp'];
 		$alamat_ktp 			= $employee_request['alamat_ktp'];
 		$alamat_domisili		= $employee_request['alamat_domisili'];
+		$id_kota_domisili		= $employee_request['id_kota_domisili'];
+		$nama_kota_domisili		= $employee_request['nama_kota_domisili'];
 
 		$no_kk 					= $employee_request['no_kk'];
 		$npwp 					= $employee_request['npwp'];
@@ -1207,6 +1211,8 @@ class Employee_request_hrd extends MY_Controller
 		$contract_end			= $employee_request['contract_end'];
 		$contract_periode		= $employee_request['contract_periode'];
 		$penempatan 			= $employee_request['penempatan'];
+		$region_name 			= $employee_request['region_name'];
+		$dc_name	 			= $employee_request['dc_name'];
 		$hari_kerja				= $employee_request['hari_kerja'];
 		$bank_id				= $employee_request['bank_id'];
 		$no_rek					= $employee_request['no_rek'];
@@ -1235,6 +1241,7 @@ class Employee_request_hrd extends MY_Controller
 		$cut_start 				= $employee_request['cut_start'];
 		$cut_off				= $employee_request['cut_off'];
 		$date_payment 			= $employee_request['date_payment'];
+		$foto_profile			= $employee_request['foto_profile'];
 		$ktp					= $employee_request['ktp'];
 		$kk						= $employee_request['kk'];
 		$skck					= $employee_request['skck'];
@@ -1368,10 +1375,14 @@ class Employee_request_hrd extends MY_Controller
 				'ktp_no' 					=> $nik_ktp,
 				'alamat_ktp' 				=> $alamat_ktp,
 				'alamat_domisili' 			=> $alamat_domisili,
+				'id_kota_domisili' 			=> $id_kota_domisili,
+				'nama_kota_domisili' 		=> $nama_kota_domisili,
 				'kk_no' 					=> $no_kk,
 				'npwp_no' 					=> $npwp,
 				'email' 					=> $email,
 				'penempatan' 				=> $penempatan,
+				'region_name' 				=> $region_name,
+				'dc_name' 					=> $dc_name,
 				'hari_kerja' 				=> $hari_kerja,
 				'bank_name' 				=> $bank_id,
 				'nomor_rek' 				=> $no_rek,
@@ -1400,6 +1411,7 @@ class Employee_request_hrd extends MY_Controller
 				'cut_start' 				=> $cut_start,
 				'cut_off'					=> $cut_off,
 				'date_payment'				=> $date_payment,
+				'profile_picture'			=> $foto_profile,
 				'filename_ktp'				=> $ktp,
 				'filename_kk'				=> $kk,
 				'filename_skck'				=> $skck,
@@ -1482,9 +1494,9 @@ class Employee_request_hrd extends MY_Controller
 				'approve_hrd'				=> $session['user_id'],
 				'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-							'sign_nip'							=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR & GA MANAGER',
+				'sign_nip'							=> '21300033',
+				'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+				'sign_jabatan'					=> 'HR & GA MANAGER',
 
 				'status_pkwt' 				=> 1, //0 belum approve, 1 sudah approve
 				'contract_type_id'			=> $e_status, //1 pkwt, 2 tkhl

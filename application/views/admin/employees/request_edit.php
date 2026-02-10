@@ -6,6 +6,7 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
+<?php $user = $this->Xin_model->read_user_info($session['user_id']); ?>
 <?php $system = $this->Xin_model->read_setting_info(1);
 $sub_project_id = $sub_project; ?>
 <?php $count_emp_request_cancel = '-'; ?>
@@ -23,120 +24,283 @@ $sub_project_id = $sub_project; ?>
 <?php $employee_id = $this->Xin_model->generate_random_employeeid(); ?>
 <?php $employee_pincode = $this->Xin_model->generate_random_pincode(); ?>
 
-<!-- Modal -->
-<div class="modal fade" id="verifikasiModal" tabindex="-1" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
+<!-- Filepond css -->
+<link rel="stylesheet" href="<?= base_url() ?>assets/libs/filepond/filepond.min.css" type="text/css" />
+<!-- <link href="assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.css" rel="stylesheet" /> -->
+<link rel="stylesheet" href="<?= base_url() ?>assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css">
+
+<!-- MODAL UNTUK VERIFIKASI V2-->
+<div class="modal fade" id="verifikasiModal" role="dialog" aria-labelledby="verifikasiModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="verifikasiModalLabel">
-					<div class="judul-modal">
-						Verifikasi data
-					</div>
+					<div class="judul-modal-verifikasi">Verifikasi data</div>
 				</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true"> X </span>
+					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-				<div class="form-group row">
-					<!-- <pre>
-            <?php //print_r($user_info); 
-						?>
-          </pre><br> -->
-					<div class="col-md-3">NIK <span class="icon-verify-nik"></span>
-					</div>
-					<div class="col-md-5"><input type='text' id="nik_modal" class='form-control' placeholder='Nomor NIK KTP' value='<?php echo $ktp_no; ?>'></div>
-					<div class="col-md-4">
-						<button id="button_verify_nik_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
-						<?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
-							<button id="button_unverify_nik_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
-						<?php } ?>
+				<div class="isi-modal-verifikasi">
+					<div class="container" id="container_modal_verifikasi">
+						<div class="row">
+							<table class="table table-striped col-md-12">
+								<tbody>
+									<tr>
+										<td style='width:25%'><strong>File KTP <span class="icon-verify-file-ktp"></span></strong></td>
+										<td style='width:50%'>
+											<!-- <div class="row align-items-center"> -->
+											<span class='display_file_ktp_modal'></span>
+											<input hidden type="text" id="link_file_ktp_sebelum_modal">
+											<input hidden type="text" id="link_file_ktp_modal">
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_ktp_modal" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span id='pesan_file_ktp_modal'></span>
+											<!-- </div> -->
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_file_ktp_modal"></span>
+											<span id="button_unverify_file_ktp_modal"></span>
+										</td>
+									</tr>
+									<tr>
+										<td style='width:20%'><strong>NIK <span class="icon-verify-nik"></span></strong></td>
+										<td style='width:50%'>
+											<input hidden type="text" id="nik_modal_sebelum_verifikasi">
+											<input type='text' id="nik_modal_verifikasi" class='form-control' placeholder='Nomor NIK KTP' value=''>
+											<span id='pesan_nik_verifikasi_modal'></span>
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_nik_modal"></span>
+											<span id="button_unverify_nik_modal"></span>
+											<!-- <button id="button_verify_nik_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_nik_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:20%'><strong>Nama Lengkap <span class="icon-verify-nama"></span></strong></td>
+										<td style='width:50%'>
+											<input hidden type="text" id="nama_modal_sebelum">
+											<input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value="">
+											<span id='pesan_nama_verifikasi_modal'></span>
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_nama_modal"></span>
+											<span id="button_unverify_nama_modal"></span>
+											<!-- <button id="button_verify_nama_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_nama_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:25%'><strong>File KK <span class="icon-verify-file-kk"></span></strong></td>
+										<td style='width:75%'>
+											<!-- <div class="row align-items-center"> -->
+											<span class='display_file_kk_modal'></span>
+											<input hidden type="text" id="link_file_kk_sebelum_modal">
+											<input hidden type="text" id="link_file_kk_modal">
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_kk_modal" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span id='pesan_file_kk_modal'></span>
+											<!-- </div> -->
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_file_kk_modal"></span>
+											<span id="button_unverify_file_kk_modal"></span>
+											<!-- <button id="button_verify_file_kk_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_file_kk_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:20%'><strong>KK <span class="icon-verify-kk"></span></strong></td>
+										<td style='width:50%'>
+											<input hidden type="text" id="kk_modal_sebelum">
+											<input type='text' id="kk_modal" class='form-control' placeholder='Nomor Kartu Keluarga' value=''>
+											<span id='pesan_kk_verifikasi_modal'></span>
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_kk_modal"></span>
+											<span id="button_unverify_kk_modal"></span>
+											<!-- <button id="button_verify_kk_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_kk_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:20%'><strong>Bank <span class="icon-verify-bank"></span></strong></td>
+										<td style='width:50%'>
+											<input hidden type="text" id="bank_modal_sebelum">
+											<select name="bank_modal" id="bank_modal" class="form-control" data-plugin="select_modal_verifikasi" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name'); ?>">
+												<option value=""></option>
+												<?php
+												foreach ($list_bank as $bank) {
+												?>
+													<option value="<?php echo $bank->secid; ?>"> <?php echo $bank->bank_name; ?></option>
+												<?php
+												}
+												?>
+											</select>
+											<span id='pesan_bank_verifikasi_modal'></span>
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_bank_modal"></span>
+											<span id="button_unverify_bank_modal"></span>
+											<!-- <button id="button_verify_bank_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_bank_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:20%'><strong>Nomor Rekening <span class="icon-verify-norek"></span></strong></td>
+										<td style='width:50%'>
+											<input hidden type="text" id="rekening_modal_sebelum">
+											<input type='text' id="rekening_modal" class='form-control' placeholder='Nomor Rekening' value=''>
+											<span id='pesan_norek_verifikasi_modal'></span>
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_norek_modal"></span>
+											<span id="button_unverify_norek_modal"></span>
+											<!-- <button id="button_verify_norek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_norek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:20%'><strong>Pemilik Rekening <span class="icon-verify-pemilik-rek"></span></strong></td>
+										<td style='width:50%'>
+											<input hidden type="text" id="pemilik_rekening_modal_sebelum">
+											<input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value="">
+											<span id='pesan_pemilik_rekening_verifikasi_modal'></span>
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_pemilik_rek_modal"></span>
+											<span id="button_unverify_pemilik_rek_modal"></span>
+											<!-- <button id="button_verify_pemilik_rek_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_pemilik_rek_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:25%'><strong>File CV <span class="icon-verify-file-cv"></span></strong></td>
+										<td style='width:75%'>
+											<!-- <div class="row align-items-center"> -->
+											<span class='display_file_cv_modal'></span>
+											<input hidden type="text" id="link_file_cv_sebelum_modal">
+											<input hidden type="text" id="link_file_cv_modal">
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_cv_modal" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span id='pesan_file_cv_modal'></span>
+											<!-- </div> -->
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_file_cv_modal"></span>
+											<span id="button_unverify_file_cv_modal"></span>
+											<!-- <button id="button_verify_file_cv_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_file_cv_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:25%'><strong>File SKCK <span class="icon-verify-file-skck"></span></strong></td>
+										<td style='width:75%'>
+											<!-- <div class="row align-items-center"> -->
+											<span class='display_file_skck_modal'></span>
+											<input hidden type="text" id="link_file_skck_sebelum_modal">
+											<input hidden type="text" id="link_file_skck_modal">
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_skck_modal" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span id='pesan_file_skck_modal'></span>
+											<!-- </div> -->
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_file_skck_modal"></span>
+											<span id="button_unverify_file_skck_modal"></span>
+											<!-- <button id="button_verify_file_skck_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_file_skck_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+									<tr>
+										<td style='width:25%'><strong>File Ijazah <span class="icon-verify-file-ijazah"></span></strong></td>
+										<td style='width:75%'>
+											<!-- <div class="row align-items-center"> -->
+											<span class='display_file_ijazah_modal'></span>
+											<input hidden type="text" id="link_file_ijazah_sebelum_modal">
+											<input hidden type="text" id="link_file_ijazah_modal">
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_ijazah_modal" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span id='pesan_file_ijazah_modal'></span>
+											<!-- </div> -->
+										</td>
+										<td style='width:30%'>
+											<span id="button_verify_file_ijazah_modal"></span>
+											<span id="button_unverify_file_ijazah_modal"></span>
+											<!-- <button id="button_verify_file_ijazah_modal" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>
+											<?php //if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { 
+											?>
+												<button id="button_unverify_file_ijazah_modal" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>
+											<?php //} 
+											?> -->
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- <div class="row">
+							<table class="table table-striped col-md-12">
+								<tbody>
+									<tr class="text-center align-self-center">
+										<td style='width:33.33%'>
+											<button id="button_show_ktp_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KTP</button>
+										</td>
+										<td style='width:33.33%'>
+											<button id="button_show_kk_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KK</button>
+										</td>
+										<td style='width:33.33%'>
+											<button id="button_show_rekening_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide Rekening</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="row">
+							<div class="rekening-modal col-md-12"></div>
+							<div class="ktp-modal col-md-12"></div>
+							<div class="kk-modal col-md-12"></div>
+							<div class="api-rekening-modal col-md-12"></div>
+						</div> -->
 					</div>
 				</div>
-				<div class="form-group row">
-					<div class="col-md-3">KK <span class="icon-verify-kk"></span>
-					</div>
-					<div class="col-md-5"><input type='text' id="kk_modal" class='form-control' placeholder='Nomor Kartu Keluarga' value='<?php echo $kk_no; ?>'></div>
-					<div class="col-md-4">
-						<button id="button_verify_kk_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
-						<?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
-							<button id="button_unverify_kk_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
-						<?php } ?>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">Nama Lengkap <span class="icon-verify-nama"></span>
-					</div>
-					<div class="col-md-5"><input type='text' id="nama_modal" class='form-control' placeholder='Nama Lengkap' value="<?php echo $fullname; ?>"></div>
-					<div class="col-md-4">
-						<button id="button_verify_nama_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
-						<?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
-							<button id="button_unverify_nama_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
-						<?php } ?>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">Bank <span class="icon-verify-bank"></span>
-					</div>
-					<div class="col-md-5">
-						<select name="bank_modal" id="bank_modal" class="form-control" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_bank_choose_name'); ?>">
-							<option value=""></option>
-							<?php
-							foreach ($list_bank as $bank) {
-							?>
-								<option value="<?php echo $bank->secid; ?>" <?php if ($bank_id == $bank->secid) : ?> selected <?php endif; ?>> <?php echo $bank->bank_name; ?></option>
-							<?php
-							}
-							?>
-						</select>
-						<!-- <input type='text' id="bank_modal" class='form-control' placeholder='Bank' value='<?php echo $bank_id; ?>'> -->
-					</div>
-					<div class="col-md-4">
-						<button id="button_verify_bank_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
-						<?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
-							<button id="button_unverify_bank_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
-						<?php } ?>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">Nomor Rekening <span class="icon-verify-norek"></span>
-					</div>
-					<div class="col-md-5"><input type='text' id="rekening_modal" class='form-control' placeholder='Nomor Rekening' value='<?php echo $nomor_rek; ?>'></div>
-					<div class="col-md-4">
-						<button id="button_verify_norek_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
-						<?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
-							<button id="button_unverify_norek_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
-						<?php } ?>
-					</div>
-				</div>
-				<div class="form-group row">
-					<div class="col-md-3">Pemilik Rekening <span class="icon-verify-pemilik-rek"></span>
-					</div>
-					<div class="col-md-5"><input type='text' id="pemilik_rekening_modal" class='form-control' placeholder='Pemilik Rekening' value="<?php echo $pemilik_rek; ?>"></div>
-					<div class="col-md-4">
-						<button id="button_verify_pemilik_rek_modal" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi</button>
-						<?php if (($user_info[0]->user_role_id == "1") || ($user_info[0]->user_role_id == "11")) { ?>
-							<button id="button_unverify_pemilik_rek_modal" class="btn btn-danger ladda-button" data-style="expand-right">Cancel</button>
-						<?php } ?>
-					</div>
-				</div>
-
-				<div class="form-group row">
-					<div class="col-md-3"><button id="button_show_ktp_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KTP</button></div>
-					<div class="col-md-3"><button id="button_show_kk_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide KK</button></div>
-					<div class="col-md-3"><button id="button_show_rekening_modal" class="btn btn-xs btn-outline-success" data-style="expand-right">Show/Hide Rekening</button></div>
-				</div>
-
-				<div class="isi-modal">
-					<div class="rekening-modal"></div>
-					<div class="ktp-modal"></div>
-					<div class="kk-modal"></div>
-					<div class="api-rekening-modal"></div>
+				<div class="info-modal-verifikasi">
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button id="close_modal" class="btn btn-primary ladda-button" data-style="expand-right">Close Modal</button>
-				<!-- <button type="button" class="btn btn-primary" data-dismiss="modal"> Close </button> -->
+				<button type='button' id="close_modal" class='btn btn-secondary' data-dismiss='modal'>Close</button>
 			</div>
 		</div>
 	</div>
@@ -165,10 +329,6 @@ $sub_project_id = $sub_project; ?>
 								<div class="col-md-8">
 									<div class="form-group">
 										<label for="fullname"><?php echo $this->lang->line('xin_employees_full_name'); ?><i class="hrpremium-asterisk">*</i></label>
-										<!-- icon lock - unlock - log -->
-										<!-- <i hidden id="lock_nama" onclick="lock_on_nama()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
-                    <i hidden id="unlock_nama" onclick="lock_off_nama()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
-                    <i hidden id="log_nama" onclick="show_log_nama()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i> -->
 										<span class="icon-verify-nama"></span>
 										<input class="form-control" placeholder="<?php echo $this->lang->line('xin_employees_full_name'); ?>" name="fullname" id="fullname" type="text" value="<?php echo $fullname; ?>">
 									</div>
@@ -185,7 +345,7 @@ $sub_project_id = $sub_project; ?>
 							<div class="row">
 
 								<!--TEMPAT LAHIR-->
-								<div class="col-md-4">
+								<div class="col-md-8">
 									<div class="form-group">
 										<label for="nomor_hp" class="control-label">Tempat Lahir<i class="hrpremium-asterisk">*</i></label>
 										<input class="form-control" placeholder="Tempat Lahir" name="tempat_lahir" type="text" value="<?php echo $tempat_lahir; ?>">
@@ -212,11 +372,11 @@ $sub_project_id = $sub_project; ?>
 										<select class="form-control" name="gender" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_employee_gender'); ?>">
 											<option value="">Jenis Kelamin</option>
 											<option value="L" <?php if ($gender == 'L') {
-																					echo 'selected';
-																				} ?>><?php echo $this->lang->line('xin_gender_male'); ?></option>
+																	echo 'selected';
+																} ?>><?php echo $this->lang->line('xin_gender_male'); ?></option>
 											<option value="P" <?php if ($gender == 'P') {
-																					echo 'selected';
-																				} ?>><?php echo $this->lang->line('xin_gender_female'); ?></option>
+																	echo 'selected';
+																} ?>><?php echo $this->lang->line('xin_gender_female'); ?></option>
 										</select>
 									</div>
 								</div>
@@ -265,51 +425,22 @@ $sub_project_id = $sub_project; ?>
 
 							<div class="row">
 								<!--NO KTP-->
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group">
 										<label for="nomor_ktp" class="control-label">Nomor KTP<i class="hrpremium-asterisk">*</i></label>
-										<!-- icon lock - unlock - log -->
-										<!-- <i hidden id="lock_ktp" onclick="lock_on_ktp()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
-                    <i hidden id="unlock_ktp" onclick="lock_off_ktp()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
-                    <i hidden id="log_ktp" onclick="show_log_ktp()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i> -->
 										<span class="icon-verify-nik"></span>
 										<input class="form-control" placeholder="Nomor KTP" name="nomor_ktp" id="nomor_ktp" type="text" value="<?php echo $ktp_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 									</div>
 								</div>
 
-								<!--ALAMAT SESUAI KTP-->
-								<div class="col-md-8">
-									<div class="form-group">
-										<label for="alamat_ktp"><?php echo $this->lang->line('xin_address_1'); ?><i class="hrpremium-asterisk">*</i></label>
-										<input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1'); ?>" name="alamat_ktp" type="text" value="<?php echo $alamat_ktp; ?>">
-									</div>
-								</div>
-
-							</div>
-
-							<div class="row">
-
 								<!--NOMOR KK-->
-								<div class="col-md-4">
+								<div class="col-md-6">
 									<div class="form-group">
 										<label for="nomor_kk" class="control-label">Nomor KK<i class="hrpremium-asterisk">*</i></label>
-										<!-- icon lock - unlock - log -->
-										<!-- <i hidden id="lock_kk" onclick="lock_on_kk()" style="color:green;" class="sidenav-icon ion ion-md-unlock" data-toggle="tooltip" data-placement="top" title="Lock Kolom"></i>
-                    <i hidden id="unlock_kk" onclick="lock_off_kk()" style="color:red;" class="sidenav-icon ion ion-md-lock" data-toggle="tooltip" data-placement="top" title="Unlock Kolom"></i>
-                    <i hidden id="log_kk" onclick="show_log_kk()" style="color:orange;" class="sidenav-icon ion ion-md-clipboard" data-toggle="tooltip" data-placement="top" title="Catatan"></i> -->
 										<span class="icon-verify-kk"></span>
 										<input class="form-control" placeholder="Nomor KK" name="nomor_kk" id="nomor_kk" type="text" value="<?php echo $kk_no; ?>" maxlength="16" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 									</div>
 								</div>
-
-								<!--ALAMAT DOMISILI-->
-								<div class="col-md-8">
-									<div class="form-group">
-										<label for="alamat_domisili">Alamat Domisili</i></label>
-										<input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1'); ?>" name="alamat_domisili" type="text" value="<?php echo $alamat_domisili; ?>">
-									</div>
-								</div>
-
 							</div>
 
 							<div class="row">
@@ -374,8 +505,35 @@ $sub_project_id = $sub_project; ?>
 								<!--PEMILIK REKENING-->
 								<div class="col-md-4">
 									<div class="form-group">
-										<label for="pemilik_rek" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label><span class="icon-verify-pemilik-rek"></span>
+										<label for="pemilik_rekening" class="control-label">Pemilik Rekening<i class="hrpremium-asterisk">*</i></label><span class="icon-verify-pemilik-rek"></span>
 										<input class="form-control" placeholder="Nama Pemilik Rekening" id="pemilik_rekening" name="pemilik_rekening" type="text" value="<?php echo $pemilik_rek; ?>">
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row">
+								<!--NAMA KONDAR-->
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="nama_kondar" class="control-label">Nama Kontak Darurat</label>
+										<input readonly class="form-control" placeholder="Nama Kontak Darurat" id="nama_kondar" name="nama_kondar" type="text" value="<?php echo $nama_kontak_darurat; ?>">
+									</div>
+								</div>
+
+								<!--HUBUNGAN KONDAR-->
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="hubungan_kondar" class="control-label">Hubungan Kontak Darurat</label>
+										<input readonly class="form-control" placeholder="Hubungan Kontak Darurat" id="hubungan_kondar" name="hubungan_kondar" type="text" value="<?php echo $hubungan_kontak_darurat; ?>">
+									</div>
+								</div>
+
+								<!--NOMOR TLPN KONDAR-->
+								<div class="col-md-4">
+									<div class="form-group">
+										<label for="nomor_kondar" class="control-label">Nomor Kontak Darurat</label>
+										<input readonly class="form-control" placeholder="Nomor Kontak Darurat" id="nomor_kondar" name="nomor_kondar" type="text" value="<?php echo $nomor_kontak_darurat; ?>">
 									</div>
 								</div>
 
@@ -389,7 +547,7 @@ $sub_project_id = $sub_project; ?>
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="projects"><?php echo $this->lang->line('left_projects'); ?><i class="hrpremium-asterisk">*</i></label>
+										<label for="aj_project"><?php echo $this->lang->line('left_projects'); ?><i class="hrpremium-asterisk">*</i></label>
 										<select class="form-control" id="aj_project" name="project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects'); ?>">
 											<option value=""></option>
 											<?php foreach ($project_list as $projects) { ?>
@@ -470,17 +628,31 @@ $sub_project_id = $sub_project; ?>
 
 							<div class="row">
 
+								<!--REGION-->
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="region">Region</label>
+										<input class="form-control" placeholder="Region" name="region" id="region" type="text" value="<?php echo $region_name ?>">
+									</div>
+								</div>
+
+								<!-- DC -->
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="dc">DC</label>
+										<input class="form-control" placeholder="Penempatan" name="dc" id="dc" type="text" value="<?php echo $dc_name ?>">
+									</div>
+								</div>
+
+							</div>
+
+							<div class="row">
+
 								<!--REG-TKHL-->
 								<div class="col-md-6">
 
 									<div class="form-group">
 										<label for="e_status">Jenis Dokumen<i class="hrpremium-asterisk">*</i></label>
-										<!-- <select class="form-control" name="e_status" id="e_status" data-plugin="xin_select" data-placeholder="e_status">
-                      <option value="">-Pilih Jenis Dokumen-</option>
-                      <option value="0" <?php if ($e_status == 0) : ?> selected <?php endif; ?>>Pilih Jenis Dokumen-</option>
-                      <option value="1" <?php if ($e_status == 1) : ?> selected <?php endif; ?>>PKWT</option>
-                      <option value="2" <?php if ($e_status == 2) : ?> selected <?php endif; ?>>TKHL</option>
-                    </select> -->
 										<?php
 										$jenis_dokumen = "";
 										if ($e_status == 1) {
@@ -516,6 +688,43 @@ $sub_project_id = $sub_project; ?>
 
 							</div>
 
+							<div class="row">
+								<!--ALAMAT SESUAI KTP-->
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="alamat_ktp"><?php echo $this->lang->line('xin_address_1'); ?><i class="hrpremium-asterisk">*</i></label>
+										<textarea id="alamat_ktp" name="alamat_ktp" class='form-control' placeholder='Alamat KTP' rows="4"><?php echo $alamat_ktp; ?></textarea>
+										<!-- <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1'); ?>" name="alamat_ktp" type="text" value="<?php //echo $alamat_ktp; 
+																																												?>"> -->
+									</div>
+								</div>
+
+								<!--Kota Domisili-->
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="kota_domisili">Kota Domisili</i></label>
+										<input hidden type="text" id="nama_kota_domisili" name="nama_kota_domisili">
+										<select class="form-control" id="kota_domisili" name="kota_domisili" data-plugin="xin_select" data-placeholder="Kota Domisili">
+											<option value="">Pilih Kota Domisili</option>
+											<?php foreach ($all_kabupaten_kota as $kota): ?>
+												<option value="<?php echo $kota['id_kab_kota_bps']; ?>" <?php if ($id_kota_domisili == $kota['id_kab_kota_bps']): echo "selected";
+																										endif; ?>>[<?php echo strtoupper($kota['provinsi']); ?>] <?php echo strtoupper($kota['nama']); ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+								</div>
+
+								<!--ALAMAT DOMISILI-->
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="alamat_domisili">Alamat Domisili</i></label>
+										<textarea id="alamat_domisili" name="alamat_domisili" class='form-control' placeholder='Alamat Domisili' rows="4"><?php echo $alamat_domisili; ?></textarea>
+										<!-- <input class="form-control" placeholder="<?php echo $this->lang->line('xin_address_1'); ?>" name="alamat_domisili" type="text" value="<?php //echo $alamat_domisili; 
+																																													?>"> -->
+									</div>
+								</div>
+							</div>
+
 							<!-- end row -->
 						</div>
 					</div>
@@ -527,176 +736,38 @@ $sub_project_id = $sub_project; ?>
 					<div class="form-row">
 						<!-- upload ktp -->
 						<div class="form-group col-md-2">
-							<?php
-							//untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-							$t = time();
-							// $ktp = '';
-							if ($ktp == "" || $ktp == "0") {
-								$tesfile1 = base_url('/uploads/document/ktp/') . "default.jpg";
-								$file_ada = "";
-							} else {
-								if (strpos($ktp, "https") !== false) {
-									$tesfile1 = $ktp . "?" . $t;
-								} else {
-									$tesfile1 = base_url('/uploads/document/ktp/') . $ktp . "?" . $t;
-								}
-								$file_ada = "ada";
-							}
-
-							$parameterfile1 = substr($tesfile1, -14);
-							?>
-
-							<label>Foto KTP</label>
-							<embed class="form-group col-md-12" id="output_ktp" type='<?php if (substr($parameterfile1, 0, 3) == "pdf") {
-																																					echo "application/pdf";
-																																				} else {
-																																					echo "image/jpg";
-																																				}
-																																				?>' src="<?php echo $tesfile1; ?>"></embed>
-							<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile1; ?>" target="_blank">Buka File</a>
+							<label>Foto KTP</label> <span class="icon-verify-file-ktp"></span>
+							<span class="display_file_ktp_modal"></span>
 						</div>
 
 						<!-- upload kk -->
 						<div class="form-group col-md-2">
-							<?php
-							//untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-							$t = time(); ?>
-							<?php if ($kk == "" || $kk == "0") {
-								$tesfile2 = base_url('/uploads/document/kk/') . "default.jpg";
-								$file_ada = "";
-							} else {
-								$file_ada = "ada";
-								// $kk = '';
-								if (strpos($kk, "https") !== false) {
-									$tesfile2 = $kk . "?" . $t;
-								} else {
-									$tesfile2 = base_url('/uploads/document/kk/') . $kk . "?" . $t;
-								}
-							}
-							$parameterfile2 = substr($tesfile2, -14);
-							?>
-							<label>Foto KK</label>
-							<embed class="form-group col-md-12" id="output_kk" type='<?php if (substr($parameterfile2, 0, 3) == "pdf") {
-																																					echo "application/pdf";
-																																				} else {
-																																					echo "image/jpg";
-																																				}
-																																				?>' src="<?php echo $tesfile2; ?>"></embed>
-							<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile2; ?>" target="_blank">Buka File</a>
+							<label>Foto KK</label> <span class="icon-verify-file-kk"></span>
+							<span class="display_file_kk_modal"></span>
 						</div>
 
 						<!-- upload npwp -->
 						<div class="form-group col-md-2">
-							<?php
-							//untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-							$t = time(); ?>
-							<?php if ($file_npwp == "" || $file_npwp == "0") {
-								$tesfile3 = base_url('/uploads/document/npwp/') . "default.jpg";
-								$file_ada = "";
-							} else {
-								$file_ada = "ada";
-								// $file_npwp = '';
-								if (strpos($file_npwp, "https") !== false) {
-									$tesfile3 = $file_npwp . "?" . $t;
-								} else {
-									$tesfile3 = base_url('/uploads/document/npwp/') . $file_npwp . "?" . $t;
-								}
-							}
-							$parameterfile3 = substr($tesfile3, -14);
-							?>
 							<label>Foto NPWP</label>
-							<embed class="form-group col-md-12" id="output_npwp" type='<?php if (substr($parameterfile3, 0, 3) == "pdf") {
-																																						echo "application/pdf";
-																																					} else {
-																																						echo "image/jpg";
-																																					}
-																																					?>' src="<?php echo $tesfile3; ?>"></embed>
-							<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile3; ?>" target="_blank">Buka File</a>
+							<span class="display_file_npwp_modal"></span>
 						</div>
+
+						<!-- upload ijazah -->
 						<div class="form-group col-md-2">
-							<?php
-							//untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-							$t = time(); ?>
-							<?php if ($ijazah == "" || $ijazah == "0") {
-								$tesfile4 = base_url('/uploads/document/ijazah/') . "default.jpg";
-								$file_ada = "";
-							} else {
-								$file_ada = "ada";
-								// $ijazah = '';
-								if (strpos($ijazah, "https") !== false) {
-									$tesfile4 = $ijazah . "?" . $t;
-								} else {
-									$tesfile4 = base_url('/uploads/document/ijazah/') . $ijazah . "?" . $t;
-								}
-							}
-							$parameterfile4 = substr($tesfile4, -14);
-							?>
-							<label>Foto Ijazah</label>
-							<embed class="form-group col-md-12" id="output_ijazah" type='<?php if (substr($parameterfile4, 0, 3) == "pdf") {
-																																							echo "application/pdf";
-																																						} else {
-																																							echo "image/jpg";
-																																						}
-																																						?>' src="<?php echo $tesfile4; ?>"></embed>
-							<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile4; ?>" target="_blank">Buka File</a>
+							<label>Foto Ijazah</label> <span class="icon-verify-file-ijazah"></span>
+							<span class="display_file_ijazah_modal"></span>
 						</div>
 
 						<!-- upload CV -->
 						<div class="form-group col-md-2">
-							<?php
-							//untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-							$t = time(); ?>
-							<?php if ($civi == "" || $civi == "0") {
-								$tesfile5 = base_url('/uploads/document/cv/') . "default.jpg";
-								$file_ada = "";
-							} else {
-								$file_ada = "ada";
-								// $civi = '';
-								if (strpos($civi, "https") !== false) {
-									$tesfile5 = $civi . "?" . $t;
-								} else {
-									$tesfile5 = base_url('/uploads/document/cv/') . $civi . "?" . $t;
-								}
-							}
-							$parameterfile5 = substr($tesfile5, -14);
-							?>
-							<label>Foto CV</label>
-							<embed class="form-group col-md-12" id="output_cv" type='<?php if (substr($parameterfile5, 0, 3) == "pdf") {
-																																					echo "application/pdf";
-																																				} else {
-																																					echo "image/jpg";
-																																				}
-																																				?>' src="<?php echo $tesfile5; ?>"></embed>
-							<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile5; ?>" target="_blank">Buka File</a>
+							<label>Foto CV</label> <span class="icon-verify-file-cv"></span>
+							<span class="display_file_cv_modal"></span>
 						</div>
 
 						<!-- upload SKCK -->
 						<div class="form-group col-md-2">
-							<?php
-							//untuk menghindari cache image (saat ganti gambar, gambar masuk tapi tampilan masih mengambil cache iamge lama) 
-							$t = time(); ?>
-							<?php if ($skck == "" || $skck == "0") {
-								$tesfile6 = base_url('/uploads/document/skck/') . "default.jpg";
-								$file_ada = "";
-							} else {
-								$file_ada = "ada";
-								// $skck = '';
-								if (strpos($skck, "https") !== false) {
-									$tesfile6 = $skck . "?" . $t;
-								} else {
-									$tesfile6 = base_url('/uploads/document/skck/') . $skck . "?" . $t;
-								}
-							}
-							$parameterfile6 = substr($tesfile6, -14);
-							?>
-							<label>Foto SKCK</label>
-							<embed class="form-group col-md-12" id="output_skck" type='<?php if (substr($parameterfile6, 0, 3) == "pdf") {
-																																						echo "application/pdf";
-																																					} else {
-																																						echo "image/jpg";
-																																					}
-																																					?>' src="<?php echo $tesfile6; ?>"></embed>
-							<a <?php if ($file_ada == "") : ?> hidden <?php endif; ?> class="btn btn-primary btn-sm btn-lg btn-block" href="<?php echo $tesfile6; ?>" target="_blank">Buka File</a>
+							<label>Foto SKCK</label> <span class="icon-verify-file-skck"></span>
+							<span class="display_file_skck_modal"></span>
 						</div>
 					</div>
 
@@ -880,7 +951,7 @@ $sub_project_id = $sub_project; ?>
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="tunjangan_grooming" class="control-label">19) Tunj. Grooming<i class="hrpremium-asterisk">*</i></label>
-										<input class="form-control" placeholder="0" name="tunjangan_grooming" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_grooming); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah19">
+										<input class="form-control" placeholder="0" name="tunjangan_grooming" type="text" value="<?php echo $this->Xin_model->rupiah_titik($allow_grooming); ?>" style="text-align: right;" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" id="rupiah24">
 									</div>
 								</div>
 
@@ -1017,41 +1088,29 @@ $sub_project_id = $sub_project; ?>
 
 			<div class="form-actions box-footer">
 				<?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
+				<?php echo form_close(); ?>
 				<?php if (in_array('1012', $role_resources_ids)) { ?>
-					<button id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
+					<button onclick="verifikasi(<?php echo $secid; ?>)" id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
 				<?php } ?>
 			</div>
-			<?php echo form_close(); ?>
+			<!-- <?php //echo form_close(); 
+					?> -->
 		</div>
 	</div>
 
 	</div>
 
 <?php } ?>
-<div class="card" hidden>
-	<div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> <?php echo $this->lang->line('xin_companies'); ?></span> </div>
-	<div class="card-body">
-		<div class="box-datatable table-responsive">
-			<table class="datatables-demo table table-striped table-bordered" id="xin_table">
-				<thead>
-					<tr>
-						<th>No.</th>
-						<th><?php echo $this->lang->line('xin_request_employee_status'); ?></th>
-						<th>NIK-KTP</th>
-						<th><i class="fa fa-user"></i> <?php echo $this->lang->line('xin_employees_full_name'); ?></th>
-						<th><?php echo $this->lang->line('left_projects'); ?></th>
-						<th><?php echo $this->lang->line('left_sub_projects'); ?></th>
-						<th><?php echo $this->lang->line('left_department'); ?></th>
-						<th><?php echo $this->lang->line('left_designation'); ?></th>
-						<th><?php echo $this->lang->line('xin_placement'); ?></th>
-						<th><?php echo $this->lang->line('xin_employee_doj'); ?></th>
-						<th><?php echo $this->lang->line('xin_e_details_contact'); ?></th>
-					</tr>
-				</thead>
-			</table>
-		</div>
-	</div>
-</div>
+
+<!-- filepond js -->
+<script src="<?= base_url() ?>assets/libs/filepond/filepond.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/filepond-plugin-file-validate-size/filepond-plugin-file-validate-size.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/filepond-plugin-image-exif-orientation/filepond-plugin-image-exif-orientation.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js"></script>
+<script src="<?= base_url() ?>assets/libs/filepond-plugin-file-validate-type/filepond-plugin-file-validate-type.js"></script>
+<script src="<?= base_url() ?>assets/libs/filepond-plugin-file-rename/filepond-plugin-file-rename.js"></script>
+<!-- <script src="assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.js"></script> -->
 
 <script type="text/javascript">
 	var rupiah1 = document.getElementById("rupiah1");
@@ -1171,6 +1230,11 @@ $sub_project_id = $sub_project; ?>
 		rupiah23.value = convertRupiah(this.value);
 	});
 
+	var rupiah24 = document.getElementById("rupiah24");
+	rupiah24.addEventListener("keyup", function(e) {
+		rupiah24.value = convertRupiah(this.value);
+	});
+
 	function convertRupiah(angka, prefix) {
 		var number_string = angka.replace(/[^,\d]/g, "").toString(),
 			split = number_string.split(","),
@@ -1190,84 +1254,137 @@ $sub_project_id = $sub_project; ?>
 
 <!-- SCRIPT INITIATE VALIDATION -->
 <script type=text/javascript>
+	var loading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+	var loading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+	loading_html_text = loading_html_text + '<img src="' + loading_image + '" alt="" width="100px">';
+	loading_html_text = loading_html_text + '<h2>LOADING...</h2>';
+	loading_html_text = loading_html_text + '</div>';
+
+	var loading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+	var sending_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+	sending_html_text = sending_html_text + '<img src="' + loading_image + '" alt="" width="100px">';
+	sending_html_text = sending_html_text + '<h2>Sending PIN...</h2>';
+	sending_html_text = sending_html_text + '</div>';
+
+	var uploading_image = "<?php echo base_url('assets/icon/loading_animation3.gif'); ?>";
+	var uploading_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+	uploading_html_text = uploading_html_text + '<img src="' + uploading_image + '" alt="" width="100px">';
+	uploading_html_text = uploading_html_text + '<h2>PROCESSING...</h2>';
+	uploading_html_text = uploading_html_text + '</div>';
+
+	var success_image = "<?php echo base_url('assets/icon/ceklis_hijau.png'); ?>";
+	var success_html_text = '<div class="col-12 col-md-12 col-auto text-center align-self-center">';
+	success_html_text = success_html_text + '<img src="' + success_image + '" alt="" width="100px">';
+	success_html_text = success_html_text + '<h2 style="color: #00FFA3;">BERHASIL UPDATE DATA</h2>';
+	success_html_text = success_html_text + '</div>';
+
 	//read variable
 	var baseURL = "<?php echo base_url(); ?>";
 	var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
 	var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
-	var nama_lock = "<?php print($nama_lock); ?>";
-	var ktp_lock = "<?php print($ktp_lock); ?>";
-	var kk_lock = "<?php print($kk_lock); ?>";
 	var user_id = "<?php print($session['user_id']); ?>";
 	var user_name = "<?php print($user_info['0']->first_name); ?>";
 	var employee_id = "<?php print($secid); ?>";
 
-	var nik_validation = "<?php echo $nik_validation; ?>";
-	var kk_validation = "<?php print($kk_validation); ?>";
-	var nama_validation = "<?php print($nama_validation); ?>";
-	var bank_validation = "<?php print($bank_validation); ?>";
-	var norek_validation = "<?php print($norek_validation); ?>";
-	var pemilik_rekening_validation = "<?php print($pemilik_rekening_validation); ?>";
+	FilePond.registerPlugin(
+		FilePondPluginFileEncode,
+		FilePondPluginFileValidateType,
+		FilePondPluginFileValidateSize,
+		FilePondPluginFileRename,
+		// FilePondPluginImageEdit,
+		FilePondPluginImageExifOrientation,
+		FilePondPluginImagePreview
+	);
 
-	//initiate state validation
-	if (nik_validation == 0) {
-		$('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-		if (nomor_ktp.readOnly) document.getElementById("nomor_ktp").removeAttribute("readonly");
-		if (nik_modal.readOnly) document.getElementById("nik_modal").removeAttribute("readonly");
-	} else if (nik_validation == 1) {
-		nomor_ktp.setAttribute("readonly", "readonly");
-		nik_modal.setAttribute("readonly", "readonly");
-		$('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-	}
-	if (kk_validation == 0) {
-		$('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-		if (nomor_kk.readOnly) document.getElementById("nomor_kk").removeAttribute("readonly");
-		if (kk_modal.readOnly) document.getElementById("kk_modal").removeAttribute("readonly");
-	} else if (kk_validation == 1) {
-		nomor_kk.setAttribute("readonly", "readonly");
-		kk_modal.setAttribute("readonly", "readonly");
-		$('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-	}
-	if (nama_validation == 0) {
-		$('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-		if (fullname.readOnly) document.getElementById("fullname").removeAttribute("readonly");
-		if (nama_modal.readOnly) document.getElementById("nama_modal").removeAttribute("readonly");
-	} else if (nama_validation == 1) {
-		fullname.setAttribute("readonly", "readonly");
-		nama_modal.setAttribute("readonly", "readonly");
-		$('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-	}
-	if (bank_validation == 0) {
-		$('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-		if (bank_name2.disabled) document.getElementById("bank_name2").removeAttribute("disabled");
-		if (bank_modal.disabled) document.getElementById("bank_modal").removeAttribute("disabled");
-	} else if (bank_validation == 1) {
-		bank_modal.setAttribute("disabled", "disabled");
-		bank_name2.setAttribute("disabled", "disabled");
-		$('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-	}
-	if (norek_validation == 0) {
-		$('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-		if (no_rek.readOnly) document.getElementById("no_rek").removeAttribute("readonly");
-		if (rekening_modal.readOnly) document.getElementById("rekening_modal").removeAttribute("readonly");
-	} else if (norek_validation == 1) {
-		no_rek.setAttribute("readonly", "readonly");
-		rekening_modal.setAttribute("readonly", "readonly");
-		$('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-	}
-	if (pemilik_rekening_validation == 0) {
-		$('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-		if (pemilik_rekening.readOnly) document.getElementById("pemilik_rekening").removeAttribute("readonly");
-		if (pemilik_rekening_modal.readOnly) document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
-	} else if (pemilik_rekening_validation == 1) {
-		pemilik_rekening.setAttribute("readonly", "readonly");
-		pemilik_rekening_modal.setAttribute("readonly", "readonly");
-		$('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-	}
+	//----------BEGIN FILEPOND EDIT DOKUMEN KARYAWAN BARU----------------------------
 
-	// alert(nik_validation);
+	//create object filepond untuk file KTP
+	var pond_file_ktp_modal = FilePond.create(document.querySelector('input[id="file_ktp_modal"]'), {
+		labelIdle: 'Drag & Drop file KTP atau <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "25MB",
+		// acceptedFileTypes: ['image/png', 'image/jpeg'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `file_ktp${file.extension}`;
+		}
+	});
+
+	//create object filepond untuk file cv
+	var pond_file_cv_modal = FilePond.create(document.querySelector('input[id="file_cv_modal"]'), {
+		labelIdle: 'Drag & Drop file CV atau <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "25MB",
+		// acceptedFileTypes: ['image/png', 'image/jpeg'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `file_cv${file.extension}`;
+		}
+	});
+
+	//create object filepond untuk file KK
+	var pond_file_kk_modal = FilePond.create(document.querySelector('input[id="file_kk_modal"]'), {
+		labelIdle: 'Drag & Drop file KK atau <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "25MB",
+		// acceptedFileTypes: ['image/png', 'image/jpeg'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `file_kk${file.extension}`;
+		}
+	});
+
+	//create object filepond untuk file skck
+	var pond_file_skck_modal = FilePond.create(document.querySelector('input[id="file_skck_modal"]'), {
+		labelIdle: 'Drag & Drop file SKCK atau <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "25MB",
+		// acceptedFileTypes: ['image/png', 'image/jpeg'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `file_skck${file.extension}`;
+		}
+	});
+
+	//create object filepond untuk file ijazah
+	var pond_file_ijazah_modal = FilePond.create(document.querySelector('input[id="file_ijazah_modal"]'), {
+		labelIdle: 'Drag & Drop file ijazah atau <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "25MB",
+		// acceptedFileTypes: ['image/png', 'image/jpeg'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `file_ijazah${file.extension}`;
+		}
+	});
+
+	//----------END FILEPOND EDIT DOKUMEN KARYAWAN BARU----------------------------
+
+	//icon status verifikasi
+	$('.icon-verify-file-ktp').html("<?php echo $validate_dokumen_ktp; ?>");
+	$('.icon-verify-nik').html("<?php echo $validate_nik; ?>");
+	$('.icon-verify-nama').html("<?php echo $validate_nama; ?>");
+	$('.icon-verify-file-kk').html("<?php echo $validate_dokumen_kk; ?>");
+	$('.icon-verify-kk').html("<?php echo $validate_kk; ?>");
+	$('.icon-verify-bank').html("<?php echo $validate_bank; ?>");
+	$('.icon-verify-norek').html("<?php echo $validate_norek; ?>");
+	$('.icon-verify-pemilik-rek').html("<?php echo $validate_pemilik_rekening; ?>");
+	$('.icon-verify-file-cv').html("<?php echo $validate_cv; ?>");
+	$('.icon-verify-file-skck').html("<?php echo $validate_skck; ?>");
+	$('.icon-verify-file-ijazah').html("<?php echo $validate_ijazah; ?>");
 </script>
 
-<!-- Chained Dropdown (Project - Jenis Dokumen) -->
+<!-- Chained Dropdown -->
 <script type='text/javascript'>
 	// baseURL variable
 	var flag_ktp = 0;
@@ -1279,7 +1396,6 @@ $sub_project_id = $sub_project; ?>
 		csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
 	$(document).ready(function() {
-
 		// Project Change - Jenis Dokumen (on Change)
 		$('#aj_project').change(function() {
 			var project = $(this).val();
@@ -1316,113 +1432,213 @@ $sub_project_id = $sub_project; ?>
 			document.getElementById("bank_name").value = bank;
 		});
 
+		// Kota domisili Change - isi text ke variable hidden bank_name (untuk save)
+		$('#kota_domisili').change(function() {
+			var id_kota_domisili = $("#kota_domisili").val();
+			var nama_kota_domisili = $("#kota_domisili option:selected").text();
+			nama_kota_domisili = nama_kota_domisili.trim();
 
+			$("#nama_kota_domisili").val(nama_kota_domisili);
+
+			// alert($("#nama_kota_domisili").val());
+			// alert(id_kota_domisili);
+		});
+
+		//Display dokumen
+		var id_karyawan_request = "<?php print($secid); ?>";
+		//isi dokumen
+		$.ajax({
+			url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi_request/',
+			method: 'post',
+			data: {
+				[csrfName]: csrfHash,
+				id_karyawan_request: id_karyawan_request,
+			},
+			beforeSend: function() {
+				$('.display_file_ktp_modal').html(loading_html_text);
+				$('.display_file_kk_modal').html(loading_html_text);
+				$('.display_file_cv_modal').html(loading_html_text);
+				$('.display_file_skck_modal').html(loading_html_text);
+				$('.display_file_ijazah_modal').html(loading_html_text);
+				$('.display_file_npwp_modal').html(loading_html_text);
+			},
+			success: function(response) {
+
+				var res2 = jQuery.parseJSON(response);
+
+				//dokumen KTP
+				if (res2['status']['filename_ktp'] == "200") {
+					var nama_file = res2['data']['filename_ktp'];
+					var tipe_file = nama_file.substr(-3, 3);
+					var atribut = "";
+					var height = '';
+					var d = new Date();
+					var time = d.getTime();
+					nama_file = nama_file + "?" + time;
+
+					if (tipe_file == "pdf") {
+						atribut = "application/pdf";
+						// height = 'height="500px"';
+					} else {
+						atribut = "image/jpg";
+					}
+
+					var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+					$('.display_file_ktp_modal').html(html_text);
+				} else {
+					var html_text = '<strong>' + res2['pesan']['filename_ktp'] + '</strong>';
+					$('.display_file_ktp_modal').html(html_text);
+				}
+
+				//dokumen KK
+				if (res2['status']['filename_kk'] == "200") {
+					var nama_file = res2['data']['filename_kk'];
+					var tipe_file = nama_file.substr(-3, 3);
+					var atribut = "";
+					var height = '';
+					var d = new Date();
+					var time = d.getTime();
+					nama_file = nama_file + "?" + time;
+
+					if (tipe_file == "pdf") {
+						atribut = "application/pdf";
+						// height = 'height="500px"';
+					} else {
+						atribut = "image/jpg";
+					}
+
+					var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+					$('.display_file_kk_modal').html(html_text);
+				} else {
+					var html_text = '<strong>' + res2['pesan']['filename_kk'] + '</strong>';
+					$('.display_file_kk_modal').html(html_text);
+				}
+
+				//dokumen CV
+				if (res2['status']['filename_cv'] == "200") {
+					var nama_file = res2['data']['filename_cv'];
+					var tipe_file = nama_file.substr(-3, 3);
+					var atribut = "";
+					var height = '';
+					var d = new Date();
+					var time = d.getTime();
+					nama_file = nama_file + "?" + time;
+
+					if (tipe_file == "pdf") {
+						atribut = "application/pdf";
+						// height = 'height="500px"';
+					} else {
+						atribut = "image/jpg";
+					}
+
+					var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+					$('.display_file_cv_modal').html(html_text);
+				} else {
+					var html_text = '<strong>' + res2['pesan']['filename_cv'] + '</strong>';
+					$('.display_file_cv_modal').html(html_text);
+				}
+
+				//dokumen SKCK
+				if (res2['status']['filename_skck'] == "200") {
+					var nama_file = res2['data']['filename_skck'];
+					var tipe_file = nama_file.substr(-3, 3);
+					var atribut = "";
+					var height = '';
+					var d = new Date();
+					var time = d.getTime();
+					nama_file = nama_file + "?" + time;
+
+					if (tipe_file == "pdf") {
+						atribut = "application/pdf";
+						// height = 'height="500px"';
+					} else {
+						atribut = "image/jpg";
+					}
+
+					var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+					$('.display_file_skck_modal').html(html_text);
+				} else {
+					var html_text = '<strong>' + res2['pesan']['filename_skck'] + '</strong>';
+					$('.display_file_skck_modal').html(html_text);
+				}
+
+				//dokumen Ijazah
+				if (res2['status']['filename_isd'] == "200") {
+					var nama_file = res2['data']['filename_isd'];
+					var tipe_file = nama_file.substr(-3, 3);
+					var atribut = "";
+					var height = '';
+					var d = new Date();
+					var time = d.getTime();
+					nama_file = nama_file + "?" + time;
+
+					if (tipe_file == "pdf") {
+						atribut = "application/pdf";
+						// height = 'height="500px"';
+					} else {
+						atribut = "image/jpg";
+					}
+
+					var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+					$('.display_file_ijazah_modal').html(html_text);
+				} else {
+					var html_text = '<strong>' + res2['pesan']['filename_isd'] + '</strong>';
+					$('.display_file_ijazah_modal').html(html_text);
+				}
+
+				//dokumen NPWP
+				if (res2['status']['filename_npwp'] == "200") {
+					var nama_file = res2['data']['filename_npwp'];
+					var tipe_file = nama_file.substr(-3, 3);
+					var atribut = "";
+					var height = '';
+					var d = new Date();
+					var time = d.getTime();
+					nama_file = nama_file + "?" + time;
+
+					if (tipe_file == "pdf") {
+						atribut = "application/pdf";
+						// height = 'height="500px"';
+					} else {
+						atribut = "image/jpg";
+					}
+
+					var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+					$('.display_file_npwp_modal').html(html_text);
+				} else {
+					var html_text = '<strong>' + res2['pesan']['filename_npwp'] + '</strong>';
+					$('.display_file_npwp_modal').html(html_text);
+				}
+			},
+			error: function(xhr, status, error) {
+				var html_text = '<strong>ERROR LOAD FILE</strong>';
+				$('.display_file_ktp_modal').html(html_text);
+				$('.display_file_kk_modal').html(html_text);
+				$('.display_file_cv_modal').html(html_text);
+				$('.display_file_skck_modal').html(html_text);
+				$('.display_file_ijazah_modal').html(html_text);
+				$('.display_file_npwp_modal').html(html_text);
+
+				//display isi modal
+				$('.isi-modal-verifikasi').attr("hidden", false);
+				$('.info-modal-verifikasi').attr("hidden", true);
+			}
+		});
 	});
 </script>
 
-<!-- Tombol Show Verifikasi Data -->
-<script type="text/javascript">
-	document.getElementById("button_verifikasi").onclick = function(e) {
-		e.preventDefault();
-
-		$('#verifikasiModal').modal('show');
-	};
-</script>
-
-<!-- Tombol Show/hide KTP Modal -->
-<script type="text/javascript">
-	document.getElementById("button_show_ktp_modal").onclick = function(e) {
-		e.preventDefault();
-
-		if (flag_ktp == 0) {
-			var filektp = "<?php echo $tesfile1; ?>";
-			var tipe_file = "<?php echo $tipe_ktp; ?>";
-			var atribut = "";
-			var height = '';
-			var d = new Date();
-			var time = d.getTime();
-			filektp = filektp + "?" + time;
-
-			// alert(tipe_file);
-
-			if (tipe_file == "pdf") {
-				atribut = "application/pdf";
-				height = 'height="300px"';
-			} else {
-				atribut = "image/jpg";
-			}
-
-			var html_text = "";
-
-			var html_text = html_text + "<div class='row'>";
-			var html_text = html_text + "<div class='form-group col-md-12'>";
-			var html_text = html_text + "<label>Foto KTP  </label>";
-			var html_text = html_text + "<button id='button_verify_bank_modal' class='btn btn-xs btn-outline-success' data-style='expand-right'>Open File</button>";
-			var html_text = html_text + "<embed " + atribut + " class='form-group col-md-12' id='output_ktp' type='" + atribut + "' src='" + filektp + "'></embed>";
-			var html_text = html_text + "</div>";
-			var html_text = html_text + "</div>";
-
-			$('.ktp-modal').html(html_text);
-			flag_ktp = 1;
-		} else if (flag_ktp == 1) {
-			$('.ktp-modal').html("");
-			flag_ktp = 0;
-		}
-
-	};
-</script>
-
-<!-- Tombol Show/hide KK Modal -->
-<script type="text/javascript">
-	document.getElementById("button_show_kk_modal").onclick = function(e) {
-		e.preventDefault();
-
-		if (flag_kk == 0) {
-			var filekk = "<?php echo $tesfile2; ?>";
-			var tipe_file = "<?php echo $tipe_kk; ?>";
-			var atribut = "";
-			var height = '';
-			var d = new Date();
-			var time = d.getTime();
-			filekk = filekk + "?" + time;
-
-			if (tipe_file == "pdf") {
-				atribut = "application/pdf";
-				height = 'height="300px"';
-			} else {
-				atribut = "image/jpg";
-			}
-
-			var html_text = "";
-
-			var html_text = html_text + "<div class='row'>";
-			var html_text = html_text + "<div class='form-group col-md-12'>";
-			var html_text = html_text + "<label>Foto KK  </label>";
-			var html_text = html_text + "<button id='button_verify_bank_modal' class='btn btn-xs btn-outline-success' data-style='expand-right'>Open File</button>";
-			var html_text = html_text + "<embed " + height + " class='form-group col-md-12' id='output_ktp' type='" + atribut + "' src='" + filekk + "'></embed>";
-			var html_text = html_text + "</div>";
-			var html_text = html_text + "</div>";
-
-			$('.kk-modal').html(html_text);
-			flag_kk = 1;
-		} else if (flag_kk == 1) {
-			$('.kk-modal').html("");
-			flag_kk = 0;
-		}
-
-	};
-</script>
-
 <!-- Tombol Show/hide Rekening Modal -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	document.getElementById("button_show_rekening_modal").onclick = function(e) {
 		e.preventDefault();
 
 		if (flag_rekening == 0) {
 			var bank_id = $("#bank_modal").val();
-			// var nomor_rekening = "<?php echo $nomor_rek; ?>";
+			// var nomor_rekening = "<?php //echo $nomor_rek; 
+										?>";
 			var nomor_rekening = $("#rekening_modal").val();
-			var bank_code = "<?php echo $nomor_rek; ?>";
+			var bank_code = "<?php //echo $nomor_rek; 
+								?>";
 
 			// alert(bank_id);
 			// alert(nomor_rekening);
@@ -1491,568 +1707,1436 @@ $sub_project_id = $sub_project; ?>
 		}
 
 	};
-</script>
+</script> -->
 
-<!-- Tombol Close Modal Verifikasi Data -->
+<!-- Tombol Verifikasi -->
 <script type="text/javascript">
-	document.getElementById("close_modal").onclick = function(e) {
-		e.preventDefault();
+	function verifikasi(id_karyawan_request) {
+		// alert("Under Construction. Masuk button verifikasi");
 
-		$('.ktp-modal').html("");
-		$('.kk-modal').html("");
-		$('.rekening-modal').html("");
-		// $('.api-rekening-modal').html("");
-		flag_ktp = 0;
-		flag_kk = 0;
-		flag_rekening = 0;
-		// flag_api_rekening = 0;
-		$('#verifikasiModal').modal('hide');
+		var user_role = <?php echo $user[0]->user_role_id; ?>;
 
-		// alert("masuk fungsi verifikasi data.");
+		//inisialisasi input
+		$('#nik_modal_verifikasi').val("");
+		$("#kk_modal").val("");
+		$('#nama_modal').val("");
+		$("#bank_modal").val("").change();
+		$('#rekening_modal').val("");
+		$('#pemilik_rekening_modal').val("");
+
+		$('#link_file_ktp_modal').val("");
+		$('#link_file_kk_modal').val("");
+		$('#link_file_cv_modal').val("");
+		$('#link_file_skck_modal').val("");
+		$('#link_file_ijazah_modal').val("");
+
+		//inisialisasi attribut input
+		$('#file_ktp_modal').prop("hidden", false);
+		$('#file_kk_modal').prop("hidden", false);
+		$('#file_cv_modal').prop("hidden", false);
+		$('#file_skck_modal').prop("hidden", false);
+		$('#file_ijazah_modal').prop("hidden", false);
+
+		$('#nik_modal_verifikasi').prop('readonly', false);
+		$('#kk_modal').prop('readonly', false);
+		$('#nama_modal').prop('readonly', false);
+		$('#bank_modal').prop('disabled', false);
+		$('#rekening_modal').prop('readonly', false);
+		$('#pemilik_rekening_modal').prop('readonly', false);
+
+		//inisialisasi pesan
+		$('#pesan_nik_verifikasi_modal').html("");
+		$('#pesan_kk_verifikasi_modal').html("");
+		$('#pesan_nama_verifikasi_modal').html("");
+		$('#pesan_bank_verifikasi_modal').html("");
+		$('#pesan_norek_verifikasi_modal').html("");
+		$('#pesan_pemilik_rekening_verifikasi_modal').html("");
+
+		$('#pesan_file_ktp_modal').html("");
+		$('#pesan_file_kk_modal').html("");
+		$('#pesan_file_cv_modal').html("");
+		$('#pesan_file_skck_modal').html("");
+		$('#pesan_file_ijazah_modal').html("");
+
+		//inisialisasi button verifikasi
+		$('#button_verify_file_ktp_modal').html("");
+		$('#button_unverify_file_ktp_modal').html("");
+		$('#button_verify_nik_modal').html("");
+		$('#button_unverify_nik_modal').html("");
+		$('#button_verify_nama_modal').html("");
+		$('#button_unverify_nama_modal').html("");
+		$('#button_verify_file_kk_modal').html("");
+		$('#button_unverify_file_kk_modal').html("");
+		$('#button_verify_kk_modal').html("");
+		$('#button_unverify_kk_modal').html("");
+		$('#button_verify_bank_modal').html("");
+		$('#button_unverify_bank_modal').html("");
+		$('#button_verify_norek_modal').html("");
+		$('#button_unverify_norek_modal').html("");
+		$('#button_verify_pemilik_rek_modal').html("");
+		$('#button_unverify_pemilik_rek_modal').html("");
+		$('#button_verify_file_cv_modal').html("");
+		$('#button_unverify_file_cv_modal').html("");
+		$('#button_verify_file_skck_modal').html("");
+		$('#button_unverify_file_skck_modal').html("");
+		$('#button_verify_file_ijazah_modal').html("");
+		$('#button_unverify_file_ijazah_modal').html("");
+
+		// AJAX untuk ambil data employee terupdate
+		$.ajax({
+			url: '<?= base_url() ?>admin/Employees/get_data_diri_request/',
+			method: 'post',
+			data: {
+				[csrfName]: csrfHash,
+				id_karyawan_request: id_karyawan_request,
+			},
+			beforeSend: function() {
+				$('.info-modal-verifikasi').attr("hidden", false);
+				$('.isi-modal-verifikasi').attr("hidden", true);
+				$('.info-modal-verifikasi').html(loading_html_text);
+				$('#verifikasiModal').appendTo("body").modal('show');
+			},
+			success: function(response) {
+
+				var res = jQuery.parseJSON(response);
+
+				if (res['status'] == "200") {
+					//isi value
+					$('#nik_modal_sebelum_verifikasi').val(res['data']['nik_ktp']);
+					$("#kk_modal_sebelum").val(res['data']['no_kk']);
+					$('#nama_modal_sebelum').val(res['data']['fullname']);
+					$("#bank_modal_sebelum").val(res['data']['bank_id']).change();
+					$('#rekening_modal_sebelum').val(res['data']['no_rek']);
+					$('#pemilik_rekening_modal_sebelum').val(res['data']['pemilik_rekening']);
+
+					$('#nik_modal_verifikasi').val(res['data']['nik_ktp']);
+					$("#kk_modal").val(res['data']['no_kk']);
+					$('#nama_modal').val(res['data']['fullname']);
+					$("#bank_modal").val(res['data']['bank_id']).change();
+					$('#rekening_modal').val(res['data']['no_rek']);
+					$('#pemilik_rekening_modal').val(res['data']['pemilik_rekening']);
+
+					//isi dokumen
+					$.ajax({
+						url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi_request/',
+						method: 'post',
+						data: {
+							[csrfName]: csrfHash,
+							id_karyawan_request: id_karyawan_request,
+						},
+						// beforeSend: function() {
+						// 	$('.ktp-modal').html(loading_html_text);
+						// },
+						success: function(response) {
+
+							var res2 = jQuery.parseJSON(response);
+
+							//dokumen KTP
+							if (res2['status']['filename_ktp'] == "200") {
+								var nama_file = res2['data']['filename_ktp'];
+								$('#link_file_ktp_sebelum_modal').val(res2['database_record']['filename_ktp']);
+								$('#link_file_ktp_modal').val(res2['database_record']['filename_ktp']);
+								var tipe_file = nama_file.substr(-3, 3);
+								var atribut = "";
+								var height = '';
+								var d = new Date();
+								var time = d.getTime();
+								nama_file = nama_file + "?" + time;
+
+								if (tipe_file == "pdf") {
+									atribut = "application/pdf";
+									// height = 'height="500px"';
+								} else {
+									atribut = "image/jpg";
+								}
+
+								var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+								$('.display_file_ktp_modal').html(html_text);
+							} else {
+								$('#link_file_ktp_sebelum_modal').val(res2['database_record']['filename_ktp']);
+								var html_text = '<strong>' + res2['pesan']['filename_ktp'] + '</strong>';
+								$('.display_file_ktp_modal').html(html_text);
+							}
+
+							//append nip dan identifier ke objek filepond file ktp
+							pond_file_ktp_modal.setOptions({
+								server: {
+									process: {
+										url: '<?php echo base_url() ?>admin/Employees/upload_dokumen_request',
+										method: 'POST',
+										ondata: (formData) => {
+											formData.append('id_karyawan_request', id_karyawan_request);
+											formData.append('identifier', 'ktp');
+											formData.append([csrfName], csrfHash);
+											return formData;
+										},
+										onload: (res) => {
+											// select the right value in the response here and return
+											// return res;
+											var serverResponse = jQuery.parseJSON(res);
+
+											//display file
+											if ((serverResponse['0']['link_file'] == null) || (serverResponse['0']['link_file'] == "")) {
+												//do nothing
+											} else {
+												var nama_file = '<?= base_url("uploads/document/ktp/") ?>' + serverResponse['0']['link_file'];
+												var tipe_file = nama_file.slice(-3);
+												var atribut = "";
+												var height = '';
+												var d = new Date();
+												var time = d.getTime();
+												nama_file = nama_file + "?" + time;
+
+												if (tipe_file == "pdf") {
+													atribut = "application/pdf";
+													// height = 'height="500px"';
+												} else {
+													atribut = "image/jpg";
+												}
+
+												var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+												$('.display_file_ktp_modal').html(html_text);
+
+												$('#link_file_ktp_modal').val(serverResponse['0']['link_file']);
+
+												// alert($('#link_file_ktp_modal').val());
+
+												pond_file_ktp_modal.removeFile();
+											}
+										}
+									}
+								}
+							});
+
+							//dokumen KK
+							if (res2['status']['filename_kk'] == "200") {
+								var nama_file = res2['data']['filename_kk'];
+								$('#link_file_kk_sebelum_modal').val(res2['database_record']['filename_kk']);
+								$('#link_file_kk_modal').val(res2['database_record']['filename_kk']);
+								var tipe_file = nama_file.substr(-3, 3);
+								var atribut = "";
+								var height = '';
+								var d = new Date();
+								var time = d.getTime();
+								nama_file = nama_file + "?" + time;
+
+								if (tipe_file == "pdf") {
+									atribut = "application/pdf";
+									// height = 'height="500px"';
+								} else {
+									atribut = "image/jpg";
+								}
+
+								var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+								$('.display_file_kk_modal').html(html_text);
+							} else {
+								$('#link_file_kk_sebelum_modal').val(res2['database_record']['filename_kk']);
+								var html_text = '<strong>' + res2['pesan']['filename_kk'] + '</strong>';
+								$('.display_file_kk_modal').html(html_text);
+							}
+
+							//append nip dan identifier ke objek filepond file kk
+							pond_file_kk_modal.setOptions({
+								server: {
+									process: {
+										url: '<?php echo base_url() ?>admin/Employees/upload_dokumen_request',
+										method: 'POST',
+										ondata: (formData) => {
+											formData.append('id_karyawan_request', id_karyawan_request);
+											formData.append('identifier', 'kk');
+											formData.append([csrfName], csrfHash);
+											return formData;
+										},
+										onload: (res) => {
+											// select the right value in the response here and return
+											// return res;
+											var serverResponse = jQuery.parseJSON(res);
+
+											//display file
+											if ((serverResponse['0']['link_file'] == null) || (serverResponse['0']['link_file'] == "")) {
+												//do nothing
+											} else {
+												var nama_file = '<?= base_url("uploads/document/kk/") ?>' + serverResponse['0']['link_file'];
+												var tipe_file = nama_file.slice(-3);
+												var atribut = "";
+												var height = '';
+												var d = new Date();
+												var time = d.getTime();
+												nama_file = nama_file + "?" + time;
+
+												if (tipe_file == "pdf") {
+													atribut = "application/pdf";
+													// height = 'height="500px"';
+												} else {
+													atribut = "image/jpg";
+												}
+
+												var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+												$('.display_file_kk_modal').html(html_text);
+
+												$('#link_file_kk_modal').val(serverResponse['0']['link_file']);
+
+												// alert($('#link_file_kk_modal').val());
+
+												pond_file_kk_modal.removeFile();
+											}
+										}
+									}
+								}
+							});
+
+							//dokumen CV
+							if (res2['status']['filename_cv'] == "200") {
+								var nama_file = res2['data']['filename_cv'];
+								$('#link_file_cv_sebelum_modal').val(res2['database_record']['filename_cv']);
+								$('#link_file_cv_modal').val(res2['database_record']['filename_cv']);
+								var tipe_file = nama_file.substr(-3, 3);
+								var atribut = "";
+								var height = '';
+								var d = new Date();
+								var time = d.getTime();
+								nama_file = nama_file + "?" + time;
+
+								if (tipe_file == "pdf") {
+									atribut = "application/pdf";
+									// height = 'height="500px"';
+								} else {
+									atribut = "image/jpg";
+								}
+
+								var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+								$('.display_file_cv_modal').html(html_text);
+							} else {
+								$('#link_file_cv_sebelum_modal').val(res2['database_record']['filename_cv']);
+								var html_text = '<strong>' + res2['pesan']['filename_cv'] + '</strong>';
+								$('.display_file_cv_modal').html(html_text);
+							}
+
+							//append nip dan identifier ke objek filepond file cv
+							pond_file_cv_modal.setOptions({
+								server: {
+									process: {
+										url: '<?php echo base_url() ?>admin/Employees/upload_dokumen_request',
+										method: 'POST',
+										ondata: (formData) => {
+											formData.append('id_karyawan_request', id_karyawan_request);
+											formData.append('identifier', 'cv');
+											formData.append([csrfName], csrfHash);
+											return formData;
+										},
+										onload: (res) => {
+											// select the right value in the response here and return
+											// return res;
+											var serverResponse = jQuery.parseJSON(res);
+
+											//display file
+											if ((serverResponse['0']['link_file'] == null) || (serverResponse['0']['link_file'] == "")) {
+												//do nothing
+											} else {
+												var nama_file = '<?= base_url("uploads/document/cv/") ?>' + serverResponse['0']['link_file'];
+												var tipe_file = nama_file.slice(-3);
+												var atribut = "";
+												var height = '';
+												var d = new Date();
+												var time = d.getTime();
+												nama_file = nama_file + "?" + time;
+
+												if (tipe_file == "pdf") {
+													atribut = "application/pdf";
+													// height = 'height="500px"';
+												} else {
+													atribut = "image/jpg";
+												}
+
+												var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+												$('.display_file_cv_modal').html(html_text);
+
+												$('#link_file_cv_modal').val(serverResponse['0']['link_file']);
+
+												// alert($('#link_file_cv_modal').val());
+
+												pond_file_cv_modal.removeFile();
+											}
+										}
+									}
+								}
+							});
+
+							//dokumen SKCK
+							if (res2['status']['filename_skck'] == "200") {
+								var nama_file = res2['data']['filename_skck'];
+								$('#link_file_skck_sebelum_modal').val(res2['database_record']['filename_skck']);
+								$('#link_file_skck_modal').val(res2['database_record']['filename_skck']);
+								var tipe_file = nama_file.substr(-3, 3);
+								var atribut = "";
+								var height = '';
+								var d = new Date();
+								var time = d.getTime();
+								nama_file = nama_file + "?" + time;
+
+								if (tipe_file == "pdf") {
+									atribut = "application/pdf";
+									// height = 'height="500px"';
+								} else {
+									atribut = "image/jpg";
+								}
+
+								var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+								$('.display_file_skck_modal').html(html_text);
+							} else {
+								$('#link_file_skck_sebelum_modal').val(res2['database_record']['filename_skck']);
+								var html_text = '<strong>' + res2['pesan']['filename_skck'] + '</strong>';
+								$('.display_file_skck_modal').html(html_text);
+							}
+
+							//append nip dan identifier ke objek filepond file skck
+							pond_file_skck_modal.setOptions({
+								server: {
+									process: {
+										url: '<?php echo base_url() ?>admin/Employees/upload_dokumen_request',
+										method: 'POST',
+										ondata: (formData) => {
+											formData.append('id_karyawan_request', id_karyawan_request);
+											formData.append('identifier', 'skck');
+											formData.append([csrfName], csrfHash);
+											return formData;
+										},
+										onload: (res) => {
+											// select the right value in the response here and return
+											// return res;
+											var serverResponse = jQuery.parseJSON(res);
+
+											//display file
+											if ((serverResponse['0']['link_file'] == null) || (serverResponse['0']['link_file'] == "")) {
+												//do nothing
+											} else {
+												var nama_file = '<?= base_url("uploads/document/skck/") ?>' + serverResponse['0']['link_file'];
+												var tipe_file = nama_file.slice(-3);
+												var atribut = "";
+												var height = '';
+												var d = new Date();
+												var time = d.getTime();
+												nama_file = nama_file + "?" + time;
+
+												if (tipe_file == "pdf") {
+													atribut = "application/pdf";
+													// height = 'height="500px"';
+												} else {
+													atribut = "image/jpg";
+												}
+
+												var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+												$('.display_file_skck_modal').html(html_text);
+
+												$('#link_file_skck_modal').val(serverResponse['0']['link_file']);
+
+												// alert($('#link_file_skck_modal').val());
+
+												pond_file_skck_modal.removeFile();
+											}
+										}
+									}
+								}
+							});
+
+							//dokumen Ijazah
+							if (res2['status']['filename_isd'] == "200") {
+								var nama_file = res2['data']['filename_isd'];
+								$('#link_file_ijazah_sebelum_modal').val(res2['database_record']['filename_isd']);
+								$('#link_file_ijazah_modal').val(res2['database_record']['filename_isd']);
+								var tipe_file = nama_file.substr(-3, 3);
+								var atribut = "";
+								var height = '';
+								var d = new Date();
+								var time = d.getTime();
+								nama_file = nama_file + "?" + time;
+
+								if (tipe_file == "pdf") {
+									atribut = "application/pdf";
+									// height = 'height="500px"';
+								} else {
+									atribut = "image/jpg";
+								}
+
+								var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+								$('.display_file_ijazah_modal').html(html_text);
+							} else {
+								$('#link_file_ijazah_sebelum_modal').val(res2['database_record']['filename_isd']);
+								var html_text = '<strong>' + res2['pesan']['filename_isd'] + '</strong>';
+								$('.display_file_ijazah_modal').html(html_text);
+							}
+
+							//append nip dan identifier ke objek filepond file ijazah
+							pond_file_ijazah_modal.setOptions({
+								server: {
+									process: {
+										url: '<?php echo base_url() ?>admin/Employees/upload_dokumen_request',
+										method: 'POST',
+										ondata: (formData) => {
+											formData.append('id_karyawan_request', id_karyawan_request);
+											formData.append('identifier', 'ijazah');
+											formData.append([csrfName], csrfHash);
+											return formData;
+										},
+										onload: (res) => {
+											// select the right value in the response here and return
+											// return res;
+											var serverResponse = jQuery.parseJSON(res);
+
+											//display file
+											if ((serverResponse['0']['link_file'] == null) || (serverResponse['0']['link_file'] == "")) {
+												//do nothing
+											} else {
+												var nama_file = '<?= base_url("uploads/document/ijazah/") ?>' + serverResponse['0']['link_file'];
+												var tipe_file = nama_file.slice(-3);
+												var atribut = "";
+												var height = '';
+												var d = new Date();
+												var time = d.getTime();
+												nama_file = nama_file + "?" + time;
+
+												if (tipe_file == "pdf") {
+													atribut = "application/pdf";
+													// height = 'height="500px"';
+												} else {
+													atribut = "image/jpg";
+												}
+
+												var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+												$('.display_file_ijazah_modal').html(html_text);
+
+												$('#link_file_ijazah_modal').val(serverResponse['0']['link_file']);
+
+												// alert($('#link_file_ijazah_modal').val());
+
+												pond_file_ijazah_modal.removeFile();
+											}
+										}
+									}
+								}
+							});
+
+							//assign button verifikasi sesuai status verifikasi
+							//file KTP
+							if (res['data']['dokumen_ktp_validation'] == "0") {
+								//button
+								$('#button_verify_file_ktp_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'dokumen_ktp\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+								// if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+								// 	$('#button_unverify_file_ktp_modal').html('<button onclick="save_verifikasi(\'' + res['data']['employee_id'] + '\',\'dokumen_ktp\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								// } else {
+								$('#button_unverify_file_ktp_modal').html('');
+								// }
+
+								//icon
+								$('.icon-verify-file-ktp').html(res['data']['validate_dokumen_ktp']);
+
+								//attribut input
+								$('#file_ktp_modal').prop("hidden", false);
+							} else {
+								//button
+								$('#button_verify_file_ktp_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									// alert("button ada isinya");
+									$('#button_unverify_file_ktp_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'dokumen_ktp\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									// alert("button ngga ada isinya");
+									$('#button_unverify_file_ktp_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-file-ktp').html(res['data']['validate_dokumen_ktp']);
+
+								//attribut input
+								$('#file_ktp_modal').prop("hidden", true);
+							}
+							//NIK
+							if (res['data']['nik_validation'] == "0") {
+								//button
+								$('#button_verify_nik_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'nik\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_nik_modal').html('');
+
+								//icon
+								$('.icon-verify-nik').html(res['data']['validate_nik']);
+
+								//attribut input
+								$('#nik_modal_verifikasi').prop('readonly', false);
+							} else {
+								//button
+								$('#button_verify_nik_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_nik_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'nik\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_nik_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-nik').html(res['data']['validate_nik']);
+
+								//attribut input
+								$('#nik_modal_verifikasi').prop('readonly', true);
+							}
+							//NAMA
+							if (res['data']['nama_validation'] == "0") {
+								//button
+								$('#button_verify_nama_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'nama\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_nama_modal').html('');
+
+								//icon
+								$('.icon-verify-nama').html(res['data']['validate_nama']);
+
+								//attribut input
+								$('#nama_modal').prop('readonly', false);
+							} else {
+								//button
+								$('#button_verify_nama_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_nama_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'nama\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_nama_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-nama').html(res['data']['validate_nama']);
+
+								//attribut input
+								$('#nama_modal').prop('readonly', true);
+							}
+							//FILE KK
+							if (res['data']['dokumen_kk_validation'] == "0") {
+								//button
+								$('#button_verify_file_kk_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'dokumen_kk\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_file_kk_modal').html('');
+
+								//icon
+								$('.icon-verify-file-kk').html(res['data']['validate_dokumen_kk']);
+
+								//attribut input
+								$('#file_kk_modal').prop("hidden", false);
+							} else {
+								//button
+								$('#button_verify_file_kk_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_file_kk_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'dokumen_kk\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_file_kk_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-file-kk').html(res['data']['validate_dokumen_kk']);
+
+								//attribut input
+								$('#file_kk_modal').prop("hidden", true);
+							}
+							//KK
+							if (res['data']['kk_validation'] == "0") {
+								//button
+								$('#button_verify_kk_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'kk\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_kk_modal').html('');
+
+								//icon
+								$('.icon-verify-kk').html(res['data']['validate_kk']);
+
+								//attribut input
+								$('#kk_modal').prop('readonly', false);
+							} else {
+								//button
+								$('#button_verify_kk_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_kk_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'kk\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_kk_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-kk').html(res['data']['validate_kk']);
+
+								//attribut input
+								$('#kk_modal').prop('readonly', true);
+							}
+							//BANK
+							if (res['data']['bank_validation'] == "0") {
+								//button
+								$('#button_verify_bank_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'bank\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_bank_modal').html('');
+
+								//icon
+								$('.icon-verify-bank').html(res['data']['validate_bank']);
+
+								//attribut input
+								$('#bank_modal').prop('disabled', false);
+							} else {
+								//button
+								$('#button_verify_bank_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_bank_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'bank\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_bank_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-bank').html(res['data']['validate_bank']);
+
+								//attribut input
+								$('#bank_modal').prop('disabled', true);
+							}
+							//NOMOR REKENING
+							if (res['data']['norek_validation'] == "0") {
+								//button
+								$('#button_verify_norek_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'norek\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_norek_modal').html('');
+
+								//icon
+								$('.icon-verify-norek').html(res['data']['validate_norek']);
+
+								//attribut input
+								$('#rekening_modal').prop('readonly', false);
+							} else {
+								//button
+								$('#button_verify_norek_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_norek_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'norek\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_norek_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-norek').html(res['data']['validate_norek']);
+
+								//attribut input
+								$('#rekening_modal').prop('readonly', true);
+							}
+							//PEMILIK REKENING
+							if (res['data']['pemilik_rekening_validation'] == "0") {
+								//button
+								$('#button_verify_pemilik_rek_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'pemilik_rekening\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_pemilik_rek_modal').html('');
+
+								//icon
+								$('.icon-verify-pemilik-rek').html(res['data']['validate_pemilik_rekening']);
+
+								//attribut input
+								$('#pemilik_rekening_modal').prop('readonly', false);
+							} else {
+								//button
+								$('#button_verify_pemilik_rek_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_pemilik_rek_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'pemilik_rekening\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_pemilik_rek_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-pemilik-rek').html(res['data']['validate_pemilik_rekening']);
+
+								//attribut input
+								$('#pemilik_rekening_modal').prop('readonly', true);
+							}
+							//FILE CV
+							if (res['data']['cv_validation'] == "0") {
+								//button
+								$('#button_verify_file_cv_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'cv\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_file_cv_modal').html('');
+
+								//icon
+								$('.icon-verify-file-cv').html(res['data']['validate_cv']);
+
+								//attribut input
+								$('#file_cv_modal').prop("hidden", false);
+							} else {
+								//button
+								$('#button_verify_file_cv_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_file_cv_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'cv\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_file_cv_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-file-cv').html(res['data']['validate_cv']);
+
+								//attribut input
+								$('#file_cv_modal').prop("hidden", true);
+							}
+							//FILE SKCK
+							if (res['data']['skck_validation'] == "0") {
+								//button
+								$('#button_verify_file_skck_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'skck\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_file_skck_modal').html('');
+
+								//icon
+								$('.icon-verify-file-skck').html(res['data']['validate_skck']);
+
+								//attribut input
+								$('#file_skck_modal').prop("hidden", false);
+							} else {
+								//button
+								$('#button_verify_file_skck_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_file_skck_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'skck\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_file_skck_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-file-skck').html(res['data']['validate_skck']);
+
+								//attribut input
+								$('#file_skck_modal').prop("hidden", true);
+							}
+							//FILE IJAZAH
+							if (res['data']['ijazah_validation'] == "0") {
+								//button
+								$('#button_verify_file_ijazah_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'ijazah\',\'' + res['data']['verification_id'] + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+								$('#button_unverify_file_ijazah_modal').html('');
+
+								//icon
+								$('.icon-verify-file-ijazah').html(res['data']['validate_ijazah']);
+
+								//attribut input
+								$('#file_ijazah_modal').prop("hidden", false);
+							} else {
+								//button
+								$('#button_verify_file_ijazah_modal').html('');
+								if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+									$('#button_unverify_file_ijazah_modal').html('<button onclick="save_verifikasi(\'' + res['data']['secid'] + '\',\'ijazah\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+								} else {
+									$('#button_unverify_file_ijazah_modal').html('');
+								}
+
+								//icon
+								$('.icon-verify-file-ijazah').html(res['data']['validate_ijazah']);
+
+								//attribut input
+								$('#file_ijazah_modal').prop("hidden", true);
+							}
+
+							//display isi modal
+							$('.isi-modal-verifikasi').attr("hidden", false);
+							$('.info-modal-verifikasi').attr("hidden", true);
+						},
+						error: function(xhr, status, error) {
+							var html_text = '<strong>ERROR LOAD FILE</strong>';
+							$('.display_file_ktp_modal').html(html_text);
+							$('.display_file_kk_modal').html(html_text);
+							$('.display_file_cv_modal').html(html_text);
+							$('.display_file_skck_modal').html(html_text);
+							$('.display_file_ijazah_modal').html(html_text);
+
+							//display isi modal
+							$('.isi-modal-verifikasi').attr("hidden", false);
+							$('.info-modal-verifikasi').attr("hidden", true);
+						}
+					});
+				} else {
+					html_text = res['pesan'];
+					$('.info-modal-verifikasi').html(html_text);
+					$('.isi-modal-verifikasi').attr("hidden", true);
+					$('.info-modal-verifikasi').attr("hidden", false);
+				}
+			},
+			error: function(xhr, status, error) {
+				html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+				html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+				// html_text = "Gagal fetch data. Kode error: " + xhr.status;
+				$('.info-modal-verifikasi').html(html_text); //coba pake iframe
+				$('.isi-modal-verifikasi').attr("hidden", true);
+				$('.info-modal-verifikasi').attr("hidden", false);
+			}
+		});
+
 	};
 </script>
 
 <!-- Tombol Verifikasi Data NIK -->
 <script type="text/javascript">
-	document.getElementById("button_verify_nik_modal").onclick = function(e) {
-		e.preventDefault();
+	function save_verifikasi(secid, jenis_dokumen, verification_id, status) {
+		// e.preventDefault();
+		// alert("masuk verify nik");base_url
+		// alert("Coming Soon." + "\nVerification id: " + verification_id + "\nJenis Dokumen: " + jenis_dokumen);
 
-		var nik = $("#nik_modal").val();
-		var nik_lama = "<?php echo $ktp_no; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "nik";
-		var status = "1";
+		var base_url_cis = "<?php echo base_url(); ?>";
+		var user_role = <?php echo $user[0]->user_role_id; ?>;
+		var verified_by = "<?php echo $user[0]->first_name; ?>";
+		var verified_by_id = "<?php echo $session['user_id']; ?>";
 
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: nik_lama,
-				nilai_sesudah: nik,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				nomor_ktp.setAttribute("readonly", "readonly");
-				nik_modal.setAttribute("readonly", "readonly");
+		if (jenis_dokumen == "dokumen_ktp") {
+			var nilai_sebelum = $("#link_file_ktp_sebelum_modal").val();
+			var nilai_sesudah = $("#link_file_ktp_modal").val();
+		} else if (jenis_dokumen == "nik") {
+			var nilai_sebelum = $("#nik_modal_sebelum_verifikasi").val();
+			var nilai_sesudah = $("#nik_modal_verifikasi").val();
+		} else if (jenis_dokumen == "nama") {
+			var nilai_sebelum = $("#nama_modal_sebelum").val();
+			var nilai_sesudah = $("#nama_modal").val();
+		} else if (jenis_dokumen == "dokumen_kk") {
+			var nilai_sebelum = $("#link_file_kk_sebelum_modal").val();
+			var nilai_sesudah = $("#link_file_kk_modal").val();
+		} else if (jenis_dokumen == "kk") {
+			var nilai_sebelum = $("#kk_modal_sebelum").val();
+			var nilai_sesudah = $("#kk_modal").val();
+		} else if (jenis_dokumen == "bank") {
+			var nilai_sebelum = $("#bank_modal_sebelum").val();
+			var nilai_sesudah = $("#bank_modal").val();
+		} else if (jenis_dokumen == "norek") {
+			var nilai_sebelum = $("#rekening_modal_sebelum").val();
+			var nilai_sesudah = $("#rekening_modal").val();
+		} else if (jenis_dokumen == "pemilik_rekening") {
+			var nilai_sebelum = $("#pemilik_rekening_modal_sebelum").val();
+			var nilai_sesudah = $("#pemilik_rekening_modal").val();
+		} else if (jenis_dokumen == "cv") {
+			var nilai_sebelum = $("#link_file_cv_sebelum_modal").val();
+			var nilai_sesudah = $("#link_file_cv_modal").val();
+		} else if (jenis_dokumen == "skck") {
+			var nilai_sebelum = $("#link_file_skck_sebelum_modal").val();
+			var nilai_sesudah = $("#link_file_skck_modal").val();
+		} else if (jenis_dokumen == "ijazah") {
+			var nilai_sebelum = $("#link_file_ijazah_sebelum_modal").val();
+			var nilai_sesudah = $("#link_file_ijazah_modal").val();
+		}
 
-				document.getElementById("nomor_ktp").value = nik;
-
-				$('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-				alert("Berhasil melakukan verifikasi NIK.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi NIK.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Cancel Verifikasi Data NIK -->
-<script type="text/javascript">
-	document.getElementById("button_unverify_nik_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var nik = $("#nik_modal").val();
-		var nik_lama = "<?php echo $ktp_no; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "nik";
-		var status = "0";
+		//debug
+		// alert("NIP: " + nip + "\nVerification id: " + verification_id + "\nJenis Dokumen: " + jenis_dokumen + "\nNilai sebelum: " + nilai_sebelum + "\nNilai Sesudah: " + nilai_sesudah + "\nStatus: " + status + "\nverified_by: " + verified_by + "\nverified_by_id: " + verified_by_id);
 
 		// AJAX request
 		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
+			url: '<?= base_url() ?>admin/Employees/valiadsi_employee_request/',
 			method: 'post',
 			data: {
 				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: nik_lama,
-				nilai_sesudah: nik,
+				secid: secid,
+				id_employee_request: verification_id,
+				kolom: jenis_dokumen,
+				nilai_sebelum: nilai_sebelum,
+				nilai_sesudah: nilai_sesudah,
 				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
+				verified_by: verified_by,
+				verified_by_id: verified_by_id,
+			},
+			beforeSend: function() {
+				$('.info-modal-verifikasi').attr("hidden", false);
+				$('.isi-modal-verifikasi').attr("hidden", true);
+				$('.info-modal-verifikasi').html(loading_html_text);
 			},
 			success: function(response) {
-				document.getElementById("nomor_ktp").removeAttribute("readonly");
-				document.getElementById("nik_modal").removeAttribute("readonly");
+				var res = jQuery.parseJSON(response);
 
-				$('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+				// alert("NIP: " + nip + "\nVerification id: " + verification_id + "\nJenis Dokumen: " + jenis_dokumen + "\nNilai sebelum: " + nilai_sebelum + "\nNilai Sesudah: " + nilai_sesudah + "\nStatus: " + status + "\nverified_by: " + verified_by + "\nverified_by_id: " + verified_by_id);
 
-				alert("Berhasil melakukan cancel verifikasi NIK.\nNIK Lama : " + nik_lama + "\nNik Baru : " + nik);
+				if (jenis_dokumen == "dokumen_ktp") {
+					//file KTP
+					if (status == "0") {
+						//button
+						$('#button_verify_file_ktp_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'dokumen_ktp\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+						// if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+						// 	$('#button_unverify_file_ktp_modal').html('<button onclick="save_verifikasi(\'' + res['data']['employee_id'] + '\',\'dokumen_ktp\',\'' + res['data']['verification_id'] + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						// } else {
+						$('#button_unverify_file_ktp_modal').html('');
+						// }
+
+						//icon
+						$('.icon-verify-file-ktp').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_ktp_modal').prop("hidden", false);
+					} else {
+						//button
+						$('#button_verify_file_ktp_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							// alert("button ada isinya");
+							$('#button_unverify_file_ktp_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'dokumen_ktp\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							// alert("button ngga ada isinya");
+							$('#button_unverify_file_ktp_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-file-ktp').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_ktp_modal').prop("hidden", true);
+					}
+				} else if (jenis_dokumen == "nik") {
+					//NIK
+					if (status == "0") {
+						//button
+						$('#button_verify_nik_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'nik\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_nik_modal').html('');
+
+						//icon
+						$('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#nik_modal_verifikasi').prop('readonly', false);
+					} else {
+						//button
+						$('#button_verify_nik_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_nik_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'nik\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_nik_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-nik').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#nik_modal_verifikasi').prop('readonly', true);
+					}
+				} else if (jenis_dokumen == "nama") {
+					//NAMA
+					if (status == "0") {
+						//button
+						$('#button_verify_nama_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'nama\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_nama_modal').html('');
+
+						//icon
+						$('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#nama_modal').prop('readonly', false);
+					} else {
+						//button
+						$('#button_verify_nama_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_nama_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'nama\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_nama_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#nama_modal').prop('readonly', true);
+					}
+				} else if (jenis_dokumen == "dokumen_kk") {
+					//FILE KK
+					if (status == "0") {
+						//button
+						$('#button_verify_file_kk_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'dokumen_kk\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_file_kk_modal').html('');
+
+						//icon
+						$('.icon-verify-file-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_kk_modal').prop("hidden", false);
+					} else {
+						//button
+						$('#button_verify_file_kk_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_file_kk_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'dokumen_kk\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_file_kk_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-file-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_kk_modal').prop("hidden", true);
+					}
+				} else if (jenis_dokumen == "kk") {
+					//KK
+					if (status == "0") {
+						//button
+						$('#button_verify_kk_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'kk\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_kk_modal').html('');
+
+						//icon
+						$('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#kk_modal').prop('readonly', false);
+					} else {
+						//button
+						$('#button_verify_kk_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_kk_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'kk\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_kk_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#kk_modal').prop('readonly', true);
+					}
+				} else if (jenis_dokumen == "bank") {
+					//BANK
+					if (status == "0") {
+						//button
+						$('#button_verify_bank_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'bank\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_bank_modal').html('');
+
+						//icon
+						$('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#bank_modal').prop('disabled', false);
+					} else {
+						//button
+						$('#button_verify_bank_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_bank_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'bank\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_bank_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#bank_modal').prop('disabled', true);
+					}
+				} else if (jenis_dokumen == "norek") {
+					//NOMOR REKENING
+					if (status == "0") {
+						//button
+						$('#button_verify_norek_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'norek\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_norek_modal').html('');
+
+						//icon
+						$('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#rekening_modal').prop('readonly', false);
+					} else {
+						//button
+						$('#button_verify_norek_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_norek_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'norek\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_norek_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#rekening_modal').prop('readonly', true);
+					}
+				} else if (jenis_dokumen == "pemilik_rekening") {
+					//PEMILIK REKENING
+					if (status == "0") {
+						//button
+						$('#button_verify_pemilik_rek_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'pemilik_rekening\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_pemilik_rek_modal').html('');
+
+						//icon
+						$('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#pemilik_rekening_modal').prop('readonly', false);
+					} else {
+						//button
+						$('#button_verify_pemilik_rek_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_pemilik_rek_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'pemilik_rekening\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_pemilik_rek_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#pemilik_rekening_modal').prop('readonly', true);
+					}
+				} else if (jenis_dokumen == "cv") {
+					//FILE CV
+					if (status == "0") {
+						//button
+						$('#button_verify_file_cv_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'cv\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_file_cv_modal').html('');
+
+						//icon
+						$('.icon-verify-file-cv').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_cv_modal').prop("hidden", false);
+					} else {
+						//button
+						$('#button_verify_file_cv_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_file_cv_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'cv\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_file_cv_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-file-cv').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_cv_modal').prop("hidden", true);
+					}
+				} else if (jenis_dokumen == "skck") {
+					//FILE SKCK
+					if (status == "0") {
+						//button
+						$('#button_verify_file_skck_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'skck\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_file_skck_modal').html('');
+
+						//icon
+						$('.icon-verify-file-skck').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_skck_modal').prop("hidden", false);
+					} else {
+						//button
+						$('#button_verify_file_skck_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_file_skck_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'skck\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_file_skck_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-file-skck').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_skck_modal').prop("hidden", true);
+					}
+				} else if (jenis_dokumen == "ijazah") {
+					//FILE IJAZAH
+					if (status == "0") {
+						//button
+						$('#button_verify_file_ijazah_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'ijazah\',\'' + verification_id + '\',\'1\')" class="btn btn-success mr-1 my-1" data-style="expand-right">Verifikasi</button>');
+
+						$('#button_unverify_file_ijazah_modal').html('');
+
+						//icon
+						$('.icon-verify-file-ijazah').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_ijazah_modal').prop("hidden", false);
+					} else {
+						//button
+						$('#button_verify_file_ijazah_modal').html('');
+						if ((user_role == "1") || (user_role == "11") || (user_role == "22") || (user_role == "3")) {
+							$('#button_unverify_file_ijazah_modal').html('<button onclick="save_verifikasi(\'' + secid + '\',\'ijazah\',\'' + verification_id + '\',\'0\')" class="btn btn-danger mr-1 my-1" data-style="expand-right">Cancel</button>');
+						} else {
+							$('#button_unverify_file_ijazah_modal').html('');
+						}
+
+						//icon
+						$('.icon-verify-file-ijazah').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
+
+						//attribut input
+						$('#file_ijazah_modal').prop("hidden", true);
+					}
+				}
+
+				//Display dokumen
+				var id_karyawan_request = "<?php print($secid); ?>";
+				//isi dokumen
+				$.ajax({
+					url: '<?= base_url() ?>admin/Employees/get_data_dokumen_pribadi_request/',
+					method: 'post',
+					data: {
+						[csrfName]: csrfHash,
+						id_karyawan_request: id_karyawan_request,
+					},
+					beforeSend: function() {
+						$('.display_file_ktp_modal').html(loading_html_text);
+						$('.display_file_kk_modal').html(loading_html_text);
+						$('.display_file_cv_modal').html(loading_html_text);
+						$('.display_file_skck_modal').html(loading_html_text);
+						$('.display_file_ijazah_modal').html(loading_html_text);
+						$('.display_file_npwp_modal').html(loading_html_text);
+					},
+					success: function(response) {
+
+						var res2 = jQuery.parseJSON(response);
+
+						//dokumen KTP
+						if (res2['status']['filename_ktp'] == "200") {
+							var nama_file = res2['data']['filename_ktp'];
+							var tipe_file = nama_file.substr(-3, 3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								// height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('.display_file_ktp_modal').html(html_text);
+						} else {
+							var html_text = '<strong>' + res2['pesan']['filename_ktp'] + '</strong>';
+							$('.display_file_ktp_modal').html(html_text);
+						}
+
+						//dokumen KK
+						if (res2['status']['filename_kk'] == "200") {
+							var nama_file = res2['data']['filename_kk'];
+							var tipe_file = nama_file.substr(-3, 3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								// height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('.display_file_kk_modal').html(html_text);
+						} else {
+							var html_text = '<strong>' + res2['pesan']['filename_kk'] + '</strong>';
+							$('.display_file_kk_modal').html(html_text);
+						}
+
+						//dokumen CV
+						if (res2['status']['filename_cv'] == "200") {
+							var nama_file = res2['data']['filename_cv'];
+							var tipe_file = nama_file.substr(-3, 3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								// height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('.display_file_cv_modal').html(html_text);
+						} else {
+							var html_text = '<strong>' + res2['pesan']['filename_cv'] + '</strong>';
+							$('.display_file_cv_modal').html(html_text);
+						}
+
+						//dokumen SKCK
+						if (res2['status']['filename_skck'] == "200") {
+							var nama_file = res2['data']['filename_skck'];
+							var tipe_file = nama_file.substr(-3, 3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								// height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('.display_file_skck_modal').html(html_text);
+						} else {
+							var html_text = '<strong>' + res2['pesan']['filename_skck'] + '</strong>';
+							$('.display_file_skck_modal').html(html_text);
+						}
+
+						//dokumen Ijazah
+						if (res2['status']['filename_isd'] == "200") {
+							var nama_file = res2['data']['filename_isd'];
+							var tipe_file = nama_file.substr(-3, 3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								// height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('.display_file_ijazah_modal').html(html_text);
+						} else {
+							var html_text = '<strong>' + res2['pesan']['filename_isd'] + '</strong>';
+							$('.display_file_ijazah_modal').html(html_text);
+						}
+
+						//dokumen NPWP
+						if (res2['status']['filename_npwp'] == "200") {
+							var nama_file = res2['data']['filename_npwp'];
+							var tipe_file = nama_file.substr(-3, 3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								// height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('.display_file_npwp_modal').html(html_text);
+						} else {
+							var html_text = '<strong>' + res2['pesan']['filename_npwp'] + '</strong>';
+							$('.display_file_npwp_modal').html(html_text);
+						}
+
+						alert("Berhasil melakukan verifikasi");
+						
+						//display isi modal
+						$('.isi-modal-verifikasi').attr("hidden", false);
+						$('.info-modal-verifikasi').attr("hidden", true);
+					},
+					error: function(xhr, status, error) {
+						var html_text = '<strong>ERROR LOAD FILE</strong>';
+						$('.display_file_ktp_modal').html(html_text);
+						$('.display_file_kk_modal').html(html_text);
+						$('.display_file_cv_modal').html(html_text);
+						$('.display_file_skck_modal').html(html_text);
+						$('.display_file_ijazah_modal').html(html_text);
+						$('.display_file_npwp_modal').html(html_text);
+
+						//display isi modal
+						$('.isi-modal-verifikasi').attr("hidden", false);
+						$('.info-modal-verifikasi').attr("hidden", true);
+					}
+				});
 			},
 			error: function(xhr, status, error) {
 				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan cancel verifikasi NIK.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Verifikasi Data KK -->
-<script type="text/javascript">
-	document.getElementById("button_verify_kk_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var kk = $("#kk_modal").val();
-		var kk_lama = "<?php echo $kk_no; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "kk";
-		var status = "1";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: kk_lama,
-				nilai_sesudah: kk,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				nomor_kk.setAttribute("readonly", "readonly");
-				kk_modal.setAttribute("readonly", "readonly");
-
-				document.getElementById("nomor_kk").value = kk;
-
-				$('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-				alert("Berhasil melakukan verifikasi KK.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi KK.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Cancel Verifikasi Data KK -->
-<script type="text/javascript">
-	document.getElementById("button_unverify_kk_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var kk = $("#kk_modal").val();
-		var kk_lama = "<?php echo $kk_no; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "kk";
-		var status = "0";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: kk_lama,
-				nilai_sesudah: kk,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				document.getElementById("nomor_kk").removeAttribute("readonly");
-				document.getElementById("kk_modal").removeAttribute("readonly");
-
-				$('.icon-verify-kk').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-				alert("Berhasil melakukan cancel verifikasi KK.\nKK Lama : " + kk_lama + "\nKK Baru : " + kk);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi KK.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Verifikasi Data Nama Lengkap -->
-<script type="text/javascript">
-	document.getElementById("button_verify_nama_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var nama = $("#nama_modal").val();
-		var nama_lama = "<?php echo $fullname; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "nama";
-		var status = "1";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: nama_lama,
-				nilai_sesudah: nama,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				fullname.setAttribute("readonly", "readonly");
-				nama_modal.setAttribute("readonly", "readonly");
-
-				document.getElementById("fullname").value = nama;
-
-				$('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan verifikasi Nama.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Nama.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Cancel Verifikasi Data Nama Lengkap -->
-<script type="text/javascript">
-	document.getElementById("button_unverify_nama_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var nama = $("#nama_modal").val();
-		var nama_lama = "<?php echo $fullname; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "nama";
-		var status = "0";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: nama_lama,
-				nilai_sesudah: nama,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				document.getElementById("fullname").removeAttribute("readonly");
-				document.getElementById("nama_modal").removeAttribute("readonly");
-
-				$('.icon-verify-nama').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan cancel verifikasi Nama.\nNama Lama : " + nama_lama + "\nNama Baru : " + nama);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Nama.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Verifikasi Data Bank -->
-<script type="text/javascript">
-	document.getElementById("button_verify_bank_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var bank = $("#bank_modal").val();
-		var bank_lama = "<?php echo $bank_id; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "bank";
-		var status = "1";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: bank_lama,
-				nilai_sesudah: bank,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				$("#bank_name2").val(bank).change();
-				document.getElementById("bank_name").value = bank;
-
-				bank_modal.setAttribute("disabled", "disabled");
-				bank_name2.setAttribute("disabled", "disabled");
-
-				$('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan verifikasi Bank.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Bank.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Cancel Verifikasi Data Bank -->
-<script type="text/javascript">
-	document.getElementById("button_unverify_bank_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var bank = $("#bank_modal").val();
-		var bank_lama = "<?php echo $bank_id; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "bank";
-		var status = "0";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: bank_lama,
-				nilai_sesudah: bank,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				document.getElementById("bank_modal").removeAttribute("disabled");
-				document.getElementById("bank_name2").removeAttribute("disabled");
-
-				$('.icon-verify-bank').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan cancel verifikasi Bank.\nBank Lama : " + bank_lama + "\nBank Baru : " + bank);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Bank.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Verifikasi Data Nomor Rekening -->
-<script type="text/javascript">
-	document.getElementById("button_verify_norek_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var norek = $("#rekening_modal").val();
-		var norek_lama = "<?php echo $nomor_rek; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "norek";
-		var status = "1";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: norek_lama,
-				nilai_sesudah: norek,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				no_rek.setAttribute("readonly", "readonly");
-				rekening_modal.setAttribute("readonly", "readonly");
-
-				document.getElementById("no_rek").value = norek;
-
-				$('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan verifikasi Nomor Rekening.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Nomor Rekening.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Cancel Verifikasi Data Nomor Rekening -->
-<script type="text/javascript">
-	document.getElementById("button_unverify_norek_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var norek = $("#rekening_modal").val();
-		var norek_lama = "<?php echo $nomor_rek; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "norek";
-		var status = "0";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: norek_lama,
-				nilai_sesudah: norek,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				document.getElementById("no_rek").removeAttribute("readonly");
-				document.getElementById("rekening_modal").removeAttribute("readonly");
-
-				$('.icon-verify-norek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan cancel verifikasi Nomor Rekening.\nNomor Rekening Lama : " + norek_lama + "\nNomor Rekening Baru : " + norek);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Nomor Rekening.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Verifikasi Data Pemilik Rekening -->
-<script type="text/javascript">
-	document.getElementById("button_verify_pemilik_rek_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var pemilik_rek = $("#pemilik_rekening_modal").val();
-		var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "pemilik_rekening";
-		var status = "1";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: pemilik_rek_lama,
-				nilai_sesudah: pemilik_rek,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				pemilik_rekening.setAttribute("readonly", "readonly");
-				pemilik_rekening_modal.setAttribute("readonly", "readonly");
-
-				document.getElementById("pemilik_rekening").value = pemilik_rek;
-
-				$('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan verifikasi Pemilik Rekening.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Pemilik Rekening.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text)
-			}
-		});
-
-	};
-</script>
-
-<!-- Tombol Cancel Verifikasi Data Pemilik Rekening -->
-<script type="text/javascript">
-	document.getElementById("button_unverify_pemilik_rek_modal").onclick = function(e) {
-		e.preventDefault();
-
-		var pemilik_rek = $("#pemilik_rekening_modal").val();
-		var pemilik_rek_lama = "<?php echo $pemilik_rek; ?>";
-		var id_employee = "<?php echo $secid; ?>";
-		var nama_kolom = "pemilik_rekening";
-		var status = "0";
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Employee_request_cancelled/valiadsi_employee_request/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id_employee_request: id_employee,
-				kolom: nama_kolom,
-				nilai_sebelum: pemilik_rek_lama,
-				nilai_sesudah: pemilik_rek,
-				status: status,
-				verified_by: user_name,
-				verified_by_id: user_id,
-			},
-			success: function(response) {
-				document.getElementById("pemilik_rekening").removeAttribute("readonly");
-				document.getElementById("pemilik_rekening_modal").removeAttribute("readonly");
-
-				$('.icon-verify-pemilik-rek').html("<img src='<?php echo base_url('/assets/icon/not-verified.png'); ?>' width='20'>");
-
-				alert("Berhasil melakukan cancel verifikasi Pemilik Rekening.\nPemilik Rekening Lama : " + pemilik_rek_lama + "\nPemilik Rekening Baru : " + pemilik_rek);
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan verifikasi Pemilik Rekening.\n";
+				html_text = "Gagal melakukan verifikasi.\n";
 				html_text = html_text + "Error :\n";
 				html_text = html_text + xhr.responseText;
 				alert(html_text)
