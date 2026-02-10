@@ -1214,11 +1214,14 @@ class Traxes_model extends CI_Model
 			$dbtraxes->select('xin_sku_material.barcode');
 			$dbtraxes->select('xin_sku_material.nama_material');
 			$dbtraxes->select('xin_sku_material.brand');
-			$dbtraxes->select('xin_sku_material.poin');
+			$dbtraxes->select('xin_sku_material.material_type');
+			$dbtraxes->select('xin_sku_material.volume');
+			$dbtraxes->select('xin_sku_material.uom');
 			$dbtraxes->select('xin_mobile_order.qty');
 			$dbtraxes->select('xin_mobile_order.price');
 			$dbtraxes->select('xin_mobile_order.total');
 			$dbtraxes->select('xin_mobile_order.order_date');
+			$dbtraxes->select('xin_mobile_order.is_adjustment');
 
 
 
@@ -1245,6 +1248,11 @@ class Traxes_model extends CI_Model
 
 		foreach ($records as $record) {
 			
+			if($record->is_adjustment == 0){
+				$adjust = "SELLOUT";
+			} else {
+				$adjust = "ADJUSTMENT";
+			}
 
 			$data[] = array(
 				$record->employee_id,
@@ -1262,13 +1270,16 @@ class Traxes_model extends CI_Model
 				strtoupper($record->barcode),
 				strtoupper($record->nama_material),
 				strtoupper($record->brand),
-				strtoupper($record->poin),
+				strtoupper($record->material_type),
+				strtoupper($record->volume),
+				strtoupper($record->uom),
 				
 				strtoupper($record->qty),
 				strtoupper($record->price),
 				strtoupper($record->total),
 				
 				strtoupper($record->order_date),
+				strtoupper($adjust),
 
 			);
 		}

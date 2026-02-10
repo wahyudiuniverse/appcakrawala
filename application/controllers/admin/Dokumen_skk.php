@@ -269,22 +269,38 @@ class Dokumen_skk extends MY_Controller {
 		} else {
 
 			$lastT = new DateTime(date("2023-12-31"));
-
 			if($resign_date<$lastT){
 				$sign_fullname = 'Asti Prastista';
 				$sign_nip = '21500006';
 			} else {
 
 				$lastT = new DateTime(date("2024-07-19"));
-
 					if($resign_date<$lastT){
 						$sign_fullname = 'TATOK PURHANDONO SETYAWAN';
 						$sign_nip = '21513829';
-					} else {
-						$sign_fullname = 'SISKYLA KHAIRANA PRITIGARINI';
-						$sign_nip = '21300033';
-					}
 
+					} else {
+
+						$lastT = new DateTime(date("2025-07-07"));
+						if($resign_date<$lastT){
+							$sign_fullname = 'SISKYLA KHAIRANA PRITIGARINI';
+							$sign_nip = '21300033';
+						
+						} else {
+
+							$lastT = new DateTime(date("2026-01-06"));
+							if($resign_date<$lastT){	
+								$sign_fullname = 'PAMUNGKAS SUSANTO';
+								$sign_nip = '24536132';
+
+							} else {
+
+								$sign_fullname = 'RIZKIAWAN BUDIANTO';
+								$sign_nip = '24539641';
+
+							}
+						} 
+					}
 			}
 		}
 

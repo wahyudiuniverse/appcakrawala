@@ -803,8 +803,8 @@ class Employee_request_tkhl extends MY_Controller {
 										'approve_hrd'						=> $session['user_id'],
 										'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-							'sign_nip'							=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+							'sign_nip'							=> '24539641',
+							'sign_fullname'					=> 'RIZKIAWAN BUDIANTO',
 							'sign_jabatan'					=> 'HR & GA MANAGER',
 
 										'status_pkwt' => 1,

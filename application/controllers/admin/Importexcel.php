@@ -1061,8 +1061,8 @@ class ImportExcel extends MY_Controller
 							'dm_allow_operation' 			=> $line[49],
 							'img_esign'						=> $image_name,
 
-							'sign_nip'							=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
+							'sign_nip'							=> '24539641',
+							'sign_fullname'					=> 'RIZKIAWAN BUDIANTO',
 							'sign_jabatan'					=> 'HR & GA MANAGER',
 							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
 							'contract_type_id'				=> $line[9], //1 pkwt, 2 tkhl

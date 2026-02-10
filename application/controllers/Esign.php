@@ -164,8 +164,8 @@ class Esign extends MY_Controller {
 			|| $srcdoc[0]->employee_id=='21512569' 
 			|| $srcdoc[0]->employee_id=='24528002') {
 
-			$data['sign_fullname']= 'SISKYLA KHAIRANA PRITIGARINI';
-			$data['sign_nip'] = '21300033';
+			$data['sign_fullname']= 'RIZKIAWAN BUDIANTO';
+			$data['sign_nip'] = '24539641';
 
 		} else {
 

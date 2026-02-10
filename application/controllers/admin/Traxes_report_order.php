@@ -229,13 +229,16 @@ class Traxes_report_order extends MY_Controller {
 			'GTIN',
 			'PRODUK/MATERIAL',
 			'BRAND',
-			'POIN',
+			'CLASS',
+			'VOLUME',
+			'SATUAN',
 
 			'JUMLAH',
 			'HARGA-SATUAN',
 			'TOTAL',
 			
-			'TANGGAL PENJUALAN'
+			'TANGGAL PENJUALAN',
+			'STATUS_SELLOUT'
 		];
 
 		$length_array = count($rowArray);
