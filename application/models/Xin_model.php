@@ -142,7 +142,7 @@ class Xin_model extends CI_Model
 			$arr['active'] = 'active';
 			$arr['open'] = '';
 			return $arr;
-		} else if ($mClass == 'employees' && $mMethod='emp_view') {
+		} else if ($mClass == 'employees' && $mMethod = 'emp_view') {
 			$arr['activep'] = 'activep';
 			$arr['open'] = '';
 			return $arr;
@@ -213,19 +213,19 @@ class Xin_model extends CI_Model
 			return $arr;
 		} else if ($mClass == 'importexcel' && $mMethod == 'konfig_download_esaltab') {
 			$arr['konfig_download_esaltab_active'] = 'active';
-			$arr['saltab_open'] = 'open';	
+			$arr['saltab_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'budget' && $mMethod == 'budget') {
 			$arr['pengajuan_sp_active'] = 'active';
-			$arr['budgeting_open'] = 'open';	
+			$arr['budgeting_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'budget' && $mMethod == 'actual') {
 			$arr['budget_invoice_active'] = 'active';
-			$arr['budgeting_open'] = 'open';	
+			$arr['budgeting_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'budget' && $mMethod == 'report') {
 			$arr['budget_report_active'] = 'active';
-			$arr['budgeting_open'] = 'open';	
+			$arr['budgeting_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'importexcel' && $mMethod == 'import_bpjs') {
 			$arr['manage_bpjs_active'] = 'active';
@@ -742,7 +742,7 @@ class Xin_model extends CI_Model
 			$arr['traxes_order_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
-		}  else if ($mClass == 'traxes_report_stock') {
+		} else if ($mClass == 'traxes_report_stock') {
 			$arr['traxes_stock_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
@@ -750,7 +750,7 @@ class Xin_model extends CI_Model
 			$arr['traxes_summary_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
-		}  else if ($mClass == 'traxes_report_display') {
+		} else if ($mClass == 'traxes_report_display') {
 			$arr['traxes_display_active'] = 'active';
 			$arr['reports_open'] = 'open';
 			return $arr;
@@ -819,10 +819,10 @@ class Xin_model extends CI_Model
 			$arr['report_open'] = 'open';
 			return $arr;
 		} else if ($mClass == 'addendum' && $mMethod == 'report_addendum') {
-            $arr['report_active'] = 'active';
-            $arr['report_open'] = 'open';
-            return $arr;
-        } else if ($mClass == 'employee_resign') {
+			$arr['report_active'] = 'active';
+			$arr['report_open'] = 'open';
+			return $arr;
+		} else if ($mClass == 'employee_resign') {
 			$arr['resign_req_emp_active'] = 'active';
 			$arr['resign_req_resign'] = 'open';
 			return $arr;
@@ -1733,7 +1733,7 @@ class Xin_model extends CI_Model
 	// 	return $query->num_rows();
 	// }
 
-public function count_emp_resign()
+	public function count_emp_resign()
 	{
 
 		$query = $this->db->query("SELECT employee_id 
@@ -2146,14 +2146,51 @@ public function count_emp_resign()
 		$num = (int) $num;
 		$words = array();
 		$list1 = array(
-			'', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
-			'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
+			'',
+			'one',
+			'two',
+			'three',
+			'four',
+			'five',
+			'six',
+			'seven',
+			'eight',
+			'nine',
+			'ten',
+			'eleven',
+			'twelve',
+			'thirteen',
+			'fourteen',
+			'fifteen',
+			'sixteen',
+			'seventeen',
+			'eighteen',
+			'nineteen'
 		);
 		$list2 = array('', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred');
 		$list3 = array(
-			'', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion',
-			'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion', 'tredecillion', 'quattuordecillion',
-			'quindecillion', 'sexdecillion', 'septendecillion', 'octodecillion', 'novemdecillion', 'vigintillion'
+			'',
+			'thousand',
+			'million',
+			'billion',
+			'trillion',
+			'quadrillion',
+			'quintillion',
+			'sextillion',
+			'septillion',
+			'octillion',
+			'nonillion',
+			'decillion',
+			'undecillion',
+			'duodecillion',
+			'tredecillion',
+			'quattuordecillion',
+			'quindecillion',
+			'sexdecillion',
+			'septendecillion',
+			'octodecillion',
+			'novemdecillion',
+			'vigintillion'
 		);
 		$num_length = strlen($num);
 		$levels = (int) (($num_length + 2) / 3);
@@ -4424,7 +4461,7 @@ ORDER BY `expiry_date`");
 		$query = $this->db->query("SELECT * from xin_ethnicity_type");
 		return $query->result();
 	}
-	
+
 
 	// get all education level
 	public function get_all_education()
@@ -4867,7 +4904,7 @@ ORDER BY `expiry_date`");
 		} else {
 			// $input = '06/10/2011 19:00:02';
 			$timetodate = strtotime($tanggal);
-			$date = date('Y-m-d', $timetodate);
+			$date = date('Y-m-d H:i:s', $timetodate);
 
 
 			$bulan = array(
@@ -4884,13 +4921,18 @@ ORDER BY `expiry_date`");
 				'November',
 				'Desember'
 			);
-			$pecahkan = explode('-', $date);
+			$waktu = explode(' ', $date);
+			$pecahkan = explode('-', $waktu[0]);
+
+			if ($waktu[1] == "00:00:00") {
+				$waktu[1] = "";
+			}
 
 			// variabel pecahkan 0 = tanggal
 			// variabel pecahkan 1 = bulan
 			// variabel pecahkan 2 = tahun
 
-			return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+			return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0] . ' ' . $waktu[1];
 		}
 	}
 
@@ -4967,7 +5009,7 @@ ORDER BY `expiry_date`");
 
 	function rupiah_titik($angka)
 	{
-		if(is_null($angka) || $angka==''){
+		if (is_null($angka) || $angka == '') {
 			$angka = 0;
 		}
 		$hasil_rupiah = number_format($angka, 0, ',', '.');

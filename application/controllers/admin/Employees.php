@@ -11907,6 +11907,7 @@ class Employees extends MY_Controller
 						die;
 					} else {
 						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/ktp/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['id_screening'], $name);
@@ -11915,6 +11916,7 @@ class Employees extends MY_Controller
 						// $file_data_return = $path_file_return . $nama_file;
 						$return_file_data[] = array(
 							"link_file" => $file_data,
+							"type_file" => $file_type,
 						);
 					}
 				}
@@ -11939,6 +11941,7 @@ class Employees extends MY_Controller
 						die;
 					} else {
 						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/kk/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
@@ -11948,6 +11951,7 @@ class Employees extends MY_Controller
 						// $file_data_return = $path_file_return . $nama_file;
 						$return_file_data[] = array(
 							"link_file" => $file_data,
+							"type_file" => $file_type,
 						);
 					}
 				}
@@ -11972,6 +11976,7 @@ class Employees extends MY_Controller
 						die;
 					} else {
 						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/rekening/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
@@ -11981,6 +11986,7 @@ class Employees extends MY_Controller
 						// $file_data_return = $path_file_return . $nama_file;
 						$return_file_data[] = array(
 							"link_file" => $file_data,
+							"type_file" => $file_type,
 						);
 					}
 				}
@@ -12005,6 +12011,7 @@ class Employees extends MY_Controller
 						die;
 					} else {
 						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/cv/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
@@ -12014,6 +12021,7 @@ class Employees extends MY_Controller
 						// $file_data_return = $path_file_return . $nama_file;
 						$return_file_data[] = array(
 							"link_file" => $file_data,
+							"type_file" => $file_type,
 						);
 					}
 				}
@@ -12038,6 +12046,7 @@ class Employees extends MY_Controller
 						die;
 					} else {
 						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/skck/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
@@ -12047,6 +12056,7 @@ class Employees extends MY_Controller
 						// $file_data_return = $path_file_return . $nama_file;
 						$return_file_data[] = array(
 							"link_file" => $file_data,
+							"type_file" => $file_type,
 						);
 					}
 				}
@@ -12071,6 +12081,7 @@ class Employees extends MY_Controller
 						die;
 					} else {
 						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/ijazah/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
@@ -12080,6 +12091,77 @@ class Employees extends MY_Controller
 						// $file_data_return = $path_file_return . $nama_file;
 						$return_file_data[] = array(
 							"link_file" => $file_data,
+							"type_file" => $file_type,
+						);
+					}
+				}
+			} else if ($identifier == "ratecard") {
+				if (!is_dir('./uploads/document/excel_ratecard/' . $yearmonth)) {
+					mkdir('./uploads/document/excel_ratecard/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/excel_ratecard/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = 'ratecard_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
+						$path_file = '/uploads/document/excel_ratecard/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+							"type_file" => $file_type,
+						);
+					}
+				}
+			} else if ($identifier == "absensi") {
+				if (!is_dir('./uploads/document/excel_absensi/' . $yearmonth)) {
+					mkdir('./uploads/document/excel_absensi/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './uploads/document/excel_absensi/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = 'absensi_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
+						$path_file = '/uploads/document/excel_absensi/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+							"type_file" => $file_type,
 						);
 					}
 				}
@@ -12738,6 +12820,10 @@ class Employees extends MY_Controller
 	public function valiadsi_employee_request()
 	{
 		$postData = $this->input->post();
+
+		$img = $postData['signature'];
+		$data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $img));
+		file_put_contents('./uploads/contoh_ttd/signature.png', $data);
 
 		// get data 
 		$data = $this->Employees_model->valiadsi_employee_request($postData);

@@ -242,6 +242,99 @@ class Reports extends MY_Controller
 		echo json_encode($data);
 	}
 
+	function get_email_pin()
+	{
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Employees_model->get_employee_array_by_nip($postData['nip']);
+
+		if (!empty($data)) {
+			$message = '<strong>[ HR-SYSTEM NOTIFIKASI ]</strong><br><br>' .
+				'Karyawan Aktif <strong>' . $this->Employees_model->get_nama_company($data['company_id']) . '</strong>' .
+				'<br><br><strong>Nama Lengkap: </strong>' . $data['first_name'] .
+				'<br><strong>NIP: </strong>' . $data['employee_id'] .
+				'<br><strong>PIN: </strong>' . $data['private_code'] .
+				'<br><strong>PROJECT: </strong>' . $this->Employees_model->get_nama_project($data['project_id']) .
+				'<br><strong>AREA: </strong>' . $data['penempatan'] .
+				'<br><br>Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.' .
+				'<br>Link C.I.S : https://apps-cakrawala.com/admin' .
+				'<br>Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu <strong>My Profile</strong> kemudian <strong>Ubah Pin</strong>' .
+				'<br><br><strong>INFO HRD di Nomor Whatsapp: 088211158907</strong>' .
+				'<br><strong>IT-CARE di Nomor Whatsapp: 085174123434</strong>' .
+				'<br><br>Terima kasih.';
+
+			$tujuan_email = "" . $data['email'];
+
+			$response = array(
+				'status' => '1',
+				'message' => $message,
+				'tujuan_email' => $tujuan_email,
+				'subject_email' => "Notifikasi Akun CIS",
+			);
+
+			echo json_encode($response);
+		} else {
+			$response = array(
+				'status' => '0',
+				'message' => "",
+				'tujuan_email' => "",
+				'subject_email' => "",
+			);
+
+			echo json_encode($response);
+		}
+	}
+
+	function send_email_pin()
+	{
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Employees_model->get_employee_array_by_nip($postData['nip']);
+
+
+		if (!empty($data)) {
+			$config = array(
+				'protocol' => 'smtp',
+				'smtp_host' => 'ssl://mail.spcakrawala.co.id',
+				'smtp_port' => 465,
+				// 'smtp_user' => 'hrd@spcakrawala.co.id', // change it to yours
+				// 'smtp_pass' => 'i4cPBaQY@22', // change it to yours
+				'smtp_user' => 'tes@spcakrawala.co.id', // change it to yours
+				'smtp_pass' => 'Cakrawala#2026', // change it to yours
+				'mailtype' => 'html',
+				'charset' => 'iso-8859-1',
+				'crlf' => "\r\n",
+				'wordwrap' => TRUE
+			);
+
+			$message = "" . $postData['isi'];
+			$from_email = "" . $postData['email_from'];
+			$tujuan_email = "" . $postData['email_to'];
+			$email_subject = "" . $postData['email_subject'];
+
+			$this->load->library('email', $config);
+
+			$this->email->set_newline("\r\n");
+			// $this->email->from($from_email); // change it to yours
+			$this->email->from('tes@spcakrawala.co.id'); // change it to yours
+			$this->email->to($tujuan_email); // change it to yours
+			$this->email->subject($email_subject);
+			$this->email->message($message);
+			if ($this->email->send()) {
+				$response = 'Email sent.';
+			} else {
+				show_error($this->email->print_debugger());
+				$response = $this->email->print_debugger();
+			}
+
+			echo $response;
+		} else {
+			echo "Data karyawan tidak ditemukan.";
+		}
+	}
+
 	// client report
 	public function manage_client()
 	{
@@ -3301,6 +3394,7 @@ class Reports extends MY_Controller
 			'AREA/PENEMPATAN',
 			'REGION',
 			'DC',
+			'KOTA DOMISILI',
 			'TEMPAT LAHIR',
 			'TANGGAL LAHIR',
 			'TANGGAL BERGABUNG',
@@ -3324,6 +3418,7 @@ class Reports extends MY_Controller
 			'NAMA KONTAK DARURAT',
 			'HUB. KONTAK DARURAT',
 			'NOMOR KONTAK DARURAT',
+			'ALAMAT KONTAK DARURAT',
 			'NAMA BANK',
 			'NO REKENING',
 			'NAMA PEMILIK REKENING',
@@ -3379,7 +3474,7 @@ class Reports extends MY_Controller
 		//set background color
 		$spreadsheet
 			->getActiveSheet()
-			->getStyle('A1:BS1')
+			->getStyle('A1:BU1')
 			->getFill()
 			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
 			->getStartColor()

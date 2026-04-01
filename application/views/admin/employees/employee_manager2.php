@@ -1748,7 +1748,11 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 									<!-- <div class="tab-pane fade show active" id="account-basic_info" role="tabpanel" aria-labelledby="home-tab"> -->
 									<div class="tab-pane fade" id="dokumen-kontrak" role="tabpanel" aria-labelledby="dokumen-kontrak-tab">
 										<div class="row" id="isi-dokumen-kontrak-tabel">
-											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span> <a href='https://apps-cakrawala.com/admin/employee_pkwt_cancel/pkwt_expired_edit/<?php echo $employee_id; ?>/1' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>PERPANJANG KONTRAK</button></a></div>
+											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span>
+												<?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
+													<a href='https://apps-cakrawala.com/admin/employee_pkwt_cancel/pkwt_expired_edit/<?php echo $employee_id; ?>/1' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>PERPANJANG KONTRAK</button></a>
+												<?php } ?>
+											</div>
 
 											<?php foreach ($all_contract as $kontrak): ?>
 												<div class="card-header with-elements" <?php echo ($kontrak['jenis_dokumen'] == "ADDENDUM" ? 'style="background-color:#c0ebbc;"' : 'style="background-color:#bcbeeb;"'); ?>> <span class="card-header-title mr-2"> <strong> <?php echo $kontrak['jenis_dokumen']; ?>. Periode: <?php echo $kontrak['periode_start']; ?> - <?php echo $kontrak['periode_end']; ?></strong></span> </div>
@@ -5610,18 +5614,41 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 					$('#tanggal_resign_modal2').val(res['data']['deactive_date_seed']);
 					$('#keterangan_resign_modal2').val(res['data']['deactive_reason']);
 
-					if (res['data']['employee_id'] == nip_session) {
+					var permission_change = "<?php if (in_array('1017', $role_resources_ids)) {
+													echo "1";
+												} else {
+													echo "0";
+												} ?>";
+
+					if (res['data']['employee_id'] == nip_session) { //1017
 						$('#editResignModalLabel').html("Informasi Status Karyawan");
-						$("#isi_non_aktif_by_modal3").attr("hidden", true);
-						$("#isi_non_aktif_date_modal3").attr("hidden", true);
-						$("#isi_keterangan_aktif_modal3").attr("hidden", true);
+						$("#isi_non_aktif_by_modal3").attr("hidden", false);
+						$("#isi_non_aktif_date_modal3").attr("hidden", false);
+						$("#isi_keterangan_aktif_modal3").attr("hidden", false);
 						$("#isi_status_aktif_modal2").attr("hidden", true);
 						$('#isi_tanggal_aktif_modal2').attr("hidden", true);
 						$('#isi_keterangan_aktif_modal2').attr("hidden", true);
 						$('#button_save_resign').attr("hidden", true);
 					} else {
-						$('#editResignModalLabel').html("Edit Status Karyawan");
-						$('#button_save_resign').attr("hidden", false);
+						if (permission_change == "1") {
+							$('#editResignModalLabel').html("Edit Status Karyawan");
+							$("#isi_non_aktif_by_modal3").attr("hidden", false);
+							$("#isi_non_aktif_date_modal3").attr("hidden", false);
+							$("#isi_keterangan_aktif_modal3").attr("hidden", false);
+							$("#isi_status_aktif_modal2").attr("hidden", false);
+							$('#isi_tanggal_aktif_modal2').attr("hidden", false);
+							$('#isi_keterangan_aktif_modal2').attr("hidden", false);
+							$('#button_save_resign').attr("hidden", false);
+						} else {
+							$('#editResignModalLabel').html("Informasi Status Karyawan");
+							$("#isi_non_aktif_by_modal3").attr("hidden", false);
+							$("#isi_non_aktif_date_modal3").attr("hidden", false);
+							$("#isi_keterangan_aktif_modal3").attr("hidden", false);
+							$("#isi_status_aktif_modal2").attr("hidden", true);
+							$('#isi_tanggal_aktif_modal2').attr("hidden", true);
+							$('#isi_keterangan_aktif_modal2').attr("hidden", true);
+							$('#button_save_resign').attr("hidden", true);
+						}
 					}
 
 					$('.isi-modal-edit-resign').attr("hidden", false);

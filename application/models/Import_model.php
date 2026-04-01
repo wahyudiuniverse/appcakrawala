@@ -307,6 +307,92 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	//get table absensi
+	public function get_absensi_table()
+	{
+		$data = [""];
+
+		$this->db->select('*');
+		$this->db->from('mt_tabel_absensi');
+		// $this->db->limit(2147483647, 1);
+
+		$query = $this->db->get()->result_array();
+		if (empty($query)) {
+			$data = [""];
+		} else {
+			$data = $query;
+		}
+
+		return $data;
+	}
+
+	//get table ratecard
+	public function get_ratecard_table()
+	{
+		$data = [""];
+
+		$this->db->select('*');
+		$this->db->from('mt_tabel_ratecard');
+		// $this->db->limit(2147483647, 1);
+
+		$query = $this->db->get()->result_array();
+		if (empty($query)) {
+			$data = [""];
+		} else {
+			$data = $query;
+		}
+
+		return $data;
+	}
+
+	//get data kota kabupaten
+	public function get_data_kota_kabupaten()
+	{
+		$data = [""];
+
+		$this->db->select('id_kab_kota_bps');
+		$this->db->select('nama');
+		$this->db->from('kabupaten_kota');
+		// $this->db->limit(2147483647, 1);
+
+		$query = $this->db->get()->result_array();
+		if (empty($query)) {
+			$data = [""];
+		} else {
+			$data = $query;
+		}
+
+		return $data;
+	}
+
+	//get data mapping project - sub project - posisi
+	public function get_data_mapping_project_posisi()
+	{
+		$data = [""];
+
+		$this->db->select('xin_projects.project_id as project_id');
+		// $this->db->select('xin_projects.priority as priority');
+		$this->db->select('CONCAT("[", xin_projects.priority, "] ", xin_projects.title) as project_name');
+		$this->db->select('xin_projects_sub.secid as sub_project_id');
+		$this->db->select('xin_projects_sub.sub_project_name as sub_project_name');
+		$this->db->select('xin_designations.designation_id as jabatan_id');
+		$this->db->select('xin_designations.designation_name as jabatan_name');
+		$this->db->from('xin_projects_posisi');
+		$this->db->join('xin_projects', 'xin_projects_posisi.project_id = xin_projects.project_id');
+		$this->db->join('xin_projects_sub', 'xin_projects_posisi.sub_project = xin_projects_sub.secid');
+		$this->db->join('xin_designations', 'xin_projects_posisi.posisi = xin_designations.designation_id');
+		$this->db->order_by('project_id', 'ASC');
+
+		$query = $this->db->get()->result_array();
+		if (empty($query)) {
+			$data = [""];
+		} else {
+			$data = $query;
+		}
+
+		return $data;
+	}
+
 	//get table bupot
 	public function get_bupot_table()
 	{
@@ -359,7 +445,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$length = count($result_index);
 
-		for ($i = 2; $i < ($length); $i++) {
+		for ($i = 3; $i < ($length); $i++) {
 			// $button_edit_nip = "";
 			// if (in_array('1101', $role_resources_ids)) {
 			// 	if ($i == "3") {
@@ -421,6 +507,196 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $data;
 	}
 
+	public function get_detail_ratecard($id = null)
+	{
+		$data = array();
+		$this->db->select('*');
+		$this->db->from('xin_ratecad_detail');
+		$this->db->where('id', $id);
+
+		$records = $this->db->get()->row_array();
+
+		$result_index = array_keys($records);
+		$result_value = array_values($records);
+
+		$length = count($result_index);
+
+		for ($i = 2; $i < ($length); $i++) {
+			// $button_edit_nip = "";
+			// if (in_array('1101', $role_resources_ids)) {
+			// 	if ($i == "3") {
+			// 		$button_edit_nip = '<button type="button" onclick="edit_nip(' . $id . ')" class="btn btn-sm btn-outline-success ml-2" ><i class="fa fa-file mr-1"></i> EDIT NIP</button>';
+			// 	}
+			// }
+
+			// $data[] = array(
+			// 	$this->get_nama_kolom_detail_saltab($result_index[$i]),
+			// 	$result_value[$i] . $button_edit_nip,
+			// );
+			$value = $result_value[$i];
+			if ($result_index[$i] == "id_jabatan") {
+				$value = $this->Employees_model->get_nama_jabatan($result_value[$i]);
+			}
+			if ($result_index[$i] == "id_kota_kabupaten") {
+				$value = $this->Employees_model->get_nama_kabupaten_kota($result_value[$i]);
+			}
+
+			$data[] = array(
+				$this->get_nama_kolom_detail_ratecard($result_index[$i]),
+				$value,
+			);
+		}
+
+		return $data;
+	}
+
+	public function get_detail_absensi($id = null)
+	{
+		$data = array();
+		$this->db->select('*');
+		$this->db->from('xin_absensi_detail');
+		$this->db->where('id', $id);
+
+		$records = $this->db->get()->row_array();
+
+		$result_index = array_keys($records);
+		$result_value = array_values($records);
+
+		$length = count($result_index);
+
+		for ($i = 2; $i < ($length); $i++) {
+			// $button_edit_nip = "";
+			// if (in_array('1101', $role_resources_ids)) {
+			// 	if ($i == "3") {
+			// 		$button_edit_nip = '<button type="button" onclick="edit_nip(' . $id . ')" class="btn btn-sm btn-outline-success ml-2" ><i class="fa fa-file mr-1"></i> EDIT NIP</button>';
+			// 	}
+			// }
+
+			// $data[] = array(
+			// 	$this->get_nama_kolom_detail_saltab($result_index[$i]),
+			// 	$result_value[$i] . $button_edit_nip,
+			// );
+			$value = $result_value[$i];
+			if ($result_index[$i] == "id_jabatan") {
+				$value = $this->Employees_model->get_nama_jabatan($result_value[$i]);
+			}
+			if ($result_index[$i] == "id_kota_kabupaten") {
+				$value = $this->Employees_model->get_nama_kabupaten_kota($result_value[$i]);
+			}
+			if (($result_index[$i] == "status_hitung") || ($result_index[$i] == "catatan_hitung") || ($result_index[$i] == "id_detail_saltab_temp")) {
+				//do nothing
+			} else {
+				$data[] = array(
+					$this->get_nama_kolom_detail_absensi($result_index[$i]),
+					$value,
+				);
+			}
+		}
+
+		return $data;
+	}
+
+	public function get_detail_edit_absensi($id = null)
+	{
+		$data = array();
+		$this->db->select('*');
+		$this->db->from('xin_absensi_detail');
+		$this->db->where('id', $id);
+
+		$records = $this->db->get()->row_array();
+
+		$result_index = array_keys($records);
+		$result_value = array_values($records);
+
+		$length = count($result_index);
+
+		for ($i = 2; $i < ($length); $i++) {
+			// $button_edit_nip = "";
+			// if (in_array('1101', $role_resources_ids)) {
+			// 	if ($i == "3") {
+			// 		$button_edit_nip = '<button type="button" onclick="edit_nip(' . $id . ')" class="btn btn-sm btn-outline-success ml-2" ><i class="fa fa-file mr-1"></i> EDIT NIP</button>';
+			// 	}
+			// }
+
+			// $data[] = array(
+			// 	$this->get_nama_kolom_detail_saltab($result_index[$i]),
+			// 	$result_value[$i] . $button_edit_nip,
+			// );
+			// $value = $result_value[$i];
+			// if ($result_index[$i] == "id_jabatan") {
+			// 	$value = $this->Employees_model->get_nama_jabatan($result_value[$i]);
+			// }
+			// if ($result_index[$i] == "id_kota_kabupaten") {
+			// 	$value = $this->Employees_model->get_nama_kabupaten_kota($result_value[$i]);
+			// }
+
+			$data[] = array(
+				$result_index[$i],
+				$this->get_nama_kolom_detail_absensi($result_index[$i]),
+				$result_value[$i],
+			);
+		}
+
+		$response = array(
+			'all_kabupaten_kota'	=> $this->Employees_model->get_data_kabupaten_kota(),
+			'data_response' => $data,
+		);
+		return $response;
+	}
+
+	// Function to update record in table > basic_info
+	public function update_detail_absensi($data, $id)
+	{
+		$session = $this->session->userdata('username');
+		$nip = $session['employee_id'];
+
+		//ambil data sebelum edit
+		$this->db->select('*');
+		$this->db->from('xin_absensi_detail');
+		$this->db->where('id', $id);
+		$records_before_update = $this->db->get()->row_array();
+		$json_before_update = json_encode($records_before_update);
+
+		$this->db->where('id', $id);
+		if ($this->db->update('xin_absensi_detail', $data)) {
+			//delete detail saltab yg terkait
+			$data_detail_saltab = $this->Import_model->delete_detail_saltab($records_before_update['id_detail_saltab_temp']);
+
+			//update flag belum hitung di data record absensi
+			$data_update = array(
+				"status_hitung" => "0",
+				"catatan_hitung" => null,
+				"id_detail_saltab_temp" => null,
+			);
+			$hasil_update_absensi_detail = $this->Saltab_model->update_data_absensi_record($data_update, $id);
+
+			//ambil data sesudah edit
+			$this->db->select('*');
+			$this->db->from('xin_absensi_detail');
+			$this->db->where('id', $id);
+			$records_after_update = $this->db->get()->row_array();
+			$json_after_update = json_encode($records_after_update);
+
+			//simpan di log perubahan
+			$data_log_perubahan = array(
+				"id_detail_absensi" => $id,
+				"nilai_sebelum" 	=> $json_before_update,
+				"nilai_sesudah" 	=> $json_after_update,
+
+				'created_by'      	=> $nip,
+				'created_by_name'   => $this->Import_model->get_nama_karyawan($nip),
+				'created_on'		=> date('Y-m-d H:i:s'),
+				'created_ip'		=> $this->Saltab_model->get_client_ip(),
+			);
+
+			$this->db->insert('log_perubahan_absensi', $data_log_perubahan);
+
+			return $records_before_update['id_absensi_header'];
+		} else {
+			return $records_before_update['id_absensi_header'];
+		}
+	}
+
 	public function get_detail_saltab_release($id = null)
 	{
 		$role_resources_ids = $this->Xin_model->user_role_resource();
@@ -468,7 +744,6 @@ GROUP BY uploadid, periode, project, project_sub;';
 		} else {
 			return $records['alias'];
 		}
-
 	}
 
 	public function get_nama_kolom_detail_bupot($nama_tabel)
@@ -478,6 +753,38 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->where('nama_tabel', $nama_tabel);
 
 		$records = $this->db->get()->row_array();
+
+		if (empty($records)) {
+			return "";
+		} else {
+			return $records['alias'];
+		}
+	}
+
+	public function get_nama_kolom_detail_ratecard($nama_tabel)
+	{
+		$this->db->select('*');
+		$this->db->from('mt_tabel_ratecard');
+		$this->db->where('nama_tabel', $nama_tabel);
+
+		$records = $this->db->get()->row_array();
+
+
+		if (empty($records)) {
+			return "";
+		} else {
+			return $records['alias'];
+		}
+	}
+
+	public function get_nama_kolom_detail_absensi($nama_tabel)
+	{
+		$this->db->select('*');
+		$this->db->from('mt_tabel_absensi');
+		$this->db->where('nama_tabel', $nama_tabel);
+
+		$records = $this->db->get()->row_array();
+
 
 		if (empty($records)) {
 			return "";
@@ -1419,11 +1726,61 @@ GROUP BY uploadid, periode, project, project_sub;';
 		}
 	}
 
+	function get_id_ratecard_batch($data)
+	{
+		$this->db->order_by('upload_on', 'desc');
+		$query = $this->db->get_where('xin_ratecad_header', $data);
+		$result = $query->row_array();
+
+		if (empty($result)) {
+			return "";
+		} else {
+			return $result['id'];
+		}
+	}
+
+	function get_id_absensi_batch($data)
+	{
+		$this->db->order_by('upload_on', 'desc');
+		$query = $this->db->get_where('xin_absensi_header', $data);
+		$result = $query->row_array();
+
+		if (empty($result)) {
+			return "";
+		} else {
+			return $result['id'];
+		}
+	}
+
 	function get_saltab_batch($id)
 	{
 
 		$this->db->select('*');
 		$this->db->from('xin_saltab_bulk');
+		$this->db->where('id', $id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	function get_ratecard_batch($id)
+	{
+
+		$this->db->select('*');
+		$this->db->from('xin_ratecad_header');
+		$this->db->where('id', $id);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	function get_absensi_batch($id)
+	{
+
+		$this->db->select('*');
+		$this->db->from('xin_absensi_header');
 		$this->db->where('id', $id);
 
 		$query = $this->db->get()->row_array();
@@ -1505,6 +1862,46 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// 	echo "</pre>";
 		// 	$error = $this->db->error(); // Has keys 'code' and 'message'
 		// }
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Insert detail ratecard Data
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail ratecard Array Data
+    |
+    */
+	function insert_ratecard_detail($data)
+	{
+		$this->db->insert_batch("xin_ratecad_detail", $data);
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Insert detail absensi Data
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail ratecard Array Data
+    |
+    */
+	function insert_absensi_detail($data)
+	{
+		$this->db->insert_batch("xin_absensi_detail", $data);
+	}
+
+	//update ratecard
+	public function update_ratecard_batch($postData, $id)
+	{
+		$this->db->where('id', $id);
+		$this->db->update('xin_ratecad_header', $postData);
+	}
+
+	//update absensi
+	public function update_absensi_batch($postData, $id)
+	{
+		$this->db->where('id', $id);
+		$this->db->update('xin_absensi_header', $postData);
 	}
 
 	/*
@@ -1634,10 +2031,50 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$this->db->replace("xin_bupot_batch", $data);
 	}
 
+	/*
+    |-------------------------------------------------------------------
+    | Insert bach ratecard Data
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail saltab Array Data
+    |
+    */
+	function insert_ratecard_batch($data)
+	{
+		$this->db->replace("xin_ratecad_header", $data);
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Insert batch absensi Data
+    |-------------------------------------------------------------------
+    |
+    | @param $data  detail saltab Array Data
+    |
+    */
+	function insert_absensi_batch($data)
+	{
+		$this->db->replace("xin_absensi_header", $data);
+	}
+
 	function delete_batch_saltab($id = null)
 	{
 		$this->db->delete('xin_saltab_bulk', array('id' => $id));
 		$this->db->delete('xin_saltab_temp', array('uploadid' => $id));
+		// $this->db->replace("xin_employees_saltab_bulk", $data);
+	}
+
+	function delete_batch_ratecard($id = null)
+	{
+		$this->db->delete('xin_ratecad_header', array('id' => $id));
+		$this->db->delete('xin_ratecad_detail', array('id_ratecard_header' => $id));
+		// $this->db->replace("xin_employees_saltab_bulk", $data);
+	}
+
+	function delete_batch_absensi($id = null)
+	{
+		$this->db->delete('xin_absensi_header', array('id' => $id));
+		$this->db->delete('xin_absensi_detail', array('id_absensi_header' => $id));
 		// $this->db->replace("xin_employees_saltab_bulk", $data);
 	}
 
@@ -1814,6 +2251,18 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$this->db->where('id_batch', $id_batch);
 		$this->db->update('xin_bupot_batch', $data);
+	}
+
+	//delete detail ratecard
+	function delete_detail_ratecard($id = null)
+	{
+		$this->db->delete('xin_ratecad_detail', array('secid' => $id));
+	}
+
+	//delete detail absensi
+	function delete_detail_absensi($id = null)
+	{
+		$this->db->delete('xin_absensi_detail', array('secid' => $id));
 	}
 
 	//ambil data bupot berdasarkan NIK
@@ -2044,6 +2493,12 @@ GROUP BY uploadid, periode, project, project_sub;';
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
+			if(($record->id_absensi == "0") || ($record->id_absensi == null) || ($record->id_absensi == "")) {
+				$button_lihat_absensi = "";
+			} else {
+				$button_lihat_absensi = '</br><a href="' . base_url() . "admin/Importexcel/view_batch_absensi/" . $record->id_absensi . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW ABSENSI</button></a>';
+			}
+
 			$view = '<button id="tesbutton" type="button" onclick="lihatBatchSaltab(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$editReq = '<br><button type="button" onclick="downloadBatchSaltab(' . $record->id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 			$delete = '<br><button type="button" onclick="deleteBatchSaltab(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
@@ -2052,7 +2507,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$data[] = array(
 				"aksi" => $view . " " . $editReq . " " . $delete,
-				"periode_salary" => $this->Xin_model->tgl_indo($record->periode_salary),
+				"periode_salary" => $this->Xin_model->tgl_indo($record->periode_salary) . $button_lihat_absensi,
 				"periode" => $this->Xin_model->tgl_indo($record->periode_cutoff_from) . " s/d " . $this->Xin_model->tgl_indo($record->periode_cutoff_to),
 				"project_name" => $record->project_name,
 				"sub_project_name" => $record->sub_project_name,
@@ -2060,6 +2515,238 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"upload_by" => $record->upload_by,
 				"upload_on" => $record->upload_on,
 				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list batch ratecard
+	* 
+	* @author Fadla Qamara
+	*/
+	function list_batch_ratecard($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		//$nip = $postData['nip'];
+		//$emp_id = $postData['emp_id'];
+		//$contract_id = $postData['contract_id'];
+		$session_id = $postData['session_id'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (project_name like '%" . $searchValue .  "%' or sub_project_name like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->where('status', 1);
+		$records = $this->db->get('xin_ratecad_header')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->where('status', 1);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_ratecad_header')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->where('status', 1);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_ratecad_header')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			$nama_jenis_ratecard = "";
+			if ($record->jenis_ratecard == "1") {
+				$nama_jenis_ratecard = "Approval Client";
+			} else if ($record->jenis_ratecard == "2") {
+				$nama_jenis_ratecard = "Approval Internal";
+			} else if ($record->jenis_ratecard == "3") {
+				$nama_jenis_ratecard = "Database";
+			} else {
+				$nama_jenis_ratecard = "";
+			}
+
+			$view = '<button id="tesbutton" type="button" onclick="lihatBatchRatecard(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$editReq = '<br><button type="button" onclick="downloadBatchRatecard(' . $record->id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+			$delete = '<br><button type="button" onclick="deleteBatchRatecard(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " " . $editReq . " " . $delete,
+				"tahun" => $record->tahun,
+				"periode" => $this->Xin_model->tgl_indo($record->periode_start) . " s/d " . $this->Xin_model->tgl_indo($record->periode_end),
+				"project_name" => strtoupper($record->project_name),
+				"sub_project_name" => strtoupper($record->sub_project_name),
+				"jenis_ratecard" => strtoupper($nama_jenis_ratecard),
+				"upload_by_name" => strtoupper($record->upload_by_name),
+				"upload_on" => $record->upload_on,
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list batch absensi
+	* 
+	* @author Fadla Qamara
+	*/
+	function list_batch_absensi($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel filter (diambil dari post ajax di view)
+		//$nip = $postData['nip'];
+		//$emp_id = $postData['emp_id'];
+		//$contract_id = $postData['contract_id'];
+		$session_id = $postData['session_id'];
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (project_name like '%" . $searchValue .  "%' or sub_project_name like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = " . $session_id . ")";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->where('status_finish_upload', 1);
+		$records = $this->db->get('xin_absensi_header')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->where('status_finish_upload', 1);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$records = $this->db->get('xin_absensi_header')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->where('status_finish_upload', 1);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$records = $this->db->get('xin_absensi_header')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+			// $addendum_id = $this->secure->encrypt_url($record->id);
+			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
+
+			$saltab_temp = "";
+			// $button_view_saltab = "";
+			if (($record->id_saltab_temp == "0") || ($record->id_saltab_temp == "") || ($record->id_saltab_temp == null)) {
+				$saltab_temp = "Belum Hitung Absensi";
+			} else {
+				// $saltab_temp = "";
+				$saltab_temp = '<button type="button" onclick="lihat_saltab_temp(' . $record->id_saltab_temp . ')" class="btn btn-xs btn-outline-twitter" >LIHAT DRAFT SALTAB</button>';
+			}
+
+			$view = '<button type="button" onclick="lihatBatchAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$editReq = '<br><button type="button" onclick="downloadBatchAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
+			$delete = '<br><button type="button" onclick="deleteBatchAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " " . $editReq . " " . $delete,
+				"saltab" => $saltab_temp,
+				"periode_salary" => $this->Xin_model->tgl_indo($record->periode_salary),
+				"saltab_from" => $this->Xin_model->tgl_indo($record->saltab_from) . " s/d " . $this->Xin_model->tgl_indo($record->saltab_to),
+				"project_name" => strtoupper($record->project_name),
+				"sub_project_name" => strtoupper($record->sub_project_name),
+				"mpp" => $record->mpp,
+				"fee" => $record->fee . " %",
+				"upload_by_name" => strtoupper($record->upload_by_name),
+				"upload_on" => $record->upload_on,
 			);
 		}
 
@@ -2967,6 +3654,261 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 	/*
 	* persiapan data untuk datatable pagination
+	* data list detail ratecard
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_detail_ratecard($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel id batch
+		$id_batch = $postData['id_batch'];
+		$data_batch = $this->get_ratecard_batch($id_batch);
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (detail_area like '%" . $searchValue .  "%' or region like '%" . $searchValue . "%' or jabatan_name like '%" . $searchValue . "%' or kota_kabupaten like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(
+			id_ratecard_header = " . $id_batch . "
+		)";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->join('xin_designations', 'xin_ratecad_detail.id_jabatan = xin_designations.designation_id');
+		$this->db->join('kabupaten_kota', 'xin_ratecad_detail.id_kota_kabupaten = kabupaten_kota.id_kab_kota_bps');
+		$records = $this->db->get('xin_ratecad_detail')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->join('xin_designations', 'xin_ratecad_detail.id_jabatan = xin_designations.designation_id');
+		$this->db->join('kabupaten_kota', 'xin_ratecad_detail.id_kota_kabupaten = kabupaten_kota.id_kab_kota_bps');
+		$records = $this->db->get('xin_ratecad_detail')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('xin_ratecad_detail.id');
+		$this->db->select('xin_ratecad_detail.detail_area');
+		$this->db->select('xin_ratecad_detail.region');
+		$this->db->select('xin_ratecad_detail.jumlah_mapower');
+		$this->db->select('xin_ratecad_detail.hk');
+		$this->db->select('xin_ratecad_detail.gaji_pokok');
+		$this->db->select('xin_designations.designation_name as jabatan_name');
+		$this->db->select('kabupaten_kota.nama as kota_kabupaten');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$this->db->join('xin_designations', 'xin_ratecad_detail.id_jabatan = xin_designations.designation_id');
+		$this->db->join('kabupaten_kota', 'xin_ratecad_detail.id_kota_kabupaten = kabupaten_kota.id_kab_kota_bps');
+		$records = $this->db->get('xin_ratecad_detail')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+
+			$view = '<button type="button" onclick="lihatDetailRatecard(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			// $esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_temp2/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
+			$delete = '<button type="button" onclick="deleteDetailRatecard(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . " "  . $delete,
+				"jabatan_name" => $record->jabatan_name,
+				"kota_kabupaten" => $record->kota_kabupaten,
+				"detail_area" => $record->detail_area,
+				"region" => $record->region,
+				"jumlah_mapower" => $record->jumlah_mapower,
+				"hk" => $record->hk,
+				"gaji_pokok" => $record->gaji_pokok,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list detail absensi
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_list_detail_absensi($postData = null)
+	{
+
+		$response = array();
+
+		## Read value
+		$draw = $postData['draw'];
+		$start = $postData['start'];
+		$rowperpage = $postData['length']; // Rows display per page
+		$columnIndex = $postData['order'][0]['column']; // Column index
+		$columnName = $postData['columns'][$columnIndex]['data']; // Column name
+		$columnSortOrder = $postData['order'][0]['dir']; // asc or desc
+		$searchValue = $postData['search']['value']; // Search value
+
+		//variabel id batch
+		$id_batch = $postData['id_batch'];
+		$data_batch = $this->get_absensi_batch($id_batch);
+
+		## Search 
+		$searchQuery = "";
+		if ($searchValue != '') {
+			$searchQuery = " (detail_area like '%" . $searchValue .  "%' or region like '%" . $searchValue . "%' or jabatan_name like '%" . $searchValue . "%' or kota_kabupaten like '%" . $searchValue . "%') ";
+		}
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(
+			id_absensi_header = " . $id_batch . "
+		)";
+		//$kondisiDefaultQuery = "";
+
+		## Total number of records without filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		$this->db->join('xin_designations', 'xin_absensi_detail.id_jabatan = xin_designations.designation_id');
+		$this->db->join('kabupaten_kota', 'xin_absensi_detail.id_area = kabupaten_kota.id_kab_kota_bps');
+		$records = $this->db->get('xin_absensi_detail')->result();
+		$totalRecords = $records[0]->allcount;
+
+		## Total number of record with filtering
+		$this->db->select('count(*) as allcount');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->join('xin_designations', 'xin_absensi_detail.id_jabatan = xin_designations.designation_id');
+		$this->db->join('kabupaten_kota', 'xin_absensi_detail.id_area = kabupaten_kota.id_kab_kota_bps');
+		$records = $this->db->get('xin_absensi_detail')->result();
+		$totalRecordwithFilter = $records[0]->allcount;
+
+		## Fetch records
+		$this->db->select('xin_absensi_detail.id');
+		$this->db->select('xin_absensi_detail.nik');
+		$this->db->select('xin_absensi_detail.nip');
+		$this->db->select('xin_absensi_detail.fullname');
+		$this->db->select('xin_designations.designation_name as jabatan_name');
+		$this->db->select('kabupaten_kota.nama as kota_kabupaten');
+		$this->db->select('xin_absensi_detail.detail_area');
+		$this->db->select('xin_absensi_detail.region');
+		$this->db->select('xin_absensi_detail.hk_target');
+		$this->db->select('xin_absensi_detail.hk_actual');
+		$this->db->select('xin_absensi_detail.hk_allowance');
+		$this->db->select('xin_absensi_detail.status_hitung');
+		$this->db->select('xin_absensi_detail.catatan_hitung');
+		$this->db->where($kondisiDefaultQuery);
+		if ($searchQuery != '') {
+			$this->db->where($searchQuery);
+		}
+		$this->db->order_by($columnName, $columnSortOrder);
+		$this->db->limit($rowperpage, $start);
+		$this->db->join('xin_designations', 'xin_absensi_detail.id_jabatan = xin_designations.designation_id');
+		$this->db->join('kabupaten_kota', 'xin_absensi_detail.id_area = kabupaten_kota.id_kab_kota_bps');
+		$records = $this->db->get('xin_absensi_detail')->result();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		$data = array();
+
+		foreach ($records as $record) {
+
+			$hitung = "";
+
+			if ($record->status_hitung == 0) {
+				if (($data_batch['id_saltab_temp'] == "") || ($data_batch['id_saltab_temp'] == null)) {
+					$hitung = "";
+				} else {
+					$hitung = '</br><button type="button" onclick="hitungDetailAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >HITUNG</button>';
+				}
+				$status_hitung_text = "<font style='color: rgba(133, 15, 15, 1);'><strong>[BELUM HITUNG]</strong></font>";
+			} else if ($record->status_hitung == 1) {
+				$status_hitung_text = "<font style='color: rgb(23, 124, 38);'><strong>[SUDAH HITUNG]</strong></font>";
+			} else if ($record->status_hitung == 2) {
+				if (($data_batch['id_saltab_temp'] == "") || ($data_batch['id_saltab_temp'] == null)) {
+					$hitung = "";
+				} else {
+					$hitung = '</br><button type="button" onclick="hitungDetailAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >HITUNG</button>';
+				}
+				$status_hitung_text = "<font style='color: rgba(133, 15, 15, 1);'><strong>[GAGAL HITUNG] - " . $record->catatan_hitung . "</strong></font>";
+			}
+			$view = '<button type="button" onclick="lihatDetailAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+			$edit = '</br><button type="button" onclick="editDetailAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-success" >EDIT</button>';
+			// $esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_temp2/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
+			$delete = '</br><button type="button" onclick="deleteDetailAbsensi(' . $record->id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
+
+			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+
+			$data[] = array(
+				"aksi" => $view . $edit . $delete,
+				"nik" => $record->nik . "</br>" . $status_hitung_text,
+				"fullname" => $record->nip . " - " . strtoupper($record->fullname),
+				"jabatan_name" => strtoupper($record->jabatan_name),
+				"kota_kabupaten" => strtoupper($record->kota_kabupaten),
+				"detail_area" => strtoupper($record->detail_area),
+				"region" => strtoupper($record->region),
+				"hk_target" => $record->hk_target,
+				"hk_actual" => $record->hk_actual,
+				"hk_allowance" => $record->hk_allowance,
+				// $this->get_nama_karyawan($record->upload_by)
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => $totalRecordwithFilter,
+			"aaData" => $data
+		);
+		//print_r($this->db->last_query());
+		//die;
+
+		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
 	* data list detail saltab release
 	* 
 	* @author Fadla Qamara
@@ -3538,5 +4480,22 @@ GROUP BY uploadid, periode, project, project_sub;';
 		$query = $this->db->get()->row_array();
 
 		return $query;
+	}
+
+	//ambil data jabatan berdasarkan project dan sub project
+	public function get_jabatan_by_project_sub($postData)
+	{
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$this->db->select('*');
+		$this->db->from('xin_projects_posisi');
+		$this->db->where('project_id', $postData['project_id']);
+		$this->db->where('sub_project', $postData['sub_project_id']);
+		$this->db->join('xin_designations', 'xin_projects_posisi.posisi = xin_designations.designation_id', 'left');
+
+		$query = $this->db->get()->result_array();
+
+		return $query;
+		// echo json_encode($query);
 	}
 }

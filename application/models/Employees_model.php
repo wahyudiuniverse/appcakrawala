@@ -459,6 +459,29 @@ class Employees_model extends CI_Model
 		}
 	}
 
+	//ambil nama kabupaten_kota
+	function get_nama_kabupaten_kota($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('nama');
+			$this->db->from('kabupaten_kota');
+			$this->db->where('id_kab_kota_bps', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['sub_project_name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['nama'];
+			}
+		}
+	}
+
 	//ambil nama kategori karyawan
 	function get_nama_kategori($id)
 	{
@@ -815,6 +838,10 @@ class Employees_model extends CI_Model
 	//ambil periode pkwt terakhir
 	function get_periode_pkwt($id)
 	{
+		$session = $this->session->userdata('username');
+		$user = $this->Xin_model->read_user_info($session['user_id']);
+		// if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {}
+
 		$data = array(
 			'jumlah_kontrak' => "",
 			'tanggal_kontrak' => "",
@@ -835,7 +862,6 @@ class Employees_model extends CI_Model
 			$this->db->where('status_pkwt', 1);
 			$this->db->where('cancel_stat', 0);
 			$query_count = $this->db->get()->row_array();
-
 
 			$this->db->select('max(contract_id) as max_contract_id');
 			$this->db->from('xin_employee_contract');
@@ -885,7 +911,11 @@ class Employees_model extends CI_Model
 							// $pesan = "File Belum Diupload";
 							$button_kontrak = '';
 						} else {
-							$button_kontrak = '</br><button onclick="open_kontrak(\'' . $query2['contract_id'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button>';
+							if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
+								$button_kontrak = '</br><button onclick="open_kontrak(\'' . $query2['contract_id'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button>';
+							} else {
+								$button_kontrak = '';
+							}
 						}
 
 						//	// Cek ada file nya atau tidak
@@ -973,7 +1003,12 @@ class Employees_model extends CI_Model
 
 					$file_name_draft_kontrak = base_url() . "admin/pkwt" . $query2['sub_project'] . "/view/" . $query2['uniqueid'];
 					// $button_draft_kontrak = '</br><a href="' . $file_name_draft_kontrak . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button></a>';
-					$button_draft_kontrak = '</br><button onclick="open_draft_kontrak(\'' . $query2['uniqueid'] . '\',\'' . $query2['sub_project'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button>';
+					if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
+						$button_draft_kontrak = '</br><button onclick="open_draft_kontrak(\'' . $query2['uniqueid'] . '\',\'' . $query2['sub_project'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button>';
+					} else {
+						$button_draft_kontrak = '';
+					}
+					// $button_draft_kontrak = '</br><button onclick="open_draft_kontrak(\'' . $query2['uniqueid'] . '\',\'' . $query2['sub_project'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW DRAFT KONTRAK</button>';
 
 					$data = array(
 						'jumlah_kontrak' => $query_count['allcount'],
@@ -1716,7 +1751,7 @@ class Employees_model extends CI_Model
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
-		}else if ($postData['kolom'] == "dokumen_ktp") {
+		} else if ($postData['kolom'] == "dokumen_ktp") {
 			$data = array(
 				'ktp' => $postData['nilai_sesudah']
 			);
@@ -2419,7 +2454,7 @@ class Employees_model extends CI_Model
 		## Search 
 		$searchQuery = "";
 		if ($searchValue != '') {
-			$searchQuery = " (penempatan like '%" . $searchValue . "%' or nik_ktp like '%" . $searchValue . "%' or fullname like'%" . $searchValue . "%' ) ";
+			$searchQuery = " (penempatan like '%" . $searchValue . "%' or nik_ktp like '%" . $searchValue . "%' or fullname like'%" . $searchValue . "%' or catatan_hr like'%" . $searchValue . "%' ) ";
 		}
 
 		$kondisiDefaultQuery = "(
@@ -3148,6 +3183,8 @@ class Employees_model extends CI_Model
 	function get_list_employees($postData = null)
 	{
 		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$session = $this->session->userdata('username');
+		$user = $this->Xin_model->read_user_info($session['user_id']);
 
 		$response = array();
 
@@ -3174,7 +3211,7 @@ class Employees_model extends CI_Model
 					$searchQuery = " (xin_employees.employee_id like '%" . $searchValue .  "%' 
 					or xin_employees.first_name like '%" . $searchValue . "%' 
 					or xin_designations.designation_name like '%" . $searchValue . "%'
-					or xin_employees.penempatan like '%" . $searchValue . "%'  
+					or xin_employees.penempatan like '%" . $searchValue . "%' 
 					or xin_employees.ktp_no like '%" . $searchValue . "%') ";
 				}
 			}
@@ -3527,8 +3564,10 @@ class Employees_model extends CI_Model
 				}
 				if ($level_record <= $level_user) {
 					$text_pin = " - **********";
+					$view = '';
 				} else {
 					$text_pin = " - " . $record->private_code;
+					$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 				}
 
 				$pkwt_periode = $this->get_periode_pkwt($record->employee_id);
@@ -3536,12 +3575,25 @@ class Employees_model extends CI_Model
 				// $addendum_id = $this->secure->encrypt_url($record->id);
 				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
-				$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-				if ($pkwt_periode['jumlah_kontrak'] == 1) {
-					$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				// $view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
+				if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
+					if ($pkwt_periode['jumlah_kontrak'] == 1) {
+						$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+					} else {
+						$button_send_pin = "";
+					}
+					$button_send_email = '<br><button type="button" onclick="open_email(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
 				} else {
 					$button_send_pin = "";
+					$button_send_email = "";
 				}
+
+				// if ($pkwt_periode['jumlah_kontrak'] == 1) {
+				// 	$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				// } else {
+				// 	$button_send_pin = "";
+				// }
+				// $button_send_email = '<br><button type="button" onclick="open_email(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
 				$viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
 				$editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
 				$delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
@@ -3552,7 +3604,7 @@ class Employees_model extends CI_Model
 					"aksi" => $view,
 					"employee_id" => $record->employee_id . $text_pin . $text_resign,
 					"ktp_no" => $record->ktp_no . $button_open_ktp,
-					"first_name" => strtoupper($record->first_name) . $button_send_pin,
+					"first_name" => strtoupper($record->first_name) . $button_send_pin . $button_send_email,
 					"verifikasi" => $tabel_verifikasi,
 					"project" => strtoupper($this->get_nama_project($record->project_id)),
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
@@ -3675,6 +3727,7 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.edu_prodi_name');
 		$this->db->select('xin_employees.alamat_ktp');
 		$this->db->select('xin_employees.alamat_domisili');
+		$this->db->select('xin_employees.nama_kota_domisili');
 		$this->db->select('xin_employees.kk_no');
 		$this->db->select('xin_employees.npwp_no');
 		$this->db->select('xin_employees.bpjs_tk_no');
@@ -3906,8 +3959,8 @@ class Employees_model extends CI_Model
 				$allow_skill 		= "**********";
 				$allow_ops 			= "**********";
 				$allow_training 	= "**********";
+				$link_pkwt			= "**********";
 			} else {
-
 				$text_gaji 			= $record->basic_salary;
 				$text_pin 			= $record->private_code;
 				$allow_grade 		= $record->allowance_grade;
@@ -3928,6 +3981,7 @@ class Employees_model extends CI_Model
 				$allow_skill 		= $record->allowance_skill;
 				$allow_ops 			= $record->allowance_operation;
 				$allow_training 	= $record->allowance_training;
+				$link_pkwt			= $record->file_name;
 			}
 
 
@@ -3946,6 +4000,7 @@ class Employees_model extends CI_Model
 				strtoupper($record->penempatan),
 				strtoupper($record->region_name),
 				strtoupper($record->dc_name),
+				strtoupper($record->nama_kota_domisili),
 				strtoupper($record->tempat_lahir),
 				$this->Xin_model->tgl_indo($record->date_of_birth),
 				$this->Xin_model->tgl_indo($record->date_of_joining),
@@ -3969,6 +4024,7 @@ class Employees_model extends CI_Model
 				strtoupper($this->get_nama_kontak_darurat($record->ktp_no)),
 				strtoupper($this->get_hubungan_kontak_darurat($record->ktp_no)),
 				$this->get_nomor_kontak_darurat($record->ktp_no),
+				strtoupper($this->get_alamat_kontak_darurat($record->ktp_no)),
 				strtoupper($this->get_nama_bank($record->bank_name)),
 				$record->nomor_rek,
 				strtoupper($record->pemilik_rek),
@@ -4005,7 +4061,7 @@ class Employees_model extends CI_Model
 				$record->no_surat,
 				$this->Xin_model->tgl_indo($record->from_date),
 				$this->Xin_model->tgl_indo($record->to_date),
-				$record->file_name,
+				$link_pkwt,
 				$record->upload_pkwt,
 				// $this->get_tanggal_pkwt($record->upload_pkwt)
 				// $this->get_nama_karyawan($record->upload_by)
