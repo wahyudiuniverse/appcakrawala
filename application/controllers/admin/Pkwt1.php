@@ -1895,10 +1895,10 @@ class Pkwt1 extends MY_Controller
 
 				if ($this->Contracts_model->update_kontrak($data_update, $uniqueid)) {
 					// echo '200';
-					echo "Berhasil generate " . $nama_file_save . ". Dan berhasil update kontrak";
+					echo "Berhasil generate PKWT dan berhasil update kontrak";
 				} else {
 					// echo '201';
-					echo "Berhasil generate " . $nama_file_save . ". Dan gagal update kontrak";
+					echo "Berhasil generate PKWT dan gagal update kontrak";
 				}
 			}
 
