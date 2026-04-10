@@ -8,6 +8,16 @@ class Contracts_model extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
+
+	// Function to update kontrak in table
+	public function update_kontrak($data, $id){
+		$this->db->where('uniqueid', $id);
+		if( $this->db->update('xin_employee_contract',$data)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
  
 	public function get_all_contract_type()
 	{
