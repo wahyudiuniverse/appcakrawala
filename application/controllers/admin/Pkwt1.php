@@ -75,7 +75,6 @@ class Pkwt1 extends MY_Controller
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		// $uniqueid = $this->uri->segment(4);
-
 		// $uniqueid = $this->uri->segment(5);
 
 		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
@@ -206,6 +205,7 @@ class Pkwt1 extends MY_Controller
 					$sign_fullname 						= $pkwt[0]->sign_fullname;
 					$sign_jabatan 						= $pkwt[0]->sign_jabatan;
 					$sign_qrcode 							= $pkwt[0]->img_esign;
+					$sign_digital 						= $pkwt[0]->file_tandatangan;
 					$pkwt_active							= $pkwt[0]->status_pkwt;
 
 					$tanggalcetak 						= $pkwt[0]->from_date;
@@ -1186,7 +1186,10 @@ class Pkwt1 extends MY_Controller
 						<tr>
 							<td><br>
 							<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-							<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<td>
+							<img src="'.base_url().$sign_digital.'" alt="Trulli" width="140" height="90">
+
+							<b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 
 						<tr>
@@ -1841,9 +1844,59 @@ class Pkwt1 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
 				ob_start();
-				if($identifier==null){
-					$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
-				}
+
+
+				// #1
+			// if ($identifier == null) {
+			// 	$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
+			// } else {
+			// 	$yearmonth = date('Y/m');
+
+			// 	if (!is_dir('./upload/pkwt_digital/' . $yearmonth)) {
+			// 		mkdir('./upload/pkwt_digital/' . $yearmonth, 0777, TRUE);
+			// 	}
+
+			// 	//untuk di local
+			// 	// $pdf->Output($SERVER["DOCUMENT_ROOT"] . "appcakrawala/assets/images/ttd/" . $yearmonth . "/pkwt" . $employee_id . "/" . $namalengkap . ".pdf", "F");
+
+			// 	//untuk di server
+			// 	$pdf->Output($_SERVER["DOCUMENT_ROOT"] . "upload/pkwt_digital/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . ".pdf", "F");
+			// }
+
+			if ($identifier == null) {
+						$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
+					} else {
+						$yearmonth = date('Y/m');
+
+						if (!is_dir('./uploads/document/pkwt/' . $yearmonth)) {
+							mkdir('./uploads/document/pkwt/' . $yearmonth, 0777, TRUE);
+						}
+
+						$nama_file_save = "";
+
+						//untuk di local
+						// $nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "" . $namalengkap . "" . time() . ".pdf";
+						// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+
+						//untuk di server
+						$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "" . $namalengkap . ""  . time() . ".pdf";
+						$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+
+						//update path file
+						$data_update = [
+							'file_name'    		=> $nama_file_save,
+						];
+
+						if($this->Contracts_model->update_kontrak($data_update, $uniqueid)){
+							echo "Berhasil generate " . $nama_file_save . ". Dan berhasil update kontrak";
+						} else {
+							echo "Berhasil generate " . $nama_file_save . ". Dan gagal update kontrak";
+						}
+					}
+
+
+				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+				// $pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 
 

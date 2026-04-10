@@ -1520,7 +1520,7 @@ class Pkwt207 extends MY_Controller
 				</tr>
 				<tr>
 					<td>PPh 21</td>
-					<td colspan="5">Ditanggung Pihak Kedua</td>
+					<td colspan="5">Ditanggung Pihak Pertama</td>
 				</tr>
 
 				
