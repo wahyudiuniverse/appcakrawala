@@ -3308,7 +3308,7 @@
 			url: '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid + '/123',
 			method: 'get',
 			success: function(response) {
-			    // alert("Berhasil");
+				alert(response);
 			}
 		});
 	}
