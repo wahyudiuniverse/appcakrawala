@@ -788,7 +788,7 @@ class Pkwt408a extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>

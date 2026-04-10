@@ -69,12 +69,13 @@ class Pkwt1 extends MY_Controller
 	}
 
 
-	public function view() {
+	public function view($uniqueid = null, $identifier = null) {
 		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$uniqueid = $this->uri->segment(4);
+		// $uniqueid = $this->uri->segment(4);
+
 		// $uniqueid = $this->uri->segment(5);
 
 		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
@@ -1840,8 +1841,9 @@ class Pkwt1 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 			
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
-				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				if($identifier==null){
+					$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				}
 				ob_end_flush();
 
 

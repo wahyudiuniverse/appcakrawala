@@ -458,30 +458,6 @@ class Pkwt207 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
-							<br>
-							<tr>
-								<td >3.2</td>
-								<td colspan="20">Gaji yang di terima <b>PIHAK KEDUA</b> setiap bulan belum termasuk potongan dengan fasilitas :</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">Iuran Jaminan Hari Tua <b>( JHT )</b> sesuai ketentuan <b>BPJS KetenagaKerjaan</b> dari hasil pendapatan perbulan</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">Pajak penghasilan <b>PPH21</b>.</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">Iuran <b>BPJS Kesehatan</b>.</td>
-							</tr>
 				</table>
 				<br>
 				<br>
@@ -512,11 +488,11 @@ class Pkwt207 extends MY_Controller
 						<td colspan="18"><b>PIHAK KEDUA</b> berhak mendapatkan cuti tahunan selama 12 hari dalam 1 (satu) tahun, jika masa kerja sudah melampui 1 Tahun (12 Bulan) yang diatur dan kebijakan oleh <b>PIHAK PERTAMA</b> berdasarkan kebutuhan dan kesepakatan dengan pihak User/Klien (berlaku bagi karyawan kontrak).</td>
 					</tr>
 				</table>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
+				<br><br>
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -880,254 +856,7 @@ class Pkwt207 extends MY_Controller
 								<td>Dalam hal perusahaan <b>PIHAK PERTAMA</b> maupun klien <b>PIHAK PERTAMA</b> mengubah nama atau menggabungkan diri dengan perusahaan lain selama masa <b>PKWT</b> ini berlaku, maka ketentuan – ketentuan dari <b>PKWT</b> ini akan tetap berlaku bagi <b>PIHAK KEDUA</b> selama berlakunya <b>PKWT</b> ini.</td>
 							</tr>			
 				</table>
-				<br>	<br>
-
-
-				<div style="text-align: center; text-justify: inter-word;">
-					<b>PASAL 10<br>KEANGGOTAAN KOPERASI</b>
-				</div>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
-							</tr>
-				</table>
-				<br>
-
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td><b>SIMPANAN KOPERASI</b></td>
-							</tr>			
-				</table>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td>1.</td>
-								<td colspan="20">Simpanan Pokok</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td colspan="20">Simpanan diawal pendaftaran anggota dan hanya di potongkan 1 kali, besarnya sama untuk semua anggota yaitu sebesar Rp.50.000.-</td>
-							</tr>
-				<br>
-							<tr>
-								<td>2.</td>
-								<td colspan="20">Simpanan Wajib</td>
-							</tr>
-							<tr>
-								<td></td>
-								<td colspan="20">Simpanan yang dipotongkan setiap bulannya Jumlah simpanan wajib per bulan bervariasi berdasarkan level/jenjang jabatan anggota di Perusahaan dengan rincian:</td>
-							</tr>
-				</table>
-
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td></td>
-								<td colspan="20">
-
-									<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-										<tr>
-											<td colspan="1"></td>
-											<td colspan="8"><b>HO</b></td>
-											<td colspan="9"></td>
-										</tr>
-
-										<tr>
-											<td colspan="1">a.</td>
-											<td colspan="8">Admin</td>
-											<td colspan="9">: Rp. 50.000,-</td>
-										</tr>
-
-										<tr>
-											<td colspan="1">b.</td>
-											<td colspan="8">NAE</td>
-											<td colspan="9">: Rp. 75.000,-</td>
-										</tr>
-
-										<tr>
-											<td colspan="1">c.</td>
-											<td colspan="8">Manager – General Manager </td>
-											<td colspan="9">: Rp. 100.000,-</td>
-										</tr>
-
-										<tr>
-											<td colspan="1">d.</td>
-											<td colspan="8">Direksi / Komisaris</td>
-											<td colspan="9">: Rp. 150.000,-</td>
-										</tr>
-<br>
-
-										<tr>
-											<td colspan="1"></td>
-											<td colspan="8"><b>Area/Cabang</b></td>
-											<td colspan="9"></td>
-										</tr>
-
-										<tr>
-											<td colspan="1">a.</td>
-											<td colspan="8">Frontliner	( Sales/SPG SPB/Motoris/MD)</td>
-											<td colspan="9">: Rp. 25.000,-</td>
-										</tr>
-
-										<tr>
-											<td colspan="1">b.</td>
-											<td colspan="8">Team Leader/Koordinator</td>
-											<td colspan="9">: Rp. 50.000,-</td>
-										</tr>
-
-										<tr>
-											<td colspan="1">c.</td>
-											<td colspan="8">PIC/Kepala Cabang/Area</td>
-											<td colspan="9">: Rp. 75.000,-</td>
-										</tr>
-
-									</table>
-
-								</td>
-							</tr>
-				</table>
-
-
-				<br>
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td><b>PAGU PINJAMAN /PLAFON PINJAMAN</b></td>
-							</tr>			
-				</table>
-
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Besarnya maksimal pinjaman yang dapat diajukan kekoprasi adalah 1x dari Gaji Pokok.</td>
-							</tr>			
-				</table>
-
-				<br>
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td><b>SYARAT PENGAJUAN PINJAMAN</b></td>
-							</tr>			
-				</table>
-				
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Dengan mempertimbangkan keberadaan Koperasi yang merupakan bagian yang tidak dapat dipisahkan dari bisnis utama dari Perusahaan. Dalam hal ini Perusahaan tergantung atas adanya Kontrak Kerjasama dengan Client/Customer maka :</td>
-							</tr>			
-				</table>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td>a.</td>
-								<td colspan="20">Karyawan yang dapat mengajukan pinjaman adalah karyawan yang telah menjadi anggota koperasi dengan 	ketentuan lebih lanjut</td>
-							</tr>
-							<tr>
-								<td>b.</td>
-								<td colspan="20">Memiliki kinerja yang baik dan tidak memiliki catatan dari  masing-masing pengawas</td>
-							</tr>
-				
-							<tr>
-								<td>c.</td>
-								<td colspan="20">Lamanya tenggang/tenor pinjaman maksimal mengikuti batas kontrak karyawan terhadap perusahaan dengan 	tetap mempertimbangan kontrak kerjasama Perusahaan  dengan Client/Customer.</td>
-							</tr>
-				</table>
-
-				<br>
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Karyawan yang dapat mengajukan pinjaman hanyalah karyawan yang sudah menjadi anggota Koperasi dengan mengisi formulir pengajuan pinjaman dan harus atas persetujuan atasan dan Department  HR dengan memperhatikan ketentuan sebagai berikut :</td>
-							</tr>			
-				</table>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td>a.</td>
-								<td colspan="20">Anggota yang telah membayar simpanan pokok (satu kali) dan dua kali simpanan wajib.</td>
-							</tr>
-							<tr>
-								<td>b.</td>
-								<td colspan="20">Pinjaman akan diberikan berdasarkan urutan formulir yang telah masuk ke pengurus koperasi</td>
-							</tr>
-							<tr>
-								<td>c.</td>
-								<td colspan="20">Pinjaman diberikan dengan tetap memperhatikan ketersediaan keuangan koperasi</td>
-							</tr>
-				</table>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Batas akhir penyerahan aplikasi pengajuan pinjaman adalah setiap tanggal 24 di setiap bulannya untuk pencairan di bulan berikutnya.</td>
-							</tr>			
-				</table>
-
-
-				<br>
-				<br>
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td><b>PENGEMBALIAN SIMPANAN ANGGOTA</b></td>
-							</tr>			
-				</table>
-<br>
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-							<tr>
-								<td>Seluruh simpanan baik simpanan  pokok, wajib  tidak dapat diambil selama masih menjadi anggota Koperasi.</td>
-							</tr>
-
-							<tr>
-								<td>Pengembalian simpanan anggota dapat setelah anggota tidak lagi menjadi anggota Koperasi. Dananya diberikan setelah 1 bulan periode penggajian terhitung sejak anggota tidak menjadi anggota Koperasi.</td>
-							</tr>
-<br>
-							<tr>
-								<td>Apabila anggota keluar  namun masih memiliki kewajiban kepada Koperasi maka : </td>
-							</tr>
-
-				</table>
-
-				<br>
-
-				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
-							<tr>
-								<td>1.</td>
-								<td colspan="20">Total simpanan anggota akan diperhitungkan untuk melunasi kewajiban pinjaman</td>
-							</tr>
-							<tr>
-								<td>2.</td>
-								<td colspan="20">Apabila masih belum cukup melunasi kewajiban terhadap koperasi maka Gaji bulan terakhir akan dipotong untuk melunasi kewajiban tersebut</td>
-							</tr>
-							<tr>
-								<td>3.</td>
-								<td colspan="20">Apabila masih belum cukup melunasi juga, maka koperasi akan mengusulkan kepada Departemen HR untuk tidak memberikan surat pengalaman kerja sampai kewajibannya telah dilunasi</td>
-							</tr>
-				</table>
-
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
-				<br>
+				<br><br>
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1238,16 +967,16 @@ class Pkwt207 extends MY_Controller
 
 				$tbl_spb = '
 
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>			
-				<br>
-				<br>		
-				<br>	
+				<br>	<br>		
+				<br><br>
+				<br><br>			
+				<br><br>
+				<br><br>			
+				<br><br>
+				<br><br>			
+				<br><br>
+				<br><br>		
+				<br><br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1745,22 +1474,22 @@ class Pkwt207 extends MY_Controller
 
 					<table cellpadding="2" cellspacing="0" border="0">
 						<tr>
-							<td>Jaminan Kecelakaan Kerja 0,24% ditanggung oleh Pihak Pertama</td>
+							<td>Jaminan Kecelakaan Kerja 0,24% ditanggung Pihak Pertama</td>
 						</tr>
 						<tr>
-							<td>Jaminan Kematian 0,3 % ditanggung oleh Pihak Pertama</td>
+							<td>Jaminan Kematian 0,3 % ditanggung Pihak Pertama</td>
 						</tr>
 						<tr>
-							<td>Jaminan Hari Tua 3,7 % ditanggung oleh Pihak Pertama</td>
+							<td>Jaminan Hari Tua 3,7 % ditanggung Pihak Pertama</td>
 						</tr>
 						<tr>
 							<td>Jaminan Pensiun 2 % ditanggung pihak pertama</td>
 						</tr>
 						<tr>
-							<td>Jaminan Pensiun 1 % ditanggung pihak kedua</td>
+							<td>Jaminan Pensiun 1 % ditanggung pihak pertama</td>
 						</tr>
 						<tr>
-							<td>Iuran JHT sebesar 2% ditanggung oleh Pihak Kedua</td>
+							<td>Iuran JHT sebesar 2% ditanggung Pihak pertama</td>
 						</tr>
 					</table>
 
@@ -1777,7 +1506,7 @@ class Pkwt207 extends MY_Controller
 				</td>
 						</tr>
 						<tr>
-							<td>Iuran sebesar 4% ditanggung oleh pihak Pertama, 1 % Pihak kedua,</td>
+							<td>Iuran sebesar 5% ditanggung oleh pihak Pertama,</td>
 						</tr>
 						<tr>
 							<td>Bisa mengcover untuk karyawan, 1 orang pasangan yang sah, dan maksimal 3 orang anak.</td>

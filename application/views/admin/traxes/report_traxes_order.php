@@ -58,28 +58,33 @@
 
 
 
-                  <tr style="background: #ffec83;">
+                  <tr>
                     <td><strong> Jumlah Produk (QTY) <span class="icon-verify-norek"></span></strong></td>
                     <td>
 
-                      <input style="text-align: right;" class="form-control" placeholder="Pastikan Jumlah Produk (QTY) angka." name="order_qty" id="order_qty"></input>
+                      <input style="text-align: right;" class="form-control" placeholder="Pastikan Jumlah Produk (QTY) angka." name="order_qty" id="order_qty" disabled></input>
                       <span id='pesan_isi_qty'></span>
                     </td>
                   </tr>
 
 
-                  <tr>
-                    <td style='width:25%'><strong> Harga Satuan @Rp.<span class="icon-verify-bank"></span></strong></td>
-                    <td style="text-align: right;"><strong><span class="icon-verify-bank" id="harga_satuan" name="harga_satuan"></span></strong></td>
+                  <tr style="background: #ffec83;">
+                    <td><strong>Harga Satuan @Rp.<span class="icon-verify-norek"></span></strong></td>
+                    <td>
+
+
+                      <input style="text-align: right;" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="Pastikan Harga Satuan (Value) angka." name="harga_satuan" id="harga_satuan"></input>
+                      <span id='pesan_harga_satuan'></span>
                     </td>
                   </tr>
+
 
                   <tr style="background: #ffec83;">
                     <td><strong>Total Harga (Values) Rp.<span class="icon-verify-norek"></span></strong></td>
                     <td>
 
 
-                      <input style="text-align: right;" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="Pastikan Total Harga (Value) angka." name="total_harga" id="total_harga"></input>
+                      <input style="text-align: right;" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="Pastikan Total Harga (Value) angka." name="total_harga" id="total_harga" disabled></input>
                       <span id='pesan_total_harga'></span>
                     </td>
                   </tr>
@@ -241,10 +246,27 @@
 </div>
 
 <script type="text/javascript">
+
+  var rupiah_sat = document.getElementById("harga_satuan");
+  // var qty = document.getElementById("order_qty");
   var rupiah_tot = document.getElementById("total_harga");
-  rupiah_tot.addEventListener("keyup", function(e) {
-    rupiah_tot.value = convertRupiah(this.value);
+
+
+  rupiah_sat.addEventListener("keyup", function(e) {
+
+    var qty = $("#order_qty").val();
+    var sat = this.value.replace(".","");
+    var hasil = (sat * qty);
+
+    rupiah_sat.value = convertRupiah(this.value);
+    rupiah_tot.value = convertRupiah("" + hasil);
+
   });
+
+  // var rupiah_tot = document.getElementById("total_harga");
+  // rupiah_tot.addEventListener("keyup", function(e) {
+  //   rupiah_tot.value = convertRupiah(this.value);
+  // });
 
 
   function convertRupiah(angka, prefix) {
@@ -559,7 +581,7 @@
           $('#toko_modal').html(res['data']['customer_name']);
           $('#material_modal').html(res['data']['material_name']);
           $('#order_qty').val(res['data']['qty']);
-          $('#harga_satuan').html(res['data']['price']);
+          $('#harga_satuan').val(res['data']['price']);
           $('#total_harga').val(res['data']['total']);
 
 
@@ -601,6 +623,7 @@
     // var company_name = $("#field_company_name").val();
 
     var qty = $("#order_qty").val();
+    var harga_satuan = $("#harga_satuan").val();
     var total_harga = $("#total_harga").val();
 
     // var bpjs_join = $("#joindate_field").val();
@@ -614,24 +637,32 @@
 
     // const uniqueTimestamp = Date.now();
     var pesan_qty ="";
+    var pesan_satuan ="";
     var pesan_total ="";
 
     if (qty == "") {
           pesan_qty = "<small style='color:#FF0000;'>Jumlah (QTY) produk tidak boleh kosong..!</small>";
           $('#pesan_perusahaan_id_modal').focus();
     }
+
+    if (harga_satuan == "") {
+          pesan_satuan = "<small style='color:#FF0000;'>Harga Satuan tidak boleh kosong..!</small>";
+          $('#pesan_harga_satuan').focus();
+    }
+
     if (total_harga == "") {
           pesan_total = "<small style='color:#FF0000;'>Total Harga tidak boleh kosong..!</small>";
-          $('#pesan_leavedate').focus();
+          $('#pesan_total_harga').focus();
     }
 
     $('#pesan_isi_qty').html(pesan_qty);
+    $('#pesan_harga_satuan').html(pesan_satuan);
     $('#pesan_total_harga').html(pesan_total);
 
   
     var session_id = '<?php echo $session['employee_name']; ?>';
 
-    if(pesan_qty!="" || pesan_total!=""){
+    if(pesan_qty!="" || pesan_satuan!="" || pesan_total!=""){
 
     } else {
 
@@ -644,6 +675,7 @@
               [csrfName]: csrfHash,
               secid: secid,
               qty: qty,
+              price: harga_satuan,
               total: total_harga,
               modifiedby: session_id,
 

@@ -214,6 +214,8 @@ class Traxes_report_order extends MY_Controller {
 
 		//data satu row yg mau di isi
 		$rowArray = [
+
+			'ID TRANSAKSI',
 			'NIP',
 			'NAMA LENGKAP',
 			'PROJECT',

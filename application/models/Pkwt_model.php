@@ -445,7 +445,7 @@ ORDER BY contract_id DESC LIMIT 1";
 			AND cancel_stat = 0
 	        -- AND project in (8,97,90,106,94,46,74)
 	        AND project = '$project'
-	        LIMIT 200";
+	        LIMIT 50";
 		// $binds = array(1,$cid);
 		$query = $this->db->query($sql);
 		return $query;

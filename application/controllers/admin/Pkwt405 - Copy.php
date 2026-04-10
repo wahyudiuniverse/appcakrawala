@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt406 extends MY_Controller 
+class Pkwt405 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -82,16 +82,19 @@ class Pkwt406 extends MY_Controller
 			redirect('admin/');
 		}
 
-		if ($pkwt[0]->jabatan=='155') {
+		
+		if ($pkwt[0]->jabatan=='834') {
 			// ADMIN NKA
-			redirect('admin/pkwt406pic/view/'.$pkwt[0]->uniqueid);
-		} else if ($pkwt[0]->jabatan=='39') {
-			// ADMIN AREA
-			redirect('admin/pkwt406adminarea/view/'.$pkwt[0]->uniqueid);
+			redirect('admin/pkwt405adminnka/view/'.$pkwt[0]->uniqueid);
+
+		} else if ($pkwt[0]->jabatan=='556') {
+			//ADMIN ANALYST
+			redirect('admin/pkwt405adminanalyst/view/'.$pkwt[0]->uniqueid);
 		} else if ($pkwt[0]->jabatan=='212') {
 			// TEAM LEADER
-			redirect('admin/pkwt406teamleader/view/'.$pkwt[0]->uniqueid);
+			redirect('admin/pkwt405teamleader/view/'.$pkwt[0]->uniqueid);
 		}
+
 
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
@@ -789,7 +792,7 @@ class Pkwt406 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>

@@ -182,6 +182,18 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 								{
 									id: "",
 									class: "role-checkbox-modal custom-control-input",
+									text: "Non-Aktif Karyawan",
+									add_info: "",
+									value: "1017",
+									check: "<?php if (isset($_GET['role_id'])) {
+												if (in_array('1017', $role_resources_ids)) : echo 'checked';
+												else : echo '';
+												endif;
+											} ?>"
+								},
+								{
+									id: "",
+									class: "role-checkbox-modal custom-control-input",
 									text: "Verification Profile",
 									add_info: "",
 									value: "1000",
@@ -1361,6 +1373,45 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 					]
 				},
 
+				//MODUL RATECARD PAYROLL
+				{
+					id: "",
+					class: "role-checkbox-modal custom-control-input",
+					text: "Modul RateCard",
+					check: "<?php if (isset($_GET['role_id'])) {
+								if (in_array('1500', $role_resources_ids)) : echo 'checked';
+								else : echo '';
+								endif;
+							} ?>",
+					add_info: "",
+					value: "1500",
+					items: [{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Import RateCard",
+							add_info: "",
+							value: "1501",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('1501', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>"
+						},
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Manage RateCard",
+							add_info: "",
+							value: "1502",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('1502', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>"
+						},
+
+					]
+				},
 
 				//MODUL SALTAB PAYROLL
 				{
@@ -1374,7 +1425,20 @@ if (isset($_GET['jd']) && isset($_GET['role_id']) && $_GET['data'] == 'role') {
 							} ?>",
 					add_info: "",
 					value: "501",
-					items: [{
+					items: [
+						{
+							id: "",
+							class: "role-checkbox-modal custom-control-input",
+							text: "Import ABSENSI",
+							add_info: "",
+							value: "516",
+							check: "<?php if (isset($_GET['role_id'])) {
+										if (in_array('516', $role_resources_ids)) : echo 'checked';
+										else : echo '';
+										endif;
+									} ?>"
+						},
+						{
 							id: "",
 							class: "role-checkbox-modal custom-control-input",
 							text: "Import SALTAB",

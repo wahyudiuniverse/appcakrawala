@@ -1255,6 +1255,8 @@ class Traxes_model extends CI_Model
 			}
 
 			$data[] = array(
+
+				$record->secid,
 				$record->employee_id,
 				trim(strtoupper($record->employee_name), " "),
 				strtoupper($record->project_name),
@@ -2315,6 +2317,7 @@ class Traxes_model extends CI_Model
 		$data = [
 			// 'secid'      	=> trim($postData['secid']),
 			'qty'     		=> trim($postData['qty']),
+			'price'     		=> str_replace(".", "", trim($postData['price'])),
 			'total'     	=> str_replace(".", "", trim($postData['total'])),
 			'modifiedby'     => trim($postData['modifiedby']),
 			'modifiedon'	=> date("Y-m-d h:m:i"),

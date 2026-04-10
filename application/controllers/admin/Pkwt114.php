@@ -1584,12 +1584,12 @@ class Pkwt114 extends MY_Controller
 							</tr>
 							<tr>
 								<td >21.</td>
-								<td colspan="20">Apabila terbukti menjalin hubungan dalam 1 project yang sama dan hubungan tersebut ke jenjang serius hingga pernikahan, maka salah satu karyawan akan diakhiri kontrak kerjasama.</td>
+								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan.</td>
 								<td colspan="0"></td>
 							</tr>
 							<tr>
 								<td >22.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan.</td>
+								<td colspan="20">Saya bersedia bahwa batas usia maksimal karyawan adalah 56 tahun. Apabila saya telah mencapai usia tersebut, maka hubungan kerja akan berakhir secara otomatis.</td>
 								<td colspan="0"></td>
 							</tr>
 

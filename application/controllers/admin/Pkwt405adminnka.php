@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt406 extends MY_Controller 
+class Pkwt405adminnka extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -82,16 +82,6 @@ class Pkwt406 extends MY_Controller
 			redirect('admin/');
 		}
 
-		if ($pkwt[0]->jabatan=='155') {
-			// ADMIN NKA
-			redirect('admin/pkwt406pic/view/'.$pkwt[0]->uniqueid);
-		} else if ($pkwt[0]->jabatan=='39') {
-			// ADMIN AREA
-			redirect('admin/pkwt406adminarea/view/'.$pkwt[0]->uniqueid);
-		} else if ($pkwt[0]->jabatan=='212') {
-			// TEAM LEADER
-			redirect('admin/pkwt406teamleader/view/'.$pkwt[0]->uniqueid);
-		}
 
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
@@ -789,7 +779,7 @@ class Pkwt406 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>
@@ -1240,6 +1230,25 @@ class Pkwt406 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >19.</td>
+								<td colspan="20">Saya bersedia bahwa apabila saya tidak masuk bekerja tanpa alasan yang sah sesuai ketentuan yang berlaku, maka saya tidak berhak atas upah untuk hari ketidakhadiran tersebut (no work no pay).</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >20.</td>
+								<td colspan="20">Saya bersedia apabila jumlah hari kerja < 15 hari kerja (HK), maka sewa laptop dan pulsa tidak dibayarkan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >21.</td>
+								<td colspan="20">Saya bersedia bahwa gaji pokok dan tunjangan transport yang bersifat harian akan dihitung secara prorata sesuai dengan jumlah hari kerja aktual.</td>
+								<td colspan="0"></td>
+							</tr>
+
+
 				</table>
 
 				<br><br>
@@ -1309,8 +1318,9 @@ class Pkwt406 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+
 				
 				
 				<table cellpadding="2" cellspacing="0" border="0">

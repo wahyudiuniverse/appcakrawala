@@ -622,7 +622,7 @@ class Pkwt364sto extends MY_Controller
 							<tr>
 								<td></td>
 								<td>•</td>
-								<td colspan="20">Hari Sabtu bekerja selama ½ hari.</td>
+								<td colspan="20">Hari Sabtu Jam kerja mengikuti operasional distributor masing-masing area.</td>
 							</tr>
 
 

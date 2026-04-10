@@ -82,12 +82,19 @@ class Pkwt407 extends MY_Controller
 			redirect('admin/');
 		}
 
-		// SMDA
-		if ($pkwt[0]->jabatan=='837') {
-			redirect('admin/pkwt407smda/view/'.$pkwt[0]->uniqueid);
+	
+		if ($pkwt[0]->jabatan=='834') {
+			// ADMIN NKA
+			redirect('admin/pkwt405adminnka/view/'.$pkwt[0]->uniqueid);
 
-		// TL
+		} else if ($pkwt[0]->jabatan=='556') {
+			//ADMIN ANALYST
+			redirect('admin/pkwt405adminanalyst/view/'.$pkwt[0]->uniqueid);
+		} else if ($pkwt[0]->jabatan=='212') {
+			// TEAM LEADER
+			redirect('admin/pkwt405teamleader/view/'.$pkwt[0]->uniqueid);
 		}
+
 
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
@@ -265,6 +272,7 @@ class Pkwt407 extends MY_Controller
 				} else {
 
 				}
+
 
 				$tbl_2 = '
 				
@@ -784,7 +792,7 @@ class Pkwt407 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>
@@ -873,7 +881,7 @@ class Pkwt407 extends MY_Controller
 				<br>
 							<tr>
 								<td>2.</td>
-								<td colspan="20"><b>PIHAK PERTAMA</b> berhak memberikan upah/gaji kepada PIHAK KEDUA sesuai dengan hari kerja.</td>
+								<td colspan="20"><b>PIHAK PERTAMA</b> berhak memberikan upah/gaji kepada <b>PIHAK KEDUA</b> sesuai dengan hari kerja.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1228,6 +1236,13 @@ class Pkwt407 extends MY_Controller
 								<td colspan="20">Saya bersedia memberikan data diri saya untuk kepentingan perusahaan dan pekerjaan.</td>
 								<td colspan="0"></td>
 							</tr>
+
+							<tr>
+								<td >18.</td>
+								<td colspan="20">Apabila masa kerja saya kurang dari 2 (dua) minggu atau 14 (empat belas) hari kerja, maka saya bersedia dikenakan ganti rugi sesuai dengan peraturan perusahaan dan/atau perjanjian yang telah disepakati.</td>
+								<td colspan="0"></td>
+							</tr>
+
 				</table>
 
 				<br><br>

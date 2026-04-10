@@ -786,7 +786,7 @@ class Pkwt476 extends MY_Controller
 				<br>
 							<tr>
 								<td>j.</td>
-								<td colspan="18">diketahui memiliki catatan kriminal atau pernah melakukan kejahatan.</td>
+								<td colspan="18">Diketahui memiliki catatan kriminal atau pernah melakukan kejahatan.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1453,6 +1453,32 @@ class Pkwt476 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Saya bersedia melakukan absensi masuk dan pulang melalui sistem yang telah ditetapkan (Onesky), serta bersedia berada dan menjalankan pekerjaan di POD atau KP yang telah ditentukan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Saya bersedia memenuhi ketentuan durasi kerja, yaitu minimal 8 (delapan) jam per hari terhitung sejak waktu masuk hingga waktu pulang.</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Saya menyetujui bahwa absensi dinyatakan tidak sah (gugur) apabila durasi kehadiran tercatat kurang dari 8 (delapan) jam.</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Saya menyetujui bahwa apabila saya lupa melakukan absensi, baik pada saat masuk maupun pulang, maka pada hari tersebut saya dianggap tidak hadir.</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td >17.</td>
+								<td colspan="20">Saya menyetujui bahwa pengajuan Berita Acara terkait absensi hanya dapat dilakukan dalam kondisi khusus, yaitu apabila terjadi kendala teknis pada perangkat (gadget trouble) atau gangguan pada sistem OneSky.</td>
+								<td colspan="0"></td>
+							</tr>
 				</table>
 
 				<br><br>
@@ -1522,9 +1548,11 @@ class Pkwt476 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
