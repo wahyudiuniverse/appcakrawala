@@ -1875,23 +1875,23 @@ class Pkwt1 extends MY_Controller
 				$nama_file_save = "";
 
 				//untuk di local
-				$nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
-				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
-				$nama_file_save2 = "/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
+				// $nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
+				// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				// $nama_file_save2 = "/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
 
 				//untuk di server
-				// $nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
-				// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
+				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
 
 				//update path file di local
-				$data_update = [
-					'file_name'    		=> $nama_file_save2,
-				];
+				// $data_update = [
+				// 	'file_name'    		=> $nama_file_save2,
+				// ];
 
 				//update path file di server
-				// $data_update = [
-				// 	'file_name'    		=> $nama_file_save,
-				// ];
+				$data_update = [
+					'file_name'    		=> $nama_file_save,
+				];
 
 				if ($this->Contracts_model->update_kontrak($data_update, $uniqueid)) {
 					// echo '200';
