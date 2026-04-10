@@ -3146,6 +3146,8 @@
 		//inisialisasi input
 		$('#link_file_ttd_sebelum_modal').val("");
 		$('#display_file_ttd').html("");
+		$('.info-modal-upload-ttd').attr("hidden", true);
+		$('.isi-modal-upload-ttd').attr("hidden", false);
 
 		//inisialisasi attribut input
 		$('#file_ttd_modal').prop("hidden", false);
