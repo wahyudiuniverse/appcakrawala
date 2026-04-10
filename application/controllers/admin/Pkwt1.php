@@ -1875,24 +1875,30 @@ class Pkwt1 extends MY_Controller
 				$nama_file_save = "";
 
 				//untuk di local
-				// $nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
-				// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				$nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
+				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				$nama_file_save2 = "/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
 
 				//untuk di server
-				$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
-				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				// $nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
+				// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
 
-				//update path file
+				//update path file di local
 				$data_update = [
-					'file_name'    		=> $nama_file_save,
+					'file_name'    		=> $nama_file_save2,
 				];
 
+				//update path file di server
+				// $data_update = [
+				// 	'file_name'    		=> $nama_file_save,
+				// ];
+
 				if ($this->Contracts_model->update_kontrak($data_update, $uniqueid)) {
-					echo '<script>alert("Berhasil generate ' . $nama_file_save . ' . Dan berhasil update kontrak"); window.close();</script>';
-					// echo "Berhasil generate " . $nama_file_save . ". Dan berhasil update kontrak";
+					// echo '200';
+					echo "Berhasil generate " . $nama_file_save . ". Dan berhasil update kontrak";
 				} else {
-					echo '<script>alert("Berhasil generate ' . $nama_file_save . ' . Dan gagal update kontrak"); window.close();</script>';
-					// echo "Berhasil generate " . $nama_file_save . ". Dan gagal update kontrak";
+					// echo '201';
+					echo "Berhasil generate " . $nama_file_save . ". Dan gagal update kontrak";
 				}
 			}
 
@@ -1901,7 +1907,8 @@ class Pkwt1 extends MY_Controller
 			// $pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 			ob_end_flush();
 		} else {
-			echo '<script>alert("PKWT # ( DISACTIVE ) \nPlease Contact HR For Approval..!"); window.close();</script>';
+			// echo '202'; //gagal generate pkwt
+			echo "gagal generate pkwt";
 			// redirect('admin/pkwt');
 		}
 	}
