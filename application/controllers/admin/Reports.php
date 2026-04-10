@@ -3663,4 +3663,35 @@ class Reports extends MY_Controller
 
 		$writer->save('php://output');
 	}
+
+	//update data kontrak
+	public function update_kontrak()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'file_tandatangan'    => $postData['link_file_ttd'],
+		];
+
+		// update data kontrak
+		$data = $this->Employees_model->update_kontrak($datarequest, $postData['id_kontrak']);
+
+		if ($data == false) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Tidak ada perubahan data",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Update Data",
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
 }

@@ -10919,26 +10919,25 @@ class Employees extends MY_Controller
 			$status = "";
 			$pesan = "";
 
-
-			if (($data['file_name'] == "") || (empty($data['file_name'])) || ($data['file_name'] == "0")) {
-				$nama_file = "tidak ada file"; //nilai di database kosong
-				$status = "202"; //file blm upload
+			if (($record_database == "") || (empty($record_database)) || ($record_database == "0")) {
+				$nama_file = "File Belum Diupload";
+				$status = "201"; //file blm upload
 				$pesan = "File Belum Diupload";
 			} else {
-				if (file_exists($local1 . $record_database)) { //cek file di lokal
-					$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
+				if (file_exists($local1 . $record_database)) { //cek file di lokal 1
+					$nama_file = base_url() . "uploads/document/ijazah/" . $record_database;
 					$status = "200"; //file ditemukan
 					$pesan = "Berhasil Fetch Data";
 				} else {
 					if (file_exists($local2 . $record_database)) { //cek file di lokal 2
-						$nama_file_rekening = base_url() . "uploads/document/" . $record_database;
-						$status_rekening = "200"; //file ditemukan
-						$pesan_rekening = "Berhasil Fetch Data";
+						$nama_file = base_url() . "uploads/document/" . $record_database;
+						$status = "200"; //file ditemukan
+						$pesan = "Berhasil Fetch Data";
 					} else {
 						if (file_exists($local3 . $record_database)) { //cek file di lokal 3
-							$nama_file_rekening = base_url() . $record_database;
-							$status_rekening = "200"; //file ditemukan
-							$pesan_rekening = "Berhasil Fetch Data";
+							$nama_file = base_url() . $record_database;
+							$status = "200"; //file ditemukan
+							$pesan = "Berhasil Fetch Data";
 						} else {
 							if (strpos($record_database, "http") === false) { //kalau ada http nya
 								$nama_file = "tidak ada file"; //record di database tanpa http
@@ -10947,7 +10946,7 @@ class Employees extends MY_Controller
 							} else {
 								$headers = @get_headers($record_database);
 								if ($headers == false) {
-									$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+									$nama_file = ""; //link mati atau tidak bisa dibuka
 									$status = "203"; //file tidak ditemukan
 									$pesan = "File Tidak Ditemukan";
 								} else {
@@ -10962,21 +10961,70 @@ class Employees extends MY_Controller
 										$pesan = "File Tidak Ditemukan";
 									}
 								}
-								// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
-								// if ($file_in_url_exist) {
-								// 	$nama_file = $record_database; //tampil file skema lama dengan http
-								// 	$status = "200"; //file ditemukan
-								// 	$pesan = "Berhasil Fetch Data";
-								// } else {
-								// 	$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
-								// 	$status = "203"; //file tidak ditemukan
-								// 	$pesan = "File Tidak Ditemukan";
-								// }
 							}
 						}
 					}
 				}
 			}
+
+
+			// if (($data['file_name'] == "") || (empty($data['file_name'])) || ($data['file_name'] == "0")) {
+			// 	$nama_file = "tidak ada file"; //nilai di database kosong
+			// 	$status = "202"; //file blm upload
+			// 	$pesan = "File Belum Diupload";
+			// } else {
+			// 	if (file_exists($local1 . $record_database)) { //cek file di lokal
+			// 		$nama_file = base_url() . "uploads/document/pkwt/" . $record_database;
+			// 		$status = "200"; //file ditemukan
+			// 		$pesan = "Berhasil Fetch Data";
+			// 	} else {
+			// 		if (file_exists($local2 . $record_database)) { //cek file di lokal 2
+			// 			$nama_file_rekening = base_url() . "uploads/document/" . $record_database;
+			// 			$status_rekening = "200"; //file ditemukan
+			// 			$pesan_rekening = "Berhasil Fetch Data";
+			// 		} else {
+			// 			if (file_exists($local3 . $record_database)) { //cek file di lokal 3
+			// 				$nama_file_rekening = base_url() . $record_database;
+			// 				$status_rekening = "200"; //file ditemukan
+			// 				$pesan_rekening = "Berhasil Fetch Data";
+			// 			} else {
+			// 				if (strpos($record_database, "http") === false) { //kalau ada http nya
+			// 					$nama_file = "tidak ada file"; //record di database tanpa http
+			// 					$status = "203"; //file tidak ditemukan
+			// 					$pesan = "File Tidak Ditemukan";
+			// 				} else {
+			// 					$headers = @get_headers($record_database);
+			// 					if ($headers == false) {
+			// 						$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+			// 						$status = "203"; //file tidak ditemukan
+			// 						$pesan = "File Tidak Ditemukan";
+			// 					} else {
+			// 						$file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+			// 						if ($file_in_url_exist) {
+			// 							$nama_file = $record_database; //tampil file skema lama dengan http
+			// 							$status = "200"; //file ditemukan
+			// 							$pesan = "Berhasil Fetch Data";
+			// 						} else {
+			// 							$nama_file = ""; //link mati atau tidak bisa dibuka
+			// 							$status = "203"; //file tidak ditemukan
+			// 							$pesan = "File Tidak Ditemukan";
+			// 						}
+			// 					}
+			// 					// $file_in_url_exist = stripos($headers[0], "200 OK") ? true : false; //cek open link
+			// 					// if ($file_in_url_exist) {
+			// 					// 	$nama_file = $record_database; //tampil file skema lama dengan http
+			// 					// 	$status = "200"; //file ditemukan
+			// 					// 	$pesan = "Berhasil Fetch Data";
+			// 					// } else {
+			// 					// 	$nama_file = "tidak ada file"; //link mati atau tidak bisa dibuka
+			// 					// 	$status = "203"; //file tidak ditemukan
+			// 					// 	$pesan = "File Tidak Ditemukan";
+			// 					// }
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// }
 
 			$response = array(
 				'status'	=> $status,
@@ -12153,6 +12201,41 @@ class Employees extends MY_Controller
 						$nama_file = $this->upload->data('file_name');
 						$file_type = $this->upload->data('file_type');
 						$path_file = '/uploads/document/excel_absensi/' . $yearmonth . '/';
+						$file_data = $path_file . $nama_file;
+						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
+
+						// $path_file_return = 'https://karir.onecorp.co.id/uploads/document/ktp/' . $yearmonth . '/';
+						// $path_file_return = 'http://localhost/appjoborder/uploads/document/ktp/' . $yearmonth . '/';
+						// $file_data_return = $path_file_return . $nama_file;
+						$return_file_data[] = array(
+							"link_file" => $file_data,
+							"type_file" => $file_type,
+						);
+					}
+				}
+			} else if ($identifier == "ttd_pkwt") {
+				if (!is_dir('./assets/images/ttd/' . $yearmonth)) {
+					mkdir('./assets/images/ttd/' . $yearmonth, 0777, TRUE);
+				}
+				if (!empty($img['name'])) {
+					$config['upload_path'] = './assets/images/ttd/' . $yearmonth;
+					$config['allowed_types'] = '*';
+					// $config['max_size'] = '100'; 
+					// $config['max_width'] = '1024';
+					// $config['max_height'] = '768';
+					$config['overwrite'] = FALSE;
+					$config['file_name'] = 'ttd_pkwt_' . $postData['nip'] . '_' . time();
+
+					$this->load->library('upload', $config);
+					$this->upload->initialize($config);
+					if (!$this->upload->do_upload($key)) {
+						$error = array('error' => $this->upload->display_errors());
+						print_r($error);
+						die;
+					} else {
+						$nama_file = $this->upload->data('file_name');
+						$file_type = $this->upload->data('file_type');
+						$path_file = '/assets/images/ttd/' . $yearmonth . '/';
 						$file_data = $path_file . $nama_file;
 						// $this->Screening_model->save_dokumen($file_data, $postData['nip'], $name);
 

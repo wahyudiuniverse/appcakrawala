@@ -847,6 +847,8 @@ class Employees_model extends CI_Model
 			'tanggal_kontrak' => "",
 			'draft_kontrak' => "",
 			'button_kontrak' => "",
+			'button_upload_ttd' => "",
+			'button_generate_pkwt' => "",
 			'status_blast' => "",
 		);
 
@@ -910,11 +912,18 @@ class Employees_model extends CI_Model
 							// $status = "202"; //file blm upload
 							// $pesan = "File Belum Diupload";
 							$button_kontrak = '';
+							$button_upload_ttd = '';
+							$button_generate_pkwt = '';
 						} else {
 							if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
 								$button_kontrak = '</br><button onclick="open_kontrak(\'' . $query2['contract_id'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >VIEW KONTRAK</button>';
+								$button_upload_ttd = '</br><button onclick="upload_ttd(\'' . $query2['contract_id'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >UPLOAD TTD</button>';
+								// $button_generate_pkwt = '</br><button onclick="generate_pkwt(\'' . $query2['contract_id'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >GENERATE PKWT</button>';
+								$button_generate_pkwt = '</br><button onclick="generate_pkwt(\'' . $query2['uniqueid'] . '\',\'' . $query2['sub_project'] . '\')" type="button" class="btn btn-xs btn-outline-twitter" >GENERATE PKWT</button>';
 							} else {
 								$button_kontrak = '';
+								$button_upload_ttd = '';
+								$button_generate_pkwt = '';
 							}
 						}
 
@@ -993,6 +1002,8 @@ class Employees_model extends CI_Model
 					} else {
 						$file_name_kontrak = "";
 						$button_kontrak = "";
+						$button_upload_ttd = "";
+						$button_generate_pkwt = '';
 					}
 
 					if ($query2['status_blast'] == 1) {
@@ -1015,6 +1026,8 @@ class Employees_model extends CI_Model
 						'tanggal_kontrak' => $this->Xin_model->tgl_indo($query2['from_date']) . " s/d " . $this->Xin_model->tgl_indo($query2['to_date']),
 						'draft_kontrak' => $button_draft_kontrak,
 						'button_kontrak' => $button_kontrak,
+						'button_upload_ttd' => $button_upload_ttd,
+						'button_generate_pkwt' => $button_generate_pkwt,
 						'status_blast' => $status_blast,
 					);
 
@@ -3610,7 +3623,7 @@ class Employees_model extends CI_Model
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
 					"penempatan" => strtoupper($record->penempatan),
-					"periode" => "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['status_blast'],
+					"periode" => "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['button_upload_ttd']. $pkwt_periode['button_generate_pkwt'] . $pkwt_periode['status_blast'],
 					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
 				);
@@ -9417,5 +9430,18 @@ NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents W
 		// $query = $this->db->get('projects')->result_array();
 
 		// return $query;
+	}
+
+	//update data kontrak
+	public function update_kontrak($postData, $id)
+	{
+		$this->db->where('contract_id', $id);
+		$this->db->update('xin_employee_contract', $postData);
+
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

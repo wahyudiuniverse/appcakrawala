@@ -1,5 +1,6 @@
 <?php
-  /**
+
+/**
  * NOTICE OF LICENSE
  *
  * This source file is subject to the dndsoft License
@@ -8,51 +9,54 @@
  * @author-email  komputer.dnd@gmail.com
  * @copyright  Copyright © dndsoft.my.id All Rights Reserved
  */
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pkwt1 extends MY_Controller 
+class Pkwt1 extends MY_Controller
 {
 
-   /*Function to set JSON output*/
-	public function output($Return=array()) {
+	/*Function to set JSON output*/
+	public function output($Return = array())
+	{
 		/*Set response header*/
 		header("Access-Control-Allow-Origin: *");
 		header("Content-Type: application/json; charset=UTF-8");
 		/*Final JSON response*/
 		exit(json_encode($Return));
 	}
-	
-	public function __construct() {
-          parent::__construct();
-          //load the login model
-          $this->load->model('Company_model');
-		  $this->load->model('Xin_model');
-			$this->load->model("Employees_model");
-		  $this->load->model("Project_model");
-			$this->load->model("Pkwt_model");
-		  // $this->load->model("Tax_model");
-		  // $this->load->model("Invoices_model");
-		  $this->load->model("Clients_model");
-		  $this->load->model("Finance_model");
-			$this->load->model("Department_model");
-			$this->load->model("Designation_model");
-			$this->load->model("Location_model");
-			$this->load->model("Roles_model");
-			$this->load->model("City_model");
-			$this->load->model("Contracts_model");
-			$this->load->library("pagination");
-			$this->load->library('Pdf');
-			$this->load->helper('string');
-     }
-	 
+
+	public function __construct()
+	{
+		parent::__construct();
+		//load the login model
+		$this->load->model('Company_model');
+		$this->load->model('Xin_model');
+		$this->load->model("Employees_model");
+		$this->load->model("Project_model");
+		$this->load->model("Pkwt_model");
+		// $this->load->model("Tax_model");
+		// $this->load->model("Invoices_model");
+		$this->load->model("Clients_model");
+		$this->load->model("Finance_model");
+		$this->load->model("Department_model");
+		$this->load->model("Designation_model");
+		$this->load->model("Location_model");
+		$this->load->model("Roles_model");
+		$this->load->model("City_model");
+		$this->load->model("Contracts_model");
+		$this->load->library("pagination");
+		$this->load->library('Pdf');
+		$this->load->helper('string');
+	}
+
 	// invoices page
-	public function index() {
-	
+	public function index()
+	{
+
 		$session = $this->session->userdata('username');
-		if(empty($session)){ 
+		if (empty($session)) {
 			redirect('admin/');
 		}
-		$data['title'] = $this->lang->line('xin_pkwt').' | '.$this->Xin_model->site_title();
+		$data['title'] = $this->lang->line('xin_pkwt') . ' | ' . $this->Xin_model->site_title();
 		$data['breadcrumbs'] = $this->lang->line('xin_pkwt');
 		$data['all_projects'] = $this->Project_model->get_projects();
 		$data['all_employees'] = $this->Employees_model->get_all_employees_active();
@@ -60,7 +64,7 @@ class Pkwt1 extends MY_Controller
 		$data['all_companies'] = $this->Xin_model->get_companies();
 		$data['path_url'] = 'hrpremium_pkwt';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if(in_array('34',$role_resources_ids)) {
+		if (in_array('34', $role_resources_ids)) {
 			$data['subview'] = $this->load->view("admin/pkwt/pkwt_list", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
@@ -69,102 +73,103 @@ class Pkwt1 extends MY_Controller
 	}
 
 
-	public function view($uniqueid = null, $identifier = null) {
+	public function view($uniqueid = null, $identifier = null)
+	{
 		$system = $this->Xin_model->read_setting_info(1);
-		 // create new PDF document
-   	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		// create new PDF document
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		// $uniqueid = $this->uri->segment(4);
 		// $uniqueid = $this->uri->segment(5);
 
 		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
-		if(is_null($pkwt)){
+		if (is_null($pkwt)) {
 			redirect('admin/');
 		}
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
 
-		if($pkwt[0]->approve_hrd != null){
+		if ($pkwt[0]->approve_hrd != null) {
 
-				if($pkwt[0]->company==2){
-					$logo_cover = 'tcpdf_logo_sc.png';
-					$header_namae = 'PT. Siprama Cakrawala';
-				} else {
-					$logo_cover = 'tcpdf_logo_kac.png';
-					$header_namae = 'PT. Krista Aulia Cakrawala';
-				}
-
-				// set document information
-				$pdf->SetCreator('HRCakrawala');
-				$pdf->SetAuthor('HRCakrawala');
-				// $baseurl=base_url();
-
+			if ($pkwt[0]->company == 2) {
+				$logo_cover = 'tcpdf_logo_sc.png';
 				$header_namae = 'PT. Siprama Cakrawala';
-				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
+			} else {
+				$logo_cover = 'tcpdf_logo_kac.png';
+				$header_namae = 'PT. Krista Aulia Cakrawala';
+			}
 
-				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
-				
-				$pdf->setFooterData(array(0,64,0), array(0,64,128));
-			
-				// set header and footer fonts
-				// $pdf->setHeaderFont(Array('helvetica', ', 20));
-				// $pdf->setFooterFont(Array('helvetica', ', 9));
-			
-				// set default monospaced font
-				$pdf->SetDefaultMonospacedFont('courier');
-				
-				// set margins
-				$pdf->SetMargins(15, 27, 15);
-				$pdf->SetHeaderMargin(5);
-				$pdf->SetFooterMargin(10);
-				
-				// set auto page breaks
-				$pdf->SetAutoPageBreak(TRUE, 25);
-				
-				// set image scale factor
-				$pdf->setImageScale(10);
+			// set document information
+			$pdf->SetCreator('HRCakrawala');
+			$pdf->SetAuthor('HRCakrawala');
+			// $baseurl=base_url();
 
-				$pdf->SetAuthor('HRCakrawala');
-				$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
-				$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
-				$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
-				// set font
-				$pdf->SetFont('helvetica', 'B', 10);
-						
-				// set header and footer fonts
-				$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 9));
-				$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-				
-				// set default monospaced font
-				$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-				
-				// set margins
-				$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-				$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-				$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-				
-				// set auto page breaks
-				$pdf->SetAutoPageBreak(TRUE, 12);
-				
-				// set image scale factor
-				$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-				
-				// ---------------------------------------------------------
+			$header_namae = 'PT. Siprama Cakrawala';
+			$header_string = 'HR Power Services | Facility Services' . "\n" . 'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
-				// set default font subsetting mode
-				$pdf->setFontSubsetting(true);
-				
-				// Set font
-				// dejavusans is a UTF-8 Unicode font, if you only need to
-				// print standard ASCII chars, you can use core fonts like
-				// helvetica or times to reduce file size.
-				$pdf->SetFont('helvetica', '', 9, '', true);
-				
-				// Add a page
-				// This method has several options, check the source code documentation for more information.
-				$pdf->AddPage();
-				/*$tbl = '<br>
+			$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
+
+			$pdf->setFooterData(array(0, 64, 0), array(0, 64, 128));
+
+			// set header and footer fonts
+			// $pdf->setHeaderFont(Array('helvetica', ', 20));
+			// $pdf->setFooterFont(Array('helvetica', ', 9));
+
+			// set default monospaced font
+			$pdf->SetDefaultMonospacedFont('courier');
+
+			// set margins
+			$pdf->SetMargins(15, 27, 15);
+			$pdf->SetHeaderMargin(5);
+			$pdf->SetFooterMargin(10);
+
+			// set auto page breaks
+			$pdf->SetAutoPageBreak(TRUE, 25);
+
+			// set image scale factor
+			$pdf->setImageScale(10);
+
+			$pdf->SetAuthor('HRCakrawala');
+			$pdf->SetTitle('PT. Siprama Cakrawala ' . ' - ' . $this->lang->line('xin_download_profile_title'));
+			$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
+			$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
+			// set font
+			$pdf->SetFont('helvetica', 'B', 10);
+
+			// set header and footer fonts
+			$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', 9));
+			$pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+			// set default monospaced font
+			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+			// set margins
+			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+			// set auto page breaks
+			$pdf->SetAutoPageBreak(TRUE, 12);
+
+			// set image scale factor
+			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+			// ---------------------------------------------------------
+
+			// set default font subsetting mode
+			$pdf->setFontSubsetting(true);
+
+			// Set font
+			// dejavusans is a UTF-8 Unicode font, if you only need to
+			// print standard ASCII chars, you can use core fonts like
+			// helvetica or times to reduce file size.
+			$pdf->SetFont('helvetica', '', 9, '', true);
+
+			// Add a page
+			// This method has several options, check the source code documentation for more information.
+			$pdf->AddPage();
+			/*$tbl = '<br>
 				<table cellpadding="1" cellspacing="1" border="0">
 					<tr>
 						<td align="center"><h1>'.$fname.'</h1></td>
@@ -172,110 +177,108 @@ class Pkwt1 extends MY_Controller
 				</table>
 				';
 				$pdf->writeHTML($tbl, true, false, false, false, ');*/
-				// -----------------------------------------------------------------------------
+			// -----------------------------------------------------------------------------
 
 
 
-				// $date_of_joining = $this->Xin_model->set_date_format($user[0]->date_of_joining);
-				// $date_of_birth = $this->Xin_model->set_date_format($user[0]->date_of_birth);
-				// $set_ethnicity = $this->Xin_model->read_user_xin_ethnicity($user[0]->ethnicity_type);
-				// $set_marital = $this->Xin_model->read_user_xin_marital($user[0]->marital_status);
-				// $set_location_office = $this->Xin_model->read_user_xin_office_location($user[0]->location_id);
-				// $set_department = $this->Xin_model->read_user_xin_department($user[0]->department_id);
-				// $set_designation = $this->Xin_model->read_user_xin_designation($user[0]->designation_id);
-				//----------------------------------------------------------------------------------------
-			
-				// set cell padding
-				$pdf->setCellPaddings(1, 1, 1, 1);
-				
-				// set cell margins
-				$pdf->setCellMargins(0, 0, 0, 0);
-				
-				// set color for background
-				$pdf->SetFillColor(255, 255, 127);
-				/////////////////////////////////////////////////////////////////////////////////
+			// $date_of_joining = $this->Xin_model->set_date_format($user[0]->date_of_joining);
+			// $date_of_birth = $this->Xin_model->set_date_format($user[0]->date_of_birth);
+			// $set_ethnicity = $this->Xin_model->read_user_xin_ethnicity($user[0]->ethnicity_type);
+			// $set_marital = $this->Xin_model->read_user_xin_marital($user[0]->marital_status);
+			// $set_location_office = $this->Xin_model->read_user_xin_office_location($user[0]->location_id);
+			// $set_department = $this->Xin_model->read_user_xin_department($user[0]->department_id);
+			// $set_designation = $this->Xin_model->read_user_xin_designation($user[0]->designation_id);
+			//----------------------------------------------------------------------------------------
 
-				if(!is_null($pkwt)){
+			// set cell padding
+			$pdf->setCellPaddings(1, 1, 1, 1);
 
+			// set cell margins
+			$pdf->setCellMargins(0, 0, 0, 0);
 
+			// set color for background
+			$pdf->SetFillColor(255, 255, 127);
+			/////////////////////////////////////////////////////////////////////////////////
 
-					$nomorsurat 							= $pkwt[0]->no_surat;
-					$nomorspb 								= $pkwt[0]->no_spb;
-					// $sign_nip 								= $pkwt[0]->sign_nip;
-					$sign_fullname 						= $pkwt[0]->sign_fullname;
-					$sign_jabatan 						= $pkwt[0]->sign_jabatan;
-					$sign_qrcode 							= $pkwt[0]->img_esign;
-					$sign_digital 						= $pkwt[0]->file_tandatangan;
-					$pkwt_active							= $pkwt[0]->status_pkwt;
-
-					$tanggalcetak 						= $pkwt[0]->from_date;
-					$namalengkap 							= $user[0]->first_name;
-					$tempattgllahir 					= $user[0]->tempat_lahir.', '.$this->Xin_model->tgl_indo($user[0]->date_of_birth);
-
-					$designation = $this->Xin_model->read_user_xin_designation($pkwt[0]->jabatan);
-					if(!is_null($designation)){
-						$jabatan = $designation[0]->designation_name;
-					} else {
-						$jabatan = '-';
-					}
-
-					$alamatlengkap 					= $user[0]->alamat_ktp;
-					$nomorkontak 						= $user[0]->contact_no;
-					$ktp 										= $user[0]->ktp_no;
-
-					$penempatan 						= $pkwt[0]->penempatan;
-					$waktukontrak 					= $pkwt[0]->waktu_kontrak;
-					$tglmulaipkwt 					= $pkwt[0]->from_date;
-					$tglakhirpkwt 					= $pkwt[0]->to_date;
-					$waktukerja 						= $pkwt[0]->hari_kerja;
-
-					$project = $this->Xin_model->read_user_xin_project($pkwt[0]->project);
-					if(!is_null($project)){
-						$client = $project[0]->title;
-					} else {
-						$client = $project[0]->title;
-					}
-
-					$basicpay =	$this->Xin_model->rupiah($pkwt[0]->basic_pay);
-					$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
-					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
-					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
-					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
-					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
-					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
-					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
-					$allowance_park =	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
-					$allowance_residance =	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
-
-					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
-					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
-					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
-					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
-					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
-					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
-
-					$sum_salary = $pkwt[0]->basic_pay + $pkwt[0]->allowance_grade + $pkwt[0]->allowance_area + $pkwt[0]->allowance_masakerja + $pkwt[0]->allowance_meal + $pkwt[0]->allowance_transport + $pkwt[0]->allowance_rent + $pkwt[0]->allowance_komunikasi + $pkwt[0]->allowance_park + $pkwt[0]->allowance_residance + $pkwt[0]->allowance_laptop + $pkwt[0]->allowance_kasir + $pkwt[0]->allowance_transmeal + $pkwt[0]->allowance_medicine + $pkwt[0]->allowance_akomodasi + $pkwt[0]->allowance_operation;
+			if (!is_null($pkwt)) {
 
 
-					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
-					$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
-					$tgl_payment = $pkwt[0]->tgl_payment;
 
+				$nomorsurat 							= $pkwt[0]->no_surat;
+				$nomorspb 								= $pkwt[0]->no_spb;
+				// $sign_nip 								= $pkwt[0]->sign_nip;
+				$sign_fullname 						= $pkwt[0]->sign_fullname;
+				$sign_jabatan 						= $pkwt[0]->sign_jabatan;
+				$sign_qrcode 							= $pkwt[0]->img_esign;
+				$sign_digital 						= $pkwt[0]->file_tandatangan;
+				$pkwt_active							= $pkwt[0]->status_pkwt;
+
+				$tanggalcetak 						= $pkwt[0]->from_date;
+				$namalengkap 							= $user[0]->first_name;
+				$tempattgllahir 					= $user[0]->tempat_lahir . ', ' . $this->Xin_model->tgl_indo($user[0]->date_of_birth);
+
+				$designation = $this->Xin_model->read_user_xin_designation($pkwt[0]->jabatan);
+				if (!is_null($designation)) {
+					$jabatan = $designation[0]->designation_name;
 				} else {
-
+					$jabatan = '-';
 				}
 
+				$alamatlengkap 					= $user[0]->alamat_ktp;
+				$nomorkontak 						= $user[0]->contact_no;
+				$ktp 										= $user[0]->ktp_no;
 
-				$tbl_2 = '
+				$penempatan 						= $pkwt[0]->penempatan;
+				$waktukontrak 					= $pkwt[0]->waktu_kontrak;
+				$tglmulaipkwt 					= $pkwt[0]->from_date;
+				$tglakhirpkwt 					= $pkwt[0]->to_date;
+				$waktukerja 						= $pkwt[0]->hari_kerja;
+
+				$project = $this->Xin_model->read_user_xin_project($pkwt[0]->project);
+				if (!is_null($project)) {
+					$client = $project[0]->title;
+				} else {
+					$client = $project[0]->title;
+				}
+
+				$basicpay =	$this->Xin_model->rupiah($pkwt[0]->basic_pay);
+				$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
+				$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
+				$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
+				$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
+				$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
+				$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
+				$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
+				$allowance_park =	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
+				$allowance_residance =	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+
+				$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
+				$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
+				$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
+				$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
+				$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
+				$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+
+				$sum_salary = $pkwt[0]->basic_pay + $pkwt[0]->allowance_grade + $pkwt[0]->allowance_area + $pkwt[0]->allowance_masakerja + $pkwt[0]->allowance_meal + $pkwt[0]->allowance_transport + $pkwt[0]->allowance_rent + $pkwt[0]->allowance_komunikasi + $pkwt[0]->allowance_park + $pkwt[0]->allowance_residance + $pkwt[0]->allowance_laptop + $pkwt[0]->allowance_kasir + $pkwt[0]->allowance_transmeal + $pkwt[0]->allowance_medicine + $pkwt[0]->allowance_akomodasi + $pkwt[0]->allowance_operation;
+
+
+				$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
+				$tgl_akhirperiode_payment = $pkwt[0]->end_period_payment;
+				$tgl_payment = $pkwt[0]->tgl_payment;
+			} else {
+			}
+
+
+			$tbl_2 = '
 				
 					<div style="text-align: center; text-justify: inter-word;">
-						<b><u>PERJANJIAN KERJA WAKTU TERTENTU<br>'.$nomorsurat.'</u><br>(PKWT)</b>
+						<b><u>PERJANJIAN KERJA WAKTU TERTENTU<br>' . $nomorsurat . '</u><br>(PKWT)</b>
 					</div>
 				<br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Pada hari ini di '.$this->Xin_model->tgl_indo($tanggalcetak).' ditandatangani Perjanjian Kerja Waktu Tertentu (selanjutnya disebut "<b>PKWT</b>") oleh dan diantara:</td>
+								<td>Pada hari ini di ' . $this->Xin_model->tgl_indo($tanggalcetak) . ' ditandatangani Perjanjian Kerja Waktu Tertentu (selanjutnya disebut "<b>PKWT</b>") oleh dan diantara:</td>
 							</tr>
 				</table>
 
@@ -284,12 +287,12 @@ class Pkwt1 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 					<tr>
 						<td>Nama</td>
-						<td colspan="3">: '.$sign_fullname.'</td>
+						<td colspan="3">: ' . $sign_fullname . '</td>
 					</tr>
 
 					<tr>
 						<td>Jabatan</td>
-						<td colspan="3">: '.$sign_jabatan.'</td>
+						<td colspan="3">: ' . $sign_jabatan . '</td>
 					</tr>
 
 					<tr>
@@ -311,31 +314,31 @@ class Pkwt1 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0">
 					<tr>
 						<td>Nama</td>
-						<td colspan="3"> : '.$namalengkap.'</td>
+						<td colspan="3"> : ' . $namalengkap . '</td>
 					</tr>
 
 					<tr>
 						<td>Tanggal Lahir</td>
-						<td colspan="3"> : '.$tempattgllahir.'</td>
+						<td colspan="3"> : ' . $tempattgllahir . '</td>
 					</tr>
 
 					<tr>
 						<td>Jabatan</td>
-						<td colspan="3"> : '.$jabatan.'</td>
+						<td colspan="3"> : ' . $jabatan . '</td>
 					</tr>
 					<tr>
 						<td>Alamat Rumah</td>
-						<td colspan="3"> : '.$alamatlengkap.'</td>
+						<td colspan="3"> : ' . $alamatlengkap . '</td>
 					</tr>
 
 					<tr>
 						<td>No. Hp</td>
-						<td colspan="3"> : '.$nomorkontak.'</td>
+						<td colspan="3"> : ' . $nomorkontak . '</td>
 					</tr>
 
 					<tr>
 						<td>No. NIK/KTP</td>
-						<td colspan="3"> : '.$ktp.'</td>
+						<td colspan="3"> : ' . $ktp . '</td>
 					</tr>
 				</table>
 				<br>
@@ -393,7 +396,7 @@ class Pkwt1 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di '.$penempatan.' dengan posisi sebagai karyawan/Staff '.$jabatan.' di Jakarta atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di ' . $penempatan . ' dengan posisi sebagai karyawan/Staff ' . $jabatan . ' di Jakarta atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
 							</tr>
 				<br>
 							<tr>
@@ -419,9 +422,9 @@ class Pkwt1 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>'.$waktukontrak.'</b> Bulan terhitung sejak <b>
-													'.$this->Xin_model->tgl_indo($tglmulaipkwt).'</b> sampai dengan <b>
-																		'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.</td>
+								<td colspan="18">PKWT ini berlangsung/berlaku selama <b>' . $waktukontrak . '</b> Bulan terhitung sejak <b>
+													' . $this->Xin_model->tgl_indo($tglmulaipkwt) . '</b> sampai dengan <b>
+																		' . $this->Xin_model->tgl_indo($tglakhirpkwt) . '</b> Selama <b>PIHAK KEDUA</b> menjadi Karyawan Kontrak maka akan ada masa Evaluasi kinerja setiap bulan dan atau per <b>3 Bulan</b>.</td>
 							</tr>
 				<br>
 							<tr>
@@ -529,7 +532,7 @@ class Pkwt1 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>4.1</td>
-								<td colspan="18">Hari kerja normal adalah '.$waktukerja.' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
+								<td colspan="18">Hari kerja normal adalah ' . $waktukerja . ' hari kerja dalam 1 Bulan kalender sesuai dengan ketentuan <b>PIHAK PERTAMA</b></td>
 							</tr>
 				<br>
 							<tr>
@@ -1172,10 +1175,10 @@ class Pkwt1 extends MY_Controller
 				<br>
 				<br>
 				<br>';
-				$pdf->writeHTML($tbl_2, true, false, false, false, '');
+			$pdf->writeHTML($tbl_2, true, false, false, false, '');
 
-				if($pkwt_active == 1){
-					$tbl_ttd = '
+			if ($pkwt_active == 1) {
+				$tbl_ttd = '
 						<table cellpadding="2" cellspacing="0" border="0">
 
 						<tr>
@@ -1185,21 +1188,21 @@ class Pkwt1 extends MY_Controller
 
 						<tr>
 							<td><br>
-							<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
+							<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
 							<td>
-							<img src="'.base_url().$sign_digital.'" alt="Trulli" width="140" height="90">
+							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="140" height="90">
 
-							<b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 
 						<tr>
-							<td>'.$sign_jabatan.'</td>
+							<td>' . $sign_jabatan . '</td>
 							<td>Karyawan</td>
 						</tr>
 
 						</table>';
-				} else {
-					$tbl_ttd = '
+			} else {
+				$tbl_ttd = '
 						<table cellpadding="2" cellspacing="0" border="0">
 
 						<tr>
@@ -1209,8 +1212,8 @@ class Pkwt1 extends MY_Controller
 
 						<tr>
 							<td><br>
-							<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-							<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<img src="' . base_url() . 'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+							<td><br><br><br><br><br><br><br><b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 
 						<tr>
@@ -1219,14 +1222,14 @@ class Pkwt1 extends MY_Controller
 						</tr>
 
 						</table>';
-				}
-
-				
-				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
+			}
 
 
+			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 
-				$tbl_spb = '
+
+
+			$tbl_spb = '
 
 				<br><br><br><br>
 				<br><br><br><br>
@@ -1238,7 +1241,7 @@ class Pkwt1 extends MY_Controller
 				<br><br><br><br>
 				
 				<div style="text-align: center; text-justify: inter-word;">
-					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
+					<b><u>SURAT PERJANJIAN BERSAMA<br>' . $nomorspb . '</u></b>
 				</div>
 				<br>
 				<br>
@@ -1265,22 +1268,22 @@ class Pkwt1 extends MY_Controller
 
 					<tr>
 						<td>Nama</td>
-						<td colspan="7">: '.$namalengkap.'</td>
+						<td colspan="7">: ' . $namalengkap . '</td>
 					</tr>
 
 					<tr>
 						<td>Jabatan</td>
-						<td colspan="7">: '.$jabatan.'</td>
+						<td colspan="7">: ' . $jabatan . '</td>
 					</tr>
 
 					<tr>
 						<td>Alamat</td>
-						<td colspan="7">: '.$alamatlengkap.'</td>
+						<td colspan="7">: ' . $alamatlengkap . '</td>
 					</tr>
 
 					<tr>
 						<td>No NIK/KTP</td>
-						<td colspan="7">: '.$ktp.'</td>
+						<td colspan="7">: ' . $ktp . '</td>
 					</tr>
 
 				</table>
@@ -1366,7 +1369,7 @@ class Pkwt1 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td >6.</td>
-								<td colspan="20">Bahwa saya bersedia menjadi <b>Karyawan Kontrak</b> selama jangka waktu <b>'.$waktukontrak.'</b> bulan dengan ketentuan sebagai berikut :</td>
+								<td colspan="20">Bahwa saya bersedia menjadi <b>Karyawan Kontrak</b> selama jangka waktu <b>' . $waktukontrak . '</b> bulan dengan ketentuan sebagai berikut :</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1474,33 +1477,9 @@ class Pkwt1 extends MY_Controller
 						<td>Demikian Surat Perjanjian Bersama ini ditandatangani dalam keadaan jasmani/rohani yang sehat, dan tanpa paksaan dari pihak manapun.</td>
 					</tr>			
 				</table>';
-				$pdf->writeHTML($tbl_spb, true, false, false, false, '');
+			$pdf->writeHTML($tbl_spb, true, false, false, false, '');
 
-				if($pkwt_active == 1){
-
-
-				$tbl_ttd2 = '
-				<table cellpadding="2" cellspacing="0" border="0">
-
-					<tr>
-						<td>Pihak Pertama</td>
-						<td>Pihak Kedua</td>
-					</tr>
-
-					<tr>
-						<td><br>
-					<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-					</tr>
-
-					<tr>
-						<td>'.$sign_jabatan.'</td>
-						<td>Karyawan</td>
-					</tr>
-
-				</table>';
-
-				} else {
+			if ($pkwt_active == 1) {
 
 
 				$tbl_ttd2 = '
@@ -1513,25 +1492,46 @@ class Pkwt1 extends MY_Controller
 
 					<tr>
 						<td><br>
-					<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+						<td><br><br><br><br><br><br><br><b><br><u>' . $namalengkap . '</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 					</tr>
 
 					<tr>
-						<td>'.$sign_jabatan.'</td>
+						<td>' . $sign_jabatan . '</td>
 						<td>Karyawan</td>
 					</tr>
 
 				</table>';
+			} else {
 
 
-				}
-				$pdf->writeHTML($tbl_ttd2, true, false, false, false, '');
-				
-				//<img src="'.base_url().'assets/images/pkwt/esign_pkwt230604162602000.png" alt="Trulli" width="90" height="90">
-				//<img src="'.base_url().'assets/images/pkwt/$sign_qrcode" alt="Trulli" width="90" height="90">
-				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
-				$lampiran = '
+				$tbl_ttd2 = '
+				<table cellpadding="2" cellspacing="0" border="0">
+
+					<tr>
+						<td>Pihak Pertama</td>
+						<td>Pihak Kedua</td>
+					</tr>
+
+					<tr>
+						<td><br>
+					<img src="' . base_url() . 'assets/under_review.png" alt="Trulli" width="120" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+						<td><br><br><br><br><br><br><br><b><br><u>' . $namalengkap . '</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+					</tr>
+
+					<tr>
+						<td>' . $sign_jabatan . '</td>
+						<td>Karyawan</td>
+					</tr>
+
+				</table>';
+			}
+			$pdf->writeHTML($tbl_ttd2, true, false, false, false, '');
+
+			//<img src="'.base_url().'assets/images/pkwt/esign_pkwt230604162602000.png" alt="Trulli" width="90" height="90">
+			//<img src="'.base_url().'assets/images/pkwt/$sign_qrcode" alt="Trulli" width="90" height="90">
+			//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
+			$lampiran = '
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
@@ -1541,7 +1541,7 @@ class Pkwt1 extends MY_Controller
 
 					<tr>
 						<td>Lampiran 1</td>
-						<td colspan="5">PKWT <b>'.$nomorsurat.'</b></td>
+						<td colspan="5">PKWT <b>' . $nomorsurat . '</b></td>
 					</tr>
 
 				</table>
@@ -1553,28 +1553,28 @@ class Pkwt1 extends MY_Controller
 
 				<tr>
 					<td>Nama</td>
-					<td colspan="5">'.$namalengkap.'</td>
+					<td colspan="5">' . $namalengkap . '</td>
 				</tr>
 
 				<tr>
 					<td>NIK KTP</td>
-					<td colspan="5">'.$ktp.'</td>
+					<td colspan="5">' . $ktp . '</td>
 				</tr>
 				<tr>
 					<td>Jabatan</td>
-					<td colspan="5">'.$jabatan.'</td>
+					<td colspan="5">' . $jabatan . '</td>
 				</tr>
 				<tr>
 					<td>Penugasan di Klien</td>
-					<td colspan="5">'.$client.'</td>
+					<td colspan="5">' . $client . '</td>
 				</tr>
 				<tr>
 					<td>Lokasi Penempatan</td>
-					<td colspan="5">'.$penempatan.'</td>
+					<td colspan="5">' . $penempatan . '</td>
 				</tr>
 				<tr>
 					<td>Periode Perjanjian <br><br>- Mulai<br>- Berakhir</td>
-					<td colspan="5"><br><br><br>'.$this->Xin_model->tgl_indo($tglmulaipkwt).'<br>'.$this->Xin_model->tgl_indo($tglakhirpkwt).'</td>
+					<td colspan="5"><br><br><br>' . $this->Xin_model->tgl_indo($tglmulaipkwt) . '<br>' . $this->Xin_model->tgl_indo($tglakhirpkwt) . '</td>
 				</tr>
 				<tr>
 					<td>Waktu Kerja</td>
@@ -1586,165 +1586,165 @@ class Pkwt1 extends MY_Controller
 					<table cellpadding="2" cellspacing="0" border="0">
 						<tr>
 							<td>Gaji Pokok</td>
-							<td colspan="3"> : '.$basicpay.',- Per Bulan</td>
+							<td colspan="3"> : ' . $basicpay . ',- Per Bulan</td>
 						</tr>';
 
 
-				if($allowance_grade!="Rp 0"){
+			if ($allowance_grade != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Jabatan</td>
-							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_grade . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_area!="Rp 0"){
+			if ($allowance_area != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Area</td>
-							<td colspan="3"> : '.$allowance_area.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_area . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_masakerja!="Rp 0"){
+			if ($allowance_masakerja != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Masa Kerja</td>
-							<td colspan="3"> : '.$allowance_masakerja.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_masakerja . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_meal!="Rp 0"){	
+			if ($allowance_meal != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_meal . ',- Per Bulan</td>
 						</tr>';
-				}
-				
-				if($allowance_transport!="Rp 0"){	
+			}
+
+			if ($allowance_transport != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_transport . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_rent!="Rp 0"){	
+			if ($allowance_rent != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_rent . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_komunikasi!="Rp 0"){	
+			if ($allowance_komunikasi != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Komunikasi</td>
-							<td colspan="3"> : '.$allowance_komunikasi.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_komunikasi . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_park!="Rp 0"){	
+			if ($allowance_park != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Parkir</td>
-							<td colspan="3"> : '.$allowance_park.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_park . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_residance!="Rp 0"){	
+			if ($allowance_residance != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Tempat Tinggal</td>
-							<td colspan="3"> : '.$allowance_residance.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_residance . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_laptop!="Rp 0"){	
+			if ($allowance_laptop != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Laptop</td>
-							<td colspan="3"> : '.$allowance_laptop.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_laptop . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
 
-				if($allowance_kasir!="Rp 0"){	
+			if ($allowance_kasir != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Kasir</td>
-							<td colspan="3"> : '.$allowance_kasir.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_kasir . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_transmeal!="Rp 0"){	
+			if ($allowance_transmeal != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_transmeal . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($allowance_medicine!="Rp 0"){	
+			if ($allowance_medicine != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Kesehatan</td>
-							<td colspan="3"> : '.$allowance_medicine.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_medicine . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
 
-				if($allowance_akomodasi!="Rp 0"){	
+			if ($allowance_akomodasi != "Rp 0") {
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Akomodasi</td>
-							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+							<td colspan="3"> : ' . $allowance_akomodasi . ',- Per Bulan</td>
 						</tr>';
-				}
+			}
 
-				if($employee_id='21525393'){
+			if ($employee_id = '21525393') {
 
-					if($allowance_operation!="Rp 0"){	
+				if ($allowance_operation != "Rp 0") {
 					$lampiran .= '
 						
 							<tr>
 								<td>Tunjangan Keahlian</td>
-								<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+								<td colspan="3"> : ' . $allowance_operation . ',- Per Bulan</td>
 							</tr>';
-					}
-				} else {
+				}
+			} else {
 
-					if($allowance_operation!="Rp 0"){	
+				if ($allowance_operation != "Rp 0") {
 					$lampiran .= '
 						
 							<tr>
 								<td>Tunjangan Operasional</td>
-								<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+								<td colspan="3"> : ' . $allowance_operation . ',- Per Bulan</td>
 							</tr>';
-					}
 				}
+			}
 
-				$lampiran .= '	
+			$lampiran .= '	
 
 						<tr>
 							<td><b>Total Gaji</b></td>
-							<td colspan="3"><b> : '.$this->Xin_model->rupiah($sum_salary).',- Per Bulan </b></td>
+							<td colspan="3"><b> : ' . $this->Xin_model->rupiah($sum_salary) . ',- Per Bulan </b></td>
 						</tr>
 
 						<tr>
@@ -1758,11 +1758,11 @@ class Pkwt1 extends MY_Controller
 				</tr>
 				<tr>
 					<td>Waktu Pembayaran</td>
-					<td colspan="5">Tanggal '.$tgl_payment.' setiap Bulan</td>
+					<td colspan="5">Tanggal ' . $tgl_payment . ' setiap Bulan</td>
 				</tr>
 				<tr>
 					<td>Periode Perhitungan</td>
-					<td colspan="5">Periode perhitungan upah adalah tanggal '.$tgl_mulaiperiode_payment.' ke '.$tgl_akhirperiode_payment.' bulan berjalan</td>
+					<td colspan="5">Periode perhitungan upah adalah tanggal ' . $tgl_mulaiperiode_payment . ' ke ' . $tgl_akhirperiode_payment . ' bulan berjalan</td>
 				</tr>
 				<tr>
 					<td>Tunjangan Lain</td>
@@ -1841,12 +1841,12 @@ class Pkwt1 extends MY_Controller
 
 				
 				</table>';
-				$pdf->writeHTML($lampiran, true, false, false, false, '');
-			
-				ob_start();
+			$pdf->writeHTML($lampiran, true, false, false, false, '');
+
+			ob_start();
 
 
-				// #1
+			// #1
 			// if ($identifier == null) {
 			// 	$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
 			// } else {
@@ -1864,49 +1864,45 @@ class Pkwt1 extends MY_Controller
 			// }
 
 			if ($identifier == null) {
-						$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
-					} else {
-						$yearmonth = date('Y/m');
+				$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
+			} else {
+				$yearmonth = date('Y/m');
 
-						if (!is_dir('./uploads/document/pkwt/' . $yearmonth)) {
-							mkdir('./uploads/document/pkwt/' . $yearmonth, 0777, TRUE);
-						}
+				if (!is_dir('./uploads/document/pkwt/' . $yearmonth)) {
+					mkdir('./uploads/document/pkwt/' . $yearmonth, 0777, TRUE);
+				}
 
-						$nama_file_save = "";
+				$nama_file_save = "";
 
-						//untuk di local
-						// $nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "" . $namalengkap . "" . time() . ".pdf";
-						// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				//untuk di local
+				// $nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
+				// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
 
-						//untuk di server
-						$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "" . $namalengkap . ""  . time() . ".pdf";
-						$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+				//untuk di server
+				$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
+				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
 
-						//update path file
-						$data_update = [
-							'file_name'    		=> $nama_file_save,
-						];
+				//update path file
+				$data_update = [
+					'file_name'    		=> $nama_file_save,
+				];
 
-						if($this->Contracts_model->update_kontrak($data_update, $uniqueid)){
-							echo "Berhasil generate " . $nama_file_save . ". Dan berhasil update kontrak";
-						} else {
-							echo "Berhasil generate " . $nama_file_save . ". Dan gagal update kontrak";
-						}
-					}
-
-
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
-				// $pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
-				ob_end_flush();
+				if ($this->Contracts_model->update_kontrak($data_update, $uniqueid)) {
+					echo '<script>alert("Berhasil generate ' . $nama_file_save . ' . Dan berhasil update kontrak"); window.close();</script>';
+					// echo "Berhasil generate " . $nama_file_save . ". Dan berhasil update kontrak";
+				} else {
+					echo '<script>alert("Berhasil generate ' . $nama_file_save . ' . Dan gagal update kontrak"); window.close();</script>';
+					// echo "Berhasil generate " . $nama_file_save . ". Dan gagal update kontrak";
+				}
+			}
 
 
+			// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
+			// $pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+			ob_end_flush();
 		} else {
-		 	echo '<script>alert("PKWT # ( DISACTIVE ) \nPlease Contact HR For Approval..!"); window.close();</script>';
+			echo '<script>alert("PKWT # ( DISACTIVE ) \nPlease Contact HR For Approval..!"); window.close();</script>';
 			// redirect('admin/pkwt');
 		}
-
 	}
-
-
-} 
-?>
+}

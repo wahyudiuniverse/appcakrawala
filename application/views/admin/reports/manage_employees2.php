@@ -410,6 +410,54 @@
 	</div>
 </div>
 
+<!-- MODAL UNTUK UPLOAD TTD -->
+<div class="modal fade" id="upload_ttdModal" role="dialog" aria-labelledby="upload_ttdModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="upload_ttdModalLabel">
+					<div class="judul-modal">
+						<span id="judul-modal-upload-ttd">UPLOAD TANDATANGAN</span>
+					</div>
+				</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<!-- <iframe src="" style="zoom:0.60" frameborder="0" height="250" width="99.6%"></iframe> -->
+				<div class="isi-modal-upload-ttd">
+					<div class="container" id="container_modal_verifikasi">
+						<div class="row">
+							<table class="table table-striped col-md-12">
+								<tbody>
+									<tr>
+										<td style='width:25%'><strong>File Tandatangan <span class="icon-verify-file-ktp"></span></strong></td>
+										<td style='width:75%'>
+											<!-- <div class="row align-items-center"> -->
+											<span id='display_file_ttd'></span>
+											<input hidden type="text" id="id_kontrak_modal_ttd">
+											<input hidden type="text" id="link_file_ttd_sebelum_modal">
+											<input type="file" class="filepond filepond-input-multiple" multiple id="file_ttd_modal" data-allow-reorder="true" data-max-file-size="5MB" data-max-files="1" accept="image/png, image/jpeg, application/pdf">
+											<span id='pesan_file_ttd_modal'></span>
+											<!-- </div> -->
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="info-modal-upload-ttd"></div>
+			</div>
+			<div class="modal-footer">
+				<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
+				<button hidden onclick="save_tandatangan()" id='button_save_ttd' name='button_save_pin' type='button' class='btn btn-primary'>Save Tandatangan</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <!-- MODAL UNTUK PROSES -->
 <div class="modal fade" id="processModal" role="dialog" aria-labelledby="processModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -915,6 +963,20 @@
 		imageResizeTargetHeight: 200,
 		fileRenameFunction: (file) => {
 			return `file_buku_tabungan${file.extension}`;
+		}
+	});
+
+	//create object filepond untuk file tandatangan kontrak
+	var pond_file_tandatangan_pkwt = FilePond.create(document.querySelector('input[id="file_ttd_modal"]'), {
+		labelIdle: 'Drag & Drop file tandatangan pkwt atau <span class="filepond--label-action">Browse</span>',
+		imagePreviewHeight: 170,
+		maxFileSize: "25MB",
+		// acceptedFileTypes: ['image/png', 'image/jpeg'],
+		imageCropAspectRatio: "1:1",
+		imageResizeTargetWidth: 200,
+		imageResizeTargetHeight: 200,
+		fileRenameFunction: (file) => {
+			return `file_tandatangan_pkwt${file.extension}`;
 		}
 	});
 
@@ -3069,6 +3131,187 @@
 		});
 
 	};
+</script>
+
+<!-- Tombol Show Upload tandatangan -->
+<script type="text/javascript">
+	function upload_ttd(id_kontrak) {
+		// alert("Under Construction. Masuk button verifikasi");
+
+		var user_role = <?php echo $user[0]->user_role_id; ?>;
+		$('#id_kontrak_modal_ttd').val(id_kontrak);
+
+		// alert("ID Kontrak: " + $('#id_kontrak_modal_ttd').val());
+
+		//inisialisasi input
+		$('#link_file_ttd_sebelum_modal').val("");
+		$('#display_file_ttd').html("");
+
+		//inisialisasi attribut input
+		$('#file_ttd_modal').prop("hidden", false);
+		$('#button_save_ttd').prop("hidden", true);
+
+		//inisialisasi pesan
+		$('#pesan_file_ttd_modal').html("");
+
+		//append id_kontrak dan identifier ke objek filepond file ttd pkwt
+		pond_file_tandatangan_pkwt.setOptions({
+			server: {
+				process: {
+					url: '<?php echo base_url() ?>admin/Employees/upload_dokumen',
+					method: 'POST',
+					ondata: (formData) => {
+						formData.append('nip', id_kontrak);
+						formData.append('identifier', 'ttd_pkwt');
+						formData.append([csrfName], csrfHash);
+						return formData;
+					},
+					onload: (res) => {
+						// select the right value in the response here and return
+						// return res;
+						var serverResponse = jQuery.parseJSON(res);
+
+						//display file
+						if ((serverResponse['0']['link_file'] == null) || (serverResponse['0']['link_file'] == "")) {
+							//do nothing
+						} else {
+							var nama_file = '<?= base_url() ?>' + serverResponse['0']['link_file'];
+							var tipe_file = nama_file.slice(-3);
+							var atribut = "";
+							var height = '';
+							var d = new Date();
+							var time = d.getTime();
+							nama_file = nama_file + "?" + time;
+
+							if (tipe_file == "pdf") {
+								atribut = "application/pdf";
+								height = 'height="500px"';
+							} else {
+								atribut = "image/jpg";
+							}
+
+							var html_text = '<a href="' + nama_file + '" target="_blank"><button class="btn btn-sm btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD FILE</button></a></br><object ' + height + ' data="' + nama_file + '" type="' + atribut + '" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+							$('#display_file_ttd').html(html_text);
+
+							$('#link_file_ttd_sebelum_modal').val(serverResponse['0']['link_file']);
+
+							// alert("LINK SESUDAH UPLOAD: " + $('#link_file_ttd_sebelum_modal').val());
+
+							pond_file_tandatangan_pkwt.removeFile();
+
+							$('#button_save_ttd').prop("hidden", false);
+						}
+					}
+				}
+			}
+		});
+
+		$('#upload_ttdModal').appendTo("body").modal('show');
+	};
+</script>
+
+<!-- Action Upload tandatangan -->
+<script type="text/javascript">
+	function save_tandatangan() {
+		// alert("Under Construction. Masuk button verifikasi");
+
+		var link_file_ttd = $('#link_file_ttd_sebelum_modal').val();
+		var id_kontrak = $('#id_kontrak_modal_ttd').val();
+
+		//-------cek apakah ada yang tidak diisi-------
+		var pesan_file_ttd_modal = "";
+		if (link_file_ttd == "") {
+			pesan_file_ttd_modal = "<small style='color:#FF0000;'>Lakukan Upload Tandatangan terlebih dahulu</small>";
+			$('#link_file_ttd').focus();
+		}
+		$('#pesan_file_ttd_modal').html(pesan_file_ttd_modal);
+
+		//-------action-------
+		if (
+			(pesan_file_ttd_modal != "")
+		) { //kalau ada input kosong 
+			// alert("Tidak boleh ada input kosong");
+		} else {
+			// AJAX untuk update data kontrak
+			// alert("Data OK");
+			$.ajax({
+				url: '<?= base_url() ?>admin/Reports/update_kontrak/',
+				method: 'post',
+				data: {
+					[csrfName]: csrfHash,
+					link_file_ttd: link_file_ttd,
+					id_kontrak: id_kontrak,
+				},
+				beforeSend: function() {
+					// $('#editKontakModal').modal('show');
+					$('.info-modal-upload-ttd').attr("hidden", false);
+					$('.isi-modal-upload-ttd').attr("hidden", true);
+					$('.info-modal-upload-ttd').html(loading_html_text);
+					$('#button_save_ttd').attr("hidden", true);
+				},
+				success: function(response) {
+
+					var res = jQuery.parseJSON(response);
+
+					if (res['status'] == "200") {
+						//update nilai terbaru di halaman profile
+						// $('#nama_kontak_tabel').html(res['data']['nama']);
+						// $('#hubungan_tabel').html(res['data']['hubungan']);
+						// $('#nomor_kontak_darurat_tabel').html(res['data']['no_kontak']);
+
+						//tampilkan pesan sukses
+						$('.info-modal-upload-ttd').attr("hidden", false);
+						$('.isi-modal-upload-ttd').attr("hidden", true);
+						$('.info-modal-upload-ttd').html(success_html_text);
+						$('#button_save_ttd').attr("hidden", true);
+						$('#id_kontrak_modal_ttd').val("");
+						$('#link_file_ttd_sebelum_modal').val("");
+						$('#display_file_ttd').html("");
+					} else {
+						html_text = res['pesan'];
+						$('.info-modal-upload-ttd').html(html_text);
+						$('.isi-modal-upload-ttd').attr("hidden", true);
+						$('.info-modal-upload-ttd').attr("hidden", false);
+						$('#button_save_ttd').attr("hidden", true);
+						$('#id_kontrak_modal_ttd').val("");
+						$('#link_file_ttd_sebelum_modal').val("");
+						$('#display_file_ttd').html("");
+					}
+				},
+				error: function(xhr, status, error) {
+					html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+					html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+					// html_text = "Gagal fetch data. Kode error: " + xhr.status;
+					$('.info-modal-upload-ttd').html(html_text); //coba pake iframe
+					$('.isi-modal-upload-ttd').attr("hidden", true);
+					$('.info-modal-upload-ttd').attr("hidden", false);
+					$('#button_save_ttd').attr("hidden", true);
+					$('#id_kontrak_modal_ttd').val("");
+					$('#link_file_ttd_sebelum_modal').val("");
+					$('#display_file_ttd').html("");
+				}
+			});
+
+			// alert("Tidak ada input kosong");
+		}
+	};
+</script>
+
+<!-- Tombol Generate PKWT -->
+<script type="text/javascript">
+	function generate_pkwt(uniqueid, sub_project) {
+		//testing
+		// alert(uniqueid);
+		// alert(sub_project);
+
+		$.ajax({
+			url: '<?= base_url() ?>admin/pkwt' + sub_project + '/view/' + uniqueid + '/123',
+			method: 'get',
+			success: function(response) {
+			    // alert("Berhasil");
+			}
+		});
+	}
 </script>
 
 <!-- Tombol SEND PIN VIA EMAIL -->
