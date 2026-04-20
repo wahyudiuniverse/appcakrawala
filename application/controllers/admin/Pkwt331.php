@@ -1439,6 +1439,55 @@ class Pkwt331 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Jika karyawan mengalami keterlambatan sebanyak 4 (empat) kali dalam kurun waktu 1 (satu) bulan kalender akan dikenakan sanksi berupa Surat Peringatan 1 (SP1).</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Jika karyawan mengalami keterlambatan sebanyak lebih dari 4 (empat) kali dalam kurun waktu 2 (dua) bulan berturut - turut kalender akan dikenakan sanksi berupa Surat Peringatan 2 (SP2).</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Pemotongan cuti akan diberlakukan secara otomatis dalam kondisi berikut:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Apabila saya karyawan tidak hadir tanpa keterangan (Alpha).</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Apabila saya karyawan (perempuan) tidak hadir pada hari pertama masa haid tanpa melampirkan Surat Keterangan Istirahat Kerja dari dokter.</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">c.</td>
+								<td colspan="20">Apabila saya karyawan terlambat lebih dari 120 (seratus dua puluh) menit dalam 1 hari kerja.</td>
+							</tr>
+
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Apabila ketidakhadiran saya (Alpha) mencapai 2 (tiga) kali dalam kurun waktu 1 (satu) bulan kalender, maka saya bersedia dikenakan sanksi berupa Surat Peringatan 2 (SP2). Dan apabila terjadi di bulan berikutnya, saya bersedia dilakukan Pemutusan Hubungan Kerja (PHK). Yang dimaksud dengan ketidakhadiran tanpa keterangan meliputi:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Tidak melampirkan surat keterangan sakit</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Tidak mengajukan cuti sesuai prosedur</td>
+							</tr>
+
 				</table>
 
 				<br><br>
@@ -1508,9 +1557,10 @@ class Pkwt331 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

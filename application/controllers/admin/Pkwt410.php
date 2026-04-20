@@ -69,7 +69,8 @@ class Pkwt410 extends MY_Controller
 	}
 
 
-	public function view() {
+	public function view($uniqueid = null, $identifier = null)
+	{
 		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -216,6 +217,7 @@ class Pkwt410 extends MY_Controller
 					$sign_fullname 						= $pkwt[0]->sign_fullname;
 					$sign_jabatan 						= $pkwt[0]->sign_jabatan;
 					$sign_qrcode 							= $pkwt[0]->img_esign;
+				$sign_digital 						= $pkwt[0]->file_tandatangan;
 					$pkwt_active							= $pkwt[0]->status_pkwt;
 
 					$tanggalcetak 						= $pkwt[0]->from_date;
@@ -939,8 +941,11 @@ class Pkwt410 extends MY_Controller
 
 						<tr>
 							<td><br>
-							<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-							<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+							<td>
+							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="100" height="90">
+
+							<b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 
 						<tr>
@@ -1010,7 +1015,7 @@ class Pkwt410 extends MY_Controller
 				<br>			
 				<br>
 				<br>			
-				<br>
+				<br><br><br>
 				<br><br><br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1266,11 +1271,14 @@ class Pkwt410 extends MY_Controller
 						<td>Pihak Kedua</td>
 					</tr>
 
-					<tr>
-						<td><br>
-					<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-					</tr>
+						<tr>
+							<td><br>
+							<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+							<td>
+							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="100" height="90">
+
+							<b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
 
 					<tr>
 						<td>'.$sign_jabatan.'</td>
@@ -1590,7 +1598,36 @@ class Pkwt410 extends MY_Controller
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
 				ob_start();
-				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
+				
+			if ($identifier == null) {
+				$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
+			} else {
+				$yearmonth = date('Y/m');
+
+				if (!is_dir('./uploads/document/pkwt/' . $yearmonth)) {
+					mkdir('./uploads/document/pkwt/' . $yearmonth, 0777, TRUE);
+				}
+
+				$nama_file_save = "";
+
+				//untuk di server
+				$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
+				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
+
+
+				//update path file di server
+				$data_update = [
+					'file_name'    		=> $nama_file_save,
+				];
+
+				if ($this->Contracts_model->update_kontrak($data_update, $uniqueid)) {
+					// echo '200';
+					echo "Berhasil generate PKWT dan berhasil update kontrak";
+				} else {
+					// echo '201';
+					echo "Berhasil generate PKWT dan gagal update kontrak";
+				}
+			}
 				ob_end_flush();
 
 

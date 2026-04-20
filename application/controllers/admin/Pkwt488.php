@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt408 extends MY_Controller 
+class Pkwt488 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -88,15 +88,15 @@ class Pkwt408 extends MY_Controller
 		if($pkwt[0]->approve_hrd != null){
 
 
-					$logo_cover = 'tcpdf_logo_sc.png';
-					$header_namae = 'PT. Siprama Cakrawala';
+					$logo_cover = 'tcpdf_logo_kac.png';
+					$header_namae = 'PT. Krista Aulia Cakrawala';
 					
 				// set document information
 				$pdf->SetCreator('HRCakrawala');
 				$pdf->SetAuthor('HRCakrawala');
 				// $baseurl=base_url();
 
-				$header_namae = 'PT. Siprama Cakrawala';
+				$header_namae = 'PT. Krista Aulia Cakrawala';
 				$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16514, Telp: (021) 74870859';
 
 				$pdf->SetHeaderData($logo_cover, 35, $header_namae, $header_string);
@@ -122,7 +122,7 @@ class Pkwt408 extends MY_Controller
 				$pdf->setImageScale(10);
 
 				$pdf->SetAuthor('HRCakrawala');
-				$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
+				$pdf->SetTitle('PT. Krista Aulia Cakrawala '.' - '.$this->lang->line('xin_download_profile_title'));
 				$pdf->SetSubject($this->lang->line('xin_download_profile_title'));
 				$pdf->SetKeywords($this->lang->line('xin_download_profile_title'));
 				// set font
@@ -232,22 +232,36 @@ class Pkwt408 extends MY_Controller
 					}
 
 					$basicpay =	$this->Xin_model->rupiah($pkwt[0]->basic_pay);
-					$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
-					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
-					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
-					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
-					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
-					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
+					$allowance_grade 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
+					$allowance_skill 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_skill);
+					$allowance_area 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
+					
+					$allowance_masakerja 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
+					$allowance_meal 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
+					$allowance_transport 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
+					
+					$allowance_rent 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
 					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
-					$allowance_park =	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
-					$allowance_residance =	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+					$allowance_park 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
+					
+					$allowance_residance 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+					$allowance_akomodasi 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
+					$allowance_laptop 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 
-					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
-					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
-					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
-					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
-					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
-					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_kasir 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
+					$allowance_transmeal 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
+					$allowance_transrent 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
+
+					$allowance_medicine 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
+					$allowance_grooming 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_grooming);
+					$allowance_kehadiran 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_kehadiran);
+
+					$allowance_operation 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_training 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_training);
+					$allowance_kinerja 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_kinerja);
+
+					$allowance_disiplin 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_disiplin);
+					$allowance_others 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_others);
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -295,7 +309,7 @@ class Pkwt408 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Dalam hal ini bertindak untuk dan atas nama serta sah mewakili perseroan terbatas <b>PT. Siprama Cakrawala</b>, suatu Perseroan Terbatas yang bergerak dibidang Penyediaan Jasa Tenaga Kerja dan Konsultan didirikan menurut hukum Indonesa, selanjutnya disebut sebagai <b>PIHAK PERTAMA ----------------------------------------------</b></td>
+								<td>Dalam hal ini bertindak untuk dan atas nama serta sah mewakili perseroan terbatas <b>PT. Krista Aulia Cakrawala</b>, suatu Perseroan Terbatas yang bergerak dibidang Penyediaan Jasa Tenaga Kerja dan Konsultan didirikan menurut hukum Indonesa, selanjutnya disebut sebagai <b>PIHAK PERTAMA ----------------------------------------------</b></td>
 							</tr>			
 				</table>
 				<br>
@@ -788,7 +802,7 @@ class Pkwt408 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>
@@ -820,7 +834,7 @@ class Pkwt408 extends MY_Controller
 				<br>
 							<tr>
 								<td>m.</td>
-								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Siprama Cakrawala.</td>
+								<td colspan="18">Bagi karyawan yang dinyatakan hamil maka karyawan harus mengundurkan diri selambat-lambatnya 3 bulan masa kehamilan dan selama proses kehamilan terjadi akibat dan resiko menjadi tanggung jawab karyawan dan bukan menjadi tanggung jawab PT. Krista Aulia Cakrawala.</td>
 							</tr>
 
 				</table>
@@ -871,7 +885,7 @@ class Pkwt408 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 							<tr>
-								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Siprama Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
+								<td>Sejak bergabung karyawan wajib mengikuti koperasi PT. Krista Aulia Cakrawala yang akan dipotongkan melalui gaji setiap bulannya, dengan perhitungan sebagai berikut :</td>
 							</tr>
 				</table>
 				<br>
@@ -1141,7 +1155,7 @@ class Pkwt408 extends MY_Controller
 				<br>
 							<tr>
 								<td>6.</td>
-								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT Siprama Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
+								<td colspan="20">Hal – hal yang belum atau tidak cukup diatur dalam <b>PKWT</b> ini akan di atur dan dituangkan dalam bentuk perjanjian tambahan (addendum) yang merupakan satu kesatuan yang tidak dapat dipisahkan dari <b>PKWT</b> ini serta tunduk kepada peraturan perusahaan <b>PT. Krista Aulia Cakrawala</b> dan peraturan perundangan yang berlaku dan sepanjang tidak bertentangan.</td>
 							</tr>
 				<br>
 							<tr>
@@ -1298,7 +1312,7 @@ class Pkwt408 extends MY_Controller
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
 					<tr>
-						<td>Selanjutnya dengan ini saya menyatakan, bahwa saya menerima, dan menyetujui serta melaksanakan ketentuan-ketentuan/tata tertib kerja PT. SIPRAMA CAKRAWALA (selanjutnya disebut “Perusahaan”) yang mengacu kepada Peraturan Perusahaan PT. SIPRAMA CAKRAWALA.</td>
+						<td>Selanjutnya dengan ini saya menyatakan, bahwa saya menerima, dan menyetujui serta melaksanakan ketentuan-ketentuan/tata tertib kerja PT. KRISTA AULIA CAKRAWALA (selanjutnya disebut “Perusahaan”) yang mengacu kepada Peraturan Perusahaan PT. KRISTA AULIA CAKRAWALA.</td>
 					</tr>			
 				</table>
 				<br>
@@ -1439,6 +1453,55 @@ class Pkwt408 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Jika karyawan mengalami keterlambatan sebanyak 4 (empat) kali dalam kurun waktu 1 (satu) bulan kalender akan dikenakan sanksi berupa Surat Peringatan 1 (SP1).</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Jika karyawan mengalami keterlambatan sebanyak lebih dari 4 (empat) kali dalam kurun waktu 2 (dua) bulan berturut - turut kalender akan dikenakan sanksi berupa Surat Peringatan 2 (SP2).</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >15.</td>
+								<td colspan="20">Pemotongan cuti akan diberlakukan secara otomatis dalam kondisi berikut:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Apabila saya karyawan tidak hadir tanpa keterangan (Alpha).</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Apabila saya karyawan (perempuan) tidak hadir pada hari pertama masa haid tanpa melampirkan Surat Keterangan Istirahat Kerja dari dokter.</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">c.</td>
+								<td colspan="20">Apabila saya karyawan terlambat lebih dari 120 (seratus dua puluh) menit dalam 1 hari kerja.</td>
+							</tr>
+
+							<tr>
+								<td >16.</td>
+								<td colspan="20">Apabila ketidakhadiran saya (Alpha) mencapai 2 (tiga) kali dalam kurun waktu 1 (satu) bulan kalender, maka saya bersedia dikenakan sanksi berupa Surat Peringatan 2 (SP2). Dan apabila terjadi di bulan berikutnya, saya bersedia dilakukan Pemutusan Hubungan Kerja (PHK). Yang dimaksud dengan ketidakhadiran tanpa keterangan meliputi:</td>
+								<td colspan="0"></td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">a.</td>
+								<td colspan="20">Tidak melampirkan surat keterangan sakit</td>
+							</tr>
+							<tr>
+								<td ></td>
+								<td colspan="0">b.</td>
+								<td colspan="20">Tidak mengajukan cuti sesuai prosedur</td>
+							</tr>
+
 				</table>
 
 				<br><br>
@@ -1508,9 +1571,10 @@ class Pkwt408 extends MY_Controller
 				//<img src="'.base_url().'assets/under_review.png" alt="Trulli" width="120" height="90">
 				$lampiran = '
 
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br><br><br><br>
+				<br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 
@@ -1571,6 +1635,15 @@ class Pkwt408 extends MY_Controller
 						<tr>
 							<td>Tunjangan Grade</td>
 							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_skill!="Rp 0"){
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Keahlian</td>
+							<td colspan="3"> : '.$allowance_skill.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1646,6 +1719,15 @@ class Pkwt408 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_akomodasi!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Akomodasi</td>
+							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+						</tr>';
+				}
+
 				if($allowance_laptop!="Rp 0"){	
 				$lampiran .= '
 					
@@ -1674,6 +1756,15 @@ class Pkwt408 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_transrent!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Transport-Rental</td>
+							<td colspan="3"> : '.$allowance_transrent.',- Per Bulan</td>
+						</tr>';
+				}
+
 				if($allowance_medicine!="Rp 0"){	
 				$lampiran .= '
 					
@@ -1683,13 +1774,21 @@ class Pkwt408 extends MY_Controller
 						</tr>';
 				}
 
-
-				if($allowance_akomodasi!="Rp 0"){	
+				if($allowance_grooming!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Akomodasi</td>
-							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+							<td>Tunjangan Grooming</td>
+							<td colspan="3"> : '.$allowance_grooming.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_kehadiran!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Kehadiran</td>
+							<td colspan="3"> : '.$allowance_kehadiran.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1700,6 +1799,42 @@ class Pkwt408 extends MY_Controller
 						<tr>
 							<td>Tunjangan Operasional</td>
 							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_training!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Pelatihan</td>
+							<td colspan="3"> : '.$allowance_training.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_kinerja!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Kinerja</td>
+							<td colspan="3"> : '.$allowance_kinerja.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_disiplin!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Disiplin</td>
+							<td colspan="3"> : '.$allowance_disiplin.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_others!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Lain-lain</td>
+							<td colspan="3"> : '.$allowance_others.',- Per Bulan</td>
 						</tr>';
 				}
 

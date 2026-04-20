@@ -1190,7 +1190,7 @@ class Pkwt1 extends MY_Controller
 							<td><br>
 							<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
 							<td>
-							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="140" height="90">
+							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="100" height="90">
 
 							<b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
@@ -1845,24 +1845,6 @@ class Pkwt1 extends MY_Controller
 
 			ob_start();
 
-
-			// #1
-			// if ($identifier == null) {
-			// 	$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
-			// } else {
-			// 	$yearmonth = date('Y/m');
-
-			// 	if (!is_dir('./upload/pkwt_digital/' . $yearmonth)) {
-			// 		mkdir('./upload/pkwt_digital/' . $yearmonth, 0777, TRUE);
-			// 	}
-
-			// 	//untuk di local
-			// 	// $pdf->Output($SERVER["DOCUMENT_ROOT"] . "appcakrawala/assets/images/ttd/" . $yearmonth . "/pkwt" . $employee_id . "/" . $namalengkap . ".pdf", "F");
-
-			// 	//untuk di server
-			// 	$pdf->Output($_SERVER["DOCUMENT_ROOT"] . "upload/pkwt_digital/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . ".pdf", "F");
-			// }
-
 			if ($identifier == null) {
 				$pdf->Output('pkwt_' . $namalengkap . '_' . $nomorsurat . '.pdf', 'I');
 			} else {
@@ -1874,19 +1856,10 @@ class Pkwt1 extends MY_Controller
 
 				$nama_file_save = "";
 
-				//untuk di local
-				// $nama_file_save = "appcakrawala/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
-				// $pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
-				// $nama_file_save2 = "/uploads/document/pkwt/" . $yearmonth . "/pkwt_" . $employee_id . "_" . $namalengkap . "_" . time() . ".pdf";
-
 				//untuk di server
 				$nama_file_save = "uploads/document/pkwt/" . $yearmonth . "/pkwt_auto_" . $employee_id . "_" . $namalengkap . "_"  . time() . ".pdf";
 				$pdf->Output($_SERVER["DOCUMENT_ROOT"] . $nama_file_save, "F");
 
-				//update path file di local
-				// $data_update = [
-				// 	'file_name'    		=> $nama_file_save2,
-				// ];
 
 				//update path file di server
 				$data_update = [

@@ -69,7 +69,7 @@ class Pkwt231 extends MY_Controller
 	}
 
 
-	public function view() {
+	public function view($uniqueid = null, $identifier = null) {
 		$system = $this->Xin_model->read_setting_info(1);
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -201,6 +201,7 @@ class Pkwt231 extends MY_Controller
 					$sign_fullname 						= $pkwt[0]->sign_fullname;
 					$sign_jabatan 						= $pkwt[0]->sign_jabatan;
 					$sign_qrcode 							= $pkwt[0]->img_esign;
+				$sign_digital 						= $pkwt[0]->file_tandatangan;
 					$pkwt_active							= $pkwt[0]->status_pkwt;
 
 					$tanggalcetak 						= $pkwt[0]->from_date;
@@ -1168,8 +1169,11 @@ class Pkwt231 extends MY_Controller
 
 						<tr>
 							<td><br>
-							<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-							<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+							<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+							<td>
+							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="100" height="90">
+
+							<b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 						</tr>
 
 						<tr>
@@ -1458,11 +1462,14 @@ class Pkwt231 extends MY_Controller
 						<td>Pihak Kedua</td>
 					</tr>
 
-					<tr>
-						<td><br>
-					<img src="'.base_url().'assets/images/pkwt/'.$sign_qrcode.'" alt="Trulli" width="90" height="90"><br><b><u>'.$sign_fullname.'</u></b></td>
-						<td><br><br><br><br><br><br><br><b><br><u>'.$namalengkap.'</u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-					</tr>
+						<tr>
+							<td><br>
+							<img src="' . base_url() . 'assets/images/pkwt/' . $sign_qrcode . '" alt="Trulli" width="90" height="90"><br><b><u>' . $sign_fullname . '</u></b></td>
+							<td>
+							<img src="' . base_url() . $sign_digital . '" alt="Trulli" width="100" height="90">
+
+							<b><br><u>' . $namalengkap . ' </u></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+						</tr>
 
 					<tr>
 						<td>'.$sign_jabatan.'</td>
