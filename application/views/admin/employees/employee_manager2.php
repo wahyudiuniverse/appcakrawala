@@ -24,7 +24,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 ?>
 
 <!-- <pre>
-	<?php //print_r($all_kabupaten_kota); 
+	<?php //print_r($_SERVER); 
 	?>
 </pre> -->
 
@@ -2158,6 +2158,8 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		// alert("<?php //echo $_SERVER['DOCUMENT_ROOT'] 
+					?>");
 		// var link = opener.location.href;
 		// alert(link);
 		// window.opener.location.reload();
@@ -5620,6 +5622,12 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 													echo "0";
 												} ?>";
 
+					var permission_rollback_status = "<?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "3")) {
+															echo "1";
+														} else {
+															echo "0";
+														} ?>";
+
 					if (res['data']['employee_id'] == nip_session) { //1017
 						$('#editResignModalLabel').html("Informasi Status Karyawan");
 						$("#isi_non_aktif_by_modal3").attr("hidden", false);
@@ -5631,14 +5639,36 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 						$('#button_save_resign').attr("hidden", true);
 					} else {
 						if (permission_change == "1") {
-							$('#editResignModalLabel').html("Edit Status Karyawan");
-							$("#isi_non_aktif_by_modal3").attr("hidden", false);
-							$("#isi_non_aktif_date_modal3").attr("hidden", false);
-							$("#isi_keterangan_aktif_modal3").attr("hidden", false);
-							$("#isi_status_aktif_modal2").attr("hidden", false);
-							$('#isi_tanggal_aktif_modal2').attr("hidden", false);
-							$('#isi_keterangan_aktif_modal2').attr("hidden", false);
-							$('#button_save_resign').attr("hidden", false);
+							if (res['data']['status_resign'] == "1") {
+								$('#editResignModalLabel').html("Edit Status Karyawan");
+								$("#isi_non_aktif_by_modal3").attr("hidden", false);
+								$("#isi_non_aktif_date_modal3").attr("hidden", false);
+								$("#isi_keterangan_aktif_modal3").attr("hidden", false);
+								$("#isi_status_aktif_modal2").attr("hidden", false);
+								$('#isi_tanggal_aktif_modal2').attr("hidden", false);
+								$('#isi_keterangan_aktif_modal2').attr("hidden", false);
+								$('#button_save_resign').attr("hidden", false);
+							} else {
+								if (permission_rollback_status == "1") {
+									$('#editResignModalLabel').html("Edit Status Karyawan");
+									$("#isi_non_aktif_by_modal3").attr("hidden", false);
+									$("#isi_non_aktif_date_modal3").attr("hidden", false);
+									$("#isi_keterangan_aktif_modal3").attr("hidden", false);
+									$("#isi_status_aktif_modal2").attr("hidden", false);
+									$('#isi_tanggal_aktif_modal2').attr("hidden", false);
+									$('#isi_keterangan_aktif_modal2').attr("hidden", false);
+									$('#button_save_resign').attr("hidden", false);
+								} else {
+									$('#editResignModalLabel').html("Informasi Status Karyawan");
+									$("#isi_non_aktif_by_modal3").attr("hidden", false);
+									$("#isi_non_aktif_date_modal3").attr("hidden", false);
+									$("#isi_keterangan_aktif_modal3").attr("hidden", false);
+									$("#isi_status_aktif_modal2").attr("hidden", true);
+									$('#isi_tanggal_aktif_modal2').attr("hidden", true);
+									$('#isi_keterangan_aktif_modal2').attr("hidden", true);
+									$('#button_save_resign').attr("hidden", true);
+								}
+							}
 						} else {
 							$('#editResignModalLabel').html("Informasi Status Karyawan");
 							$("#isi_non_aktif_by_modal3").attr("hidden", false);
