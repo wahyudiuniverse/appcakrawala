@@ -306,6 +306,7 @@ class Importexceleslip extends MY_Controller
 			  $allow_parking = $r->allow_parking;
 			  $allow_residence_cost = $r->allow_residence_cost;
 			  $allow_device = $r->allow_device;
+			  
 			  $penyesuaian_umk = $r->penyesuaian_umk;
 			  $insentive = $r->insentive;
 			  $overtime = $r->overtime;
@@ -2240,64 +2241,84 @@ class Importexceleslip extends MY_Controller
 				$gaji_umk = $eslip[0]->gaji_umk;
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$gaji_diterima = $eslip[0]->gaji_diterima;
+				$allow_management 	= $eslip[0]->allow_management;
+				$allow_jabatan 			= $eslip[0]->allow_jabatan;
+				$allow_keahlian 		= $eslip[0]->allow_keahlian;
+				$allow_area 				= $eslip[0]->allow_area;
 
-				$allow_jabatan 		= $eslip[0]->allow_jabatan;
-				$allow_keahlian 	= $eslip[0]->allow_keahlian;
-				$allow_area 			= $eslip[0]->allow_area;
-
-				$allow_masakerja 	= $eslip[0]->allow_masakerja;
-				$allow_konsumsi 	= $eslip[0]->allow_konsumsi;
-				$allow_transport 	= $eslip[0]->allow_transport;
-
+				$allow_masakerja 		= $eslip[0]->allow_masakerja;
+				$allow_konsumsi 		= $eslip[0]->allow_konsumsi;
+				$allow_transport 		= $eslip[0]->allow_transport;
 				$allow_rent 				= $eslip[0]->allow_rent;
+
 				$allow_comunication = $eslip[0]->allow_comunication;
 				$allow_parking 			= $eslip[0]->allow_parking;
-
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
 				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
-				$allow_device 			= $eslip[0]->allow_device;
 
+				$allow_device 			= $eslip[0]->allow_device;
 				$allow_kasir 				= $eslip[0]->allow_kasir;
+
 				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
 				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
 
-				$allow_medicine 			= $eslip[0]->allow_medicine;
+				$allow_medicine 		= $eslip[0]->allow_medicine;
 				$allow_grooming 		= $eslip[0]->allow_grooming;
 				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
-
 				$allow_operation 		= $eslip[0]->allow_operation;
+
 				$allow_pelatihan 		= $eslip[0]->allow_pelatihan;
 				$allow_kinerja 			= $eslip[0]->allow_kinerja;
-
 				$allow_disiplin 		= $eslip[0]->allow_disiplin;
+
+				$allow_pph 					= $eslip[0]->allow_pph;
+				$allow_acting 			= $eslip[0]->allow_acting;
 				$allow_others 			= $eslip[0]->allow_others;
 				$allow_pph 					= $eslip[0]->allow_pph;
 
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
+				$over_salary 				= $eslip[0]->over_salary;
+				$penyesuaian_umk 		= $eslip[0]->penyesuaian_umk;
+				$insentive 					= $eslip[0]->insentive;
 				$insentive_taktentu = $eslip[0]->insentive_taktentu;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
+				$overtime 					= $eslip[0]->overtime;
+				$overtime_holiday 	= $eslip[0]->overtime_holiday;
 				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-				$adjustment_bruto = $eslip[0]->adjustment_bruto;
-				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
+				$overtime_rapel 		= $eslip[0]->overtime_rapel;
+				$overtime_adjustment= $eslip[0]->overtime_adjustment;
 
-				$deduction_bruto = $eslip[0]->deduction_bruto;
+				$kompensasi 				= $eslip[0]->kompensasi;
+				$bonus 							= $eslip[0]->bonus;
+				$uuck 							= $eslip[0]->uuck;
+				$reimbursement 			= $eslip[0]->reimbursement;
+				$santunan 					= $eslip[0]->santunan;
+				$sisa_cuti 					= $eslip[0]->sisa_cuti;
+
+				$thr 								= $eslip[0]->thr;
+				$adjustment_pph 		= $eslip[0]->adjustment_pph;
+				$adjustment_bruto 	= $eslip[0]->adjustment_bruto;
+				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
+				$adjustment_seragam 	= $eslip[0]->adjustment_seragam;
+				$adjust_tabungan 		= $eslip[0]->adjust_tabungan;
+				$penyesuaian_umk		= $eslip[0]->penyesuaian_umk;
+
+
+				$deduction_bruto 		= $eslip[0]->deduction_bruto;
 				$deduction_so_bruto = $eslip[0]->deduction_so_bruto;
 				$potongan_kpi_bruto = $eslip[0]->potongan_kpi_bruto;
+				$potongan_sp 				= $eslip[0]->potongan_sp;
+				$potongan_others 		= $eslip[0]->potongan_others;
+				$hutang_karyawan 		= $eslip[0]->hutang_karyawan;
+				$hutang_others 			= $eslip[0]->hutang_others;
+				$deduction_leave 			= $eslip[0]->deduction_leave;
+				$deduction_alpha 			= $eslip[0]->deduction_alpha;
+				$deduction_seragam 			= $eslip[0]->deduction_seragam;
+				$deduction_tabungan 			= $eslip[0]->deduction_tabungan;
+
 				$bpjs_tk_deduction_jkk_jkm = $eslip[0]->bpjs_tk_deduction_jkk_jkm;
 				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
 				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
 				$bpjs_jp_deduction = $eslip[0]->jaminan_pensiun_deduction;
-
 				$pendapatan = $eslip[0]->total_1;
-				
 				$bpjs_tk = $eslip[0]->bpjs_tk;
 				$bpjs_ks = $eslip[0]->bpjs_ks;
 				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
@@ -2315,10 +2336,12 @@ class Importexceleslip extends MY_Controller
 				$simpanan_pokok = $eslip[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
 				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
+				$pembayaran_pinjaman_perusahaan = $eslip[0]->pembayaran_pinjaman_perusahaan;
 				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
 				$adjustment = $eslip[0]->adjustment;
 				$adjustment_dlk = $eslip[0]->adjustment_dlk;
 				$total = $eslip[0]->total_thp;
+				$total_thp_2 = $eslip[0]->total_thp_2;
 
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
@@ -2418,7 +2441,7 @@ class Importexceleslip extends MY_Controller
 								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_pokok).';-</td>
 							</tr>
 						</table>
-					</td>	
+					</td>
 				</tr>
 
 			</table>
@@ -2441,6 +2464,21 @@ class Importexceleslip extends MY_Controller
 						</table>
 					</td>
 				</tr>';
+
+				if($allow_management!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Manajemen</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_management).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
 
 				if($allow_jabatan!=0){
 				$tbl_2 .= '
@@ -2779,6 +2817,36 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($allow_ph!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Hari Libur (PH)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_ph).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_acting!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Acting</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_acting).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($allow_others!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2808,7 +2876,6 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>';
 			}
-
 
 			if($penyesuaian_umk!=0){	
 			$tbl_2 .= '
@@ -2915,6 +2982,22 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($overtime_adjustment!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment Lembur</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_adjustment).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
 			if($kompensasi!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -2954,6 +3037,51 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">UUCK</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($reimbursement!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Reimbursement</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($reimbursement).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($santunan!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Santunan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($santunan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($sisa_cuti!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Sisa Cuti</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($sisa_cuti).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -3004,6 +3132,53 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>';
 			}
+
+			if($adjustment_seragam!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Seragam (+)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_seragam).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($adjust_tabungan!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Daily Saving (+)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjust_tabungan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($penyesuaian_umk!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment Gaji</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 
 			$tbl_2 .= '
 
@@ -3063,6 +3238,126 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Potongan KPI</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_kpi_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($potongan_sp!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Potongan SP</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_sp).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($potongan_others!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Potongan Lain-Lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($hutang_karyawan!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Hutang Karyawan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($hutang_karyawan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($hutang_others!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Hutang Lain-Lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($hutang_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_leave!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Unpaid Leave</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_leave).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_alpha!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Alpha</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_alpha).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_seragam!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Seragam (-)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_seragam).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_tabungan!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Daily Saving (-)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_tabungan).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -3142,7 +3437,6 @@ class Importexceleslip extends MY_Controller
 					</tr>
 				</table>';
 			}
-
 
 
 
@@ -3285,6 +3579,7 @@ class Importexceleslip extends MY_Controller
 						</td>
 					</tr>';
 				}
+
 
 
 				if($penalty_alfa!=0){	
@@ -3453,6 +3748,8 @@ class Importexceleslip extends MY_Controller
 			</table>
 			<br>';
 
+
+
 			if($adjustment!=0){
 			$tbl_2 .= '
 
@@ -3488,10 +3785,10 @@ class Importexceleslip extends MY_Controller
 				</tr>
 			</table>';
 			}
-			
+
+
 			$tbl_2 .= '
 			<br><br>
-
 
 			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
 				<tr>
@@ -3506,8 +3803,27 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>
 
-			</table>
-			
+			</table>';
+
+			if($total_thp_2!=0){
+			$tbl_2 .= '
+			<br><br>
+			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA (2)</b></td>
+								<td colspan="2"><b>: Rp.</b></td>
+								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total_thp_2).' &nbsp;&nbsp;</b> </td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			$tbl_2 .= '
 			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
 
 			';
@@ -4871,7 +5187,6 @@ class Importexceleslip extends MY_Controller
 		$idsaltab = $this->uri->segment(5);
 		// $employee_id = $this->uri->segment(5);
 
-		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
 		$employee = $this->Employees_model->read_employee_info_eslip($employee_id);
 		$eslip = $this->Employees_model->read_saltab_temp_by_id($idsaltab);
 
@@ -5006,56 +5321,79 @@ class Importexceleslip extends MY_Controller
 				$gaji_pokok = $eslip[0]->gaji_pokok;
 				$gaji_diterima = $eslip[0]->gaji_diterima;
 
-				$allow_jabatan = $eslip[0]->allow_jabatan;
-				$allow_keahlian 	= $eslip[0]->allow_keahlian;
-				$allow_area 			= $eslip[0]->allow_area;
+				$allow_management 	= $eslip[0]->allow_management;
+				$allow_jabatan 			= $eslip[0]->allow_jabatan;
+				$allow_keahlian 		= $eslip[0]->allow_keahlian;
+				$allow_area 				= $eslip[0]->allow_area;
 
-				$allow_masakerja = $eslip[0]->allow_masakerja;
-				$allow_konsumsi = $eslip[0]->allow_konsumsi;
-				$allow_transport = $eslip[0]->allow_transport;
+				$allow_masakerja 		= $eslip[0]->allow_masakerja;
+				$allow_konsumsi 		= $eslip[0]->allow_konsumsi;
+				$allow_transport 		= $eslip[0]->allow_transport;
+				$allow_rent 				= $eslip[0]->allow_rent;
 
-				$allow_rent = $eslip[0]->allow_rent;
 				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking = $eslip[0]->allow_parking;
-
+				$allow_parking 			= $eslip[0]->allow_parking;
 				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi = $eslip[0]->allow_akomodasi;
-				$allow_device = $eslip[0]->allow_device;
+				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
 
-				$allow_kasir = $eslip[0]->allow_kasir;
-				$allow_trans_meal = $eslip[0]->allow_trans_meal;
-				$allow_trans_rent = $eslip[0]->allow_trans_rent;
+				$allow_device 			= $eslip[0]->allow_device;
+				$allow_kasir 				= $eslip[0]->allow_kasir;
 
-				$allow_medicine = $eslip[0]->allow_medicine;
-				$allow_grooming = $eslip[0]->allow_grooming;
+				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
+				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
+
+				$allow_medicine 		= $eslip[0]->allow_medicine;
+				$allow_grooming 		= $eslip[0]->allow_grooming;
 				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
+				$allow_operation 		= $eslip[0]->allow_operation;
 
-				$allow_operation = $eslip[0]->allow_operation;
 				$allow_pelatihan 		= $eslip[0]->allow_pelatihan;
 				$allow_kinerja 			= $eslip[0]->allow_kinerja;
-
 				$allow_disiplin 		= $eslip[0]->allow_disiplin;
-				$allow_others = $eslip[0]->allow_others;
+
+				$allow_pph 					= $eslip[0]->allow_pph;
+				$allow_acting 			= $eslip[0]->allow_acting;
+				$allow_others 			= $eslip[0]->allow_others;
 				$allow_pph 					= $eslip[0]->allow_pph;
 
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
+				$over_salary 				= $eslip[0]->over_salary;
+				$penyesuaian_umk 		= $eslip[0]->penyesuaian_umk;
+				$insentive 					= $eslip[0]->insentive;
 				$insentive_taktentu = $eslip[0]->insentive_taktentu;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
+				$overtime 					= $eslip[0]->overtime;
+				$overtime_holiday 	= $eslip[0]->overtime_holiday;
 				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-				$adjustment_bruto = $eslip[0]->adjustment_bruto;
-				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
+				$overtime_rapel 		= $eslip[0]->overtime_rapel;
+				$overtime_adjustment= $eslip[0]->overtime_adjustment;
 
-				$deduction_bruto = $eslip[0]->deduction_bruto;
+				$kompensasi 				= $eslip[0]->kompensasi;
+				$bonus 							= $eslip[0]->bonus;
+				$uuck 							= $eslip[0]->uuck;
+				$reimbursement 			= $eslip[0]->reimbursement;
+				$santunan 					= $eslip[0]->santunan;
+				$sisa_cuti 					= $eslip[0]->sisa_cuti;
+
+				$thr 								= $eslip[0]->thr;
+				$adjustment_pph 		= $eslip[0]->adjustment_pph;
+				$adjustment_bruto 	= $eslip[0]->adjustment_bruto;
+				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
+				$adjustment_seragam 	= $eslip[0]->adjustment_seragam;
+				$adjust_tabungan 		= $eslip[0]->adjust_tabungan;
+				$penyesuaian_umk		= $eslip[0]->penyesuaian_umk;
+
+
+				$deduction_bruto 		= $eslip[0]->deduction_bruto;
 				$deduction_so_bruto = $eslip[0]->deduction_so_bruto;
 				$potongan_kpi_bruto = $eslip[0]->potongan_kpi_bruto;
+				$potongan_sp 				= $eslip[0]->potongan_sp;
+				$potongan_others 		= $eslip[0]->potongan_others;
+				$hutang_karyawan 		= $eslip[0]->hutang_karyawan;
+				$hutang_others 			= $eslip[0]->hutang_others;
+				$deduction_leave 			= $eslip[0]->deduction_leave;
+				$deduction_alpha 			= $eslip[0]->deduction_alpha;
+				$deduction_seragam 			= $eslip[0]->deduction_seragam;
+				$deduction_tabungan 			= $eslip[0]->deduction_tabungan;
+
 				$bpjs_tk_deduction_jkk_jkm = $eslip[0]->bpjs_tk_deduction_jkk_jkm;
 				$bpjs_tk_deduction_jht = $eslip[0]->bpjs_tk_deduction_jht;
 				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
@@ -5078,10 +5416,12 @@ class Importexceleslip extends MY_Controller
 				$simpanan_pokok = $eslip[0]->simpanan_pokok;
 				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
 				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
+				$pembayaran_pinjaman_perusahaan = $eslip[0]->pembayaran_pinjaman_perusahaan;
 				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
 				$adjustment = $eslip[0]->adjustment;
 				$adjustment_dlk = $eslip[0]->adjustment_dlk;
 				$total = $eslip[0]->total_thp;
+				$total_thp_2 = $eslip[0]->total_thp_2;
 
 				$monyear =  date('M Y');
 				$tanggalcetak = date("Y-m-d");
@@ -5200,6 +5540,21 @@ class Importexceleslip extends MY_Controller
 						</table>
 					</td>
 				</tr>';
+
+				if($allow_management!=0){
+				$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Manajemen</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_management).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+				}
 
 				if($allow_jabatan!=0){
 				$tbl_2 .= '
@@ -5538,6 +5893,36 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($allow_ph!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Hari Libur (PH)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_ph).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($allow_acting!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Tunjangan Acting</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_acting).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($allow_others!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -5673,6 +6058,22 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($overtime_adjustment!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment Lembur</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_adjustment).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
 			if($kompensasi!=0){	
 			$tbl_2 .= '
 				<tr>
@@ -5712,6 +6113,51 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">UUCK</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($reimbursement!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Reimbursement</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($reimbursement).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($santunan!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Santunan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($santunan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($sisa_cuti!=0){	
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Sisa Cuti</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($sisa_cuti).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -5762,6 +6208,53 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>';
 			}
+
+			if($adjustment_seragam!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Seragam (+)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_seragam).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($adjust_tabungan!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Daily Saving (+)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjust_tabungan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($penyesuaian_umk!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Adjustment Gaji</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 
 			$tbl_2 .= '
 
@@ -5821,6 +6314,126 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Potongan KPI</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_kpi_bruto).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($potongan_sp!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Potongan SP</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_sp).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($potongan_others!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Potongan Lain-Lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($potongan_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($hutang_karyawan!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Hutang Karyawan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($hutang_karyawan).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($hutang_others!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Hutang Lain-Lain</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($hutang_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_leave!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Unpaid Leave</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_leave).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_alpha!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Alpha</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_alpha).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_seragam!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Seragam (-)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_seragam).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($deduction_tabungan!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Daily Saving (-)</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_tabungan).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -6249,9 +6862,9 @@ class Importexceleslip extends MY_Controller
 			</table>';
 			}
 
+
 			$tbl_2 .= '
 			<br><br>
-
 
 			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
 				<tr>
@@ -6266,8 +6879,27 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>
 
-			</table>
-			
+			</table>';
+
+			if($total_thp_2!=0){
+			$tbl_2 .= '
+			<br><br>
+			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA (2)</b></td>
+								<td colspan="2"><b>: Rp.</b></td>
+								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total_thp_2).' &nbsp;&nbsp;</b> </td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>';
+			}
+
+			$tbl_2 .= '
 			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
 
 			';
@@ -6293,1364 +6925,6 @@ class Importexceleslip extends MY_Controller
 		// }
 	}
 
-	public function preview_pdf() {
-
-		// $session = $this->session->userdata('username');
-		// if(empty($session)){ 
-		// 	redirect('admin/');
-		// }
-
-		$system = $this->Xin_model->read_setting_info(1);		
-		 // create new PDF document
-   		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$vnip = $this->uri->segment(4);
-		$ideslip = $this->uri->segment(5);
-		// $employee_id = $this->uri->segment(5);
-
-
-		// if($session['employee_id'] != $vpin) {
-		// 	redirect('admin/');
-		// }
-				// $cekEmp = $this->Employees_model->read_employee_info_by_nik($vpin);
-
-
-				// $cekEslip = $this->Import_model->get_eslip_by_id($ideslip);
-				// if(!is_null($cekEslip)){
-				// 	redirect('admin/');
-				// }
-
-
-		// $eslip = $this->Employees_model->read_eslip_info_by_nip_periode($vpin, $vperiode);
-		$eslip = $this->Employees_model->read_eslip_info_by_id($ideslip);
-		$employee = $this->Employees_model->read_employee_info_by_nik($vnip);
-
-		$designation = $this->Designation_model->read_designation_information($employee[0]->designation_id);
-				if(!is_null($designation)){
-					$jabatan = $designation[0]->designation_name;
-				} else {
-					$jabatan = '--';	
-				}
-
-		// if($eslip[0]->status_kirim==1){
-			// $bMargin = $this->getBreakMargin();
-			// $bMargi = $this->getBreakMargin();
-
-				if($employee[0]->company_id == '2'){
-					$company_name = 'PT. SIPRAMA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_sc.png';
-				} else if($employee[0]->company_id == '3') {
-					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_kac.png';
-				} else {
-					$company_name = 'PT. MATA CAKRAWALA';
-					$logohead			= 'tcpdf_logo_mata.png';
-				}
-			// set document information
-			$pdf->SetCreator('PT Siprama Cakrawala');
-			$pdf->SetAuthor('PT Siprama Cakrawala');
-			// $baseurl=base_url();
-
-			$header_namae = $company_name;
-			$header_string = 'HR Power Services | Facility Services'."\n".'Gedung Graha Krista Aulia, Jalan Andara Raya No. 20, Pangakalan Jati Baru, Kecamatan Cinere, Kota Depok 16513, Telp: (021) 27813599';
-
-			$pdf->SetHeaderData($logohead, 35, $header_namae, $header_string);
-			
-			$pdf->setFooterData(array(0,64,0), array(0,64,128));
-		
-			// set header and footer fonts
-			// $pdf->setHeaderFont(Array('helvetica', '', 20));
-			// $pdf->setFooterFont(Array('helvetica', '', 9));
-		
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont('courier');
-			
-			// set margins
-			$pdf->SetMargins(15, 27, 15);
-			$pdf->SetHeaderMargin(5);
-			$pdf->SetFooterMargin(10);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 25);
-			
-			// set image scale factor
-			$pdf->setImageScale(10);
-
-
-			$pdf->SetAuthor('HRCakrawala');
-			// $pdf->SetProtection(array('print','copy'),$employee[0]->private_code,null, 0, null);
-
-			$pdf->SetTitle('PT. Siprama Cakrawala '.' - '.$this->lang->line('xin_eslip'));
-			$pdf->SetSubject($this->lang->line('xin_eslip'));
-			$pdf->SetKeywords($this->lang->line('xin_eslip'));
-			// set font
-			$pdf->SetFont('helvetica', 'B', 10);
-					
-			// set header and footer fonts
-			$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', 9));
-			$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
-			
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-			
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-			
-			// set auto page breaks
-			$pdf->SetAutoPageBreak(TRUE, 12);
-			
-			// set image scale factor
-			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-			
-			// ---------------------------------------------------------
-
-			// set default font subsetting mode
-			$pdf->setFontSubsetting(true);
-			
-			// Set font
-			// dejavusans is a UTF-8 Unicode font, if you only need to
-			// print standard ASCII chars, you can use core fonts like
-			// helvetica or times to reduce file size.
-			$pdf->SetFont('helvetica', '', 9, '', true);
-			
-			// Add a page
-			// This method has several options, check the source code documentation for more information.
-			$pdf->AddPage();
-		
-			// set cell padding
-			$pdf->setCellPaddings(1, 1, 1, 1);
-			
-			// set cell margins
-			$pdf->setCellMargins(0, 0, 0, 0);
-			
-			// set color for background
-			$pdf->SetFillColor(255, 255, 127);
-			/////////////////////////////////////////////////////////////////////////////////
-
-			if(!is_null($eslip)){
-
-				// $tanggal = $this->Xin_model->tgl_indo($eslip[0]->tanggal);
-				$nip = $eslip[0]->nip;
-				$namalengkap = $employee[0]->first_name;
-				$periode = $eslip[0]->periode;
-				$project = $eslip[0]->project;
-				$area = $eslip[0]->area;
-				$hari_kerja = $eslip[0]->hari_kerja;
-				$gaji_umk = $eslip[0]->gaji_umk;
-				$gaji_pokok = $eslip[0]->gaji_pokok;
-				$gaji_diterima = $eslip[0]->gaji_diterima;
-
-				$allow_jabatan 		= $eslip[0]->allow_jabatan;
-				$allow_keahlian 	= $eslip[0]->allow_keahlian;
-				$allow_area 			= $eslip[0]->allow_area;
-
-				$allow_masakerja 	= $eslip[0]->allow_masakerja;
-				$allow_konsumsi 	= $eslip[0]->allow_konsumsi;
-				$allow_transport 	= $eslip[0]->allow_transport;
-
-				$allow_rent 				= $eslip[0]->allow_rent;
-				$allow_comunication = $eslip[0]->allow_comunication;
-				$allow_parking 			= $eslip[0]->allow_parking;
-
-				$allow_residence_cost = $eslip[0]->allow_residence_cost;
-				$allow_akomodasi 		= $eslip[0]->allow_akomodasi;
-				$allow_device 			= $eslip[0]->allow_device;
-
-				$allow_kasir 				= $eslip[0]->allow_kasir;
-				$allow_trans_meal 	= $eslip[0]->allow_trans_meal;
-				$allow_trans_rent 	= $eslip[0]->allow_trans_rent;
-
-				$allow_medicine 			= $eslip[0]->allow_medicine;
-				$allow_grooming 		= $eslip[0]->allow_grooming;
-				$allow_kehadiran 		= $eslip[0]->allow_kehadiran;
-
-				$allow_operation 		= $eslip[0]->allow_operation;
-				$allow_pelatihan 		= $eslip[0]->allow_pelatihan;
-				$allow_kinerja 			= $eslip[0]->allow_kinerja;
-
-				$allow_disiplin 		= $eslip[0]->allow_disiplin;
-				$allow_others 			= $eslip[0]->allow_others;
-				$allow_pph 					= $eslip[0]->allow_pph;
-
-
-				$over_salary = $eslip[0]->over_salary;
-				$penyesuaian_umk = $eslip[0]->penyesuaian_umk;
-				$insentive = $eslip[0]->insentive;
-				$overtime = $eslip[0]->overtime;
-				$overtime_holiday = $eslip[0]->overtime_holiday;
-				$overtime_national_day = $eslip[0]->overtime_national_day;
-				$overtime_rapel = $eslip[0]->overtime_rapel;
-				$kompensasi = $eslip[0]->kompensasi;
-				$bonus = $eslip[0]->bonus;
-				$uuck = $eslip[0]->uuck;
-				$thr = $eslip[0]->thr;
-
-				$bpjs_tk_deduction = $eslip[0]->bpjs_tk_deduction;
-				$bpjs_ks_deduction = $eslip[0]->bpjs_ks_deduction;
-				$jaminan_pensiun_deduction = $eslip[0]->jaminan_pensiun_deduction;
-				$pendapatan = $eslip[0]->pendapatan;
-				$bpjs_tk = $eslip[0]->bpjs_tk;
-				$bpjs_ks = $eslip[0]->bpjs_ks;
-				$jaminan_pensiun = $eslip[0]->jaminan_pensiun;
-				$deposit = $eslip[0]->deposit;
-				$pph = $eslip[0]->pph;
-				$pph_thr = $eslip[0]->pph_thr;
-				$penalty_late = $eslip[0]->penalty_late;
-				$penalty_alfa = $eslip[0]->penalty_alfa;
-				$penalty_attend = $eslip[0]->penalty_attend;
-				$mix_oplos = $eslip[0]->mix_oplos;
-				$pot_trip_malang = $eslip[0]->pot_trip_malang;
-				$pot_device = $eslip[0]->pot_device;
-				$pot_kpi = $eslip[0]->pot_kpi;
-				$deduction = $eslip[0]->deduction;
-				$simpanan_pokok = $eslip[0]->simpanan_pokok;
-				$simpanan_wajib_koperasi = $eslip[0]->simpanan_wajib_koperasi;
-				$pembayaran_pinjaman = $eslip[0]->pembayaran_pinjaman;
-				$biaya_admin_bank = $eslip[0]->biaya_admin_bank;
-				$adjustment = $eslip[0]->adjustment;
-				$adjustment_dlk = $eslip[0]->adjustment_dlk;
-				$total = $eslip[0]->total;
-				$monyear =  date('M Y');
-				$tanggalcetak = date("Y-m-d");
-	
-				if($project=='CPJF'){
-					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
-				} else {
-					$deduction_name = 'Deduction';
-				}
-
-				// $pengirim = $eslip[0]->nip;
-				  // if(!is_null($pengirim)){
-				  // 	$supplier_name = $pengirim[0]->name;
-				  // } else {
-					 //  $supplier_name = '--';	
-				  // }
-
-				// $transporter = $eslip[0]->nip;
-				  // if(!is_null($transporter)){
-				  // 	$trans_name = $transporter[0]->name;
-				  // } else {
-					 //  $trans_name = '--';	
-				  // }
-
-
-				// $tujuan = $this->Kbm_model->read_suppdis($SJ[0]->tujuan);
-				//   if(!is_null($tujuan)){
-				//   	$nama_tujuan = $tujuan[0]->name;
-				//   } else {
-				// 	  $nama_tujuan = '--';	
-				//   }
-
-
-				// $distributor_alamat = $this->Kbm_model->read_distributor_alamat($SJ[0]->alamat_tujuan);
-				//   if(!is_null($distributor_alamat)){
-				//   	$alamat_tujuan = $distributor_alamat[0]->lokasi;
-				//   } else {
-				// 	  $alamat_tujuan = '--';	
-				//   }
-
-				// $armada = $eslip[0]->nip;
-				  // if(!is_null($armada)){
-				  // 	$platnomor = $armada[0]->no_polisi;
-				  // } else {
-					 //  $platnomor = '--';	
-				  // }
-
-
-			} else {
-				redirect('admin/');
-
-			}
-
-
-			$tbl_2 = '
-			<div style="text-align: center; text-justify: inter-word;">
-				<b>SLIP GAJI</b>
-			</div>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>NIP</td>
-								<td colspan="2">: '.$nip.'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Project</td>
-								<td colspan="2">: '.strtoupper($project).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Nama</td>
-								<td colspan="2">: '.strtoupper($namalengkap).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Area</td>
-								<td colspan="2">: '.strtoupper($area).'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Periode</td>
-								<td colspan="2">: '.strtoupper($periode).'</td>
-							</tr>
-						</table>
-					</td>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Hari Kerja</td>
-								<td colspan="2">: '.$hari_kerja.'</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Posisi/Jabatan</td>
-								<td colspan="2">: '.$jabatan.'</td>
-							</tr>
-						</table>
-					</td>
-		
-
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td>Gaji Pokok</td>
-								<td colspan="2">: Rp. '.$this->Xin_model->rupiah_titik($gaji_pokok).'</td>
-							</tr>
-						</table>
-					</td>
-
-
-				</tr>
-
-			</table>
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="1" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br><br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Gaji Diterima</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($gaji_diterima).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-				if($allow_jabatan!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Jabatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_jabatan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-				if($allow_keahlian!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Keahlian</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_keahlian).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-				if($allow_area!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Area</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_area).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-				if($allow_masakerja!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Masa Kerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_masakerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-				}
-
-			if($allow_konsumsi!=0){
-				$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Makan/Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_konsumsi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_transport!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transportasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_transport).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Sewa/Rent</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_comunication!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Komunikasi/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_comunication).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_parking!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Parkir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_parking).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_residence_cost!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Tempat Tinggal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_residence_cost).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_akomodasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_device!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Laptop</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_device).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_kasir!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kasir</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kasir).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-
-			if($allow_trans_meal!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Meal</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_meal).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_trans_rent!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Transport + Rental</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_trans_rent).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_medicine!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_medicine).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_grooming!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Grooming</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_grooming).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_kehadiran!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kehadiran</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kehadiran).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_operation!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Operational</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_operation).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_pelatihan!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Pelatihan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pelatihan).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_kinerja!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Kinerja</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_kinerja).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($allow_disiplin!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Disiplin</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_disiplin).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_others!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan Lain-lain</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_others).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($allow_pph!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Tunjangan PPH</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_pph).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($penyesuaian_umk!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Penyesuaian UMK/Meal/Transport/Sewa/Pulsa</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($insentive!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Insentif</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($insentive).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_holiday!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Hari Libur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_holiday).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_national_day!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Lembur Libur Nasional</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_national_day).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($overtime_rapel!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Rapel Lembur</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($overtime_rapel).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($kompensasi!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Kompensasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($kompensasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($bonus!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Bonus</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bonus).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-			if($uuck!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">UUCK</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($uuck).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
-
-			if($thr!=0){	
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">THR</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($thr).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-				
-			$tbl_2 .= '
-			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">Deduction</td>
-								<td colspan="0"></td>
-								<td colspan="0" align="right"></td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Ketenagakerjaan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*BPJS Kesehatan</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="2">*Jaminan Pensiun</td>
-								<td colspan="0">: Rp.</td>
-								<td colspan="0" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun_deduction).' &nbsp;&nbsp;&nbsp;</td>
-								<td colspan="6" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-
-
-			if($over_salary!=0) {
-				$tbl_2 .= '
-				<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Kelebihan Gaji / <i>Extra Cost</i></td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($over_salary).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-				</table>';
-			}
-
-			if($adjustment!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			if($adjustment_dlk!=0){
-			$tbl_2 .= '
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><i>Adjustment DLK</i></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_dlk).'&nbsp;&nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>';
-			}
-
-			$tbl_2 .= '
-			<br><br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>
-
-			<table cellpadding="0" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>Pendapatan</b></td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($pendapatan).'&nbsp;&nbsp;&nbsp;</b> &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><u><i>Potongan</i></u></td>
-								<td colspan="2"></td>
-								<td colspan="2" align="right"></td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Ketenagakerjaan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*BPJS Kesehatan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Jaminan Pensiun</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($jaminan_pensiun).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*Deposit</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deposit).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">*PPH Karyawan</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-
-
-				if($pph_thr!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">PPH21 THR</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pph_thr).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_late!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Keterlambatan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_late).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_attend!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran (SKD & Cuti)</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_attend).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-
-				if($penalty_alfa!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Penalty Kehadiran Tanpa Keterangan</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penalty_alfa).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-
-				if($employee[0]->project_id==158){
-
-					if($mix_oplos!=0){	
-					$tbl_2 .= '
-						<tr>
-							<td>
-								<table cellpadding="1" cellspacing="0">
-									<tr>
-										<td colspan="4">Potongan MCU</td>
-										<td colspan="2">: Rp.</td>
-										<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
-									</tr>
-								</table>
-							</td>
-						</tr>';
-					}
-
-				} else {
-
-					if($mix_oplos!=0){	
-					$tbl_2 .= '
-						<tr>
-							<td>
-								<table cellpadding="1" cellspacing="0">
-									<tr>
-										<td colspan="4">Mix Oplos</td>
-										<td colspan="2">: Rp.</td>
-										<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($mix_oplos).' &nbsp;&nbsp;&nbsp;</td>
-									</tr>
-								</table>
-							</td>
-						</tr>';
-					}
-
-				}
-
-				if($pot_trip_malang!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Trip Raker</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_trip_malang).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_device!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan Laptop/HP</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_device).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				if($pot_kpi!=0){	
-				$tbl_2 .= '
-					<tr>
-						<td>
-							<table cellpadding="1" cellspacing="0">
-								<tr>
-									<td colspan="4">Potongan KPI</td>
-									<td colspan="2">: Rp.</td>
-									<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pot_kpi).' &nbsp;&nbsp;&nbsp;</td>
-								</tr>
-							</table>
-						</td>
-					</tr>';
-				}
-
-				$tbl_2 .= '<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">'.$deduction_name.'</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($deduction).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Pokok</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_pokok).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Simpanan Wajib Koperasi</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($simpanan_wajib_koperasi).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Pembayaran Pinjaman</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($pembayaran_pinjaman).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Biaya Admin</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($biaya_admin_bank).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>';
-
-			$tbl_2 .= '
-			<br>
-			<table cellpadding="3" cellspacing="0" border="0.5" style="text-align: justify; text-justify: inter-word;">
-			</table>
-			<br>';
-
-
-			$tbl_2 .= '
-			<br><br>
-
-
-			<table cellpadding="4" cellspacing="0" border="0" style="text-align: justify; text-justify: inter-word; background-color: #ffffff; filter: alpha(opacity=40); opacity: 1;border:1;">
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4"><b>TOTAL PENDAPATAN DITERIMA</b></td>
-								<td colspan="2"><b>: Rp.</b></td>
-								<td colspan="2" align="right"><b>'.$this->Xin_model->rupiah_titik($total).' &nbsp;&nbsp;</b> </td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-
-			</table>
-			
-			<p style="font-size: 10px;"><i>*Segala bentuk pengembalian terhadap pendapatan diatas hanya dilakukan ke Rekening Perusahaan PT. SIPRAMA CAKRAWALA.</i></p>
-
-			';
-			$pdf->writeHTML($tbl_2, true, false, false, false, '');
-
-
-			$tbl_ttd = '';
-			$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
-
-			$lampiran = '';
-			$pdf->writeHTML($lampiran, true, false, false, false, '');
-		
-
-			//Close and output PDF document
-			ob_start();
-			// $pdf->Output('eslip'.$fname.'_'.$pay_month.'.pdf', 'I');
-			$pdf->Output('eslip'.strtoupper($namalengkap).'_'.strtoupper($periode).'.pdf', 'I');
-			ob_end_flush();
-
-		// } else {
-		//  	echo '<script>alert("ORDER BELUM DI PROSES...!  \nPlease Contact Admin For Approval..!"); window.close();</script>';
-		// 	// redirect('admin/pkwt');
-		// }
-	}
 
 } 
 ?>

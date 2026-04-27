@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt283 extends MY_Controller 
+class Pkwt283md extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -82,15 +82,6 @@ class Pkwt283 extends MY_Controller
 			redirect('admin/');
 		}
 
-		// SPG
-		if ($pkwt[0]->jabatan=='395' || $pkwt[0]->jabatan=='622' || $pkwt[0]->jabatan=='458') {
-			redirect('admin/pkwt283spg/view/'.$pkwt[0]->uniqueid);
-		}
-
-		// MD & TL
-		if ($pkwt[0]->jabatan=='130' || $pkwt[0]->jabatan=='166' || $pkwt[0]->jabatan=='784'  || $pkwt[0]->jabatan=='167'   || $pkwt[0]->jabatan=='665' || $pkwt[0]->jabatan=='212') {
-			redirect('admin/pkwt283md/view/'.$pkwt[0]->uniqueid);
-		}
 
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
@@ -556,7 +547,7 @@ class Pkwt283 extends MY_Controller
 							</tr>
 				<br>
 				</table>
-
+				<br><br>
 
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
@@ -567,38 +558,13 @@ class Pkwt283 extends MY_Controller
 
 							<tr>
 								<td ></td>
-								<td colspan="20">5 (lima) Hari Kerja dalam 7 (Tujuh) hari kalender	:</td>
 								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin - Jumat 	8 Jam Kerja<br>•	Hari libur Sabtu-Minggu</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="20">6 (enam) Hari Kerja dalam 7 (Tujuh) hari kalender	:-</td>
-								<td colspan="0"></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20"><br>•	Hari Senin – Sabtu 	7 Jam Kerja<br>•	Hari Sabtu 	5 Jam Kerja<br>•	Hari libur Minggu</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
-								<td colspan="0"></td>
+								<td colspan="20"><br>•	Hari Senin – Jumat 08.00 – 17.00 WIB<br>•	Hari Sabtu 08.00 – 14.00<br>•	Hari libur Minggu</td>
 							</tr>
 
 				</table>
 
-			<br>
-
+			<br><br>
 
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 5<br>ETIKA PRILAKU</b>
@@ -657,7 +623,7 @@ class Pkwt283 extends MY_Controller
 								<td colspan="18">Bersedia melaksanakan tanggung jawab sebagai seorang Karyawan/Staff sesuai yang tertulis pada Instruksi Kerja dan SOP yang berlaku di perusahaan.</td>
 							</tr>
 				</table>
-<br>
+				<br><br>
 				<div style="text-align: center; text-justify: inter-word;">
 					<b>PASAL 6<br>KERAHASIAAN</b>
 				</div>
@@ -668,7 +634,7 @@ class Pkwt283 extends MY_Controller
 								<td>Karyawan, selama bekerja dan setelah bekerja pada Perusahaan, diminta untuk menjaga kerahasiaan dan tidak membuka rahasia perdagangan <b>PIHAK PERTAMA</b>, dokumentasi atau informasi rahasia, data dan petunjuk teknis, gambar, sistem, metode, perangkat lunak proses, daftar klien, program, pemasaran, dan informasi keuangan kepada orang lain selain dari Karyawan yang dipekerjakan atau diserahi wewenang oleh <b>PIHAK PERTAMA</b> untuk mengetahui rahasia-rahasia tersebut demi kepentingan pekerjaan mereka atau berkaitan dengan <b>PIHAK PERTAMA</b>.</td>
 							</tr>			
 				</table>
-				<br><br>
+				<br><br><br><br>
 
 
 				<div style="text-align: center; text-justify: inter-word;">

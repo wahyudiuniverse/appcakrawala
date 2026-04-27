@@ -295,8 +295,17 @@ class Dokumen_skk extends MY_Controller {
 
 							} else {
 
-								$sign_fullname = 'RIZKIAWAN BUDIANTO';
-								$sign_nip = '24539641';
+								$lastT = new DateTime(date("2026-04-24"));
+								if($resign_date<$lastT){	
+									$sign_fullname = 'RIZKIAWAN BUDIANTO';
+									$sign_nip = '24539641';
+
+								} else {
+
+									$sign_fullname = 'SISKYLA KHAIRANA PRITIGARINI';
+									$sign_nip = '21300033';
+									
+								}
 
 							}
 						} 

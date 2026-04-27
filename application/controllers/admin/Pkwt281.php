@@ -81,6 +81,17 @@ class Pkwt281 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+		// SPG
+		if ($pkwt[0]->jabatan=='395' || $pkwt[0]->jabatan=='622' || $pkwt[0]->jabatan=='458') {
+			redirect('admin/pkwt283spg/view/'.$pkwt[0]->uniqueid);
+		}
+
+		// MD & TL
+		if ($pkwt[0]->jabatan=='130' || $pkwt[0]->jabatan=='166' || $pkwt[0]->jabatan=='784'  || $pkwt[0]->jabatan=='167'   || $pkwt[0]->jabatan=='665' || $pkwt[0]->jabatan=='212') {
+			redirect('admin/pkwt283md/view/'.$pkwt[0]->uniqueid);
+		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
