@@ -1475,6 +1475,65 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$nomor_rekening = $record->norek;
 			}
 
+			if (($record->nip == null) || ($record->nip == "") || ($record->nip == "0")) {
+				$norek_database = $nomor_rekening;
+				$verif_norek_database = "NOT VERIFIED";
+				$nama_bank_database = $record->nama_bank;
+				$verif_nama_bank_database = "NOT VERIFIED";
+				$pemilik_rekening_database = $record->pemilik_rek;
+				$verif_pemilik_rekening_database = "NOT VERIFIED";
+			} else {
+				//get data employee
+				$this->db->select("*");
+				$this->db->where('employee_id', $record->nip);
+				$data_employee = $this->db->get('xin_employees')->row_array();
+
+				if (empty($data_employee)) {
+					$norek_database = $nomor_rekening;
+					$verif_norek_database = "NOT VERIFIED";
+					$nama_bank_database = $record->nama_bank;
+					$verif_nama_bank_database = "NOT VERIFIED";
+					$pemilik_rekening_database = $record->pemilik_rek;
+					$verif_pemilik_rekening_database = "NOT VERIFIED";
+				} else {
+					$actual_verification_id = "";
+					if ((is_null($data_employee['verification_id'])) || ($data_employee['verification_id'] == "") || ($data_employee['verification_id'] == "0")) {
+						$actual_verification_id = "e_" . $data_employee['user_id'];
+					} else {
+						$actual_verification_id = $data_employee['verification_id'];
+					}
+
+					$bank_validation = "NOT VERIFIED";
+					$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+					if (is_null($bank_validation_query)) {
+						$bank_validation = "NOT VERIFIED";
+					} else {
+						$bank_validation = "VERIFIED";
+					}
+					$norek_validation = "NOT VERIFIED";
+					$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+					if (is_null($norek_validation_query)) {
+						$norek_validation = "NOT VERIFIED";
+					} else {
+						$norek_validation = "VERIFIED";
+					}
+					$pemilik_rekening_validation = "NOT VERIFIED";
+					$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+					if (is_null($pemilik_rekening_validation_query)) {
+						$pemilik_rekening_validation = "NOT VERIFIED";
+					} else {
+						$pemilik_rekening_validation = "VERIFIED";
+					}
+
+					$norek_database = $data_employee['nomor_rek'];
+					$verif_norek_database = $norek_validation;
+					$nama_bank_database = $this->Employees_model->get_nama_bank($data_employee['bank_name']);
+					$verif_nama_bank_database = $bank_validation;
+					$pemilik_rekening_database = $data_employee['pemilik_rek'];
+					$verif_pemilik_rekening_database = $pemilik_rekening_validation;
+				}
+			}
+
 			$data[] = array(
 				trim(strtoupper($record->status_emp), " "),
 				$record->nip,
@@ -1484,11 +1543,17 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($sub_project), " "),
 				trim(strtoupper($record->area), " "),
 				round($record->total_thp, 2),
-				$nomor_rekening,
-				trim(strtoupper($record->nama_bank), " "),
-				trim(strtoupper($record->pemilik_rek), " "),
+				// $nomor_rekening,
+				// trim(strtoupper($record->nama_bank), " "),
+				// trim(strtoupper($record->pemilik_rek), " "),
+				// trim(strtoupper($record->status_hold), " "),
+				$norek_database,
+				$verif_norek_database,
+				$nama_bank_database,
+				$verif_nama_bank_database,
+				$pemilik_rekening_database,
+				$verif_pemilik_rekening_database,
 				trim(strtoupper($record->status_hold), " "),
-				"",
 				"https://apps-cakrawala.com/admin/importexceleslip/eslip_final/" . $record->nip . "/" . $record->secid,
 			);
 		}
@@ -2493,7 +2558,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 			// $addendum_id = $this->secure->encrypt_url($record->id);
 			// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
 
-			if(($record->id_absensi == "0") || ($record->id_absensi == null) || ($record->id_absensi == "")) {
+			if (($record->id_absensi == "0") || ($record->id_absensi == null) || ($record->id_absensi == "")) {
 				$button_lihat_absensi = "";
 			} else {
 				$button_lihat_absensi = '</br><a href="' . base_url() . "admin/Importexcel/view_batch_absensi/" . $record->id_absensi . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-twitter" >VIEW ABSENSI</button></a>';
@@ -3519,6 +3584,92 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$sub_project = $data_batch['sub_project_name'];
 			}
 
+			if (($record->nip == null) || ($record->nip == "") || ($record->nip == "0")) {
+				$norek_database = $record->norek;
+				$verif_norek_database = "";
+				$nama_bank_database = $record->nama_bank;
+				$verif_nama_bank_database = "";
+				$pemilik_rekening_database = $record->pemilik_rek;
+				$verif_pemilik_rekening_database = "";
+
+				$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			} else {
+				//get data employee
+				$this->db->select("*");
+				$this->db->where('employee_id', $record->nip);
+				$data_employee = $this->db->get('xin_employees')->row_array();
+
+				if (empty($data_employee)) {
+					$norek_database = $record->norek;
+					$verif_norek_database = "";
+					$nama_bank_database = $record->nama_bank;
+					$verif_nama_bank_database = "";
+					$pemilik_rekening_database = $record->pemilik_rek;
+					$verif_pemilik_rekening_database = "";
+
+					$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+					$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				} else {
+					$actual_verification_id = "";
+					if ((is_null($data_employee['verification_id'])) || ($data_employee['verification_id'] == "") || ($data_employee['verification_id'] == "0")) {
+						$actual_verification_id = "e_" . $data_employee['user_id'];
+					} else {
+						$actual_verification_id = $data_employee['verification_id'];
+					}
+
+					$bank_validation = "0";
+					$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+					if (is_null($bank_validation_query)) {
+						$bank_validation = "0";
+					} else {
+						$bank_validation = $bank_validation_query['status'];
+					}
+					$norek_validation = "0";
+					$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+					if (is_null($norek_validation_query)) {
+						$norek_validation = "0";
+					} else {
+						$norek_validation = $norek_validation_query['status'];
+					}
+					$pemilik_rekening_validation = "0";
+					$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+					if (is_null($pemilik_rekening_validation_query)) {
+						$pemilik_rekening_validation = "0";
+					} else {
+						$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+					}
+
+					$validate_bank = "";
+					if ($bank_validation == "1") {
+						$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+					} else {
+						$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+					}
+					$validate_norek = "";
+					if ($norek_validation == "1") {
+						$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+					} else {
+						$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+					}
+					$validate_pemilik_rekening = "";
+					if ($pemilik_rekening_validation == "1") {
+						$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+					} else {
+						$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+					}
+
+					$norek_database = $data_employee['nomor_rek'];
+					$verif_norek_database = $norek_validation;
+					$nama_bank_database = $this->Employees_model->get_nama_bank($data_employee['bank_name']);
+					$verif_nama_bank_database = $bank_validation;
+					$pemilik_rekening_database = $data_employee['pemilik_rek'];
+					$verif_pemilik_rekening_database = $pemilik_rekening_validation;
+				}
+			}
+
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 			$esaltab = '<a href="' . site_url() . 'admin/importexceleslip/eslip_temp2/' . $record->nip . '/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">E-SLIP</button></a>';
 			$delete = '<button type="button" onclick="deleteDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
@@ -3534,6 +3685,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 				"jabatan" => $record->jabatan,
 				"area" => $record->area,
 				"hari_kerja" => $record->hari_kerja,
+				"rekening" => "No. Rek: " . $norek_database . $validate_norek . "</br>Bank: " . $nama_bank_database . $validate_bank . "</br>Pemilik Rek: " . $pemilik_rekening_database . $validate_pemilik_rekening,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}

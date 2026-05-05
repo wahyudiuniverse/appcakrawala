@@ -242,6 +242,202 @@ class Reports extends MY_Controller
 		echo json_encode($data);
 	}
 
+	//load datatables Employee
+	public function get_detail_pkwt_employee()
+	{
+		// // POST data
+		$postData = $this->input->post();
+
+		$pkwt_periode = $this->Employees_model->get_periode_pkwt($postData['employee_id']);
+
+		// // Get data
+		// $data = $this->Employees_model->get_list_employees($postData);
+
+		// echo json_encode($data);
+		// $data['path_url'] = 'emp_view';
+		// $this->load->view('admin/components/htmlheader');
+		echo "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['button_upload_ttd'] . $pkwt_periode['button_generate_pkwt'] . $pkwt_periode['status_blast'];
+		// $this->load->view('admin/layout/layout_main', $data); //page load
+
+		// echo "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['button_upload_ttd'] . $pkwt_periode['button_generate_pkwt'] . $pkwt_periode['status_blast'];
+	}
+
+	//load datatables Employee
+	public function get_detail_verifikasi_employee()
+	{
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		
+		// // POST data
+		$postData = $this->input->post();
+
+		$actual_verification_id = $postData['actual_verification_id'];
+
+		//cek status verifikasi
+		$nik_validation = "0";
+		$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+		if (is_null($nik_validation_query)) {
+			$nik_validation = "0";
+		} else {
+			$nik_validation = $nik_validation_query['status'];
+		}
+		$kk_validation = "0";
+		$kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
+		if (is_null($kk_validation_query)) {
+			$kk_validation = "0";
+		} else {
+			$kk_validation = $kk_validation_query['status'];
+		}
+		$nama_validation = "0";
+		$nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
+		if (is_null($nama_validation_query)) {
+			$nama_validation = "0";
+		} else {
+			$nama_validation = $nama_validation_query['status'];
+		}
+		$bank_validation = "0";
+		$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+		if (is_null($bank_validation_query)) {
+			$bank_validation = "0";
+		} else {
+			$bank_validation = $bank_validation_query['status'];
+		}
+		$norek_validation = "0";
+		$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+		if (is_null($norek_validation_query)) {
+			$norek_validation = "0";
+		} else {
+			$norek_validation = $norek_validation_query['status'];
+		}
+		$pemilik_rekening_validation = "0";
+		$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+		if (is_null($pemilik_rekening_validation_query)) {
+			$pemilik_rekening_validation = "0";
+		} else {
+			$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+		}
+		$buku_rekening_validation = "0";
+		$buku_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'buku_rekening');
+		if (is_null($buku_rekening_validation_query)) {
+			$buku_rekening_validation = "0";
+		} else {
+			$buku_rekening_validation = $buku_rekening_validation_query['status'];
+		}
+		$ijazah_validation = "0";
+		$ijazah_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'ijazah');
+		if (is_null($ijazah_query)) {
+			$ijazah_validation = "0";
+		} else {
+			$ijazah_validation = $ijazah_query['status'];
+		}
+		$cv_validation = "0";
+		$cv_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'cv');
+		if (is_null($cv_query)) {
+			$cv_validation = "0";
+		} else {
+			$cv_validation = $cv_query['status'];
+		}
+		$skck_validation = "0";
+		$skck_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'skck');
+		if (is_null($skck_query)) {
+			$skck_validation = "0";
+		} else {
+			$skck_validation = $skck_query['status'];
+		}
+
+		//assign checklist hijau kalau sudah diverifikasi
+		$validate_nik = "";
+		if ($nik_validation == "1") {
+			$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		// $button_open_ktp = '<button onclick="open_ktp(' . $postData['employee_id'] . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+		$validate_kk = "";
+		if ($kk_validation == "1") {
+			$validate_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_nama = "";
+		if ($nama_validation == "1") {
+			$validate_nama = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_nama = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_bank = "";
+		if ($bank_validation == "1") {
+			$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_norek = "";
+		if ($norek_validation == "1") {
+			$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_pemilik_rekening = "";
+		if ($pemilik_rekening_validation == "1") {
+			$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_buku_rekening = "";
+		if ($buku_rekening_validation == "1") {
+			$validate_buku_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_buku_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_ijazah = "";
+		if ($ijazah_validation == "1") {
+			$validate_ijazah = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_ijazah = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_cv = "";
+		if ($cv_validation == "1") {
+			$validate_cv = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_cv = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+		$validate_skck = "";
+		if ($skck_validation == "1") {
+			$validate_skck = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		} else {
+			$validate_skck = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		}
+
+		// //rangkai tabel verifikasi v.1 -> Tabel All verifikasi
+		// $tabel_verifikasi = "<table class='table table-striped col-md-12'>";
+		// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>NIK</td><td>" . $validate_nik . "</td><td>SKCK</td><td>" . $validate_skck . "</td></tr>";
+		// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>Nama</td><td>" . $validate_nama . "</td><td>Bank</td><td>" . $validate_bank . "</td></tr>";
+		// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>KK</td><td>" . $validate_kk . "</td><td>No. Rek.</td><td>" . $validate_norek . "</td></tr>";
+		// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>CV</td><td>" . $validate_cv . "</td><td>Nama Rek.</td><td>" . $validate_pemilik_rekening . "</td></tr>";
+		// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>Ijazah</td><td>" . $validate_ijazah . "</td><td>Buku Tabungan</td><td>" . $validate_buku_rekening . "</td></tr>";
+		// $tabel_verifikasi = $tabel_verifikasi . "</table>";
+
+		//rangkai tabel verifikasi v.2 -> Tabel verifikasi
+		$tabel_verifikasi = "<table class='table table-striped col-md-12'>";
+		$tabel_verifikasi = $tabel_verifikasi . "<tr><td>NIK</td><td>" . $validate_nik . "</td><td>Ijazah</td><td>" . $validate_ijazah . "</td></tr>";
+		$tabel_verifikasi = $tabel_verifikasi . "<tr><td>KK</td><td>" . $validate_kk . "</td><td>CV</td><td>" . $validate_cv . "</td></tr>";
+		$tabel_verifikasi = $tabel_verifikasi . "<tr><td>No. Rek.</td><td>" . $validate_norek . "</td><td>SKCK</td><td>" . $validate_skck . "</td></tr>";
+		$tabel_verifikasi = $tabel_verifikasi . "<tr><td colspan='3'>Buku Tabungan</td><td>" . $validate_buku_rekening . "</td></tr>";
+		if (in_array('1000', $role_resources_ids)) {
+			$tabel_verifikasi = $tabel_verifikasi . "<tr><td colspan='4'><button type='button' onclick='verifikasi(" . $postData['employee_id'] . ")' class='btn btn-xs btn-outline-twitter col-12' >Verifikasi data</button></td></tr>";
+		}
+		$tabel_verifikasi = $tabel_verifikasi . "</table>";
+		// // Get data
+		// $data = $this->Employees_model->get_list_employees($postData);
+
+		// echo json_encode($data);
+		// $data['path_url'] = 'emp_view';
+		// $this->load->view('admin/components/htmlheader');
+		echo $tabel_verifikasi;
+		// $this->load->view('admin/layout/layout_main', $data); //page load
+
+		// echo "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['button_upload_ttd'] . $pkwt_periode['button_generate_pkwt'] . $pkwt_periode['status_blast'];
+	}
+
 	function get_email_pin()
 	{
 		$postData = $this->input->post();

@@ -12904,9 +12904,9 @@ class Employees extends MY_Controller
 	{
 		$postData = $this->input->post();
 
-		$img = $postData['signature'];
-		$data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $img));
-		file_put_contents('./uploads/contoh_ttd/signature.png', $data);
+		// $img = $postData['signature'];
+		// $data = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $img));
+		// file_put_contents('./uploads/contoh_ttd/signature.png', $data);
 
 		// get data 
 		$data = $this->Employees_model->valiadsi_employee_request($postData);

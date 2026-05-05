@@ -1673,10 +1673,29 @@ class Employees_model extends CI_Model
 		$this->db->from('log_employee_verification');
 		$this->db->where('id_employee_request', $id);
 		$this->db->where('kolom', $column);
-		$this->db->order_by('verified_on', 'desc');
+		$this->db->order_by('id', 'desc');
 		$this->db->limit(1);
 
 		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
+	//get all validation status kolom
+	function get_all_valiadation_status($id)
+	{
+		//nik =  nik
+		//
+		$this->db->select('t1.*');
+		// $this->db->where('id_employee_request', $id);
+		// $this->db->join('comments', 'comments.id = blogs.id');
+		$this->db->join('(SELECT MAX(id) as last_id FROM log_employee_verification WHERE `id_employee_request` = $id GROUP BY kolom) t2', 't1.id = t2.last_id');
+		// $this->db->where('kolom', $column);
+		// $this->db->order_by('id', 'desc');
+		// $this->db->limit(1);
+		$this->db->from('log_employee_verification t1');
+
+		$query = $this->db->get()->result_array();
 
 		return $query;
 	}
@@ -3352,160 +3371,9 @@ class Employees_model extends CI_Model
 					$actual_verification_id = $record->verification_id;
 				}
 
-				//cek status verifikasi
-				$nik_validation = "0";
-				$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
-				if (is_null($nik_validation_query)) {
-					$nik_validation = "0";
-				} else {
-					$nik_validation = $nik_validation_query['status'];
-				}
-				$kk_validation = "0";
-				$kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
-				if (is_null($kk_validation_query)) {
-					$kk_validation = "0";
-				} else {
-					$kk_validation = $kk_validation_query['status'];
-				}
-				$nama_validation = "0";
-				$nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
-				if (is_null($nama_validation_query)) {
-					$nama_validation = "0";
-				} else {
-					$nama_validation = $nama_validation_query['status'];
-				}
-				$bank_validation = "0";
-				$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
-				if (is_null($bank_validation_query)) {
-					$bank_validation = "0";
-				} else {
-					$bank_validation = $bank_validation_query['status'];
-				}
-				$norek_validation = "0";
-				$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
-				if (is_null($norek_validation_query)) {
-					$norek_validation = "0";
-				} else {
-					$norek_validation = $norek_validation_query['status'];
-				}
-				$pemilik_rekening_validation = "0";
-				$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
-				if (is_null($pemilik_rekening_validation_query)) {
-					$pemilik_rekening_validation = "0";
-				} else {
-					$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
-				}
-				$buku_rekening_validation = "0";
-				$buku_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'buku_rekening');
-				if (is_null($buku_rekening_validation_query)) {
-					$buku_rekening_validation = "0";
-				} else {
-					$buku_rekening_validation = $buku_rekening_validation_query['status'];
-				}
-				$ijazah_validation = "0";
-				$ijazah_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'ijazah');
-				if (is_null($ijazah_query)) {
-					$ijazah_validation = "0";
-				} else {
-					$ijazah_validation = $ijazah_query['status'];
-				}
-				$cv_validation = "0";
-				$cv_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'cv');
-				if (is_null($cv_query)) {
-					$cv_validation = "0";
-				} else {
-					$cv_validation = $cv_query['status'];
-				}
-				$skck_validation = "0";
-				$skck_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'skck');
-				if (is_null($skck_query)) {
-					$skck_validation = "0";
-				} else {
-					$skck_validation = $skck_query['status'];
-				}
+				// $all_verification = $this->Employees_model->get_all_valiadation_status($actual_verification_id);
 
-				//assign checklist hijau kalau sudah diverifikasi
-				$validate_nik = "";
-				if ($nik_validation == "1") {
-					$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
 				$button_open_ktp = '<button onclick="open_ktp(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
-				$validate_kk = "";
-				if ($kk_validation == "1") {
-					$validate_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_nama = "";
-				if ($nama_validation == "1") {
-					$validate_nama = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_nama = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_bank = "";
-				if ($bank_validation == "1") {
-					$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_norek = "";
-				if ($norek_validation == "1") {
-					$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_pemilik_rekening = "";
-				if ($pemilik_rekening_validation == "1") {
-					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_buku_rekening = "";
-				if ($buku_rekening_validation == "1") {
-					$validate_buku_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_buku_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_ijazah = "";
-				if ($ijazah_validation == "1") {
-					$validate_ijazah = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_ijazah = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_cv = "";
-				if ($cv_validation == "1") {
-					$validate_cv = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_cv = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-				$validate_skck = "";
-				if ($skck_validation == "1") {
-					$validate_skck = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				} else {
-					$validate_skck = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				}
-
-				// //rangkai tabel verifikasi v.1 -> Tabel All verifikasi
-				// $tabel_verifikasi = "<table class='table table-striped col-md-12'>";
-				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>NIK</td><td>" . $validate_nik . "</td><td>SKCK</td><td>" . $validate_skck . "</td></tr>";
-				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>Nama</td><td>" . $validate_nama . "</td><td>Bank</td><td>" . $validate_bank . "</td></tr>";
-				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>KK</td><td>" . $validate_kk . "</td><td>No. Rek.</td><td>" . $validate_norek . "</td></tr>";
-				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>CV</td><td>" . $validate_cv . "</td><td>Nama Rek.</td><td>" . $validate_pemilik_rekening . "</td></tr>";
-				// $tabel_verifikasi = $tabel_verifikasi . "<tr><td>Ijazah</td><td>" . $validate_ijazah . "</td><td>Buku Tabungan</td><td>" . $validate_buku_rekening . "</td></tr>";
-				// $tabel_verifikasi = $tabel_verifikasi . "</table>";
-
-				//rangkai tabel verifikasi v.2 -> Tabel verifikasi
-				$tabel_verifikasi = "<table class='table table-striped col-md-12'>";
-				$tabel_verifikasi = $tabel_verifikasi . "<tr><td>NIK</td><td>" . $validate_nik . "</td><td>Ijazah</td><td>" . $validate_ijazah . "</td></tr>";
-				$tabel_verifikasi = $tabel_verifikasi . "<tr><td>KK</td><td>" . $validate_kk . "</td><td>CV</td><td>" . $validate_cv . "</td></tr>";
-				$tabel_verifikasi = $tabel_verifikasi . "<tr><td>No. Rek.</td><td>" . $validate_norek . "</td><td>SKCK</td><td>" . $validate_skck . "</td></tr>";
-				$tabel_verifikasi = $tabel_verifikasi . "<tr><td colspan='3'>Buku Tabungan</td><td>" . $validate_buku_rekening . "</td></tr>";
-				if (in_array('1000', $role_resources_ids)) {
-					$tabel_verifikasi = $tabel_verifikasi . "<tr><td colspan='4'><button type='button' onclick='verifikasi(" . $record->employee_id . ")' class='btn btn-xs btn-outline-twitter col-12' >Verifikasi data</button></td></tr>";
-				}
-				$tabel_verifikasi = $tabel_verifikasi . "</table>";
 
 				// $view = "<button type='button' onclick='verifikasi(" . $record->employee_id . ")' class='btn btn-xs btn-outline-twitter col-12' >Verifikasi data</button>";
 				// $text_periode_from = "";
@@ -3583,23 +3451,23 @@ class Employees_model extends CI_Model
 					$view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 				}
 
-				$pkwt_periode = $this->get_periode_pkwt($record->employee_id);
+				//get last pkwt
+				// $pkwt_periode = $this->get_periode_pkwt($record->employee_id);
 
-				// $addendum_id = $this->secure->encrypt_url($record->id);
-				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
-
-				// $view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
-				if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
-					if ($pkwt_periode['jumlah_kontrak'] == 1) {
-						$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
-					} else {
-						$button_send_pin = "";
-					}
-					$button_send_email = '<br><button type="button" onclick="open_email(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
-				} else {
-					$button_send_pin = "";
-					$button_send_email = "";
-				}
+				//send pin dan email
+				$button_send_pin = "";
+				$button_send_email = "";
+				// if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
+				// 	if ($pkwt_periode['jumlah_kontrak'] == 1) {
+				// 		$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
+				// 	} else {
+				// 		$button_send_pin = "";
+				// 	}
+				// 	$button_send_email = '<br><button type="button" onclick="open_email(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
+				// } else {
+				// 	$button_send_pin = "";
+				// 	$button_send_email = "";
+				// }
 
 				// if ($pkwt_periode['jumlah_kontrak'] == 1) {
 				// 	$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
@@ -3613,17 +3481,24 @@ class Employees_model extends CI_Model
 
 				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
+				$button_lihat_kontrak = '<button type="button" onclick="open_modal_kontrak(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >LIHAT DETAIL KONTRAK</button>';
+
+				// $tes_iframe = "<iframe src='" . base_url("admin/reports/get_verification_employee/" . $record->employee_id) . "' frameborder='0'></iframe>";
+				$tes_iframe = '<embed type="text/html" src="' . base_url("admin/reports/get_verification_employee/" . $record->employee_id) . '">';
 				$data[] = array(
 					"aksi" => $view,
 					"employee_id" => $record->employee_id . $text_pin . $text_resign,
 					"ktp_no" => $record->ktp_no . $button_open_ktp,
 					"first_name" => strtoupper($record->first_name) . $button_send_pin . $button_send_email,
-					"verifikasi" => $tabel_verifikasi,
+					// "verifikasi" => $tabel_verifikasi,
+					"verifikasi" => $actual_verification_id,
 					"project" => strtoupper($this->get_nama_project($record->project_id)),
 					"sub_project" => strtoupper($this->get_nama_sub_project($record->sub_project_id)),
 					"designation_name" => strtoupper($record->designation_name),
 					"penempatan" => strtoupper($record->penempatan),
-					"periode" => "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['button_upload_ttd']. $pkwt_periode['button_generate_pkwt'] . $pkwt_periode['status_blast'],
+					// "periode" => "<strong>Kontrak ke: " . $pkwt_periode['jumlah_kontrak'] . "</strong><br>" . $pkwt_periode['tanggal_kontrak'] . $pkwt_periode['draft_kontrak'] . $pkwt_periode['button_kontrak'] . $pkwt_periode['button_upload_ttd'] . $pkwt_periode['button_generate_pkwt'] . $pkwt_periode['status_blast'],
+					// "periode" => $button_lihat_kontrak,
+					"periode" => $record->employee_id,
 					// "pincode" => $text_pin,
 					// $this->get_nama_karyawan($record->upload_by)
 				);
@@ -3758,6 +3633,7 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_employees.filename_cv');
 		$this->db->select('xin_employees.filename_paklaring');
 
+		$this->db->select('b.contract_id');
 		$this->db->select('b.no_surat');
 		$this->db->select('b.from_date');
 		$this->db->select('b.to_date');
@@ -3997,6 +3873,31 @@ class Employees_model extends CI_Model
 				$link_pkwt			= $record->file_name;
 			}
 
+			//cek addendum
+			$addendum = $this->cek_addendum($record->contract_id);
+			if((empty($addendum)) || ($addendum == null) || ($addendum == "")){
+				$nomor_kontrak = $record->no_surat;
+				$awal_kontrak = $this->Xin_model->tgl_indo($record->from_date);
+				$akhir_kontrak = $this->Xin_model->tgl_indo($record->to_date);
+				if((empty($record->file_name)) || ($record->file_name == null) || ($record->file_name == "")){
+				    $link_dokumen_kontrak = "";
+				} else {
+				    $link_dokumen_kontrak = $record->file_name;
+				}
+				// $link_dokumen_kontrak = $link_pkwt;
+				$tgl_upload_kontrak = $record->upload_pkwt;
+			} else {
+				$nomor_kontrak = $addendum['no_addendum'];
+				$awal_kontrak = $this->Xin_model->tgl_indo($addendum['kontrak_start_new']);
+				$akhir_kontrak = $this->Xin_model->tgl_indo($addendum['kontrak_end_new']);
+				if((empty($addendum['file_signed'])) || ($addendum['file_signed'] == null) || ($addendum['file_signed'] == "")){
+				    $link_dokumen_kontrak = "";
+				} else {
+				    $link_dokumen_kontrak = base_url("uploads/document/addendum") . $addendum['file_signed'];
+				}
+				// $link_dokumen_kontrak = base_url("uploads/document/addendum") . $addendum['file_signed'];
+				$tgl_upload_kontrak = $this->Xin_model->tgl_indo($addendum['file_signed_time']);
+			}
 
 			$data[] = array(
 				$text_resign,
@@ -4071,13 +3972,17 @@ class Employees_model extends CI_Model
 				$allow_ops,
 				$allow_training,
 
-				$record->no_surat,
-				$this->Xin_model->tgl_indo($record->from_date),
-				$this->Xin_model->tgl_indo($record->to_date),
-				$link_pkwt,
-				$record->upload_pkwt,
-				// $this->get_tanggal_pkwt($record->upload_pkwt)
-				// $this->get_nama_karyawan($record->upload_by)
+				$nomor_kontrak,
+				$awal_kontrak,
+				$akhir_kontrak,
+				$link_dokumen_kontrak,
+				$tgl_upload_kontrak,
+
+				// $record->no_surat,
+				// $this->Xin_model->tgl_indo($record->from_date),
+				// $this->Xin_model->tgl_indo($record->to_date),
+				// $link_pkwt,
+				// $record->upload_pkwt,
 			);
 		}
 
@@ -4088,6 +3993,19 @@ class Employees_model extends CI_Model
 
 		return $data;
 		//json_encode($data);
+	}
+
+	//cek addendum
+	public function cek_addendum($contract_id)
+	{
+		$this->db->select('*');
+		$this->db->from('xin_contract_addendum');
+		$this->db->where('pkwt_id', $contract_id);
+		// $this->db->where($searchQuery);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
 	}
 
 	/*

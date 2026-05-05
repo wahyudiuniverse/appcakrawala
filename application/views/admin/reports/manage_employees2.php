@@ -1241,7 +1241,39 @@
 								},
 								{
 									data: 'periode',
+									"defaultContent": '',
 									"orderable": false,
+									render: function(data, type, row, meta) {
+										var currentCell = $("#tabel_employees").DataTable().cells({
+											"row": meta.row,
+											"column": meta.col
+										}).nodes(0);
+										$.ajax({
+											url: '<?= base_url() ?>admin/Reports/get_detail_pkwt_employee/',
+											method: 'post',
+											dataType: 'html',
+											data: {
+												[csrfName]: csrfHash,
+												employee_id: data,
+											},
+											beforeSend: function() {
+												// return loading_html_text;
+												$(currentCell).html(loading_html_text);
+											},
+											success: function(response) {
+												$(currentCell).html(response);
+												// return response;
+											},
+											error: function(xhr, status, error) {
+												// html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+												// html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+												// // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+												// $('.isi-modal').html(html_text); //coba pake iframe
+												// $('#button_save_pin').attr("hidden", true);
+											}
+										});
+										// return '<a href="/edit/' + data + '">Edit</a>';
+									}
 								},
 							]
 						}).on('search.dt', () => eventFired('Search'));
@@ -1322,6 +1354,7 @@
 			$('#button_download_data_broadcast').attr("hidden", false);
 
 			employee_table = $('#tabel_employees').DataTable({
+				"searchDelay": 1000,
 				//"bDestroy": true,
 				'processing': true,
 				'serverSide': true,
@@ -1374,8 +1407,43 @@
 					},
 					{
 						data: 'verifikasi',
+						"defaultContent": '',
 						"orderable": false,
-						//searchable: true
+						render: function(data, type, row, meta) {
+							if (type === 'display') {
+								var currentCell = $("#tabel_employees").DataTable().cells({
+									"row": meta.row,
+									"column": meta.col
+								}).nodes(0);
+								$.ajax({
+									url: '<?= base_url() ?>admin/Reports/get_detail_verifikasi_employee/',
+									method: 'post',
+									dataType: 'html',
+									data: {
+										[csrfName]: csrfHash,
+										employee_id: row.periode,
+										actual_verification_id: data,
+									},
+									beforeSend: function() {
+										// return loading_html_text;
+										$(currentCell).html(loading_html_text);
+									},
+									success: function(response) {
+										$(currentCell).html(response);
+										// return response;
+									},
+									error: function(xhr, status, error) {
+										// html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+										// html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+										// // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+										// $('.isi-modal').html(html_text); //coba pake iframe
+										// $('#button_save_pin').attr("hidden", true);
+									}
+								});
+								// return null;
+								// return '<a href="/edit/' + data + '">Edit</a>';
+							}
+						}
 					},
 					{
 						data: 'project',
@@ -1395,10 +1463,46 @@
 					},
 					{
 						data: 'periode',
+						"defaultContent": '',
 						"orderable": false,
+						render: function(data, type, row, meta) {
+							if (type === 'display') {
+								var currentCell = $("#tabel_employees").DataTable().cells({
+									"row": meta.row,
+									"column": meta.col
+								}).nodes(0);
+								$.ajax({
+									url: '<?= base_url() ?>admin/Reports/get_detail_pkwt_employee/',
+									method: 'post',
+									dataType: 'html',
+									data: {
+										[csrfName]: csrfHash,
+										employee_id: data,
+									},
+									beforeSend: function() {
+										// return loading_html_text;
+										$(currentCell).html(loading_html_text);
+									},
+									success: function(response) {
+										$(currentCell).html(response);
+										// return response;
+									},
+									error: function(xhr, status, error) {
+										// html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
+										// html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
+										// // html_text = "Gagal fetch data. Kode error: " + xhr.status;
+										// $('.isi-modal').html(html_text); //coba pake iframe
+										// $('#button_save_pin').attr("hidden", true);
+									}
+								});
+								// return null;
+								// return '<a href="/edit/' + data + '">Edit</a>';
+							}
+						}
 					},
 				]
-			}).on('search.dt', () => eventFired('Search'));
+			});
+			// }).on('search.dt', () => eventFired('Search'));
 
 			$('#tombol_filter').attr("disabled", false);
 			$('#tombol_filter').removeAttr("data-loading");
