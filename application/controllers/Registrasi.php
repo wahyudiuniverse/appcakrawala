@@ -63,6 +63,8 @@ class Registrasi extends CI_Controller
 		//$this->load->view('templates/topbar_register', $data);
 		//$this->load->view('karyawan/add_register2', $data);
 		//$this->load->view('templates/footer');
+
+		
 	}
 
 	//mengambil Json data Sub Project berdasarkan projectnya
@@ -316,6 +318,7 @@ class Registrasi extends CI_Controller
 		$data['companies'] = $this->register->getAllCompany();
 		$data['karyawan'] = $nik_url;
 		$data['cek_nik'] = $nik;
+		$data['nik_karyawan'] = $nik;
 		$data['halaman'] = $halaman;
 		$data['upload_data'] = "";
 
@@ -324,7 +327,7 @@ class Registrasi extends CI_Controller
 		//$this->load->view('templates/sidebar', $data);
 		$this->load->view('frontend/templates/topbar_register', $data);
 		$this->load->view('frontend/add_register2', $data);
-		$this->load->view('frontend/templates/footer');
+		// $this->load->view('frontend/templates/footer');
 	}
 
 	//Menampilkan Register tanpa parameter untuk proses POST variable
@@ -1016,7 +1019,7 @@ class Registrasi extends CI_Controller
         }*/
 
 		//----Persiapan data----
-		$data['karyawan'] = $nik_url;
+		$data['nik_karyawan'] = $nik_url;
 		$data['cek_nik'] = $nik;
 		$data['halaman'] = $halaman;
 
@@ -1026,7 +1029,7 @@ class Registrasi extends CI_Controller
 		// //$this->load->view('templates/sidebar', $data);
 		$this->load->view('frontend/templates/topbar_register', $data);
 		$this->load->view('frontend/add_register2', $data);
-		$this->load->view('frontend/templates/footer');
+		// $this->load->view('frontend/templates/footer');
 
 		//$data['subview'] = $this->load->view("admin/employees/add_register2", $data, TRUE);
 

@@ -1476,62 +1476,36 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			if (($record->nip == null) || ($record->nip == "") || ($record->nip == "0")) {
-				$norek_database = $nomor_rekening;
-				$verif_norek_database = "NOT VERIFIED";
-				$nama_bank_database = $record->nama_bank;
+				$norek_database = "";
+				$nama_bank_database = "";
+				$pemilik_rekening_database = "";
+
 				$verif_nama_bank_database = "NOT VERIFIED";
-				$pemilik_rekening_database = $record->pemilik_rek;
+				$verif_norek_database = "NOT VERIFIED";
 				$verif_pemilik_rekening_database = "NOT VERIFIED";
 			} else {
-				//get data employee
-				$this->db->select("*");
-				$this->db->where('employee_id', $record->nip);
-				$data_employee = $this->db->get('xin_employees')->row_array();
-
-				if (empty($data_employee)) {
-					$norek_database = $nomor_rekening;
-					$verif_norek_database = "NOT VERIFIED";
-					$nama_bank_database = $record->nama_bank;
-					$verif_nama_bank_database = "NOT VERIFIED";
-					$pemilik_rekening_database = $record->pemilik_rek;
-					$verif_pemilik_rekening_database = "NOT VERIFIED";
+				$verif_nama_bank_database = "";
+				if ($record->bank_verify == "1") {
+					$verif_nama_bank_database = "VERIFIED";
 				} else {
-					$actual_verification_id = "";
-					if ((is_null($data_employee['verification_id'])) || ($data_employee['verification_id'] == "") || ($data_employee['verification_id'] == "0")) {
-						$actual_verification_id = "e_" . $data_employee['user_id'];
-					} else {
-						$actual_verification_id = $data_employee['verification_id'];
-					}
-
-					$bank_validation = "NOT VERIFIED";
-					$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
-					if (is_null($bank_validation_query)) {
-						$bank_validation = "NOT VERIFIED";
-					} else {
-						$bank_validation = "VERIFIED";
-					}
-					$norek_validation = "NOT VERIFIED";
-					$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
-					if (is_null($norek_validation_query)) {
-						$norek_validation = "NOT VERIFIED";
-					} else {
-						$norek_validation = "VERIFIED";
-					}
-					$pemilik_rekening_validation = "NOT VERIFIED";
-					$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
-					if (is_null($pemilik_rekening_validation_query)) {
-						$pemilik_rekening_validation = "NOT VERIFIED";
-					} else {
-						$pemilik_rekening_validation = "VERIFIED";
-					}
-
-					$norek_database = $data_employee['nomor_rek'];
-					$verif_norek_database = $norek_validation;
-					$nama_bank_database = $this->Employees_model->get_nama_bank($data_employee['bank_name']);
-					$verif_nama_bank_database = $bank_validation;
-					$pemilik_rekening_database = $data_employee['pemilik_rek'];
-					$verif_pemilik_rekening_database = $pemilik_rekening_validation;
+					$verif_nama_bank_database = "NOT VERIFIED";
 				}
+				$verif_norek_database = "";
+				if ($record->rek_verify == "1") {
+					$verif_norek_database = "VERIFIED";
+				} else {
+					$verif_norek_database = "NOT VERIFIED";
+				}
+				$verif_pemilik_rekening_database = "";
+				if ($record->pemilik_rek_verify == "1") {
+					$verif_pemilik_rekening_database = "VERIFIED";
+				} else {
+					$verif_pemilik_rekening_database = "NOT VERIFIED";
+				}
+
+				$norek_database = $nomor_rekening;
+				$nama_bank_database = $record->nama_bank;
+				$pemilik_rekening_database = $record->pemilik_rek;
 			}
 
 			$data[] = array(
@@ -1570,6 +1544,107 @@ GROUP BY uploadid, periode, project, project_sub;';
 		// }
 
 		return $data;
+	}
+
+	// get all employes temporary
+	public function get_employee_validasi_saltab($employee_id)
+	{
+
+		//get data employee
+		$this->db->select("*");
+		$this->db->where('employee_id', $employee_id);
+		$data_employee = $this->db->get('xin_employees')->row_array();
+
+		if (empty($data_employee)) {
+			$verif_nik_database = "0";
+			$norek_database = "";
+			$verif_norek_database = "0";
+			$id_bank_database = "0";
+			$nama_bank_database = "";
+			$verif_nama_bank_database = "0";
+			$pemilik_rekening_database = "";
+			$verif_pemilik_rekening_database = "0";
+		} else {
+			$actual_verification_id = "";
+			if ((is_null($data_employee['verification_id'])) || ($data_employee['verification_id'] == "") || ($data_employee['verification_id'] == "0")) {
+				$actual_verification_id = "e_" . $data_employee['user_id'];
+			} else {
+				$actual_verification_id = $data_employee['verification_id'];
+			}
+
+			//cek status verifikasi
+			$nik_validation = "0";
+			$nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+			if (is_null($nik_validation_query)) {
+				$nik_validation = "0";
+			} else {
+				$nik_validation = $nik_validation_query['status'];
+			}
+			$bank_validation = "0";
+			$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+			if (is_null($bank_validation_query)) {
+				$bank_validation = "0";
+			} else {
+				$bank_validation = $bank_validation_query['status'];
+			}
+			$norek_validation = "0";
+			$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+			if (is_null($norek_validation_query)) {
+				$norek_validation = "0";
+			} else {
+				$norek_validation = $norek_validation_query['status'];
+			}
+			$pemilik_rekening_validation = "0";
+			$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+			if (is_null($pemilik_rekening_validation_query)) {
+				$pemilik_rekening_validation = "0";
+			} else {
+				$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+			}
+
+			$verif_nik_database = $nik_validation;
+			$norek_database = $data_employee['nomor_rek'];
+			$verif_norek_database = $norek_validation;
+			$id_bank_database = $data_employee['bank_name'];
+			$nama_bank_database = $this->Employees_model->get_nama_bank($data_employee['bank_name']);
+			$verif_nama_bank_database = $bank_validation;
+			$pemilik_rekening_database = strtoupper($data_employee['pemilik_rek']);
+			$verif_pemilik_rekening_database = $pemilik_rekening_validation;
+		}
+
+		$response = array(
+			'verif_nik_database' => $verif_nik_database,
+			'norek_database' => $norek_database,
+			'verif_norek_database' => $verif_norek_database,
+			'id_bank_database' => $id_bank_database,
+			'nama_bank_database' => $nama_bank_database,
+			'verif_nama_bank_database' => $verif_nama_bank_database,
+			'pemilik_rekening_database' => $pemilik_rekening_database,
+			'verif_pemilik_rekening_database' => $verif_pemilik_rekening_database,
+		);
+
+		return $response;
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Insert batch Data Saltab Temp
+    |-------------------------------------------------------------------
+    |
+    | @param $data catch detail data saltab temp
+    |
+    */
+	function save_saltab_temp($data)
+	{
+		$this->db->insert_batch("xin_saltab_temp", $data);
+
+		$tes_query = $this->db->last_query();
+
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	// get all employes temporary
@@ -2260,6 +2335,51 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		$this->db->where('id', $id);
 		$this->db->update('xin_saltab_bulk_release', $data);
+	}
+
+	function cek_jumlah_invalid($id = null)
+	{
+		$session = $this->session->userdata('username');
+
+		## Get Detail Saltab
+		$this->db->select('count(*) as jumlah_invalid');
+		$this->db->from('xin_saltab_temp');
+		$this->db->where('uploadid', $id);
+		$this->db->where('status_valid', 0);
+		$saltab_detail = $this->db->get()->row_array();
+
+		return $saltab_detail['jumlah_invalid'];
+	}
+
+	function cek_jumlah_warning($id = null)
+	{
+		$session = $this->session->userdata('username');
+
+		## Get Detail Saltab
+		$this->db->select('count(*) as jumlah_invalid');
+		$this->db->from('xin_saltab_temp');
+		$this->db->where('uploadid', $id);
+		$this->db->where('status_valid', 2);
+		$saltab_detail = $this->db->get()->row_array();
+
+		return $saltab_detail['jumlah_invalid'];
+	}
+
+	function cek_jumlah_rekening_tidak_aktif($id = null)
+	{
+		$session = $this->session->userdata('username');
+
+		## Get Detail Saltab
+		$this->db->select('count(*) as jumlah_tidak_aktif');
+		$this->db->from('xin_saltab_temp');
+		$this->db->where('uploadid', $id);
+		$this->db->group_start();
+		$this->db->or_where('status_cek_aktif_rekening', 0);
+		$this->db->or_where('status_cek_aktif_rekening', 2);
+		$this->db->group_end();
+		$saltab_detail = $this->db->get()->row_array();
+
+		return $saltab_detail['jumlah_tidak_aktif'];
 	}
 
 	//delete detail saltab temporary
@@ -3585,89 +3705,54 @@ GROUP BY uploadid, periode, project, project_sub;';
 			}
 
 			if (($record->nip == null) || ($record->nip == "") || ($record->nip == "0")) {
-				$norek_database = $record->norek;
-				$verif_norek_database = "";
-				$nama_bank_database = $record->nama_bank;
-				$verif_nama_bank_database = "";
-				$pemilik_rekening_database = $record->pemilik_rek;
-				$verif_pemilik_rekening_database = "";
+				$norek_database = "";
+				$nama_bank_database = "";
+				$pemilik_rekening_database = "";
 
 				$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 				$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 				$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 			} else {
-				//get data employee
-				$this->db->select("*");
-				$this->db->where('employee_id', $record->nip);
-				$data_employee = $this->db->get('xin_employees')->row_array();
-
-				if (empty($data_employee)) {
-					$norek_database = $record->norek;
-					$verif_norek_database = "";
-					$nama_bank_database = $record->nama_bank;
-					$verif_nama_bank_database = "";
-					$pemilik_rekening_database = $record->pemilik_rek;
-					$verif_pemilik_rekening_database = "";
-
-					$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-					$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				$validate_bank = "";
+				if ($record->bank_verify == "1") {
+					$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
 				} else {
-					$actual_verification_id = "";
-					if ((is_null($data_employee['verification_id'])) || ($data_employee['verification_id'] == "") || ($data_employee['verification_id'] == "0")) {
-						$actual_verification_id = "e_" . $data_employee['user_id'];
-					} else {
-						$actual_verification_id = $data_employee['verification_id'];
-					}
-
-					$bank_validation = "0";
-					$bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
-					if (is_null($bank_validation_query)) {
-						$bank_validation = "0";
-					} else {
-						$bank_validation = $bank_validation_query['status'];
-					}
-					$norek_validation = "0";
-					$norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
-					if (is_null($norek_validation_query)) {
-						$norek_validation = "0";
-					} else {
-						$norek_validation = $norek_validation_query['status'];
-					}
-					$pemilik_rekening_validation = "0";
-					$pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
-					if (is_null($pemilik_rekening_validation_query)) {
-						$pemilik_rekening_validation = "0";
-					} else {
-						$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
-					}
-
-					$validate_bank = "";
-					if ($bank_validation == "1") {
-						$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-					} else {
-						$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-					}
-					$validate_norek = "";
-					if ($norek_validation == "1") {
-						$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-					} else {
-						$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-					}
-					$validate_pemilik_rekening = "";
-					if ($pemilik_rekening_validation == "1") {
-						$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-					} else {
-						$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-					}
-
-					$norek_database = $data_employee['nomor_rek'];
-					$verif_norek_database = $norek_validation;
-					$nama_bank_database = $this->Employees_model->get_nama_bank($data_employee['bank_name']);
-					$verif_nama_bank_database = $bank_validation;
-					$pemilik_rekening_database = $data_employee['pemilik_rek'];
-					$verif_pemilik_rekening_database = $pemilik_rekening_validation;
+					$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
 				}
+				$validate_norek = "";
+				if ($record->rek_verify == "1") {
+					$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_pemilik_rekening = "";
+				if ($record->pemilik_rek_verify == "1") {
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+
+				$norek_database = $record->norek;
+				$nama_bank_database = $record->nama_bank;
+				$pemilik_rekening_database = $record->pemilik_rek;
+			}
+
+			if ($record->status_valid == "1") {
+				$status_valid_data = "</br><strong><span style='color:blue;'>[VALID]</span></strong>";
+			} else if ($record->status_valid == "2") {
+				$status_valid_data = "</br><strong><span style='color:orange;'>[VALID]</span></strong> <small style='color:orange;'>" . $record->keterangan_valid . "</small>";
+			} else {
+				$status_valid_data = "</br><strong><span style='color:red;'>[INVALID]:</span></strong> <small style='color:red;'>" . $record->keterangan_valid . "</small>";
+			}
+
+			if ($record->status_cek_aktif_rekening == "0") {
+				$status_cek_aktif_rekening = "</br></br><strong>STATUS: <span style='color:red;'>[BELUM CEK STATUS AKTIF]</span></strong>";
+			} else if ($record->status_cek_aktif_rekening == "1") {
+				$tgl_cek = $this->Xin_model->tgl_indo($record->cek_aktif_rekening_on);
+				$status_cek_aktif_rekening = "</br></br><strong>STATUS: <span style='color:blue;'>[REKENING AKTIF]</span></br>Checked on: " . $tgl_cek . "</strong>";
+			} else {
+				$tgl_cek = $this->Xin_model->tgl_indo($record->cek_aktif_rekening_on);
+				$status_cek_aktif_rekening = "</br></br><strong>STATUS: <span style='color:red;'>[REKENING TIDAK AKTIF]</span></br>Checked on: " . $tgl_cek . "</strong>";
 			}
 
 			$view = '<button id="tesbutton" type="button" onclick="lihatDetailSaltab(' . $record->secid . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
@@ -3678,14 +3763,14 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 			$data[] = array(
 				"aksi" => $view . " " . $esaltab . " "  . $delete,
-				"nik" => $record->nik,
+				"nik" => $record->nik . $status_valid_data,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
-				"sub_project" => $sub_project,
+				"sub_project" => $record->sub_project,
 				"jabatan" => $record->jabatan,
 				"area" => $record->area,
 				"hari_kerja" => $record->hari_kerja,
-				"rekening" => "No. Rek: " . $norek_database . $validate_norek . "</br>Bank: " . $nama_bank_database . $validate_bank . "</br>Pemilik Rek: " . $pemilik_rekening_database . $validate_pemilik_rekening,
+				"rekening" => "No. Rek: " . $norek_database . $validate_norek . "</br>Bank: " . $nama_bank_database . $validate_bank . "</br>Pemilik Rek: " . $pemilik_rekening_database . $validate_pemilik_rekening . $status_cek_aktif_rekening,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
@@ -3701,6 +3786,36 @@ GROUP BY uploadid, periode, project, project_sub;';
 		//die;
 
 		return $response;
+	}
+
+	/*
+	* persiapan data untuk datatable pagination
+	* data list all detail saltab untuk cek atif rekening
+	* 
+	* @author Fadla Qamara
+	*/
+	function get_all_detail_saltab_cek_aktif($postData = null)
+	{
+		//variabel id batch
+		$id_batch = $postData['id_batch'];
+
+		## Kondisi Default 
+		$kondisiDefaultQuery = "(
+			uploadid = " . $id_batch . "
+		)";
+		//$kondisiDefaultQuery = "";
+
+		## Fetch records
+		$this->db->select('*');
+		$this->db->where($kondisiDefaultQuery);
+		// $this->db->join('mt_bank', 'xin_saltab_temp.id = mt_bank.id', 'left');
+		$records = $this->db->get('xin_saltab_temp')->result_array();
+
+		#Debugging variable
+		$tes_query = $this->db->last_query();
+		//print_r($tes_query);
+
+		return $records;
 	}
 
 	/*
@@ -4271,17 +4386,69 @@ GROUP BY uploadid, periode, project, project_sub;';
 			$whatsapp = '<a href="https://wa.me/62' . $contact_no . '?text=' . $copypaste . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">Send WA</button> </a>';
 
 
+			if (($record->nip == null) || ($record->nip == "") || ($record->nip == "0")) {
+				$norek_database = "";
+				$nama_bank_database = "";
+				$pemilik_rekening_database = "";
+
+				$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+			} else {
+				$validate_bank = "";
+				if ($record->bank_verify == "1") {
+					$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_norek = "";
+				if ($record->rek_verify == "1") {
+					$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+				$validate_pemilik_rekening = "";
+				if ($record->pemilik_rek_verify == "1") {
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+				} else {
+					$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+				}
+
+				$norek_database = $record->norek;
+				$nama_bank_database = $record->nama_bank;
+				$pemilik_rekening_database = $record->pemilik_rek;
+			}
+
+			if ($record->status_valid == "1") {
+				$status_valid_data = "</br><strong><span style='color:blue;'>[VALID]</span></strong>";
+			} else if ($record->status_valid == "2") {
+				$status_valid_data = "</br><strong><span style='color:orange;'>[VALID]</span></strong> <small style='color:orange;'>" . $record->keterangan_valid . "</small>";
+			} else {
+				$status_valid_data = "</br><strong><span style='color:red;'>[INVALID]:</span></strong> <small style='color:red;'>" . $record->keterangan_valid . "</small>";
+			}
+
+			if ($record->status_cek_aktif_rekening == "0") {
+				$status_cek_aktif_rekening = "</br></br><strong>STATUS: <span style='color:red;'>[BELUM CEK STATUS AKTIF]</span></strong>";
+			} else if ($record->status_cek_aktif_rekening == "1") {
+				$tgl_cek = $this->Xin_model->tgl_indo($record->cek_aktif_rekening_on);
+				$status_cek_aktif_rekening = "</br></br><strong>STATUS: <span style='color:blue;'>[REKENING AKTIF]</span></br>Checked on: " . $tgl_cek . "</strong>";
+			} else {
+				$tgl_cek = $this->Xin_model->tgl_indo($record->cek_aktif_rekening_on);
+				$status_cek_aktif_rekening = "</br></br><strong>STATUS: <span style='color:red;'>[REKENING TIDAK AKTIF]</span></br>Checked on: " . $tgl_cek . "</strong>";
+			}
+
 			// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
 
 			$data[] = array(
 				"aksi" => $view . " " . $esaltab . " " . $whatsapp,
-				"nik" => $record->nik,
+				"nik" => $record->nik . $status_valid_data,
 				"nip" => $record->nip,
 				"fullname" => $record->fullname,
 				"sub_project" => $sub_project,
 				"jabatan" => $record->jabatan,
 				"area" => $record->area,
 				"hari_kerja" => $record->hari_kerja,
+				"rekening" => "No. Rek: " . $norek_database . $validate_norek . "</br>Bank: " . $nama_bank_database . $validate_bank . "</br>Pemilik Rek: " . $pemilik_rekening_database . $validate_pemilik_rekening . $status_cek_aktif_rekening,
 				// $this->get_nama_karyawan($record->upload_by)
 			);
 		}
@@ -4649,5 +4816,43 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		return $query;
 		// echo json_encode($query);
+	}
+
+	//ambil id bank untuk api verifikasi
+	function get_id_bank_verifikasi($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else if ($id == "") {
+			return "";
+		} else {
+			$this->db->select('bank_code_verification_api');
+			$this->db->from('mt_bank');
+			$this->db->where('secid', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bank_code_verification_api'];
+			}
+		}
+	}
+
+	//update row saltab temp detail
+	public function update_row_saltab_temp_detail($postData, $secid)
+	{
+		$this->db->where('secid', $secid);
+		$this->db->update('xin_saltab_temp', $postData);
+
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

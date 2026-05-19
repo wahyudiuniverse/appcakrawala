@@ -213,6 +213,7 @@
 						<th>Posisi</th>
 						<th>Area</th>
 						<th>Hari Kerja</th>
+						<th>Rekening</th>
 					</tr>
 				</thead>
 			</table>
@@ -337,6 +338,10 @@
 				},
 				{
 					data: 'hari_kerja',
+					//"orderable": false,
+				},
+				{
+					data: 'rekening',
 					//"orderable": false,
 				},
 			]

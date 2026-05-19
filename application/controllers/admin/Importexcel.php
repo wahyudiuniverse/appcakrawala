@@ -1289,13 +1289,51 @@ class ImportExcel extends MY_Controller
 	//release batch saltab
 	public function release_batch_saltab()
 	{
-
 		// POST data
 		$postData = $this->input->post();
 
 		// Get data
 		$data = $this->Import_model->release_batch_saltab($postData['id']);
 
+		echo json_encode($data);
+	}
+
+	//cek jumlah data invalid di saltab temp
+	public function cek_jumlah_invalid()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->cek_jumlah_invalid($postData['id']);
+
+		// return $data;
+		echo json_encode($data);
+	}
+
+	//cek jumlah data warning di saltab temp
+	public function cek_jumlah_warning()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->cek_jumlah_warning($postData['id']);
+
+		// return $data;
+		echo json_encode($data);
+	}
+
+	//cek jumlah data rekening tidak aktif di saltab temp
+	public function cek_jumlah_rekening_tidak_aktif()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->cek_jumlah_rekening_tidak_aktif($postData['id']);
+
+		// return $data;
 		echo json_encode($data);
 	}
 
@@ -1463,6 +1501,19 @@ class ImportExcel extends MY_Controller
 
 		// Get data
 		$data = $this->Import_model->get_list_detail_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load all detail saltab
+	public function all_detail_saltab_cek_aktif()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_all_detail_saltab_cek_aktif($postData);
 
 		echo json_encode($data);
 	}
@@ -3423,6 +3474,405 @@ class ImportExcel extends MY_Controller
 		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
 	}
 
+	function upload_dokumen()
+	{
+		$postData = $this->input->post();
+		$identifier = $postData['identifier'];
+		$image = $_FILES;
+		$return_file_data = array();
+
+		$status = "0";
+		$message = "File gagal diupload";
+		$jumlah_data = 0;
+		$data_header = array();
+		$data = array();
+
+		foreach ($image as $key => $img) {
+			$ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+			$name = pathinfo($img['name'], PATHINFO_FILENAME);
+			$yearmonth = date('Y/m');
+
+			if ($identifier == "saltab") {
+				if (!empty($img['name'])) {
+					$this->load->helper('file');
+
+					/* Allowed MIME(s) File */
+					$file_mimes = array(
+						'application/octet-stream',
+						'application/vnd.ms-excel',
+						'application/x-csv',
+						'text/x-csv',
+						'text/csv',
+						'application/csv',
+						'application/excel',
+						'application/vnd.msexcel',
+						'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					);
+
+					if (isset($img['name']) && in_array($img['type'], $file_mimes)) {
+
+						$array_file = explode('.', $img['name']);
+						$extension  = end($array_file);
+
+						if ('csv' == $extension) {
+							$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+						} else {
+							$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+						}
+
+						$spreadsheet = $reader->load($img['tmp_name']);
+						if ($spreadsheet->sheetNameExists('E-Saltab')) {
+							$spreadsheet->setActiveSheetIndexByName('E-Saltab');
+
+							// $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+							$sheet_data  = $spreadsheet->getActiveSheet()->toArray();
+							// $sheet_data = array_map('trim', $sheet_data);
+							$sheet_data = array_filter($sheet_data);
+							$array_data  = [];
+							$array_data_final  = [];
+							$data        = [];
+							$header_tabel_saltab = $sheet_data[0];
+							$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+							$length_header = count($header_tabel_saltab);
+							$jumlah_data = count($sheet_data) - 2;
+
+							//susun array saltab detail
+							for ($i = 2; $i < count($sheet_data); $i++) {
+								$lanjut = true;
+								$data += ['id_bank' => 0];
+								// $data += ['customer_id' => time()];
+								for ($j = 0; $j < $length_header; $j++) {
+									if ($lanjut) {
+										if ($header_tabel_saltab[$j] == "fullname") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += [$header_tabel_saltab[$j] => $trimmed_value];
+											if (($trimmed_value == "") || ($trimmed_value == null)) {
+												$lanjut = false;
+											} else {
+												$lanjut = true;
+											}
+										} else if ($header_tabel_saltab[$j] == "nip") {
+											if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
+												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+												$trimmed_nip = trim($trimmed_nip, ' ');
+												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+												$data += [$header_tabel_saltab[$j + 1] => ""];
+												$j = $j + 1;
+											} else {
+												// if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
+												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+												$trimmed_nip = trim($trimmed_nip, ' ');
+												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+												$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
+												$j = $j + 1;
+												// } else {
+												// 	$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+												// 	$trimmed_nip = trim($trimmed_nip, ' ');
+												// 	$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+												// }
+											}
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "norek") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += ['norek' => ''];
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "nama_bank") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += ['nama_bank' => ''];
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "pemilik_rek") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += ['pemilik_rek' => ''];
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "adjustment_pph") {
+											$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+											$trimmed_nip = trim($trimmed_nip, ' ');
+											$trimmed_nip = abs(doubleval($trimmed_nip));
+											$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+											$lanjut = true;
+										} else {
+											if ($lanjut) {
+												$trimmed_value = trim($sheet_data[$i][$j], ' ');
+												$trimmed_value = trim($trimmed_value, ' ');
+												$data += [$header_tabel_saltab[$j] => $trimmed_value];
+												$lanjut = true;
+											}
+										}
+									}
+								}
+								if ($lanjut) {
+									$array_data[] = $data;
+									$data = array();
+								} else {
+									$data = array();
+								}
+							}
+
+							$status = "1";
+							$message = "Berhasil Baca Data Saltab.";
+							$jumlah_data = count($array_data);
+							$data_header = $header_tabel_saltab;
+							$data = $array_data;
+						} else {
+							$status = "0";
+							$message = "Tidak ditemukan sheet \"E-Saltab\" di dalam file excel";
+							$jumlah_data = 0;
+							$data_header = array();
+							$data = array();
+						}
+					} else {
+						$status = "0";
+						$message = "File yang diupload bukan format excel (.xlsx)";
+						$jumlah_data = 0;
+						$data_header = array();
+						$data = array();
+					}
+				} else {
+					$status = "0";
+					$message = "File gagal diupload";
+					$jumlah_data = 0;
+					$data_header = array();
+					$data = array();
+				}
+			} else {
+				$status = "0";
+				$message = "Tidak memiliki izin upload";
+				$jumlah_data = 0;
+				$data_header = array();
+				$data = array();
+			}
+		}
+
+		$return_value = array(
+			'status' => $status,
+			'message' => $message,
+			'jumlah_data' => $jumlah_data,
+			'data_header' => $data_header,
+			'data' => $data,
+		);
+
+		echo json_encode($return_value);
+
+		// echo json_encode($return_file_data);
+		// $this->load->view('imgtest');
+	}
+
+	//validasi import saltab
+	public function validasi_import_saltab()
+	{
+		$postData = $this->input->post();
+
+		$array_data  = [];
+		$data        = [];
+		$array_data_invalid	= [];
+		$data_saltab = json_decode($postData['array_data_import']);
+		$status_valid = 1;
+		$keterangan_valid = "";
+
+		foreach ($data_saltab as $record) {
+			if (($record->nip == "0") || ($record->nip == "") || ($record->nip == null)) {
+				$status_valid = 0;
+				$keterangan_valid = "Tidak Ada NIP";
+				//add status validasi  	id_bank
+				$data += ['nik_verify' => 0];
+				$data += ['bank_verify' => 0];
+				$data += ['pemilik_rek_verify' => 0];
+
+				foreach ($record as $key => $value) {
+					if ($key == "rek_verify") {
+						$data += [$key => 0];
+					} else if ($key == "norek") {
+						$data += [$key => ""];
+					} else if ($key == "id_bank") {
+						$data += [$key => 0];
+					} else if ($key == "nama_bank") {
+						$data += [$key => ""];
+					} else if ($key == "pemilik_rek") {
+						$data += [$key => ""];
+					} else {
+						$data += [$key => $value];
+					}
+				}
+
+				$data += ['status_valid' => $status_valid];
+				$data += ['keterangan_valid' => $keterangan_valid];
+
+				if ($status_valid == 0) {
+					$array_data_invalid[] = $data;
+				}
+				$array_data[] = $data;
+				$data = array();
+			} else {
+				$data_validasi = $this->Import_model->get_employee_validasi_saltab($record->nip);
+
+				if (($data_validasi['verif_norek_database'] == "0") || ($data_validasi['verif_nama_bank_database'] == "0") || ($data_validasi['verif_pemilik_rekening_database'] == "0")) {
+					$status_valid = 0;
+					$keterangan_valid = "Komponen Rekening Tidak Valid";
+				} else {
+					if ($record->fullname == $data_validasi['pemilik_rekening_database']) {
+						$status_valid = 1;
+						$keterangan_valid = "Data Valid";
+					} else {
+						$status_valid = 2;
+						$keterangan_valid = "NIP Berbeda atau Nama Pemilik Rekening Berbeda";
+					}
+				}
+				//add status validasi 
+				$data += ['nik_verify' => $data_validasi['verif_nik_database']];
+				$data += ['bank_verify' => $data_validasi['verif_nama_bank_database']];
+				$data += ['pemilik_rek_verify' => $data_validasi['verif_pemilik_rekening_database']];
+
+				foreach ($record as $key => $value) {
+					if ($key == "rek_verify") {
+						$data += [$key => $data_validasi['verif_norek_database']];
+					} else if ($key == "norek") {
+						$data += [$key => $data_validasi['norek_database']];
+					} else if ($key == "id_bank") {
+						$data += [$key => $data_validasi['id_bank_database']];
+					} else if ($key == "nama_bank") {
+						$data += [$key => $data_validasi['nama_bank_database']];
+					} else if ($key == "pemilik_rek") {
+						$data += [$key => $data_validasi['pemilik_rekening_database']];
+					} else {
+						$data += [$key => $value];
+					}
+				}
+
+				$data += ['status_valid' => $status_valid];
+				$data += ['keterangan_valid' => $keterangan_valid];
+
+				if ($status_valid == 0) {
+					$array_data_invalid[] = $data;
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+		}
+
+		if (empty($array_data)) {
+			$response = array(
+				'status'				=> "201",
+				'pesan' 				=> "Gagal Validasi Data",
+				'data'					=> array(),
+				'data_invalid'			=> array(),
+				'jumlah_data_saltab'	=> count($data_saltab),
+				'jumlah_data_invalid'	=> count(array()),
+			);
+		} else {
+			$response = array(
+				'status'				=> "200",
+				'pesan' 				=> "Berhasil Validasi Data",
+				'data'					=> $array_data,
+				'data_invalid'			=> $array_data_invalid,
+				'jumlah_data_saltab'	=> count($data_saltab),
+				'jumlah_data_invalid'	=> count($array_data_invalid),
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save saltab temp
+	public function save_saltab_temp()
+	{
+		$postData = $this->input->post();
+
+		// $array_postData = json_decode($postData);array_data_import_validasi
+		// $array_data_header = $postData['array_data_header'];
+		$array_data_import_validasi = json_decode($postData['array_data_import_validasi']);
+		$array_data_final  = [];
+
+		//susun array batch saltab
+		$data_batch = array(
+			'periode_cutoff_from'    => $postData['saltab_from'],
+			'periode_cutoff_to'      => $postData['saltab_to'],
+			'periode_salary'      	 => $postData['periode_salary'],
+			'project_id'        	 => $postData['project'],
+			'project_name'        	 => $postData['project_name'],
+			'sub_project_id'         => $postData['sub_project'],
+			'sub_project_name'       => $postData['sub_project_name'],
+			'total_mpp'        	 	 => count($array_data_import_validasi),
+			'fee'        	 	 	 => 0,
+			'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($postData['nip']),
+			'upload_by_id'        	 => $postData['nip'],
+			'upload_ip'        	 	 => $this->get_client_ip(),
+		);
+
+		//susun array untuk cek apakah sudah ada data batch yg sama
+		$data_batch_cek = array(
+			'periode_cutoff_from'    => $postData['saltab_from'],
+			'periode_cutoff_to'      => $postData['saltab_to'],
+			'periode_salary'      	 => $postData['periode_salary'],
+			'project_id'        	 => $postData['project'],
+			'project_name'        	 => $postData['project_name'],
+			'sub_project_id'         => $postData['sub_project'],
+			'sub_project_name'       => $postData['sub_project_name'],
+		);
+
+		$id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
+
+		if ($id_batch_awal != "") {
+			$this->Import_model->delete_batch_saltab($id_batch_awal);
+		}
+
+		$this->Import_model->insert_saltab_batch($data_batch);
+
+		$id_batch = $this->Import_model->get_id_saltab_batch($data_batch);
+
+		//tambah id_batch sebagai uploadid di detail saltab
+		$array_data  = [];
+		$data        = array();
+		foreach ($array_data_import_validasi as $record) {
+			// $data = $record;
+			// $data['uploadid'] = $id_batch;
+
+			$data += ['uploadid' => $id_batch];
+
+			foreach ($record as $key => $value) {
+				$data += [$key => $value];
+			}
+			$array_data[] = $data;
+			$data = array();
+		}
+
+		// foreach ($array_data_import_validasi as $array_data) {
+		// 	$array_data['uploadid'] = $id_batch;
+		// 	$array_data_final[] = $array_data;
+		// }
+
+		// save data sku
+		$data = $this->Import_model->save_saltab_temp($array_data);
+
+		if ($data) {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Add Batch Saltab",
+				'id_batch'	=> $id_batch,
+				'data'		=> $data,
+			);
+		} else {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Gagal Add Batch Saltab",
+				'id_batch'	=> $id_batch,
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
 	/*
     |-------------------------------------------------------------------
     | Import Excel ratecard
@@ -5192,7 +5642,7 @@ class ImportExcel extends MY_Controller
 		$data['breadcrumbs'] = 'Import E-SALTAB';
 		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
 		// $data['all_projects'] = $this->Project_model->get_projects();
-		$data['path_url'] = 'hrpremium_import_esaltab';
+		$data['path_url'] = 'emp_view';
 		$role_resources_ids = $this->Xin_model->user_role_resource();
 		if (in_array('511', $role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
@@ -5839,5 +6289,118 @@ class ImportExcel extends MY_Controller
 		// get data 
 		$data = $this->Import_model->get_jabatan_by_project_sub($postData);
 		echo json_encode($data);
+	}
+
+	//Cek rekening bank menggunakan API
+	public function tes_API_Bank3()
+	{
+		$postData = $this->input->post();
+
+		$bank_code = $this->Import_model->get_id_bank_verifikasi($postData['id_bank']);
+
+		// $no_rekening_jelas = urldecode($no_rekening);
+
+		if ($bank_code == "" || $bank_code == null) {
+			$pesan = array(
+				"is_success" => false,
+				"message" => "ID Bank Kosong",
+			);
+
+			$data_update = array(
+				"status_cek_aktif_rekening" => "2",
+				"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+			);
+
+			// $this->update_row_saltab_temp_detail($data_update, $postData['secid']);
+
+			// update status cek aktif rekening
+			$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+
+			// if ($data == false) {
+			// 	$response = array(
+			// 		'status'	=> "201",
+			// 		'pesan' 	=> "Tidak ada perubahan data",
+			// 	);
+			// } else {
+			// 	$response = array(
+			// 		'status'	=> "200",
+			// 		'pesan' 	=> "Berhasil Update Data",
+			// 	);
+			// }
+
+			echo json_encode($pesan);
+		} else {
+			// set post fields
+			$post_variable = [
+				"bank_code" => $bank_code,
+				"account_number" => $postData['norek'],
+				"account_name" => $postData['pemilik_rekening']
+			];
+
+			$input_post = json_encode($post_variable);
+			// $input_post = "{'account_bank': '". $bank_code ."','account_number':'".$no_rekening."'}";
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => 'https://use.api.co.id/validation/bank',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_POSTFIELDS => $input_post,
+				CURLOPT_HTTPHEADER => array('x-api-co-id:vqTZFIy3OxzYOzjAnJBl9DYkhpJ9eMZhkSEAyUdJhBsW71b4Kc', 'Content-Type:application/json'),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+			// echo $response;
+
+			$pesan = array(
+				"is_success" => false,
+				"message" => "cURL Error #:" . $err,
+			);
+
+			if ($err) {
+				$data_update = array(
+					"status_cek_aktif_rekening" => "2",
+					"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+				);
+
+				// update status cek aktif rekening
+				$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+
+				echo json_encode($pesan);
+			} else {
+				$hasil_api = json_decode($response);
+				$data_hasil_api = $hasil_api->data;
+
+				if ($data_hasil_api->is_valid) {
+					$data_update = array(
+						"status_cek_aktif_rekening" => "1",
+						"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+					);
+
+					// update status cek aktif rekening
+					$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+				} else {
+					$data_update = array(
+						"status_cek_aktif_rekening" => "2",
+						"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+					);
+
+					// update status cek aktif rekening
+					$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+				}
+
+
+				echo $response;
+			}
+		}
 	}
 }
