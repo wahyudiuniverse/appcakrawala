@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt7 extends MY_Controller 
+class Pkwt513 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -232,23 +232,36 @@ class Pkwt7 extends MY_Controller
 					}
 
 					$basicpay =	$this->Xin_model->rupiah($pkwt[0]->basic_pay);
-					$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
-					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
-					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
-					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
-					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
-					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
+					$allowance_grade 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
+					$allowance_skill 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_skill);
+					$allowance_area 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
+					
+					$allowance_masakerja 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
+					$allowance_meal 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
+					$allowance_transport 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
+					
+					$allowance_rent 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
 					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
-					$allowance_park =	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
-					$allowance_residance =	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+					$allowance_park 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
+					
+					$allowance_residance 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+					$allowance_akomodasi 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
+					$allowance_laptop 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 
-					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
-					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
-					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
-					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
-					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
-					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
-					$allowance_skill =	$this->Xin_model->rupiah($pkwt[0]->allowance_skill);
+					$allowance_kasir 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
+					$allowance_transmeal 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
+					$allowance_transrent 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
+
+					$allowance_medicine 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
+					$allowance_grooming 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_grooming);
+					$allowance_kehadiran 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_kehadiran);
+
+					$allowance_operation 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_training 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_training);
+					$allowance_kinerja 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_kinerja);
+
+					$allowance_disiplin 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_disiplin);
+					$allowance_others 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_others);
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -789,7 +802,7 @@ class Pkwt7 extends MY_Controller
 							<tr>
 								<td ></td>
 								<td colspan="0">a)</td>
-								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) kerja sebelum tanggal pengunduran diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
+								<td colspan="20">Mengajukan surat pengunduran diri selambat – lambatnya 30 hari (one month notice) dan atau minimal 14 hari kerja sebelum tanggal pengunduruan diri tersebut berlaku efektif kepada <b>PIHAK PERTAMA</b> dan salinanya kepada atasan langsung dari <b>PIHAK KEDUA</b>.</td>
 							</tr>
 
 							<tr>
@@ -1370,11 +1383,6 @@ class Pkwt7 extends MY_Controller
 								<td colspan="20">Apabila saya karyawan yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
 							</tr>
 							<tr>
-								<td ></td>
-								<td colspan="0">f.</td>
-								<td colspan="20">Selama saya menjalankan training, saya hanya mendapatkan Tunjangan Pelatihan per-hari</td>
-							</tr>
-							<tr>
 								<td >7.</td>
 								<td colspan="20">Surat keterangan kerja tidak dapat dikeluarkan apabila karyawan bekerja dibawah 3 bulan dengan pengecualian:</td>
 								<td colspan="0"></td>
@@ -1398,6 +1406,8 @@ class Pkwt7 extends MY_Controller
 							<br>
 							<br>
 							<br>	
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td >9.</td>
@@ -1569,12 +1579,22 @@ class Pkwt7 extends MY_Controller
 						</tr>';
 
 
+
 				if($allowance_grade!="Rp 0"){
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Grade</td>
 							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_skill!="Rp 0"){
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Keahlian</td>
+							<td colspan="3"> : '.$allowance_skill.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1601,7 +1621,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan</td>
-							<td colspan="3"> : '.$allowance_meal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_meal.',- Per Bulan</td>
 						</tr>';
 				}
 				
@@ -1610,7 +1630,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Transport</td>
-							<td colspan="3"> : '.$allowance_transport.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transport.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1619,7 +1639,7 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Rental</td>
-							<td colspan="3"> : '.$allowance_rent.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_rent.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1650,6 +1670,15 @@ class Pkwt7 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_akomodasi!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Akomodasi</td>
+							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+						</tr>';
+				}
+
 				if($allowance_laptop!="Rp 0"){	
 				$lampiran .= '
 					
@@ -1674,7 +1703,16 @@ class Pkwt7 extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_transrent!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Transport-Rental</td>
+							<td colspan="3"> : '.$allowance_transrent.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1687,22 +1725,21 @@ class Pkwt7 extends MY_Controller
 						</tr>';
 				}
 
-
-				if($allowance_akomodasi!="Rp 0"){	
+				if($allowance_grooming!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Akomodasi</td>
-							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+							<td>Tunjangan Grooming</td>
+							<td colspan="3"> : '.$allowance_grooming.',- Per Bulan</td>
 						</tr>';
 				}
 
-				if($allowance_skill!="Rp 0"){	
+				if($allowance_kehadiran!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Pelatihan</td>
-							<td colspan="3"> : '.$allowance_skill.',- Per Hari</td>
+							<td>Tunjangan Kehadiran</td>
+							<td colspan="3"> : '.$allowance_kehadiran.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1711,8 +1748,44 @@ class Pkwt7 extends MY_Controller
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Operational</td>
+							<td>Tunjangan Operasional</td>
 							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_training!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Pelatihan</td>
+							<td colspan="3"> : '.$allowance_training.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_kinerja!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Kinerja</td>
+							<td colspan="3"> : '.$allowance_kinerja.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_disiplin!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Disiplin</td>
+							<td colspan="3"> : '.$allowance_disiplin.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_others!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Lain-lain</td>
+							<td colspan="3"> : '.$allowance_others.',- Per Bulan</td>
 						</tr>';
 				}
 

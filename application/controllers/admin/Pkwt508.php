@@ -442,7 +442,8 @@ class Pkwt508 extends MY_Controller
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 
-							<br>
+							<br><br><br><br><br>
+							<br><br><br>
 
 							<tr>
 								<td>8.</td>
@@ -520,6 +521,50 @@ class Pkwt508 extends MY_Controller
 							<tr>
 								<td>16.</td>
 								<td colspan="20">Apabila saya mitra bertugas telah menggunakan seluruh hak cuti tahunan, maka setiap ketidakhadiran berikutnya dapat dikategorikan sebagai izin tidak berbayar dan perusahaan berhak melakukan pemotongan upah sesuai dengan jumlah hari ketidakhadiran.</td>
+							</tr>
+							<br>
+
+							<tr>
+								<td>17.</td>
+								<td colspan="20">Perusahaan berhak mengakhiri Perjanjian Kemitraan ini sewaktu – waktu berdasarkan pertimbangan internal Perusahaan.</td>
+							</tr>
+							<br>
+
+							<tr>
+								<td>18.</td>
+								<td colspan="20">Pemutusan kemitraan sebagaimana dimaksud pada poin (17) akan disampaikan kepada Mitra, baik secara lisan maupun tertulis, selambat-lambatnya 1 (satu) hari sebelum tanggal efektif pemutusan.</td>
+							</tr>
+							<br>
+
+							<tr>
+								<td>19.</td>
+								<td colspan="20">Selama masa pemberitahuan pemutusan, para pihak tetap berkewajiban untuk melaksanakan hak dan kewajiban masing-masing sesuai dengan ketentuan dalam Perjanjian ini.</td>
+							</tr>
+							<br>
+
+							<tr>
+								<td>20.</td>
+								<td colspan="20">Pemutusan kemitraan tidak menghapus kewajiban para pihak yang telah timbul sebelum tanggal efektif pemutusan, termasuk namun tidak terbatas pada kewajiban pembayaran, penyelesaian pekerjaan, dan kewajiban lainnya yang masih berjalan.</td>
+							</tr>
+							<br>
+
+							<tr>
+								<td>21.</td>
+								<td colspan="20">Perusahaan tidak berkewajiban memberikan kompensasi dan/atau ganti rugi kepada Mitra atas pemutusan kemitraan, kecuali apabila diatur lain dalam Perjanjian ini atau diwajibkan berdasarkan ketentuan peraturan perundang-undangan yang berlaku.</td>
+							</tr>
+							
+							<br><br><br><br><br>
+							<br>
+
+							<tr>
+								<td>22.</td>
+								<td colspan="20">Para pihak sepakat untuk mengesampingkan ketentuan dalam Kitab Undang-Undang Hukum Perdata sepanjang diperlukan untuk melaksanakan ketentuan pemutusan kemitraan ini, sepanjang tidak bertentangan dengan peraturan perundang-undangan yang berlaku.</td>
+							</tr>
+							<br>
+
+							<tr>
+								<td>23.</td>
+								<td colspan="20">Dengan ditandatanganinya Perjanjian ini, Mitra menyatakan telah membaca, memahami, dan menyetujui seluruh ketentuan mengenai pemutusan kemitraan secara sukarela dan tanpa adanya paksaan dari pihak manapun.</td>
 							</tr>
 						<br>
 							<tr>

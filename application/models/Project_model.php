@@ -111,26 +111,69 @@ class Project_model extends CI_Model
 			return null;
 		}
 	}
+
+
+	//mengambil data all outlet dan user mobile by project id
+	public function get_sub_project_list($datarequest)
+	{
+		if ($datarequest['project_id'] == "") {
+			$response = array(
+				'status'			=> "0",
+				'pesan' 			=> "Berhasil Fetch Data",
+				'data_customer'		=> array(),
+				'data_sku'	=> array(),
+			);
+		} else {
+
+
+			//ambil data outlet
+			$this->db->select('secid');
+			$this->db->select('sub_project_name');
+			$this->db->where('id_project', $datarequest['project_id']);
+			$this->db->where('sub_active', 1);
+			$this->db->from('xin_projects_sub');
+
+			$data_subproject = $this->db->get()->result_array();
+
+			$response = array(
+				'status'			=> "1",
+				'pesan' 			=> "Berhasil Fetch Data",
+				'data_subproject'		=> $data_subproject,
+			);
+		}
+
+		return $response;
+	}
+
 	//ambil data employee berdasarkan NIK dari table employee
 	public function get_document_id($postData)
 	{
 		//$otherdb = $this->load->database('default', TRUE);
 
 		$this->db->select('*');
-		$this->db->from('xin_projects');
-		$this->db->where('project_id', $postData['project']);
+		$this->db->from('xin_projects_sub');
+		$this->db->where('secid', $postData['subproject_id']);
 
-		$query = $this->db->get()->result_array();
-
-		// $this->db->select('*');
-		// $this->db->from('xin_projects');
-		// $this->db->where('project_id', $id);
-
-		// $query = $this->db->get()->row_array();
-
-		//print_r($this->db->last_query());
-
+		$query = $this->db->get()->row_array();
 		return $query;
+	}
+
+
+	//mengambil data nama Agama
+	public function get_companies($id_company)
+	{
+
+		$this->db->select('*');
+		$this->db->where('company_id', $id_company);
+		$this->db->from('mt_customer_category');
+
+		$query = $this->db->get()->row_array();
+
+		if (empty($query)) {
+			return "";
+		} else {
+			return $query['category_name'];
+		}
 	}
 
 	public function read_all_project_information($id)

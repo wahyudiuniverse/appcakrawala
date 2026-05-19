@@ -1450,6 +1450,12 @@ class Pkwt283 extends MY_Controller
 								<td colspan="0"></td>
 							</tr>
 
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Apabila karyawan menjalankan jam kerja kurang dari 8 (delapan) jam per hari kerja sesuai ketentuan perusahaan, maka perhitungan upah/gaji pada hari tersebut akan dilakukan secara prorata sesuai jumlah jam kerja yang dijalankan.</td>
+								<td colspan="0"></td>
+							</tr>
+							
 				</table>
 
 				<br><br>

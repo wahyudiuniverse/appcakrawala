@@ -81,6 +81,17 @@ class Pkwt501 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+		// SPG
+		if ($pkwt[0]->jabatan=='395' || $pkwt[0]->jabatan=='622' || $pkwt[0]->jabatan=='458') {
+			redirect('admin/pkwt283spg/view/'.$pkwt[0]->uniqueid);
+		}
+
+		// MD & TL
+		if ($pkwt[0]->jabatan=='130' || $pkwt[0]->jabatan=='166' || $pkwt[0]->jabatan=='784'  || $pkwt[0]->jabatan=='167'   || $pkwt[0]->jabatan=='665' || $pkwt[0]->jabatan=='212') {
+			redirect('admin/pkwt283md/view/'.$pkwt[0]->uniqueid);
+		}
+		
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
@@ -1450,6 +1461,13 @@ class Pkwt501 extends MY_Controller
 							<tr>
 								<td >12.</td>
 								<td colspan="20">Wajib melampirkan Exit clearance beserta pengembalian inventaris perusahaan yang dipinjamkan kepada karyawan selama bekerja dan Form handover (isi bila diperlukan). apabila secara administrasi tidak dilengkapi dan tidak mengembalikan inventaris yang dipinjamkan perusahaan maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga diselesaikan oleh kedua belah pihak.</td>
+								<td colspan="0"></td>
+							</tr>
+
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Apabila karyawan menjalankan jam kerja kurang dari 8 (delapan) jam per hari kerja sesuai ketentuan perusahaan, maka perhitungan upah/gaji pada hari tersebut akan dilakukan secara prorata sesuai jumlah jam kerja yang dijalankan.</td>
 								<td colspan="0"></td>
 							</tr>
 

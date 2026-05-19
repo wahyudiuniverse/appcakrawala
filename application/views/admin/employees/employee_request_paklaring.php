@@ -164,6 +164,20 @@
       <span class="card-header-title mr-2"><strong>NON-AKTIF EMPLOYEES | </strong>FILTER</span>
     </div>
 
+
+      <div class="col-md-6">
+        <div class="pull-right">
+          <!-- <div class="card-header with-elements"> -->
+          <span class="card-header-title mr-2">
+            <a href="<?php echo 'https://apps-cakrawala.com/assets/TEMPLATE_PENGAJUAN_PAKLARING_2026_(nama_project).xlsx';?>" target="_blank" class="btn btn-success" target="_blank">
+              <i class="fa fa-download"></i>
+              Template Pengajuan Paklaringx
+            </a>
+          </span>
+          <!-- </div> -->
+        </div>
+      </div>
+
     <!-- <div class="col-md-6">
       <div class="pull-right">
         <span class="card-header-title mr-2">

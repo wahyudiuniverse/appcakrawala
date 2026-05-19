@@ -877,6 +877,9 @@ class Importexceleslip extends MY_Controller
 				} else if ($employee[0]->company_id == '3') {
 					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_kac.png';
+				} else if ($employee[0]->company_id == '5') {
+					$company_name = 'PT. PT. DAICHI NUSANTARA AMARTA';
+					$logohead			= 'tcpdf_logo_dna.png';
 				} else {
 					$company_name = 'PT. MATA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_mata.png';
@@ -2138,6 +2141,9 @@ class Importexceleslip extends MY_Controller
 				} else if ($employee[0]->company_id == '3') {
 					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_kac.png';
+				} else if ($employee[0]->company_id == '5') {
+					$company_name = 'PT. PT. DAICHI NUSANTARA AMARTA';
+					$logohead			= 'tcpdf_logo_dna.png';
 				} else {
 					$company_name = 'PT. MATA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_mata.png';
@@ -2274,7 +2280,7 @@ class Importexceleslip extends MY_Controller
 				$allow_pph 					= $eslip[0]->allow_pph;
 				$allow_acting 			= $eslip[0]->allow_acting;
 				$allow_others 			= $eslip[0]->allow_others;
-				$allow_pph 					= $eslip[0]->allow_pph;
+				$allow_ph 					= $eslip[0]->allow_ph;
 
 				$over_salary 				= $eslip[0]->over_salary;
 				$penyesuaian_umk 		= $eslip[0]->penyesuaian_umk;
@@ -2292,8 +2298,14 @@ class Importexceleslip extends MY_Controller
 				$reimbursement 			= $eslip[0]->reimbursement;
 				$santunan 					= $eslip[0]->santunan;
 				$sisa_cuti 					= $eslip[0]->sisa_cuti;
+				$apresiasi_kehadiran= $eslip[0]->apresiasi_kehadiran;
+				$tsha 							= $eslip[0]->tsha;
 
 				$thr 								= $eslip[0]->thr;
+
+				$adjustment_bpjs_tk 		= $eslip[0]->adjustment_bpjs_tk;
+				$adjustment_bpjs_ks 		= $eslip[0]->adjustment_bpjs_ks;
+				$adjustment_jp 			= $eslip[0]->adjustment_jp;
 				$adjustment_pph 		= $eslip[0]->adjustment_pph;
 				$adjustment_bruto 	= $eslip[0]->adjustment_bruto;
 				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
@@ -2309,6 +2321,7 @@ class Importexceleslip extends MY_Controller
 				$potongan_others 		= $eslip[0]->potongan_others;
 				$hutang_karyawan 		= $eslip[0]->hutang_karyawan;
 				$hutang_others 			= $eslip[0]->hutang_others;
+				$deduction_unpaid 			= $eslip[0]->deduction_unpaid;
 				$deduction_leave 			= $eslip[0]->deduction_leave;
 				$deduction_alpha 			= $eslip[0]->deduction_alpha;
 				$deduction_seragam 			= $eslip[0]->deduction_seragam;
@@ -2351,7 +2364,14 @@ class Importexceleslip extends MY_Controller
 				} else {
 					$deduction_name = 'Deduction';
 				}
-	
+				
+
+				if($employee[0]->project_id=='214'){
+					$allow_akomodasi_name = 'Tunjangan TLK';
+				} else {
+					$allow_akomodasi_name = 'Tunjangan Akomodasi';
+				}
+
 				} else {
 					redirect('admin/');
 				}
@@ -2637,7 +2657,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
+								<td colspan="4">'.$allow_akomodasi_name.'</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -3088,6 +3108,35 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($apresiasi_kehadiran!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Apresiasi Kehadiran</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($apresiasi_kehadiran).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+			if($tsha!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">TSHA</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($tsha).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($thr!=0){
 			$tbl_2 .= '
 				<tr>
@@ -3103,6 +3152,66 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 				
+			if($adjustment_bpjs_tk!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance BPJS TK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_bpjs_ks!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance BPJS KS</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_jp!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance Janiman Pensiun</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_jp).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_pph!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance PPH21</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_pph).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($adjustment_bruto!=0){
 			$tbl_2 .= '
 				<tr>
@@ -3163,22 +3272,6 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>';
 			}
-
-			if($penyesuaian_umk!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Adjustment Gaji</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
 
 			$tbl_2 .= '
 
@@ -3298,6 +3391,22 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Hutang Lain-Lain</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($hutang_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($deduction_unpaid!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">UNPAID</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_unpaid).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
@@ -5217,6 +5326,9 @@ class Importexceleslip extends MY_Controller
 				} else if ($employee[0]->company_id == '3') {
 					$company_name = 'PT. KRISTA AULIA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_kac.png';
+				} else if ($employee[0]->company_id == '5') {
+					$company_name = 'PT. PT. DAICHI NUSANTARA AMARTA';
+					$logohead			= 'tcpdf_logo_dna.png';
 				} else {
 					$company_name = 'PT. MATA CAKRAWALA';
 					$logohead			= 'tcpdf_logo_mata.png';
@@ -5354,7 +5466,7 @@ class Importexceleslip extends MY_Controller
 				$allow_pph 					= $eslip[0]->allow_pph;
 				$allow_acting 			= $eslip[0]->allow_acting;
 				$allow_others 			= $eslip[0]->allow_others;
-				$allow_pph 					= $eslip[0]->allow_pph;
+				$allow_ph 					= $eslip[0]->allow_ph;
 
 				$over_salary 				= $eslip[0]->over_salary;
 				$penyesuaian_umk 		= $eslip[0]->penyesuaian_umk;
@@ -5372,8 +5484,13 @@ class Importexceleslip extends MY_Controller
 				$reimbursement 			= $eslip[0]->reimbursement;
 				$santunan 					= $eslip[0]->santunan;
 				$sisa_cuti 					= $eslip[0]->sisa_cuti;
+				$apresiasi_kehadiran 	= $eslip[0]->apresiasi_kehadiran;
+				$tsha 							= $eslip[0]->tsha;
 
 				$thr 								= $eslip[0]->thr;
+				$adjustment_bpjs_tk 		= $eslip[0]->adjustment_bpjs_tk;
+				$adjustment_bpjs_ks 		= $eslip[0]->adjustment_bpjs_ks;
+				$adjustment_jp 			= $eslip[0]->adjustment_jp;
 				$adjustment_pph 		= $eslip[0]->adjustment_pph;
 				$adjustment_bruto 	= $eslip[0]->adjustment_bruto;
 				$adjustment_dlk_bruto = $eslip[0]->adjustment_dlk_bruto;
@@ -5389,6 +5506,7 @@ class Importexceleslip extends MY_Controller
 				$potongan_others 		= $eslip[0]->potongan_others;
 				$hutang_karyawan 		= $eslip[0]->hutang_karyawan;
 				$hutang_others 			= $eslip[0]->hutang_others;
+				$deduction_unpaid 	= $eslip[0]->deduction_unpaid;
 				$deduction_leave 			= $eslip[0]->deduction_leave;
 				$deduction_alpha 			= $eslip[0]->deduction_alpha;
 				$deduction_seragam 			= $eslip[0]->deduction_seragam;
@@ -5430,6 +5548,12 @@ class Importexceleslip extends MY_Controller
 					$deduction_name = 'Potongan Yamiku (Jan-Feb-Mar)';
 				} else {
 					$deduction_name = 'Deduction';
+				}
+
+				if($employee[0]->project_id=='214'){
+					$allow_akomodasi_name = 'Tunjangan TLK';
+				} else {
+					$allow_akomodasi_name = 'Tunjangan Akomodasi';
 				}
 	
 				
@@ -5713,7 +5837,7 @@ class Importexceleslip extends MY_Controller
 					<td>
 						<table cellpadding="1" cellspacing="0">
 							<tr>
-								<td colspan="4">Tunjangan Akomodasi</td>
+								<td colspan="4">'.$allow_akomodasi_name.'</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($allow_akomodasi).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
@@ -6164,6 +6288,35 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 
+			if($apresiasi_kehadiran!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Apresiasi Kehadairan</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($apresiasi_kehadiran).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+			if($tsha!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">TSHA</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($tsha).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($thr!=0){
 			$tbl_2 .= '
 				<tr>
@@ -6179,6 +6332,66 @@ class Importexceleslip extends MY_Controller
 				</tr>';
 			}
 				
+			if($adjustment_bpjs_tk!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance BPJS TK</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bpjs_tk).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_bpjs_ks!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance BPJS KS</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_bpjs_ks).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_jp!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance Jaminan Pensiun</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_jp).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+			if($adjustment_pph!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">Allowance PPH21</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($adjustment_pph).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
 			if($adjustment_bruto!=0){
 			$tbl_2 .= '
 				<tr>
@@ -6239,22 +6452,6 @@ class Importexceleslip extends MY_Controller
 					</td>
 				</tr>';
 			}
-
-			if($penyesuaian_umk!=0){
-			$tbl_2 .= '
-				<tr>
-					<td>
-						<table cellpadding="1" cellspacing="0">
-							<tr>
-								<td colspan="4">Adjustment Gaji</td>
-								<td colspan="2">: Rp.</td>
-								<td colspan="2" align="right">'.$this->Xin_model->rupiah_titik($penyesuaian_umk).' &nbsp;&nbsp;&nbsp;</td>
-							</tr>
-						</table>
-					</td>
-				</tr>';
-			}
-
 
 			$tbl_2 .= '
 
@@ -6374,6 +6571,22 @@ class Importexceleslip extends MY_Controller
 								<td colspan="4">Hutang Lain-Lain</td>
 								<td colspan="2">: Rp.</td>
 								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($hutang_others).' &nbsp;&nbsp;&nbsp;</td>
+							</tr>
+						</table>
+					</td>
+				</tr>';
+			}
+
+
+			if($deduction_unpaid!=0){
+			$tbl_2 .= '
+				<tr>
+					<td>
+						<table cellpadding="1" cellspacing="0">
+							<tr>
+								<td colspan="4">UNPAID</td>
+								<td colspan="2">: Rp.</td>
+								<td colspan="2" align="right">- '.$this->Xin_model->rupiah_titik($deduction_unpaid).' &nbsp;&nbsp;&nbsp;</td>
 							</tr>
 						</table>
 					</td>
