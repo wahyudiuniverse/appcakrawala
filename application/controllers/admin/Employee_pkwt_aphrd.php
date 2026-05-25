@@ -427,9 +427,9 @@ class Employee_pkwt_aphrd extends MY_Controller
 
 				$data_up = array(
 
-							'sign_nip'						=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR MANAGER',
+							'sign_nip'							=> '21541934',
+							'sign_fullname'					=> 'MARLIA ULFA',
+							'sign_jabatan'					=> 'SM HRD & GA',
 
 					'status_pkwt' => 1,
 					'approve_hrd' =>  $session['user_id'],

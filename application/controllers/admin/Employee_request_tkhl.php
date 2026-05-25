@@ -803,9 +803,9 @@ class Employee_request_tkhl extends MY_Controller {
 										'approve_hrd'						=> $session['user_id'],
 										'approve_hrd_date'			=> date('Y-m-d h:i:s'),
 
-							'sign_nip'						=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR MANAGER',
+							'sign_nip'							=> '21541934',
+							'sign_fullname'					=> 'MARLIA ULFA',
+							'sign_jabatan'					=> 'SM HRD & GA',
 
 										'status_pkwt' => 1,
 										'createdon' => date('Y-m-d h:i:s'),

@@ -1095,45 +1095,6 @@ class employee_request_cancelled extends MY_Controller
 		$length = intval($this->input->get("length"));
 	}
 
-
-	//mengambil Json all outlet dan user mobile by project id
-	public function get_subproject_by_project()
-	{
-		$postData = $this->input->post();
-
-		//Cek variabel post
-		$datarequest = [
-			'project_id'        	=> $postData['project_id'],
-		];
-
-		// get data all jabatan by project dari request man power JO
-		$data = $this->Project_model->get_sub_project_list($datarequest);
-
-		echo json_encode($data);
-		// echo "<pre>";
-		// print_r($response);
-		// echo "</pre>";
-	}
-
-	//mengambil Json all outlet dan user mobile by project id
-	public function get_docid_by_subproject()
-	{
-		$postData = $this->input->post();
-
-		//Cek variabel post
-		$datarequest = [
-			'subproject_id'        	=> $postData['subproject_id'],
-		];
-
-		// get data all jabatan by project dari request man power JO
-		$data = $this->Project_model->get_document_id($datarequest);
-
-		echo json_encode($data);
-		// echo "<pre>";
-		// print_r($response);
-		// echo "</pre>";
-	}
-
 	//get document_id from project table
 	public function getDocId()
 	{
@@ -1194,8 +1155,8 @@ class employee_request_cancelled extends MY_Controller
 			$no_rek							= $this->input->post('no_rek');
 			$pemilik_rekening			= $this->input->post('pemilik_rekening');
 
-			$project_id					= $this->input->post('project_modal');
-			$sub_project				= $this->input->post('subproject_modal');
+			$project_id					= $this->input->post('project_id');
+			$sub_project				= $this->input->post('sub_project_id');
 			$posisi 							= $this->input->post('posisi');
 			$date_of_join 							= $this->input->post('date_of_join');
 			$penempatan 							= $this->input->post('penempatan');
@@ -1254,7 +1215,7 @@ class employee_request_cancelled extends MY_Controller
 			if ($Return['error'] != '') {
 				$this->output($Return);
 			}
-			//ANGGUN
+
 			if ($session['user_id'] == '29222') {
 
 				$data = array(

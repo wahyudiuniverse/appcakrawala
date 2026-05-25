@@ -144,9 +144,9 @@
 			'approve_hrd'		=> trim($postData['session_hrd']),
 			'approve_hrd_date'	=> date("Y-m-d h:m:i"),
 
-							'sign_nip'						=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR MANAGER',
+							'sign_nip'							=> '21541934',
+							'sign_fullname'					=> 'MARLIA ULFA',
+							'sign_jabatan'					=> 'SM HRD & GA',
 
 			'sign_company'		=> trim($postData['company_id']),
 			'sign_company_name'	=> trim($postData['company_name']),

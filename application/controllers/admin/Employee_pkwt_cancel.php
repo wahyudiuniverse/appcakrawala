@@ -1399,9 +1399,9 @@ class Employee_pkwt_cancel extends MY_Controller {
 
 							'img_esign'							=> $image_name,
 
-							'sign_nip'							=> '21300033',
-							'sign_fullname'					=> 'SISKYLA KHAIRANA PRITIGARINI',
-							'sign_jabatan'					=> 'HR MANAGER',
+							'sign_nip'							=> '21541934',
+							'sign_fullname'					=> 'MARLIA ULFA',
+							'sign_jabatan'					=> 'SM HRD & GA',
 
 							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
 							'contract_type_id'			=> $jenis_dokumen, //1 pkwt, 2 tkhl
