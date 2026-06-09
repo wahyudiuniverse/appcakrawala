@@ -1681,6 +1681,23 @@ class Employees_model extends CI_Model
 		return $query;
 	}
 
+	//get validation status kolom
+	function get_data_valiadation_status($validation_id)
+	{
+		//nik =  nik
+		//
+		$this->db->select('*');
+		$this->db->from('log_employee_verification');
+		$this->db->where('id_employee_request', $id);
+		$this->db->where('kolom', $column);
+		$this->db->order_by('id', 'desc');
+		$this->db->limit(1);
+
+		$query = $this->db->get()->row_array();
+
+		return $query;
+	}
+
 	//get all validation status kolom
 	function get_all_valiadation_status($id)
 	{
@@ -1735,7 +1752,7 @@ class Employees_model extends CI_Model
 	//validasi employee request
 	public function valiadsi_employee_request($postData)
 	{
-		//Input untuk Database
+		//Insert ke log verifikasi
 		$datalock = [
 			'id_employee_request'     => $postData['id_employee_request'],
 			'kolom'      			  => $postData['kolom'],
@@ -1745,77 +1762,384 @@ class Employees_model extends CI_Model
 			'verified_by'             => $postData['verified_by'],
 			'verified_by_id'          => $postData['verified_by_id']
 		];
+		$this->db->insert('log_employee_verification', $datalock);
 
-		//update data employee
+		//update data
 		if ($postData['kolom'] == "nik") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'nik_ktp' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_nik' => $postData['nilai_sesudah'],
+					'col_nik_status' => $postData['status'],
+					'col_nik_update' => date('Y-m-d H:i:s'),
+					'col_nik_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_nik' => $postData['nilai_sesudah'],
+					'col_nik_status' => $postData['status'],
+					'col_nik_update' => date('Y-m-d H:i:s'),
+					'col_nik_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "kk") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'no_kk' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_kk' => $postData['nilai_sesudah'],
+					'col_kk_status' => $postData['status'],
+					'col_kk_update' => date('Y-m-d H:i:s'),
+					'col_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_kk' => $postData['nilai_sesudah'],
+					'col_kk_status' => $postData['status'],
+					'col_kk_update' => date('Y-m-d H:i:s'),
+					'col_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "nama") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'fullname' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_fullname' => $postData['nilai_sesudah'],
+					'col_fullname_status' => $postData['status'],
+					'col_fullname_update' => date('Y-m-d H:i:s'),
+					'col_fullname_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_fullname' => $postData['nilai_sesudah'],
+					'col_fullname_status' => $postData['status'],
+					'col_fullname_update' => date('Y-m-d H:i:s'),
+					'col_fullname_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "bank") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'bank_id' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_bank' => $postData['nilai_sesudah'],
+					'col_bank_status' => $postData['status'],
+					'col_bank_update' => date('Y-m-d H:i:s'),
+					'col_bank_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_bank' => $postData['nilai_sesudah'],
+					'col_bank_status' => $postData['status'],
+					'col_bank_update' => date('Y-m-d H:i:s'),
+					'col_bank_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "norek") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'no_rek' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_norek' => $postData['nilai_sesudah'],
+					'col_norek_status' => $postData['status'],
+					'col_norek_update' => date('Y-m-d H:i:s'),
+					'col_norek_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_norek' => $postData['nilai_sesudah'],
+					'col_norek_status' => $postData['status'],
+					'col_norek_update' => date('Y-m-d H:i:s'),
+					'col_norek_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "pemilik_rekening") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'pemilik_rekening' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_norekname' => $postData['nilai_sesudah'],
+					'col_norekname_status' => $postData['status'],
+					'col_norekname_update' => date('Y-m-d H:i:s'),
+					'col_norekname_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_norekname' => $postData['nilai_sesudah'],
+					'col_norekname_status' => $postData['status'],
+					'col_norekname_update' => date('Y-m-d H:i:s'),
+					'col_norekname_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "dokumen_ktp") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'ktp' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_ktp' => $postData['nilai_sesudah'],
+					'doc_ktp_status' => $postData['status'],
+					'doc_ktp_update' => date('Y-m-d H:i:s'),
+					'doc_ktp_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_ktp' => $postData['nilai_sesudah'],
+					'doc_ktp_status' => $postData['status'],
+					'doc_ktp_update' => date('Y-m-d H:i:s'),
+					'doc_ktp_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "dokumen_kk") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'kk' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_kk' => $postData['nilai_sesudah'],
+					'doc_kk_status' => $postData['status'],
+					'doc_kk_update' => date('Y-m-d H:i:s'),
+					'doc_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_kk' => $postData['nilai_sesudah'],
+					'doc_kk_status' => $postData['status'],
+					'doc_kk_update' => date('Y-m-d H:i:s'),
+					'doc_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "ijazah") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'ijazah' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_ijazah' => $postData['nilai_sesudah'],
+					'doc_ijazah_status' => $postData['status'],
+					'doc_ijazah_update' => date('Y-m-d H:i:s'),
+					'doc_ijazah_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_ijazah' => $postData['nilai_sesudah'],
+					'doc_ijazah_status' => $postData['status'],
+					'doc_ijazah_update' => date('Y-m-d H:i:s'),
+					'doc_ijazah_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "cv") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'civi' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_cv' => $postData['nilai_sesudah'],
+					'doc_cv_status' => $postData['status'],
+					'doc_cv_update' => date('Y-m-d H:i:s'),
+					'doc_cv_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_cv' => $postData['nilai_sesudah'],
+					'doc_cv_status' => $postData['status'],
+					'doc_cv_update' => date('Y-m-d H:i:s'),
+					'doc_cv_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "skck") {
+			//update ke xin_employee_request-------------------
 			$data = array(
 				'skck' => $postData['nilai_sesudah']
 			);
 			$this->db->where('secid', $postData['id_employee_request']);
 			$this->db->update('xin_employee_request', $data);
-		}
 
-		$this->db->insert('log_employee_verification', $datalock);
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_skck' => $postData['nilai_sesudah'],
+					'doc_skck_status' => $postData['status'],
+					'doc_skck_update' => date('Y-m-d H:i:s'),
+					'doc_skck_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_skck' => $postData['nilai_sesudah'],
+					'doc_skck_status' => $postData['status'],
+					'doc_skck_update' => date('Y-m-d H:i:s'),
+					'doc_skck_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		}
 	}
 
 	//un validasi employee request
@@ -1832,11 +2156,307 @@ class Employees_model extends CI_Model
 			'verified_by_id'          => $postData['verified_by_id']
 		];
 
-		//$otherdb = $this->load->database('default', TRUE);
-
 		$this->db->insert('log_employee_verification', $datalock);
 
-		//return null;
+		//update data
+		if ($postData['kolom'] == "nik") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_nik' => $postData['nilai_sesudah'],
+					'col_nik_status' => $postData['status'],
+					'col_nik_update' => date('Y-m-d H:i:s'),
+					'col_nik_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_nik' => $postData['nilai_sesudah'],
+					'col_nik_status' => $postData['status'],
+					'col_nik_update' => date('Y-m-d H:i:s'),
+					'col_nik_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "kk") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_kk' => $postData['nilai_sesudah'],
+					'col_kk_status' => $postData['status'],
+					'col_kk_update' => date('Y-m-d H:i:s'),
+					'col_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_kk' => $postData['nilai_sesudah'],
+					'col_kk_status' => $postData['status'],
+					'col_kk_update' => date('Y-m-d H:i:s'),
+					'col_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "nama") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_fullname' => $postData['nilai_sesudah'],
+					'col_fullname_status' => $postData['status'],
+					'col_fullname_update' => date('Y-m-d H:i:s'),
+					'col_fullname_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_fullname' => $postData['nilai_sesudah'],
+					'col_fullname_status' => $postData['status'],
+					'col_fullname_update' => date('Y-m-d H:i:s'),
+					'col_fullname_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "bank") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_bank' => $postData['nilai_sesudah'],
+					'col_bank_status' => $postData['status'],
+					'col_bank_update' => date('Y-m-d H:i:s'),
+					'col_bank_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_bank' => $postData['nilai_sesudah'],
+					'col_bank_status' => $postData['status'],
+					'col_bank_update' => date('Y-m-d H:i:s'),
+					'col_bank_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "norek") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_norek' => $postData['nilai_sesudah'],
+					'col_norek_status' => $postData['status'],
+					'col_norek_update' => date('Y-m-d H:i:s'),
+					'col_norek_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_norek' => $postData['nilai_sesudah'],
+					'col_norek_status' => $postData['status'],
+					'col_norek_update' => date('Y-m-d H:i:s'),
+					'col_norek_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "pemilik_rekening") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_norekname' => $postData['nilai_sesudah'],
+					'col_norekname_status' => $postData['status'],
+					'col_norekname_update' => date('Y-m-d H:i:s'),
+					'col_norekname_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_norekname' => $postData['nilai_sesudah'],
+					'col_norekname_status' => $postData['status'],
+					'col_norekname_update' => date('Y-m-d H:i:s'),
+					'col_norekname_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "dokumen_ktp") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_ktp' => $postData['nilai_sesudah'],
+					'doc_ktp_status' => $postData['status'],
+					'doc_ktp_update' => date('Y-m-d H:i:s'),
+					'doc_ktp_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_ktp' => $postData['nilai_sesudah'],
+					'doc_ktp_status' => $postData['status'],
+					'doc_ktp_update' => date('Y-m-d H:i:s'),
+					'doc_ktp_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "dokumen_kk") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_kk' => $postData['nilai_sesudah'],
+					'doc_kk_status' => $postData['status'],
+					'doc_kk_update' => date('Y-m-d H:i:s'),
+					'doc_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_kk' => $postData['nilai_sesudah'],
+					'doc_kk_status' => $postData['status'],
+					'doc_kk_update' => date('Y-m-d H:i:s'),
+					'doc_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "ijazah") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_ijazah' => $postData['nilai_sesudah'],
+					'doc_ijazah_status' => $postData['status'],
+					'doc_ijazah_update' => date('Y-m-d H:i:s'),
+					'doc_ijazah_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_ijazah' => $postData['nilai_sesudah'],
+					'doc_ijazah_status' => $postData['status'],
+					'doc_ijazah_update' => date('Y-m-d H:i:s'),
+					'doc_ijazah_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "cv") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_cv' => $postData['nilai_sesudah'],
+					'doc_cv_status' => $postData['status'],
+					'doc_cv_update' => date('Y-m-d H:i:s'),
+					'doc_cv_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_cv' => $postData['nilai_sesudah'],
+					'doc_cv_status' => $postData['status'],
+					'doc_cv_update' => date('Y-m-d H:i:s'),
+					'doc_cv_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		} else if ($postData['kolom'] == "skck") {
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_skck' => $postData['nilai_sesudah'],
+					'doc_skck_status' => $postData['status'],
+					'doc_skck_update' => date('Y-m-d H:i:s'),
+					'doc_skck_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_skck' => $postData['nilai_sesudah'],
+					'doc_skck_status' => $postData['status'],
+					'doc_skck_update' => date('Y-m-d H:i:s'),
+					'doc_skck_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+		}
 	}
 
 	//validasi employee existing
@@ -1853,11 +2473,14 @@ class Employees_model extends CI_Model
 			'verified_by_id'          => $postData['verified_by_id']
 		];
 
+		$this->db->insert('log_employee_verification', $datalock);
+
 		//get user varification_id info
 		$result = $this->read_employee_info_by_nik($postData['employee_id']);
 
-		//update data employee
+		//update data
 		if ($postData['kolom'] == "nik") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'ktp_no' => $postData['nilai_sesudah']
 			);
@@ -1866,7 +2489,96 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_nik' => $postData['nilai_sesudah'],
+					'col_nik_status' => $postData['status'],
+					'col_nik_update' => date('Y-m-d H:i:s'),
+					'col_nik_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_nik' => $postData['nilai_sesudah'],
+					'col_nik_status' => $postData['status'],
+					'col_nik_update' => date('Y-m-d H:i:s'),
+					'col_nik_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+
+			//update ke xin_saltab_temp-------------------
+			//cek ada di xin_saltab_temp atau blm
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('nip', $postData['employee_id']);
+			$this->db->from('xin_saltab_temp');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'nik' => $postData['nilai_sesudah'],
+					'nik_verify' => $postData['status'],
+				);
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->update('xin_saltab_temp', $data_update);
+
+				//evaluasi ulang status valid data
+				$this->db->select("secid");
+				$this->db->select("nip");
+				$this->db->select("fullname");
+				$this->db->select("uploadid");
+				$this->db->select("nik_verify");
+				$this->db->select("bank_verify");
+				$this->db->select("pemilik_rek_verify");
+				$this->db->select("rek_verify");
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->from('xin_saltab_temp');
+				$query_cek_saltab = $this->db->get()->result_array();
+
+				foreach ($query_cek_saltab as $record) {
+					if (($record['rek_verify'] == 1) && ($record['bank_verify'] == 1) && ($record['pemilik_rek_verify'] == 1)) {
+						if (strtoupper($result[0]->first_name) == strtoupper($record['fullname'])) {
+							$data_update_saltab = array(
+								'status_valid' => 1,
+								'keterangan_valid' => "Data Valid",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						} else {
+							$data_update_saltab = array(
+								'status_valid' => 2,
+								'keterangan_valid' => "NIP Berbeda atau Nama Pemilik Rekening Berbeda",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						}
+					} else {
+						$data_update_saltab = array(
+							'status_valid' => 0,
+							'keterangan_valid' => "Komponen Rekening Tidak Valid",
+						);
+
+						$this->db->where('secid', $record['secid']);
+						$this->db->update('xin_saltab_temp', $data_update_saltab);
+					}
+				}
+			} else {
+				//do nothing
+			}
 		} else if ($postData['kolom'] == "kk") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'kk_no' => $postData['nilai_sesudah']
 			);
@@ -1875,7 +2587,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_kk' => $postData['nilai_sesudah'],
+					'col_kk_status' => $postData['status'],
+					'col_kk_update' => date('Y-m-d H:i:s'),
+					'col_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_kk' => $postData['nilai_sesudah'],
+					'col_kk_status' => $postData['status'],
+					'col_kk_update' => date('Y-m-d H:i:s'),
+					'col_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "nama") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'first_name' => $postData['nilai_sesudah']
 			);
@@ -1884,7 +2624,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_fullname' => $postData['nilai_sesudah'],
+					'col_fullname_status' => $postData['status'],
+					'col_fullname_update' => date('Y-m-d H:i:s'),
+					'col_fullname_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_fullname' => $postData['nilai_sesudah'],
+					'col_fullname_status' => $postData['status'],
+					'col_fullname_update' => date('Y-m-d H:i:s'),
+					'col_fullname_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "bank") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'bank_name' => $postData['nilai_sesudah']
 			);
@@ -1893,7 +2661,97 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_bank' => $postData['nilai_sesudah'],
+					'col_bank_status' => $postData['status'],
+					'col_bank_update' => date('Y-m-d H:i:s'),
+					'col_bank_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_bank' => $postData['nilai_sesudah'],
+					'col_bank_status' => $postData['status'],
+					'col_bank_update' => date('Y-m-d H:i:s'),
+					'col_bank_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+
+			//update ke xin_saltab_temp-------------------
+			//cek ada di xin_saltab_temp atau blm
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('nip', $postData['employee_id']);
+			$this->db->from('xin_saltab_temp');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'id_bank' => $postData['nilai_sesudah'],
+					'nama_bank' => $this->get_nama_bank($postData['nilai_sesudah']),
+					'bank_verify' => $postData['status'],
+				);
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->update('xin_saltab_temp', $data_update);
+
+				//evaluasi ulang status valid data
+				$this->db->select("secid");
+				$this->db->select("nip");
+				$this->db->select("fullname");
+				$this->db->select("uploadid");
+				$this->db->select("nik_verify");
+				$this->db->select("bank_verify");
+				$this->db->select("pemilik_rek_verify");
+				$this->db->select("rek_verify");
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->from('xin_saltab_temp');
+				$query_cek_saltab = $this->db->get()->result_array();
+
+				foreach ($query_cek_saltab as $record) {
+					if (($record['rek_verify'] == 1) && ($record['bank_verify'] == 1) && ($record['pemilik_rek_verify'] == 1)) {
+						if (strtoupper($result[0]->first_name) == strtoupper($record['fullname'])) {
+							$data_update_saltab = array(
+								'status_valid' => 1,
+								'keterangan_valid' => "Data Valid",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						} else {
+							$data_update_saltab = array(
+								'status_valid' => 2,
+								'keterangan_valid' => "NIP Berbeda atau Nama Pemilik Rekening Berbeda",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						}
+					} else {
+						$data_update_saltab = array(
+							'status_valid' => 0,
+							'keterangan_valid' => "Komponen Rekening Tidak Valid",
+						);
+
+						$this->db->where('secid', $record['secid']);
+						$this->db->update('xin_saltab_temp', $data_update_saltab);
+					}
+				}
+			} else {
+				//do nothing
+			}
 		} else if ($postData['kolom'] == "norek") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'nomor_rek' => $postData['nilai_sesudah']
 			);
@@ -1902,7 +2760,96 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_norek' => $postData['nilai_sesudah'],
+					'col_norek_status' => $postData['status'],
+					'col_norek_update' => date('Y-m-d H:i:s'),
+					'col_norek_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_norek' => $postData['nilai_sesudah'],
+					'col_norek_status' => $postData['status'],
+					'col_norek_update' => date('Y-m-d H:i:s'),
+					'col_norek_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+
+			//update ke xin_saltab_temp-------------------
+			//cek ada di xin_saltab_temp atau blm
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('nip', $postData['employee_id']);
+			$this->db->from('xin_saltab_temp');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'norek' => $postData['nilai_sesudah'],
+					'rek_verify' => $postData['status'],
+				);
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->update('xin_saltab_temp', $data_update);
+
+				//evaluasi ulang status valid data
+				$this->db->select("secid");
+				$this->db->select("nip");
+				$this->db->select("fullname");
+				$this->db->select("uploadid");
+				$this->db->select("nik_verify");
+				$this->db->select("bank_verify");
+				$this->db->select("pemilik_rek_verify");
+				$this->db->select("rek_verify");
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->from('xin_saltab_temp');
+				$query_cek_saltab = $this->db->get()->result_array();
+
+				foreach ($query_cek_saltab as $record) {
+					if (($record['rek_verify'] == 1) && ($record['bank_verify'] == 1) && ($record['pemilik_rek_verify'] == 1)) {
+						if (strtoupper($result[0]->first_name) == strtoupper($record['fullname'])) {
+							$data_update_saltab = array(
+								'status_valid' => 1,
+								'keterangan_valid' => "Data Valid",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						} else {
+							$data_update_saltab = array(
+								'status_valid' => 2,
+								'keterangan_valid' => "NIP Berbeda atau Nama Pemilik Rekening Berbeda",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						}
+					} else {
+						$data_update_saltab = array(
+							'status_valid' => 0,
+							'keterangan_valid' => "Komponen Rekening Tidak Valid",
+						);
+
+						$this->db->where('secid', $record['secid']);
+						$this->db->update('xin_saltab_temp', $data_update_saltab);
+					}
+				}
+			} else {
+				//do nothing
+			}
 		} else if ($postData['kolom'] == "pemilik_rekening") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'pemilik_rek' => $postData['nilai_sesudah']
 			);
@@ -1911,7 +2858,96 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'col_norekname' => $postData['nilai_sesudah'],
+					'col_norekname_status' => $postData['status'],
+					'col_norekname_update' => date('Y-m-d H:i:s'),
+					'col_norekname_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'col_norekname' => $postData['nilai_sesudah'],
+					'col_norekname_status' => $postData['status'],
+					'col_norekname_update' => date('Y-m-d H:i:s'),
+					'col_norekname_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
+
+			//update ke xin_saltab_temp-------------------
+			//cek ada di xin_saltab_temp atau blm
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('nip', $postData['employee_id']);
+			$this->db->from('xin_saltab_temp');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'pemilik_rek' => $postData['nilai_sesudah'],
+					'pemilik_rek_verify' => $postData['status'],
+				);
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->update('xin_saltab_temp', $data_update);
+
+				//evaluasi ulang status valid data
+				$this->db->select("secid");
+				$this->db->select("nip");
+				$this->db->select("fullname");
+				$this->db->select("uploadid");
+				$this->db->select("nik_verify");
+				$this->db->select("bank_verify");
+				$this->db->select("pemilik_rek_verify");
+				$this->db->select("rek_verify");
+				$this->db->where('nip', $postData['employee_id']);
+				$this->db->from('xin_saltab_temp');
+				$query_cek_saltab = $this->db->get()->result_array();
+
+				foreach ($query_cek_saltab as $record) {
+					if (($record['rek_verify'] == 1) && ($record['bank_verify'] == 1) && ($record['pemilik_rek_verify'] == 1)) {
+						if (strtoupper($result[0]->first_name) == strtoupper($record['fullname'])) {
+							$data_update_saltab = array(
+								'status_valid' => 1,
+								'keterangan_valid' => "Data Valid",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						} else {
+							$data_update_saltab = array(
+								'status_valid' => 2,
+								'keterangan_valid' => "NIP Berbeda atau Nama Pemilik Rekening Berbeda",
+							);
+
+							$this->db->where('secid', $record['secid']);
+							$this->db->update('xin_saltab_temp', $data_update_saltab);
+						}
+					} else {
+						$data_update_saltab = array(
+							'status_valid' => 0,
+							'keterangan_valid' => "Komponen Rekening Tidak Valid",
+						);
+
+						$this->db->where('secid', $record['secid']);
+						$this->db->update('xin_saltab_temp', $data_update_saltab);
+					}
+				}
+			} else {
+				//do nothing
+			}
 		} else if ($postData['kolom'] == "dokumen_ktp") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'filename_ktp' => $postData['nilai_sesudah']
 			);
@@ -1920,7 +2956,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_ktp' => $postData['nilai_sesudah'],
+					'doc_ktp_status' => $postData['status'],
+					'doc_ktp_update' => date('Y-m-d H:i:s'),
+					'doc_ktp_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_ktp' => $postData['nilai_sesudah'],
+					'doc_ktp_status' => $postData['status'],
+					'doc_ktp_update' => date('Y-m-d H:i:s'),
+					'doc_ktp_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "dokumen_kk") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'filename_kk' => $postData['nilai_sesudah']
 			);
@@ -1929,7 +2993,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_kk' => $postData['nilai_sesudah'],
+					'doc_kk_status' => $postData['status'],
+					'doc_kk_update' => date('Y-m-d H:i:s'),
+					'doc_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_kk' => $postData['nilai_sesudah'],
+					'doc_kk_status' => $postData['status'],
+					'doc_kk_update' => date('Y-m-d H:i:s'),
+					'doc_kk_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "buku_rekening") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'filename_rek' => $postData['nilai_sesudah']
 			);
@@ -1938,7 +3030,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_rekening' => $postData['nilai_sesudah'],
+					'doc_rekening_status' => $postData['status'],
+					'doc_rekening_update' => date('Y-m-d H:i:s'),
+					'doc_rekening_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_rekening' => $postData['nilai_sesudah'],
+					'doc_rekening_status' => $postData['status'],
+					'doc_rekening_update' => date('Y-m-d H:i:s'),
+					'doc_rekening_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "ijazah") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'filename_isd' => $postData['nilai_sesudah']
 			);
@@ -1947,7 +3067,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_ijazah' => $postData['nilai_sesudah'],
+					'doc_ijazah_status' => $postData['status'],
+					'doc_ijazah_update' => date('Y-m-d H:i:s'),
+					'doc_ijazah_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_ijazah' => $postData['nilai_sesudah'],
+					'doc_ijazah_status' => $postData['status'],
+					'doc_ijazah_update' => date('Y-m-d H:i:s'),
+					'doc_ijazah_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "cv") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'filename_cv' => $postData['nilai_sesudah']
 			);
@@ -1956,7 +3104,35 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_cv' => $postData['nilai_sesudah'],
+					'doc_cv_status' => $postData['status'],
+					'doc_cv_update' => date('Y-m-d H:i:s'),
+					'doc_cv_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_cv' => $postData['nilai_sesudah'],
+					'doc_cv_status' => $postData['status'],
+					'doc_cv_update' => date('Y-m-d H:i:s'),
+					'doc_cv_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		} else if ($postData['kolom'] == "skck") {
+			//update ke xin_employees-------------------
 			$data = array(
 				'filename_skck' => $postData['nilai_sesudah']
 			);
@@ -1965,10 +3141,34 @@ class Employees_model extends CI_Model
 			}
 			$this->db->where('employee_id', $postData['employee_id']);
 			$this->db->update('xin_employees', $data);
+
+			//update ke xin_employee_verification-------------------
+			//cek sudah pernah verifikasi atau belum
+			$this->db->select("count(*) as jumlah_data");
+			$this->db->where('id_verification', $postData['id_employee_request']);
+			$this->db->from('xin_employee_verification');
+			$query_cek = $this->db->get()->row_array();
+			//update kalau sudah ada data, insert kalau blm ada
+			if ($query_cek['jumlah_data'] > 0) {
+				$data_update = array(
+					'doc_skck' => $postData['nilai_sesudah'],
+					'doc_skck_status' => $postData['status'],
+					'doc_skck_update' => date('Y-m-d H:i:s'),
+					'doc_skck_updateby' => $postData['verified_by'],
+				);
+				$this->db->where('id_verification', $postData['id_employee_request']);
+				$this->db->update('xin_employee_verification', $data_update);
+			} else {
+				$data_insert = array(
+					'id_verification' => $postData['id_employee_request'],
+					'doc_skck' => $postData['nilai_sesudah'],
+					'doc_skck_status' => $postData['status'],
+					'doc_skck_update' => date('Y-m-d H:i:s'),
+					'doc_skck_updateby' => $postData['verified_by'],
+				);
+				$this->db->insert('xin_employee_verification', $data_insert);
+			}
 		}
-
-
-		$this->db->insert('log_employee_verification', $datalock);
 
 		//get user varification_id info
 		$result = $this->get_employee_array_by_nip($postData['employee_id']);
@@ -3875,14 +5075,14 @@ class Employees_model extends CI_Model
 
 			//cek addendum
 			$addendum = $this->cek_addendum($record->contract_id);
-			if((empty($addendum)) || ($addendum == null) || ($addendum == "")){
+			if ((empty($addendum)) || ($addendum == null) || ($addendum == "")) {
 				$nomor_kontrak = $record->no_surat;
 				$awal_kontrak = $this->Xin_model->tgl_indo($record->from_date);
 				$akhir_kontrak = $this->Xin_model->tgl_indo($record->to_date);
-				if((empty($record->file_name)) || ($record->file_name == null) || ($record->file_name == "")){
-				    $link_dokumen_kontrak = "";
+				if ((empty($record->file_name)) || ($record->file_name == null) || ($record->file_name == "")) {
+					$link_dokumen_kontrak = "";
 				} else {
-				    $link_dokumen_kontrak = $record->file_name;
+					$link_dokumen_kontrak = $record->file_name;
 				}
 				// $link_dokumen_kontrak = $link_pkwt;
 				$tgl_upload_kontrak = $record->upload_pkwt;
@@ -3890,10 +5090,10 @@ class Employees_model extends CI_Model
 				$nomor_kontrak = $addendum['no_addendum'];
 				$awal_kontrak = $this->Xin_model->tgl_indo($addendum['kontrak_start_new']);
 				$akhir_kontrak = $this->Xin_model->tgl_indo($addendum['kontrak_end_new']);
-				if((empty($addendum['file_signed'])) || ($addendum['file_signed'] == null) || ($addendum['file_signed'] == "")){
-				    $link_dokumen_kontrak = "";
+				if ((empty($addendum['file_signed'])) || ($addendum['file_signed'] == null) || ($addendum['file_signed'] == "")) {
+					$link_dokumen_kontrak = "";
 				} else {
-				    $link_dokumen_kontrak = base_url("uploads/document/addendum") . $addendum['file_signed'];
+					$link_dokumen_kontrak = base_url("uploads/document/addendum") . $addendum['file_signed'];
 				}
 				// $link_dokumen_kontrak = base_url("uploads/document/addendum") . $addendum['file_signed'];
 				$tgl_upload_kontrak = $this->Xin_model->tgl_indo($addendum['file_signed_time']);

@@ -1063,7 +1063,7 @@ class ImportExcel extends MY_Controller
 							'dm_allow_operation' 			=> $line[49],
 							'img_esign'						=> $image_name,
 
-							'sign_nip'							=> '21541934',
+							'sign_nip'						=> '21541934',
 							'sign_fullname'					=> 'MARLIA ULFA',
 							'sign_jabatan'					=> 'SM HRD & GA',
 
@@ -2135,7 +2135,7 @@ class ImportExcel extends MY_Controller
 
 		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
 		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
-		$length_array = count($header_tabel_saltab);
+		$length_array = count($header_tabel_saltab) + 4;
 		$gabung = implode(",", $header_tabel_saltab);
 
 		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel($id, $gabung);
@@ -2162,9 +2162,16 @@ class ImportExcel extends MY_Controller
 		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
 		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
 
+		$tambahan_header = array(
+			"STATUS VALID",
+			"KETERANGAN VALID",
+			"STATUS CEK REKENING",
+			"TANGGAL CEK REKENING"
+		);
+		$final_header_array = array_merge($tambahan_header, $header2_tabel_saltab);
 		$spreadsheet->getActiveSheet()
 			->fromArray(
-				$header2_tabel_saltab,   // The data to set
+				$final_header_array,   // The data to set
 				NULL,
 				'A6'
 			);
@@ -2466,7 +2473,7 @@ class ImportExcel extends MY_Controller
 		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
 		//$writer->setPreCalculateFormulas(false);
 
-		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name'] . ' - ' . $peride_salary; // set filename for excel file to be exported
 		// $filename = $gabung;
 
 		header('Content-Type: application/vnd.ms-excel'); // generate excel file
@@ -2647,16 +2654,20 @@ class ImportExcel extends MY_Controller
 			'SUB PROJECT',
 			'AREA',
 			'THP',
+			'STATUS DATA',
+			'KETERANGAN',
+			'STATUS AKTIF REKENING',
+			'CEK AKTIF REKENING ON',
 			// 'NOMOR REKENING (SALTAB)',
 			// 'NAMA BANK (SALTAB)',
 			// 'PEMILIK REKENING (SALTAB)',
 			// 'STATUS HOLD',
 			'NOMOR REKENING (DATABASE)',
-			'STATUS VERIFIKASI NOMOR REKENING',
+			'STATUS VERIFIKASI NOMOR REKENING BY HRD',
 			'NAMA BANK (DATABASE)',
-			'STATUS VERIFIKASI NAMA BANK',
+			'STATUS VERIFIKASI NAMA BANK BY HRD',
 			'PEMILIK REKENING (DATABASE)',
-			'STATUS VERIFIKASI PEMILIK REKENING',
+			'STATUS VERIFIKASI PEMILIK REKENING BY HRD',
 			'STATUS HOLD',
 			'LINK ESLIP',
 		);
@@ -3204,6 +3215,234 @@ class ImportExcel extends MY_Controller
 		//$writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
+	public function download_data_invalid_from_import($id = null)
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		$data_invalid = json_decode($postData['data_saltab_invalid']);
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Data Invalid'); //nama Spreadsheet yg baru dibuat
+
+		$header2_tabel_saltab = array(
+			'STATUS VALID',
+			'KETERANGAN VALID',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:E1");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A3'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A3:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$data_invalid_print = array();
+
+		foreach ($data_invalid as $record) {
+			$data_invalid_print[] = array(
+				$record->status_valid,
+				$record->keterangan_valid,
+				$record->nip,
+				$record->nik,
+				$record->fullname,
+			);
+		}
+
+		$length_data = count($data_invalid_print);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 4])->setvalueExplicit($data_invalid_print[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data_invalid_print,   // The data to set
+		// 		NULL,
+		// 		'A4'
+		// 	);
+
+		// echo "<pre>";
+		// print_r($detail_saltab);
+		// echo "</pre>";
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('3:3')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('3:3')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('3:3')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = "Data Invalid"; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		// $writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function download_data_from_saltab_temp()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		$id = $postData['id'];
+		$jenis = $postData['jenis'];
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab) + 4;
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel($id, $gabung, $jenis);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$tambahan_header = array(
+			"STATUS VALID",
+			"KETERANGAN VALID",
+			"STATUS CEK REKENING",
+			"TANGGAL CEK REKENING"
+		);
+		$final_header_array = array_merge($tambahan_header, $header2_tabel_saltab);
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$final_header_array,   // The data to set
+				NULL,
+				'A6'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 7])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
 	public function update_downloader($id)
 	{
 		/* Define return | here result is used to return user data and error for error message */
@@ -3547,7 +3786,7 @@ class ImportExcel extends MY_Controller
 										if ($header_tabel_saltab[$j] == "fullname") {
 											$trimmed_value = trim($sheet_data[$i][$j], ' ');
 											$trimmed_value = trim($trimmed_value, ' ');
-											$data += [$header_tabel_saltab[$j] => $trimmed_value];
+											$data += [$header_tabel_saltab[$j] => strtoupper($trimmed_value)];
 											if (($trimmed_value == "") || ($trimmed_value == null)) {
 												$lanjut = false;
 											} else {
@@ -3558,20 +3797,14 @@ class ImportExcel extends MY_Controller
 												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
 												$trimmed_nip = trim($trimmed_nip, ' ');
 												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-												$data += [$header_tabel_saltab[$j + 1] => ""];
-												$j = $j + 1;
+												// $data += [$header_tabel_saltab[$j + 1] => ""];
+												// $j = $j + 1;
 											} else {
-												// if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
 												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
 												$trimmed_nip = trim($trimmed_nip, ' ');
 												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-												$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
-												$j = $j + 1;
-												// } else {
-												// 	$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-												// 	$trimmed_nip = trim($trimmed_nip, ' ');
-												// 	$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-												// }
+												// $data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
+												// $j = $j + 1;
 											}
 											$lanjut = true;
 										} else if ($header_tabel_saltab[$j] == "norek") {
@@ -3710,18 +3943,34 @@ class ImportExcel extends MY_Controller
 			} else {
 				$data_validasi = $this->Import_model->get_employee_validasi_saltab($record->nip);
 
-				if (($data_validasi['verif_norek_database'] == "0") || ($data_validasi['verif_nama_bank_database'] == "0") || ($data_validasi['verif_pemilik_rekening_database'] == "0")) {
-					$status_valid = 0;
-					$keterangan_valid = "Komponen Rekening Tidak Valid";
-				} else {
-					if ($record->fullname == $data_validasi['pemilik_rekening_database']) {
-						$status_valid = 1;
-						$keterangan_valid = "Data Valid";
+				// if (($data_validasi['verif_norek_database'] == "0") || ($data_validasi['verif_nama_bank_database'] == "0") || ($data_validasi['verif_pemilik_rekening_database'] == "0")) {
+				// 	$status_valid = 0;
+				// 	$keterangan_valid = "Komponen Rekening Tidak Valid";
+				// } else {
+				if (strtoupper(trim($record->fullname, ' ')) == strtoupper(trim($data_validasi['fullname_database'], ' '))) {
+					if (strval(trim($record->nik, ' ')) == strval(trim($data_validasi['nik_database'], ' '))) {
+						if (strtoupper($record->fullname) == strtoupper($data_validasi['pemilik_rekening_database'])) {
+							if (($data_validasi['verif_norek_database'] == "0") || ($data_validasi['verif_nama_bank_database'] == "0") || ($data_validasi['verif_pemilik_rekening_database'] == "0")) {
+								$status_valid = 0;
+								$keterangan_valid = "Komponen Rekening Tidak Valid";
+							} else {
+								$status_valid = 1;
+								$keterangan_valid = "Data Valid";
+							}
+						} else {
+							$status_valid = 2;
+							$keterangan_valid = "Nama Pemilik Rekening Berbeda";
+						}
 					} else {
-						$status_valid = 2;
-						$keterangan_valid = "NIP Berbeda atau Nama Pemilik Rekening Berbeda";
+						$status_valid = 0;
+						$keterangan_valid = "NIP Salah atau NIK Berbeda dengan Database NEO";
+						// $keterangan_valid = "NIK SALTAB: " . trim($record->nik, ' ') . "</br>NIK CIS: " . trim($data_validasi['nik_database'], ' ');
 					}
+				} else {
+					$status_valid = 0;
+					$keterangan_valid = "NIP Salah atau Nama Lengkap Berbeda dengan Database NEO";
 				}
+
 				//add status validasi 
 				$data += ['nik_verify' => $data_validasi['verif_nik_database']];
 				$data += ['bank_verify' => $data_validasi['verif_nama_bank_database']];
@@ -3800,7 +4049,7 @@ class ImportExcel extends MY_Controller
 			'sub_project_id'         => $postData['sub_project'],
 			'sub_project_name'       => $postData['sub_project_name'],
 			'total_mpp'        	 	 => count($array_data_import_validasi),
-			'fee'        	 	 	 => 0,
+			'fee'        	 	 	 => $postData['fee'],
 			'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($postData['nip']),
 			'upload_by_id'        	 => $postData['nip'],
 			'upload_ip'        	 	 => $this->get_client_ip(),
@@ -6309,6 +6558,7 @@ class ImportExcel extends MY_Controller
 			$data_update = array(
 				"status_cek_aktif_rekening" => "2",
 				"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+				"status_hold" => "HOLD",
 			);
 
 			// $this->update_row_saltab_temp_detail($data_update, $postData['secid']);

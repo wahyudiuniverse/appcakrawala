@@ -6,6 +6,32 @@
 <?php $get_animate = $this->Xin_model->get_content_animate(); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 
+<!-- START MODAL IMPORT SALTAB -->
+<div class="modal fade" id="importSaltabModal" tabindex="-1" role="dialog" aria-labelledby="importSaltabModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="importSaltabModalLabel"><span class="judulModalSaltab">Download data invalid</span></h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body bg-light">
+				<div class="isi-modal-edit-outlet">
+					<div class="container" id="container_modal_outlet"></div>
+				</div>
+
+				<div class="info-modal-edit-outlet"></div>
+
+			</div>
+			<div class="modal-footer">
+				<button type='button' class='btn btn-secondary mt-2' data-dismiss='modal'>Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END MODAL IMPORT SALTAB -->
+
 <!-- START MODAL CEK REKENING AKTIF -->
 <div class="modal fade" id="cekRekeningAktifModal" tabindex="-1" role="dialog" aria-labelledby="cekRekeningAktifModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
@@ -253,7 +279,16 @@
 				<span class="card-header-title mr-2">
 					<button onclick="cek_status_aktif_rekening()" id="button_cek_rekening_aktif" class="btn btn-primary ladda-button" data-style="expand-right">Cek Rekening Aktif All</button>
 					<button onclick="release_all()" id="button_release_all" class="btn btn-success ladda-button" data-style="expand-right">Finalize All</button>
-					<button id="button_delete_all" class="btn btn-danger ladda-button" data-style="expand-right">Delete All</button>
+					<button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
+						DOWNLOAD <span class="caret"></span></button>
+					<ul class="dropdown-menu" role="menu" style="width: 100px;background-color:#faf7f0;">
+						<span style="color:#3F72D5;">DOWNLOAD OPTION:</span>
+						<li class="mb-1"><button type="button" onclick="download_data('all')" id="button_download_data_all" class="btn btn-sm btn-outline-primary col-12">Download Data All</button></li>
+						<li class="mb-1"><button type="button" onclick="download_data('invalid')" id="button_download_data_invalid" class="btn btn-sm btn-outline-danger col-12">Download Data Invalid</button></li>
+						<li class="mb-1"><button type="button" onclick="download_data('pemilik_rekening_beda')" id="button_download_data_pemilik_rekening_beda" class="btn btn-sm btn-outline-danger col-12">Download Data Pemilik Rekening Beda</button></li>
+						<li class="mb-1"><button type="button" onclick="download_data('rekening_non_aktif')" id="button_download_data_rekening_nonaktif" class="btn btn-sm btn-outline-danger col-12">Download Data Rekening Nonaktif</button></li>
+					</ul>
+					<button hidden id="button_delete_all" class="btn btn-danger ladda-button" data-style="expand-right">Delete All</button>
 				</span>
 				<!-- </div> -->
 			</div>
@@ -515,6 +550,78 @@
 		// var html_text = 'This is the dummy data added using jQuery. Id: ' + id;
 
 		// window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_temporary/' + id, "_self");
+	}
+
+	//-----download data-----
+	function download_data(jenis) {
+		var id = "<?php echo $id_batch; ?>";
+		alert(jenis);
+
+		$.ajax({
+			// url: '<?= base_url() ?>admin/importexcel/downloadTemplateSaltab/',
+			url: '<?= base_url() ?>admin/importexcel/download_data_from_saltab_temp/',
+			method: 'post',
+			data: {
+				[csrfName]: csrfHash,
+				id: id,
+				jenis: jenis,
+			},
+			xhrFields: {
+				responseType: 'blob' // tipe untuk binary data
+			},
+			beforeSend: function() {
+				//judul modal
+				$('.judulModalSaltab').html("Download Data Saltab");
+				$('.info-modal-edit-outlet').attr("hidden", false);
+				$('.isi-modal-edit-outlet').attr("hidden", true);
+				$('.info-modal-edit-outlet').html(generating_html_text);
+				$('#importSaltabModal').modal('show');
+			},
+			success: function(data) {
+				var now = new Date();
+				var tanggal = now.toLocaleString();
+				// var jam = now.toLocaleTimeString();
+
+				// Create a temporary link to trigger download
+				var a = document.createElement('a');
+				var url = window.URL.createObjectURL(data);
+				a.href = url;
+				a.download = 'Data ' + jenis + '.xlsx';
+				document.body.append(a);
+				a.click();
+				window.URL.revokeObjectURL(url);
+				a.remove();
+
+				$('.info-modal-edit-outlet').attr("hidden", false);
+				$('.isi-modal-edit-outlet').attr("hidden", true);
+				$('.info-modal-edit-outlet').html(success_generating_html_text);
+
+				setTimeout(() => {
+					//judul modal
+					$('.judulModalSaltab').html("Import Data Saltab");
+
+					$('.info-modal-edit-outlet').attr("hidden", true);
+					$('.isi-modal-edit-outlet').attr("hidden", false);
+					$('#importSaltabModal').modal('hide');
+				}, 1000);
+			},
+			error: function() {
+				alert("Failed to download file.");
+
+				setTimeout(() => {
+					//judul modal
+					$('.judulModalSaltab').html("Import Data Saltab");
+
+					$('.info-modal-edit-outlet').attr("hidden", true);
+					$('.isi-modal-edit-outlet').attr("hidden", false);
+					$('#importSaltabModal').modal('hide');
+				}, 1000);
+			}
+			// success: function(response) {
+			// 	alert("selesai download");
+			// 	// alert(response);
+			// }
+		});
 	}
 </script>
 

@@ -50,6 +50,10 @@
 															<td style='width:30%'><strong>Sub Project</strong></td>
 															<td style='width:70%'><span id="sub_project_table"></span></td>
 														</tr>
+														<tr>
+															<td style='width:30%'><strong>Agency Fee (Dalam %)</strong></td>
+															<td style='width:70%'><span id="agency_fee_table"></span></td>
+														</tr>
 													</tbody>
 												</table>
 											</div>
@@ -226,13 +230,22 @@ if (in_array('511', $role_resources_ids)) {
 					</div>
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-3">
 					<div class="form-group">
 						<label class="form-label">Sub Project <font color="#FF0000">*</font></label>
 						<select class="form-control" data-live-search="true" name="sub_project" id="sub_project" data-plugin="xin_select" data-placeholder="Sub-Project" required>
 							<option value="0">--ALL--</option>
 						</select>
 						<span id="pesan_sub_project"></span>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<!-- input periode -->
+						<label class="form-label">Agency Fee (Dalam %) <font color="#FF0000">*</font></label>
+						<input type="number" class="form-control" name="agency_fee" id="agency_fee" placeholder="Contoh: 8.5" required>
+						<span id="pesan_agency_fee"></span>
 					</div>
 				</div>
 			</div>
@@ -332,6 +345,7 @@ if (in_array('511', $role_resources_ids)) {
 	var langopt;
 	var saltab_table;
 	var invalid_saltab_table;
+	var data_saltab_invalid;
 	var array_data_import;
 	var array_data_import_validasi;
 	var jumlah_data_import;
@@ -490,6 +504,7 @@ if (in_array('511', $role_resources_ids)) {
 
 											$('#list_data_invalid').attr("hidden", false);
 											let dataSet = res2['data_invalid'];
+											data_saltab_invalid = res2['data_invalid'];
 
 											invalid_saltab_table.destroy();
 
@@ -709,6 +724,81 @@ if (in_array('511', $role_resources_ids)) {
 		// window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
 		window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltab/' + id, "_self");
 	}
+
+	//-----download data invalid-----
+	function download_data_invalid() {
+		$.ajax({
+			// url: '<?= base_url() ?>admin/importexcel/downloadTemplateSaltab/',
+			url: '<?= base_url() ?>admin/importexcel/download_data_invalid_from_import/',
+			method: 'post',
+			data: {
+				[csrfName]: csrfHash,
+				data_saltab_invalid: JSON.stringify(data_saltab_invalid),
+			},
+			xhrFields: {
+				responseType: 'blob' // tipe untuk binary data
+			},
+			beforeSend: function() {
+				//judul modal
+				$('.judulModalSaltab').html("Download Template Saltab");
+				$('.info-modal-edit-outlet').attr("hidden", false);
+				$('.isi-modal-edit-outlet').attr("hidden", true);
+				$('.info-modal-edit-outlet').html(generating_html_text);
+				$('#button_save_saltab').attr("hidden", true);
+				$('#button_delete_outlet').attr("hidden", true);
+				$('#button_reset_device_user_mobile').attr("hidden", true);
+				$('#button_enable_web_user_mobile').attr("hidden", true);
+				$('#button_disable_web_user_mobile').attr("hidden", true);
+				$('#importSaltabModal').modal('show');
+			},
+			success: function(data) {
+				var now = new Date();
+				var tanggal = now.toLocaleString();
+				// var jam = now.toLocaleTimeString();
+
+				// Create a temporary link to trigger download
+				var a = document.createElement('a');
+				var url = window.URL.createObjectURL(data);
+				a.href = url;
+				a.download = 'Data Invalid.xlsx';
+				document.body.append(a);
+				a.click();
+				window.URL.revokeObjectURL(url);
+				a.remove();
+
+				$('.info-modal-edit-outlet').attr("hidden", false);
+				$('.isi-modal-edit-outlet').attr("hidden", true);
+				$('.info-modal-edit-outlet').html(success_generating_html_text);
+
+				setTimeout(() => {
+					//judul modal
+					$('.judulModalSaltab').html("Import Data Saltab");
+
+					$('#button_save_saltab').attr("hidden", false);
+
+					$('.info-modal-edit-outlet').attr("hidden", true);
+					$('.isi-modal-edit-outlet').attr("hidden", false);
+				}, 1000);
+			},
+			error: function() {
+				alert("Failed to download file.");
+
+				setTimeout(() => {
+					//judul modal
+					$('.judulModalSaltab').html("Import Data Saltab");
+
+					$('#button_save_saltab').attr("hidden", false);
+					
+					$('.info-modal-edit-outlet').attr("hidden", true);
+					$('.isi-modal-edit-outlet').attr("hidden", false);
+				}, 1000);
+			}
+			// success: function(response) {
+			// 	alert("selesai download");
+			// 	// alert(response);
+			// }
+		});
+	}
 </script>
 
 <!-- Action Tombol Download Excel -->
@@ -765,6 +855,14 @@ if (in_array('511', $role_resources_ids)) {
 			},
 			error: function() {
 				alert("Failed to download file.");
+
+				setTimeout(() => {
+					//judul modal
+					$('.judulModalSaltab').html("Import Data Saltab");
+
+					$('.info-modal-edit-outlet').attr("hidden", true);
+					$('.isi-modal-edit-outlet').attr("hidden", false);
+				}, 1000);
 			}
 			// success: function(response) {
 			// 	alert("selesai download");
@@ -1009,6 +1107,7 @@ if (in_array('511', $role_resources_ids)) {
 		var periode_salary = $('#periode_salary').val();
 		var saltab_from = $('#saltab_from').val();
 		var saltab_to = $('#saltab_to').val();
+		var agency_fee = $('#agency_fee').val();
 
 		array_data_header.nip = nip;
 		array_data_header.project = project;
@@ -1018,6 +1117,7 @@ if (in_array('511', $role_resources_ids)) {
 		array_data_header.periode_salary = periode_salary;
 		array_data_header.saltab_from = saltab_from;
 		array_data_header.saltab_to = saltab_to;
+		array_data_header.fee = agency_fee;
 
 		//debugging
 		// alert(array_data_header.project_name);
@@ -1032,12 +1132,14 @@ if (in_array('511', $role_resources_ids)) {
 		$('#pesan_periode_salary').html("");
 		$('#pesan_saltab_from').html("");
 		$('#pesan_saltab_to').html("");
+		$('#pesan_agency_fee').html("");
 
 		//-------cek apakah ada yang tidak diisi-------
 		var pesan_project = "";
 		var pesan_periode_salary = "";
 		var pesan_saltab_from = "";
 		var pesan_saltab_to = "";
+		var pesan_agency_fee = "";
 		if ((saltab_to == "") || (saltab_to == null)) {
 			pesan_saltab_to = "<small style='color:#FF0000;'>Periode Saltab to tidak boleh kosong</small>";
 			// $('#saltab_to').focus();
@@ -1050,6 +1152,10 @@ if (in_array('511', $role_resources_ids)) {
 			pesan_periode_salary = "<small style='color:#FF0000;'>Periode penggajian tidak boleh kosong</small>";
 			// $('#periode_salary').focus();
 		}
+		if ((agency_fee == "") || (agency_fee == null)) {
+			pesan_agency_fee = "<small style='color:#FF0000;'>Agency fee tidak boleh kosong</small>";
+			// $('#project').focus();
+		}
 		if ((project == "") || (project == null)) {
 			pesan_project = "<small style='color:#FF0000;'>Project tidak boleh kosong</small>";
 			// $('#project').focus();
@@ -1058,16 +1164,18 @@ if (in_array('511', $role_resources_ids)) {
 		$('#pesan_periode_salary').html(pesan_periode_salary);
 		$('#pesan_saltab_from').html(pesan_saltab_from);
 		$('#pesan_saltab_to').html(pesan_saltab_to);
+		$('#pesan_agency_fee').html(pesan_agency_fee);
 
 		//-------action-------
 		if (
 			(pesan_project != "") || (pesan_periode_salary != "") || (pesan_saltab_from != "") ||
-			(pesan_saltab_to != "")
+			(pesan_saltab_to != "") || (pesan_agency_fee != "")
 		) { //kalau ada input kosong 
 			// alert("Tidak boleh ada input kosong");
 		} else {
 			$('#project_table').html(project_name);
 			$('#sub_project_table').html(sub_project_name);
+			$('#agency_fee_table').html(agency_fee + " %");
 			$('#periode_penggajian_table').html(periode_salary);
 			$('#periode_saltab_table').html(saltab_from + " s/d " + saltab_to);
 
@@ -1125,6 +1233,7 @@ if (in_array('511', $role_resources_ids)) {
 						saltab_from: array_data_header.saltab_from,
 						saltab_to: array_data_header.saltab_to,
 						periode_salary: array_data_header.periode_salary,
+						fee: array_data_header.fee,
 					},
 					beforeSend: function() {
 						html_pesan_file = "</br><strong><span style='color:blue;'>Jumlah data terbaca: " + jumlah_data_import + " data</span></strong>";

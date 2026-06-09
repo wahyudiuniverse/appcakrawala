@@ -469,7 +469,11 @@ class Addendum extends MY_Controller
 		$kontrakEnd                 = $this->Xin_model->tgl_indo($tglakhirpkwt);
 		$kontrakStartNew            = $this->Xin_model->tgl_indo($tglmulaipkwtbaru);
 		$kontrakEndNew              = $this->Xin_model->tgl_indo($tglakhirpkwtbaru);
-		$namaSMHR                   = $pkwt[0]->sign_fullname;
+		if (($addendum['nama_sm_hrd'] == "") || ($addendum['nama_sm_hrd'] == null)) {
+			$namaSMHR                   = $pkwt[0]->sign_fullname;
+		} else {
+			$namaSMHR                   = $addendum['nama_sm_hrd'];
+		}
 		$alamatCompany              = "Gedung Graha Krista Aulia Cakrawala Lt. 2 Jl. Andara No. 20 Pangkalan Jati Baru Cinere Depok 16513";
 		$urutanAddendum             = $addendum['urutan'];
 
@@ -714,7 +718,11 @@ class Addendum extends MY_Controller
 			'nip',
 			'id_pkwt',
 			'tanggal_terbit',
-			'isi'
+			'kontrak_start_new',
+			'kontrak_end_new',
+			'periode_new',
+			'isi',
+			'nama_sm_hrd'
 		);
 
 		$jumlah_data = count($header);
@@ -877,6 +885,7 @@ class Addendum extends MY_Controller
 		$tgl_terbit = $data['tanggal_terbit'];
 		$pkwt_id = $data['id_pkwt'];
 		$isi = $data['isi'];
+		$nama_sm_hrd = $data['nama_sm_hrd'];
 
 		//assingn variable sisanya
 		$contract_data = $this->Addendum_model->getContract($pkwt_id);
@@ -885,9 +894,23 @@ class Addendum extends MY_Controller
 		$karyawan_id = $employee_data['user_id'];
 		$created_by = $session['user_id'];
 		$created_time = date('Y-m-d H:i:s');
-		$kontrak_start_new = $contract_data['from_date'];
-		$kontrak_end_new = $contract_data['to_date'];
-		$periode_new = $contract_data['waktu_kontrak'];
+		if (($data['kontrak_start_new'] == "") || ($data['kontrak_start_new'] == null)) {
+			$kontrak_start_new = $contract_data['from_date'];
+		} else {
+			$kontrak_start_new = $data['kontrak_start_new'];
+		}
+		if (($data['kontrak_end_new'] == "") || ($data['kontrak_end_new'] == null)) {
+			$kontrak_end_new = $contract_data['to_date'];
+		} else {
+			$kontrak_end_new = $data['kontrak_end_new'];
+		}
+		if (($data['periode_new'] == "") || ($data['periode_new'] == null)) {
+			$periode_new = $contract_data['waktu_kontrak'];
+		} else {
+			$periode_new = $data['periode_new'];
+		}
+		// $kontrak_end_new = $contract_data['to_date'];
+		// $periode_new = $contract_data['waktu_kontrak'];
 
 		$urutan = $this->Addendum_model->urutan_addendum($karyawan_id, $pkwt_id);
 
@@ -935,6 +958,7 @@ class Addendum extends MY_Controller
 		$data['no_addendum'] = $no_addendum;
 		$data['tgl_terbit'] = $tgl_terbit;
 		$data['isi'] = $isi;
+		$data['nama_sm_hrd'] = $nama_sm_hrd;
 		$data['esign'] = $image_name;
 		$data['created_by'] = $created_by;
 		$data['created_time'] = $created_time;

@@ -60,7 +60,6 @@ if (in_array('512', $role_resources_ids)) {
         </div>
       </div>
     </div>
-
     
     <div class="card-body border-bottom-blue ">
 
@@ -319,6 +318,7 @@ if (in_array('512', $role_resources_ids)) {
 
   //-----open modal untuk accept request-----
   function acceptRequest(id) {
+    // ver_bootstrap = $.fn.tooltip.Constructor.VERSION;
     $('#button_accept').attr("hidden", false);
     $('#button_reject').attr("hidden", true);
     $('.pesan-modal').html("Apakah anda yakin untuk membuka kunci import saltab ini?<br>");

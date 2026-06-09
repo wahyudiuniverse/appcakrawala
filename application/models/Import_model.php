@@ -819,21 +819,70 @@ GROUP BY uploadid, periode, project, project_sub;';
 	}
 
 	//get table saltab untuk download excel
-	public function get_saltab_temp_detail_excel($id, $parameter)
+	public function get_saltab_temp_detail_excel($id, $parameter, $jenis = null)
 	{
 		$data = array();
 
+		if ($jenis == "all") {
+			$kondisiDefaultQuery = "";
+		} else if ($jenis == "invalid") {
+			$kondisiDefaultQuery = "status_valid = 0";
+		} else if ($jenis == "rekening_non_aktif") {
+			$kondisiDefaultQuery = "(status_cek_aktif_rekening = 0 OR status_cek_aktif_rekening = 2)";
+		} else if ($jenis == "pemilik_rekening_beda") {
+			$kondisiDefaultQuery = "status_valid = 2";
+		} else {
+			$kondisiDefaultQuery = "";
+		}
+		$this->db->select("status_valid");
+		$this->db->select("keterangan_valid");
+		$this->db->select("status_cek_aktif_rekening");
+		$this->db->select("cek_aktif_rekening_on");
 		$this->db->select($parameter);
 		$this->db->from('xin_saltab_temp');
 		$this->db->where('uploadid', $id);
+		if ($kondisiDefaultQuery != '') {
+			$this->db->where($kondisiDefaultQuery);
+		}
 
 		$records = $this->db->get()->result_array();
 
 		$data = array();
 
 		foreach ($records as $row) {
+			if ($row['status_valid'] == "1") {
+				$status_valid = "VALID";
+			} else if ($row['status_valid'] == "2") {
+				$status_valid = "VALID";
+			} else {
+				$status_valid = "INVALID";
+			}
+
+			if ($row['status_cek_aktif_rekening'] == "0") {
+				$status_cek_rekening = "BELUM CEK REKENING";
+			} else if ($row['status_cek_aktif_rekening'] == "1") {
+				$status_cek_rekening = "REKENING AKTIF";
+			} else {
+				$status_cek_rekening = "REKENING TIDAK AKTIF";
+			}
+
+			$array_tambahan = array(
+				$status_valid,
+				strtoupper($row['keterangan_valid']),
+				$status_cek_rekening,
+				strtoupper($row['cek_aktif_rekening_on']),
+			);
+
 			$new_row = array_values($row);
-			array_push($data, $new_row);
+
+			$first = array_shift($new_row);
+			$first = array_shift($new_row);
+			$first = array_shift($new_row);
+			$first = array_shift($new_row);
+
+			$final_array = array_merge($array_tambahan, $new_row);
+
+			array_push($data, $final_array);
 		}
 
 		//$tabel_saltab = $this->Import_model->get_saltab_table();
@@ -1462,11 +1511,12 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		foreach ($records as $record) {
 			$sub_project = "";
-			if ($data_batch['sub_project_name'] == "-ALL-") {
-				$sub_project = $record->sub_project;
-			} else {
-				$sub_project = $data_batch['sub_project_name'];
-			}
+			$sub_project = $record->sub_project;
+			// if ($data_batch['sub_project_name'] == "--ALL--") {
+			// 	$sub_project = $record->sub_project;
+			// } else {
+			// 	$sub_project = $data_batch['sub_project_name'];
+			// }
 
 			$nomor_rekening = "";
 			if (strtoupper($record->status_hold) == "HOLD") {
@@ -1508,6 +1558,24 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$pemilik_rekening_database = $record->pemilik_rek;
 			}
 
+			if ($record->status_valid == "1") {
+				$status_valid_data = "DATA VALID";
+			} else if ($record->status_valid == "2") {
+				$status_valid_data = "DATA VALID";
+			} else {
+				$status_valid_data = "DATA INVALID";
+			}
+
+			if ($record->status_cek_aktif_rekening == "0") {
+				$status_cek_aktif_rekening = "BELUM DICEK";
+			} else if ($record->status_cek_aktif_rekening == "1") {
+				$status_cek_aktif_rekening = "REKENING AKTIF";
+			} else if ($record->status_cek_aktif_rekening == "2") {
+				$status_cek_aktif_rekening = "REKENING TIDAK AKTIF";
+			} else {
+				$status_cek_aktif_rekening = "BELUM DICEK";
+			}
+
 			$data[] = array(
 				trim(strtoupper($record->status_emp), " "),
 				$record->nip,
@@ -1517,6 +1585,10 @@ GROUP BY uploadid, periode, project, project_sub;';
 				trim(strtoupper($sub_project), " "),
 				trim(strtoupper($record->area), " "),
 				round($record->total_thp, 2),
+				$status_valid_data,
+				trim(strtoupper($record->keterangan_valid), " "),
+				$status_cek_aktif_rekening,
+				$record->cek_aktif_rekening_on,
 				// $nomor_rekening,
 				// trim(strtoupper($record->nama_bank), " "),
 				// trim(strtoupper($record->pemilik_rek), " "),
@@ -1557,6 +1629,8 @@ GROUP BY uploadid, periode, project, project_sub;';
 
 		if (empty($data_employee)) {
 			$verif_nik_database = "0";
+			$fullname_database = "";
+			$nik_database = "";
 			$norek_database = "";
 			$verif_norek_database = "0";
 			$id_bank_database = "0";
@@ -1602,17 +1676,21 @@ GROUP BY uploadid, periode, project, project_sub;';
 				$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
 			}
 
+			$nik_database = $data_employee['ktp_no'];
+			$fullname_database = $data_employee['first_name'];
 			$verif_nik_database = $nik_validation;
 			$norek_database = $data_employee['nomor_rek'];
 			$verif_norek_database = $norek_validation;
 			$id_bank_database = $data_employee['bank_name'];
 			$nama_bank_database = $this->Employees_model->get_nama_bank($data_employee['bank_name']);
 			$verif_nama_bank_database = $bank_validation;
-			$pemilik_rekening_database = strtoupper($data_employee['pemilik_rek']);
+			$pemilik_rekening_database = trim(strtoupper($data_employee['pemilik_rek']), " ");
 			$verif_pemilik_rekening_database = $pemilik_rekening_validation;
 		}
 
 		$response = array(
+			'nik_database' => $nik_database,
+			'fullname_database' => $fullname_database,
 			'verif_nik_database' => $verif_nik_database,
 			'norek_database' => $norek_database,
 			'verif_norek_database' => $verif_norek_database,
@@ -3802,6 +3880,7 @@ GROUP BY uploadid, periode, project, project_sub;';
 		## Kondisi Default 
 		$kondisiDefaultQuery = "(
 			uploadid = " . $id_batch . "
+			AND status_cek_aktif_rekening != 1
 		)";
 		//$kondisiDefaultQuery = "";
 

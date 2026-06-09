@@ -213,6 +213,7 @@ class Addendum_model extends CI_Model
 			'no_addendum' => $data['no_addendum'],
 			'tgl_terbit' => $data['tgl_terbit'],
 			'isi' => $data['isi'],
+			'nama_sm_hrd' => $data['nama_sm_hrd'],
 			'esign' => $data['esign'],
 			'urutan' => $data['urutan'],
 			'kontrak_start_new' => $data['kontrak_start_new'],
