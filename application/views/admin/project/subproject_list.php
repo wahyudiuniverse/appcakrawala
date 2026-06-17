@@ -20,7 +20,7 @@
       <div class="card-body">
         <?php $attributes = array('name' => 'add_subproject', 'id' => 'xin-form', 'autocomplete' => 'off');?>
         <?php $hidden = array('user_id' => $session['user_id']);?>
-        <?php echo form_open('admin/project/add_subproject', $attributes, $hidden);?>
+        <?php echo form_open('admin/subproject/add_subproject', $attributes, $hidden);?>
 
 
         <div class="form-group">
@@ -39,6 +39,14 @@
           <input type="text" class="form-control" placeholder="Nama Sub Project" name="subproject"/>
         </div>
 
+        <div class="form-group">
+          <label for="reg_tkhl">REG/TKHL</label>
+          <select class=" form-control" name="reg_tkhl" data-plugin="select_hrm" data-placeholder="--Pilih REG or TKHL--">
+            <option value=""></option>
+            <option value="1">REGULER</option>
+            <option value="2">TKHL</option>
+          </select>
+        </div>
 
         <div class="form-actions box-footer"> <?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> '.$this->lang->line('xin_save'))); ?> </div>
         <?php echo form_close(); ?> </div>
@@ -64,6 +72,7 @@
                 <th width="10px"><?php echo $this->lang->line('xin_action');?></th>
                 <th><?php echo $this->lang->line('xin_sub_project_id');?></th>
                 <th><?php echo $this->lang->line('xin_sub_project_name');?></th>
+                <th>PKWT/TKHL</th>
                 <th>Status Active</th>
                 <th>Nama Project</th>
               </tr>

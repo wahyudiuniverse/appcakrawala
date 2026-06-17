@@ -59,7 +59,7 @@ class Billing extends MY_Controller {
 			$data['am_billing'] = $this->Billing_model->get_am_billing($session['employee_id']);
 			$data['periode_billing'] = $this->Billing_model->get_periode_billing($session['employee_id']);
 
-		if(in_array('110',$role_resources_ids)) {
+		if(in_array('122',$role_resources_ids)) {
 
 			$data['subview'] = $this->load->view("admin/billing/list_billing", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load

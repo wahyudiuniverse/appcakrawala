@@ -341,6 +341,7 @@ function get_list_skk_report($postData = null)
 			$this->db->select('xin_qrcode_skk.project_name');
 			$this->db->select('xin_qrcode_skk.resign_date');
 			$this->db->select('xin_qrcode_skk.approve_hrd_date');
+			$this->db->select('xin_qrcode_skk.exit_clearance');
 
 			// $dbtraxes->select('xin_qrcode_skk.sub_project_name');
 			// $dbtraxes->select('xin_qrcode_skk.jabatan_name');
@@ -376,111 +377,15 @@ function get_list_skk_report($postData = null)
 			$data = array();
 
 			foreach ($records as $record) {
-				//verification id
-				// $actual_verification_id = "";
-				// if ((is_null($record->verification_id)) || ($record->verification_id == "") || ($record->verification_id == "0")) {
-				// 	$actual_verification_id = "e_" . $record->user_id;
-				// } else {
-				// 	$actual_verification_id = $record->verification_id;
-				// }
 
-				//cek status validation ke database
-				// $nik_validation = "0";
-				// $nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
-				// if (is_null($nik_validation_query)) {
-				// 	$nik_validation = "0";
-				// } else {
-				// 	$nik_validation = $nik_validation_query['status'];
-				// }
+				$fullname = '<strong>' . strtoupper($record->employee_name) . '</strong>';
+				$employee_id = '<h6 style="color: grey; font-size: 11px;">' . $record->nip . '</h6>';
 
-				// $validate_nik = "";
-				// if($nik_validation == "1"){
-				// 	$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
-				// } else {
-				// 	$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
-				// }
-				// $text_periode_from = "";
-				// $text_periode_to = "";
-				// $text_periode = "";
-				// if (empty($record->from_date) || ($record->from_date == "")) {
-				// 	$text_periode_from = "";
-				// } else {
-				// 	$text_periode_from = $this->Xin_model->tgl_indo($record->from_date);
-				// }
-				// if (empty($record->to_date) || ($record->to_date == "")) {
-				// 	$text_periode_to = "";
-				// } else {
-				// 	$text_periode_to = $this->Xin_model->tgl_indo($record->to_date);
-				// }
-				// if (($text_periode_from == "") && ($text_periode_to == "")) {
-				// 	$text_periode = "";
-				// } else {
-				// 	$text_periode = $text_periode_from . " s/d " . $text_periode_to;
-				// }
-
-				// $text_resign = "";
-				// if (empty($record->status_resign) || ($record->status_resign == "")) {
-				// 	$text_resign = "";
-				// } else if ($record->status_resign == "1") {
-				// 	$text_resign = " - [AKTIF]";
-				// } else if ($record->status_resign == "2") {
-				// 	$text_resign = " - [RESIGN]";
-				// } else if ($record->status_resign == "3") {
-				// 	$text_resign = " - [BLACKLIST]";
-				// } else if ($record->status_resign == "4") {
-				// 	$text_resign = " - [END CONTRACT]";
-				// } else if ($record->status_resign == "5") {
-				// 	$text_resign = " - [DEACTIVE]";
-				// } else {
-				// 	$text_resign = "";
-				// }
-
-				//cek komparasi string
-				// $teskomparasi_1 = "A";
-				// $teskomparasi_2 = "C2";
-				// $hasilkomparasi = "";
-
-				// if ($teskomparasi_2 < $teskomparasi_1) {
-				// 	$hasilkomparasi = "2 lebih kecil";
-				// } else {
-				// 	$hasilkomparasi = "2 lebih besar";
-				// }
-
-				// $text_pin = "";
-				// $id_jabatan_user = $this->get_id_jabatan($session_id);
-				// $level_record = $this->get_level($record->designation_id);
-				// $level_user = $this->get_level($id_jabatan_user);
-
-				// if (empty($level_user) || $level_user == "") {
-				// 	$level_user = "Z9";
-				// } else {
-				// 	if (strlen($level_user) == 1) {
-				// 		$level_user = $level_user . "0";
-				// 	}
-				// }
-
-				// if (empty($level_record) || $level_record == "") {
-				// 	$level_record = "Z9";
-				// } else {
-				// 	if (strlen($level_record) == 1) {
-				// 		$level_record = $level_record . "0";
-				// 	}
-				// }
-				// if ($level_record <= $level_user) {
-				// 	$text_pin = "**********";
-				// } else {
-				// 	$text_pin = $record->private_code;
-				// }
-
-				// $addendum_id = $this->secure->encrypt_url($record->id);
-				// $addendum_id_encrypt = strtr($addendum_id, array('+' => '.', '=' => '-', '/' => '~'));
-
-				// $view = '<button id="tesbutton" type="button" onclick="viewEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >AJUKAN PAKLARING</button>';
-				// $viewDocs = '<button id="tesbutton2" type="button" onclick="viewDocumentEmployee(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >DOCUMENT</button>';
-				// $editReq = '<br><button type="button" onclick="downloadBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-success" >DOWNLOAD</button>';
-				// $delete = '<br><button type="button" onclick="deleteBatchSaltabRelease(' . $record->employee_id . ')" class="btn btn-xs btn-outline-danger" >DELETE</button>';
 
 				$open_sk = '<button onclick="lihat_sk(' . $record->secid . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">'.$record->nomor_dokumen.'</button>';
+
+
+				$open_exitc = '<button onclick="lihat_exitc(' . $record->secid . ',\'' . $record->exit_clearance . '\')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">ExitClearance</button>';
 
 
 				// $teslinkview = 'type="button" onclick="lihatAddendum(' . $addendum_id_encrypt . ')" class="btn btn-xs btn-outline-twitter" >VIEW</button>';
@@ -489,9 +394,8 @@ function get_list_skk_report($postData = null)
 				$data[] = array(
 					"aksi" => $record->secid,
 					"nomor_dokumen" => $open_sk,
-					"nip" => strtoupper($record->nip),
-					"ktp" => strtoupper($record->ktp),
-					"employee_name" => strtoupper($record->employee_name),
+					"nip" => $fullname . ' ' . $employee_id,
+					"ktp" => strtoupper($record->ktp). ' ' . $open_exitc,
 					"project_name" => strtoupper($record->project_name),
 					"resign_date" => strtoupper($record->resign_date),
 					"approve_hrd_date" => strtoupper($record->approve_hrd_date),

@@ -81,12 +81,6 @@ class Xin_model extends CI_Model
 	}
 
 
-	public function get_bank_code()
-	{
-		$query = $this->db->query("SELECT secid, concat(bank_name, ' (', bank_code, ')' ) AS bank_name from mt_bank");
-		return $query->result();
-	}
-
 	public function clean_post($post_name)
 	{
 		$name = trim($post_name);
@@ -4462,6 +4456,82 @@ ORDER BY `expiry_date`");
 		return $query->result();
 	}
 
+
+	//mengambil data Provinsi
+	public function getAllEthnicity()
+	{
+		//$otherdb = $this->load->database('default', TRUE);
+
+		$query = $this->db->get('xin_ethnicity_type')->result_array();
+
+		return $query;
+	}
+
+	//mengambil data Provinsi
+	public function getAllptkp()
+	{
+		$query = $this->db->get('mt_marital')->result_array();
+		return $query;
+	}
+
+	//mengambil data Provinsi
+	public function getAllrelation()
+	{
+		$query = $this->db->get('mt_family_relation')->result_array();
+		return $query;
+	}
+
+
+	//mengambil data Provinsi
+	public function getAllbank()
+	{
+		$query = $this->db->get('mt_bank')->result_array();
+		return $query;
+	}
+
+
+	//mengambil data project
+	public function getAllProject($empID)
+	{	 
+		$this->db->where("
+        project_id IN (
+            SELECT project_id
+            FROM xin_projects_akses
+            WHERE nip = ".$empID.")", NULL, FALSE);
+		$this->db->order_by('priority', 'ASC');
+		$query = $this->db->get('xin_projects')->result_array();
+		return $query;
+	}
+
+	//mengambil data project
+	public function getAllsubProject()
+	{	 
+		$this->db->order_by('sub_project_name', 'ASC');
+		$query = $this->db->get('xin_projects_sub')->result_array();
+		return $query;
+	}
+
+	//mengambil data project
+	public function getAllPosisi()
+	{	 
+		$this->db->order_by('designation_name', 'ASC');
+		$query = $this->db->get('xin_designations')->result_array();
+		return $query;
+	}
+
+	//mengambil data project
+	public function getAllLocation()
+	{	 
+		$this->db->order_by('secid', 'ASC');
+		$query = $this->db->get('xin_employee_location')->result_array();
+		return $query;
+	}
+
+	public function get_bank_code()
+	{
+		$query = $this->db->query("SELECT secid, concat(bank_name, ' (', bank_code, ')' ) AS bank_name from mt_bank");
+		return $query->result();
+	}
 
 	// get all education level
 	public function get_all_education()

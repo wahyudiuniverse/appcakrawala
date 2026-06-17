@@ -78,6 +78,7 @@
                <option value="14">-14 Hari</option>
                <option value="21">-21 Hari</option>
                <option value="30">-30 Hari</option>
+               <option value="60">-60 Hari</option>
             </select>
           </div>
 

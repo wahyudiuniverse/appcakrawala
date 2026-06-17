@@ -4023,6 +4023,8 @@ class Employees_model extends CI_Model
 			$status_migrasi = "";
 			$editReq = '<a href="' . site_url() . 'admin/employee_request_cancelled/request_edit/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>';
 
+			$view_profile = '<button onclick="show_profile(' . $record->secid . ')" class="btn btn-sm btn-success btn-block">Lihat Profile</button>';
+
 			$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@' . $record->secid . '">TOLAK</button>';
 
 			$noteHR = '<button type="button" class="btn btn-xs btn-outline-warning" data-toggle="modal" data-target=".edit-modal-data" data-company_id="!' . $record->secid . '">note</button>';
@@ -4147,27 +4149,47 @@ class Employees_model extends CI_Model
 				$status_verifikasi = " <img src='" . $url_icon_verifikasi . "' width='20'>";
 			}
 
+
+			$var_subproject = '<strong>' . $this->get_nama_sub_project($record->sub_project) . '</strong>';
+			$var_project = '<h6 style="color: grey; font-size: 11px;">' . $this->get_nama_project($record->project) . '</h6>';
+
+			$var_jabatan = '<strong>' . strtoupper($this->get_nama_jabatan($record->posisi)) . '</strong>';
+			$var_penempatan = '<h6 style="color: grey; font-size: 11px;">' . $record->penempatan . '</h6>';
+
+			$var_gapok = '<strong>' . $this->Xin_model->rupiah($record->gaji_pokok) . '</strong>';
+
+			$m_kategory = $this->get_nama_kategori($record->location_id);
+			if($m_kategory==null || $m_kategory==""){
+				$var_kategori = '<strong>[UNCATEGORIES]</strong>';
+			} else {
+				$var_kategori = '<strong>' . strtoupper($this->get_nama_kategori($record->location_id)) . '</strong>';
+			}
+			
+			$var_nik = '<h6 style="color: grey; font-size: 11px;">' . $record->nik_ktp . '</h6>';
+			$var_fullname = '<strong>' . $record->fullname . '</strong>';
+
 			$data[] = array(
-				"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $editReq,
+				"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $view_profile,
+				"nik_ktp" => $var_kategori . ' ' .$var_nik . "<i>" . $record->catatan_hr . "</i><br>" . $noteHR,
+				"fullname" => $var_fullname . $status_verifikasi . $siap_approve . '<br>' . $alredy_active,
+				"project" => $var_subproject . ' ' . $var_project,
+				"posisi" => $var_jabatan . ' ' . $var_penempatan,
+				"gaji_pokok" => $var_gapok,
+				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
+				"request_empon" => $record->request_empon
+				
 				//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
-				"golongan_karyawan" => $status_golongan,
+				// "golongan_karyawan" => $status_golongan,
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
 				//"fullname" => $record->fullname . $siap_approve  . "<br>" . $tes_query,
 				// "fullname" => $record->fullname . $siap_approve,
-				"fullname" => $record->fullname . $status_verifikasi . $siap_approve . '<br>' . $alredy_active,
-				"nik_ktp" => $record->nik_ktp . "<br>" . $record->catatan_hr . "<br>" . $noteHR,
-				"penempatan" => $record->penempatan,
-				"project" => $this->get_nama_project($record->project),
+				// "penempatan" => $record->penempatan,
 				//"project" => $record->project,
-				"sub_project" => $this->get_nama_sub_project($record->sub_project),
+				// "sub_project" => $this->get_nama_sub_project($record->sub_project),
 				//"sub_project" => $record->sub_project,
-				"posisi" => strtoupper($this->get_nama_jabatan($record->posisi)),
 				// "posisi" => $record->posisi,
 				//"jabatan" => $record->posisi,
-				"gaji_pokok" => $record->gaji_pokok,
-				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
-				"kategori" => $this->get_nama_kategori($record->location_id),
-				"request_empon" => $record->request_empon
+				// "kategori" => $this->get_nama_kategori($record->location_id),
 			);
 
 			// if ($approve == '1') {
@@ -4723,6 +4745,146 @@ class Employees_model extends CI_Model
 
 		return $response;
 	}
+
+
+	//ambil data transfer - retur
+	public function get_data_employee_request2($postData)
+	{
+		$this->db->select('
+        xin_employee_request.*,
+        xin_employee_emergency.hubungan,
+        xin_employee_emergency.nama,
+        xin_employee_emergency.no_kontak,
+        xin_employee_emergency.alamat');
+
+    	$this->db->from('xin_employee_request');
+	    $this->db->join(
+	        'xin_employee_emergency',
+	        'xin_employee_emergency.id_verification = xin_employee_request.secid',
+	        'left'
+	    );
+
+    	$this->db->where($postData);
+
+    	$query = $this->db->get()->row_array();
+
+    	return $query;
+
+		// $dbtraxes->select('*');
+		// $this->db->select('xin_employee_request.*');
+		// $this->db->from('xin_employee_request');
+		// $this->db->where($postData);
+
+		// $this->db->limit(1);
+		// // $this->db->where($searchQuery);
+
+		// $query = $this->db->get()->row_array();
+
+		// return $query;
+	}
+
+	//ambil data transfer - retur
+	public function get_data_upah_request($postData)
+	{
+		$this->db->select('xin_employee_request.*');
+    	$this->db->from('xin_employee_request');
+    	$this->db->where($postData);
+    	$query = $this->db->get()->row_array();
+
+    	return $query;
+	}
+
+	//ambil data transfer - retur
+	public function get_dokumen_employee_request($postData)
+	{
+		$this->db->select('
+        xin_employee_request.*');
+    	$this->db->from('xin_employee_request');
+    	$this->db->where($postData);
+    	$query = $this->db->get()->row_array();
+
+    	return $query;
+	}
+
+	//mengambil data all outlet dan user mobile by project id
+	public function get_entitas_by_project($datarequest)
+	{
+		if ($datarequest['project_id'] == "") {
+			$response = array(
+				'status'			=> "0",
+				'pesan' 			=> "Berhasil Fetch Data",
+				'data_pt'			=> array(),
+				'data_entitas'		=> array(),
+			);
+		} else {
+			//connect database traxes
+			// ambil data outlet
+			$this->db->select('xin_projects.company_id');
+			$this->db->select('xin_companies.name');
+			$this->db->from('xin_projects');
+			$this->db->join(
+			    'xin_companies',
+			    'xin_companies.company_id = xin_projects.company_id',
+			    'left'
+			);
+			$this->db->where('xin_projects.project_id', $datarequest['project_id']);
+			$data_pt = $this->db->get()->result_array();
+
+			//ambil data entitas
+			$this->db->select('secid');
+			$this->db->select('sub_project_name');
+			$this->db->select('doc_id');
+			$this->db->where('id_project', $datarequest['project_id']);
+			$this->db->where('sub_active', "1");
+			$this->db->from('xin_projects_sub');
+			$data_entitas = $this->db->get()->result_array();
+
+			$response = array(
+				'status'			=> "1",
+				'pesan' 			=> "Berhasil Fetch Data",
+				'data_pt'			=> $data_pt,
+				'data_entitas'		=> $data_entitas,
+			);
+		}
+
+		return $response;
+	}
+
+
+	//mengambil data all outlet dan user mobile by project id
+	public function get_posisi_by_entitas($datarequest)
+	{
+		if ($datarequest['sub_project'] == "") {
+			$response = array(
+				'status'			=> "0",
+				'pesan' 			=> "Berhasil Fetch Data",
+				'data_posisi'		=> array(),
+			);
+		} else {
+			//connect database traxes
+			// ambil data outlet
+			$this->db->select('xin_projects_posisi.posisi');
+			$this->db->select('xin_designations.designation_name');
+			$this->db->select('xin_designations.level');
+			$this->db->from('xin_projects_posisi');
+			$this->db->join(
+			    'xin_designations',
+			    'xin_designations.designation_id = xin_projects_posisi.posisi',
+			    'left'
+			);
+			$this->db->where('xin_projects_posisi.sub_project', $datarequest['sub_project']);
+			$data_posisi = $this->db->get()->result_array();
+
+			$response = array(
+				'status'			=> "1",
+				'pesan' 			=> "Berhasil Fetch Data",
+				'data_posisi'		=> $data_posisi,
+			);
+		}
+
+		return $response;
+	}
+
 
 	/*
 	* persiapan data export excel
@@ -6778,19 +6940,19 @@ class Employees_model extends CI_Model
 	{
 
 		$sql = 'SELECT date_of_joining, emp.employee_id, emp.first_name, emp.designation_id, pos.designation_name, emp.project_id,pro.priority, pro.title, emp.company_id,emp.ktp_no, emp.status_resign
-	FROM xin_employees emp
-	LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-	LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
-	WHERE ktp_no = ? ORDER BY user_id DESC
-	LIMIT 1';
-		$binds = array($nik);
-		$query = $this->db->query($sql, $binds);
+		FROM xin_employees emp
+		LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
+		LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
+		WHERE ktp_no = ? ORDER BY user_id DESC
+		LIMIT 1';
+			$binds = array($nik);
+			$query = $this->db->query($sql, $binds);
 
-		if ($query->num_rows() > 0) {
-			return $query->result();
-		} else {
-			return null;
-		}
+			if ($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return null;
+			}
 	}
 
 	// get single employee by NIP
@@ -7155,9 +7317,9 @@ class Employees_model extends CI_Model
 	{
 
 		$sql = "SELECT pos.posisi, jab.designation_name FROM xin_projects_posisi pos
-LEFT JOIN xin_designations jab ON jab.designation_id = pos.posisi
-WHERE pos.project_id = ?
-ORDER BY jab.designation_id ASC";
+		LEFT JOIN xin_designations jab ON jab.designation_id = pos.posisi
+		WHERE pos.project_id = ?
+		ORDER BY jab.designation_id ASC";
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 
@@ -7499,6 +7661,72 @@ ORDER BY jab.designation_id ASC";
 
 		$this->db->where('employee_id', $id);
 		if ($this->db->update('xin_employees', $data)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	//update data profile employee request
+	public function update_profile_employee_request($postData, $secid)
+	{
+		//connect database traxes
+		// $database_traxes = $this->load->database('database_traxes', TRUE);
+
+		$this->db->where('secid', $secid);
+		$this->db->update('xin_employee_request', $postData);
+
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+
+	//update data emergency eployee request
+	public function update_emergency_employee_request($postData, $secid)
+	{
+
+		$this->db->where('id_verification', $secid);
+		$this->db->update('xin_employee_emergency', $postData);
+
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	//update data profile employee request
+	public function update_project_employee_request($postData, $secid)
+	{
+		//connect database traxes
+		// $database_traxes = $this->load->database('database_traxes', TRUE);
+
+		$this->db->where('secid', $secid);
+		$this->db->update('xin_employee_request', $postData);
+
+		if ($this->db->affected_rows() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+	//update data profile employee request
+	public function update_upah_employee_request($postData, $secid)
+	{
+		//connect database traxes
+		// $database_traxes = $this->load->database('database_traxes', TRUE);
+
+		$this->db->where('secid', $secid);
+		$this->db->update('xin_employee_request', $postData);
+
+		if ($this->db->affected_rows() > 0) {
 			return true;
 		} else {
 			return false;
@@ -8340,9 +8568,9 @@ ORDER BY jab.designation_id ASC";
 
 
 		$sql = 'SELECT * 
-FROM xin_document_type 
-WHERE document_type_id 
-NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents WHERE employee_id = ?)';
+		FROM xin_document_type 
+		WHERE document_type_id 
+		NOT IN (SELECT distinct(document_type_id) AS iddoc FROM xin_employee_documents WHERE employee_id = ?)';
 		$binds = array($id);
 		$query = $this->db->query($sql, $binds);
 

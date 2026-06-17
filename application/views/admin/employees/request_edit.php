@@ -547,8 +547,8 @@ $sub_project_id = $sub_project; ?>
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label for="project_modal"><?php echo $this->lang->line('left_projects'); ?><i class="hrpremium-asterisk">*</i></label>
-										<select class="form-control" id="project_modal" name="project_modal" data-plugin="xin_select" data-placeholder="Nama Project">
+										<label for="aj_project"><?php echo $this->lang->line('left_projects'); ?><i class="hrpremium-asterisk">*</i></label>
+										<select class="form-control" id="aj_project" name="project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects'); ?>">
 											<option value=""></option>
 											<?php foreach ($project_list as $projects) { ?>
 												<option value="<?php echo $projects->project_id ?>" <?php if ($project_id == $projects->project_id) : ?> selected <?php endif; ?>><?php echo $projects->title ?></option>
@@ -559,14 +559,17 @@ $sub_project_id = $sub_project; ?>
 								</div>
 
 								<!--SUB PROJECT-->
-								<div class="col-md-6">
+								<div class="col-md-6" id="project_sub_project">
 
-									<label for="sub_project">Entitas / Sub Project</label>
+									<label for="sub_project"><?php echo $this->lang->line('left_sub_projects'); ?></label>
 
-									<select data-plugin="xin_select" name="subproject_modal" id="subproject_modal" class="form-control dropdown-user-mobile-search">
-																					<option value="">Pilih Entitas</option>
-																				</select>
 
+									<select class="form-control" id="project_sub_project" name="sub_project_id" data-plugin="xin_select" data-placeholder="<?php echo $this->lang->line('xin_projects'); ?>">
+										<option value=""></option>
+										<?php foreach ($sub_project_list as $sbproject) { ?>
+											<option value="<?php echo $sbproject->secid ?>" <?php if ($sub_project_id == $sbproject->secid) : ?> selected <?php endif; ?>><?php echo $sbproject->sub_project_name ?></option>
+										<?php } ?>
+									</select>
 
 								</div>
 							</div>
@@ -659,7 +662,6 @@ $sub_project_id = $sub_project; ?>
 										}
 										?>
 										<input class="form-control" hidden readonly placeholder="Jenis Dokumen" name="e_status" id="e_status" type="text" value="<?php echo $e_status; ?>">
-
 										<input class="form-control" readonly placeholder="Jenis Dokumen" name="jenis_dokumen" id="jenis_dokumen" type="text" value="<?php echo $jenis_dokumen; ?>">
 									</div>
 								</div>
@@ -1085,9 +1087,8 @@ $sub_project_id = $sub_project; ?>
 			</div>
 
 			<div class="form-actions box-footer">
-				<?php echo form_button(array('name' => 'hrpremium_form','style'   => 'display:none;', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
+				<?php echo form_button(array('name' => 'hrpremium_form', 'type' => 'submit', 'class' => $this->Xin_model->form_button_class(), 'content' => '<i class="fas fa-check-square"></i> ' . $this->lang->line('xin_save'))); ?>
 				<?php echo form_close(); ?>
-				
 				<?php if (in_array('1012', $role_resources_ids)) { ?>
 					<button onclick="verifikasi(<?php echo $secid; ?>)" id="button_verifikasi" class="btn btn-success ladda-button" data-style="expand-right">Verifikasi Data</button>
 				<?php } ?>
@@ -1395,68 +1396,34 @@ $sub_project_id = $sub_project; ?>
 		csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
 
 	$(document).ready(function() {
-
-		// Project modal Change -> cari jabatan dari data request man power JO
-		$('#project_modal').change(function() {
-			var project_id = $(this).val();
-
-			// AJAX request Kota
-			$.ajax({
-				url: '<?= base_url() ?>admin/employee_request_cancelled/get_subproject_by_project',
-				method: 'post',
-				data: {
-					[csrfName]: csrfHash,
-					project_id: project_id,
-				},
-				// dataType: 'json',
-				success: function(response) {
-					var res = jQuery.parseJSON(response);
-
-					if (res['status'] == "1") {
-						// alert(res['data_subproject']);
-						// -----Data outlet-----
-						$('#subproject_modal').find('option').not(':first').remove();
-						// Add options
-						$.each(res['data_subproject'], function(index, data) {
-							$('#subproject_modal').append('<option value="' + data['secid'] + '" style="text-wrap: wrap;">' + data['sub_project_name'] + '</option>');
-						});
-
-					} else {
-
-						alert(error);
-						// $('#outlet_modal').find('option').not(':first').remove();
-						// $('#sku_modal').find('option').not(':first').remove();
-					}
-				}
-			});
-		});
-
 		// Project Change - Jenis Dokumen (on Change)
-		$('#subproject_modal').change(function() {
-			var subproject_id = $(this).val();
+		$('#aj_project').change(function() {
+			var project = $(this).val();
+			//alert("masuk javascript");
 
-			// AJAX request Kota
+			// AJAX request
 			$.ajax({
-				url: '<?= base_url() ?>admin/employee_request_cancelled/get_docid_by_subproject',
+				url: '<?= base_url() ?>admin/employee_request_cancelled/getDocId/',
 				method: 'post',
 				data: {
 					[csrfName]: csrfHash,
-					subproject_id: subproject_id,
+					project: project
 				},
-				// dataType: 'json',
+				dataType: 'json',
 				success: function(response) {
-					var res = jQuery.parseJSON(response);
-						if(res['doc_id']==1){
-							$('#e_status').val(res['doc_id']);
-							$('#jenis_dokumen').val('PKWT');
-						} else {
-							$('#e_status').val(res['doc_id']);
-							$('#jenis_dokumen').val('TKHL');
+					// Add options
+					$.each(response, function(index, data) {
+						document.getElementById("e_status").value = data['doc_id'];
+						if (data['doc_id'] == 1) {
+							document.getElementById("jenis_dokumen").value = "PKWT";
+						} else if (data['doc_id'] == 2) {
+							document.getElementById("jenis_dokumen").value = "TKHL";
 						}
-						// alert(res['status']);
-					
+						//$('#jenis_dokumen').append('<input class="form-control" readonly placeholder="Nama Ibu" name="e_status" id="e_status" type="text" value="' + data['title'] + '">');
+					}).show();
 				}
 			});
+			//alert("selesai ajax");
 		});
 
 		// Bank Change - isi value ke variable hidden bank_name (untuk save)

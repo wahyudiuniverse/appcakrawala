@@ -121,7 +121,7 @@
 
            <?php if (in_array('14', $role_resources_ids)) { ?>
                 <button
-                  type="button" id="btn_tolak"
+                  type="button" id="btn_tolak" name="btn_tolak"
                   onclick="rebuild_qrcode()"
                   class="btn btn-warning btn-label float-right ms-auto">
                   <i
@@ -237,9 +237,8 @@
 
                 <th>AKSI</th>
                 <th>NOMOR DOKUMEN</th>
-                <th>NIP</th>
+                <th>FULLNAME/NIP</th>
                 <th>KTP</th>
-                <th>NAMA LANGKAP</th>
                 <th>PROJECT/CLIENT</th>
                 <th>TANGGAL RESIGN</th>
                 <th>TANGGAL TERBIT SKK</th>
@@ -365,10 +364,6 @@
             data: 'ktp',
             "orderable": false,
             //searchable: true
-          },
-          {
-            data: 'employee_name',
-            "orderable": false
           },
           {
             data: 'project_name',
@@ -555,6 +550,30 @@
 
   }
 </script>
+
+
+<!-- Tombol Lihat SK -->
+<script type="text/javascript">
+  function lihat_exitc(secid,urlexit) {
+    //testing
+    // alert(secid);
+    // alert(nip);
+
+    var html_text2 = '<a href="' + urlexit + '" target="_blank"><button class="btn btn-lg btn-outline-primary ladda-button my-1 mx-1 col-12" data-style="expand-right">DOWNLOAD EXIT CLEARANCE</button></a></br><object height="500px" data="' + urlexit + '" type="image/*,application/pdf" width="100%"><p>Klik tombol diatas untuk download file.</p></object>';
+    // var html_text = '<embed height="500px" class="col-md-12" type="application/pdf" src="' + link_eslip + '"></embed>';
+    // var html_text = "<iframe src='" + link_eslip + "' style='zoom:1' frameborder='0' height='500' width='100%'></iframe>"
+
+    $('#field_secid').val(secid);
+    $('#judul-modal-edit').html("Lihat Exit Clearance");
+    $('#button_download_dokumen_conditional').html("");
+    $('.isi-modal').html(html_text2);
+    $('#button_save_pin').attr("hidden", true);
+    $('#btn_tolak').attr("hidden", true);
+    $('#editModal').appendTo("body").modal('show');
+
+  }
+</script>
+
 
 <style type="text/css">
   

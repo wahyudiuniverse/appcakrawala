@@ -98,15 +98,21 @@ $session = $this->session->userdata('username');
         <div class="form-group">
           <label for="level_name">Level</label>
           <select class="select2" data-plugin="select_hrm" data-placeholder="Level" name="level">
-            <option value="A">A</option>
+            <option value="A1">A1</option>
+            <option value="A2">A2</option>
+            <option value="A3">A3</option>
             <option value="B1">B1</option>
             <option value="B2">B2</option>
+            <option value="B3">B3</option>
             <option value="C1">C1</option>
             <option value="C2">C2</option>
+            <option value="C3">C3</option>
             <option value="D1">D1</option>
             <option value="D2">D2</option>
-            <option value="E1" selected>E1</option>
+            <option value="D3">D3</option>
+            <option value="E1">E1</option>
             <option value="E2">E2</option>
+            <option value="E3" selected>E3</option>
           </select>
         </div>
 
@@ -123,6 +129,25 @@ $session = $this->session->userdata('username');
         <button type="submit" class="btn btn-primary"> <i class="fa fa-check-square-o"></i> <?php echo $this->lang->line('xin_save');?> </button>
       </div>
       <?php echo form_close(); ?> </div></div>
+
+
+      
+A1  GM <br>
+A2  SM<br>
+A3  SM HRD NEW<br>
+B1  NOM<br>
+B2  MANAGER<br>
+B3  ASSISTEN MANAGER<br>
+C1  NAE<br>
+C2  PIC<br>
+C3  ARCO<br>
+D1  ADMIN SYSTEM<br>
+D2  ADMIN RATECARD<br>
+D3  ADMIN<br>
+E1  TL<br>
+E2  COORDINATOR<br>
+E3  FL/OPERATOR
+
   </div>
   <?php $colmdval = 'col-md-8';?>
   <?php } else {?>

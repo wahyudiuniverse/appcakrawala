@@ -59,7 +59,7 @@ class Employee_paklaring_report extends MY_Controller {
 				$data['path_url'] = 'emp_view';
 				$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-			if(in_array('110',$role_resources_ids)) {
+			if(in_array('490',$role_resources_ids)) {
 
 				$data['subview'] = $this->load->view("admin/paklaring/employee_paklaring_report", $data, TRUE);
 				$this->load->view('admin/layout/layout_main', $data); //page load

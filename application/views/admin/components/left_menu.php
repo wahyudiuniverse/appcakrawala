@@ -745,7 +745,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 
 
         <?php
-        if (in_array('121', $role_resources_ids)) {
+        if (in_array('378', $role_resources_ids)) {
         ?>
           <li class="sidenav-item <?php if (!empty($arr_mod['res_active'])) echo $arr_mod['res_active']; ?>">
             <a class="sidenav-link" href="<?php echo site_url('admin/employee_history_join'); ?>"> Riwayat Karyawan Baru</a>

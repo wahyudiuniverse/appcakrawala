@@ -76,10 +76,18 @@ class Employee_request_hrd extends MY_Controller
 		$data['approve_karyawan'] = is_null($approve_karyawan) ? "" : $approve_karyawan;
 		$data['session'] = $session;
 
-		$data['all_projects_sub'] = $this->Project_model->get_all_projects();
-		$data['all_departments'] = $this->Department_model->all_departments();
-		$data['all_designations'] = $this->Designation_model->all_designations();
-		$data['list_bank'] = $this->Xin_model->get_bank_code();
+		$data['list_agama'] 		= $this->Xin_model->getAllEthnicity();
+		$data['list_ptkp'] 			= $this->Xin_model->getAllptkp();
+		$data['list_relation'] 		= $this->Xin_model->getAllrelation();
+		// $data['list_bank'] 			= $this->Xin_model->getAllbank();
+		$data['list_bank'] 			= $this->Xin_model->get_bank_code();
+		$data['list_project'] 		= $this->Xin_model->getAllProject($session['employee_id']);
+		$data['list_subproject'] 	= $this->Xin_model->getAllsubProject();
+		$data['list_posisi'] 		= $this->Xin_model->getAllPosisi();
+		$data['list_location'] 		= $this->Xin_model->getAllLocation();
+		// $data['all_projects_sub'] = $this->Project_model->get_all_projects();
+		// $data['all_departments'] = $this->Department_model->all_departments();
+		// $data['all_designations'] = $this->Designation_model->all_designations();
 		$count_emp_request_hrd = $this->Xin_model->count_emp_request_hrd($session['employee_id']);
 
 		$data['breadcrumbs'] = 'KARYAWAN BARU ( ' . $count_emp_request_hrd . ' )';
@@ -105,6 +113,283 @@ class Employee_request_hrd extends MY_Controller
 		$data = $this->Employees_model->get_request_hrd2($postData);
 
 		echo json_encode($data);
+	}
+
+
+	//mengambil Json data interviewer
+	public function get_data_employee_request()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'xin_employee_request.secid'        => $postData['secid']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_employee_request2($datarequest);
+
+		if (empty($data)) {
+			$data_empty = array();
+
+			$response = array(
+				'status'	=> "0",
+				'pesan' 	=> "Belum ada data",
+				'data'		=> $data_empty,
+			);
+		} else {
+			$response = array(
+				'status'	=> "1",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+
+	//mengambil Json data interviewer
+	public function get_data_upah_request()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'xin_employee_request.secid'        => $postData['secid']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_data_upah_request($datarequest);
+
+		if (empty($data)) {
+			$data_empty = array();
+
+			$response = array(
+				'status'	=> "0",
+				'pesan' 	=> "Belum ada data",
+				'data'		=> $data_empty,
+			);
+		} else {
+			$response = array(
+				'status'	=> "1",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+
+	//mengambil Json data interviewer
+	public function get_dokumen_employee_request()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'xin_employee_request.secid'        => $postData['secid']
+		];
+
+		// get data diri
+		$data = $this->Employees_model->get_dokumen_employee_request($datarequest);
+
+		//verification id
+		// $actual_verification_id = $postData['secid'];
+
+		// //cek status verifikasi ke database
+		// $nik_validation = "0";
+		// $nik_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nik');
+		// if (is_null($nik_validation_query)) {
+		// 	$nik_validation = "0";
+		// } else {
+		// 	$nik_validation = $nik_validation_query['status'];
+		// }
+		// $kk_validation = "0";
+		// $kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'kk');
+		// if (is_null($kk_validation_query)) {
+		// 	$kk_validation = "0";
+		// } else {
+		// 	$kk_validation = $kk_validation_query['status'];
+		// }
+		// $nama_validation = "0";
+		// $nama_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'nama');
+		// if (is_null($nama_validation_query)) {
+		// 	$nama_validation = "0";
+		// } else {
+		// 	$nama_validation = $nama_validation_query['status'];
+		// }
+		// $bank_validation = "0";
+		// $bank_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'bank');
+		// if (is_null($bank_validation_query)) {
+		// 	$bank_validation = "0";
+		// } else {
+		// 	$bank_validation = $bank_validation_query['status'];
+		// }
+		// $norek_validation = "0";
+		// $norek_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'norek');
+		// if (is_null($norek_validation_query)) {
+		// 	$norek_validation = "0";
+		// } else {
+		// 	$norek_validation = $norek_validation_query['status'];
+		// }
+		// $pemilik_rekening_validation = "0";
+		// $pemilik_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'pemilik_rekening');
+		// if (is_null($pemilik_rekening_validation_query)) {
+		// 	$pemilik_rekening_validation = "0";
+		// } else {
+		// 	$pemilik_rekening_validation = $pemilik_rekening_validation_query['status'];
+		// }
+		// $dokumen_ktp_validation = "0";
+		// $dokumen_ktp_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'dokumen_ktp');
+		// if (is_null($dokumen_ktp_validation_query)) {
+		// 	$dokumen_ktp_validation = "0";
+		// } else {
+		// 	$dokumen_ktp_validation = $dokumen_ktp_validation_query['status'];
+		// }
+		// $dokumen_kk_validation = "0";
+		// $dokumen_kk_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'dokumen_kk');
+		// if (is_null($dokumen_kk_validation_query)) {
+		// 	$dokumen_kk_validation = "0";
+		// } else {
+		// 	$dokumen_kk_validation = $dokumen_kk_validation_query['status'];
+		// }
+		// $buku_rekening_validation = "0";
+		// $buku_rekening_validation_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'buku_rekening');
+		// if (is_null($buku_rekening_validation_query)) {
+		// 	$buku_rekening_validation = "0";
+		// } else {
+		// 	$buku_rekening_validation = $buku_rekening_validation_query['status'];
+		// }
+		// $ijazah_validation = "0";
+		// $ijazah_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'ijazah');
+		// if (is_null($ijazah_query)) {
+		// 	$ijazah_validation = "0";
+		// } else {
+		// 	$ijazah_validation = $ijazah_query['status'];
+		// }
+		// $cv_validation = "0";
+		// $cv_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'cv');
+		// if (is_null($cv_query)) {
+		// 	$cv_validation = "0";
+		// } else {
+		// 	$cv_validation = $cv_query['status'];
+		// }
+		// $skck_validation = "0";
+		// $skck_query = $this->Employees_model->get_valiadation_status($actual_verification_id, 'skck');
+		// if (is_null($skck_query)) {
+		// 	$skck_validation = "0";
+		// } else {
+		// 	$skck_validation = $skck_query['status'];
+		// }
+
+		//assign checklist hijau kalau sudah diverifikasi
+		// $validate_nik = "";
+		// if ($nik_validation == "1") {
+		// 	$validate_nik = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_nik = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $button_open_ktp = '<button onclick="open_ktp(' . $record->employee_id . ')" class="btn btn-sm btn-outline-primary ladda-button ml-0" data-style="expand-right">Open KTP</button>';
+		// $validate_kk = "";
+		// if ($kk_validation == "1") {
+		// 	$validate_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_nama = "";
+		// if ($nama_validation == "1") {
+		// 	$validate_nama = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_nama = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_bank = "";
+		// if ($bank_validation == "1") {
+		// 	$validate_bank = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_bank = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_norek = "";
+		// if ($norek_validation == "1") {
+		// 	$validate_norek = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_norek = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_pemilik_rekening = "";
+		// if ($pemilik_rekening_validation == "1") {
+		// 	$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_pemilik_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_dokumen_ktp = "";
+		// if ($dokumen_ktp_validation == "1") {
+		// 	$validate_dokumen_ktp = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_dokumen_ktp = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_dokumen_kk = "";
+		// if ($dokumen_kk_validation == "1") {
+		// 	$validate_dokumen_kk = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_dokumen_kk = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_buku_rekening = "";
+		// if ($buku_rekening_validation == "1") {
+		// 	$validate_buku_rekening = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_buku_rekening = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_ijazah = "";
+		// if ($ijazah_validation == "1") {
+		// 	$validate_ijazah = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_ijazah = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_cv = "";
+		// if ($cv_validation == "1") {
+		// 	$validate_cv = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_cv = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+		// $validate_skck = "";
+		// if ($skck_validation == "1") {
+		// 	$validate_skck = "<img src=" . base_url('/assets/icon/verified.png') . " width='20'>";
+		// } else {
+		// 	$validate_skck = "<img src=" . base_url('/assets/icon/not-verified.png') . " width='20'>";
+		// }
+
+
+		if (empty($data)) {
+			$data_empty = array();
+
+			$response = array(
+				'status'	=> "0",
+				'pesan' 	=> "Belum ada data",
+				'data'		=> $data_empty,
+				'nik_validation'			=> $nik_validation,
+				'validate_nik'				=> $validate_nik
+			);
+		} else {
+			$response = array(
+				'status'	=> "1",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data,
+				'nik_validation'			=> $nik_validation,
+				'validate_nik'				=> $validate_nik
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
 	}
 
 	public function printExcel($project_id, $kategori, $golongan,  $approve, $idsession, $filter)
@@ -684,6 +969,48 @@ class Employee_request_hrd extends MY_Controller
 			exit;
 		}
 	}
+
+
+	//mengambil Json all outlet dan user mobile by project id
+	public function get_entitas_project()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'project_id'        	=> $postData['project_id'],
+		];
+
+		// get data all jabatan by project dari request man power JO
+		// $data = $this->Callplan_model->get_outlet_user_mobile_by_project($datarequest);
+		$data = $this->Employees_model->get_entitas_by_project($datarequest);
+
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//mengambil Json all outlet dan user mobile by project id
+	public function get_posisi_subproject()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'sub_project'        	=> $postData['sub_project_id'],
+		];
+
+		// get data all jabatan by project dari request man power JO
+		// $data = $this->Callplan_model->get_outlet_user_mobile_by_project($datarequest);
+		$data = $this->Employees_model->get_posisi_by_entitas($datarequest);
+
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
 
 	public function read()
 	{
@@ -1675,6 +2002,199 @@ class Employee_request_hrd extends MY_Controller
 
 			redirect(base_url() . 'admin/employee_request_hrd/');
 		}
+	}
+
+	//update data outlet
+	public function update_data_profile()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'nama_ibu'   		=> strtoupper($postData['nama_ibu']),
+			'tempat_lahir'    	=> strtoupper($postData['tempat_lahir']),
+			'tanggal_lahir'   	=> $postData['tanggal_lahir'],
+			'gender'    		=> $postData['gender'],
+			'agama'    			=> $postData['agama'],
+			'status_kawin'    	=> $postData['status_kawin'],
+			'npwp'    			=> $postData['no_npwp'],
+			'contact_no'    	=> $postData['contact_no'],
+			'email'    			=> strtoupper($postData['email']),
+
+		];
+
+		// update data profile
+		$data = $this->Employees_model->update_profile_employee_request($datarequest, $postData['secid']);
+
+		//Cek variabel post
+		$datarequestemergency = [
+			'hubungan'   		=> $postData['emergency_hubungan_modal'],
+			'nama'    			=> strtoupper($postData['emergency_name_modal']),
+			'no_kontak'   		=> $postData['emergency_kontak_modal'],
+
+		];
+
+		$data2 = $this->Employees_model->update_emergency_employee_request($datarequestemergency, $postData['secid']);
+
+		if ($data == false) {
+			if ($data2 == false) {
+				$response = array(
+					'status'	=> "201",
+					'pesan' 	=> "Tidak ada perubahan data",
+				);
+			} else {
+				$response = array(
+					'status'	=> "200",
+					'pesan' 	=> "Berhasil Update Data",
+				);
+			}
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Update Data",
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+
+	//update data outlet
+	public function update_data_project()
+	{
+		$postData = $this->input->post();
+
+		$result_cutoff = explode("/", $postData['cut_off']);
+		//Cek variabel post
+		$datarequest = [
+			'project'   		=> $postData['project'],
+			'sub_project'    	=> $postData['sub_project'],
+			'company_id'   		=> $postData['company_id'],
+			'e_status'    		=> $postData['e_status'],
+			'posisi'    		=> $postData['posisi'],
+			'location_id'		=> $postData['location_id'],
+			'penempatan'    	=> strtoupper($postData['penempatan']),
+			'region_name'    	=> strtoupper($postData['region_name']),
+			'region'    		=> strtoupper($postData['region']),
+			'dc_name'    		=> strtoupper($postData['dc_name']),
+			'doj'    			=> $postData['doj'],
+			'contract_start'    => $postData['contract_start'],
+			'contract_end'    	=> $postData['contract_end'],
+			'contract_periode'  => $postData['contract_periode'],
+			'cut_start'    		=> $result_cutoff[0],
+			'cut_off'    		=> $result_cutoff[1],
+			'hari_kerja'    	=> $postData['hari_kerja'],
+			'date_payment'    	=> $postData['date_payment'],
+
+		];
+
+
+		// update data profile
+		$data = $this->Employees_model->update_project_employee_request($datarequest, $postData['secid']);
+
+		if ($data == false) {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Update Data",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Update Data",
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+
+	//update data outlet
+	public function update_data_upah()
+	{
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+
+          	'secid' 				=> $postData['secid'],
+            'gaji_pokok'			=> $postData['gaji_pokok'],
+            'allow_jabatan'			=> $postData['allow_jabatan'],
+            'dm_allow_jabatan'		=> $postData['dm_allow_jabatan'],
+            'allow_skill'			=> $postData['allow_skill'],
+            'dm_allow_skill'		=> $postData['dm_allow_skill'],
+            'allow_area'			=> $postData['allow_area'],
+            'dm_allow_area'			=> $postData['dm_allow_area'],
+            'allow_masakerja'		=> $postData['allow_masakerja'],
+            'dm_allow_masakerja'	=> $postData['dm_allow_masakerja'],
+            'allow_konsumsi'		=> $postData['allow_konsumsi'],
+            'dm_allow_konsumsi'		=> $postData['dm_allow_konsumsi'],
+            'allow_transport'		=> $postData['allow_transport'],
+            'dm_allow_transport'	=> $postData['dm_allow_transport'],
+            'allow_rent'			=> $postData['allow_rent'],
+            'dm_allow_rent'			=> $postData['dm_allow_rent'],
+            'allow_comunication'	=> $postData['allow_comunication'],
+            'dm_allow_comunication'	=> $postData['dm_allow_comunication'],
+            'allow_parking'			=> $postData['allow_parking'],
+            'dm_allow_park'			=> $postData['dm_allow_park'],
+            'allow_residence_cost'	=> $postData['allow_residence_cost'],
+            'dm_allow_residance'	=> $postData['dm_allow_residance'],
+            'allow_akomodsasi'		=> $postData['allow_akomodsasi'],
+            'dm_allow_akomodasi'	=> $postData['dm_allow_akomodasi'],
+            'allow_device'			=> $postData['allow_device'],
+            'dm_allow_device'		=> $postData['dm_allow_device'],
+            'allow_kasir'			=> $postData['allow_kasir'],
+            'dm_allow_kasir'		=> $postData['dm_allow_kasir'],
+            'allow_trans_meal'		=> $postData['allow_trans_meal'],
+            'dm_allow_transmeal'	=> $postData['dm_allow_transmeal'],
+            'allow_trans_rent'		=> $postData['allow_trans_rent'],
+            'dm_allow_transrent'	=> $postData['dm_allow_transrent'],
+            'allow_medicine'		=> $postData['allow_medicine'],
+            'dm_allow_medicine'		=> $postData['dm_allow_medicine'],
+            'allow_grooming'		=> $postData['allow_grooming'],
+            'dm_allow_grooming'		=> $postData['dm_allow_grooming'],
+            'allow_kehadiran'		=> $postData['allow_kehadiran'],
+            'dm_allow_kehadiran'	=> $postData['dm_allow_kehadiran'],
+            'allow_operational'		=> $postData['allow_operational'],
+            'dm_allow_operational'	=> $postData['dm_allow_operational'],
+            'allow_training'		=> $postData['allow_training'],
+            'dm_allow_training'		=> $postData['dm_allow_training'],
+            'allow_kinerja'			=> $postData['allow_kinerja'],
+            'dm_allow_kinerja'		=> $postData['dm_allow_kinerja'],
+            'allow_disiplin'		=> $postData['allow_disiplin'],
+            'dm_allow_disiplin'		=> $postData['dm_allow_disiplin'],
+            'allow_pph'				=> $postData['allow_pph'],
+            'dm_allow_pph'			=> $postData['dm_allow_pph'],
+            'allow_others'			=> $postData['allow_others'],
+            'dm_allow_others'		=> $postData['dm_allow_others'],
+
+		];
+
+
+		// update data profile
+		$data = $this->Employees_model->update_upah_employee_request($datarequest, $postData['secid']);
+
+		if ($data == false) {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Update Data",
+			);
+		} else {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Update Data",
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
 	}
 
 	public function delete()

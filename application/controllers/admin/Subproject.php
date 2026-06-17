@@ -112,6 +112,14 @@ class Subproject extends MY_Controller
 				} else {
 					$nama_project = '--';
 				}
+
+				if($r->doc_id==1){
+    		$doc_id = 'PKWT';
+    	} else if ($r->doc_id==2){
+    		$doc_id = 'TKHL';
+    	} else {
+    		$doc_id = '-';
+    	}
 			
 			if(in_array('134',$role_resources_ids)) { //edit
 				$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="'.$this->lang->line('xin_edit').'"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-subproject_id="'. $r->secid . '"><span class="fas fa-pencil-alt"></span></button></span>';
@@ -131,6 +139,7 @@ class Subproject extends MY_Controller
 				$combhr,
 				$sid,
 				$subproject_name,
+				$doc_id,
 				$status_active,
 				$nama_project,
 		   );
@@ -161,6 +170,7 @@ class Subproject extends MY_Controller
 		$data = array(
 		'sub_project_name' => $this->input->post('subproject'),
 		'id_project' => $this->input->post('project'),
+		'doc_id' => $this->input->post('reg_tkhl'),
 
 		);
 

@@ -56,7 +56,7 @@ class Employee_history_join extends MY_Controller {
 			$data['path_url'] = 'emp_view';
 			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-		if(in_array('110',$role_resources_ids)) {
+		if(in_array('378',$role_resources_ids)) {
 
 			$data['subview'] = $this->load->view("admin/hrd/employee_history_join", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
