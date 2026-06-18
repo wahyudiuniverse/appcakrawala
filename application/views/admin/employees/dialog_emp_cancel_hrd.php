@@ -84,31 +84,13 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="no_transaksi"><?php echo $this->lang->line('left_projects');?></label>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-8">
         <div>
-          <label for="plant"><?php echo ': '.$project[0]->title;?></label>
+          <label for="plant"><?php echo ': '.$project[0]->title .' / '.$sub_project[0]->sub_project_name;?></label>
         </div>
       </div>
     </div>
   </div>
-
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- SUB PROJECT -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi"><?php echo $this->lang->line('left_sub_projects');?></label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$sub_project[0]->sub_project_name;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
 
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
@@ -171,7 +153,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="alamat_ktp"><?php echo $this->lang->line('xin_address');?></label>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-8">
         <div>
           <label for="plant"><?php echo ': '.$alamat_ktp;?></label>
         </div>
@@ -196,8 +178,8 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+ <!-- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"> -->
+  <div hidden class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- JOINDATE -->
       <div class="col-sm-4">
@@ -213,8 +195,8 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+ <!-- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"> -->
+  <div hidden class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- ALAMAT KTP -->
       <div class="col-sm-4">
@@ -230,8 +212,8 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+ <!-- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"> -->
+  <div hidden class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- PENEMPATAN -->
       <div class="col-sm-4">
@@ -247,8 +229,8 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
+ <!-- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;"> -->
+  <div hidden class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
     <div class="row">
       <!-- REQUESTED -->
       <div class="col-sm-4">
@@ -264,345 +246,6 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
     </div>
   </div>
 
-<!-- TUNJANGAN -->
-<?php if($allowance_grade!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tujangan Jabatan</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_grade). ' /'.$dm_allow_grade;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_masakerja!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Masa Kerja</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_masakerja). ' ('.$dm_allow_masakerja.')';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
- 
-<?php if($allowance_meal!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Makan</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_meal). ' /'.$dm_allow_meal;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_transport!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Transport</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_transport). ' /'.$dm_allow_transport;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_rent!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Sewa</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_rent). ' /'.$dm_allow_rent;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_komunikasi!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Komunikasi</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_komunikasi). ' /'.$dm_allow_komunikasi;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_park!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Parkir</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_park). ' /'.$dm_allow_park;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_residance!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Tempat Tinggal</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_residance). ' /'.$dm_allow_residance;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_laptop!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Laptop</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_laptop). ' /'.$dm_allow_laptop;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_kasir!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Kasir</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_kasir). ' /'.$dm_allow_kasir;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_transmeal!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Tranport-Makan</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_transmeal). ' /'.$dm_allow_transmeal;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-<?php if($allowance_medicine!="0") {?>
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Tunjangan Kesehatan</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo ': '.$this->Xin_model->rupiah($allowance_medicine). ' /'.$dm_allow_medicine;?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-<?php } ?>
-
-
-
-<!-- FOTO KTP -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">KTP</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/ktp/'.$ktp.'" target="_blank"> '.$ktp.'</a>';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- FOTO KK -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">KK</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/kk/'.$kk.'" target="_blank"> '.$kk.'</a>';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- FOTO SKCK -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">SKCK</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/skck/'.$skck.'" target="_blank"> '.$skck.'</a>';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- FOTO IJAZAH -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">IJAZAH</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/ijazah/'.$ijazah.'" target="_blank"> '.$ijazah.'</a>';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- CV -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">CV</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="'.$cv.'" target="_blank"> '.$cv.'</a>';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-<!-- PAKLARING -->
- <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
-  <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
-    <div class="row">
-      <!-- APPROVED -->
-      <div class="col-sm-4">
-        <div>
-          <label for="no_transaksi">Paklaring</label>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div>
-          <label for="plant"><?php echo '<a href="'.base_url().'uploads/document/paklaring/'.$paklaring.'" target="_blank"> '.$paklaring.'</a>';?></label>
-        </div>
-      </div>
-    </div>
-  </div>
   
  <hr style="height:1px;border-width:0;color:gray;background-color:#e3e3e3; margin: auto;">
   <div class="modal-body" style="padding-top: 6px; padding-bottom: 6px;">
@@ -613,7 +256,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
           <label for="no_transaksi"><?php echo $this->lang->line('xin_request_employee_by');?></label>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-8">
         <div>
           <label for="plant"><?php echo ': '.$requets_name. ' ('.$request_empon.')';?></label>
         </div>
@@ -633,7 +276,7 @@ if(isset($_GET['jd']) && isset($_GET['company_id']) && $_GET['data']=='company')
       </div>
       <div class="col-sm-4">
         <div>
-          <textarea name="ket_revisi" rows="2" cols="50" maxlength="250"></textarea>
+          <textarea name="ket_revisi" rows="2" cols="50" maxlength="250" placeholder="Isi alasan ditolak..."></textarea>
         </div>
       </div>
     </div>

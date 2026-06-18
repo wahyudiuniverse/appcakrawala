@@ -1197,7 +1197,9 @@
       <div class="col-md mb-3">
         <!-- button submit -->
         <label class="form-label">&nbsp;</label>
-        <button type="submit" class="btn btn-primary  btn-block">FILTER</button>
+        <button onclick="filter_karyawan_baru()" name="filter_karyawan_baru" id="filter_karyawan_baru" class="btn btn-primary btn-block col-12">FILTER</button>
+
+        <!-- <button type="submit" class="btn btn-primary  btn-block">FILTER</button> -->
       </div>
 
     </div>
@@ -1208,7 +1210,7 @@
 <div class="row m-b-1">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> Request Karyawan Baru</span><button id="button_download" class="btn btn-primary ladda-button" data-style="expand-right">Download Excel</button> </div>
+      <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong><?php echo $this->lang->line('xin_list_all'); ?></strong> Request Karyawan Baru</span><button onclick="printExcel()" type="button" id="button_download" class="btn btn-primary ladda-button" data-style="expand-right">Download Excel</button> </div>
       <div class=" card-body">
         <div class="box-datatable table-responsive" id="btn-place">
           <table class="display dataTable table table-striped table-bordered" id="xin_table2" style="width:100%">
@@ -1432,6 +1434,99 @@
 
     </script>
 
+
+
+<!-- Tombol Filter -->
+<script type="text/javascript">
+  function filter_karyawan_baru() {
+    //ambil variable search
+      
+    var searchVal = $('#table').find('input').val();
+
+    table.destroy();
+
+        var project_id = document.getElementById("aj_project").value;
+        var kategori = document.getElementById("kategori").value;
+        var golongan = document.getElementById("golongan").value;
+        var approve = document.getElementById("approve").value;
+        var idsession = "<?php print($session['employee_id']); ?>";
+
+    // alert(searchVal);
+
+    // if ((range_tanggal == "")) {
+    //   $('#button_download_data').attr("hidden", true);
+
+    // } else {
+    //   $('#button_download_data').attr("hidden", false);
+    // }
+
+    // $('#button_download_data').attr("hidden", false);
+
+        table = $('#xin_table2').DataTable({
+          'processing': true,
+          'serverSide': true,
+          'stateSave': true,
+          'bFilter': true,
+          'serverMethod': 'post',
+          'dom': 'pPlBfrtip',
+          //'columnDefs': [{
+          //  targets: 11,
+          //  type: 'date-eu'
+          //}],
+          'order': [
+            [7, 'desc']
+          ],
+          'ajax': {
+            'url': '<?= base_url() ?>admin/employee_request_hrd/request_list_hrd2',
+            data: {
+              [csrfName]: csrfHash,
+              project_id: project_id,
+              kategori: kategori,
+              golongan: golongan,
+              approve: approve,
+              idsession: idsession
+            },
+          },
+          'columns': [{
+              data: 'aksi',
+              "orderable": false
+            },
+            {
+              data: 'nik_ktp',
+              //"orderable": false
+            },
+            {
+              data: 'fullname',
+              //"orderable": false,
+            },
+            {
+              data: 'project',
+              //"orderable": false
+            },
+            {
+              data: 'posisi',
+              //"orderable": false
+            },
+            {
+              data: 'gaji_pokok',
+              // "orderable": false
+            },
+            {
+              data: 'periode',
+              // "orderable": false
+            },
+            {
+              data: 'request_empon',
+              //type: 'date-eu'
+              // "orderable": false
+            },
+          ]
+        });
+        //end
+        // table.search(searchVal).draw();
+  };
+</script>
+
 <!-- filepond js -->
 <script src="<?= base_url() ?>assets/libs/filepond/filepond.min.js"></script>
 <script src="<?= base_url() ?>assets/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js"></script>
@@ -1560,6 +1655,7 @@
   //----------END FILEPOND EDIT DOKUMEN KARYAWAN BARU----------------------------
 
 </script>
+
 
 <!-- SHOW MODAL PROFILE -->
 <script>
@@ -4436,5 +4532,26 @@
     function close_edit_employee() {
         // alert("show modal screening");
         $('#editProfileModal').modal('hide');
+    }
+</script>
+
+<script type="text/javascript">
+    function printExcel() {
+        var project_id = document.getElementById("aj_project").value;
+        var kategori = document.getElementById("kategori").value;
+        var golongan = document.getElementById("golongan").value;
+        var approve = document.getElementById("approve").value;
+        var idsession = "<?php print($session['employee_id']); ?>";
+        // var filter = $('#table').find('input').val();
+        var filter = $('.dataTables_filter input').val() //ambil filter search dari datatables
+
+        //alert($('.dataTables_filter input').val());
+        if (filter == "") {
+          filter = "-no_input-";
+        }
+        
+        alert('<?php echo base_url(); ?>admin/employee_request_hrd/printExcel/' + project_id + '/' + kategori + '/' + golongan + '/' + approve + '/' + idsession + '/' + filter + '/');
+
+        window.open('<?php echo base_url(); ?>admin/employee_request_hrd/printExcel/' + project_id + '/' + kategori + '/' + golongan + '/' + approve + '/' + idsession + '/' + filter + '/', '_blank');
     }
 </script>

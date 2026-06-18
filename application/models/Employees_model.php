@@ -4023,7 +4023,7 @@ class Employees_model extends CI_Model
 			$status_migrasi = "";
 			$editReq = '<a href="' . site_url() . 'admin/employee_request_cancelled/request_edit/' . $record->secid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">EDIT</button></a>';
 
-			$view_profile = '<button onclick="show_profile(' . $record->secid . ')" class="btn btn-sm btn-success btn-block">Lihat Profile</button>';
+			$view_profile = '<button onclick="show_profile(' . $record->secid . ')" class="btn btn-xs btn-outline-success">EDIT DATA</button>';
 
 			$cancel = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="@' . $record->secid . '">TOLAK</button>';
 
@@ -4169,7 +4169,7 @@ class Employees_model extends CI_Model
 			$var_fullname = '<strong>' . $record->fullname . '</strong>';
 
 			$data[] = array(
-				"aksi" => $status_migrasi . ' <br>' . $cancel . ' ' . $view_profile,
+				"aksi" => $status_migrasi . ' <br>' . $view_profile . ' <br> ' . $cancel,
 				"nik_ktp" => $var_kategori . ' ' .$var_nik . "<i>" . $record->catatan_hr . "</i><br>" . $noteHR,
 				"fullname" => $var_fullname . $status_verifikasi . $siap_approve . '<br>' . $alredy_active,
 				"project" => $var_subproject . ' ' . $var_project,
