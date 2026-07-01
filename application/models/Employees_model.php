@@ -4875,10 +4875,17 @@ class Employees_model extends CI_Model
 			$this->db->where('xin_projects_posisi.sub_project', $datarequest['sub_project']);
 			$data_posisi = $this->db->get()->result_array();
 
+			// ambil data doc_id
+			$this->db->select('xin_projects_sub.doc_id');
+			$this->db->from('xin_projects_sub');
+			$this->db->where('xin_projects_sub.secid', $datarequest['sub_project']);
+			$data_doc_id = $this->db->get()->result_array();
+
 			$response = array(
 				'status'			=> "1",
 				'pesan' 			=> "Berhasil Fetch Data",
 				'data_posisi'		=> $data_posisi,
+				'data_doc_id'		=> $data_doc_id,
 			);
 		}
 

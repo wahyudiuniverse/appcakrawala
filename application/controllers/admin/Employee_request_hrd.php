@@ -1227,6 +1227,22 @@ class Employee_request_hrd extends MY_Controller
 		// $employee_id = '2'.$employee_request[0]->location_id.$employee_request[0]->department.$count_nip;
 		//NIP
 		$employee_id = '2' . $employee_request[0]->location_id . $employee_request[0]->department . sprintf("%05d", $count_nip[0]->newcount);
+
+		$lanjut = true;
+
+		// while($lanjut){
+		// 	$lastNumber = 1000; // nomor terakhir dari database
+		// 	$newNumber = $lastNumber + 1;
+		// 	$last_nip = str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+		// 	$employee_id = $company_id . $employee_request[0]->location_id . $last_nip;
+
+		// 	$cek_nip = $this->Xin_model->cek_existing_nip($employee_id);
+
+		// 	if($cek_nip == false){
+		// 		$lanjut = false;
+		// 	}
+		// }
+
 		//PIN
 		$private_code = rand(100000, 999999);
 		//Pass
@@ -1240,9 +1256,12 @@ class Employee_request_hrd extends MY_Controller
 		} else if ($company_id == '3') {
 			$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
 			$spb_hr = 'E-SPB-JKT/KAC-HR/';
+		} else if ($company_id == '4') {
+			$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+			$spb_hr = 'E-SPB-JKT/KAC-HR/';
 		} else {
-			$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
-			$spb_hr = 'E-SPB-JKT/MATA-HR/';
+			$pkwt_hr = 'E-PKWT-JKT/DNA-HR/';
+			$spb_hr = 'E-SPB-JKT/DNA-HR/';
 		}
 
 		$count_pkwt = $this->Xin_model->count_pkwt();
@@ -1426,7 +1445,7 @@ class Employee_request_hrd extends MY_Controller
 				'createdby' => $session['user_id']
 			);
 
-			$xresult = $this->Pkwt_model->add_pkwt_record($data);
+			// $xresult = $this->Pkwt_model->add_pkwt_record($data);
 
 			$data_up = array(
 				// 'nip'							=> $employee_id,
@@ -1435,7 +1454,7 @@ class Employee_request_hrd extends MY_Controller
 				'approved_hrdon' => date("Y-m-d h:i:s")
 			);
 
-			$result = $this->Employees_model->update_request_employee($data_up, $id);
+			// $result = $this->Employees_model->update_request_employee($data_up, $id);
 		}
 
 		// $data_up = array(
@@ -1449,7 +1468,7 @@ class Employee_request_hrd extends MY_Controller
 		}
 
 
-		if ($result == TRUE) {
+		if ($iresult == TRUE) {
 			$Return['result'] = $this->lang->line('xin_success_update_company');
 		} else {
 			$Return['error'] = $Return['error'] = $this->lang->line('xin_error_msg');

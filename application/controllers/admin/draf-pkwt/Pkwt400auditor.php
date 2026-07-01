@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt487 extends MY_Controller 
+class Pkwt400auditor extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -74,13 +74,14 @@ class Pkwt487 extends MY_Controller
 		 // create new PDF document
    	$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		$uniqueid = $this->uri->segment(4);
+		$uniqueid = $this->uri->segment(5);
 		// $uniqueid = $this->uri->segment(5);
 
 		$pkwt = $this->Pkwt_model->read_pkwt_info_byuniq($uniqueid);
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
@@ -259,8 +260,9 @@ class Pkwt487 extends MY_Controller
 
 				}
 
+
 				$tbl_2 = '
-				<br>
+				<br><br>
 					<div style="text-align: center; text-justify: inter-word;">
 						<b><u>PERJANJIAN KEMITRAAN<br>'.$nomorsurat.'</u></b>
 					</div>
@@ -388,38 +390,14 @@ class Pkwt487 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
-							</tr>';
-
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan sebesar '.$basicpay.'.</td>
-							</tr>
-
-							<br>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Insentif target Rp. 25.000 / hari (syarat wajib melampirkan bukti struk penjualan).</td>
-							</tr>
-
-							<br>
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Insentif kerajinan Rp. 25.000 / hari ( syarat wajib masuk selama periode event tanpa back-up/izin dan jika kehadiran kurang dari 100% incentive akan hangus ).</td>
+								<td colspan="20">Mitra akan mendapatkan upah sebesar <b> '.$basicpay.',- </b> berdasarkan perhitungan visit atau kunjungan yang di informasikan oleh Team Leader/PIC setiap bulannya</td>
 							</tr>
 
 							<br>
 
 							<tr>
 								<td>5.</td>
-								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan (JKK & JKM) dan ditanggung oleh perusahaan</td>
+								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan.</td>
 							</tr>
 
 							<br>
@@ -427,19 +405,15 @@ class Pkwt487 extends MY_Controller
 								<td>6.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
-
+							
 							<br>
 
 							<tr>
 								<td>7.</td>
-								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
+								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
-
-							<br><br>
-							<br><br>
-							<br>
-							<br>
-							<br>
+							
+							<br><br><br><br><br>
 							
 							<tr>
 								<td>8.</td>
@@ -455,7 +429,7 @@ class Pkwt487 extends MY_Controller
 							<tr>
 								<td></td>
 								<td colspan="1">b.</td>
-								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga..</td>
+								<td colspan="20">Menyalahgunakan dan membocorkan informasi, data dan dokumen rahasia milik Pihak Pertama maupun Perusahaan Klien untuk kepentingan pribadi atau pihak ketiga.</td>
 							</tr>
 							<tr>
 								<td></td>
@@ -466,38 +440,10 @@ class Pkwt487 extends MY_Controller
 							<br>
 
 							<tr>
-								<td>9.</td>
-								<td colspan="20">Apabila saya mitra yang bertugas ingin mengakhiri kerja sama, maka wajib menyampaikan sekurang – kurangnya 14 (empat belas) hari kalender sebelum tanggal efektif pengunduran diri.</td>
-							</tr>
-
-							<br>
-
-							<tr>
-								<td>10.</td>
-								<td colspan="20">Mitra bersedia mengikuti evaluasi kinerja secara berkala setiap 1 (satu) minggu. Apabila pada minggu berikutnya kinerja masih underperform, maka Mitra bersedia untuk dilakukan Pemutusan Hubungan Kerja (PHK.</td>
-							</tr>
-
-							<br>
-
-							<tr>
-								<td>11.</td>
-								<td colspan="20">Apabila saya mitra yang bertugas mengundurkan diri secara mendadak dan kurang dari 14 HK, maka fee pada minggu sebelumnya tidak akan dibayarkan.</td>
-							</tr>
-
-							<br>
-
-							<tr>
-								<td>12.</td>
-								<td colspan="20">Mitra wajib melakukan absen check in dan check out menggunakan aplikasi Traxes.</td>
-							</tr>
-
-						<br>
-							<tr>
 								<td colspan="20">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
 								<td colspan="0"></td>
 								<td colspan="0"></td>
 							</tr>
-
 
 				</table>
 

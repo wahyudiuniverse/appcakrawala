@@ -270,7 +270,7 @@
                                     <div class="row">
 
                                       <input id='vendor_id_modal' name='vendor_id_modal' type='text' value='' hidden>
-                                      <input id='doc_id_modal' name='vendor_id_modal' type='text' value='' hidden>
+                                      <input id='doc_id_modal' name='doc_id_modal' type='text' value='' hidden>
 
                                       <div class="col-md-6 mt-2">
                                         <strong>Vendor/PT.</strong>
@@ -1337,8 +1337,6 @@
         });
         //end
 
-
-
         // Project modal Change -> cari jabatan dari data request man power JO
         $('#project_name_modal').change(function() {
           var project_id = $(this).val();
@@ -1402,8 +1400,7 @@
 
               if (res['status'] == "1") {
 
-                  // $('#vendor_id_modal').val(res['data_pt'][0]['company_id']);
-                  // $('#vendor_name_modal').val(res['data_pt'][0]['name']);
+                  $('#doc_id_modal').val(res['data_doc_id'][0]['doc_id']);
 
                 // -----Data Entitas-----
                 $('#jabatan_name_modal').find('option').not(':first').remove();
@@ -4101,6 +4098,13 @@
             // $('#area').attr("hidden", true);
             // filter_outlet_product();
             // tabel_outlet.ajax.reload(null, false);
+
+            setTimeout(() => {
+              //judul modal
+              $('.info-modal-edit-outlet').attr("hidden", true);
+              $('.isi-modal-edit-outlet').attr("hidden", false);
+            }, 1000);
+
           } else {
             html_text = res['pesan'];
             $('.info-modal-edit-outlet').html(html_text);
@@ -4185,51 +4189,51 @@
     var pesan_tanggal_penggajian_modal = "";
 
     if ((project_name_modal == "") || (project_name_modal == null)) {
-      pesan_project_name_modal = "<small style='color:#FF0000;'>Nama Ibu Kandung tidak boleh kosong</small>";
+      pesan_project_name_modal = "<small style='color:#FF0000;'>Project/Client tidak boleh kosong</small>";
       $('#nama_ibu_modal').focus();
     }
     if ((subproject_name_modal == "") || (subproject_name_modal == null)) {
-      pesan_subproject_name_modal = "<small style='color:#FF0000;'>Tempat Lahir tidak boleh kosong</small>";
+      pesan_subproject_name_modal = "<small style='color:#FF0000;'>Entitas/Sub Project tidak boleh kosong</small>";
       $('#tempat_lahir_modal').focus();
     }
     if ((jabatan_name_modal == "") || (jabatan_name_modal == null)) {
-      pesan_jabatan_name_modal = "<small style='color:#FF0000;'>Tanggal Lahir tidak boleh kosong</small>";
+      pesan_jabatan_name_modal = "<small style='color:#FF0000;'>Jabatan tidak boleh kosong</small>";
       $('#tanggal_lahir_modal').focus();
     }
     if ((kategory_name_modal == "") || (kategory_name_modal == null)) {
-      pesan_kategory_name_modal = "<small style='color:#FF0000;'>Jenis Kelamin tidak boleh kosong</small>";
+      pesan_kategory_name_modal = "<small style='color:#FF0000;'>Kategori Karyawan tidak boleh kosong</small>";
       $('#pesan_gender_modal').focus();
     }
     if ((penempatan_modal == "") || (penempatan_modal == null)) {
-      pesan_penempatan_modal = "<small style='color:#FF0000;'>Agama/Kepercayaan tidak boleh kosong</small>";
+      pesan_penempatan_modal = "<small style='color:#FF0000;'>Area Penempatan tidak boleh kosong</small>";
       $('#pesan_agama_modal').focus();
     }
     if ((tanggal_join_modal == "") || (tanggal_join_modal == null)) {
-      pesan_tanggal_join_modal = "<small style='color:#FF0000;'>Status Pernikaahan tidak boleh kosong</small>";
+      pesan_tanggal_join_modal = "<small style='color:#FF0000;'>Tanggal Bergabung tidak boleh kosong</small>";
       $('#pesan_status_kawin_modal').focus();
     }
     if ((tanggal_mulai_modal == "") || (tanggal_mulai_modal == null)) {
-      pesan_tanggal_mulai_modal = "<small style='color:#FF0000;'>Nomor Kontak/HP tidak boleh kosong</small>";
+      pesan_tanggal_mulai_modal = "<small style='color:#FF0000;'>Tanggal Mulai Kontrak tidak boleh kosong</small>";
       $('#pesan_no_hp_modal').focus();
     }
     if ((tanggal_akhir_modal == "") || (tanggal_akhir_modal == null)) {
-      pesan_tanggal_akhir_modal = "<small style='color:#FF0000;'>Alamat e-mail tidak boleh kosong</small>";
+      pesan_tanggal_akhir_modal = "<small style='color:#FF0000;'>Tanggal Akhir Kontrak tidak boleh kosong</small>";
       $('#pesan_alamat_email_modal').focus();
     }
     if ((waktu_kontrak_modal == "") || (waktu_kontrak_modal == null)) {
-      pesan_waktu_kontrak_modal = "<small style='color:#FF0000;'>Nama dalam Kontak Darurat tidak boleh kosong</small>";
+      pesan_waktu_kontrak_modal = "<small style='color:#FF0000;'>Waktu Kontrak tidak boleh kosong</small>";
       $('#pesan_emergency_name_modal').focus();
     }
     if ((cut_off_modal == "") || (cut_off_modal == null)) {
-      pesan_cut_off_modal = "<small style='color:#FF0000;'>Hubungan dengan Kontak Darurat tidak boleh kosong</small>";
+      pesan_cut_off_modal = "<small style='color:#FF0000;'>CutOff tidak boleh kosong</small>";
       $('#pesan_emergency_hubungan_modal').focus();
     }
     if ((hari_kerja_model == "") || (hari_kerja_model == null)) {
-      pesan_hari_kerja_model = "<small style='color:#FF0000;'>Nomor Kontak darurat tidak boleh kosong</small>";
+      pesan_hari_kerja_model = "<small style='color:#FF0000;'>Hari Kerja tidak boleh kosong</small>";
       $('#pesan_emergency_kontak_modal').focus();
     }
     if ((tanggal_penggajian_modal == "") || (tanggal_penggajian_modal == null)) {
-      pesan_tanggal_penggajian_modal = "<small style='color:#FF0000;'>Nomor Kontak darurat tidak boleh kosong</small>";
+      pesan_tanggal_penggajian_modal = "<small style='color:#FF0000;'>Tanggal Penggajian tidak boleh kosong</small>";
       $('#pesan_emergency_kontak_modal').focus();
     }
 
@@ -4298,9 +4302,13 @@
             $('.info-modal-edit-outlet').attr("hidden", false);
             $('.isi-modal-edit-outlet').attr("hidden", true);
             $('.info-modal-edit-outlet').html(success_html_text);
-            // $('#area').attr("hidden", true);
-            // filter_outlet_product();
-            // tabel_outlet.ajax.reload(null, false);
+
+            setTimeout(() => {
+              //judul modal
+              $('.info-modal-edit-outlet').attr("hidden", true);
+              $('.isi-modal-edit-outlet').attr("hidden", false);
+            }, 1000);
+
           } else {
             html_text = res['pesan'];
             $('.info-modal-edit-outlet').html(html_text);
@@ -4484,9 +4492,13 @@
             $('.info-modal-edit-outlet').attr("hidden", false);
             $('.isi-modal-edit-outlet').attr("hidden", true);
             $('.info-modal-edit-outlet').html(success_html_text);
-            // $('#area').attr("hidden", true);
-            // filter_outlet_product();
-            // tabel_outlet.ajax.reload(null, false);
+
+            setTimeout(() => {
+              //judul modal
+              $('.info-modal-edit-outlet').attr("hidden", true);
+              $('.isi-modal-edit-outlet').attr("hidden", false);
+            }, 1000);
+            
           } else {
             html_text = res['pesan'];
             $('.info-modal-edit-outlet').html(html_text);

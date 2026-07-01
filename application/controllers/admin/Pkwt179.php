@@ -1413,17 +1413,17 @@ class Pkwt179 extends MY_Controller
 										<tr>
 											<td style="text-align:center;" colspan="4">Motoris/Canvasser</td>
 											<td style="text-align:center;" colspan="4">All region exclude Jawa Tengah</td>
-											<td style="text-align:center;" colspan="4">Rp. 2.000.000</td>
+											<td style="text-align:center;" colspan="4">Rp. 2.400.000</td>
 											<td style="text-align:center;" colspan="4">Rp. 600.000</td>
-											<td style="text-align:center;" colspan="4">3-4 kali penggajian (conditional)</td>
+											<td style="text-align:center;" colspan="4">4-5 kali penggajian (conditional)</td>
 										</tr>	
 
 										<tr>
 											<td style="text-align:center;" colspan="4">Motoris/Canvasser</td>
 											<td style="text-align:center;" colspan="4">Jawa Tengah</td>
-											<td style="text-align:center;" colspan="4">Rp. 2.000.000</td>
+											<td style="text-align:center;" colspan="4">Rp. 2.400.000</td>
 											<td style="text-align:center;" colspan="4">Rp. 300.000</td>
-											<td style="text-align:center;" colspan="4">5-6 kali penggajian (conditional)</td>
+											<td style="text-align:center;" colspan="4">6-7 kali penggajian (conditional)</td>
 										</tr>	
 
 

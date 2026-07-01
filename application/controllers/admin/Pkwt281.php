@@ -82,13 +82,38 @@ class Pkwt281 extends MY_Controller
 			redirect('admin/');
 		}
 
-		// SPG
-		if ($pkwt[0]->jabatan=='395' || $pkwt[0]->jabatan=='622' || $pkwt[0]->jabatan=='458') {
+		// SPG, SPG GT, SPG HCO MOBILE, SPG MI MTGT, SPG MOBILE, SPG MT, SPG PARTNERSHIP, SP REGULER, SPG STAY, SPG STS
+		if ($pkwt[0]->jabatan=='395'   
+			|| $pkwt[0]->jabatan=='622' 
+			|| $pkwt[0]->jabatan=='458' 
+			|| $pkwt[0]->jabatan=='487' 
+			|| $pkwt[0]->jabatan=='670' 
+			|| $pkwt[0]->jabatan=='539' 
+			|| $pkwt[0]->jabatan=='672' 
+			|| $pkwt[0]->jabatan=='786' 
+			|| $pkwt[0]->jabatan=='788' 
+			|| $pkwt[0]->jabatan=='872' 
+			|| $pkwt[0]->jabatan=='1006') {
 			redirect('admin/pkwt283spg/view/'.$pkwt[0]->uniqueid);
 		}
 
-		// MD & TL
-		if ($pkwt[0]->jabatan=='130' || $pkwt[0]->jabatan=='166' || $pkwt[0]->jabatan=='784'  || $pkwt[0]->jabatan=='167'   || $pkwt[0]->jabatan=='665' || $pkwt[0]->jabatan=='212') {
+		// MD, SMD, MD GT, MD MIX, MD MT, SMD GT, MD HCO, MD REGULER, SMD APOTEK, SMD DRY, SMD MT, SMD SOSBAK, & TL, TL GT, TL MT
+
+		if ($pkwt[0]->jabatan=='130' 
+			|| $pkwt[0]->jabatan=='166' 
+			|| $pkwt[0]->jabatan=='784'  
+			|| $pkwt[0]->jabatan=='167'   
+			|| $pkwt[0]->jabatan=='665' 
+			|| $pkwt[0]->jabatan=='212' 
+			|| $pkwt[0]->jabatan=='173' 
+			|| $pkwt[0]->jabatan=='492' 
+			|| $pkwt[0]->jabatan=='496' 
+			|| $pkwt[0]->jabatan=='637' 
+			|| $pkwt[0]->jabatan=='655' 
+			|| $pkwt[0]->jabatan=='657' 
+			|| $pkwt[0]->jabatan=='658' 
+			|| $pkwt[0]->jabatan=='798'
+			|| $pkwt[0]->jabatan=='809') {
 			redirect('admin/pkwt283md/view/'.$pkwt[0]->uniqueid);
 		}
 

@@ -81,6 +81,13 @@ class Pkwt386 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+
+		// AUDITOR FREELANCE
+		if ($pkwt[0]->jabatan=='828') {
+			redirect('admin/draf-pkwt/pkwt368krani/view/'.$pkwt[0]->uniqueid);
+		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);

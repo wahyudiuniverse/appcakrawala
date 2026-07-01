@@ -4967,6 +4967,28 @@ ORDER BY `expiry_date`");
 		return $res;
 	}
 
+
+	//cek data kode outlet
+	public function cek_existing_nip($nip)
+	{
+		if (($nip == null) || ($nip == "") || empty($nip)) {
+			return false;
+		} else {
+
+			//cek sudah ada kode sku itu atau belum
+			$this->db->select('*');
+			$this->db->from('xin_employees');
+			$this->db->where('employee_id', $nip);
+			$query = $this->db->get()->row_array();
+
+			if (($query == null) || ($query == "") || empty($query)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
 	function tgl_indo($tanggal)
 	{
 		if (($tanggal == "") || ($tanggal == "0") || empty($tanggal)) {

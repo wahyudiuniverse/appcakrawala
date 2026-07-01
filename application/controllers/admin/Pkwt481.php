@@ -88,7 +88,7 @@ class Pkwt481 extends MY_Controller
 		if($pkwt[0]->approve_hrd != null){
 
 
-					$logo_cover = 'tcpdf_logo_sc.png';
+					$logo_cover = 'tcpdf_logo_kac.png';
 					$header_namae = 'PT. Siprama Cakrawala';
 					
 				// set document information

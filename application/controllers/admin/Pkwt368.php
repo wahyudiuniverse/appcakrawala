@@ -81,6 +81,16 @@ class Pkwt368 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+
+		//DEFAULT SPG STAY & MD
+		// LT
+		if ($pkwt[0]->jabatan=='1032') {
+			redirect('https://apps-cakrawala.com/draf-pkwt/pkwt368krani/view/'.$pkwt[0]->uniqueid);
+
+		// ADMIN
+		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);

@@ -81,6 +81,13 @@ class Pkwt399 extends MY_Controller
 		if(is_null($pkwt)){
 			redirect('admin/');
 		}
+
+
+		// AUDITOR FREELANCE
+		if ($pkwt[0]->jabatan=='828') {
+			redirect('admin/draf-pkwt/pkwt400auditor/view/'.$pkwt[0]->uniqueid);
+		}
+
 		$employee_id = $pkwt[0]->employee_id;
 		$user = $this->Xin_model->read_user_by_employee_id($employee_id);
 		$bank = $this->Xin_model->read_user_bank($employee_id);
@@ -398,20 +405,30 @@ class Pkwt399 extends MY_Controller
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
 								<td colspan="20">Total Upah Harian yang didapatkan sebesar '.$basicpay.'.</td>
-							</tr>
+							</tr>';
+						if($allowance_meal != "Rp 0"){
 
+						$tbl_2 .= '
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
 								<td colspan="20">Tunjangan Makan Harian yang didapatkan sebesar '.$allowance_meal.'.</td>
-							</tr>
+							</tr>';
 
+						}
+
+						if($allowance_komunikasi != "Rp 0"){
+
+						$tbl_2 .= '
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
 								<td colspan="20">Tunjangan Pulsa Harian yang didapatkan sebesar '.$allowance_komunikasi.'.</td>
-							</tr>
+							</tr>';
 
+						}
+
+						$tbl_2 .= '
 							<br>
 
 							<tr>

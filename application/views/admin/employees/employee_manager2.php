@@ -1821,6 +1821,40 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 
 											<?php if (!is_null($all_sk)) {
 												foreach ($all_sk->result_array() as $sk): ?>
+
+													<?php if($sk['jenis_dokumen']==3) { ?>
+
+														<!-- SURAT PERINGATAN -->
+
+														<div class="card-header with-elements" style="background-color:#f3e9a8;"> <span class="card-header-title mr-2"> <strong> SURAT PERINGATAN KE <?php echo $sk['dokumen_ke'];?></strong></span> </div>
+														<div class="col-md-6">
+															<table class="table table-striped">
+																<tbody>
+																	<tr>
+																		<th scope="row" style="width: 30%">Nomor Dokumen</th>
+																		<td><?php echo $sk['nomor_dokumen']; ?></td>
+																	</tr>
+																	<tr>
+																		<th scope="row" style="width: 30%">Tanggal Terbit</th>
+																		<td><?php echo $sk['createdon']; ?></td>
+																	</tr>
+																	<tr>
+																		<th scope="row" style="width: 30%">Action</th>
+																		<td>
+
+																			<a href="<?php echo $sk['surat_sp_pdf']; ?>" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-md btn-outline-success">OPEN SURAT PERINGATAN</button></a>
+
+																		</td>
+																	</tr>
+																</tbody>
+															</table>
+														</div>
+													
+													<?php }
+													else { ?>
+
+													<!-- SK PAKLARING -->
+
 													<div class="card-header with-elements" style="background-color:#c0ebbc;"> <span class="card-header-title mr-2"> <strong> PAKLARING. Periode: <?php echo $sk['join_date']; ?> - <?php echo $sk['resign_date']; ?></strong></span> </div>
 													<div class="col-md-6">
 														<table class="table table-striped">
@@ -1865,6 +1899,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 															</tbody>
 														</table>
 													</div>
+												<?php } ?>
 												<?php endforeach;
 											} else { ?>
 												<div class="card-header with-elements" style="background-color:#c0ebbc;"> <span class="card-header-title mr-2"> <strong> BELUM ADA DATA </strong></span> </div>
