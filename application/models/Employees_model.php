@@ -4159,25 +4159,25 @@ class Employees_model extends CI_Model
 			$var_gapok = '<strong>' . $this->Xin_model->rupiah($record->gaji_pokok) . '</strong>';
 
 			$m_kategory = $this->get_nama_kategori($record->location_id);
-			if($m_kategory==null || $m_kategory==""){
+			if ($m_kategory == null || $m_kategory == "") {
 				$var_kategori = '<strong>[UNCATEGORIES]</strong>';
 			} else {
 				$var_kategori = '<strong>' . strtoupper($this->get_nama_kategori($record->location_id)) . '</strong>';
 			}
-			
+
 			$var_nik = '<h6 style="color: grey; font-size: 11px;">' . $record->nik_ktp . '</h6>';
 			$var_fullname = '<strong>' . $record->fullname . '</strong>';
 
 			$data[] = array(
 				"aksi" => $status_migrasi . ' <br>' . $view_profile . ' <br> ' . $cancel,
-				"nik_ktp" => $var_kategori . ' ' .$var_nik . "<i>" . $record->catatan_hr . "</i><br>" . $noteHR,
+				"nik_ktp" => $var_kategori . ' ' . $var_nik . "<i>" . $record->catatan_hr . "</i><br>" . $noteHR,
 				"fullname" => $var_fullname . $status_verifikasi . $siap_approve . '<br>' . $alredy_active,
 				"project" => $var_subproject . ' ' . $var_project,
 				"posisi" => $var_jabatan . ' ' . $var_penempatan,
 				"gaji_pokok" => $var_gapok,
 				"periode" => $record->contract_start . $sambung_periode . $record->contract_end,
 				"request_empon" => $record->request_empon
-				
+
 				//"golongan_karyawan" => $this->get_golongan_karyawan($record->project),
 				// "golongan_karyawan" => $status_golongan,
 				//"fullname" => "<i class='fa-regular fa-circle-check'></i> " . $record->fullname,
@@ -4757,18 +4757,18 @@ class Employees_model extends CI_Model
         xin_employee_emergency.no_kontak,
         xin_employee_emergency.alamat');
 
-    	$this->db->from('xin_employee_request');
-	    $this->db->join(
-	        'xin_employee_emergency',
-	        'xin_employee_emergency.id_verification = xin_employee_request.secid',
-	        'left'
-	    );
+		$this->db->from('xin_employee_request');
+		$this->db->join(
+			'xin_employee_emergency',
+			'xin_employee_emergency.id_verification = xin_employee_request.secid',
+			'left'
+		);
 
-    	$this->db->where($postData);
+		$this->db->where($postData);
 
-    	$query = $this->db->get()->row_array();
+		$query = $this->db->get()->row_array();
 
-    	return $query;
+		return $query;
 
 		// $dbtraxes->select('*');
 		// $this->db->select('xin_employee_request.*');
@@ -4787,11 +4787,11 @@ class Employees_model extends CI_Model
 	public function get_data_upah_request($postData)
 	{
 		$this->db->select('xin_employee_request.*');
-    	$this->db->from('xin_employee_request');
-    	$this->db->where($postData);
-    	$query = $this->db->get()->row_array();
+		$this->db->from('xin_employee_request');
+		$this->db->where($postData);
+		$query = $this->db->get()->row_array();
 
-    	return $query;
+		return $query;
 	}
 
 	//ambil data transfer - retur
@@ -4799,11 +4799,11 @@ class Employees_model extends CI_Model
 	{
 		$this->db->select('
         xin_employee_request.*');
-    	$this->db->from('xin_employee_request');
-    	$this->db->where($postData);
-    	$query = $this->db->get()->row_array();
+		$this->db->from('xin_employee_request');
+		$this->db->where($postData);
+		$query = $this->db->get()->row_array();
 
-    	return $query;
+		return $query;
 	}
 
 	//mengambil data all outlet dan user mobile by project id
@@ -4823,9 +4823,9 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_companies.name');
 			$this->db->from('xin_projects');
 			$this->db->join(
-			    'xin_companies',
-			    'xin_companies.company_id = xin_projects.company_id',
-			    'left'
+				'xin_companies',
+				'xin_companies.company_id = xin_projects.company_id',
+				'left'
 			);
 			$this->db->where('xin_projects.project_id', $datarequest['project_id']);
 			$data_pt = $this->db->get()->result_array();
@@ -4868,9 +4868,9 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_designations.level');
 			$this->db->from('xin_projects_posisi');
 			$this->db->join(
-			    'xin_designations',
-			    'xin_designations.designation_id = xin_projects_posisi.posisi',
-			    'left'
+				'xin_designations',
+				'xin_designations.designation_id = xin_projects_posisi.posisi',
+				'left'
 			);
 			$this->db->where('xin_projects_posisi.sub_project', $datarequest['sub_project']);
 			$data_posisi = $this->db->get()->result_array();
@@ -5123,56 +5123,88 @@ class Employees_model extends CI_Model
 			if (empty($record->profile_picture) || ($record->profile_picture == "") || ($record->profile_picture == "0")) {
 				$text_profile_picture = "-";
 			} else {
-				$text_profile_picture = base_url() . "uploads/profile/" . $record->profile_picture;
+				if (strpos($record->profile_picture, "http") === false) {
+					$text_profile_picture = base_url() . "uploads/profile/" . $record->profile_picture;
+				} else {
+					$text_profile_picture = $record->profile_picture;
+				}
 			}
 
 			$text_ktp = "";
 			if (empty($record->filename_ktp) || ($record->filename_ktp == "") || ($record->filename_ktp == "0")) {
 				$text_ktp = "-";
 			} else {
-				$text_ktp = base_url() . "uploads/document/ktp/" . $record->filename_ktp;
+				if (strpos($record->filename_ktp, "http") === false) {
+					$text_ktp = base_url() . "uploads/document/ktp/" . $record->filename_ktp;
+				} else {
+					$text_ktp = $record->filename_ktp;
+				}
 			}
 
 			$text_kk = "";
 			if (empty($record->filename_kk) || ($record->filename_kk == "") || ($record->filename_kk == "0")) {
 				$text_kk = "-";
 			} else {
-				$text_kk = base_url() . "uploads/document/kk/" . $record->filename_kk;
+				if (strpos($record->filename_kk, "http") === false) {
+					$text_kk = base_url() . "uploads/document/kk/" . $record->filename_kk;
+				} else {
+					$text_kk = $record->filename_kk;
+				}
 			}
 
 			$text_npwp = "";
 			if (empty($record->filename_npwp) || ($record->filename_npwp == "") || ($record->filename_npwp == "0")) {
 				$text_npwp = "-";
 			} else {
-				$text_npwp = base_url() . "uploads/document/npwp/" . $record->filename_npwp;
+				if (strpos($record->filename_npwp, "http") === false) {
+					$text_npwp = base_url() . "uploads/document/npwp/" . $record->filename_npwp;
+				} else {
+					$text_npwp = $record->filename_npwp;
+				}
 			}
 
 			$text_ijazah = "";
 			if (empty($record->filename_isd) || ($record->filename_isd == "") || ($record->filename_isd == "0")) {
 				$text_ijazah = "-";
 			} else {
-				$text_ijazah = base_url() . "uploads/document/ijazah/" . $record->filename_isd;
+				if (strpos($record->filename_isd, "http") === false) {
+					$text_ijazah = base_url() . "uploads/document/ijazah/" . $record->filename_isd;
+				} else {
+					$text_ijazah = $record->filename_isd;
+				}
 			}
 
 			$text_skck = "";
 			if (empty($record->filename_skck) || ($record->filename_skck == "") || ($record->filename_skck == "0")) {
 				$text_skck = "-";
 			} else {
-				$text_skck = base_url() . "uploads/document/skck/" . $record->filename_skck;
+				if (strpos($record->filename_skck, "http") === false) {
+					$text_skck = base_url() . "uploads/document/skck/" . $record->filename_skck;
+				} else {
+					$text_skck = $record->filename_skck;
+				}
 			}
 
 			$text_cv = "";
 			if (empty($record->filename_cv) || ($record->filename_cv == "") || ($record->filename_cv == "0")) {
 				$text_cv = "-";
 			} else {
-				$text_cv = base_url() . "uploads/document/cv/" . $record->filename_cv;
+				if (strpos($record->filename_cv, "http") === false) {
+					$text_cv = base_url() . "uploads/document/cv/" . $record->filename_cv;
+				} else {
+					$text_cv = $record->filename_cv;
+				}
 			}
 
 			$text_paklaring = "";
 			if (empty($record->filename_paklaring) || ($record->filename_paklaring == "") || ($record->filename_paklaring == "0")) {
 				$text_paklaring = "-";
 			} else {
-				$text_paklaring = base_url() . "uploads/document/" . $record->filename_paklaring;
+				if (strpos($record->filename_paklaring, "http") === false) {
+					$text_paklaring = base_url() . "uploads/document/" . $record->filename_paklaring;
+				} else {
+					$text_paklaring = base_url() . "uploads/document/" . $record->filename_paklaring;
+				}
 			}
 
 			$text_gaji = "";
@@ -6952,14 +6984,14 @@ class Employees_model extends CI_Model
 		LEFT JOIN xin_projects pro ON pro.project_id = emp.project_id
 		WHERE ktp_no = ? ORDER BY user_id DESC
 		LIMIT 1';
-			$binds = array($nik);
-			$query = $this->db->query($sql, $binds);
+		$binds = array($nik);
+		$query = $this->db->query($sql, $binds);
 
-			if ($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return null;
-			}
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		} else {
+			return null;
+		}
 	}
 
 	// get single employee by NIP
@@ -7690,7 +7722,7 @@ class Employees_model extends CI_Model
 			return false;
 		}
 	}
-	
+
 
 	//update data emergency eployee request
 	public function update_emergency_employee_request($postData, $secid)
