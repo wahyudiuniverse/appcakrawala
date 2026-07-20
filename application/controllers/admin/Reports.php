@@ -266,7 +266,7 @@ class Reports extends MY_Controller
 	public function get_detail_verifikasi_employee()
 	{
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		
+
 		// // POST data
 		$postData = $this->input->post();
 
@@ -484,21 +484,23 @@ class Reports extends MY_Controller
 
 	function send_email_pin()
 	{
+		$session = $this->session->userdata('username');
+		$blast_by = $session['employee_id'];
+		$blast_name = $session['employee_name'];
 		$postData = $this->input->post();
 
 		// Get data
 		$data = $this->Employees_model->get_employee_array_by_nip($postData['nip']);
-
 
 		if (!empty($data)) {
 			$config = array(
 				'protocol' => 'smtp',
 				'smtp_host' => 'ssl://mail.spcakrawala.co.id',
 				'smtp_port' => 465,
-				// 'smtp_user' => 'hrd@spcakrawala.co.id', // change it to yours
-				// 'smtp_pass' => 'i4cPBaQY@22', // change it to yours
-				'smtp_user' => 'tes@spcakrawala.co.id', // change it to yours
-				'smtp_pass' => 'Cakrawala#2026', // change it to yours
+				'smtp_user' => 'hrd@spcakrawala.co.id', // change it to yours
+				'smtp_pass' => 'i4cPBaQY@22', // change it to yours
+				// 'smtp_user' => 'tes@spcakrawala.co.id', // change it to yours
+				// 'smtp_pass' => 'Cakrawala#2026', // change it to yours
 				'mailtype' => 'html',
 				'charset' => 'iso-8859-1',
 				'crlf' => "\r\n",
@@ -520,6 +522,29 @@ class Reports extends MY_Controller
 			$this->email->message($message);
 			if ($this->email->send()) {
 				$response = 'Email sent.';
+
+				$blast_on = date("Y-m-d H:i:s");
+
+				$data_log_blast = array(
+					'nip' => $data['employee_id'],
+					'nama' => $data['first_name'],
+					'email' => $tujuan_email,
+					'email_subject' => $email_subject,
+					'message' => $message,
+					'project_id' => $data['project_id'],
+					'project_name' => strtoupper($this->Employees_model->get_nama_project($data['project_id'])),
+					'sub_project_id' => $data['sub_project_id'],
+					'sub_project_name' => strtoupper($this->Employees_model->get_nama_sub_project($data['sub_project_id'])),
+					'jabatan_id' => $data['designation_id'],
+					'jabatan_name' => strtoupper($this->Employees_model->get_nama_jabatan($data['designation_id'])),
+					'penempatan' => strtoupper($data['penempatan']),
+					'blast_by' => $blast_by,
+					'blast_name' => $blast_name,
+					'blast_on' => $blast_on,
+				);
+
+				//insert log blast
+				$this->Employees_model->insert_log_email($data_log_blast);
 			} else {
 				show_error($this->email->print_debugger());
 				$response = $this->email->print_debugger();

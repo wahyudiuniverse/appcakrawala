@@ -1120,6 +1120,14 @@ class Employees_model extends CI_Model
 		//return null;
 	}
 
+	//insert log email
+	public function insert_log_email($postData)
+	{
+		$this->db->insert('log_blast_email', $postData);
+
+		//return null;
+	}
+
 	//ambil SK terakhir
 	function get_skk($id)
 	{
@@ -4691,6 +4699,12 @@ class Employees_model extends CI_Model
 				// 	$button_send_email = "";
 				// }
 
+				if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
+					$button_send_email = '<br><button type="button" onclick="open_email(' . $record->employee_id . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
+				} else {
+					$button_send_email = "";
+				}
+
 				// if ($pkwt_periode['jumlah_kontrak'] == 1) {
 				// 	$button_send_pin = '<br><button type="button" onclick="send_pin(\'' . $this->Xin_model->clean_post($record->contact_no) . '\',\'' . strtoupper($record->first_name) . '\',\'' . $record->employee_id . '\',\'' . $record->private_code . '\',\'' . strtoupper($this->get_nama_project($record->project_id)) . '\',\'' . strtoupper($record->penempatan) . '\',\'' . strtoupper($this->get_company_name_from_pkwt($record->employee_id)) . '\',\'' . strtoupper($this->get_id_kontrak_terakhir($record->employee_id)) . '\')" class="btn btn-xs btn-outline-twitter" >SEND PIN</button>';
 				// } else {
@@ -4709,7 +4723,7 @@ class Employees_model extends CI_Model
 				$tes_iframe = '<embed type="text/html" src="' . base_url("admin/reports/get_verification_employee/" . $record->employee_id) . '">';
 				$data[] = array(
 					"aksi" => $view,
-					"employee_id" => $record->employee_id . $text_pin . $text_resign,
+					"employee_id" => $record->employee_id . $text_pin . $text_resign . $button_send_email,
 					"ktp_no" => $record->ktp_no . $button_open_ktp,
 					"first_name" => strtoupper($record->first_name) . $button_send_pin . $button_send_email,
 					// "verifikasi" => $tabel_verifikasi,
