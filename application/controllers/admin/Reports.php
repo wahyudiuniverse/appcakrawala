@@ -248,7 +248,7 @@ class Reports extends MY_Controller
 		$data['all_designations'] = $this->Designation_model->all_designations();
 		$data['list_bank'] = $this->Xin_model->get_bank_code();
 		if (in_array('470', $role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/reports/manage_employees2", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/reports/log_blast_email", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
 		} else {
 			redirect('admin/dashboard');
@@ -264,6 +264,19 @@ class Reports extends MY_Controller
 
 		// Get data
 		$data = $this->Employees_model->get_list_employees($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list log blast email
+	public function list_log_blast_email()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Reports_model->list_log_blast_email($postData);
 
 		echo json_encode($data);
 	}
@@ -2575,7 +2588,7 @@ class Reports extends MY_Controller
 				$view_pkwt . ' ' . $editReq . ' ' . $delete,
 				$r->employee_id,
 				$pin,
-				$fullname . '<br>' . $whatsapp . $button_send_email,
+				$fullname . '#<br>' . $whatsapp . $button_send_email,
 				$nama_project,
 				// $nama_subproject,
 				$nowhatsapp,
