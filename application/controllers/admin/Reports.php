@@ -492,7 +492,7 @@ class Reports extends MY_Controller
 				'status' => '1',
 				'message' => $message,
 				'tujuan_email' => $tujuan_email,
-				'subject_email' => "Notifikasi Akun NEO",
+				'subject_email' => "Notifikasi Akun NEO - " . $data['first_name'] . " (" . $data['employee_id'] . ")",
 			);
 
 			echo json_encode($response);
@@ -544,6 +544,8 @@ class Reports extends MY_Controller
 			$this->email->from($from_email); // change it to yours
 			// $this->email->from('hrd@spcakrawala.co.id'); // change it to yours
 			$this->email->to($tujuan_email); // change it to yours
+			// Add the CC address
+			$this->email->cc($from_email);
 			$this->email->subject($email_subject);
 			$this->email->message($message);
 			if ($this->email->send()) {
