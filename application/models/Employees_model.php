@@ -4723,7 +4723,7 @@ class Employees_model extends CI_Model
 				$tes_iframe = '<embed type="text/html" src="' . base_url("admin/reports/get_verification_employee/" . $record->employee_id) . '">';
 				$data[] = array(
 					"aksi" => $view,
-					"employee_id" => $record->employee_id . $text_pin . $text_resign . $button_send_email,
+					"employee_id" => $record->employee_id . $text_pin . $text_resign,
 					"ktp_no" => $record->ktp_no . $button_open_ktp,
 					"first_name" => strtoupper($record->first_name) . $button_send_pin . $button_send_email,
 					// "verifikasi" => $tabel_verifikasi,

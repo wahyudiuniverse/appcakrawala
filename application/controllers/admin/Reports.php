@@ -229,6 +229,32 @@ class Reports extends MY_Controller
 		}
 	}
 
+	// blas email log report
+	public function log_blast_email()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$data['title'] = $this->lang->line('xin_manage_employees') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'LOG BLAST EMAIL';
+		$data['path_url'] = 'emp_view';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$data['all_departments'] = $this->Department_model->all_departments();
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['all_designations'] = $this->Designation_model->all_designations();
+		$data['list_bank'] = $this->Xin_model->get_bank_code();
+		if (in_array('470', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/reports/manage_employees2", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
 	//load datatables Employee
 	public function list_employees()
 	{
@@ -453,8 +479,8 @@ class Reports extends MY_Controller
 				'<br><strong>PIN: </strong>' . $data['private_code'] .
 				'<br><strong>PROJECT: </strong>' . $this->Employees_model->get_nama_project($data['project_id']) .
 				'<br><strong>AREA: </strong>' . $data['penempatan'] .
-				'<br><br>Silahkan Login C.I.S Menggunakan NIP dan PIN anda melalui Link Dibawah ini.' .
-				'<br>Link C.I.S : https://apps-cakrawala.com/admin' .
+				'<br><br>Silahkan Login N.E.O Menggunakan NIP dan PIN anda melalui Link Dibawah ini.' .
+				'<br>Link N.E.O : https://apps-cakrawala.com/admin' .
 				'<br>Lakukan Pembaharuan PIN anda secara berkala, dengan cara, Pilih Menu <strong>My Profile</strong> kemudian <strong>Ubah Pin</strong>' .
 				'<br><br><strong>INFO HRD di Nomor Whatsapp: 088211158907</strong>' .
 				'<br><strong>IT-CARE di Nomor Whatsapp: 085174123434</strong>' .
@@ -466,7 +492,7 @@ class Reports extends MY_Controller
 				'status' => '1',
 				'message' => $message,
 				'tujuan_email' => $tujuan_email,
-				'subject_email' => "Notifikasi Akun CIS",
+				'subject_email' => "Notifikasi Akun NEO",
 			);
 
 			echo json_encode($response);
@@ -515,8 +541,8 @@ class Reports extends MY_Controller
 			$this->load->library('email', $config);
 
 			$this->email->set_newline("\r\n");
-			// $this->email->from($from_email); // change it to yours
-			$this->email->from('tes@spcakrawala.co.id'); // change it to yours
+			$this->email->from($from_email); // change it to yours
+			// $this->email->from('hrd@spcakrawala.co.id'); // change it to yours
 			$this->email->to($tujuan_email); // change it to yours
 			$this->email->subject($email_subject);
 			$this->email->message($message);
@@ -2547,7 +2573,7 @@ class Reports extends MY_Controller
 				$view_pkwt . ' ' . $editReq . ' ' . $delete,
 				$r->employee_id,
 				$pin,
-				$fullname . '#<br>' . $whatsapp . $button_send_email,
+				$fullname . '<br>' . $whatsapp . $button_send_email,
 				$nama_project,
 				// $nama_subproject,
 				$nowhatsapp,
