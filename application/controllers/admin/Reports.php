@@ -2395,6 +2395,8 @@ class Reports extends MY_Controller
 	// daily attendance list > timesheet
 	public function pkwt_history_list()
 	{
+		$session = $this->session->userdata('username');
+		$user = $this->Xin_model->read_user_info($session['user_id']);
 
 		$data['title'] = $this->Xin_model->site_title();
 		$session = $this->session->userdata('username');
@@ -2525,6 +2527,12 @@ class Reports extends MY_Controller
 
 			$whatsapp = '<a href="https://wa.me/62' . $nowhatsapp . '?text=' . $copypaste . '" class="d-block text-primary" target="_blank"> <button type="button" class="btn btn-xs btn-outline-success">' . $nowhatsapp . '</button> </a>';
 
+			if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) {
+				$button_send_email = '<button type="button" onclick="open_email(' . $nip . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
+			} else {
+				$button_send_email = "";
+			}
+
 			// if($roleid=='1' || $roleid=='3' || $roleid=='11'){
 			$editReq = '<a href="' . site_url() . 'admin/employee_pkwt_cancel/pkwt_edit/' . $r->uniqueid . '" class="d-block text-primary" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">Edit</button></a>';
 			$delete = '<button type="button" class="btn btn-xs btn-outline-danger" data-toggle="modal" data-target=".edit-modal-data" data-company_id="' . $r->contract_id . '">Hapus</button>';
@@ -2539,7 +2547,7 @@ class Reports extends MY_Controller
 				$view_pkwt . ' ' . $editReq . ' ' . $delete,
 				$r->employee_id,
 				$pin,
-				$fullname . '#<br>' . $whatsapp,
+				$fullname . '#<br>' . $whatsapp . $button_send_email,
 				$nama_project,
 				// $nama_subproject,
 				$nowhatsapp,
