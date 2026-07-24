@@ -558,7 +558,7 @@ class Reports extends MY_Controller
 			// $this->email->from('hrd@spcakrawala.co.id'); // change it to yours
 			$this->email->to($tujuan_email); // change it to yours
 			// Add the CC address
-			$this->email->cc($from_email);
+			// $this->email->cc($from_email);
 			$this->email->subject($email_subject);
 			$this->email->message($message);
 			if ($this->email->send()) {

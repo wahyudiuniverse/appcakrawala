@@ -9,6 +9,9 @@
 <?php $user_info = $this->Xin_model->read_user_info($session['user_id']); ?>
 <?php $role_resources_ids = $this->Xin_model->user_role_resource(); ?>
 
+<!--flatpickr-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 <!-- Filepond css -->
 <link rel="stylesheet" href="<?= base_url() ?>assets/libs/filepond/filepond.min.css" type="text/css" />
 <!-- <link href="assets/libs/filepond-plugin-image-edit/filepond-plugin-image-edit.css" rel="stylesheet" /> -->
@@ -116,7 +119,7 @@
 	<?php //print_r($session); 
 	?>
 </pre> -->
-<div hidden class="card border-blue">
+<div class="card border-blue">
 	<div class="card-header with-elements">
 		<div class="col-md-6">
 			<span class="card-header-title mr-2"><strong>LOG BLAST EMAIL | </strong>FILTER</span>
@@ -150,28 +153,17 @@
 				</div>
 			</div>
 
-			<div class="col-md-3" id="subproject_ajax">
+			<div class="col-md-3 mb-3" id="subproject_ajax">
 				<label class="form-label">Sub Project</label>
 				<select class="form-control" data-live-search="true" name="sub_project_id" id="aj_sub_project" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('left_projects'); ?>">
 					<option value="0">--ALL--</option>
-					<!-- <?php foreach ($all_projects as $proj) { ?>
-            <option value="<?php echo $proj->project_id; ?>" <?php if ($project_karyawan == $proj->project_id) {
-																	echo " selected";
-																} ?>> <?php echo $proj->title; ?></option>
-          <?php } ?> -->
 				</select>
 			</div>
 
 			<div class="col-md-3">
-				<label class="form-label">Status</label>
-				<select class="form-control" name="status" id="status" data-plugin="select_hrm" data-placeholder="<?php echo $this->lang->line('dashboard_xin_status'); ?>">
-					<option value="1">AKTIF</option>
-					<option value="5">DEACTIVE</option>
-					<option value="2">RESIGN</option>
-					<option value="4">END CONTRACT</option>
-					<option value="3">BLACKLIST</option>
-					<option value="0">--ALL--</option>
-				</select>
+				<label for="range_tanggal" class="form-label">Range Tanggal Blast</label>
+				<!-- <input type="text" class="form-control" placeholder="Tanggal Lahir" id="tanggal_lahir" data-provider="flatpickr" data-date-format="Y-m-d" data-range-date="true" data-maxDate=""> -->
+				<input type="text" class="form-control" placeholder="Range Tanggal" id="range_tanggal">
 			</div>
 
 			<div class="col-md-3">
@@ -212,27 +204,13 @@
 
 			<!-- <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST EMPLOYEES</strong></span> </div> -->
 			<div class="card-body">
-				<!-- <div class="box-datatable table-responsive" id="btn-place">
-          <table class="display dataTable table table-striped table-bordered" id="tabel_employees2" style="width:100%">
-            <thead>
-              <tr>
-                <th>Aksi</th>
-                <th>Periode Salary</th>
-                <th>Periode Cutoff</th>
-                <th>Project</th>
-                <th>Sub Project</th>
-                <th>Total MPP</th>
-                <th>Release by</th>
-                <th>Release on</th>
-              </tr>
-            </thead>
-          </table>
-        </div> -->
 				<div class="box-datatable table-responsive">
 					<table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
 						<thead>
 							<tr>
 								<th>Nama</th>
+								<th>Project</th>
+								<th>Penempatan</th>
 								<th>Email Tujuan</th>
 								<th>Subject Email</th>
 								<th>Blast on</th>
@@ -439,6 +417,9 @@
 		});
 </script>
 
+<!--flatpickr js-->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script type="text/javascript">
 	//global variable
 	var employee_table;
@@ -498,9 +479,37 @@
 			dropdownParent: $("#container_modal_email")
 		});
 
+		//inisialisasi flatcpickr untuk select tanggal
+		$("#range_tanggal").flatpickr({
+			mode: "range",
+			dateFormat: "Y-m-d",
+			// wrap: true,
+			// maxDate: new Date().fp_incr(14),
+			onChange: function(selectedDates, dateStr, instance) {
+				//...
+				// maxDate: new Date(dateStr).fp_incr(14),
+				if (dateStr == "") {
+
+				} else {
+					newMaxDate = new Date(selectedDates[0]).fp_incr(31);
+					newMinDate = new Date(selectedDates[0]);
+					instance.set('maxDate', newMaxDate);
+					instance.set('minDate', newMinDate);
+				}
+
+				// alert(new Date(selectedDates[0]).fp_incr(14));
+			},
+			onOpen: function(selectedDates, dateStr, instance) {
+				// ...
+				instance.set('maxDate', null);
+				instance.set('minDate', null);
+				instance.clear();
+			}
+		});
+
 		var project = document.getElementById("aj_project").value;
 		var sub_project = document.getElementById("aj_sub_project").value;
-		var status = document.getElementById("status").value;
+		// var status = document.getElementById("status").value;
 		var search_periode_from = "";
 		var search_periode_to = "";
 
@@ -522,7 +531,7 @@
 			//  type: 'date-eu'
 			//}],
 			'order': [
-				[3, 'desc']
+				[5, 'desc']
 			],
 			'ajax': {
 				'url': '<?= base_url() ?>admin/reports/list_log_blast_email',
@@ -542,6 +551,16 @@
 			'columns': [{
 					data: 'nama',
 					// "orderable": false
+				},
+				{
+					data: 'project_name',
+					// "orderable": false,
+					//searchable: true
+				},
+				{
+					data: 'penempatan',
+					// "orderable": false,
+					//searchable: true
 				},
 				{
 					data: 'email',
@@ -801,6 +820,7 @@
 <!-- Tombol SEND PIN VIA EMAIL -->
 <script type="text/javascript">
 	function open_email(nip) {
+		alert("under construction")
 		$("#email_nip").val(nip);
 		// $('#emailModal').appendTo("body").modal('show');
 

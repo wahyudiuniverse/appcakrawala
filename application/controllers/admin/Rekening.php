@@ -1,0 +1,6630 @@
+<?php
+
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the dndsoft License
+ * that is bundled with this package in the file license.txt.
+ * @author   dndsoft
+ * @author-email  komputer.dnd@gmail.com
+ * @copyright  Copyright © dndsoft.my.id All Rights Reserved
+ */
+if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
+class Rekening extends MY_Controller
+{
+
+	/*Function to set JSON output*/
+	public function output($Return = array())
+	{
+		/*Set response header*/
+		header("Access-Control-Allow-Origin: *");
+		header("Content-Type: application/json; charset=UTF-8");
+		/*Final JSON response*/
+		exit(json_encode($Return));
+	}
+
+	public function __construct()
+	{
+		parent::__construct();
+		//load the models
+		$this->load->library('session');
+		// $this->load->model("Employees_model");
+		// $this->load->model("Saltab_model");
+		// $this->load->model("Register_model");
+		// $this->load->model("Xin_model");
+		// $this->load->model("Department_model");
+		// $this->load->model("Designation_model");
+		// $this->load->model("Roles_model");
+		// $this->load->model("Location_model");
+		// $this->load->model("Company_model");
+		// $this->load->model("Timesheet_model");
+		$this->load->model("Project_model");
+		// $this->load->model("Assets_model");
+		// // $this->load->model("Training_model");
+		// // $this->load->model("Trainers_model");
+		// // $this->load->model("Awards_model");
+		// $this->load->model("Travel_model");
+		// $this->load->model("Tickets_model");
+		// $this->load->model("Transfers_model");
+		// $this->load->model("Promotion_model");
+		// $this->load->model("Complaints_model");
+		// $this->load->model("Warning_model");
+		// $this->load->model("Subproject_model");
+		// $this->load->model("Payroll_model");
+		// $this->load->model("Events_model");
+		// $this->load->model("Meetings_model");
+		// $this->load->model('Exin_model');
+		// $this->load->model('Import_model');
+		// $this->load->model('Pkwt_model');
+		$this->load->model('Xin_model');
+		$this->load->model('Rekening_model');
+		$this->load->library("pagination");
+		$this->load->library('Pdf');
+		//$this->load->library("phpspreadsheet");
+		$this->load->helper('string');
+		$this->load->library('ciqrcode');
+	}
+
+	// import
+	public function index()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_hr_imports') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_hr_imports');
+		$data['path_url'] = 'hrpremium_import';
+		$data['all_companies'] = $this->Xin_model->get_companies();
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+
+		if (in_array('127', $role_resources_ids) || in_array('127', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/hr_import_excel", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// cek rekening batch
+	public function cek_rekening()
+	{
+		//cek session
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		// $data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['all_bank'] = $this->Xin_model->get_bank();
+		$data['title'] = 'Cek Rekening | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Cek Rekening';
+		$data['path_url'] = 'emp_view';
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('511', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/rekening/cek_rekening", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// Validate and add info in database
+	public function import_employees()
+	{
+
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+		// $csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+
+		// $csvMimes =  array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel');
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+							$data = array(
+								'uploadid' => $uploadid,
+								'employee_id' 		=> str_replace(' ', '', $line[0]), // auto
+								'fullname' 				=> $line[1],
+								'company_id' 			=> $line[2],
+								'location_id' 		=> $line[3], //ho-area
+								'department_id' 	=> $line[4], //divisi
+								'designation_id' 	=> $line[5], //jabatan
+								'project_id' 			=> $line[6], //jabatan
+								'sub_project_id' 	=> $line[7], //jabatan
+								'penempatan' 			=> $line[8],
+								'marital_status' 	=> $line[9], //status perkawinan
+								'gender' 					=> $line[10], //jenis kelamin
+								'tempat_lahir'		=> $line[11],
+								'date_of_birth' 	=> $line[12],
+								'date_of_joining' => $line[13],
+								'contact_no' 			=> $line[14],
+								'email' 					=> $line[15],
+								'alamat_ktp' 			=> $line[16],
+								'alamat_domisili' => $line[17],
+								'kk_no' 					=> $line[18],
+								'ktp_no' 					=> $line[19],
+								'npwp_no' 				=> $line[20],
+								'bpjs_tk_no' 			=> $line[21],
+								'bpjs_ks_no' 			=> $line[22],
+								'ibu_kandung' 		=> $line[23],
+								'bank_name' 			=> $line[24],
+								'nomor_rek' 			=> $line[25],
+								'pemilik_rek' 		=> $line[26],
+								'basic_salary' 		=> $line[27]
+							);
+							$result = $this->Employees_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Employees_model->delete_temp_by_employeeid();
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+
+		redirect('admin/ImportExcelEmployees?upid=' . $uploadid);
+	}
+
+
+	// Validate and add info in database
+	public function import_employees_active()
+	{
+
+		if ($this->input->post('is_ajax') == '3') {
+			/* Define return | here result is used to return user data and error for error message */
+			$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+			$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+			//validate whether uploaded file is a csv file
+			$csvMimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain');
+
+			if ($_FILES['file']['name'] === '') {
+				$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+			} else {
+				if (in_array($_FILES['file']['type'], $csvMimes)) {
+					if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+						// check file size
+						if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+							$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+						} else {
+
+							//open uploaded csv file with read only mode
+							$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+							//skip first line
+							fgetcsv($csvFile);
+
+							//parse data from csv file line by line
+							while (($line = fgetcsv($csvFile)) !== FALSE) {
+
+								$data = array(
+									'employee_id' => $line[0], // auto
+									'username' => $line[0], // nik
+									'first_name' => $line[1],
+									'designation_id' => $line[2], //jabatan
+									'department_id' => $line[3], //divisi
+									'location_id' => $line[4], //ho-area
+									'marital_status' => $line[5], //status perkawinan
+									'gender' => $line[6], //jenis kelamin
+									'date_of_birth' => $line[7],
+									'contact_no' => $line[8],
+									'address' => $line[9],
+									'company_id' => 2, //auto cakrawala => 2
+									'user_role_id' => 2, // auto 2 => emplyee
+									'is_active' => 0, // auto 0 disactive
+									'ktp_no' => $line[10],
+									'kk_no' => $line[11],
+									'npwp_no' => $line[12],
+									'bpjs_tk_no' => $line[13],
+									'bpjs_ks_no' => $line[14],
+									'created_at' => date('Y-m-d h:i:s')
+
+								);
+								$last_insert_id = $this->Employees_model->add($data);
+
+								$bank_account_data = array(
+									'account_title' => 'Rekening',
+									'account_number' => $line[15], //NO. REK
+									'bank_name' => $line[16],
+									'employee_id' => $last_insert_id,
+									'created_at' => date('d-m-Y'),
+								);
+								$ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+							}
+							//close opened csv file
+							fclose($csvFile);
+
+							$Return['result'] = $this->lang->line('xin_success_empactive_import');
+						}
+					} else {
+						$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_invalid_file');
+				}
+			} // file empty
+
+			if ($Return['error'] != '') {
+				$this->output($Return);
+			}
+
+			$this->output($Return);
+			exit;
+		}
+	}
+
+	// expired page
+	public function importpkwt()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = 'IMPORT PKWT';
+		$data['breadcrumbs'] = 'IMPORT PKWT';
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		// $data['all_taxes'] = $this->Tax_model->get_all_taxes();
+		$data['path_url'] = 'hrpremium_import_pkwt';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('128', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/import_pkwt", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	//delete batch saltab
+	public function delete_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_bupot($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete data bpjs
+	public function delete_bpjs()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_bpjs($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch bupot
+	public function list_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_bupot($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list bpjs
+	public function list_bpjs()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_bpjs($postData);
+
+		echo json_encode($data);
+	}
+
+
+	public function downloadTemplateBupot()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('BUPOT'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_bupot_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template BUPOT'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadTemplateBPJS()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('BPJS'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_bpjs_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template BPJS'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel BUPOT
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_bupot()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nik = $this->input->post('nik');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$periode_bupot = $this->input->post('periode_bupot');
+
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		$nama_project_only = "";
+		$projects = $this->Project_model->read_single_project_name($project);
+		if (!is_null($projects)) {
+			$nama_project_only = $projects[0]->title;
+		} else {
+			$nama_project_only = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+			$array_file = explode('.', $_FILES['file_excel']['name']);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			// $sheet_data = array_map('trim', $sheet_data);
+			$sheet_data = array_filter($sheet_data);
+			$array_data  = [];
+			$array_data_final  = [];
+			$data        = [];
+			$header_tabel_saltab = $sheet_data[0];
+			$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+			// echo '<pre>';
+			// print_r(array_filter($header_tabel_saltab));
+			// echo '</pre>';
+
+			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+			// $header_tabel_saltab = array_filter($header_tabel_saltab);
+			$length_header = count($header_tabel_saltab);
+			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
+
+			//susun array batch saltab
+			$data_batch = array(
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+				'periode_bupot'       	 => $periode_bupot,
+				'jumlah_data'        	 => $jumlah_data,
+				'status_release'         => "0",
+				'created_by'        	 => $this->Import_model->get_nama_karyawan($nik),
+				'created_by_id'        	 => $nik,
+				'created_on'        	 => date("Y-m-d H:i:s"),
+				// 'upload_ip'        	 	 => $this->get_client_ip(),
+			);
+
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			// $data_batch_cek = array(
+			// 	'periode_cutoff_from'    => $saltab_from,
+			// 	'periode_cutoff_to'      => $saltab_to,
+			// 	'periode_salary'      	 => $periode_salary,
+			// 	'project_id'        	 => $project,
+			// 	'project_name'        	 => $nama_project,
+			// 	'sub_project_id'         => $sub_project,
+			// 	'sub_project_name'       => $nama_sub_project,
+			// );
+
+			// $id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
+
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			// $data_batch_cek_request_open = array(
+			// 	'periode_saltab_from'    => $saltab_from,
+			// 	'periode_saltab_to'      => $saltab_to,
+			// 	'tanggal_gajian'      	 => $periode_salary,
+			// 	'project_id'        	 => $project,
+			// 	'project_name'        	 => $nama_project,
+			// 	'sub_project_id'         => $sub_project,
+			// 	'sub_project_name'       => $nama_sub_project,
+			// );
+
+			// $this->Import_model->update_request_open_import($data_batch_cek_request_open);
+
+			// if ($id_batch_awal != "") {
+			// 	$this->Import_model->delete_batch_saltab($id_batch_awal);
+			// }
+
+			// $data_batch += ['id' => $id_batch_awal];
+
+			if (!empty($data_batch)) {
+				$this->Import_model->insert_bupot_batch($data_batch);
+			}
+
+			$id_batch = $this->Import_model->get_id_bupot_batch($data_batch);
+
+			//susun array saltab detail
+			for ($i = 2; $i < count($sheet_data); $i++) {
+				$data += ['batch_bupot_id' => $id_batch];
+				for ($j = 0; $j < $length_header; $j++) {
+					// if ($header_tabel_saltab[$j] == "nama_penerima_penghasilan") {
+					// 	$trimmed_nip = strtolower($sheet_data[$i][$j]);
+					// 	$trimmed_nip = ucwords($trimmed_nip);
+					// 	$trimmed_nip = trim($trimmed_nip, ' ');
+					// 	$trimmed_nip = trim($trimmed_nip, ' ');
+					// 	$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					// } else {
+					$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+					$trimmed_nip = trim($trimmed_nip, ' ');
+					$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					// }
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+
+			//susun nama file
+			$yearmonth = date('Y/m/');
+			$upload_path = 'https://karir.onecorp.co.id/uploads/document_eksternal/bupot file/' . $periode_bupot . '/' . $nama_project_only . '/';
+			foreach ($array_data as $array_data) {
+				// $nama_file = $upload_path . $array_data['no_bukti_potong'] . '_' . $array_data['npwp_pemotong'] . '_' . $array_data['id_sistem'] . '.pdf';
+				$nama_file = $upload_path . $array_data['id_sistem'] . '.pdf';
+				$array_data['file_bupot'] = $nama_file;
+				$array_data_final[] = $array_data;
+			}
+			if (!empty($array_data_final)) {
+				$this->Import_model->insert_bupot_detail($array_data_final);
+			}
+
+
+			$tes_query = $this->db->last_query();
+
+
+			// if ($array_data != '') {
+			// 	$this->Import_model->insert_saltab_detail($array_data);
+			// }
+
+			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
+
+			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
+			// echo '<pre>';
+			// print_r($tes_query);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+		} else {
+			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+			print_r("gagal import");
+			print_r($_FILES['file_excel']['name']);
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		redirect('admin/Importexcel/view_batch_bupot/' . $id_batch);
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel BPJS
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_bpjs()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$upload_by_id = $this->input->post('upload_by');
+		$upload_by = $this->Import_model->get_nama_karyawan($upload_by_id);
+		$upload_on = date("Y-m-d H:i:s");
+
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+			$array_file = explode('.', $_FILES['file_excel']['name']);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			// $sheet_data = array_map('trim', $sheet_data);
+			$sheet_data = array_filter($sheet_data);
+			$array_data  = [];
+			$array_data_final  = [];
+			$data        = [];
+			$header_tabel_saltab = $sheet_data[0];
+			$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+			// echo '<pre>';
+			// print_r(array_filter($header_tabel_saltab));
+			// echo '</pre>';
+
+			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+			// $header_tabel_saltab = array_filter($header_tabel_saltab);
+			$length_header = count($header_tabel_saltab);
+			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
+
+			//susun array saltab detail dan trim karakter
+			for ($i = 2; $i < count($sheet_data); $i++) {
+				$data += ['upload_by_id' => $upload_by_id];
+				$data += ['upload_by' => $upload_by];
+				$data += ['upload_on' => $upload_on];
+				for ($j = 0; $j < $length_header; $j++) {
+					$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+					$trimmed_nip = trim($trimmed_nip, ' ');
+					$trimmed_nip = trim($trimmed_nip, '\'');
+					$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+
+			if (!empty($array_data)) {
+				$this->Import_model->insert_bpjs_detail($array_data);
+			}
+
+			$tes_query = $this->db->last_query();
+
+			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
+
+			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
+			// echo '<pre>';
+			// print_r($tes_query);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// foreach ($array_data as $record) {
+			// 	echo '<pre>';
+			// 	print_r($record);
+			// 	echo '</pre>';
+			// }
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+		} else {
+			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+			print_r("gagal import");
+			print_r($_FILES['file_excel']['name']);
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		redirect('admin/Importexcel/import_bpjs');
+	}
+
+
+
+	// Validate and add info in database
+	public function import_pkwt()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					//open uploaded csv file with read only mode
+					$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+					//skip first line
+					fgetcsv($csvFile, 0, ';');
+					$d = new DateTime();
+					$datetimestamp = $d->format("YmdHisv");
+					$uploadid = $datetimestamp;
+					// $lastnik = $this->Employees_model->get_maxid();
+					// $formula4 = substr($lastnik,5);
+
+					//parse data from csv file line by line
+					while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+
+						$data = array(
+							// 'uploadid' 					=> $uploadid,
+							'designation_id' 			=> $line[3],
+							'company_id' 				=> $line[4],
+							'project_id' 				=> $line[5],
+							'sub_project_id' 			=> $line[6],
+							'penempatan' 				=> $line[7],
+							'region' 					=> $line[8]
+							// 'project' 						=> $line[6], //project
+
+							// 'createdby' => $employee_id,
+							// 'createdon' => date('Y-m-d h:i:s'),
+						);
+
+						$this->Import_model->update_pkwt_emp($data, $line[1]);
+						// $result = $this->Import_model->addratecardtemp($data);
+
+
+
+						$config['cacheable']	= true; //boolean, the default is true
+						$config['cachedir']		= './assets/'; //string, the default is application/cache/
+						$config['errorlog']		= './assets/'; //string, the default is application/logs/
+						$config['imagedir']		= './assets/images/pkwt/'; //direktori penyimpanan qr code
+						$config['quality']		= true; //boolean, the default is true
+						$config['size']			= '1024'; //interger, the default is 1024
+						$config['black']		= array(224, 255, 255); // array, default is array(255,255,255)
+						$config['white']		= array(70, 130, 180); // array, default is array(0,0,0)
+						$this->ciqrcode->initialize($config);
+
+
+
+						if ($line[9] == 1) {
+
+							if ($line[4] == '2') {
+								$pkwt_hr = 'E-PKWT-JKT/SC-HR/';
+								$spb_hr = 'E-SPB-JKT/SC-HR/';
+								$companyID = '2';
+							} else if ($line[4] == '3') {
+								$pkwt_hr = 'E-PKWT-JKT/KAC-HR/';
+								$spb_hr = 'E-SPB-JKT/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'E-PKWT-JKT/MATA-HR/';
+								$spb_hr = 'E-SPB-JKT/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_pkwt();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+						} else {
+
+							if ($line[4] == '2') {
+								$pkwt_hr = 'KEMITRAAN/SC-HR/';
+								$spb_hr = 'KEMITRAAN/SC-HR/';
+								$companyID = '2';
+							} else if ($line[4] == '3') {
+								$pkwt_hr = 'KEMITRAAN/KAC-HR/';
+								$spb_hr = 'KEMITRAAN/KAC-HR/';
+								$companyID = '3';
+							} else {
+								$pkwt_hr = 'KEMITRAAN/MATA-HR/';
+								$spb_hr = 'KEMITRAAN/MATA-HR/';
+								$companyID = '4';
+							}
+
+							$count_pkwt = $this->Xin_model->count_tkhl();
+							$romawi = $this->Xin_model->tgl_pkwt();
+							$unicode = $this->Xin_model->getUniqueCode(20);
+							$nomor_surat = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $pkwt_hr . $romawi;
+							$nomor_surat_spb = sprintf("%05d", $count_pkwt[0]->newpkwt) . '/' . $spb_hr . $romawi;
+						}
+
+						$docid = date('ymdHisv');
+						$yearmonth = date('Y/m');
+
+						$dirpkwt = $config['imagedir'] . $yearmonth . '/';
+						//kalau blm ada folder path nya
+						if (!file_exists($dirpkwt)) {
+							mkdir($dirpkwt, 0777, true);
+						}
+
+						$image_name = $yearmonth . '/esign_pkwt' . date('ymdHisv') . '.png'; //buat name dari qr code sesuai dengan nim
+						$domain = 'https://apps-cakrawala.com/esign/pkwt/' . $docid;
+						$params['data'] = $domain; //data yang akan di jadikan QR CODE
+						$params['level'] = 'H'; //H=High
+						$params['size'] = 10;
+						$params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+						$this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+
+
+
+						// INSERT TO PKWT
+
+						$data = array(
+							'uniqueid' 							=> $unicode,
+							'employee_id' 						=> $line[1],
+							'docid'								=> $docid,
+							'project' 							=> $line[5],
+							'sub_project'						=> $line[6],
+							'from_date'	 						=> $line[10],
+							'to_date' 							=> $line[11],
+							'no_surat' 							=> $nomor_surat,
+							'no_spb' 							=> $nomor_surat_spb,
+							'waktu_kontrak' 					=> $line[12],
+							'company' 							=> $line[4],
+							'jabatan' 							=> $line[3],
+							'penempatan' 						=> $line[7],
+							'hari_kerja' 						=> $line[13],
+							'tgl_payment'						=> $line[14],
+							'start_period_payment' 				=> $line[15],
+							'end_period_payment'				=> $line[16],
+							'basic_pay' 						=> $line[17],
+							'allowance_grade'					=> $line[18],
+							'dm_allow_grade' 					=> $line[19],
+							'allowance_area'					=> $line[20],
+							'dm_allow_area' 					=> $line[21],
+							'allowance_masakerja' 				=> $line[22],
+							'dm_allow_masakerja' 				=> $line[23],
+							'allowance_meal' 				=> $line[24],
+							'dm_allow_meal' 				=> $line[25],
+							'allowance_transport' 			=> $line[26],
+							'dm_allow_transport' 			=> $line[27],
+							'allowance_rent' 				=> $line[28],
+							'dm_allow_rent' 				=> $line[29],
+							'allowance_transrent' 			=> $line[30],
+							'dm_allow_transrent' 			=> $line[31],
+							'allowance_komunikasi' 			=> $line[32],
+							'dm_allow_komunikasi' 			=> $line[33],
+							'allowance_park' 				=> $line[34],
+							'dm_allow_park' 				=> $line[35],
+							'allowance_residance' 			=> $line[36],
+							'dm_allow_residance' 			=> $line[37],
+							'allowance_laptop' 				=> $line[38],
+							'dm_allow_laptop' 				=> $line[39],
+							'allowance_transmeal' 				=> $line[40],
+							'dm_allow_transmeal' 				=> $line[41],
+							'allowance_kasir' 				=> $line[42],
+							'dm_allow_kasir' 				=> $line[43],
+							'allowance_medicine' 			=> $line[44],
+							'dm_allow_medicine' 			=> $line[45],
+							'allowance_akomodasi' 			=> $line[46],
+							'dm_allow_akomodasi' 			=> $line[47],
+							'allowance_operation' 			=> $line[48],
+							'dm_allow_operation' 			=> $line[49],
+							'img_esign'						=> $image_name,
+
+							'sign_nip'						=> '21541934',
+							'sign_fullname'					=> 'MARLIA ULFA',
+							'sign_jabatan'					=> 'SM HRD & GA',
+
+							'status_pkwt' 					=> 0, //0 belum approve, 1 sudah approve
+							'contract_type_id'				=> $line[9], //1 pkwt, 2 tkhl
+							'request_pkwt' => $session['user_id'],
+							'request_date' => date('Y-m-d h:i:s'),
+							'approve_nae' => $session['user_id'],
+							'approve_nae_date' => date('Y-m-d h:i:s'),
+							'approve_nom' =>  $session['user_id'],
+							'approve_nom_date' => date('Y-m-d h:i:s')
+
+						);
+
+
+						$iresult = $this->Pkwt_model->add_pkwt_record($data);
+
+
+						if ($iresult == TRUE) {
+							$Return['result'] = 'PENGAJUAN PKWT EXPIRED berhasil..';
+						} else {
+							$Return['error'] = $this->lang->line('xin_error_msg');
+						}
+
+						//END INSERT TO PKWT
+
+
+
+						// $bank_account_data = array(
+						// 'account_title' => 'Rekening',
+						// 'account_number' => $line[18], //NO. REK
+						// 'bank_name' => $line[19],
+						// 'employee_id' => $last_insert_id,
+						// 'created_at' => date('d-m-Y'),
+						// );
+						// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+						// $resultdel = $this->Import_model->delete_temp_by_pt();
+						// $formula4++;
+					}
+					//close opened csv file
+					fclose($csvFile);
+
+
+					$Return['result'] = $this->lang->line('xin_success_attendance_import');
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+
+		// redirect('admin/Importexcelratecard?upid=' . $uploadid);
+		redirect('admin');
+	}
+
+
+	// expired page
+	public function importnewemployees()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_import_new_employee') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_new_employee');
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_new_employees';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('109', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/new_employees", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	// expired page
+	public function importratecard()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_import_excl_ratecard') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_ratecard');
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_ratecard';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('232', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_ratecard", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	// expired page
+	public function importeslip()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->lang->line('xin_import_excl_eslip') . ' | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = $this->lang->line('xin_import_excl_eslip');
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_eslip';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('469', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_eslip", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//delete batch saltab
+	public function delete_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete batch ratecard
+	public function delete_batch_ratecard()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_ratecard($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete batch absensi
+	public function delete_batch_absensi()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_absensi($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete batch saltab release
+	public function delete_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_batch_saltab_release($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//release eslip batch saltab release
+	public function release_eslip_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_eslip_batch_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//accept request open lock saltab
+	public function accept_request()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->accept_request($postData);
+
+		echo json_encode($data);
+	}
+
+	//reject request open lock saltab
+	public function reject_request()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->reject_request($postData);
+
+		echo json_encode($data);
+	}
+
+	//release batch saltab
+	public function release_batch_saltab()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_batch_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//cek jumlah data invalid di saltab temp
+	public function cek_jumlah_invalid()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->cek_jumlah_invalid($postData['id']);
+
+		// return $data;
+		echo json_encode($data);
+	}
+
+	//cek jumlah data warning di saltab temp
+	public function cek_jumlah_warning()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->cek_jumlah_warning($postData['id']);
+
+		// return $data;
+		echo json_encode($data);
+	}
+
+	//cek jumlah data rekening tidak aktif di saltab temp
+	public function cek_jumlah_rekening_tidak_aktif()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->cek_jumlah_rekening_tidak_aktif($postData['id']);
+
+		// return $data;
+		echo json_encode($data);
+	}
+
+	//release batch bupot
+	public function release_batch_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->release_batch_bupot($postData);
+
+		echo json_encode($data);
+	}
+
+	//delete detail saltab
+	public function delete_detail_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_saltab($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail bupot
+	public function delete_detail_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_bupot($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail ratecard
+	public function delete_detail_ratecard()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_ratecard($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail absensi
+	public function delete_detail_absensi()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_absensi($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//delete detail saltab release
+	public function delete_detail_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->delete_detail_saltab_release($postData['id']);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch saltab
+	public function list_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch ratecard
+	public function list_batch_ratecard()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->list_batch_ratecard($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch absensi
+	public function list_batch_absensi()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->list_batch_absensi($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch saltab release
+	public function list_batch_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list open import batch saltab
+	public function list_open_import_batch_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_request_open_import_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list batch saltab release untuk download
+	public function list_batch_saltab_release_download()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_batch_saltab_release_download($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab
+	public function list_detail_saltab()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab($postData);
+
+		echo json_encode($data);
+	}
+
+	//load all detail saltab
+	public function all_detail_saltab_cek_aktif()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_all_detail_saltab_cek_aktif($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail bupot
+	public function list_detail_bupot()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_bupot($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail ratecard
+	public function list_detail_ratecard()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_ratecard($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail absensi
+	public function list_detail_absensi()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_absensi($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab release
+	public function list_detail_saltab_release()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab_release($postData);
+
+		echo json_encode($data);
+	}
+
+	//load datatables list detail saltab release untuk download
+	public function list_detail_saltab_release_download()
+	{
+
+		// POST data
+		$postData = $this->input->post();
+
+		// Get data
+		$data = $this->Import_model->get_list_detail_saltab_release_download($postData);
+
+		echo json_encode($data);
+	}
+
+	public function downloadTemplateSaltab()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template E-Saltab'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function download_template_absensi()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Absensi'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_absensi_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//Buat sheet Master Kota Kabupaten
+		$sheet2 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet2->setTitle('Master Kota Kabupaten'); // Set the title for the second sheet
+
+		$tabel_kota_kabupaten = $this->Import_model->get_data_kota_kabupaten();
+
+		$sheet2->setCellValue('A1', 'ID KOTA KABUPATEN');
+		$sheet2->setCellValue('B1', 'NAMA KOTA KABUPATEN');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Kota Kabupaten');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$tabel_kota_kabupaten,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 2; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:B1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+
+		//Buat sheet Master Mapping project - jabatan
+		$sheet3 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet3->setTitle('Master Project Posisi'); // Set the title for the second sheet
+
+		$tabel_project_jabatan = $this->Import_model->get_data_mapping_project_posisi();
+
+		$sheet3->setCellValue('A1', 'ID PROJECT');
+		$sheet3->setCellValue('B1', 'NAMA PROJECT');
+		$sheet3->setCellValue('C1', 'ID ENTITAS/SUB PROJECT');
+		$sheet3->setCellValue('D1', 'NAMA ENTITAS/SUB PROJECT');
+		$sheet3->setCellValue('E1', 'ID JABATAN');
+		$sheet3->setCellValue('F1', 'NAMA JABATAN');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Project Posisi');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$tabel_project_jabatan,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 6; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:F1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//aktifkan sheet pertama
+		$spreadsheet->setActiveSheetIndex(0);
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template Absensi'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function download_template_ratecard()
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Ratecard'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_ratecard = $this->Import_model->get_ratecard_table();
+
+		$header_tabel_saltab = array_column($tabel_ratecard, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_ratecard, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//Buat sheet Master Kota Kabupaten
+		$sheet2 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet2->setTitle('Master Kota Kabupaten'); // Set the title for the second sheet
+
+		$tabel_kota_kabupaten = $this->Import_model->get_data_kota_kabupaten();
+
+		$sheet2->setCellValue('A1', 'ID KOTA KABUPATEN');
+		$sheet2->setCellValue('B1', 'NAMA KOTA KABUPATEN');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Kota Kabupaten');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$tabel_kota_kabupaten,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 2; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:B1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+
+		//Buat sheet Master Mapping project - jabatan
+		$sheet3 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet3->setTitle('Master Project Posisi'); // Set the title for the second sheet
+
+		$tabel_project_jabatan = $this->Import_model->get_data_mapping_project_posisi();
+
+		$sheet3->setCellValue('A1', 'ID PROJECT');
+		$sheet3->setCellValue('B1', 'NAMA PROJECT');
+		$sheet3->setCellValue('C1', 'ID ENTITAS/SUB PROJECT');
+		$sheet3->setCellValue('D1', 'NAMA ENTITAS/SUB PROJECT');
+		$sheet3->setCellValue('E1', 'ID JABATAN');
+		$sheet3->setCellValue('F1', 'NAMA JABATAN');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Project Posisi');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$tabel_project_jabatan,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 6; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:F1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+
+		//aktifkan sheet pertama
+		$spreadsheet->setActiveSheetIndex(0);
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template Ratecard'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function format_array_print_excel($tabel_hasil)
+	{
+		// $tabel_saltab = $this->Import_model->get_saltab_table();
+
+		// $jumlah_data = count($tabel_saltab);
+
+		// $new_tabel_saltab = array_values($tabel_saltab);
+
+		// if($tabel_hasil['sub_project']){
+		// }
+
+		$data = array();
+
+		foreach ($tabel_hasil as $row) {
+			$new_row = array_values($row);
+			array_push($data, $new_row);
+		}
+
+		$jumlah_data = count($data);
+
+		for ($i = 0; $i < $jumlah_data; $i++) {
+			$jumlah_kolom = count($data[$i]);
+			for ($j = 0; $j < $jumlah_kolom; $j++) {
+				if (is_numeric($data[$i][$j])) {
+					// $data[$i][$j] = "NUMERIC";
+					if ($data[$i][$j] <= 100000000) {
+						// $data[$i][$j] = "NUMERIC kecil";
+						$data[$i][$j] = round($data[$i][$j]) . " ";
+					} else {
+						// $data[$i][$j] = "NUMERIC besar";
+						$data[$i][$j] = $data[$i][$j] . " ";
+					}
+				} else {
+					// $data[$i][$j] = "NOT NUMERIC";
+					$data[$i][$j] = $data[$i][$j] . " ";
+				}
+			}
+		}
+
+		return $data;
+
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail Saltab
+	public function get_detail_saltab()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_saltab($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail bupot
+	public function get_detail_bupot()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_bupot($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail ratecard
+	public function get_detail_ratecard()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_ratecard($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail absensi
+	public function get_detail_absensi()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_absensi($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail untuk edit absensi
+	public function get_detail_edit_absensi()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_edit_absensi($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//proses update detail absensi
+	public function update_detail_absensi()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->update_detail_absensi($postData['data_edit_save'], $postData['id']);
+
+		$data_batch_absensi = $this->Import_model->get_absensi_batch($data);
+
+		$response = array(
+			"message_perbandingan_mpp" => $this->Saltab_model->get_perbandingan_mpp_absensi_saltab_temp($data_batch_absensi['id_saltab_temp'], $data),
+			"id_header_saltab" => $data_batch_absensi['id_saltab_temp'],
+		);
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//mengambil Json data Detail Saltab
+	public function get_detail_saltab_release()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_detail_saltab_release($postData['id']);
+		echo json_encode($data);
+		// echo "<pre>";
+		// print_r($data);
+		// echo "</pre>";
+	}
+
+	//ganti data nip employee
+	public function ganti_nip()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//update NIP
+		$this->Import_model->update_NIP($postData);
+
+		//data response NIP
+		$data2 = $this->Import_model->get_single_nip_saltab_release($postData);
+		$response = array(
+			'status'	=> "200",
+			'pesan' 	=> "Berhasil Ubah NIP",
+			'data'		=> $data2,
+		);
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	public function downloadDetailSaltab($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab) + 4;
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel($id, $gabung);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$tambahan_header = array(
+			"STATUS VALID",
+			"KETERANGAN VALID",
+			"STATUS CEK REKENING",
+			"TANGGAL CEK REKENING"
+		);
+		$final_header_array = array_merge($tambahan_header, $header2_tabel_saltab);
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$final_header_array,   // The data to set
+				NULL,
+				'A6'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 7])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailBupot($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('BUPOT'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_bupot = $this->Import_model->get_bupot_table();
+		$data_batch_bupot = $this->Import_model->get_bupot_batch($id);
+
+		$header_tabel_bupot = array_column($tabel_bupot, 'nama_tabel');
+		$header2_tabel_bupot = array_column($tabel_bupot, 'alias');
+		array_push($header2_tabel_bupot, 'FILE BUPOT');
+		array_push($header_tabel_bupot, 'file_bupot');
+		$length_array = count($header_tabel_bupot);
+		$gabung = implode(",", $header_tabel_bupot);
+
+		$detail_bupot = $this->Import_model->get_bupot_detail_excel($id, $gabung);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_bupot);
+
+		$project = $data_batch_bupot['project_name'];
+		$sub_project = $data_batch_bupot['sub_project_name'];
+		$peride_bupot = $data_batch_bupot['periode_bupot'];
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode BUPOT');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_bupot);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Jumlah Data');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $data_batch_bupot['jumlah_data']);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload On (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_bupot['created_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Upload By');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_bupot['created_by']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Release On (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $data_batch_bupot['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A8', 'Release By');
+		$spreadsheet->getActiveSheet()->setCellValue('B8', ': ' . $data_batch_bupot['release_by']);
+		$spreadsheet->getActiveSheet()->mergeCells("B8:J8");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_bupot,   // The data to set
+				NULL,
+				'A10'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A10:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_bupot);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 11])->setvalueExplicit($detail_bupot[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('10:10')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('10:10')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('10:10')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'BUPOT - ' . $data_batch_bupot['periode_bupot'] . " - " . $data_batch_bupot['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabRelease($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release($id, $gabung);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name'] . ' - ' . $peride_salary; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabReleaseBPJS($id = null)
+	{
+
+
+		if ($this->Import_model->CheckDownloadBPJS($id) < 1) {
+			$this->update_downloader($id);
+		}
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab BPJS'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$header2_tabel_saltab = array(
+			'STATUS',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+			'PROJECT',
+			'SUB PROJECT',
+			'JABATAN',
+			'AREA',
+			'TEMPAT LAHIR',
+			'TANGGAL LAHIR (Y-m-d)',
+			'NAMA IBU KANDUNG',
+			'JENIS KELAMIN',
+			'STATUS PERNIKAHAN',
+			'ALAMAT',
+			'TANGGAL MULAI KONTRAK',
+			'TANGGAL AKHIR KONTRAK',
+			'UMK',
+			'UMK BARU',
+			'GAJI POKOK',
+			'GAJI DITERIMA',
+			'THP',
+			'BPJS KETENAGAKERJAAN',
+			'BPJS KESEHATAN',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_bpjs($id, $data_batch_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A9'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setWrapText(true);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab BPJS - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabReleasePayroll($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab Payroll'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header2_tabel_saltab = array(
+			'STATUS',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+			'PROJECT',
+			'SUB PROJECT',
+			'AREA',
+			'THP',
+			'STATUS DATA',
+			'KETERANGAN',
+			'STATUS AKTIF REKENING',
+			'CEK AKTIF REKENING ON',
+			// 'NOMOR REKENING (SALTAB)',
+			// 'NAMA BANK (SALTAB)',
+			// 'PEMILIK REKENING (SALTAB)',
+			// 'STATUS HOLD',
+			'NOMOR REKENING (DATABASE)',
+			'STATUS VERIFIKASI NOMOR REKENING BY HRD',
+			'NAMA BANK (DATABASE)',
+			'STATUS VERIFIKASI NAMA BANK BY HRD',
+			'PEMILIK REKENING (DATABASE)',
+			'STATUS VERIFIKASI PEMILIK REKENING BY HRD',
+			'STATUS HOLD',
+			'LINK ESLIP',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_payroll($id, $data_batch_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		// echo "<pre>";
+		// print_r($detail_saltab);
+		// echo "</pre>";
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab Payroll - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		// $writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadDetailSaltabReleasePajak($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab Pajak'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$header2_tabel_saltab = array(
+			'NIP',
+			'JOIN DATE',
+			//'PERIODE KONTRAK TERAKHIR (Y-M-D)',
+			'NIK KTP',
+			'STATUS VERIFIKASI NIK (1 = TERVERIFIKASI)',
+			'NAMA LENGKAP',
+			'STATUS PTKP',
+			'SUB PROJECT',
+			'JABATAN',
+			'STATUS KARYAWAN',
+			//'PINDAH PROJECT',
+			'GAJI POKOK',
+			'TUNJANGAN PPH',
+			'ALLOWANCE JABATAN',
+			'ALLOWANCE KEAHLIAN',
+			'ALLOWANCE AREA',
+			'ALLOWANCE MASA KERJA',
+			'ALLOWANCE KONSUMSI',
+			'ALLOWANCE TRANSPORT',
+			'ALLOWANCE RENT',
+			'ALLOWANCE KOMUNIKASI',
+			'ALLOWANCE PARKING',
+			'ALLOWANCE RESIDENCE COST',
+			'ALLOWANCE AKOMODASI',
+			'ALLOWANCE DEVICE',
+			'ALLOWANCE KASIR',
+			'ALLOWANCE TRANS MEAL',
+			'ALLOWANCE TRANS RENT',
+			'ALLOWANCE MEDICINE',
+			'ALLOWANCE GROOMING',
+			'ALLOWANCE KEHADIRAN',
+			'ALLOWANCE OPERATION',
+			'ALLOWANCE OTHER',
+			'OVER SALARY/EXTRA COST',
+			'PENYESUAIAN UMK',
+			'INSENTIVE',
+			'LEMBUR',
+			'LEMBUR HARI LIBUR',
+			'LEMBUR LIBUR NASIONAL',
+			'RAPEL LEMBUR',
+			'KOMPENSASI',
+			'BONUS',
+			'UUCK',
+			'THR',
+			'ADJUSTMENT PPH',
+			'ADJUSTMENT BRUTO',
+			'ADJUSTMENT DLK BRUTO',
+			'DEDUCTION BRUTO',
+			'DEDUCTION SO BRUTO',
+			'POTONGAN KPI BRUTO',
+			'TOTAL PENDAPATAN TIDAK TERATUR',
+			'TOTAL 1',
+			'BPJS TK DEDUCTION JKK JKM (PERUSAHAAN)',
+			'BPJS KS DEDUCTION (PERUSAHAAN)',
+			'BPJS TK (KTN)',
+			'JAMINAN PENSIUN',
+			'TOTAL BPJS TK (KTN) + JAMINAN PENSIUN',
+			'PPH 21',
+			'PPH 21 THR',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_pajak($id, $data_batch_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A9'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setWrapText(true);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab Pajak - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadBatchSaltabReleaseNIPKosong($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab);
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel_release_nip_kosong($id, $gabung);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A10'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('9:9')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function downloadBatchSaltabReleaseNIKSaltab($id = null)
+	{
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab NIK'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch_release($id);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		// $spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		$header2_tabel_saltab = array(
+			'NIP',
+			'JOIN DATE',
+			'NAMA LENGKAP',
+			'NIK KTP SALTAB',
+			'NIK KTP CIS',
+			'NIK KTP PERBAIKAN',
+			'STATUS VERIFIKASI CIS (1 = TERVERIFIKASI)',
+			'LINK FOTO KTP',
+			'SUB PROJECT',
+			'JABATAN',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_detail_excel_release_nik($id, $data_batch_saltab);
+		// $detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A5', 'Upload Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B5', ': ' . $data_batch_saltab['upload_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B5:J5");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A6', 'Finalization Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B6', ': ' . $data_batch_saltab['release_on']);
+		$spreadsheet->getActiveSheet()->mergeCells("B6:J6");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A7', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B7', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B7:J7");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A9'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A9:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 10])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A9'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setWrapText(true);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('8:8')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab NIK - ' . $data_batch_saltab['project_name'] . ' - ' . $data_batch_saltab['sub_project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function download_data_invalid_from_import($id = null)
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		$data_invalid = json_decode($postData['data_saltab_invalid']);
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Data Invalid'); //nama Spreadsheet yg baru dibuat
+
+		$header2_tabel_saltab = array(
+			'STATUS VALID',
+			'KETERANGAN VALID',
+			'NIP',
+			'NIK',
+			'NAMA LENGKAP',
+		);
+
+		$length_array = count($header2_tabel_saltab);
+		$waktu_stamp = date("Y-m-d H:i:s");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Download Time (Y-m-d)');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $waktu_stamp);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:E1");
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A3'
+			);
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A3:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$data_invalid_print = array();
+
+		foreach ($data_invalid as $record) {
+			$data_invalid_print[] = array(
+				$record->status_valid,
+				$record->keterangan_valid,
+				$record->nip,
+				$record->nik,
+				$record->fullname,
+			);
+		}
+
+		$length_data = count($data_invalid_print);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 4])->setvalueExplicit($data_invalid_print[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$data_invalid_print,   // The data to set
+		// 		NULL,
+		// 		'A4'
+		// 	);
+
+		// echo "<pre>";
+		// print_r($detail_saltab);
+		// echo "</pre>";
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('3:3')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('3:3')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('3:3')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = "Data Invalid"; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		// $writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function download_data_from_saltab_temp()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		$id = $postData['id'];
+		$jenis = $postData['jenis'];
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$data_batch_saltab = $this->Import_model->get_saltab_batch($id);
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$length_array = count($header_tabel_saltab) + 4;
+		$gabung = implode(",", $header_tabel_saltab);
+
+		$detail_saltab = $this->Import_model->get_saltab_temp_detail_excel($id, $gabung, $jenis);
+		$detail_saltab_fix = $this->format_array_print_excel($detail_saltab);
+
+		$project = $data_batch_saltab['project_name'];
+		$sub_project = $data_batch_saltab['sub_project_name'];
+		$peride_salary = $this->Xin_model->tgl_indo($data_batch_saltab['periode_salary']);
+		$peride_cutoff = $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data_batch_saltab['periode_cutoff_to']);
+
+		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $project);
+		$spreadsheet->getActiveSheet()->mergeCells("B1:J1");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A2', 'Sub Project');
+		$spreadsheet->getActiveSheet()->setCellValue('B2', ': ' . $sub_project);
+		$spreadsheet->getActiveSheet()->mergeCells("B2:J2");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A3', 'Periode Cutoff');
+		$spreadsheet->getActiveSheet()->setCellValue('B3', ': ' . $peride_cutoff);
+		$spreadsheet->getActiveSheet()->mergeCells("B3:J3");
+
+		$spreadsheet->getActiveSheet()->setCellValue('A4', 'Periode Salary');
+		$spreadsheet->getActiveSheet()->setCellValue('B4', ': ' . $peride_salary);
+		$spreadsheet->getActiveSheet()->mergeCells("B4:J4");
+
+		$tambahan_header = array(
+			"STATUS VALID",
+			"KETERANGAN VALID",
+			"STATUS CEK REKENING",
+			"TANGGAL CEK REKENING"
+		);
+		$final_header_array = array_merge($tambahan_header, $header2_tabel_saltab);
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$final_header_array,   // The data to set
+				NULL,
+				'A6'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $length_array; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A6:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$length_data = count($detail_saltab);
+
+		for ($i = 0; $i < $length_data; $i++) {
+			for ($j = 0; $j < $length_array; $j++) {
+				// $cell = chr($j + 65) . ($i);
+				$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 7])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+				// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab_fix,   // The data to set
+		// 		NULL,
+		// 		'A7'
+		// 	);
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('6:6')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'E-Saltab - ' . $data_batch_saltab['project_name']; // set filename for excel file to be exported
+		// $filename = $gabung;
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	public function update_downloader($id)
+	{
+		/* Define return | here result is used to return user data and error for error message */
+		// $status_id = $this->uri->segment(4);
+		// $session = $this->session->userdata('username');
+		// if(empty($session)){ 
+		// 	redirect('admin/');
+		// }
+
+
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$datas = array(
+			'down_bpjs_by' => $session['employee_id'],
+			'down_bpjs_on' =>  date("Y-m-d h:i:s"),
+		);
+
+		$this->Import_model->update_download_bpjs($datas, $id);
+
+
+		// $resultdel = $this->Import_model->delete_all_eslip_preview($upload_id);
+		// $tempEmployees = $this->Import_model->get_temp_eslip($upload_id);
+
+
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel saltab
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_saltab2()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nik = $this->input->post('nik');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$saltab_from = $this->input->post('saltab_from');
+		$saltab_to = $this->input->post('saltab_to');
+		$periode_salary = $this->input->post('periode_salary');
+		// $fee = $this->input->post('fee');
+
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		if (isset($_FILES['file_excel']['name']) && in_array($_FILES['file_excel']['type'], $file_mimes)) {
+
+			$array_file = explode('.', $_FILES['file_excel']['name']);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($_FILES['file_excel']['tmp_name']);
+			$sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+			// $sheet_data = array_map('trim', $sheet_data);
+			$sheet_data = array_filter($sheet_data);
+			$array_data  = [];
+			$array_data_final  = [];
+			$data        = [];
+			$header_tabel_saltab = $sheet_data[0];
+			$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+			// echo '<pre>';
+			// print_r(array_filter($header_tabel_saltab));
+			// echo '</pre>';
+
+			// $header_tabel_saltab = array_values(array_filter($header_tabel_saltab));
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+			// $header_tabel_saltab = array_filter($header_tabel_saltab);
+			$length_header = count($header_tabel_saltab);
+			$jumlah_data = count($sheet_data) - 2;
+			// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+			// echo '<pre>';
+			// print_r($sheet_data);
+			// echo '</pre>';
+
+			//susun array batch saltab
+			$data_batch = array(
+				'periode_cutoff_from'    => $saltab_from,
+				'periode_cutoff_to'      => $saltab_to,
+				'periode_salary'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+				'total_mpp'        	 	 => $jumlah_data,
+				// 'fee'        	 	 	 => $fee,
+				'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($nik),
+				'upload_by_id'        	 => $nik,
+				'upload_ip'        	 	 => $this->get_client_ip(),
+			);
+
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			$data_batch_cek = array(
+				'periode_cutoff_from'    => $saltab_from,
+				'periode_cutoff_to'      => $saltab_to,
+				'periode_salary'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+			);
+
+			$id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
+
+			//susun array untuk cek apakah sudah ada data batch yg sama
+			$data_batch_cek_request_open = array(
+				'periode_saltab_from'    => $saltab_from,
+				'periode_saltab_to'      => $saltab_to,
+				'tanggal_gajian'      	 => $periode_salary,
+				'project_id'        	 => $project,
+				'project_name'        	 => $nama_project,
+				'sub_project_id'         => $sub_project,
+				'sub_project_name'       => $nama_sub_project,
+			);
+
+			$this->Import_model->update_request_open_import($data_batch_cek_request_open);
+
+			if ($id_batch_awal != "") {
+				$this->Import_model->delete_batch_saltab($id_batch_awal);
+			}
+
+			// $data_batch += ['id' => $id_batch_awal];
+
+			if ($data_batch != '') {
+				$this->Import_model->insert_saltab_batch($data_batch);
+			}
+
+			$id_batch = $this->Import_model->get_id_saltab_batch($data_batch);
+
+			//susun array saltab detail
+			for ($i = 2; $i < count($sheet_data); $i++) {
+				$data += ['uploadid' => $id_batch];
+				for ($j = 0; $j < $length_header; $j++) {
+					if ($header_tabel_saltab[$j] == "nip") {
+						if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
+							// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+							$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+							$trimmed_nip = trim($trimmed_nip, ' ');
+							$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+						} else {
+							if (($sheet_data[$i][$j + 1] == "0") || ($sheet_data[$i][$j + 1] == "")) {
+								// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+								$trimmed_nip = trim($trimmed_nip, ' ');
+								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+								// $data += [$header_tabel_saltab[$j + 1] => "NIK KOSONG"];
+								$data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
+								// $data += [$header_tabel_saltab[$j + 1] => "CEK CIS"];
+								$j = $j + 1;
+							} else {
+								$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+								$trimmed_nip = trim($trimmed_nip, ' ');
+								$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+							}
+						}
+						// $data += [$header_tabel_saltab[$j] => $sheet_data[$i][$j]];
+					}
+					if ($header_tabel_saltab[$j] == "adjustment_pph") {
+						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+						$trimmed_nip = trim($trimmed_nip, ' ');
+						$trimmed_nip = abs(doubleval($trimmed_nip));
+						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					} else {
+						$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+						$trimmed_nip = trim($trimmed_nip, ' ');
+						$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+					}
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+
+			if ($nama_sub_project == "-ALL-") {
+				if (!empty($array_data)) {
+					// echo '<pre>';
+					// print_r($array_data);
+					// echo '</pre>';
+					$this->Import_model->insert_saltab_detail($array_data);
+				}
+			} else {
+				foreach ($array_data as $array_data) {
+					$array_data['sub_project'] = $nama_sub_project;
+					$array_data_final[] = $array_data;
+				}
+				if (!empty($array_data_final)) {
+					$this->Import_model->insert_saltab_detail($array_data_final);
+				}
+			}
+
+			$tes_query = $this->db->last_query();
+
+
+			// if ($array_data != '') {
+			// 	$this->Import_model->insert_saltab_detail($array_data);
+			// }
+
+			// $this->modal_feedback('success', 'Success', 'Data Imported', 'OK');
+
+			// print_r($id_batch . "," . $nik . "," . $project . "," . $sub_project . "," . $saltab_from . "," . $saltab_to);
+			// echo '<pre>';
+			// print_r($tes_query);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r("NIK : " . $nik);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($array_data);
+			// echo '</pre>';
+			// echo '<pre>';
+			// print_r($header_tabel_saltab);
+			// echo '</pre>';
+		} else {
+			// $this->modal_feedback('error', 'Error', 'Import failed', 'Try again');
+			print_r("gagal import");
+			print_r($_FILES['file_excel']['name']);
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+	}
+
+	function upload_dokumen()
+	{
+		$postData = $this->input->post();
+		$identifier = $postData['identifier'];
+		$image = $_FILES;
+		$return_file_data = array();
+
+		$status = "0";
+		$message = "File gagal diupload";
+		$jumlah_data = 0;
+		$data_header = array();
+		$data = array();
+
+		foreach ($image as $key => $img) {
+			$ext = pathinfo($img['name'], PATHINFO_EXTENSION);
+			$name = pathinfo($img['name'], PATHINFO_FILENAME);
+			$yearmonth = date('Y/m');
+
+			if ($identifier == "saltab") {
+				if (!empty($img['name'])) {
+					$this->load->helper('file');
+
+					/* Allowed MIME(s) File */
+					$file_mimes = array(
+						'application/octet-stream',
+						'application/vnd.ms-excel',
+						'application/x-csv',
+						'text/x-csv',
+						'text/csv',
+						'application/csv',
+						'application/excel',
+						'application/vnd.msexcel',
+						'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+					);
+
+					if (isset($img['name']) && in_array($img['type'], $file_mimes)) {
+
+						$array_file = explode('.', $img['name']);
+						$extension  = end($array_file);
+
+						if ('csv' == $extension) {
+							$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+						} else {
+							$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+						}
+
+						$spreadsheet = $reader->load($img['tmp_name']);
+						if ($spreadsheet->sheetNameExists('E-Saltab')) {
+							$spreadsheet->setActiveSheetIndexByName('E-Saltab');
+
+							// $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+							$sheet_data  = $spreadsheet->getActiveSheet()->toArray();
+							// $sheet_data = array_map('trim', $sheet_data);
+							$sheet_data = array_filter($sheet_data);
+							$array_data  = [];
+							$array_data_final  = [];
+							$data        = [];
+							$header_tabel_saltab = $sheet_data[0];
+							$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+							$length_header = count($header_tabel_saltab);
+							$jumlah_data = count($sheet_data) - 2;
+
+							//susun array saltab detail
+							for ($i = 2; $i < count($sheet_data); $i++) {
+								$lanjut = true;
+								$data += ['id_bank' => 0];
+								// $data += ['customer_id' => time()];
+								for ($j = 0; $j < $length_header; $j++) {
+									if ($lanjut) {
+										if ($header_tabel_saltab[$j] == "fullname") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += [$header_tabel_saltab[$j] => strtoupper($trimmed_value)];
+											if (($trimmed_value == "") || ($trimmed_value == null)) {
+												$lanjut = false;
+											} else {
+												$lanjut = true;
+											}
+										} else if ($header_tabel_saltab[$j] == "nip") {
+											if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
+												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+												$trimmed_nip = trim($trimmed_nip, ' ');
+												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+												// $data += [$header_tabel_saltab[$j + 1] => ""];
+												// $j = $j + 1;
+											} else {
+												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+												$trimmed_nip = trim($trimmed_nip, ' ');
+												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+												// $data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
+												// $j = $j + 1;
+											}
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "norek") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += ['norek' => ''];
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "nama_bank") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += ['nama_bank' => ''];
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "pemilik_rek") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += ['pemilik_rek' => ''];
+											$lanjut = true;
+										} else if ($header_tabel_saltab[$j] == "adjustment_pph") {
+											$trimmed_nip = trim($sheet_data[$i][$j], ' ');
+											$trimmed_nip = trim($trimmed_nip, ' ');
+											$trimmed_nip = abs(doubleval($trimmed_nip));
+											$data += [$header_tabel_saltab[$j] => $trimmed_nip];
+											$lanjut = true;
+										} else {
+											if ($lanjut) {
+												$trimmed_value = trim($sheet_data[$i][$j], ' ');
+												$trimmed_value = trim($trimmed_value, ' ');
+												$data += [$header_tabel_saltab[$j] => $trimmed_value];
+												$lanjut = true;
+											}
+										}
+									}
+								}
+								if ($lanjut) {
+									$array_data[] = $data;
+									$data = array();
+								} else {
+									$data = array();
+								}
+							}
+
+							$status = "1";
+							$message = "Berhasil Baca Data Saltab.";
+							$jumlah_data = count($array_data);
+							$data_header = $header_tabel_saltab;
+							$data = $array_data;
+						} else {
+							$status = "0";
+							$message = "Tidak ditemukan sheet \"E-Saltab\" di dalam file excel";
+							$jumlah_data = 0;
+							$data_header = array();
+							$data = array();
+						}
+					} else {
+						$status = "0";
+						$message = "File yang diupload bukan format excel (.xlsx)";
+						$jumlah_data = 0;
+						$data_header = array();
+						$data = array();
+					}
+				} else {
+					$status = "0";
+					$message = "File gagal diupload";
+					$jumlah_data = 0;
+					$data_header = array();
+					$data = array();
+				}
+			} else {
+				$status = "0";
+				$message = "Tidak memiliki izin upload";
+				$jumlah_data = 0;
+				$data_header = array();
+				$data = array();
+			}
+		}
+
+		$return_value = array(
+			'status' => $status,
+			'message' => $message,
+			'jumlah_data' => $jumlah_data,
+			'data_header' => $data_header,
+			'data' => $data,
+		);
+
+		echo json_encode($return_value);
+
+		// echo json_encode($return_file_data);
+		// $this->load->view('imgtest');
+	}
+
+	//validasi import saltab
+	public function validasi_import_saltab()
+	{
+		$postData = $this->input->post();
+
+		$array_data  = [];
+		$data        = [];
+		$array_data_invalid	= [];
+		$data_saltab = json_decode($postData['array_data_import']);
+		$status_valid = 1;
+		$keterangan_valid = "";
+
+		foreach ($data_saltab as $record) {
+			if (($record->nip == "0") || ($record->nip == "") || ($record->nip == null)) {
+				$status_valid = 0;
+				$keterangan_valid = "Tidak Ada NIP";
+				//add status validasi  	id_bank
+				$data += ['nik_verify' => 0];
+				$data += ['bank_verify' => 0];
+				$data += ['pemilik_rek_verify' => 0];
+
+				foreach ($record as $key => $value) {
+					if ($key == "rek_verify") {
+						$data += [$key => 0];
+					} else if ($key == "norek") {
+						$data += [$key => ""];
+					} else if ($key == "id_bank") {
+						$data += [$key => 0];
+					} else if ($key == "nama_bank") {
+						$data += [$key => ""];
+					} else if ($key == "pemilik_rek") {
+						$data += [$key => ""];
+					} else {
+						$data += [$key => $value];
+					}
+				}
+
+				$data += ['status_valid' => $status_valid];
+				$data += ['keterangan_valid' => $keterangan_valid];
+
+				if ($status_valid == 0) {
+					$array_data_invalid[] = $data;
+				}
+				$array_data[] = $data;
+				$data = array();
+			} else {
+				$data_validasi = $this->Import_model->get_employee_validasi_saltab($record->nip);
+
+				// if (($data_validasi['verif_norek_database'] == "0") || ($data_validasi['verif_nama_bank_database'] == "0") || ($data_validasi['verif_pemilik_rekening_database'] == "0")) {
+				// 	$status_valid = 0;
+				// 	$keterangan_valid = "Komponen Rekening Tidak Valid";
+				// } else {
+				if (strtoupper(trim($record->fullname, ' ')) == strtoupper(trim($data_validasi['fullname_database'], ' '))) {
+					if (strval(trim($record->nik, ' ')) == strval(trim($data_validasi['nik_database'], ' '))) {
+						if (strtoupper($record->fullname) == strtoupper($data_validasi['pemilik_rekening_database'])) {
+							if (($data_validasi['verif_norek_database'] == "0") || ($data_validasi['verif_nama_bank_database'] == "0") || ($data_validasi['verif_pemilik_rekening_database'] == "0")) {
+								$status_valid = 0;
+								$keterangan_valid = "Komponen Rekening Tidak Valid";
+							} else {
+								$status_valid = 1;
+								$keterangan_valid = "Data Valid";
+							}
+						} else {
+							$status_valid = 2;
+							$keterangan_valid = "Nama Pemilik Rekening Berbeda";
+						}
+					} else {
+						$status_valid = 0;
+						$keterangan_valid = "NIP Salah atau NIK Berbeda dengan Database NEO";
+						// $keterangan_valid = "NIK SALTAB: " . trim($record->nik, ' ') . "</br>NIK CIS: " . trim($data_validasi['nik_database'], ' ');
+					}
+				} else {
+					$status_valid = 0;
+					$keterangan_valid = "NIP Salah atau Nama Lengkap Berbeda dengan Database NEO";
+				}
+
+				//add status validasi 
+				$data += ['nik_verify' => $data_validasi['verif_nik_database']];
+				$data += ['bank_verify' => $data_validasi['verif_nama_bank_database']];
+				$data += ['pemilik_rek_verify' => $data_validasi['verif_pemilik_rekening_database']];
+
+				foreach ($record as $key => $value) {
+					if ($key == "rek_verify") {
+						$data += [$key => $data_validasi['verif_norek_database']];
+					} else if ($key == "norek") {
+						$data += [$key => $data_validasi['norek_database']];
+					} else if ($key == "id_bank") {
+						$data += [$key => $data_validasi['id_bank_database']];
+					} else if ($key == "nama_bank") {
+						$data += [$key => $data_validasi['nama_bank_database']];
+					} else if ($key == "pemilik_rek") {
+						$data += [$key => $data_validasi['pemilik_rekening_database']];
+					} else {
+						$data += [$key => $value];
+					}
+				}
+
+				$data += ['status_valid' => $status_valid];
+				$data += ['keterangan_valid' => $keterangan_valid];
+
+				if ($status_valid == 0) {
+					$array_data_invalid[] = $data;
+				}
+				$array_data[] = $data;
+				$data = array();
+			}
+		}
+
+		if (empty($array_data)) {
+			$response = array(
+				'status'				=> "201",
+				'pesan' 				=> "Gagal Validasi Data",
+				'data'					=> array(),
+				'data_invalid'			=> array(),
+				'jumlah_data_saltab'	=> count($data_saltab),
+				'jumlah_data_invalid'	=> count(array()),
+			);
+		} else {
+			$response = array(
+				'status'				=> "200",
+				'pesan' 				=> "Berhasil Validasi Data",
+				'data'					=> $array_data,
+				'data_invalid'			=> $array_data_invalid,
+				'jumlah_data_saltab'	=> count($data_saltab),
+				'jumlah_data_invalid'	=> count($array_data_invalid),
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	//save saltab temp
+	public function save_saltab_temp()
+	{
+		$postData = $this->input->post();
+
+		// $array_postData = json_decode($postData);array_data_import_validasi
+		// $array_data_header = $postData['array_data_header'];
+		$array_data_import_validasi = json_decode($postData['array_data_import_validasi']);
+		$array_data_final  = [];
+
+		//susun array batch saltab
+		$data_batch = array(
+			'periode_cutoff_from'    => $postData['saltab_from'],
+			'periode_cutoff_to'      => $postData['saltab_to'],
+			'periode_salary'      	 => $postData['periode_salary'],
+			'project_id'        	 => $postData['project'],
+			'project_name'        	 => $postData['project_name'],
+			'sub_project_id'         => $postData['sub_project'],
+			'sub_project_name'       => $postData['sub_project_name'],
+			'total_mpp'        	 	 => count($array_data_import_validasi),
+			'fee'        	 	 	 => $postData['fee'],
+			'upload_by'        	 	 => $this->Import_model->get_nama_karyawan($postData['nip']),
+			'upload_by_id'        	 => $postData['nip'],
+			'upload_ip'        	 	 => $this->get_client_ip(),
+		);
+
+		//susun array untuk cek apakah sudah ada data batch yg sama
+		$data_batch_cek = array(
+			'periode_cutoff_from'    => $postData['saltab_from'],
+			'periode_cutoff_to'      => $postData['saltab_to'],
+			'periode_salary'      	 => $postData['periode_salary'],
+			'project_id'        	 => $postData['project'],
+			'project_name'        	 => $postData['project_name'],
+			'sub_project_id'         => $postData['sub_project'],
+			'sub_project_name'       => $postData['sub_project_name'],
+		);
+
+		$id_batch_awal = $this->Import_model->get_id_saltab_batch($data_batch_cek);
+
+		if ($id_batch_awal != "") {
+			$this->Import_model->delete_batch_saltab($id_batch_awal);
+		}
+
+		$this->Import_model->insert_saltab_batch($data_batch);
+
+		$id_batch = $this->Import_model->get_id_saltab_batch($data_batch);
+
+		//tambah id_batch sebagai uploadid di detail saltab
+		$array_data  = [];
+		$data        = array();
+		foreach ($array_data_import_validasi as $record) {
+			// $data = $record;
+			// $data['uploadid'] = $id_batch;
+
+			$data += ['uploadid' => $id_batch];
+
+			foreach ($record as $key => $value) {
+				$data += [$key => $value];
+			}
+			$array_data[] = $data;
+			$data = array();
+		}
+
+		// foreach ($array_data_import_validasi as $array_data) {
+		// 	$array_data['uploadid'] = $id_batch;
+		// 	$array_data_final[] = $array_data;
+		// }
+
+		// save data sku
+		$data = $this->Import_model->save_saltab_temp($array_data);
+
+		if ($data) {
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Add Batch Saltab",
+				'id_batch'	=> $id_batch,
+				'data'		=> $data,
+			);
+		} else {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Gagal Add Batch Saltab",
+				'id_batch'	=> $id_batch,
+				'data'		=> $data,
+			);
+		}
+
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel ratecard
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_ratecard()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nip = $this->input->post('nip');
+		$link_file_excel = $this->input->post('link_file_excel');
+		$tipe_file_excel = $this->input->post('tipe_file_excel');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$tahun_ratecard = $this->input->post('tahun_ratecard');
+		$jenis_ratecard = $this->input->post('jenis_ratecard');
+		$periode_start = $this->input->post('periode_start');
+		$periode_end = $this->input->post('periode_end');
+
+		$status = "0";
+		$message = "";
+
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		//handle file
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		$local1 = ".";
+		if (file_exists($local1 . $link_file_excel) && in_array($tipe_file_excel, $file_mimes)) {
+
+			$array_file = explode('.', $link_file_excel);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($local1 . $link_file_excel);
+
+			if ($spreadsheet->sheetNameExists('Ratecard')) {
+				$spreadsheet->setActiveSheetIndexByName('Ratecard');
+
+				// $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+				$sheet_data  = $spreadsheet->getActiveSheet()->toArray();
+				// $sheet_data = array_map('trim', $sheet_data);
+				$sheet_data = array_filter($sheet_data);
+				$array_data  = [];
+				$array_data_final  = [];
+				$data        = [];
+				$header_tabel_saltab = $sheet_data[0];
+				$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+				// echo '<pre>';
+				// print_r($sheet_data);
+				// echo '</pre>';
+
+				$length_header = count($header_tabel_saltab);
+				$jumlah_data = count($sheet_data) - 2;
+				// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+				//susun array batch saltab
+				$data_batch = array(
+					'project_id'        	=> $project,
+					'project_name'        	=> $nama_project,
+					'sub_project_id'        => $sub_project,
+					'sub_project_name'      => $nama_sub_project,
+					'tahun'        	 	 	=> $tahun_ratecard,
+					'jenis_ratecard'    	=> $jenis_ratecard,
+					'periode_start'    		=> $periode_start,
+					'periode_end'      		=> $periode_end,
+					'file_excel'      		=> $link_file_excel,
+					'status'      			=> 0,
+					'upload_by'      		=> $nip,
+					'upload_by_name'      	=> $this->Import_model->get_nama_karyawan($nip),
+					'upload_on'      		=> date('Y-m-d h:i:s'),
+				);
+
+				$this->Import_model->insert_ratecard_batch($data_batch);
+
+				$id_batch = $this->Import_model->get_id_ratecard_batch($data_batch);
+
+				//susun array ratecard detail
+				for ($i = 2; $i < count($sheet_data); $i++) {
+					$data += ['id_ratecard_header' => $id_batch];
+					for ($j = 0; $j < $length_header; $j++) {
+						$trimmed_value = trim($sheet_data[$i][$j], ' ');
+						$trimmed_value = trim($trimmed_value, ' ');
+						$data += [$header_tabel_saltab[$j] => $trimmed_value];
+					}
+					$array_data[] = $data;
+					$data = array();
+				}
+
+				$this->Import_model->insert_ratecard_detail($array_data);
+
+				//setelah berhasil insert detail, update status batch jadi 1
+				//susun array batch saltab update
+				$data_batch_update = array(
+					'status'      			=> 1,
+				);
+
+				$this->Import_model->update_ratecard_batch($data_batch_update, $id_batch);
+				$tes_query = $this->db->last_query();
+
+				$status = "1";
+				$message = "Berhasil Import Ratecard.";
+			} else {
+				$status = "0";
+				$message = "Tidak ditemukan sheet \"Ratecard\" di dalam file excel";
+			}
+		} else {
+			$status = "0";
+			$message = "File yang diupload bukan format excel (.xlsx)";
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		$return_value = array(
+			'status' => $status,
+			'message' => $message,
+		);
+
+		echo json_encode($return_value);
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel absensi
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_absensi()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nip = $this->input->post('nip');
+		$link_file_excel = $this->input->post('link_file_excel');
+		$tipe_file_excel = $this->input->post('tipe_file_excel');
+		$periode_salary = $this->input->post('periode_salary');
+		$saltab_from = $this->input->post('saltab_from');
+		$saltab_to = $this->input->post('saltab_to');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$fee = $this->input->post('fee');
+
+		$status = "0";
+		$message = "";
+
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		//handle file
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		$local1 = ".";
+		if (file_exists($local1 . $link_file_excel) && in_array($tipe_file_excel, $file_mimes)) {
+
+			$array_file = explode('.', $link_file_excel);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($local1 . $link_file_excel);
+
+			if ($spreadsheet->sheetNameExists('Absensi')) {
+				$spreadsheet->setActiveSheetIndexByName('Absensi');
+
+				// $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+				$sheet_data  = $spreadsheet->getActiveSheet()->toArray();
+				// $sheet_data = array_map('trim', $sheet_data);
+				$sheet_data = array_filter($sheet_data);
+				$array_data  = [];
+				$array_data_final  = [];
+				$data        = [];
+				$header_tabel_saltab = $sheet_data[0];
+				$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+				// echo '<pre>';
+				// print_r($sheet_data);
+				// echo '</pre>';
+
+				$length_header = count($header_tabel_saltab);
+				$jumlah_data = count($sheet_data) - 2;
+				// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+				//susun array batch saltab
+				$data_batch = array(
+					'project_id'        	=> $project,
+					'project_name'        	=> $nama_project,
+					'sub_project_id'        => $sub_project,
+					'sub_project_name'      => $nama_sub_project,
+
+					'periode_salary'        => $periode_salary,
+					'saltab_from'    		=> $saltab_from,
+					'saltab_to'    			=> $saltab_to,
+					'fee'      				=> $fee,
+					'file_excel'      		=> $link_file_excel,
+					'status_finish_upload'  => 0,
+
+					'upload_by'      		=> $nip,
+					'upload_by_name'      	=> $this->Import_model->get_nama_karyawan($nip),
+					'upload_on'      		=> date('Y-m-d H:i:s'),
+					'upload_ip'        	 	=> $this->get_client_ip(),
+				);
+
+				$this->Import_model->insert_absensi_batch($data_batch);
+
+				$id_batch = $this->Import_model->get_id_absensi_batch($data_batch);
+
+				//susun array ratecard detail
+				for ($i = 2; $i < count($sheet_data); $i++) {
+					$lanjut = true;
+					$data += ['id_absensi_header' => $id_batch];
+					for ($j = 0; $j < $length_header; $j++) {
+						if ($header_tabel_saltab[$j] == "fullname") {
+							$trimmed_value = trim($sheet_data[$i][$j], ' ');
+							$trimmed_value = trim($trimmed_value, ' ');
+							$data += [$header_tabel_saltab[$j] => $trimmed_value];
+							if (($trimmed_value == "") || ($trimmed_value == null)) {
+								$lanjut = false;
+							} else {
+								$lanjut = true;
+							}
+						} else {
+							if ($lanjut) {
+								$trimmed_value = trim($sheet_data[$i][$j], ' ');
+								$trimmed_value = trim($trimmed_value, ' ');
+								$data += [$header_tabel_saltab[$j] => $trimmed_value];
+								$lanjut = true;
+							}
+						}
+					}
+					if ($lanjut) {
+						$array_data[] = $data;
+						$data = array();
+					} else {
+						$data = array();
+					}
+				}
+
+				$this->Import_model->insert_absensi_detail($array_data);
+
+				//setelah berhasil insert detail, update status batch jadi 1
+				//susun array batch saltab update
+				$data_batch_update = array(
+					'status_finish_upload'  => 1,
+					'mpp' => count($array_data),
+				);
+
+				$this->Import_model->update_absensi_batch($data_batch_update, $id_batch);
+				$tes_query = $this->db->last_query();
+
+				$status = "1";
+				$message = "Berhasil Import Absensi.";
+			} else {
+				$status = "0";
+				$message = "Tidak ditemukan sheet \"Absensi\" di dalam file excel";
+			}
+		} else {
+			$status = "0";
+			$message = "File yang diupload bukan format excel (.xlsx)";
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		$return_value = array(
+			'status' => $status,
+			'message' => $message,
+		);
+
+		echo json_encode($return_value);
+	}
+
+	function view_batch_saltab_temporary($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+		$data['path_url'] = 'emp_view';
+
+		$data['title'] = 'Preview E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/importesaltab') . "'>Import E-SALTAB</a> | Preview E-Saltab";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/preview_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_ratecard($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$data['path_url'] = 'emp_view';
+
+		// $data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Preview Ratecard | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/import_ratecard2') . "'>Import Ratecard</a> | Preview Ratecard";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_ratecard'] = $this->Import_model->get_ratecard_batch($id_batch);
+
+		if ($data['batch_ratecard']['jenis_ratecard'] == "1") {
+			$text_jenis_ratecard = "APPROVAL CLIENT";
+		} else if ($data['batch_ratecard']['jenis_ratecard'] == "2") {
+			$text_jenis_ratecard = "APPROVAL INTERNAL";
+		} else if ($data['batch_ratecard']['jenis_ratecard'] == "3") {
+			$text_jenis_ratecard = "DATABASE";
+		} else {
+			$text_jenis_ratecard = "";
+		}
+
+		//tes pakai eval
+		$string_data = "\$data['text_jenis_ratecard'] = \$text_jenis_ratecard;";
+		eval($string_data);
+
+		// $data['text_jenis_ratecard'] = $text_jenis_ratecard;
+
+		$text_periode = $this->Xin_model->tgl_indo($data['batch_ratecard']['periode_start']) . " s/d " . $this->Xin_model->tgl_indo($data['batch_ratecard']['periode_end']);
+		$data['text_periode'] = $text_periode;
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/preview_ratecard", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_absensi($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$data['path_url'] = 'emp_view';
+
+		// $data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Preview Absensi | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/import_absensi') . "'>Import Absensi</a> | Preview Absensi";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_absensi'] = $this->Import_model->get_absensi_batch($id_batch);
+		$data['all_jabatan_json'] = $this->Import_model->get_jabatan_by_project_sub($data['batch_absensi']);
+		$data['kolom_detail_absensi'] = $this->Import_model->get_absensi_table();
+
+		$data['tanggal_penggajian'] = $this->Xin_model->tgl_indo($data['batch_absensi']['periode_salary']);
+		$data['tanggal_upload'] = $this->Xin_model->tgl_indo($data['batch_absensi']['upload_on']);
+
+		if (($data['batch_absensi']['id_saltab_temp'] == null) || ($data['batch_absensi']['id_saltab_temp'] == "")) {
+			$data['hasil_saltab'] = "<font style='color: rgba(133, 15, 15, 1);'><strong>[Belum Hitung]</br>Lakukan Hitung draft saltab terlebih dahulu</strong></font>";
+		} else {
+			$text_hasil_saltab = $this->Saltab_model->get_perbandingan_mpp_absensi_saltab_temp($data['batch_absensi']['id_saltab_temp'], $data['id_batch']);
+			$data['hasil_saltab'] = '<font style="color: rgb(23, 124, 38);"></font><a href="' . base_url('admin/Importexcel/view_batch_saltab_temporary/' . $data['batch_absensi']['id_saltab_temp']) . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-success">OPEN HASIL SALTAB</button></a></br>' . $text_hasil_saltab;
+		}
+
+		$text_periode_cutoff = $this->Xin_model->tgl_indo($data['batch_absensi']['saltab_from']) . " s/d " . $this->Xin_model->tgl_indo($data['batch_absensi']['saltab_to']);
+		$data['text_periode_cutoff'] = $text_periode_cutoff;
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/preview_absensi", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+
+	function view_batch_bupot($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'VIEW DETAIL BUPOT | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/import_bupot') . "'>MANAGE BUPOT</a> | VIEW DETAIL BUPOT";
+
+		$session = $this->session->userdata('username');
+		// $data['path_url'] = 'hrpremium_import';
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_bupot'] = $this->Import_model->get_bupot_batch($id_batch);
+
+		$nama_project_only = "";
+		$projects = $this->Project_model->read_single_project_name($data['batch_bupot']['project_id']);
+		if (!is_null($projects)) {
+			$nama_project_only = $projects[0]->title;
+		} else {
+			$nama_project_only = '';
+		}
+
+		$data['nama_project_only'] = $nama_project_only;
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/preview_bupot", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+
+	function view_batch_saltab_release($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/manage_esaltab') . "'>Manage E-SALTAB</a> | Detail E-Saltab";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	function view_batch_saltab_release_download($id_batch = null)
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Employees_model->get_req_empproject($session['employee_id']);
+
+		$data['title'] = 'Detail E-Saltab | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = "<a href='" . base_url('admin/Importexcel/download_esaltab') . "'>Download E-SALTAB</a> | Detail E-Saltab";
+
+		$session = $this->session->userdata('username');
+
+		$data['id_batch'] = $id_batch;
+		$data['batch_saltab'] = $this->Import_model->get_saltab_batch_release($id_batch);
+
+		if (!empty($session)) {
+			$data['subview'] = $this->load->view("admin/import_excel/detail_esaltab_download", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/');
+		}
+	}
+
+	// Function to get the client IP address
+	function get_client_ip()
+	{
+		$ipaddress = '';
+		if (isset($_SERVER['HTTP_CLIENT_IP']))
+			$ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+		else if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		else if (isset($_SERVER['HTTP_X_FORWARDED']))
+			$ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+		else if (isset($_SERVER['HTTP_FORWARDED_FOR']))
+			$ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+		else if (isset($_SERVER['HTTP_FORWARDED']))
+			$ipaddress = $_SERVER['HTTP_FORWARDED'];
+		else if (isset($_SERVER['REMOTE_ADDR']))
+			$ipaddress = $_SERVER['REMOTE_ADDR'];
+		else
+			$ipaddress = 'UNKNOWN';
+		return $ipaddress;
+	}
+
+	// Validate and add info in database
+	public function import_newemp()
+	{
+
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							if ($line[2] == 'HO' || $line[2] == 'INHOUSE' || $line[2] == 'IN-HOUSE') {
+								$formula2 = '2';
+							} else {
+								$formula2 = '3';
+							}
+
+							$formula3 = sprintf("%03d", $line[3]);
+
+
+
+							$ids = '2' . $formula2 . $formula3 . (int)$formula4 + 1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' => $uploadid,
+								'employee_id' => $ids, // auto
+								'fullname' => $line[1],
+								'company_id' => '2',
+								'location_id' => '3', //ho-area
+								'department_id' => $line[2], //divisi
+								'designation_id' => $line[3], //jabatan
+								'date_of_joining' => $line[4],
+								'ktp_no' => $line[0],
+
+							);
+							$result = $this->Employees_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Employees_model->delete_temp_by_employeeid();
+							$formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+
+		redirect('admin/ImportExcelEmployees?upid=' . $uploadid);
+	}
+
+
+	// Validate and add info in database
+	public function import_eslip()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+
+						//parse data from csv file line by line
+						//while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 								=> $uploadid,
+								'nip' 										=> $line[0],
+								'fullname' 								=> str_replace("'", " ", $line[1]),
+								'periode' 								=> str_replace("'", " ", $line[2]),
+								'project' 								=> $line[3],
+								'project_sub' 						=> $line[4],
+								'area' 										=> str_replace("'", " ", $line[5]),
+								'status_emp' 							=> $line[6],
+								'hari_kerja' 							=> $line[7],
+								'gaji_umk' 								=> $line[8],
+								'gaji_pokok' 							=> $line[9],
+								'allow_jabatan' 					=> $line[10],
+								'allow_area' 							=> $line[11],
+								'allow_masakerja' 				=> $line[12],
+								'allow_konsumsi' 					=> $line[13],
+								'allow_transport' 				=> $line[14],
+								'allow_rent' 							=> $line[15],
+								'allow_comunication' 			=> $line[16],
+								'allow_parking' 					=> $line[17],
+								'allow_residence_cost' 		=> $line[18],
+								'allow_akomodasi' 				=> $line[19],
+								'allow_device' 						=> $line[20],
+								'allow_kasir' 						=> $line[21],
+								'allow_trans_meal' 				=> $line[22],
+								'allow_trans_rent' 				=> $line[23],
+								'allow_vitamin' 					=> $line[24],
+								'allow_grooming'					=> $line[25],
+								'allow_others'						=> $line[26],
+								'allow_operation' 				=> $line[27],
+								'over_salary' 						=> $line[28],
+								'penyesuaian_umk' 				=> $line[29],
+								'insentive'								=> $line[30],
+								'overtime' 								=> $line[31],
+								'overtime_holiday' 				=> $line[32],
+								'overtime_national_day' 	=> $line[33],
+								'overtime_rapel' 					=> $line[34],
+								'kompensasi' 							=> $line[35],
+								'bonus' 									=> $line[36],
+								'uuck' 										=> $line[37],
+								'thr' 										=> $line[38],
+								'bpjs_tk_deduction' 			=> $line[39],
+								'bpjs_ks_deduction' 			=> $line[40],
+								'jaminan_pensiun_deduction' => $line[41],
+								'pendapatan' 							=> $line[42],
+								'bpjs_tk' 								=> $line[43],
+								'bpjs_ks' 								=> $line[44],
+								'jaminan_pensiun' 				=> $line[45],
+								'deposit' 								=> $line[46],
+								'pph' 										=> $line[47],
+								'pph_thr' 								=> $line[48],
+								'penalty_late' 						=> $line[49],
+								'penalty_alfa' 						=> $line[50],
+								'penalty_attend' 					=> $line[51],
+								'mix_oplos' 							=> $line[52],
+								'pot_trip_malang' 				=> $line[53],
+								'pot_device' 							=> $line[54],
+								'pot_kpi' 								=> $line[55],
+								'deduction' 							=> $line[56],
+								'simpanan_pokok' 					=> $line[57],
+								'simpanan_wajib_koperasi' => $line[58],
+								'pembayaran_pinjaman' 		=> $line[59],
+								'biaya_admin_bank' 				=> $line[60],
+								'adjustment' 							=> $line[61],
+								'adjustment_dlk' 					=> $line[62],
+								'total' 									=> $line[63],
+								'createdby' 							=> $employee_id,
+
+							);
+							$result = $this->Import_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_temp_by_nip();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+		redirect('admin/Importexceleslip?upid=' . $uploadid);
+	}
+
+
+
+	// Validate and add info in database
+	public function import_ratecard()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						// $lastnik = $this->Employees_model->get_maxid();
+						// $formula4 = substr($lastnik,5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 						=> $uploadid,
+								'company_id' 					=> $line[1],
+								'nama_pt' 						=> 'PT Siprama Cakrawala',
+								'periode' 						=> $line[2], //periode
+								'date_periode_start' 	=> $line[3], //start date
+								'date_periode_end' 		=> $line[4], //start date
+								'project_id' 					=> $line[5], //project id
+								'project' 						=> $line[6], //project
+								'sub_project_id' 			=> $line[7], //sub project id
+								'sub_project' 				=> $line[8], // sub project
+								'kota' 								=> $line[9], //kota
+								'posisi_jabatan' 			=> $line[10], //jabatan
+								'jumlah_mpp' 					=> $line[11], //jumlah mpp
+								'gaji_pokok' 					=> $line[12], //gapok
+								'hari_kerja' 					=> $line[13], //hari kerja
+								'dm_grade' 						=> $line[14], // dm_grade
+								'allow_grade' 				=> $line[15], //grade
+								'dm_masa_kerja' 			=> $line[16], // dm_grade
+								'allow_masa_kerja' 		=> $line[17], //grade
+								'dm_konsumsi' 				=> $line[18], //dm_konsumsi
+								'allow_konsumsi' 			=> $line[19], //konsumsi
+								'dm_transport' 				=> $line[20], //dm_transport
+								'allow_transport' 		=> $line[21], //transport
+								'dm_rent' 						=> $line[22], //dm_sewa
+								'allow_rent' 					=> $line[23], //sewa
+								'dm_comunication' 		=> $line[24], //
+								'allow_comunication'	=> $line[25], //
+								'dm_parking'					=> $line[26], //dm_parkir
+								'allow_parking' 			=> $line[27], //parkir
+								'dm_resicance' 				=> $line[28], //dm_residance
+								'allow_residance' 		=> $line[29], //allow resicande
+								'dm_device' 					=> $line[30], //dm_device
+								'allow_device' 				=> $line[31], //device
+								'dm_kasir' 						=> $line[32], //dm kasair
+								'allow_kasir' 				=> $line[33], //allow kasir
+								'dm_trans_meal' 			=> $line[34], //dm_transmeal
+								'allow_trans_meal' 		=> $line[35], //transmeal
+								'dm_medicine' 				=> $line[36], //dm_medical
+								'allow_medicine' 			=> $line[37], //medical
+								'total_allow' 				=> $line[38], //total_tunjangan
+								'gaji_bersih' 				=> $line[39], //gaji bersih
+								'kompensasi' 					=> $line[40], //kompensasi
+								'kompensasi_pt' 			=> $line[41], //kompensasi client
+								'bpjs_tk' 						=> $line[42], //bpjs tk
+								'bpjs_ks' 						=> $line[43], //bpjs ks
+								'insentive' 					=> $line[44], //insentive
+								'total' 							=> $line[45], //total
+								'grand_total' 				=> $line[46], //grand_total
+
+								'createdby' => $employee_id,
+								'createdon' => date('Y-m-d h:i:s'),
+
+
+							);
+							$result = $this->Import_model->addratecardtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_temp_by_pt();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+
+		redirect('admin/Importexcelratecard?upid=' . $uploadid);
+	}
+
+
+	// import bupot
+	public function import_bupot()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'MANAJEMEN BUPOT | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'MANAJEMEN BUPOT';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_bpjs';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('1300', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_bupot", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// import bpjs
+	public function import_bpjs()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'MANAJEMEN BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'MANAJEMEN BPJS';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_bpjs';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('1400', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_bpjs", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	public function history_upload_ratecard_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_ratecard", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_ratecard();
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->sub_project);
+			$createdby = $r->createdby;
+
+			$preiode_param 			= str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param 	= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->sub_project)));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// expired page
+	public function importsaltab()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = 'Import Saltab to BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import Saltab to BPJS';
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_import_saltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('481', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/import_saltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	public function history_upload_eslip_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_eslip", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param = str_replace("]", "", str_replace("[", "", str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)))));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+	public function history_upload_saltab_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_saltab", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_saltab();
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param = str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/importexcelsaltab/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/importexcelsaltab/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// Validate and add info in database
+	public function import_saltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 								=> $uploadid,
+								'nip' 										=> $line[0],
+								'fullname' 								=> $line[1],
+								'periode' 								=> $line[2],
+								'project' 								=> $line[3],
+								'project_sub' 						=> $line[4],
+								'area' 										=> $line[5],
+								'status_emp' 							=> $line[6],
+								'hari_kerja' 							=> $line[7],
+								'gaji_umk' 								=> $line[8],
+								'gaji_pokok' 							=> $line[9],
+
+
+								'allow_jabatan' 					=> $line[10],
+								'allow_area' 							=> $line[11],
+								'allow_masakerja' 				=> $line[12],
+								'allow_konsumsi' 					=> $line[13],
+								'allow_transport' 				=> $line[14],
+								'allow_rent' 							=> $line[15],
+								'allow_comunication' 			=> $line[16],
+								'allow_parking' 					=> $line[17],
+								'allow_residence_cost' 		=> $line[18],
+								'allow_akomodasi' 				=> $line[19],
+								'allow_device' 						=> $line[20],
+								'allow_kasir' 						=> $line[21],
+								'allow_trans_meal' 				=> $line[22],
+								'allow_trans_rent' 				=> $line[23],
+								'allow_vitamin' 					=> $line[24],
+								'allow_grooming'					=> $line[25],
+								'allow_others'						=> $line[26],
+								'allow_operation' 				=> $line[27],
+
+								'over_salary' 						=> $line[28],
+								'penyesuaian_umk' 				=> $line[29],
+								'insentive'								=> $line[30],
+								'overtime' 								=> $line[31],
+								'overtime_holiday' 				=> $line[32],
+								'overtime_national_day' 	=> $line[33],
+								'overtime_rapel' 					=> $line[34],
+								'kompensasi' 							=> $line[35],
+								'bonus' 									=> $line[36],
+								'uuck' 										=> $line[37],
+								'thr' 										=> $line[38],
+								'bpjs_tk_deduction' 			=> $line[39],
+								'bpjs_ks_deduction' 			=> $line[40],
+								'jaminan_pensiun_deduction' => $line[41],
+								'pendapatan' 							=> $line[42],
+								'bpjs_tk' 								=> $line[43],
+								'bpjs_ks' 								=> $line[44],
+								'jaminan_pensiun' 				=> $line[45],
+								'deposit' 								=> $line[46],
+								'pph' 										=> $line[47],
+								'pph_thr' 								=> $line[48],
+								'penalty_late' 						=> $line[49],
+								'penalty_alfa' 						=> $line[50],
+								'penalty_attend' 					=> $line[51],
+								'mix_oplos' 							=> $line[52],
+								'pot_trip_malang' 				=> $line[53],
+								'pot_device' 							=> $line[54],
+								'pot_kpi' 								=> $line[55],
+								'deduction' 							=> $line[56],
+								'simpanan_pokok' 					=> $line[57],
+								'simpanan_wajib_koperasi' => $line[58],
+								'pembayaran_pinjaman' 		=> $line[59],
+								'biaya_admin_bank' 				=> $line[60],
+								'adjustment' 							=> $line[61],
+								'adjustment_dlk' 					=> $line[62],
+								'total' 									=> $line[63],
+								'createdby' 							=> $employee_id,
+
+							);
+							$result = $this->Import_model->add_saltab_temp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_saltabtemp_by_nip();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+		redirect('admin/Importexcelsaltab?upid=' . $uploadid);
+	}
+
+	// expired page
+	public function bpjs()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = 'E-Slip To BPJS | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'E-Slip to BPJS';
+		$data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'hrpremium_eslip_bpjs';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('477', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/bpjs/eslip_bpjs_list", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+
+	public function history_upload_eslip_bpjs()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/bpjs/eslip_bpjs_list", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_eslip_project();
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param = str_replace(" ", "", $r->project);
+			$project_sub_param = str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			$view_data = '<a href="' . site_url() . 'admin/reports/saltab_bpjs/?upid=' . $uploadid . '" target="_blank"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+
+			$edit = '<span data-toggle="tooltip" data-placement="top" data-state="primary" title="' . $this->lang->line('xin_edit') . '"><button type="button" class="btn icon-btn btn-sm btn-outline-secondary waves-effect waves-light"  data-toggle="modal" data-target="#edit-modal-data"  data-usermobile_id="' . $uploadid . '"><span class="fas fa-pencil-alt"></span></button></span>';
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+				$edit
+
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	public function read()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['title'] = $this->Xin_model->site_title();
+
+		// $keywords = preg_split("/[\s,]+/", $this->input->get('department_id'));
+		// $keystring = $this->input->get('department_id');
+
+		// 	if(!is_null($keywords[0])){
+
+		// 		$read_employee = $this->Employees_model->read_employee_info_by_nik($keywords[0]);
+		// 		$read_usermobile = $this->Usersmobile_model->read_users_mobile_by_nik($keywords[0]);
+
+		// 		$full_name = $read_employee[0]->first_name;
+
+		// 		$all_projects = $this->Project_model->get_projects();
+		// 		$all_usertype = $this->Usersmobile_model->get_usertype();
+		// 		$all_area = $this->Xin_model->get_area();
+		// 		// $all_area = $this->Usersmobile_model->get_district();
+
+		// 	}
+
+		// if(is_numeric($keywords[0])) {
+
+		// 	$id = $keywords[0];
+		// 	$id = $this->security->xss_clean($id);
+
+
+		// }
+
+		$data = array(
+			'usermobile_id' => 'DIALOG'
+			// 'fullname' => $full_name,
+			// 'usertype_id' => $read_usermobile[0]->usertype_id,
+			// 'project_id' => $read_usermobile[0]->project_id,
+			// 'areaid' => $read_usermobile[0]->areaid,
+			// 'areaid_extra1' => $read_usermobile[0]->areaid_extra1,
+			// 'areaid_extra2' => $read_usermobile[0]->areaid_extra2,
+			// 'device_id' => $read_usermobile[0]->device_id_one,
+			// 'all_usertype' => $all_usertype,
+			// 'all_projects' => $all_projects,
+			// 'all_area' => $all_area
+		);
+
+		$this->load->view('admin/usermobile/dialog_usermobile', $data);
+		// $session = $this->session->userdata('username');
+
+		// if(!empty($session)){
+		// 	$this->load->view('admin/usermobile/dialog_usermobile', $data);
+		// } else {
+		// 	redirect('admin/');
+		// }
+
+	}
+
+	//manage saltab release
+	public function manage_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Manage E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Manage E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('513', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/manage_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//konfigurasi import saltab
+	public function konfig_import_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Konfigurasi Import E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Konfigurasi Import E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('512', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/manage_import_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	//download saltab release
+	public function download_esaltab()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Download E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Download E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		//$data['path_url'] = 'hrpremium_download_esaltab';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('514', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/download_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// import saltab
+	public function importesaltab()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Import E-SALTAB | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import E-SALTAB';
+		// $data['tabel_saltab'] = $this->Import_model->get_saltab_table();
+		// $data['all_projects'] = $this->Project_model->get_projects();
+		$data['path_url'] = 'emp_view';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('511', $role_resources_ids)) {
+			// $data['subview'] = $this->load->view("admin/import_excel/hr_import_excel_pkwt", $data, TRUE);
+			$data['subview'] = $this->load->view("admin/import_excel/import_esaltab", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// import absensi
+	public function import_absensi()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Import Data Absensi | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import Data Absensi';
+		$data['path_url'] = 'emp_view';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('516', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/import_absensi", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	// import ratecard
+	public function import_ratecard2()
+	{
+
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
+		$data['title'] = 'Import Data Ratecard | ' . $this->Xin_model->site_title();
+		$data['breadcrumbs'] = 'Import Data Ratecard';
+		$data['path_url'] = 'emp_view';
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		if (in_array('516', $role_resources_ids)) {
+			$data['subview'] = $this->load->view("admin/import_excel/import_ratecard2", $data, TRUE);
+			$this->load->view('admin/layout/layout_main', $data); //page load
+		} else {
+			redirect('admin/dashboard');
+		}
+	}
+
+	public function history_upload_esaltab_list()
+	{
+
+		$data['title'] = $this->Xin_model->site_title();
+		$session = $this->session->userdata('username');
+		if (!empty($session)) {
+			$this->load->view("admin/import_excel/import_esaltab", $data);
+		} else {
+			redirect('admin/');
+		}
+		// Datatables Variables
+		$draw = intval($this->input->get("draw"));
+		$start = intval($this->input->get("start"));
+		$length = intval($this->input->get("length"));
+
+
+
+		$role_resources_ids = $this->Xin_model->user_role_resource();
+		$user_info = $this->Xin_model->read_user_info($session['user_id']);
+		// if($user_info[0]->user_role_id==1){
+		// 	$location = $this->Location_model->get_locations();
+		// } else {
+		// 	$location = $this->Location_model->get_company_office_location($user_info[0]->company_id);
+		// }
+		$history_eslip = $this->Import_model->get_all_eslip($user_info[0]->employee_id);
+
+		$data = array();
+
+		foreach ($history_eslip->result() as $r) {
+			$uploadid = $r->uploadid;
+			$up_date = $r->up_date;
+			$periode = $r->periode;
+			$project = $r->project;
+			$project_sub = $this->Xin_model->clean_post($r->project_sub);
+			$total_mp = $r->total_mp;
+			$createdby = $r->createdby;
+
+			$preiode_param = str_replace(" ", "", $r->periode);
+			$project_param 			= str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project)));
+			$project_sub_param = str_replace("]", "", str_replace("[", "", str_replace(")", "", str_replace("(", "", str_replace(" ", "", $r->project_sub)))));
+
+			// get created
+			$empname = $this->Employees_model->read_employee_info_by_nik($r->createdby);
+			if (!is_null($empname)) {
+				$fullname = $empname[0]->first_name;
+			} else {
+				$fullname = '--';
+			}
+
+			if ($project_sub == 'INHOUSE' || $project_sub == 'INHOUSE AREA' || $project_sub == 'AREA' || $project_sub == 'HO') {
+				if ($session['user_id'] == '1') {
+
+					$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+				} else {
+
+					$view_data = '';
+				}
+			} else {
+				$view_data = '<a href="' . site_url() . 'admin/Importexceleslip/show_eslip/' . $uploadid . '/' . $preiode_param . '/' . $project_param . '/' . $project_sub_param . '"><button type="button" class="btn btn-xs btn-outline-info">View Data</button></a>';
+			}
+
+
+			$data[] = array(
+				$view_data,
+				$up_date,
+				$periode,
+				$project,
+				$project_sub,
+				$total_mp,
+				$fullname,
+			);
+		}
+
+		$output = array(
+			"draw" => $draw,
+			"recordsTotal" => $history_eslip->num_rows(),
+			"recordsFiltered" => $history_eslip->num_rows(),
+			"data" => $data
+		);
+		echo json_encode($output);
+		exit();
+	}
+
+
+	// Validate and add info in database
+	public function import_eslip2()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+		$employee_id = $session['employee_id'];
+		// if($this->input->post('is_ajax')=='3') {		
+		/* Define return | here result is used to return user data and error for error message */
+		$Return = array('result' => '', 'error' => '', 'csrf_hash' => '');
+		$Return['csrf_hash'] = $this->security->get_csrf_hash();
+		// $config['allowed_types'] = 'csv';
+		// 	$this->load->library('upload', $config);
+		//validate whether uploaded file is a csv file
+
+		$csvMimes =  array(
+
+			'text/x-comma-separated-values',
+			'text/comma-separated-values',
+			'text/semicolon-separated-values',
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'text/plain'
+
+		);
+
+		if ($_FILES['file']['name'] === '') {
+			$Return['error'] = $this->lang->line('xin_employee_imp_allowed_size');
+		} else {
+			if (in_array($_FILES['file']['type'], $csvMimes)) {
+				if (is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+					// check file size
+					if (filesize($_FILES['file']['tmp_name']) > 2000000) {
+						$Return['error'] = $this->lang->line('xin_error_employees_import_size');
+					} else {
+
+						//open uploaded csv file with read only mode
+						$csvFile = fopen($_FILES['file']['tmp_name'], 'r');
+
+						//skip first line
+						// fgetcsv($csvFile,0,';');
+						$d = new DateTime();
+						$datetimestamp = $d->format("YmdHisv");
+						$uploadid = $datetimestamp;
+						$lastnik = $this->Employees_model->get_maxid();
+						$formula4 = substr($lastnik, 5);
+
+						//parse data from csv file line by line
+						while (($line = fgetcsv($csvFile, 1000, ';')) !== FALSE) {
+
+							// $options = array('cost' => 12);
+							// $password_hash = password_hash('123456', PASSWORD_BCRYPT, $options);
+
+							// if($line[2]=='HO' || $line[2]=='INHOUSE' || $line[2]=='IN-HOUSE'){
+							// 	$formula2 = '2';
+							// } else {
+							// 	$formula2 = '3';
+							// }
+
+							// $formula3 = sprintf("%03d", $line[3]);
+
+							// $ids = '2'.$formula2.$formula3.(int)$formula4+1;
+							// $ids = (int)$formula4+1;
+
+
+							$data = array(
+								'uploadid' 								=> $uploadid,
+								'nip' 										=> $line[0],
+								'fullname' 								=> str_replace("'", " ", $line[1]),
+								'periode' 								=> str_replace("'", " ", $line[2]),
+								'project' 								=> $line[3],
+								'project_sub' 						=> $line[4],
+								'area' 										=> str_replace("'", " ", $line[5]),
+								'status_emp' 							=> $line[6],
+								'hari_kerja' 							=> $line[7],
+								'gaji_umk' 								=> $line[8],
+								'gaji_pokok' 							=> $line[9],
+								'allow_jabatan' 					=> $line[10],
+								'allow_area' 							=> $line[11],
+								'allow_masakerja' 				=> $line[12],
+								'allow_konsumsi' 					=> $line[13],
+								'allow_transport' 				=> $line[14],
+								'allow_rent' 							=> $line[15],
+								'allow_comunication' 			=> $line[16],
+								'allow_parking' 					=> $line[17],
+								'allow_residence_cost' 		=> $line[18],
+								'allow_akomodasi' 				=> $line[19],
+								'allow_device' 						=> $line[20],
+								'allow_kasir' 						=> $line[21],
+								'allow_trans_meal' 				=> $line[22],
+								'allow_trans_rent' 				=> $line[23],
+								'allow_vitamin' 					=> $line[24],
+								'allow_grooming'					=> $line[25],
+								'allow_others'						=> $line[26],
+								'allow_operation' 				=> $line[27],
+								'over_salary' 						=> $line[28],
+								'penyesuaian_umk' 				=> $line[29],
+								'insentive'								=> $line[30],
+								'overtime' 								=> $line[31],
+								'overtime_holiday' 				=> $line[32],
+								'overtime_national_day' 	=> $line[33],
+								'overtime_rapel' 					=> $line[34],
+								'kompensasi' 							=> $line[35],
+								'bonus' 									=> $line[36],
+								'uuck' 										=> $line[37],
+								'thr' 										=> $line[38],
+								'bpjs_tk_deduction' 			=> $line[39],
+								'bpjs_ks_deduction' 			=> $line[40],
+								'jaminan_pensiun_deduction' => $line[41],
+								'pendapatan' 							=> $line[42],
+								'bpjs_tk' 								=> $line[43],
+								'bpjs_ks' 								=> $line[44],
+								'jaminan_pensiun' 				=> $line[45],
+								'deposit' 								=> $line[46],
+								'pph' 										=> $line[47],
+								'pph_thr' 								=> $line[48],
+								'penalty_late' 						=> $line[49],
+								'penalty_alfa' 						=> $line[50],
+								'penalty_attend' 					=> $line[51],
+								'mix_oplos' 							=> $line[52],
+								'pot_trip_malang' 				=> $line[53],
+								'pot_device' 							=> $line[54],
+								'pot_kpi' 								=> $line[55],
+								'deduction' 							=> $line[56],
+								'simpanan_pokok' 					=> $line[57],
+								'simpanan_wajib_koperasi' => $line[58],
+								'pembayaran_pinjaman' 		=> $line[59],
+								'biaya_admin_bank' 				=> $line[60],
+								'adjustment' 							=> $line[61],
+								'adjustment_dlk' 					=> $line[62],
+								'total' 									=> $line[63],
+								'createdby' 							=> $employee_id,
+
+							);
+							$result = $this->Import_model->addtemp($data);
+
+							// $bank_account_data = array(
+							// 'account_title' => 'Rekening',
+							// 'account_number' => $line[18], //NO. REK
+							// 'bank_name' => $line[19],
+							// 'employee_id' => $last_insert_id,
+							// 'created_at' => date('d-m-Y'),
+							// );
+							// $ibank_account = $this->Employees_model->bank_account_info_add($bank_account_data);
+
+							$resultdel = $this->Import_model->delete_temp_by_nip();
+							// $formula4++;
+						}
+						//close opened csv file
+						fclose($csvFile);
+
+
+						$Return['result'] = $this->lang->line('xin_success_attendance_import');
+					}
+				} else {
+					$Return['error'] = $this->lang->line('xin_error_not_employee_import');
+				}
+			} else {
+				$Return['error'] = $this->lang->line('xin_error_invalid_file');
+			}
+		} // file empty
+
+		if ($Return['error'] != '') {
+			$this->output($Return);
+		}
+
+		redirect('admin/Importexceleslip?upid=' . $uploadid);
+	}
+
+	//mengambil Json data validasi employee request
+	public function request_open_import()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($postData['project_id']);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '--';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($postData['sub_project_id'] == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($postData['sub_project_id']);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '--';
+			}
+		}
+
+		//Input untuk Database
+		$datarequest = [
+			'request_by_id'     	=> $postData['employee_id'],
+			'request_by_name'       => $postData['request_by_name'],
+			'request_on'      		=> $postData['tgl_request'],
+			'tanggal_gajian'        => $postData['tgl_gajian'],
+			'project_id'       	  	=> $postData['project_id'],
+			'project_name'       	=> $nama_project,
+			'sub_project_id'      	=> $postData['sub_project_id'],
+			'sub_project_name'      => $nama_sub_project,
+			'periode_saltab_from'   => $postData['periode_saltab_from'],
+			'periode_saltab_to'     => $postData['periode_saltab_to'],
+			'note'          		=> $postData['note_open'],
+			'status'          		=> '1',
+		];
+
+		// get data 
+		$data = $this->Import_model->insert_request_open_import($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'pesan' 	=> "Gagal",
+			);
+		} else {
+			$response = array(
+				'pesan' 	=> "Berhasil",
+				'data'		=> $data,
+			);
+		}
+
+		//echo "data berhasil masuk";
+		echo json_encode($response);
+		echo "<pre>";
+		print_r($response);
+		echo "</pre>";
+	}
+
+	//mengambil Json data validasi employee request
+	public function cek_request_open_import()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek Request ACC
+		$datarequest = [
+			'tanggal_gajian'        => $postData['tgl_gajian'],
+			'project_id'       	  	=> $postData['project_id'],
+			'sub_project_id'      	=> $postData['sub_project_id'],
+			'periode_saltab_from'   => $postData['periode_saltab_from'],
+			'periode_saltab_to'     => $postData['periode_saltab_to']
+		];
+
+		// get data 
+		$data = $this->Import_model->cek_request_open_import($datarequest);
+
+		//cek pengaturan lock manual
+		$project_id = $postData['project_id'];
+
+		//cek pengaturan lock otomatis
+		$jam_sekarang = $postData['jam_sekarang'];
+
+		if (empty($data)) {
+			//cek pengaturan lock manual
+			$project_id = $postData['project_id'];
+			$data2 = $this->Import_model->cek_request_open_import_manual($project_id);
+
+			if (empty($data2)) {
+				//cek pengaturan lock otomatis
+				$jam_sekarang = $postData['jam_sekarang'];
+
+				if ($jam_sekarang >= 12) {
+					$response = array(
+						'status'	=> "100",
+						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Tidak Diset. Jam lebih dari 12",
+					);
+				} else {
+					$response = array(
+						'status'	=> "101",
+						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Tidak Diset. Jam blm 12",
+					);
+				}
+			} else {
+				if ($jam_sekarang >= $data2['jam']) {
+					$response = array(
+						'status'	=> "102",
+						'pesan' 	=> "LOCK IMPORT. Tidak ada request. Jam Diset. Jam melebihi angka yang di set",
+						'data'		=> $data2,
+					);
+				} else {
+					$response = array(
+						'status'	=> "103",
+						'pesan' 	=> "OPEN IMPORT. Tidak ada request. Jam Diset. Jam tidak melebihi angka yang di set",
+						'data'		=> $data2,
+					);
+				}
+			}
+		} else {
+			if ($data['status'] == 1) {
+				$response = array(
+					'status'	=> "104",
+					'pesan' 	=> "LOCK IMPORT. Ada Request Blm ACC. Tidak Boleh Request",
+					'data'		=> $data,
+				);
+			} else if ($data['status'] == 0) {
+				$response = array(
+					'status'	=> "105",
+					'pesan' 	=> "OPEN IMPORT. Ada Request dan di ACC",
+					'data'		=> $data,
+				);
+			} else if ($data['status'] == 2) {
+				$response = array(
+					'status'	=> "106",
+					'pesan' 	=> "LOCK IMPORT. Ada Request dan ditolak. Boleh request ulang",
+					'data'		=> $data,
+				);
+			} else {
+				$response = array(
+					'status'	=> "107",
+					'pesan' 	=> "LOCK IMPORT. Ada Request dan berhasil upload. Boleh request ulang",
+					'data'		=> $data,
+				);
+			}
+		}
+
+		// //echo "data berhasil masuk";
+		echo json_encode($response);
+		// echo "<pre>";
+		// print_r($response);
+		// echo "</pre>";
+	}
+
+	/**
+	 * Compress a file using gzip
+	 *
+	 * Rewritten from Simon East's version here:
+	 * https://stackoverflow.com/a/22754032/3499843
+	 *
+	 * @param string $inFilename Input filename
+	 * @param int    $level      Compression level (default: 9)
+	 *
+	 * @throws Exception if the input or output file can not be opened
+	 *
+	 * @return string Output filename
+	 */
+	function gzcompressfile(string $inFilename, int $level = 9): string
+	{
+		// Is the file gzipped already?
+		$extension = pathinfo($inFilename, PATHINFO_EXTENSION);
+		if ($extension == "gz") {
+			return $inFilename;
+		}
+
+		// Open input file
+		$inFile = fopen($inFilename, "rb");
+		if ($inFile === false) {
+			throw new \Exception("Unable to open input file: $inFilename");
+		}
+
+		// Open output file
+		$gzFilename = $inFilename . ".gz";
+		$mode = "wb" . $level;
+		$gzFile = gzopen($gzFilename, $mode);
+		if ($gzFile === false) {
+			fclose($inFile);
+			throw new \Exception("Unable to open output file: $gzFilename");
+		}
+
+		// Stream copy
+		$length = 512 * 1024; // 512 kB
+		while (!feof($inFile)) {
+			gzwrite($gzFile, fread($inFile, $length));
+		}
+
+		// Close files
+		fclose($inFile);
+		gzclose($gzFile);
+
+		// Return the new filename
+		return $gzFilename;
+	}
+
+	//mengambil Json data eslip release
+	public function get_data_eslip_release()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id'        => $postData['id']
+		];
+
+		// get data rekening
+		$data = $this->Import_model->get_data_eslip_release($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Karyawan tidak ditemukan",
+			);
+		} else {
+			$full_name = "";
+			$user = $this->Xin_model->read_user_info($data['eslip_release_by']);
+			if (empty($user)) {
+				$full_name = "";
+			} else {
+				$full_name = strtoupper($user[0]->first_name);
+			}
+
+			if ((empty($data['eslip_release_on'])) || ($data['eslip_release_on'] == "")) {
+				$eslip_release_on_text = "";
+			} else {
+				$eslip_release_on_array = explode(" ", $data['eslip_release_on']);
+				$eslip_release_on_text = $this->Xin_model->tgl_indo($data['eslip_release_on']) . " " . $eslip_release_on_array[1];
+			}
+
+			$data2 = array(
+				'tanggal_penggajian'	=> $this->Xin_model->tgl_indo($data['periode_salary']),
+				'periode_salary'		=> $data['periode_salary'],
+				'release_by'			=> $data['release_by'],
+				'sub_project_name'		=> $data['sub_project_name'],
+				'project_name'			=> $data['project_name'],
+				'total_mpp'				=> $data['total_mpp'],
+				'periode_cutoff'		=> $this->Xin_model->tgl_indo($data['periode_cutoff_from']) . " s/d " . $this->Xin_model->tgl_indo($data['periode_cutoff_to']),
+				'tanggal_terbit'		=> $this->Xin_model->tgl_indo($data['eslip_release']),
+				'eslip_release_by'		=> $full_name,
+				// 'eslip_release_on'		=> $eslip_release_on_array[1],
+				'eslip_release_on'		=> $eslip_release_on_text,
+			);
+
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data2,
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	//mengambil Json data bupot
+	public function get_data_batch_bupot()
+	{
+		$session = $this->session->userdata('username');
+		if (empty($session)) {
+			redirect('admin/');
+		}
+
+		$postData = $this->input->post();
+
+		//Cek variabel post
+		$datarequest = [
+			'id_batch'        => $postData['id_batch']
+		];
+
+		// get data bupot
+		$data = $this->Import_model->get_data_batch_bupot($datarequest);
+
+		if (empty($data)) {
+			$response = array(
+				'status'	=> "201",
+				'pesan' 	=> "Bupot tidak ditemukan",
+			);
+		} else {
+			$data2 = array(
+				'id_batch'				=> $data['id_batch'],
+				'periode_bupot'			=> $data['periode_bupot'],
+				'project_name'			=> $data['project_name'],
+				'sub_project_name'		=> $data['sub_project_name'],
+				'jumlah_data'			=> $data['jumlah_data'],
+				'created_by'			=> $data['created_by'],
+				'created_on'			=> $this->Xin_model->tgl_indo($data['created_on']),
+				'release_by'			=> $data['release_by'],
+				'release_on'			=> $this->Xin_model->tgl_indo($data['release_on']),
+			);
+
+			$response = array(
+				'status'	=> "200",
+				'pesan' 	=> "Berhasil Fetch Data",
+				'data'		=> $data2,
+			);
+		}
+
+		echo json_encode($response);
+	}
+
+	//mengambil Json data jabatan berdasarkan project dan sub project
+	public function get_jabatan_by_project_sub()
+	{
+		$postData = $this->input->post();
+
+		// get data 
+		$data = $this->Import_model->get_jabatan_by_project_sub($postData);
+		echo json_encode($data);
+	}
+
+	//Cek rekening bank menggunakan API
+	public function cek_rekening_via_API()
+	{
+		$postData = $this->input->post();
+
+		$bank_code = $postData['bank_input'];
+
+		// $no_rekening_jelas = urldecode($no_rekening);
+
+		if ($bank_code == "" || $bank_code == null) {
+			$pesan = array(
+				"is_success" => false,
+				"message" => "Kode Bank Kosong",
+			);
+
+			echo json_encode($pesan);
+		} else {
+			// set post fields
+			$post_variable = [
+				"bank_code" => $bank_code,
+				"account_number" => $postData['norek_input'],
+				"account_name" => $postData['pemilik_rekening_input']
+			];
+
+			$input_post = json_encode($post_variable);
+			// $input_post = "{'account_bank': '". $bank_code ."','account_number':'".$no_rekening."'}";
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => 'https://use.api.co.id/validation/bank',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_POSTFIELDS => $input_post,
+				CURLOPT_HTTPHEADER => array('x-api-co-id:JJ34it6kv5bLxdnd4Pwsuj1dVjw91DRDvAht8a6syMNko49tCt', 'Content-Type:application/json'),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+			// echo $response;
+
+			$pesan = array(
+				"is_success" => false,
+				"message" => "cURL Error #:" . $err,
+			);
+
+			if ($err) {
+				echo json_encode($pesan);
+			} else {
+				// $hasil_api = json_decode($response);
+				// $data_hasil_api = $hasil_api->data;
+
+				echo $response;
+			}
+		}
+	}
+}

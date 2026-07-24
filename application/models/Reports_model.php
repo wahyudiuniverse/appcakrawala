@@ -97,6 +97,17 @@ class Reports_model extends CI_Model
 
 		## Fetch records
 		// $this->db->select('*');
+		$this->db->select('id');
+		$this->db->select('nip');
+		$this->db->select('nama');
+		$this->db->select('project_name');
+		$this->db->select('jabatan_name');
+		$this->db->select('penempatan');
+		$this->db->select('email');
+		$this->db->select('email_subject');
+		$this->db->select('blast_on');
+		$this->db->select('blast_name');
+		$this->db->select('blast_by');
 		if ($kondisiDefaultQuery != '') {
 			$this->db->where($kondisiDefaultQuery);
 		}
@@ -120,11 +131,13 @@ class Reports_model extends CI_Model
 		$data = array();
 
 		foreach ($records as $record) {
-			$button_open_email = '<br><button type="button" onclick="open_email(' . $record->nip . ')" class="btn btn-xs btn-outline-twitter" >SEND PIN VIA EMAIL</button>';
+			$button_open_email = '<br><button type="button" onclick="open_email(' . $record->id . ')" class="btn btn-xs btn-outline-twitter" >LIHAT EMAIL</button>';
 
 			$data[] = array(
-				"nama" => "<strong>(" . $record->nip . ") " . strtoupper($record->nama) . "</strong><br><small>" . strtoupper($record->project_name) . "</br>" . strtoupper($record->sub_project_name) . "</br>" . strtoupper($record->jabatan_name) . "</br>" . strtoupper($record->penempatan) . "</small>",
-				"email" => $record->email,
+				"nama" => "<strong>" . strtoupper($record->nama) . "</strong><br><small>" . $record->nip,
+				"project_name" => "<strong>" . strtoupper($record->project_name) . "</strong><br><small>" . strtoupper($record->jabatan_name) . "</small>",
+				"penempatan" => strtoupper($record->penempatan),
+				"email" => $record->email . $button_open_email,
 				"email_subject" => $record->email_subject,
 				"blast_on" => $this->Xin_model->tgl_indo($record->blast_on),
 				"blast_name" => "<strong>" . strtoupper($record->blast_name) . "</strong><br><small>" . $record->blast_by . "</small>",
