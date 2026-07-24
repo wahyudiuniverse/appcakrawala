@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt_default extends MY_Controller 
+class Pkwt529 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -1703,7 +1703,7 @@ class Pkwt_default extends MY_Controller
 					
 						<tr>
 							<td>Tunjangan Makan-Transport</td>
-							<td colspan="3"> : '.$allowance_transmeal.',- Per Bulan</td>
+							<td colspan="3"> : '.$allowance_transmeal.',- Per Hari</td>
 						</tr>';
 				}
 

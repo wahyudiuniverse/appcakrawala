@@ -52,8 +52,7 @@ class Project extends MY_Controller {
 		}
   }
  
-  public function project_list()
-    {
+  public function project_list() {
 
 		$session = $this->session->userdata('username');
 		$data['title'] = $this->Xin_model->site_title();
@@ -74,7 +73,7 @@ class Project extends MY_Controller {
 		$projectlist = $this->Project_model->project_list();
 		$data = array();
 
-   foreach($projectlist->result() as $r) {
+   	foreach($projectlist->result() as $r) {
 
     	$project_id = $r->project_id;
     	$title = $r->title;
@@ -112,10 +111,9 @@ class Project extends MY_Controller {
             );
           echo json_encode($output);
           exit();
-     }
+  }
 	 
-	 public function read()
-	{
+	public function read() {
 		$session = $this->session->userdata('username');
 		if(empty($session)){ 
 			redirect('admin/');
@@ -279,10 +277,59 @@ class Project extends MY_Controller {
 		);
 		$result = $this->Project_model->add($data);
 
-		if ($result == TRUE) {
-			$Return['result'] = $this->lang->line('xin_success_add_designation');
-		} else {
+		$dataAkses = array(
+		'nip' => '1',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// MUTIA SARI FEBRIANI
+		$dataAkses = array(
+		'nip' => '21300026',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// ANGGUN RAMADHANI
+		$dataAkses = array(
+		'nip' => '21528204',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// MEGA AYU FITRIA
+		$dataAkses = array(
+		'nip' => '21300024',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// 21600009
+		$dataAkses = array(
+		'nip' => '21600009',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// FATIKHA AYUNDA RAHMI
+		$dataAkses = array(
+		'nip' => '21531417',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// NANDA ASTRIYADI
+		$dataAkses = array(
+		'nip' => '21300837',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+		// SISKYLA KHAIRANA PRITIGARINI
+		$dataAkses = array(
+		'nip' => '21300033',
+		'project_id' => $result
+		);
+		$resultAkses = $this->Project_model->add_akses_project($dataAkses);
+
+
+		if ($result == FALSE) {
 			$Return['error'] = $this->lang->line('xin_error_msg');
+		} else {
+			$Return['result'] = $this->lang->line('xin_success_add_designation');
 		}
 
 		$this->output($Return);

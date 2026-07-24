@@ -359,6 +359,16 @@ LEFT JOIN xin_projects npro ON npro.project_id = pp.project_id WHERE npro.doc_id
 		return $query->result();
 	}
 
+	public function get_project_status_paklaring($empID)
+	{
+		$query = $this->db->query("SELECT skk.project_id, concat('[',pro.priority,'] ', pro.title) as title
+		FROM `xin_qrcode_skk` as skk
+		LEFT JOIN xin_projects pro ON pro.project_id = skk.project_id
+		WHERE skk.project_id in (SELECT project_id FROM xin_projects_akses WHERE nip = '$empID') AND skk.approve_hrd is null AND skk.doc_id = 0 AND skk.remove_status = 0 GROUP BY skk.project_id
+		ORDER BY pro.priority;");
+		return $query->result();
+	}
+
 
 	public function get_project_ratecard_all_()
 	{
@@ -614,7 +624,8 @@ ORDER BY title ASC");
 	{
 		$this->db->insert('xin_projects', $data);
 		if ($this->db->affected_rows() > 0) {
-			return true;
+			// return true;
+			return $this->db->insert_id();
 		} else {
 			return false;
 		}

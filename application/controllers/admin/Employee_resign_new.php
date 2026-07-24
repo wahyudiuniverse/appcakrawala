@@ -147,7 +147,7 @@ class Employee_resign_new extends MY_Controller {
 				'penempatan'					=> $data['penempatan'],
 				'periode'							=> $data['contract_start'] . ' - ' . $data['contract_end'],
 				'join_date'						=> $data['date_of_joining'],
-				'leave_date'					=> $data['date_of_leaving'],
+				'leave_date'					=> $data['date_resign_request'],
 				'status_resign'					=> $data['status_resign'],
 
 			);

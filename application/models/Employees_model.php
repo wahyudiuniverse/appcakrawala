@@ -99,7 +99,7 @@ class Employees_model extends CI_Model
 		$query = $this->db->query("SELECT emp.user_id, emp.employee_id, emp.first_name
 			FROM xin_employees emp
 			LEFT JOIN xin_designations pos ON pos.designation_id = emp.designation_id
-			WHERE pos.level not in ('E1','E2')
+			WHERE pos.level not in ('E2','E3')
 			AND emp.status_resign = 1");
 		return $query->result();
 	}

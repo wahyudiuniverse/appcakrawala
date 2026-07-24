@@ -395,30 +395,9 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan absensi kehadiran.</td>
 							</tr>';
 
-
-						if($allowance_meal!="Rp 0"){	
-						$tbl_2 .= '
-					
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>';
-						}
-
-						if($allowance_transport!="Rp 0"){	
-						$tbl_2 .= '
-
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
-							</tr>';
-
-						}
 
 						if($allowance_rent!="Rp 0"){	
 						$tbl_2 .= '
@@ -426,9 +405,10 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan absensi kehadiran.</td>
 							</tr>';
 						}
+
 
 						if($allowance_komunikasi!="Rp 0"){	
 						$tbl_2 .= '
@@ -436,7 +416,7 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan absensi kehadiran.</td>
 							</tr>';
 						}
 
@@ -446,17 +426,34 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan absensi kehadiran.</td>
 							</tr>';
 						}
 
+
+						if($allowance_meal!="Rp 0"){	
+						$tbl_2 .= '
+					
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan absensi kehadiran.</td>
+							</tr>';
+						}
+
+						if($allowance_transport!="Rp 0"){	
 						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
-							</tr>
+								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan absensi kehadiran.</td>
+							</tr>';
+
+						}
+
+
+						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
@@ -481,9 +478,7 @@ class Pkwt367 extends MY_Controller
 								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
 							</tr>
 							
-							<br>
-							<br>
-							<br>
+							<br><br><br><br><br>
 							<tr>
 								<td>6.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
@@ -577,6 +572,7 @@ class Pkwt367 extends MY_Controller
 				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 
 				$tbl_kk = '
+				<br><br><br><br><br>
 				<br><br><br><br><br>
 				<br><br><br><br><br>
 				<br><br><br><br><br>

@@ -21,7 +21,7 @@ class Employee_paklaring_status extends MY_Controller {
 		$this->load->helper('html');
 		$this->load->database();
 		$this->load->library('form_validation');
-			$this->load->library('ciqrcode');
+		$this->load->library('ciqrcode');
 		// $this->load->model("Traxes_model");
 		$this->load->model("Project_model");	
 		$this->load->model("Employees_model");
@@ -57,11 +57,11 @@ class Employee_paklaring_status extends MY_Controller {
 
 			// $data['all_companies'] = $this->Xin_model->get_companies();
 			// $data['all_emp_active'] = $this->Employees_model->get_all_employees_all();
-			$data['all_projects'] = $this->Project_model->get_project_exist_deactive($session['employee_id']);
+			$data['all_projects'] = $this->Project_model->get_project_status_paklaring($session['employee_id']);
 
 			// $data['all_departments'] = $this->Department_model->all_departments();
 			// $data['all_designations'] = $this->Designation_model->all_designations();
-		if(in_array('378',$role_resources_ids)) {
+			if(in_array('378',$role_resources_ids)) {
 			// $data['subview'] = $this->load->view("admin/employees/resign_list", $data, TRUE);
 			$data['subview'] = $this->load->view("admin/paklaring/employee_paklaring_status", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load

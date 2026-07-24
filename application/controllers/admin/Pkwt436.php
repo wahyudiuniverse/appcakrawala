@@ -397,7 +397,7 @@ class Pkwt436 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan sebesar '.$basicpay.'.</td>
+								<td colspan="20"><b>'.$basicpay.'</b> Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
 							</tr>
 
 
