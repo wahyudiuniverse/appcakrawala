@@ -107,12 +107,12 @@ class Rekening extends MY_Controller
 		$data['path_url'] = 'emp_view';
 
 		$role_resources_ids = $this->Xin_model->user_role_resource();
-		if (in_array('511', $role_resources_ids)) {
-			$data['subview'] = $this->load->view("admin/rekening/cek_rekening", $data, TRUE);
-			$this->load->view('admin/layout/layout_main', $data); //page load
-		} else {
-			redirect('admin/dashboard');
-		}
+		// if (in_array('511', $role_resources_ids)) {
+		$data['subview'] = $this->load->view("admin/rekening/cek_rekening", $data, TRUE);
+		$this->load->view('admin/layout/layout_main', $data); //page load
+		// } else {
+		// 	redirect('admin/dashboard');
+		// }
 	}
 
 	// Validate and add info in database
@@ -1607,12 +1607,12 @@ class Rekening extends MY_Controller
 		echo json_encode($data);
 	}
 
-	public function downloadTemplateSaltab()
+	public function downloadTemplateRekening()
 	{
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('E-Saltab'); //nama Spreadsheet yg baru dibuat
+		$spreadsheet->getActiveSheet()->setTitle('Rekening'); //nama Spreadsheet yg baru dibuat
 
-		$tabel_saltab = $this->Import_model->get_saltab_table();
+		$tabel_saltab = $this->Rekening_model->get_cek_rekening_table();
 
 		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
 		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
@@ -1663,6 +1663,42 @@ class Rekening extends MY_Controller
 		$spreadsheet->getActiveSheet()->getStyle('1:2')
 			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
+		//Buat sheet Master Bank
+		$sheet2 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet2->setTitle('Master Kode Bank'); // Set the title for the second sheet
+
+		$master_bank = $this->Rekening_model->get_master_bank();
+
+		$sheet2->setCellValue('A1', 'KODE BANK');
+		$sheet2->setCellValue('B1', 'NAMA BANK');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Kode Bank');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$master_bank,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 2; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:B1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Rekening');
 
 		//----------------Buat File Untuk Download--------------
 		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
@@ -3239,26 +3275,30 @@ class Rekening extends MY_Controller
 		//$writer->save('./absen/tes2.xlsx');	// download file 
 	}
 
-	public function download_data_invalid_from_import($id = null)
+	public function download_data_hasil_cek_from_import($id = null)
 	{
 		// POST data
 		$postData = $this->input->post();
 
-		$data_invalid = json_decode($postData['data_saltab_invalid']);
+		$data_invalid = json_decode($postData['array_total_data_hasil_cek']);
 
 		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
-		$spreadsheet->getActiveSheet()->setTitle('Data Invalid'); //nama Spreadsheet yg baru dibuat
+		$spreadsheet->getActiveSheet()->setTitle('Data Hasil Cek Rekening'); //nama Spreadsheet yg baru dibuat
 
 		$header2_tabel_saltab = array(
-			'STATUS VALID',
-			'KETERANGAN VALID',
-			'NIP',
-			'NIK',
-			'NAMA LENGKAP',
+			'NAMA',
+			'BANK',
+			'NOMOR REKENING',
+			'STATUS HASIL',
+			'NAMA PEMILIK REKENING',
+			'SKOR HASIL KECOCOKAN',
+			'PESAN',
+			'NOTE',
+			'CHECKED ON',
 		);
 
 		$length_array = count($header2_tabel_saltab);
-		$waktu_stamp = date("Y-m-d H:i:s");
+		$waktu_stamp = $this->Xin_model->tgl_indo(date("Y-m-d H:i:s"));
 
 		$spreadsheet->getActiveSheet()->setCellValue('A1', 'Download Time (Y-m-d)');
 		$spreadsheet->getActiveSheet()->setCellValue('B1', ': ' . $waktu_stamp);
@@ -3291,12 +3331,21 @@ class Rekening extends MY_Controller
 		$data_invalid_print = array();
 
 		foreach ($data_invalid as $record) {
+			if ($record->hasil->data->is_valid == true) {
+				$hasil = "AKTIF";
+			} else {
+				$hasil = "TIDAK AKTIF";
+			}
 			$data_invalid_print[] = array(
-				$record->status_valid,
-				$record->keterangan_valid,
-				$record->nip,
-				$record->nik,
-				$record->fullname,
+				$record->input->pemilik_rekening,
+				$record->bank_name,
+				$record->input->nomor_rekening,
+				$hasil,
+				$record->hasil->data->name,
+				$record->hasil->data->score,
+				$record->hasil->data->message,
+				$record->hasil->data->note,
+				$record->check_on,
 			);
 		}
 
@@ -3755,7 +3804,7 @@ class Rekening extends MY_Controller
 			$name = pathinfo($img['name'], PATHINFO_FILENAME);
 			$yearmonth = date('Y/m');
 
-			if ($identifier == "saltab") {
+			if ($identifier == "cek_rekening") {
 				if (!empty($img['name'])) {
 					$this->load->helper('file');
 
@@ -3784,8 +3833,8 @@ class Rekening extends MY_Controller
 						}
 
 						$spreadsheet = $reader->load($img['tmp_name']);
-						if ($spreadsheet->sheetNameExists('E-Saltab')) {
-							$spreadsheet->setActiveSheetIndexByName('E-Saltab');
+						if ($spreadsheet->sheetNameExists('Rekening')) {
+							$spreadsheet->setActiveSheetIndexByName('Rekening');
 
 							// $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
 							$sheet_data  = $spreadsheet->getActiveSheet()->toArray();
@@ -3803,11 +3852,11 @@ class Rekening extends MY_Controller
 							//susun array saltab detail
 							for ($i = 2; $i < count($sheet_data); $i++) {
 								$lanjut = true;
-								$data += ['id_bank' => 0];
+								// $data += ['id_bank' => 0];
 								// $data += ['customer_id' => time()];
 								for ($j = 0; $j < $length_header; $j++) {
 									if ($lanjut) {
-										if ($header_tabel_saltab[$j] == "fullname") {
+										if ($header_tabel_saltab[$j] == "kode_bank") {
 											$trimmed_value = trim($sheet_data[$i][$j], ' ');
 											$trimmed_value = trim($trimmed_value, ' ');
 											$data += [$header_tabel_saltab[$j] => strtoupper($trimmed_value)];
@@ -3816,42 +3865,24 @@ class Rekening extends MY_Controller
 											} else {
 												$lanjut = true;
 											}
-										} else if ($header_tabel_saltab[$j] == "nip") {
-											if (($sheet_data[$i][$j] == "0") || ($sheet_data[$i][$j] == "")) {
-												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-												$trimmed_nip = trim($trimmed_nip, ' ');
-												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-												// $data += [$header_tabel_saltab[$j + 1] => ""];
-												// $j = $j + 1;
+										} else if ($header_tabel_saltab[$j] == "nomor_rekening") {
+											$trimmed_value = trim($sheet_data[$i][$j], ' ');
+											$trimmed_value = trim($trimmed_value, ' ');
+											$data += [$header_tabel_saltab[$j] => strtoupper($trimmed_value)];
+											if (($trimmed_value == "") || ($trimmed_value == null)) {
+												$lanjut = false;
 											} else {
-												$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-												$trimmed_nip = trim($trimmed_nip, ' ');
-												$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-												// $data += [$header_tabel_saltab[$j + 1] => $this->Import_model->get_ktp_karyawan($sheet_data[$i][$j])];
-												// $j = $j + 1;
+												$lanjut = true;
 											}
-											$lanjut = true;
-										} else if ($header_tabel_saltab[$j] == "norek") {
+										} else if ($header_tabel_saltab[$j] == "pemilik_rekening") {
 											$trimmed_value = trim($sheet_data[$i][$j], ' ');
 											$trimmed_value = trim($trimmed_value, ' ');
-											$data += ['norek' => ''];
-											$lanjut = true;
-										} else if ($header_tabel_saltab[$j] == "nama_bank") {
-											$trimmed_value = trim($sheet_data[$i][$j], ' ');
-											$trimmed_value = trim($trimmed_value, ' ');
-											$data += ['nama_bank' => ''];
-											$lanjut = true;
-										} else if ($header_tabel_saltab[$j] == "pemilik_rek") {
-											$trimmed_value = trim($sheet_data[$i][$j], ' ');
-											$trimmed_value = trim($trimmed_value, ' ');
-											$data += ['pemilik_rek' => ''];
-											$lanjut = true;
-										} else if ($header_tabel_saltab[$j] == "adjustment_pph") {
-											$trimmed_nip = trim($sheet_data[$i][$j], ' ');
-											$trimmed_nip = trim($trimmed_nip, ' ');
-											$trimmed_nip = abs(doubleval($trimmed_nip));
-											$data += [$header_tabel_saltab[$j] => $trimmed_nip];
-											$lanjut = true;
+											$data += [$header_tabel_saltab[$j] => strtoupper($trimmed_value)];
+											if (($trimmed_value == "") || ($trimmed_value == null)) {
+												$lanjut = false;
+											} else {
+												$lanjut = true;
+											}
 										} else {
 											if ($lanjut) {
 												$trimmed_value = trim($sheet_data[$i][$j], ' ');
@@ -3871,13 +3902,13 @@ class Rekening extends MY_Controller
 							}
 
 							$status = "1";
-							$message = "Berhasil Baca Data Saltab.";
+							$message = "Berhasil Baca Data Cek Rekening.";
 							$jumlah_data = count($array_data);
 							$data_header = $header_tabel_saltab;
 							$data = $array_data;
 						} else {
 							$status = "0";
-							$message = "Tidak ditemukan sheet \"E-Saltab\" di dalam file excel";
+							$message = "Tidak ditemukan sheet \"Rekening\" di dalam file excel";
 							$jumlah_data = 0;
 							$data_header = array();
 							$data = array();
@@ -6624,6 +6655,93 @@ class Rekening extends MY_Controller
 				// $data_hasil_api = $hasil_api->data;
 
 				echo $response;
+			}
+		}
+	}
+
+	//Cek rekening bank menggunakan API
+	public function cek_batch_rekening_via_API()
+	{
+		$postData = $this->input->post();
+
+		$bank_code = $postData['kode_bank'];
+
+		$bank_name = $this->Rekening_model->get_nama_bank_verifikasi($postData['kode_bank']);
+
+		// $no_rekening_jelas = urldecode($no_rekening);
+
+		if ($bank_code == "" || $bank_code == null) {
+			$pesan = array(
+				"is_success" => false,
+				"message" => "Kode Bank Kosong",
+			);
+
+			$data_return = array(
+				"input" => $postData,
+				"hasil" => $pesan,
+				"bank_name" => $bank_name,
+				"check_on" => $this->Xin_model->tgl_indo(date('Y-m-d H:i:s')),
+			);
+
+			echo json_encode($data_return);
+		} else {
+			// set post fields
+			$post_variable = [
+				"bank_code" => $bank_code,
+				"account_number" => $postData['nomor_rekening'],
+				"account_name" => $postData['pemilik_rekening']
+			];
+
+			$input_post = json_encode($post_variable);
+			// $input_post = "{'account_bank': '". $bank_code ."','account_number':'".$no_rekening."'}";
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => 'https://use.api.co.id/validation/bank',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_POSTFIELDS => $input_post,
+				CURLOPT_HTTPHEADER => array('x-api-co-id:JJ34it6kv5bLxdnd4Pwsuj1dVjw91DRDvAht8a6syMNko49tCt', 'Content-Type:application/json'),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+			// echo $response;
+
+			$pesan = array(
+				"is_success" => false,
+				"message" => "cURL Error #:" . $err,
+			);
+
+			if ($err) {
+				$data_return = array(
+					"input" => $postData,
+					"hasil" => $pesan,
+					"bank_name" => $bank_name,
+					"check_on" => $this->Xin_model->tgl_indo(date('Y-m-d H:i:s')),
+				);
+				echo json_encode($data_return);
+			} else {
+				// $hasil_api = json_decode($response);
+				// $data_hasil_api = $hasil_api->data;
+
+				$data_return = array(
+					"input" => $postData,
+					"hasil" => json_decode($response),
+					"bank_name" => $bank_name,
+					"check_on" => $this->Xin_model->tgl_indo(date('Y-m-d H:i:s')),
+				);
+
+				echo json_encode($data_return);
+				// echo $data_return;
 			}
 		}
 	}

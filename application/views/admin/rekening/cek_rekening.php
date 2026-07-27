@@ -23,8 +23,8 @@
 				</button>
 			</div>
 			<div class="modal-body bg-light">
-				<div class="isi-modal-edit-outlet">
-					<div class="container" id="container_modal_outlet">
+				<div class="isi-modal-cek-rekening">
+					<div class="container" id="container_modal_cek_rekening">
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="card col-12">
@@ -57,40 +57,63 @@
 							<!--end col-->
 						</div>
 						<!--end row-->
-						<div hidden id="list_data_invalid">
+						<div hidden id="list_data_hasil_cek">
 							<div class="card">
 								<div class="card-header">
 									<div class="d-flex justify-content-between align-items-center">
-										<h5 class="card-title mb-0">Data Invalid</h5>
+										<h5 class="card-title mb-0">Data Hasil</h5>
 										<div id="kumpulan_button3">
-											<button onclick="download_data_invalid()" id="button_download_data_invalid" class="btn btn-success btn-block">Download Data Invalid</button>
+											<button hidden onclick="download_data_hasil_cek()" id="button_download_data_invalid" class="btn btn-success btn-block">Download Data Hasil</button>
 										</div>
 									</div>
 								</div>
 
 								<div class="card-body">
-									<div class="table-responsive">
-										<table id="invalid-rekening-datatables" class="display table table-bordered" style="width:100%">
-											<thead>
-												<tr>
-													<th>STATUS REKENING</th>
-													<th>KETERANGAN</th>
-													<th>BANK</th>
-													<th>NOREK</th>
-													<th>NAMA</th>
-												</tr>
-											</thead>
-											<tfoot>
-												<tr>
-													<th>STATUS REKENING</th>
-													<th>KETERANGAN</th>
-													<th>BANK</th>
-													<th>NOREK</th>
-													<th>NAMA</th>
-												</tr>
-											</tfoot>
-										</table>
+									<div class="row">
+										<div class="col-lg-12">
+											<span id="status_pengecekan"></span>
+											<div style="max-height: 300px; overflow: auto; border: 1px solid #ccc;">
+												<table id="tabel_rek_rekening" class="table table-striped col-md-12">
+													<thead>
+														<tr>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																<!-- <th> -->
+																NAMA
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																(BANK) NOREK
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																STATUS REKENING
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																NAMA PEMILIK
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																SCORE KECOCOKAN
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																PESAN
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																NOTE
+															</th>
+															<th style="position: sticky; top: 0; background-color: #f9f9f9; z-index: 1;">
+																CHECK ON
+															</th>
+														</tr>
+													</thead>
+													<tbody>
+														<div id="isi_tabel_cek_rekening">
+														</div>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<!--end col-->
 									</div>
+									<!--end row-->
+
 								</div>
 							</div>
 						</div>
@@ -98,12 +121,12 @@
 					</div>
 				</div>
 
-				<div class="info-modal-edit-outlet"></div>
+				<div class="info-modal-cek_rekening"></div>
 
 			</div>
 			<div class="modal-footer">
 				<button type='button' class='btn btn-secondary mt-2' data-dismiss='modal'>Close</button>
-				<button onclick="save_saltab()" id='button_save_saltab' name='button_save_saltab' type='button' class='btn btn-primary mt-2'>Save Data Saltab</button>
+				<!-- <button hidden onclick="cek_batch_rekening()" id='button_cek_batch_rekening' name='button_cek_batch_rekening' type='button' class='btn btn-primary mt-2'>Cek Batch Rekening</button> -->
 			</div>
 		</div>
 	</div>
@@ -213,23 +236,11 @@
 <!-- CARD CEK BATCH REKENING -->
 <div class="card border-blue">
 	<div class="card-header with-elements">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<span class="card-header-title mr-2">
-				<strong>REKENING | </strong>CEK BATCH REKENING (COMING SOON)
+				<strong>REKENING | </strong>CEK BATCH REKENING (OPEN BETA)</br>
+				<font color="#FF0000"><strong>Sudah bisa dicoba. Kalau ada bug/error, lapor ya</strong></font>
 			</span>
-		</div>
-
-		<div hidden class="col-md-6">
-			<div class="pull-right">
-				<!-- <div class="card-header with-elements"> -->
-				<span class="card-header-title mr-2">
-					<a href="<?php echo base_url(); ?>admin/importexcel/downloadTemplateSaltab" class="btn btn-primary">
-						<i class="fa fa-download"></i>
-						Download template cek rekening
-					</a>
-				</span>
-				<!-- </div> -->
-			</div>
 		</div>
 	</div>
 
@@ -263,9 +274,11 @@
 	var ms1;
 	var langopt;
 	var saltab_table;
-	var invalid_saltab_table;
+	var invalid_cek_rekening_table;
 	var data_saltab_invalid;
 	var array_data_import;
+	var array_data_hasil_cek = [];
+	var array_total_data_hasil_cek = [];
 	var array_data_import_validasi;
 	var jumlah_data_import;
 	var jumlah_data_invalid;
@@ -324,8 +337,8 @@
 	);
 
 	//create object filepond untuk file saltab
-	var pond_saltab = FilePond.create(document.querySelector('input[id="file_excel"]'), {
-		labelIdle: 'Drag & Drop file Saltab atau klik <span class="filepond--label-action">Browse</span>',
+	var pond_cek_rekening = FilePond.create(document.querySelector('input[id="file_excel"]'), {
+		labelIdle: 'Drag & Drop file Cek Rekening atau klik <span class="filepond--label-action">Browse</span>',
 		labelFileTypeNotAllowed: 'Format tidak sesuai',
 		// allowMultiple: 1,
 		// maxParallelUploads: 10,
@@ -354,19 +367,22 @@
 			width: '100%'
 		});
 
-		invalid_saltab_table = $('#invalid-rekening-datatables').DataTable();
+		invalid_cek_rekening_table = $('#cek-rekening-datatables').DataTable();
 
 		//append identifier ke objek filepond file saltab
-		pond_saltab.setOptions({
+		pond_cek_rekening.setOptions({
 			server: {
 				process: {
-					url: '<?php echo base_url() ?>admin/Importexcel/upload_dokumen',
+					url: '<?php echo base_url() ?>admin/Rekening/upload_dokumen',
 					method: 'POST',
 					ondata: (formData) => {
-						$('#button_save_saltab').attr("hidden", true);
+						$('#button_download_data_invalid').attr("hidden", true);
+						$('#list_data_hasil_cek').attr("hidden", true);
+						$('#status_pengecekan').html("");
+						// $('#button_cek_batch_rekening').attr("hidden", true);
 						$('#pesan_file_excel').html("</br><strong><img src='" + loading_image + "' alt='' width='30px'><span style='color:blue;'> Reading data... (Akan lama jika data banyak)</span></strong>");
 
-						formData.append('identifier', 'saltab');
+						formData.append('identifier', 'cek_rekening');
 						formData.append([csrfName], csrfHash);
 						return formData;
 					},
@@ -374,6 +390,9 @@
 						// select the right value in the response here and return
 						// return res;
 						var serverResponse = jQuery.parseJSON(res);
+
+						//refresh data total
+						array_total_data_hasil_cek = [];
 
 						alert(serverResponse['message']);
 						var data_excel = JSON.stringify(serverResponse['data']);
@@ -392,282 +411,35 @@
 						) { //kalau ada input kosong 
 							alert("Data yang diupload kosong");
 						} else {
-							//action insert data
-							$.ajax({
-								url: '<?= base_url() ?>admin/Importexcel/validasi_import_saltab/',
-								method: 'post',
-								data: {
-									[csrfName]: csrfHash,
-									array_data_import: JSON.stringify(array_data_import),
-								},
-								beforeSend: function() {
-									html_pesan_file = html_pesan_file + "</br><strong><img src='" + loading_image + "' alt='' width='30px'><span style='color:blue;'> Validating data... (Akan lama jika data banyak)</span></strong>";
-									$('#pesan_file_excel').html(html_pesan_file);
-								},
-								success: function(response) {
-
-									var res2 = jQuery.parseJSON(response);
-
-									if (res2['status'] == "200") {
-										array_data_import_validasi = res2['data'];
-										html_pesan_file = "</br><strong><span style='color:blue;'>Jumlah data terbaca: " + jumlah_data_import + " data</span></strong>";
-
-										jumlah_data_invalid = res2['jumlah_data_invalid'];
-
-										//tampilkan list data invalid
-										if (res2['jumlah_data_invalid'] > 0) {
-											html_pesan_file = html_pesan_file + "</br><strong><span style='color:red;'>Jumlah data invalid: " + res2['jumlah_data_invalid'] + " data</span></strong>";
-
-											//tampilkan pesan sukses
-											$('#pesan_file_excel').html(html_pesan_file);
-
-											$('#list_data_invalid').attr("hidden", false);
-											let dataSet = res2['data_invalid'];
-											data_saltab_invalid = res2['data_invalid'];
-
-											invalid_saltab_table.destroy();
-
-											invalid_saltab_table = $('#invalid-rekening-datatables').DataTable({
-												data: dataSet,
-												order: [],
-												columns: [{
-														data: 'status_valid',
-														"orderable": false,
-														// title: 'Name'
-													}, {
-														data: 'keterangan_valid',
-														"orderable": false,
-														// title: 'Name'
-													},
-													{
-														data: 'nip',
-														"orderable": false,
-														// title: 'Name'
-													},
-													{
-														data: 'nik',
-														"orderable": false,
-														// title: 'Name'
-													},
-													{
-														data: 'fullname',
-														"orderable": false,
-														// title: 'Name'
-													},
-												]
-											});
-										} else {
-											html_pesan_file = html_pesan_file + "</br><strong><span style='color:blue;'>Jumlah data invalid: " + res2['jumlah_data_invalid'] + " data</span></strong>";
-
-											//tampilkan pesan sukses
-											$('#pesan_file_excel').html(html_pesan_file);
-										}
-
-										$('#button_save_saltab').attr("hidden", false);
-
-										// filter_outlet_product();
-										saltab_table.ajax.reload(null, false);
-									} else {
-										html_pesan_file = "</br><strong><span style='color:blue;'>Jumlah data terbaca: " + jumlah_data_import + " data</span></strong>";
-										html_pesan_file = html_pesan_file + "</br><strong><span style='color:blue;'>Gagal Melakukan Validasi, Silahkan ulangi proses import saltab</span></strong>";
-
-										//tampilkan pesan sukses
-										$('#pesan_file_excel').html(html_pesan_file);
-
-										// $('#area').attr("hidden", true);
-										array_data_import = "";
-										array_data_import_validasi = "";
-										array_data_header = [];
-										jumlah_data_import = 0;
-										jumlah_data_invalid = 0;
-										pond_saltab.removeFile();
-									}
-								},
-								error: function(xhr, status, error) {
-									html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan ulangi proses import saltab</strong>";
-									html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-									// html_text = "Gagal fetch data. Kode error: " + xhr.status;
-									$('#pesan_file_excel').html(html_text);
-									$('#button_save_outlet').attr("hidden", true);
-									array_data_import = "";
-									array_data_import_validasi = "";
-									array_data_header = [];
-									jumlah_data_import = 0;
-									jumlah_data_invalid = 0;
-									pond_outlet.removeFile();
-								}
-							});
+							$('#list_data_hasil_cek').attr("hidden", false);
+							proses_cek_rekening_aktif(array_data_import);
 						}
 					}
 				}
 			}
 		});
-
-		// Project Change - Sub Project (on Change)
-		$('#project').change(function() {
-			var project = $(this).val();
-
-			// AJAX request
-			$.ajax({
-				url: '<?= base_url() ?>registrasi/getSubByProject/',
-				method: 'post',
-				data: {
-					[csrfName]: csrfHash,
-					project: project
-				},
-				dataType: 'json',
-				success: function(response) {
-					//csrfName = data.csrfName;
-					//csrfHash = data.csrfHash;
-					// Remove options 
-					$('#sub_project').find('option').not(':first').remove();
-
-					// Add options
-					$(response).each(function(index, data) {
-						$('#sub_project').append('<option value="' + data['secid'] + '">' + data['sub_project_name'] + '</option>');
-					}).show();
-				},
-				error: function(xhr, ajaxOptions, thrownError) {
-					alert("Status :" + xhr.status);
-					alert("responseText :" + xhr.responseText);
-				},
-			});
-		});
-
-		saltab_table = $('#saltab_table2').DataTable({
-			//"bDestroy": true,
-			'processing': true,
-			'serverSide': true,
-			//'stateSave': true,
-			'bFilter': true,
-			'serverMethod': 'post',
-			//'dom': 'plBfrtip',
-			'dom': 'lBfrtip',
-			"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
-			//'columnDefs': [{
-			//  targets: 11,
-			//  type: 'date-eu'
-			//}],
-			'order': [
-				[7, 'desc']
-			],
-			'ajax': {
-				'url': '<?= base_url() ?>admin/importexcel/list_batch_saltab',
-				data: {
-					[csrfName]: csrfHash,
-					session_id: session_id,
-					// nip: nip,
-					// contract_id: contract_id,
-					//idsession: idsession,
-					// emp_id: emp_id
-					//base_url_catat: base_url_catat
-				},
-				error: function(xhr, ajaxOptions, thrownError) {
-					alert("Status :" + xhr.status);
-					alert("responseText :" + xhr.responseText);
-				},
-			},
-			'columns': [{
-					data: 'aksi',
-					"orderable": false
-				},
-				{
-					data: 'periode_salary',
-					// "orderable": false,
-					//searchable: true
-				},
-				{
-					data: 'periode',
-					"orderable": false,
-					//searchable: true
-				},
-				{
-					data: 'project_name',
-					//"orderable": false
-				},
-				{
-					data: 'sub_project_name',
-					//"orderable": false,
-				},
-				{
-					data: 'total_mpp',
-					"orderable": false,
-				},
-				{
-					data: 'upload_by',
-					//"orderable": false,
-				},
-				{
-					data: 'upload_on',
-					//"orderable": false,
-				},
-			]
-		});
-
-
-
 	});
 
-	//-----delete batch saltab-----
-	function deleteBatchSaltab(id) {
-		// alert("masuk fungsi delete saltab. id: " + id);
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Importexcel/delete_batch_saltab/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				id: id
-			},
-			success: function(response) {
-				alert("Berhasil Delete Batch Saltab");
-				saltab_table.ajax.reload(null, false);
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert("Gagal Delete Batch Saltab. Status : " + xhr.status);
-				alert("responseText :" + xhr.responseText);
-			},
-		});
-		// alert("Beres Ajax. id: " + id);
-	}
-
-	//-----lihat batch saltab-----
-	function lihatBatchSaltab(id) {
-		//alert("masuk fungsi lihat. id: " + id);
-		window.open('<?= base_url() ?>admin/Importexcel/view_batch_saltab_temporary/' + id, "_self");
-	}
-
-	//-----edit batch saltab-----
-	function downloadBatchSaltab(id) {
-		//alert("masuk fungsi download. id: " + id);downloadDetailSaltab
-		// window.open('<?= base_url() ?>admin/addendum/edit/' + id, "_blank");
-		window.open('<?= base_url() ?>admin/Importexcel/downloadDetailSaltab/' + id, "_self");
-	}
-
 	//-----download data invalid-----
-	function download_data_invalid() {
+	function download_data_hasil_cek() {
 		$.ajax({
 			// url: '<?= base_url() ?>admin/importexcel/downloadTemplateSaltab/',
-			url: '<?= base_url() ?>admin/importexcel/download_data_invalid_from_import/',
+			url: '<?= base_url() ?>admin/Rekening/download_data_hasil_cek_from_import/',
 			method: 'post',
 			data: {
 				[csrfName]: csrfHash,
-				data_saltab_invalid: JSON.stringify(data_saltab_invalid),
+				array_total_data_hasil_cek: JSON.stringify(array_total_data_hasil_cek),
 			},
 			xhrFields: {
 				responseType: 'blob' // tipe untuk binary data
 			},
 			beforeSend: function() {
 				//judul modal
-				$('.judulModalRekening').html("Download Template Saltab");
-				$('.info-modal-edit-outlet').attr("hidden", false);
-				$('.isi-modal-edit-outlet').attr("hidden", true);
-				$('.info-modal-edit-outlet').html(generating_html_text);
-				$('#button_save_saltab').attr("hidden", true);
-				$('#button_delete_outlet').attr("hidden", true);
-				$('#button_reset_device_user_mobile').attr("hidden", true);
-				$('#button_enable_web_user_mobile').attr("hidden", true);
-				$('#button_disable_web_user_mobile').attr("hidden", true);
+				$('.judulModalRekening').html("Download Data Hasil Cek Rekening");
+				$('.info-modal-cek_rekening').attr("hidden", false);
+				$('.isi-modal-cek-rekening').attr("hidden", true);
+				$('.info-modal-cek_rekening').html(generating_html_text);
+				// $('#button_cek_batch_rekening').attr("hidden", true);
 				$('#cekRekeningModal').modal('show');
 			},
 			success: function(data) {
@@ -679,24 +451,24 @@
 				var a = document.createElement('a');
 				var url = window.URL.createObjectURL(data);
 				a.href = url;
-				a.download = 'Data Invalid.xlsx';
+				a.download = 'Data Hasil Cek.xlsx';
 				document.body.append(a);
 				a.click();
 				window.URL.revokeObjectURL(url);
 				a.remove();
 
-				$('.info-modal-edit-outlet').attr("hidden", false);
-				$('.isi-modal-edit-outlet').attr("hidden", true);
-				$('.info-modal-edit-outlet').html(success_generating_html_text);
+				$('.info-modal-cek_rekening').attr("hidden", false);
+				$('.isi-modal-cek-rekening').attr("hidden", true);
+				$('.info-modal-cek_rekening').html(success_generating_html_text);
 
 				setTimeout(() => {
 					//judul modal
-					$('.judulModalRekening').html("Import Data Saltab");
+					$('.judulModalRekening').html("Cek Batch Rekening");
 
-					$('#button_save_saltab').attr("hidden", false);
+					$('#button_cek_batch_rekening').attr("hidden", false);
 
-					$('.info-modal-edit-outlet').attr("hidden", true);
-					$('.isi-modal-edit-outlet').attr("hidden", false);
+					$('.info-modal-cek_rekening').attr("hidden", true);
+					$('.isi-modal-cek-rekening').attr("hidden", false);
 				}, 1000);
 			},
 			error: function() {
@@ -704,12 +476,12 @@
 
 				setTimeout(() => {
 					//judul modal
-					$('.judulModalRekening').html("Import Data Saltab");
+					$('.judulModalRekening').html("Cek Batch Rekening");
 
-					$('#button_save_saltab').attr("hidden", false);
+					$('#button_cek_batch_rekening').attr("hidden", false);
 
-					$('.info-modal-edit-outlet').attr("hidden", true);
-					$('.isi-modal-edit-outlet').attr("hidden", false);
+					$('.info-modal-cek_rekening').attr("hidden", true);
+					$('.isi-modal-cek-rekening').attr("hidden", false);
 				}, 1000);
 			}
 			// success: function(response) {
@@ -717,6 +489,189 @@
 			// 	// alert(response);
 			// }
 		});
+	}
+</script>
+
+<script>
+	async function proses_cek_rekening_aktif(dataArray) {
+		var html_pesan_file = "";
+		var jumlah_data = dataArray.length;
+		var data_checked = 0;
+
+		for (const item of dataArray) {
+			data_checked++;
+			try {
+				// The loop pauses here until the request completes
+				const response = await $.ajax({
+					url: '<?= base_url() ?>admin/Rekening/cek_batch_rekening_via_API/',
+					method: 'POST',
+					data: {
+						[csrfName]: csrfHash,
+						kode_bank: item.kode_bank,
+						nomor_rekening: item.nomor_rekening,
+						pemilik_rekening: item.pemilik_rekening,
+					},
+					beforeSend: function() {
+						//judul modal status_pengecekan isi_tabel_cek_rekening
+						html_pesan_file = "<strong><img src='" + loading_image + "' alt='' width='30px'><span style='color:blue;'> Cek Rekening a.n " + item.pemilik_rekening + "</br>Checked: " + data_checked + "/" + jumlah_data + "</span></strong></br>";
+						$('#status_pengecekan').html(html_pesan_file);
+						$('.judulModalRekening').html("Cek Batch Rekening");
+						$('#cekRekeningModal').modal('show');
+					},
+					success: function(resp) {
+						var res = jQuery.parseJSON(resp);
+
+						if (res['hasil']['is_success']) {
+							var status_hasil = "";
+							if (res['hasil']['data']['is_valid']) {
+								status_hasil_html = "<span style='color:blue;'>AKTIF</span>";
+								status_hasil = "AKTIF";
+							} else {
+								status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
+								status_hasil = "TIDAK AKTIF";
+							}
+							var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td>" + res['hasil']['data']['name'] + "</td><td>" + res['hasil']['data']['score'] + "</td><td>" + res['hasil']['data']['message'] + "</td><td>" + res['hasil']['data']['note'] + "</td><td>" + res['check_on'] + "</td></tr>";
+
+							$("#tabel_rek_rekening tbody").append(html_hasil);
+
+							array_data_hasil_cek.nama = res['input']['pemilik_rekening'];
+							array_data_hasil_cek.bank = res['bank_name'];
+							array_data_hasil_cek.nomor_rekening = res['input']['nomor_rekening'];
+							array_data_hasil_cek.status_hasil = status_hasil;
+							array_data_hasil_cek.nama_pemilik = res['hasil']['data']['name'];
+							array_data_hasil_cek.score = res['hasil']['data']['score'];
+							array_data_hasil_cek.message = res['hasil']['data']['message'];
+							array_data_hasil_cek.note = res['hasil']['data']['note'];
+							array_data_hasil_cek.check_on = res['check_on'];
+
+							console.log(array_data_hasil_cek);
+
+							// array_total_data_hasil_cek.push(array_data_hasil_cek);
+
+							// console.log(array_total_data_hasil_cek);
+						} else {
+							status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
+							status_hasil = "TIDAK AKTIF";
+
+							var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + res['hasil']['message'] + "</td><td></td><td>" + res['hasil']['check_on'] + "</td></tr>";
+
+							$("#tabel_rek_rekening tbody").append(html_hasil);
+
+							array_data_hasil_cek.nama = res['input']['pemilik_rekening'];
+							array_data_hasil_cek.bank = res['bank_name'];
+							array_data_hasil_cek.nomor_rekening = res['input']['nomor_rekening'];
+							array_data_hasil_cek.status_hasil = status_hasil;
+							array_data_hasil_cek.nama_pemilik = "";
+							array_data_hasil_cek.score = "";
+							array_data_hasil_cek.message = res['hasil']['message'];
+							array_data_hasil_cek.note = "";
+							array_data_hasil_cek.check_on = res['check_on'];
+
+							console.log(array_data_hasil_cek);
+
+							// array_total_data_hasil_cek.push(array_data_hasil_cek);
+						}
+					},
+				});
+
+				// console.log(response);
+				// hasil = jQuery.parseJSON(response);
+				// var res = jQuery.parseJSON(response);
+				// if (res['hasil']['is_success']) {
+				// 	var status_hasil = "";
+				// 	if (res['hasil']['data']['is_valid']) {
+				// 		status_hasil_html = "<span style='color:blue;'>AKTIF</span>";
+				// 		status_hasil = "AKTIF";
+				// 	} else {
+				// 		status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
+				// 		status_hasil = "TIDAK AKTIF";
+				// 	}
+				// 	// var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td>" + res['hasil']['data']['name'] + "</td><td>" + res['hasil']['data']['score'] + "</td><td>" + res['hasil']['data']['message'] + "</td><td>" + res['hasil']['data']['note'] + "</td><td>" + res['check_on'] + "</td></tr>";
+
+				// 	// $("#tabel_rek_rekening tbody").append(html_hasil);
+
+				// 	array_data_hasil_cek.nama = res['input']['pemilik_rekening'];
+				// 	array_data_hasil_cek.bank = res['bank_name'];
+				// 	array_data_hasil_cek.nomor_rekening = res['input']['nomor_rekening'];
+				// 	array_data_hasil_cek.status_hasil = status_hasil;
+				// 	array_data_hasil_cek.nama_pemilik = res['hasil']['data']['name'];
+				// 	array_data_hasil_cek.score = res['hasil']['data']['score'];
+				// 	array_data_hasil_cek.message = res['hasil']['data']['message'];
+				// 	array_data_hasil_cek.note = res['hasil']['data']['note'];
+				// 	array_data_hasil_cek.check_on = res['check_on'];
+
+				// 	console.log(array_data_hasil_cek);
+
+				// 	array_total_data_hasil_cek.push(array_data_hasil_cek);
+
+				// 	// console.log(array_total_data_hasil_cek);
+				// } else {
+				// 	status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
+				// 	status_hasil = "TIDAK AKTIF";
+
+				// 	// var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + res['hasil']['message'] + "</td><td></td><td>" + res['hasil']['check_on'] + "</td></tr>";
+
+				// 	// $("#tabel_rek_rekening tbody").append(html_hasil);
+
+				// 	array_data_hasil_cek.nama = res['input']['pemilik_rekening'];
+				// 	array_data_hasil_cek.bank = res['bank_name'];
+				// 	array_data_hasil_cek.nomor_rekening = res['input']['nomor_rekening'];
+				// 	array_data_hasil_cek.status_hasil = status_hasil;
+				// 	array_data_hasil_cek.nama_pemilik = "";
+				// 	array_data_hasil_cek.score = "";
+				// 	array_data_hasil_cek.message = res['hasil']['message'];
+				// 	array_data_hasil_cek.note = "";
+				// 	array_data_hasil_cek.check_on = res['check_on'];
+
+				// 	array_total_data_hasil_cek.push(array_data_hasil_cek);
+				// }
+
+				array_total_data_hasil_cek.push(jQuery.parseJSON(response));
+				console.log(array_total_data_hasil_cek);
+			} catch (error) {
+				status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
+				status_hasil = "TIDAK AKTIF";
+
+				var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + res['hasil']['message'] + "</td><td></td><td>" + res['check_on'] + "</td></tr>";
+
+				$("#tabel_rek_rekening tbody").append(html_hasil);
+
+				array_data_hasil_cek.nama = res['input']['pemilik_rekening'];
+				array_data_hasil_cek.bank = res['bank_name'];
+				array_data_hasil_cek.nomor_rekening = res['input']['nomor_rekening'];
+				array_data_hasil_cek.status_hasil = status_hasil;
+				array_data_hasil_cek.nama_pemilik = "";
+				array_data_hasil_cek.score = "";
+				array_data_hasil_cek.message = res['hasil']['message'];
+				array_data_hasil_cek.note = "";
+				array_data_hasil_cek.check_on = res['check_on'];
+
+				array_total_data_hasil_cek.push(array_data_hasil_cek);
+
+				// console.error('Error processing item:', error);
+			}
+
+			// console.log(response);
+
+			// cek_jumlah_invalid(id_batch);
+			// cek_jumlah_rekening_tidak_aktif(id_batch);
+			// refresh_datatable();
+
+			// array_total_data_hasil_cek.push(array_data_hasil_cek);
+
+			// console.log(array_total_data_hasil_cek);
+		}
+
+		// cek_jumlah_invalid(id_batch);
+		// cek_jumlah_rekening_tidak_aktif(id_batch);
+		// refresh_datatable();
+
+		html_pesan_file = "<strong><span style='color:blue;'>Selesai Melakukan Pengecekan Rekening</br>Checked: " + data_checked + "/" + jumlah_data + "</span></strong></br>";
+		$('#status_pengecekan').html(html_pesan_file);
+		$('#button_download_data_invalid').attr("hidden", false);
+		// console.log('All requests finished sequentially.');
+
+		// console.log(array_total_data_hasil_cek);
 	}
 </script>
 
@@ -724,7 +679,7 @@
 <script type="text/javascript">
 	function download_template_cek_rekening() {
 		$.ajax({
-			url: '<?= base_url() ?>admin/importexcel/downloadTemplateSaltab/',
+			url: '<?= base_url() ?>admin/Rekening/downloadTemplateRekening/',
 			method: 'post',
 			data: {
 				[csrfName]: csrfHash,
@@ -734,15 +689,11 @@
 			},
 			beforeSend: function() {
 				//judul modal
-				$('.judulModalRekening').html("Download Template Saltab");
-				$('.info-modal-edit-outlet').attr("hidden", false);
-				$('.isi-modal-edit-outlet').attr("hidden", true);
-				$('.info-modal-edit-outlet').html(generating_html_text);
-				$('#button_save_saltab').attr("hidden", true);
-				$('#button_delete_outlet').attr("hidden", true);
-				$('#button_reset_device_user_mobile').attr("hidden", true);
-				$('#button_enable_web_user_mobile').attr("hidden", true);
-				$('#button_disable_web_user_mobile').attr("hidden", true);
+				$('.judulModalRekening').html("Download Template Cek Rekening");
+				$('.info-modal-cek_rekening').attr("hidden", false);
+				$('.isi-modal-cek-rekening').attr("hidden", true);
+				$('.info-modal-cek_rekening').html(generating_html_text);
+				$('#button_cek_batch_rekening').attr("hidden", true);
 				$('#cekRekeningModal').modal('show');
 			},
 			success: function(data) {
@@ -754,22 +705,22 @@
 				var a = document.createElement('a');
 				var url = window.URL.createObjectURL(data);
 				a.href = url;
-				a.download = 'Template Import Data Saltab.xlsx';
+				a.download = 'Template Cek Rekening.xlsx';
 				document.body.append(a);
 				a.click();
 				window.URL.revokeObjectURL(url);
 				a.remove();
 
-				$('.info-modal-edit-outlet').attr("hidden", false);
-				$('.isi-modal-edit-outlet').attr("hidden", true);
-				$('.info-modal-edit-outlet').html(success_generating_html_text);
+				$('.info-modal-cek_rekening').attr("hidden", false);
+				$('.isi-modal-cek-rekening').attr("hidden", true);
+				$('.info-modal-cek_rekening').html(success_generating_html_text);
 
 				setTimeout(() => {
 					//judul modal
-					$('.judulModalRekening').html("Import Data Saltab");
+					$('.judulModalRekening').html("Cek Batch Rekening");
 
-					$('.info-modal-edit-outlet').attr("hidden", true);
-					$('.isi-modal-edit-outlet').attr("hidden", false);
+					$('.info-modal-cek_rekening').attr("hidden", true);
+					$('.isi-modal-cek-rekening').attr("hidden", false);
 				}, 1000);
 			},
 			error: function() {
@@ -777,208 +728,14 @@
 
 				setTimeout(() => {
 					//judul modal
-					$('.judulModalRekening').html("Import Data Saltab");
+					$('.judulModalRekening').html("Cek Batch Rekening");
 
-					$('.info-modal-edit-outlet').attr("hidden", true);
-					$('.isi-modal-edit-outlet').attr("hidden", false);
+					$('.info-modal-cek_rekening').attr("hidden", true);
+					$('.isi-modal-cek-rekening').attr("hidden", false);
 				}, 1000);
 			}
-			// success: function(response) {
-			// 	alert("selesai download");
-			// 	// alert(response);
-			// }
 		});
 	}
-</script>
-
-<!-- <script>
-  $('form#myform').on('submit', function(e) {
-    const hari_ini = new Date().toJSON().slice(0, 10);
-    // const hari_ini = new Date();
-    const jam_sekaran = new Date().getHours();
-    const tgl_gajian = document.getElementById("periode_salary").value;
-
-    if (tgl_gajian == hari_ini) {
-      e.preventDefault();
-      alert("tanggal sama");
-    } else {
-      alert("tanggal beda");
-    }
-  });
-</script> -->
-
-
-<!-- Cek tanggal upload -->
-<!-- <script>
-	// var l = Ladda.create(document.querySelector('#button_submit'));
-	const btn = document.getElementById("button_submit");
-
-	btn.onclick = (e) => {
-		var hari_ini = new Date().toJSON().slice(0, 10);
-		var hari_ini2 = new Date();
-		var jam_sekarang = new Date().getHours();
-		var waktu_sekarang = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
-
-		var tgl_gajian = document.getElementById("periode_salary").value;
-		var project_id = document.getElementById("project").value;
-		var project_name = $('#project').find(":selected").text();
-		var sub_project_id = document.getElementById("sub_project").value;
-		var sub_project_name = $('#sub_project').find(":selected").text();
-		var periode_saltab_from = document.getElementById("saltab_from").value;
-		var periode_saltab_to = document.getElementById("saltab_to").value;
-
-		var file_data = $('#file_excel').prop('files')[0];
-		var fileName = file_data.name;
-		var fileSize = file_data.size;
-		var status = "";
-
-		// var form = $('.myform');
-
-		var kondisi = "";
-		var html_text = '<div class="container"><div class="row"><table class="table table-striped col-md-12"><thead class="thead-dark"><tr><th class="col-4">ATRIBUT</th><th class="col-8">VALUE</th></thead></tr>';
-		html_text = html_text + "<tr><td>" + "Project" + "</td><td><input type='text' class='form-control' readonly placeholder='Project' value='" + project_name + "'></td></tr>";
-		html_text = html_text + "<tr><td>" + "Sub Project" + "</td><td><input type='text' class='form-control' readonly placeholder='Sub Project' value='" + sub_project_name + "'></td></tr>";
-		html_text = html_text + "<tr><td>" + "Tanggal Penggajian" + "</td><td><input id='tanggal_penggajian_modal' name='tanggal_penggajian_modal' type='text' class='form-control' readonly placeholder='Tanggal Penggajian' value='" + tgl_gajian + "'></td></tr>";
-		html_text = html_text + "<tr><td>" + "Periode Saltab From" + "</td><td><input id='saltab_from_modal' name='saltab_from_modal' type='text' class='form-control' readonly placeholder='Periode Saltab From' value='" + periode_saltab_from + "'></td></tr>";
-		html_text = html_text + "<tr><td>" + "Periode Saltab To" + "</td><td><input id='saltab_to_modal' name='saltab_to_modal' type='text' class='form-control' readonly placeholder='Periode Saltab To' value='" + periode_saltab_to + "'></td></tr>";
-		html_text = html_text + "<tr><td>" + "Alasan pengajuan buka kunci" + "</td><td><textarea id='note_open' name='note_open' class='form-control' rows='4'></textarea></td></tr>";
-		html_text = html_text + "</div></div>";
-
-		pesan_request = "";
-
-		// alert(project_name + " - " + sub_project_name);
-		// alert(jam_sekarang);
-
-		if (fileName == "" || project_id == "" || sub_project_id == "" || tgl_gajian == "" || periode_saltab_from == "" || periode_saltab_to == "") {
-			//do nothing. Jalankan proses validasi form. Munculkan pesan untuk isi field kosong
-		} else {
-			//cek boleh import?
-			if (tgl_gajian <= hari_ini) {
-				// alert("tanggal sama");
-				e.preventDefault(); //stop post value
-
-				// AJAX request
-				$.ajax({
-					url: '<?= base_url() ?>admin/Importexcel/cek_request_open_import/',
-					method: 'post',
-					data: {
-						[csrfName]: csrfHash,
-						tgl_gajian: tgl_gajian,
-						project_id: project_id,
-						project_name: project_name,
-						sub_project_name: sub_project_name,
-						sub_project_id: sub_project_id,
-						periode_saltab_from: periode_saltab_from,
-						periode_saltab_to: periode_saltab_to,
-						jam_sekarang: jam_sekarang
-					},
-					success: function(response) {
-						var res = jQuery.parseJSON(response);
-
-						if (res['status'] == "101" || res['status'] == "103" || res['status'] == "105") {
-							$('#myform').submit();
-						} else if (res['status'] == "104") {
-							kondisi = res['pesan'] + "<br><small>Waktu server: " + hari_ini2 + "</small><br><br>";
-							pesan_request = "Sudah pernah ada request open import untuk saltab ini.<br>";
-							pesan_request = pesan_request + "Nama Project: " + res['data']['project_name'] + "<br>";
-							pesan_request = pesan_request + "Nama Sub Project: " + res['data']['sub_project_name'] + "<br>";
-							pesan_request = pesan_request + "Tanggal Penggajian: " + res['data']['tanggal_gajian'] + "<br>";
-							pesan_request = pesan_request + "Periode Saltab: " + res['data']['periode_saltab_from'] + " sampai " + res['data']['periode_saltab_to'] + "<br>";
-							pesan_request = pesan_request + "Alasan Pengajuan Buka Kunci: " + res['data']['note'] + "<br>";
-							pesan_request = pesan_request + "Request Oleh: " + res['data']['request_by_name'] + "<br>";
-							pesan_request = pesan_request + "Waktu Request: " + res['data']['request_on'] + "<br>";
-							$('.pesan-modal').html(kondisi + html_text);
-							$('.pesan-request-modal').html(pesan_request);
-							$('#button_request').attr("hidden", true);
-							$('#note_open').attr("readonly", true);
-							$('#requestOpenModal').appendTo("body").modal('show');
-						} else {
-							kondisi = res['pesan'] + "<br><small>Waktu server: " + hari_ini2 + "</small><br><br>";
-							$('.pesan-modal').html(kondisi + html_text);
-							$('#requestOpenModal').appendTo("body").modal('show');
-						}
-					},
-					error: function(xhr, status, error) {
-						// var res = jQuery.parseJSON(response);
-						kondisi = "Gagal Import: Tanggal penggajian sudah lewat.</br>Silahkan ajukan untuk membuka kunci import saltab.<br>Waktu server: " + hari_ini2 + "<br><br>";
-						$('.pesan-modal').html(kondisi + html_text);
-						$('.pesan-request-modal').html(pesan_request);
-						$('#requestOpenModal').appendTo("body").modal('show');
-					}
-				});
-			}
-			// else if (tgl_gajian < hari_ini) {
-			//   e.preventDefault(); //stop post value
-
-			//   kondisi = "Tidak bisa backdate. Tanggal penggajian sudah lewat.<br><small>Waktu server: " + hari_ini2 + "</small><br><br>";
-			//   $('.pesan-modal').html(kondisi + html_text);
-			//   $('.pesan-request-modal').html("");
-			//   $('#button_request').attr("hidden", true);
-			//   $('#note_open').attr("readonly", true);
-			//   $('#requestOpenModal').appendTo("body").modal('show');
-			// }
-		}
-
-	};
-</script> -->
-
-<!-- Tombol Request Open Import -->
-<script type="text/javascript">
-	document.getElementById("button_request").onclick = function(e) {
-		e.preventDefault();
-
-		var employee_id = '<?php echo $session['employee_id']; ?>';
-		var user_name = "<?php print($user_info['0']->first_name); ?>";
-
-		var note_open = $("#note_open").val();
-		var hari_ini = new Date().toJSON().slice(0, 10);
-		var hari_ini2 = new Date();
-		var jam_sekarang = new Date().getHours();
-		var waktu_sekarang = new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds();
-		var tgl_request = hari_ini + " " + waktu_sekarang;
-
-		var tgl_gajian = document.getElementById("periode_salary").value;
-		var project_id = document.getElementById("project").value;
-		var sub_project_id = document.getElementById("sub_project").value;
-		var periode_saltab_from = document.getElementById("saltab_from").value;
-		var periode_saltab_to = document.getElementById("saltab_to").value;
-
-		// alert(csrfName);
-		// alert(csrfHash);
-
-		// AJAX request
-		$.ajax({
-			url: '<?= base_url() ?>admin/Importexcel/request_open_import/',
-			method: 'post',
-			data: {
-				[csrfName]: csrfHash,
-				employee_id: employee_id,
-				request_by_name: user_name,
-				tgl_request: tgl_request,
-				tgl_gajian: tgl_gajian,
-				project_id: project_id,
-				sub_project_id: sub_project_id,
-				periode_saltab_from: periode_saltab_from,
-				periode_saltab_to: periode_saltab_to,
-				note_open: note_open,
-			},
-			success: function(response) {
-
-				alert("Berhasil melakukan request");
-				$('#button_submit').attr("disabled", false);
-				$('#button_submit').removeAttr("data-loading");
-				$('#requestOpenModal').appendTo("body").modal('hide');
-			},
-			error: function(xhr, status, error) {
-				// var res = jQuery.parseJSON(response);
-				html_text = "Gagal melakukan request.\n";
-				html_text = html_text + "Error :\n";
-				html_text = html_text + xhr.responseText;
-				alert(html_text);
-			}
-		});
-
-	};
 </script>
 
 <!-- Tombol Request Open Import -->
@@ -1098,107 +855,23 @@
 <!-- SHOW MODAL cek rekenign -->
 <script>
 	function start_cek_rekening() {
-		// alert("start import");
+		// alert("start cek rekening");
 
 		//judul modal
-		$('.judulModalRekening').html("Import Data Saltab");
+		$('.judulModalRekening').html("Cek Batch Rekening");
 
-		$('#list_data_invalid').attr("hidden", true);
+		$('#list_data_hasil_cek').attr("hidden", true);
 
-		//ambil value
-		var nip = $('#nip').val();
-		var project = $('#project').val();
-		var project_name = $("#project option:selected").text();
-		project_name = project_name.trim();
-		var sub_project = $('#sub_project').val();
-		var sub_project_name = $("#sub_project option:selected").text();
-		sub_project_name = sub_project_name.trim();
-		var periode_salary = $('#periode_salary').val();
-		var saltab_from = $('#saltab_from').val();
-		var saltab_to = $('#saltab_to').val();
-		var agency_fee = $('#agency_fee').val();
-
-		array_data_header.nip = nip;
-		array_data_header.project = project;
-		array_data_header.project_name = project_name;
-		array_data_header.sub_project = sub_project;
-		array_data_header.sub_project_name = sub_project_name;
-		array_data_header.periode_salary = periode_salary;
-		array_data_header.saltab_from = saltab_from;
-		array_data_header.saltab_to = saltab_to;
-		array_data_header.fee = agency_fee;
-
-		//debugging
-		// alert(array_data_header.project_name);
-		// alert(array_data_header.sub_project_name);
-		// alert(array_data_header.periode_salary);
-		// alert(array_data_header.saltab_from);
-		// alert(array_data_header.saltab_to);
-
-		//inisialisasi pesan
-		$('#pesan_project').html("");
-		$('#pesan_sub_project').html("");
-		$('#pesan_periode_salary').html("");
-		$('#pesan_saltab_from').html("");
-		$('#pesan_saltab_to').html("");
-		$('#pesan_agency_fee').html("");
-
-		//-------cek apakah ada yang tidak diisi-------
-		var pesan_project = "";
-		var pesan_periode_salary = "";
-		var pesan_saltab_from = "";
-		var pesan_saltab_to = "";
-		var pesan_agency_fee = "";
-		if ((saltab_to == "") || (saltab_to == null)) {
-			pesan_saltab_to = "<small style='color:#FF0000;'>Periode Saltab to tidak boleh kosong</small>";
-			// $('#saltab_to').focus();
-		}
-		if ((saltab_from == "") || (saltab_from == null)) {
-			pesan_saltab_from = "<small style='color:#FF0000;'>Periode Saltab from tidak boleh kosong</small>";
-			// $('#saltab_from').focus();
-		}
-		if ((periode_salary == "") || (periode_salary == null)) {
-			pesan_periode_salary = "<small style='color:#FF0000;'>Periode penggajian tidak boleh kosong</small>";
-			// $('#periode_salary').focus();
-		}
-		if ((agency_fee == "") || (agency_fee == null)) {
-			pesan_agency_fee = "<small style='color:#FF0000;'>Agency fee tidak boleh kosong</small>";
-			// $('#project').focus();
-		}
-		if ((project == "") || (project == null)) {
-			pesan_project = "<small style='color:#FF0000;'>Project tidak boleh kosong</small>";
-			// $('#project').focus();
-		}
-		$('#pesan_project').html(pesan_project);
-		$('#pesan_periode_salary').html(pesan_periode_salary);
-		$('#pesan_saltab_from').html(pesan_saltab_from);
-		$('#pesan_saltab_to').html(pesan_saltab_to);
-		$('#pesan_agency_fee').html(pesan_agency_fee);
-
-		//-------action-------
-		if (
-			(pesan_project != "") || (pesan_periode_salary != "") || (pesan_saltab_from != "") ||
-			(pesan_saltab_to != "") || (pesan_agency_fee != "")
-		) { //kalau ada input kosong 
-			// alert("Tidak boleh ada input kosong");
-		} else {
-			$('#project_table').html(project_name);
-			$('#sub_project_table').html(sub_project_name);
-			$('#agency_fee_table').html(agency_fee + " %");
-			$('#periode_penggajian_table').html(periode_salary);
-			$('#periode_saltab_table').html(saltab_from + " s/d " + saltab_to);
-
-			$('.info-modal-edit-outlet').attr("hidden", true);
-			$('.isi-modal-edit-outlet').attr("hidden", false);
-			$('#button_save_saltab').attr("hidden", false);
-			$('#cekRekeningModal').appendTo("body").modal('show');
-		}
+		$('.info-modal-cek_rekening').attr("hidden", true);
+		$('.isi-modal-cek-rekening').attr("hidden", false);
+		$('#button_cek_batch_rekening').attr("hidden", false);
+		$('#cekRekeningModal').appendTo("body").modal('show');
 	}
 </script>
 
 <!-- ACTION ADD BATCH SKU -->
 <script type="text/javascript">
-	function save_saltab() {
+	function cek_batch_rekening() {
 		//-------action-------
 		if (
 			(array_data_import_validasi == null) || (array_data_import_validasi == "") || (array_data_import_validasi == "0")
@@ -1229,7 +902,7 @@
 				console.log(array_data_header);
 				//action insert data
 				$.ajax({
-					url: '<?= base_url() ?>admin/Importexcel/save_saltab_temp/',
+					url: '<?= base_url() ?>admin/Importexcel/cek_batch_rekening_temp/',
 					method: 'post',
 					data: {
 						[csrfName]: csrfHash,
@@ -1287,10 +960,10 @@
 						html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
 						html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
 						// html_text = "Gagal fetch data. Kode error: " + xhr.status;
-						$('.info-modal-edit-outlet').html(html_text); //coba pake iframe
-						$('.isi-modal-edit-outlet').attr("hidden", true);
-						$('.info-modal-edit-outlet').attr("hidden", false);
-						$('#button_save_saltab').attr("hidden", true);
+						$('.info-modal-cek_rekening').html(html_text); //coba pake iframe
+						$('.isi-modal-cek-rekening').attr("hidden", true);
+						$('.info-modal-cek_rekening').attr("hidden", false);
+						$('#button_cek_batch_rekening').attr("hidden", true);
 						array_data_import = "";
 						array_data_import_validasi = "";
 						array_data_header = [];
@@ -1303,4 +976,28 @@
 			// alert("Tidak ada input kosong");
 		}
 	};
+</script>
+
+<!-- Script event filepond -->
+<script>
+	pond_cek_rekening.on('removefile', (error, file) => {
+		$('#status_pengecekan').html("");
+		$('#pesan_file_excel').html("");
+		$('#button_download_data_invalid').attr("hidden", true);
+		$('#list_data_hasil_cek').attr("hidden", true);
+
+		// alert("remove file " + file['name']); ->
+		// $('#status_file_exitclear').val("0");
+
+		// alert("Before");
+		// alert($('#link_file_excel').val());
+		// alert($('#tipe_file_excel').val());
+
+		$('#link_file_excel').val("");
+		$('#tipe_file_excel').val("");
+
+		// alert("After");
+		// alert($('#link_file_excel').val());
+		// alert($('#tipe_file_excel').val());
+	});
 </script>

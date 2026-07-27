@@ -383,7 +383,7 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 				?>
 
 				<!-- <?php
-							if (in_array('312', $role_resources_ids)) { ?>
+						if (in_array('312', $role_resources_ids)) { ?>
             <li class="sidenav-item <?php if (!empty($arr_mod['emp_request_tkhl_active'])) echo $arr_mod['emp_request_tkhl_active']; ?>"> 
               <a href="<?php echo site_url('admin/employee_request_tkhl/'); ?>" class="sidenav-link"> 
               <i class="sidenav-icon ion ion-logo-buffer"></i>
@@ -391,8 +391,8 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
               </a> 
             </li>
           <?php
-							}
-					?>  -->
+						}
+			?>  -->
 
 				<?php
 				if (in_array('338', $role_resources_ids)) { ?>
@@ -1055,6 +1055,11 @@ if ($user_info[0]->profile_picture != '' && $user_info[0]->profile_picture != 'n
 			</a>
 
 			<ul class="sidenav-menu">
+				<li class="sidenav-item <?php if (!empty($arr_mod['import_cek_rekening_active'])) echo $arr_mod['import_cek_rekening_active']; ?>">
+					<a class="sidenav-link" href="<?php echo site_url('admin/Rekening/cek_rekening'); ?>"> Cek Rekening
+					</a>
+				</li>
+
 				<?php
 				if (in_array('516', $role_resources_ids)) {
 				?>

@@ -9,6 +9,18 @@ class Rekening_model extends CI_Model
 		$this->load->database();
 	}
 
+	public function get_master_bank()
+	{
+		$this->db->select('bank_code_verification_api');
+		$this->db->select('bank_name');
+		$this->db->from('mt_bank');
+		// $this->db->limit(2147483647, 1);
+
+		$query = $this->db->get()->result_array();
+
+		return $query;
+	}
+
 	public function get_employees_temp()
 	{
 		return $this->db->get("xin_employees_temp");
@@ -288,13 +300,13 @@ GROUP BY uploadid, periode, project, project_sub;';
 		return $query;
 	}
 
-	//get table saltab
-	public function get_saltab_table()
+	//get master table cek rekening
+	public function get_cek_rekening_table()
 	{
 		$data = [""];
 
 		$this->db->select('*');
-		$this->db->from('mt_tabel_esaltab');
+		$this->db->from('mt_tabel_cek_rekening');
 		// $this->db->limit(2147483647, 1);
 
 		$query = $this->db->get()->result_array();
@@ -4918,6 +4930,31 @@ GROUP BY uploadid, periode, project, project_sub;';
 				return "";
 			} else {
 				return $query['bank_code_verification_api'];
+			}
+		}
+	}
+
+	//ambil id bank untuk api verifikasi
+	function get_nama_bank_verifikasi($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else if ($id == "") {
+			return "";
+		} else {
+			$this->db->select('bank_name');
+			$this->db->from('mt_bank');
+			$this->db->where('bank_code_verification_api', $id);
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['bank_name'];
 			}
 		}
 	}
