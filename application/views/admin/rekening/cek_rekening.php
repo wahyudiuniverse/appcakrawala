@@ -238,8 +238,8 @@
 	<div class="card-header with-elements">
 		<div class="col-md-12">
 			<span class="card-header-title mr-2">
-				<strong>REKENING | </strong>CEK BATCH REKENING (OPEN BETA)</br>
-				<font color="#FF0000"><strong>Sudah bisa dicoba. Kalau ada bug/error, lapor ya</strong></font>
+				<strong>REKENING | </strong>CEK BATCH REKENING</br>
+				<!-- <font color="#FF0000"><strong>Sudah bisa dicoba. Kalau ada bug/error, lapor ya</strong></font> -->
 			</span>
 		</div>
 	</div>
@@ -252,7 +252,7 @@
 			<div class="col-md mb-12">
 				<div class="form-group">
 					<!-- button submit -->
-					<button onclick="start_cek_rekening()" type="button" id="button_start_cek_rekening" name="button_start_cek_rekening" class="btn btn-primary btn-block"><i class="fa fa-upload"></i> START CEK REKENING</button>
+					<button onclick="start_cek_rekening()" type="button" id="button_start_cek_rekening" name="button_start_cek_rekening" class="btn btn-primary btn-block"><i class="fa fa-upload"></i> START CEK BATCH REKENING</button>
 				</div>
 			</div>
 		</div>
@@ -553,7 +553,7 @@
 							status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
 							status_hasil = "TIDAK AKTIF";
 
-							var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + res['hasil']['message'] + "</td><td></td><td>" + res['hasil']['check_on'] + "</td></tr>";
+							var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + res['hasil']['message'] + "</td><td></td><td>" + res['check_on'] + "</td></tr>";
 
 							$("#tabel_rek_rekening tbody").append(html_hasil);
 
@@ -629,22 +629,23 @@
 				array_total_data_hasil_cek.push(jQuery.parseJSON(response));
 				console.log(array_total_data_hasil_cek);
 			} catch (error) {
-				status_hasil_html = "<span style='color:red;'>TIDAK AKTIF</span>";
-				status_hasil = "TIDAK AKTIF";
+				// var res = jQuery.parseJSON(error);
+				status_hasil_html = "<span style='color:red;'>GAGAL CEK</span>";
+				status_hasil = "GAGAL CEK";
 
-				var html_hasil = "<tr><td>" + res['input']['pemilik_rekening'] + "</td><td>(" + res['bank_name'] + ") " + res['input']['nomor_rekening'] + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + res['hasil']['message'] + "</td><td></td><td>" + res['check_on'] + "</td></tr>";
+				var html_hasil = "<tr><td>" + item.pemilik_rekening + "</td><td>(" + item.kode_bank + ") " + item.nomor_rekening + "</td><td>" + status_hasil_html + "</td><td></td><td></td><td>" + error + "</td><td></td><td></td></tr>";
 
 				$("#tabel_rek_rekening tbody").append(html_hasil);
 
-				array_data_hasil_cek.nama = res['input']['pemilik_rekening'];
-				array_data_hasil_cek.bank = res['bank_name'];
-				array_data_hasil_cek.nomor_rekening = res['input']['nomor_rekening'];
+				array_data_hasil_cek.nama = item.pemilik_rekening;
+				array_data_hasil_cek.bank = item.kode_bank;
+				array_data_hasil_cek.nomor_rekening = item.nomor_rekening;
 				array_data_hasil_cek.status_hasil = status_hasil;
 				array_data_hasil_cek.nama_pemilik = "";
 				array_data_hasil_cek.score = "";
-				array_data_hasil_cek.message = res['hasil']['message'];
+				array_data_hasil_cek.message = error;
 				array_data_hasil_cek.note = "";
-				array_data_hasil_cek.check_on = res['check_on'];
+				array_data_hasil_cek.check_on = "";
 
 				array_total_data_hasil_cek.push(array_data_hasil_cek);
 
@@ -827,24 +828,32 @@
 				success: function(response) {
 					var res = jQuery.parseJSON(response);
 
-					if (res['is_success']) {
-						var status_hasil = "";
-						if (res['data']['is_valid']) {
-							status_hasil = "<span style='color:blue;'>AKTIF</span>";
-						} else {
-							status_hasil = "<span style='color:red;'>TIDAK AKTIF</span>";
-						}
-						// var html_hasil = "<tr><td>" + item.fullname + "</td><td>(" + item.nama_bank + ") " + item.norek + "</td><td>" + item.pemilik_rek + "</td><td>" + status_hasil + "</td></tr>";
+					if (Array.isArray(res['is_success'])) {
+						console.log("Array is available and valid!");
 
-						var html_hasil = "<strong>STATUS REKENING:</strong> " + status_hasil;
-						html_hasil = html_hasil + "</br><strong>NAMA PEMILIK:</strong> " + res['data']['name'];
-						html_hasil = html_hasil + "</br><strong>SCORE HASIL KECOCOKAN:</strong> " + res['data']['score'];
-						html_hasil = html_hasil + "</br><strong>PESAN:</strong> " + res['data']['message'];
-						html_hasil = html_hasil + "</br><strong>NOTE:</strong> " + res['data']['note'];
-						$("#hasil_cek_rekening_single").html(html_hasil);
-						// console.log(res['data']['name'] + ': ' + res['data']['is_valid']);
+						if (res['is_success']) {
+							var status_hasil = "";
+							if (res['data']['is_valid']) {
+								status_hasil = "<span style='color:blue;'>AKTIF</span>";
+							} else {
+								status_hasil = "<span style='color:red;'>TIDAK AKTIF</span>";
+							}
+							// var html_hasil = "<tr><td>" + item.fullname + "</td><td>(" + item.nama_bank + ") " + item.norek + "</td><td>" + item.pemilik_rek + "</td><td>" + status_hasil + "</td></tr>";
+
+							var html_hasil = "<strong>STATUS REKENING:</strong> " + status_hasil;
+							html_hasil = html_hasil + "</br><strong>NAMA PEMILIK:</strong> " + res['data']['name'];
+							html_hasil = html_hasil + "</br><strong>SCORE HASIL KECOCOKAN:</strong> " + res['data']['score'];
+							html_hasil = html_hasil + "</br><strong>PESAN:</strong> " + res['data']['message'];
+							html_hasil = html_hasil + "</br><strong>NOTE:</strong> " + res['data']['note'];
+							$("#hasil_cek_rekening_single").html(html_hasil);
+							// console.log(res['data']['name'] + ': ' + res['data']['is_valid']);
+						} else {
+							$('#hasil_cek_rekening_single').html(res['message']);
+						}
 					} else {
-						$('#hasil_cek_rekening_single').html(res['message']);
+						var html_hasil = "<strong>ERROR: </strong>";
+						html_hasil = html_hasil + response;
+						$('#hasil_cek_rekening_single').html(html_hasil);
 					}
 				},
 			});
