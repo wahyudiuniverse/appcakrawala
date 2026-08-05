@@ -520,7 +520,7 @@ class Pkwt142 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td >4.4</td>
-								<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.4 adalah :</td>
+								<td colspan="20">Jadwal/Jam kerja yang dimaksud poin 4.3 adalah :</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -538,7 +538,7 @@ class Pkwt142 extends MY_Controller
 
 							<tr>
 								<td ></td>
-								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja.</td>
+								<td colspan="20">Total jam Kerja dalam 7 (Tujuh) hari kalender (1 minggu) adalah 40 Jam Kerja atau sesuai dengan ketentuan klien/perusahaan.</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1166,7 +1166,19 @@ class Pkwt142 extends MY_Controller
 
 							<tr>
 								<td >12.</td>
-								<td colspan="20">Wajib melampirkan Exit clearance, Form handover (isi bila diperlukan) apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan</td>
+								<td colspan="20">Wajib melampirkan Exit clearance, melakukan handover untuk sisa tagihan yang belum selesai, dan menyelesaikan target penagihan minimal 70% (atau sesuai kesepakatan user). Apabila secara administrasi tidak dilengkapi maka akan diberlakukan hold gaji sisa masa kerja maupun pemberian paklaring hingga administrasi diselesaikan.</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >13.</td>
+								<td colspan="20">Bahwa saya akan memastikan bahwa seluruh pembayaran (collection) dari distributor, toko, atau pihak lain akan di transfer hanya ke rekening resmi perusahaan. Jika pembayaran menggunakan rekening pribadi akan mendapatkan sanksi sesuai dengan peraturan perusahaan</td>
+								<td colspan="0"></td>
+							</tr>
+
+							<tr>
+								<td >14.</td>
+								<td colspan="20">Dilarang melakukan manipulasi pesanan (order fiktif) dan menimbun barang tagihan di rumah. Jika hal tersebut terjadi maka karyawan akan mendapatkan sanksi sesuai dengan peraturan perusahaan</td>
 								<td colspan="0"></td>
 							</tr>
 
@@ -1241,7 +1253,7 @@ class Pkwt142 extends MY_Controller
 
 				<br><br><br><br><br><br><br><br><br><br><br><br>
 				<br><br><br><br><br><br><br><br><br><br><br><br>
-				<br><br><br><br><br><br><br><br><br><br><br><br>
+				<br><br><br><br><br><br>
 				
 				<table cellpadding="2" cellspacing="0" border="0">
 

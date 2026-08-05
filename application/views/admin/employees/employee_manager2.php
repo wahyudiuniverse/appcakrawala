@@ -1818,7 +1818,7 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 									<div class="tab-pane fade" id="dokumen-kontrak" role="tabpanel" aria-labelledby="dokumen-kontrak-tab">
 										<div class="row" id="isi-dokumen-kontrak-tabel">
 											<div class="card-header with-elements"> <span class="card-header-title mr-2"> <strong> DOKUMEN KONTRAK</strong></span>
-												<?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3")) { ?>
+												<?php if (($user[0]->user_role_id == "1") || ($user[0]->user_role_id == "11") || ($user[0]->user_role_id == "22") || ($user[0]->user_role_id == "3") || ($user[0]->user_role_id == "4")) { ?>
 													<a href='https://apps-cakrawala.com/admin/employee_pkwt_cancel/pkwt_expired_edit/<?php echo $employee_id; ?>/1' target='_blank'><button type='button' class='btn btn-sm btn-outline-success mx-2'>PERPANJANG KONTRAK</button></a>
 												<?php } ?>
 											</div>

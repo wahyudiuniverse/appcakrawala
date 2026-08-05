@@ -232,23 +232,36 @@ class Pkwt292 extends MY_Controller
 					}
 
 					$basicpay =	$this->Xin_model->rupiah($pkwt[0]->basic_pay);
-					$allowance_grade =	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
-					$allowance_area =	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
-					$allowance_masakerja =	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
-					$allowance_meal =	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
-					$allowance_transport =	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
-					$allowance_rent =	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
+					$allowance_grade 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_grade);
+					$allowance_skill 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_skill);
+					$allowance_area 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_area);
+					
+					$allowance_masakerja 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_masakerja);
+					$allowance_meal 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_meal);
+					$allowance_transport 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transport);
+					
+					$allowance_rent 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_rent);
 					$allowance_komunikasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_komunikasi);
-					$allowance_park =	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
-					$allowance_residance =	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+					$allowance_park 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_park);
+					
+					$allowance_residance 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_residance);
+					$allowance_akomodasi 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
+					$allowance_laptop 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
 
-					$allowance_laptop =	$this->Xin_model->rupiah($pkwt[0]->allowance_laptop);
-					$allowance_kasir =	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
-					$allowance_transmeal =	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
-					$allowance_transrent =	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
-					$allowance_medicine =	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
-					$allowance_akomodasi =	$this->Xin_model->rupiah($pkwt[0]->allowance_akomodasi);
-					$allowance_operation =	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_kasir 			=	$this->Xin_model->rupiah($pkwt[0]->allowance_kasir);
+					$allowance_transmeal 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transmeal);
+					$allowance_transrent 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_transrent);
+
+					$allowance_medicine 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_medicine);
+					$allowance_grooming 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_grooming);
+					$allowance_kehadiran 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_kehadiran);
+
+					$allowance_operation 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_operation);
+					$allowance_training 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_training);
+					$allowance_kinerja 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_kinerja);
+
+					$allowance_disiplin 	=	$this->Xin_model->rupiah($pkwt[0]->allowance_disiplin);
+					$allowance_others 		=	$this->Xin_model->rupiah($pkwt[0]->allowance_others);
 
 
 					$tgl_mulaiperiode_payment = $pkwt[0]->start_period_payment;
@@ -387,7 +400,7 @@ class Pkwt292 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>a.</td>
-								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di '.$penempatan.' dengan posisi sebagai karyawan/Staff '.$jabatan.' di Jakarta atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di '.$penempatan.' dengan posisi sebagai karyawan/Staff '.$jabatan.' dan atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
 							</tr>
 				<br>
 							<tr>
@@ -485,87 +498,6 @@ class Pkwt292 extends MY_Controller
 								<td colspan="0">-</td>
 								<td colspan="20">Iuran <b>BPJS Kesehatan</b>.</td>
 							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">Berikut perhitungan gaji yang diterima oleh karyawan :</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0"></td>
-								<td colspan="20">
-								<img src="'.base_url().'assets/pasal_iii_pencapaian_omset.png" alt="Trulli" width="285" height="130"></td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Jika omset diatas target (1.000.000) maka motoris diberikan, pemberian gaji 100% Gaji Pokok UMK & 100% Full Allowance</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Jika omset antara 95% - 99% maka motoris mendapatkan 100% Gaji Pokok UMK ditambah 70% Allowance.</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Jika omset antara 90% - 95% maka motoris mendapatkan 100% Gaji Pokok UMK ditambah 50% Allowance.</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Jika omset antara 85% - 90% maka motoris mendapatkan 75% Gaji Pokok UMK ditambah 50% Allowance.</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Jika omset antara 80% - 85% maka motoris mendapatkan 75% Gaji Pokok UMK tanpa pemberian allowance.</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Jika omset di bawah 80% maka motoris mendapatkan 50% Gaji Pokok UMK tanpa pemberian allowance.</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Allowance terdiri atas :</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">30.000/Hari tunjangan Transport & Sewa Motor</td>
-							</tr>
-							<tr>
-								<td ></td>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">10.000/Hari tunjangan Makan</td>
-							</tr>
-							<tr>
-								<td ></td>
-								<td ></td>
-								<td colspan="0">-</td>
-								<td colspan="20">50.000/Bulan tunjangan Pulsa</td>
-							</tr>
-
-							<tr>
-								<td ></td>
-								<td colspan="0">•</td>
-								<td colspan="20">Perhitungan gaji di totalkan omset sebulan sesuai cut off 16 ke 15, lalu diambil rata-ratanya sesuai dengan hari kerja target periode tersebut.</td>
-							</tr>
-
 				</table>
 				<br>
 				<br>
@@ -599,6 +531,10 @@ class Pkwt292 extends MY_Controller
 
 				</table>
 		
+				<br>
+				<br>
+				<br>
+				<br>
 				<br>
 
 				<div style="text-align: center; text-justify: inter-word;">
@@ -1291,12 +1227,38 @@ class Pkwt292 extends MY_Controller
 				$tbl_spb = '
 
 				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
 				<br>			
 				<br>
 				<br>			
 				<br>
 				<br>			
 				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>			
+				<br>
+				<br>	
 				
 				<div style="text-align: center; text-justify: inter-word;">
 					<b><u>SURAT PERJANJIAN BERSAMA<br>'.$nomorspb.'</u></b>
@@ -1617,12 +1579,22 @@ class Pkwt292 extends MY_Controller
 						</tr>';
 
 
+
 				if($allowance_grade!="Rp 0"){
 				$lampiran .= '
 					
 						<tr>
 							<td>Tunjangan Grade</td>
 							<td colspan="3"> : '.$allowance_grade.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_skill!="Rp 0"){
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Keahlian</td>
+							<td colspan="3"> : '.$allowance_skill.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1698,6 +1670,15 @@ class Pkwt292 extends MY_Controller
 						</tr>';
 				}
 
+				if($allowance_akomodasi!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Akomodasi</td>
+							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+						</tr>';
+				}
+
 				if($allowance_laptop!="Rp 0"){	
 				$lampiran .= '
 					
@@ -1726,7 +1707,6 @@ class Pkwt292 extends MY_Controller
 						</tr>';
 				}
 
-
 				if($allowance_transrent!="Rp 0"){	
 				$lampiran .= '
 					
@@ -1745,13 +1725,21 @@ class Pkwt292 extends MY_Controller
 						</tr>';
 				}
 
-
-				if($allowance_akomodasi!="Rp 0"){	
+				if($allowance_grooming!="Rp 0"){	
 				$lampiran .= '
 					
 						<tr>
-							<td>Tunjangan Akomodasi</td>
-							<td colspan="3"> : '.$allowance_akomodasi.',- Per Bulan</td>
+							<td>Tunjangan Grooming</td>
+							<td colspan="3"> : '.$allowance_grooming.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_kehadiran!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Kehadiran</td>
+							<td colspan="3"> : '.$allowance_kehadiran.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1762,6 +1750,42 @@ class Pkwt292 extends MY_Controller
 						<tr>
 							<td>Tunjangan Operasional</td>
 							<td colspan="3"> : '.$allowance_operation.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_training!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Pelatihan</td>
+							<td colspan="3"> : '.$allowance_training.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_kinerja!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Kinerja</td>
+							<td colspan="3"> : '.$allowance_kinerja.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_disiplin!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Disiplin</td>
+							<td colspan="3"> : '.$allowance_disiplin.',- Per Bulan</td>
+						</tr>';
+				}
+
+				if($allowance_others!="Rp 0"){	
+				$lampiran .= '
+					
+						<tr>
+							<td>Tunjangan Lain-lain</td>
+							<td colspan="3"> : '.$allowance_others.',- Per Bulan</td>
 						</tr>';
 				}
 
@@ -1847,7 +1871,6 @@ class Pkwt292 extends MY_Controller
 				</table>';
 				$pdf->writeHTML($lampiran, true, false, false, false, '');
 
-				//Close and output PDF document
 				ob_start();
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
