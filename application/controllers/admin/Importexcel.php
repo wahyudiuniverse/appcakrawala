@@ -6558,7 +6558,7 @@ class ImportExcel extends MY_Controller
 			$data_update = array(
 				"status_cek_aktif_rekening" => "2",
 				"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
-				"status_hold" => "HOLD",
+				// "status_hold" => "HOLD", //hold temporary
 			);
 
 			// $this->update_row_saltab_temp_detail($data_update, $postData['secid']);
@@ -6602,7 +6602,7 @@ class ImportExcel extends MY_Controller
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 				CURLOPT_CUSTOMREQUEST => 'POST',
 				CURLOPT_POSTFIELDS => $input_post,
-				CURLOPT_HTTPHEADER => array('x-api-co-id:vqTZFIy3OxzYOzjAnJBl9DYkhpJ9eMZhkSEAyUdJhBsW71b4Kc', 'Content-Type:application/json'),
+				CURLOPT_HTTPHEADER => array('x-api-co-id:ACPJ5oVrIf2XVzpdamB1cjDn5Hwd2hKUpnfdz1jidnFSfaFMuw', 'Content-Type:application/json'),
 			));
 
 			$response = curl_exec($curl);
@@ -6647,6 +6647,120 @@ class ImportExcel extends MY_Controller
 					// update status cek aktif rekening
 					$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
 				}
+
+
+				echo $response;
+			}
+		}
+	}
+
+	//Cek rekening bank menggunakan API
+	public function tes_API_Bank3_only()
+	{
+		$postData = $this->input->post();
+
+		$bank_code = $this->Import_model->get_id_bank_verifikasi($postData['id_bank']);
+
+		// $no_rekening_jelas = urldecode($no_rekening);
+
+		if ($bank_code == "" || $bank_code == null) {
+			$pesan = array(
+				"is_success" => false,
+				"message" => "ID Bank Kosong",
+			);
+
+			// $data_update = array(
+			// 	"status_cek_aktif_rekening" => "2",
+			// 	"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+			// 	// "status_hold" => "HOLD", //hold temporary
+			// );
+
+			// $this->update_row_saltab_temp_detail($data_update, $postData['secid']);
+
+			// update status cek aktif rekening
+			// $data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+
+			// if ($data == false) {
+			// 	$response = array(
+			// 		'status'	=> "201",
+			// 		'pesan' 	=> "Tidak ada perubahan data",
+			// 	);
+			// } else {
+			// 	$response = array(
+			// 		'status'	=> "200",
+			// 		'pesan' 	=> "Berhasil Update Data",
+			// 	);
+			// }
+
+			echo json_encode($pesan);
+		} else {
+			// set post fields
+			$post_variable = [
+				"bank_code" => $bank_code,
+				"account_number" => $postData['norek'],
+				"account_name" => $postData['pemilik_rekening']
+			];
+
+			$input_post = json_encode($post_variable);
+			// $input_post = "{'account_bank': '". $bank_code ."','account_number':'".$no_rekening."'}";
+
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => 'https://use.api.co.id/validation/bank',
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => '',
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 0,
+				CURLOPT_FOLLOWLOCATION => true,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => 'POST',
+				CURLOPT_POSTFIELDS => $input_post,
+				CURLOPT_HTTPHEADER => array('x-api-co-id:ACPJ5oVrIf2XVzpdamB1cjDn5Hwd2hKUpnfdz1jidnFSfaFMuw', 'Content-Type:application/json'),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+			// echo $response;
+
+			$pesan = array(
+				"is_success" => false,
+				"message" => "cURL Error #:" . $err,
+			);
+
+			if ($err) {
+				$data_update = array(
+					"status_cek_aktif_rekening" => "2",
+					"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+				);
+
+				// update status cek aktif rekening
+				// $data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+
+				echo json_encode($pesan);
+			} else {
+				// $hasil_api = json_decode($response);
+				// $data_hasil_api = $hasil_api->data;
+
+				// if ($data_hasil_api->is_valid) {
+				// 	$data_update = array(
+				// 		"status_cek_aktif_rekening" => "1",
+				// 		"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+				// 	);
+
+				// 	// update status cek aktif rekening
+				// 	$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+				// } else {
+				// 	$data_update = array(
+				// 		"status_cek_aktif_rekening" => "2",
+				// 		"cek_aktif_rekening_on" => date('Y-m-d H:i:s'),
+				// 	);
+
+				// 	// update status cek aktif rekening
+				// 	$data = $this->Import_model->update_row_saltab_temp_detail($data_update, $postData['secid']);
+				// }
 
 
 				echo $response;

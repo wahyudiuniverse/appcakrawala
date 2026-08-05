@@ -6634,7 +6634,7 @@ class Rekening extends MY_Controller
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 				CURLOPT_CUSTOMREQUEST => 'POST',
 				CURLOPT_POSTFIELDS => $input_post,
-				CURLOPT_HTTPHEADER => array('x-api-co-id:JJ34it6kv5bLxdnd4Pwsuj1dVjw91DRDvAht8a6syMNko49tCt', 'Content-Type:application/json'),
+				CURLOPT_HTTPHEADER => array('x-api-co-id:ACPJ5oVrIf2XVzpdamB1cjDn5Hwd2hKUpnfdz1jidnFSfaFMuw', 'Content-Type:application/json'),
 			));
 
 			$response = curl_exec($curl);
@@ -6707,7 +6707,7 @@ class Rekening extends MY_Controller
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 				CURLOPT_CUSTOMREQUEST => 'POST',
 				CURLOPT_POSTFIELDS => $input_post,
-				CURLOPT_HTTPHEADER => array('x-api-co-id:JJ34it6kv5bLxdnd4Pwsuj1dVjw91DRDvAht8a6syMNko49tCt', 'Content-Type:application/json'),
+				CURLOPT_HTTPHEADER => array('x-api-co-id:ACPJ5oVrIf2XVzpdamB1cjDn5Hwd2hKUpnfdz1jidnFSfaFMuw', 'Content-Type:application/json'),
 			));
 
 			$response = curl_exec($curl);
