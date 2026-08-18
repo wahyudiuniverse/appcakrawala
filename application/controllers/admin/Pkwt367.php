@@ -389,14 +389,24 @@ class Pkwt367 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Imbalan jasa sebagai berikut :</td>
 							</tr>
+
+
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan absensi kehadiran.</td>
-							</tr>';
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Gaji Pokok</td>
+										<td colspan="10"> : <b>'.$basicpay.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>
+							';
 
 
 						if($allowance_rent!="Rp 0"){	
@@ -405,18 +415,31 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan absensi kehadiran.</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="02">Tunjangan Rental</td>
+										<td colspan="10"> : <b>'.$allowance_rent.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
 
 						if($allowance_komunikasi!="Rp 0"){	
 						$tbl_2 .= '
-
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan absensi kehadiran.</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Pulsa</td>
+										<td colspan="10"> : <b>'.$allowance_komunikasi.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
@@ -426,28 +449,47 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan absensi kehadiran.</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Operational</td>
+										<td colspan="10"> : <b>'.$allowance_operation.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
 
 						if($allowance_meal!="Rp 0"){	
 						$tbl_2 .= '
-					
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan absensi kehadiran.</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_meal.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
 						if($allowance_transport!="Rp 0"){	
 						$tbl_2 .= '
-
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan absensi kehadiran.</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_transport.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 
 						}
@@ -458,7 +500,13 @@ class Pkwt367 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Komisi lain-lain berupa insentive dimana akan diberikan apabila mencapai target sesuai dengan skema yang berlaku:</td>
+								<td colspan="20"><table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="10">Komisi lain-lain berupa insentive dimana akan diberikan apabila mencapai target sesuai dengan skema yang berlaku:</td>
+										<td colspan="0"></td>
+									</tr>
+
+								</table> </td>
 							</tr>
 
 							<br>
