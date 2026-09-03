@@ -3208,73 +3208,104 @@ if ($profile_picture != '' && $profile_picture != 'no file') {
 		e.preventDefault();
 
 		if (flag_rekening == 0) {
-			var bank_id = $("#bank_modal").val();
-			// var nomor_rekening = "<?php echo $nomor_rek; ?>";
-			var nomor_rekening = $("#rekening_modal").val();
-			var bank_code = "<?php echo $nomor_rek; ?>";
+			var bank_input = $("#bank_modal").val();
+			var norek_input = $("#rekening_modal").val();
+			var pemilik_rekening_input = $("#pemilik_rekening_modal").val();
 
 			// alert(bank_id);
 			// alert(nomor_rekening);
 
 			var html_text = "";
 
-			// html_text = html_text + "<div class='row'>";
-			// html_text = html_text + "<div class='form-group col-md-12'>";
-			// html_text = html_text + "<label>Rekening  </label>";
-			// html_text = html_text + "<br>LOADING DATA ....";
-			// html_text = html_text + "</div>";
-			// html_text = html_text + "</div>";
+			// $('.rekening-modal').html(loading_html_text);
 
-			// $('.rekening-modal').html(html_text);
-			$('.rekening-modal').html(loading_html_text);
+			//action cek rekening
+			$.ajax({
+				url: '<?= base_url() ?>admin/Rekening/cek_rekening_via_API_2/',
+				method: 'POST',
+				data: {
+					[csrfName]: csrfHash,
+					bank_input: bank_input,
+					norek_input: norek_input,
+					pemilik_rekening_input: pemilik_rekening_input,
+				},
+				beforeSend: function() {
+					//judul modal status_pengecekan isi_tabel_cek_rekening
+					html_pesan_file = "<strong><img src='" + loading_image + "' alt='' width='30px'><span style='color:blue;'> Cek Rekening a.n " + pemilik_rekening_input + "</span></strong>";
+					$('.rekening-modal').html(html_pesan_file);
+				},
+				success: function(response) {
+					var res = jQuery.parseJSON(response);
+
+					if (res['is_success']) {
+						var status_hasil = "";
+						if (res['data']['is_valid']) {
+							status_hasil = "<span style='color:blue;'>AKTIF</span>";
+						} else {
+							status_hasil = "<span style='color:red;'>TIDAK AKTIF</span>";
+						}
+						// var html_hasil = "<tr><td>" + item.fullname + "</td><td>(" + item.nama_bank + ") " + item.norek + "</td><td>" + item.pemilik_rek + "</td><td>" + status_hasil + "</td></tr>";
+
+						var html_hasil = "<strong>STATUS REKENING:</strong> " + status_hasil;
+						html_hasil = html_hasil + "</br><strong>NAMA PEMILIK:</strong> " + res['data']['name'];
+						html_hasil = html_hasil + "</br><strong>SCORE HASIL KECOCOKAN:</strong> " + res['data']['score'];
+						html_hasil = html_hasil + "</br><strong>PESAN:</strong> " + res['data']['message'];
+						html_hasil = html_hasil + "</br><strong>NOTE:</strong> " + res['data']['note'];
+						$(".rekening-modal").html(html_hasil);
+						// console.log(res['data']['name'] + ': ' + res['data']['is_valid']);
+					} else {
+						$('.rekening-modal').html(res['message']);
+					}
+				},
+			});
 
 			// AJAX request
-			$.ajax({
-				url: 'https://karir.onecorp.co.id/cross_site/Crosscontroller/tes_API_Bank3/' + bank_id + "/" + nomor_rekening,
-				method: 'get',
-				success: function(response) {
-					// alert(response);
-					var res = jQuery.parseJSON(response);
-					// var res2 = jQuery.parseJSON(res);
-					// html_text = "";
-					if (res['success'] == true) {
-						html_text = "";
-						html_text = html_text + "<div class='row'>";
-						html_text = html_text + "<div class='form-group col-md-12'>";
-						html_text = html_text + "<label>Rekening  </label>";
-						html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
-						html_text = html_text + "Nama Bank: " + res['data']['account_bank'] + "<br>";
-						html_text = html_text + "nomor rekening: " + res['data']['account_number'] + "<br>";
-						html_text = html_text + "nama pemilik rekening: " + res['data']['account_holder'] + "<br>";
-						html_text = html_text + "</div>";
-						html_text = html_text + "</div>";
+			// $.ajax({
+			// 	url: 'https://karir.onecorp.co.id/cross_site/Crosscontroller/tes_API_Bank3/' + bank_id + "/" + nomor_rekening,
+			// 	method: 'get',
+			// 	success: function(response) {
+			// 		// alert(response);
+			// 		var res = jQuery.parseJSON(response);
+			// 		// var res2 = jQuery.parseJSON(res);
+			// 		// html_text = "";
+			// 		if (res['success'] == true) {
+			// 			html_text = "";
+			// 			html_text = html_text + "<div class='row'>";
+			// 			html_text = html_text + "<div class='form-group col-md-12'>";
+			// 			html_text = html_text + "<label>Rekening  </label>";
+			// 			html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
+			// 			html_text = html_text + "Nama Bank: " + res['data']['account_bank'] + "<br>";
+			// 			html_text = html_text + "nomor rekening: " + res['data']['account_number'] + "<br>";
+			// 			html_text = html_text + "nama pemilik rekening: " + res['data']['account_holder'] + "<br>";
+			// 			html_text = html_text + "</div>";
+			// 			html_text = html_text + "</div>";
 
-					} else {
-						html_text = "";
-						html_text = html_text + "<div class='row'>";
-						html_text = html_text + "<div class='form-group col-md-12'>";
-						html_text = html_text + "<label>Rekening  </label>";
-						html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
-						html_text = html_text + "</div>";
-						html_text = html_text + "</div>";
-					}
+			// 		} else {
+			// 			html_text = "";
+			// 			html_text = html_text + "<div class='row'>";
+			// 			html_text = html_text + "<div class='form-group col-md-12'>";
+			// 			html_text = html_text + "<label>Rekening  </label>";
+			// 			html_text = html_text + "<br>Pesan: " + res['message'] + "<br>";
+			// 			html_text = html_text + "</div>";
+			// 			html_text = html_text + "</div>";
+			// 		}
 
-					$('.rekening-modal').html(html_text);
-					flag_rekening = 1;
-				},
-				error: function(xhr, status, error) {
-					// var res = jQuery.parseJSON(response);
-					html_text = "";
-					html_text = html_text + "<div class='row'>";
-					html_text = html_text + "<div class='form-group col-md-12'>";
-					html_text = html_text + "<label>Rekening  </label>";
-					html_text = html_text + "<br>" + xhr.responseText;
-					html_text = html_text + "</div>";
-					html_text = html_text + "</div>";
-					$('.rekening-modal').html(html_text);
-					flag_rekening = 1;
-				}
-			});
+			// 		$('.rekening-modal').html(html_text);
+			// 		flag_rekening = 1;
+			// 	},
+			// 	error: function(xhr, status, error) {
+			// 		// var res = jQuery.parseJSON(response);
+			// 		html_text = "";
+			// 		html_text = html_text + "<div class='row'>";
+			// 		html_text = html_text + "<div class='form-group col-md-12'>";
+			// 		html_text = html_text + "<label>Rekening  </label>";
+			// 		html_text = html_text + "<br>" + xhr.responseText;
+			// 		html_text = html_text + "</div>";
+			// 		html_text = html_text + "</div>";
+			// 		$('.rekening-modal').html(html_text);
+			// 		flag_rekening = 1;
+			// 	}
+			// });
 		} else if (flag_rekening == 1) {
 			$('.rekening-modal').html("");
 			flag_rekening = 0;

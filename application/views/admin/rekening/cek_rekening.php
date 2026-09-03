@@ -828,32 +828,24 @@
 				success: function(response) {
 					var res = jQuery.parseJSON(response);
 
-					if (Array.isArray(res['is_success'])) {
-						console.log("Array is available and valid!");
-
-						if (res['is_success']) {
-							var status_hasil = "";
-							if (res['data']['is_valid']) {
-								status_hasil = "<span style='color:blue;'>AKTIF</span>";
-							} else {
-								status_hasil = "<span style='color:red;'>TIDAK AKTIF</span>";
-							}
-							// var html_hasil = "<tr><td>" + item.fullname + "</td><td>(" + item.nama_bank + ") " + item.norek + "</td><td>" + item.pemilik_rek + "</td><td>" + status_hasil + "</td></tr>";
-
-							var html_hasil = "<strong>STATUS REKENING:</strong> " + status_hasil;
-							html_hasil = html_hasil + "</br><strong>NAMA PEMILIK:</strong> " + res['data']['name'];
-							html_hasil = html_hasil + "</br><strong>SCORE HASIL KECOCOKAN:</strong> " + res['data']['score'];
-							html_hasil = html_hasil + "</br><strong>PESAN:</strong> " + res['data']['message'];
-							html_hasil = html_hasil + "</br><strong>NOTE:</strong> " + res['data']['note'];
-							$("#hasil_cek_rekening_single").html(html_hasil);
-							// console.log(res['data']['name'] + ': ' + res['data']['is_valid']);
+					if (res['is_success']) {
+						var status_hasil = "";
+						if (res['data']['is_valid']) {
+							status_hasil = "<span style='color:blue;'>AKTIF</span>";
 						} else {
-							$('#hasil_cek_rekening_single').html(res['message']);
+							status_hasil = "<span style='color:red;'>TIDAK AKTIF</span>";
 						}
+						// var html_hasil = "<tr><td>" + item.fullname + "</td><td>(" + item.nama_bank + ") " + item.norek + "</td><td>" + item.pemilik_rek + "</td><td>" + status_hasil + "</td></tr>";
+
+						var html_hasil = "<strong>STATUS REKENING:</strong> " + status_hasil;
+						html_hasil = html_hasil + "</br><strong>NAMA PEMILIK:</strong> " + res['data']['name'];
+						html_hasil = html_hasil + "</br><strong>SCORE HASIL KECOCOKAN:</strong> " + res['data']['score'];
+						html_hasil = html_hasil + "</br><strong>PESAN:</strong> " + res['data']['message'];
+						html_hasil = html_hasil + "</br><strong>NOTE:</strong> " + res['data']['note'];
+						$("#hasil_cek_rekening_single").html(html_hasil);
+						// console.log(res['data']['name'] + ': ' + res['data']['is_valid']);
 					} else {
-						var html_hasil = "<strong>ERROR: </strong>";
-						html_hasil = html_hasil + response;
-						$('#hasil_cek_rekening_single').html(html_hasil);
+						$('#hasil_cek_rekening_single').html(res['message']);
 					}
 				},
 			});

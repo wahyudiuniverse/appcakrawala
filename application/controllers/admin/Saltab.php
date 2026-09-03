@@ -13,7 +13,10 @@ if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 class Saltab extends MY_Controller
 {
@@ -36,17 +39,18 @@ class Saltab extends MY_Controller
 
 		$this->load->model('Import_model');
 		$this->load->model('Saltab_model');
-
+		$this->load->model("Project_model");
+		$this->load->model("Subproject_model");
 		$this->load->model("Employees_model");
-		$this->load->model("Register_model");
 		$this->load->model("Xin_model");
+
+		$this->load->model("Register_model");
 		$this->load->model("Department_model");
 		$this->load->model("Designation_model");
 		$this->load->model("Roles_model");
 		$this->load->model("Location_model");
 		$this->load->model("Company_model");
 		$this->load->model("Timesheet_model");
-		$this->load->model("Project_model");
 		$this->load->model("Assets_model");
 		// $this->load->model("Training_model");
 		// $this->load->model("Trainers_model");
@@ -57,7 +61,6 @@ class Saltab extends MY_Controller
 		$this->load->model("Promotion_model");
 		$this->load->model("Complaints_model");
 		$this->load->model("Warning_model");
-		$this->load->model("Subproject_model");
 		$this->load->model("Payroll_model");
 		$this->load->model("Events_model");
 		$this->load->model("Meetings_model");
@@ -73,7 +76,6 @@ class Saltab extends MY_Controller
 		$this->load->library('ciqrcode');
 	}
 
-	// import
 	public function index()
 	{
 
@@ -93,6 +95,419 @@ class Saltab extends MY_Controller
 		} else {
 			redirect('admin/dashboard');
 		}
+	}
+
+	public function download_template_absensi()
+	{
+		// POST data
+		$postData = $this->input->post();
+
+		$spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+		$spreadsheet->getActiveSheet()->setTitle('Absensi'); //nama Spreadsheet yg baru dibuat
+
+		$tabel_saltab = $this->Saltab_model->get_absensi_table();
+
+		$header_tabel_saltab = array_column($tabel_saltab, 'nama_tabel');
+		$header2_tabel_saltab = array_column($tabel_saltab, 'alias');
+		$jumlah_data = count($header_tabel_saltab);
+		//$tes = print_r($tabel_saltab);
+
+		//add 1 day
+		$original_date = $postData['absensi_from'];
+
+		for ($x = 0; $x <= 30; $x++) {
+			//add 1 hari
+			$new_date = date('(D) Y-m-d', strtotime($original_date . ' +' . $x . ' day'));
+			$hari_ke = date('N', strtotime($original_date . ' +' . $x . ' day'));
+
+			// $cellRef = Coordinate::stringFromColumnIndex($x + 1);
+
+			// $spreadsheet
+			// 	->getActiveSheet()
+			// 	->getStyle($cellRef)
+			// 	->getFill()
+			// 	->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			// 	->getStartColor()
+			// 	->setARGB('FF0000');
+
+			// $spreadsheet->getActiveSheet()
+			// 	->getStyle($cellRef)
+			// 	->getFill()
+			// 	->setFillType(Fill::FILL_SOLID)
+			// 	->getStartColor()
+			// 	->setARGB('FF0000FF');
+
+			//replace hari kerja ke tanggal
+			if (($key = array_search("Hari Kerja " . ($x + 1) . "", $header2_tabel_saltab)) !== false) {
+				if ($hari_ke == 7) {
+					$cellRef = Coordinate::stringFromColumnIndex($key + 1);
+
+					$spreadsheet->getActiveSheet()
+						->getStyle($cellRef)
+						->getFill()
+						->setFillType(Fill::FILL_SOLID)
+						->getStartColor()
+						->setARGB(Color::changeBrightness("FF0000", 0.7));
+
+					// $spreadsheet->getActiveSheet()
+					// 	->getStyle($cellRef)
+					// 	->getFill()
+					// 	->setFillType(Fill::FILL_SOLID)
+					// 	->getStartColor()
+					// 	->setARGB('FFC7CE');
+				}
+
+				$header2_tabel_saltab[$key] = $new_date;
+			}
+		}
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header_tabel_saltab,   // The data to set
+				NULL,
+				'A1'
+			);
+
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$header2_tabel_saltab,   // The data to set
+				NULL,
+				'A2'
+			);
+
+
+		//set header background color
+		$maxDataRow = $spreadsheet->getActiveSheet()->getHighestDataRow();
+		$maxDataColumn = $spreadsheet->getActiveSheet()->getHighestDataColumn();
+
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A2:{$maxDataColumn}{$maxDataRow}")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//Isi data karyawan aktif di template
+		$detail_saltab = $this->Saltab_model->get_employee_aktif($postData['project_id'], $postData['sub_project_id']);
+
+		$length_data = count($detail_saltab);
+
+		// $spreadsheet->getActiveSheet()
+		// 	->fromArray(
+		// 		$detail_saltab,   // The data to set
+		// 		NULL,
+		// 		'A3'
+		// 	);
+
+		if ($length_data < 1) {
+			//do nothing
+		} else {
+			$length_array = count($detail_saltab[0]);
+
+			for ($i = 0; $i < $length_data; $i++) {
+				for ($j = 0; $j < $length_array; $j++) {
+					// $cell = chr($j + 65) . ($i);
+					$spreadsheet->getActiveSheet()->getCell([$j + 1, $i + 3])->setvalueExplicit($detail_saltab[$i][$j], \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING2);
+					// $spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+				}
+			}
+		}
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= $jumlah_data; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set wrap text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setWrapText(true);
+
+		//set vertical dan horizontal alignment text untuk row ke 1
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+		$spreadsheet->getActiveSheet()->getStyle('1:2')
+			->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
+		//Buat sheet Master Kota Kabupaten
+		$sheet2 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet2->setTitle('Master Kota Kabupaten'); // Set the title for the second sheet
+
+		$tabel_kota_kabupaten = $this->Import_model->get_data_kota_kabupaten();
+
+		$sheet2->setCellValue('A1', 'ID AREA PENGGAJIAN');
+		$sheet2->setCellValue('B1', 'NAMA KOTA KABUPATEN');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Kota Kabupaten');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$tabel_kota_kabupaten,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 2; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:B1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+
+		//Buat sheet Master Mapping project - jabatan
+		$sheet3 = $spreadsheet->createSheet(); // createSheet() returns the new sheet object
+		$sheet3->setTitle('Master Project Posisi'); // Set the title for the second sheet
+
+		$tabel_project_jabatan = $this->Import_model->get_data_mapping_project_posisi();
+
+		$sheet3->setCellValue('A1', 'ID PROJECT');
+		$sheet3->setCellValue('B1', 'NAMA PROJECT');
+		$sheet3->setCellValue('C1', 'ID ENTITAS/SUB PROJECT');
+		$sheet3->setCellValue('D1', 'NAMA ENTITAS/SUB PROJECT');
+		$sheet3->setCellValue('E1', 'ID JABATAN');
+		$sheet3->setCellValue('F1', 'NAMA JABATAN');
+
+		$activeWorksheet = $spreadsheet->setActiveSheetIndexByName('Master Project Posisi');
+
+		$spreadsheet->getDefaultStyle()->getNumberFormat()->setFormatCode('@');
+
+		//isi cell dari array
+		$spreadsheet->getActiveSheet()
+			->fromArray(
+				$tabel_project_jabatan,   // The data to set
+				NULL,
+				'A2'
+			);
+
+		//set column width jadi auto size
+		for ($i = 1; $i <= 6; $i++) {
+			$spreadsheet->getActiveSheet()->getColumnDimensionByColumn($i)->setAutoSize(true);
+		}
+
+		//set header background color
+		$spreadsheet
+			->getActiveSheet()
+			->getStyle("A1:F1")
+			->getFill()
+			->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+			->getStartColor()
+			->setARGB('BFBFBF');
+
+		//aktifkan sheet pertama
+		$spreadsheet->setActiveSheetIndex(0);
+
+		//----------------Buat File Untuk Download--------------
+		$writer = new Xlsx($spreadsheet); // instantiate Xlsx
+		//$writer->setPreCalculateFormulas(false);
+
+		$filename = 'Template Absensi'; // set filename for excel file to be exported
+
+		header('Content-Type: application/vnd.ms-excel'); // generate excel file
+		header('Content-Disposition: attachment;filename="' . $filename . '.xlsx"');
+		header('Cache-Control: max-age=0');
+
+		$writer->save('php://output');	// download file 
+		//$writer->save('./absen/tes2.xlsx');	// download file 
+	}
+
+	/*
+    |-------------------------------------------------------------------
+    | Import Excel absensi
+    |-------------------------------------------------------------------
+    |
+    */
+	function import_excel_absensi()
+	{
+		//ambil parameter yg di post sebagai acuan
+		$nip = $this->input->post('nip');
+		$link_file_excel = $this->input->post('link_file_excel');
+		$tipe_file_excel = $this->input->post('tipe_file_excel');
+		$periode_salary = $this->input->post('periode_salary');
+		$saltab_from = $this->input->post('saltab_from');
+		$saltab_to = $this->input->post('saltab_to');
+		$project = $this->input->post('project');
+		$sub_project = $this->input->post('sub_project');
+		$fee = $this->input->post('fee');
+
+		$status = "0";
+		$message = "";
+
+		//load data Project
+		$nama_project = "";
+		$projects = $this->Project_model->read_single_project($project);
+		if (!is_null($projects)) {
+			$nama_project = $projects[0]->title;
+		} else {
+			$nama_project = '';
+		}
+
+		//load data Sub Project
+		$nama_sub_project = "";
+		if ($sub_project == 0) {
+			$nama_sub_project = '-ALL-';
+		} else {
+			$subprojects = $this->Subproject_model->read_single_subproject($sub_project);
+			if (!is_null($subprojects)) {
+				$nama_sub_project = $subprojects[0]->sub_project_name;
+			} else {
+				$nama_sub_project = '';
+			}
+		}
+
+		//handle file
+		$this->load->helper('file');
+
+		/* Allowed MIME(s) File */
+		$file_mimes = array(
+			'application/octet-stream',
+			'application/vnd.ms-excel',
+			'application/x-csv',
+			'text/x-csv',
+			'text/csv',
+			'application/csv',
+			'application/excel',
+			'application/vnd.msexcel',
+			'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+		);
+
+		$local1 = ".";
+		if (file_exists($local1 . $link_file_excel) && in_array($tipe_file_excel, $file_mimes)) {
+
+			$array_file = explode('.', $link_file_excel);
+			$extension  = end($array_file);
+
+			if ('csv' == $extension) {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+			} else {
+				$reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+			}
+
+			$spreadsheet = $reader->load($local1 . $link_file_excel);
+
+			if ($spreadsheet->sheetNameExists('Absensi')) {
+				$spreadsheet->setActiveSheetIndexByName('Absensi');
+
+				// $sheet_data  = $spreadsheet->getActiveSheet(0)->toArray();
+				$sheet_data  = $spreadsheet->getActiveSheet()->toArray();
+				// $sheet_data = array_map('trim', $sheet_data);
+				$sheet_data = array_filter($sheet_data);
+				$array_data  = [];
+				$array_data_final  = [];
+				$data        = [];
+				$header_tabel_saltab = $sheet_data[0];
+				$header_tabel_saltab = array_filter($header_tabel_saltab);
+
+				// echo '<pre>';
+				// print_r($sheet_data);
+				// echo '</pre>';
+
+				$length_header = count($header_tabel_saltab);
+				$jumlah_data = count($sheet_data) - 2;
+				// $highestColumnInRow5 = $spreadsheet->getActiveSheet(0)->getHighestColumn(1);
+
+				//susun array batch saltab
+				$data_batch = array(
+					'project_id'        	=> $project,
+					'project_name'        	=> $nama_project,
+					'sub_project_id'        => $sub_project,
+					'sub_project_name'      => $nama_sub_project,
+
+					'periode_salary'        => $periode_salary,
+					'saltab_from'    		=> $saltab_from,
+					'saltab_to'    			=> $saltab_to,
+					'fee'      				=> $fee,
+					'file_excel'      		=> $link_file_excel,
+					'status_finish_upload'  => 0,
+
+					'upload_by'      		=> $nip,
+					'upload_by_name'      	=> $this->Saltab_model->get_nama_karyawan($nip),
+					'upload_on'      		=> date('Y-m-d H:i:s'),
+					'upload_ip'        	 	=> $this->get_client_ip(),
+				);
+
+				$this->Saltab_model->insert_absensi_batch($data_batch);
+
+				$id_batch = $this->Saltab_model->get_id_absensi_batch($data_batch);
+
+				//susun array ratecard detail
+				for ($i = 2; $i < count($sheet_data); $i++) {
+					$lanjut = true;
+					$data += ['id_absensi_header' => $id_batch];
+					for ($j = 0; $j < $length_header; $j++) {
+						if ($header_tabel_saltab[$j] == "fullname") {
+							$trimmed_value = trim($sheet_data[$i][$j], ' ');
+							$trimmed_value = trim($trimmed_value, ' ');
+							$data += [$header_tabel_saltab[$j] => $trimmed_value];
+							if (($trimmed_value == "") || ($trimmed_value == null)) {
+								$lanjut = false;
+							} else {
+								$lanjut = true;
+							}
+						} else {
+							if ($lanjut) {
+								$trimmed_value = trim($sheet_data[$i][$j], ' ');
+								$trimmed_value = trim($trimmed_value, ' ');
+								$data += [$header_tabel_saltab[$j] => $trimmed_value];
+								$lanjut = true;
+							}
+						}
+					}
+					if ($lanjut) {
+						$array_data[] = $data;
+						$data = array();
+					} else {
+						$data = array();
+					}
+				}
+
+				$this->Saltab_model->insert_absensi_detail($array_data);
+
+				//setelah berhasil insert detail, update status batch jadi 1
+				//susun array batch saltab update
+				$data_batch_update = array(
+					'status_finish_upload'  => 1,
+					'mpp' => count($array_data),
+				);
+
+				$this->Saltab_model->update_absensi_batch($data_batch_update, $id_batch);
+				$tes_query = $this->db->last_query();
+
+				$status = "1";
+				$message = "Berhasil Import Absensi.";
+			} else {
+				$status = "0";
+				$message = "Tidak ditemukan sheet \"Absensi\" di dalam file excel";
+			}
+		} else {
+			$status = "0";
+			$message = "File yang diupload bukan format excel (.xlsx)";
+		}
+
+		//$this->view_batch_saltab_temporary($id_batch);
+		//redirect('/');
+
+		// redirect('admin/Importexcel/view_batch_saltab_temporary/' . $id_batch);
+		$return_value = array(
+			'status' => $status,
+			'message' => $message,
+		);
+
+		echo json_encode($return_value);
 	}
 
 	//hitung saltab
