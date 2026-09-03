@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt483 extends MY_Controller 
+class Pkwt603 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -426,6 +426,23 @@ class Pkwt483 extends MY_Controller
 						}
 
 
+						if($allowance_park!="Rp 0"){	
+						$tbl_2 .= '
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="02">Tunjangan Parkir</td>
+										<td colspan="10"> : <b>'.$allowance_park.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+						}
+
 						if($allowance_komunikasi!="Rp 0"){	
 						$tbl_2 .= '
 							<tr>
@@ -541,6 +558,13 @@ class Pkwt483 extends MY_Controller
 								<td></td>
 								<td colspan="1">c.</td>
 								<td colspan="20">Mencemarkan nama baik perusahaan.</td>
+							</tr>
+
+							<br>
+
+							<tr>
+								<td>9.</td>
+								<td colspan="20">Pembayaran gaji diberikan apabila Mitra bekerja minimal 3 (tiga) hari kerja. Jika Mitra bekerja kurang dari 3 (tiga) hari, maka gaji tidak akan dibayarkan</td>
 							</tr>
 
 

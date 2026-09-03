@@ -56,7 +56,7 @@ class Employee_history_join extends MY_Controller {
 			$data['path_url'] = 'emp_view';
 			$data['all_projects'] = $this->Project_model->get_project_maping($session['employee_id']);
 
-		if(in_array('378',$role_resources_ids)) {
+		if(in_array('121',$role_resources_ids)) {
 
 			$data['subview'] = $this->load->view("admin/hrd/employee_history_join", $data, TRUE);
 			$this->load->view('admin/layout/layout_main', $data); //page load
@@ -141,9 +141,20 @@ class Employee_history_join extends MY_Controller {
 			'NAMA LENGKAP',
 			'PROJECT',
 			'POSISI/JABATAN',
-			'AREA/PENEMPATAN',
+			'NIK KTP',
+			'NO KK',
+			'PTKP',
+			'NO HP',
+			'EMAIL',
+			'TEMPAT LAHIR',
+			'TANGGAL LAHIR',
+			'GENDER',
+			'ALAMAT KTP',
+			'PENEMPATAN KERJA',
+			'IBU KANDUNG',
 			'TANGGAL BERGABUNG',
-			'INTERVIWER'
+			'APPROVE HRD'
+
 		];
 
 		$length_array = count($rowArray);

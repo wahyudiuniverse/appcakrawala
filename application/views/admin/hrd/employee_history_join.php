@@ -138,12 +138,12 @@
 
 
           <div class="col-md mb-3">
-              <label class="form-label">Tanggal Awal</label>
+              <label class="form-label">Start Approve</label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly name="start_date" id="aj_sdate" type="text" value="<?php echo date('Y-m-d');?>">
           </div>
             
             <div class="col-md mb-3">
-              <label class="form-label">Tanggal Akhir</label>
+              <label class="form-label">End Approve</label>
               <input class="form-control date" placeholder="<?php echo $this->lang->line('xin_select_date');?>" readonly name="end_date" id="aj_edate" type="text" value="<?php echo date('Y-m-d');?>">
             </div>
 
@@ -186,13 +186,12 @@
           <table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
             <thead>
               <tr>
-                <th>NIP</th>
-                <th>Nama Lengkap</th>
-                <th>Project</th>
-                <th>Posisi/Jabatan</th>
-                <th>Area/Penempatan</th>
-                <th>Tanggal Bergabung</th>
-                <th>Interviewer</th>
+                <th>ACTION</th>
+                <th>NAMA LENGKAP</th>
+                <th>PROJECT</th>
+                <th>POSISI/PENEMPATAN</th>
+                <th>JOINDATE</th>
+                <th>APPROVED</th>
               </tr>
             </thead>
           </table>
@@ -306,11 +305,11 @@
 
         },
         'columns': [{
-            data: 'employee_id',
+            data: 'id',
             "orderable": false
           },
           {
-            data: 'fullname',
+            data: 'employee_id',
             "orderable": false,
             //searchable: true
           },
@@ -322,10 +321,6 @@
           {
             data: 'jabatan_name',
             "orderable": false
-          },
-          {
-            data: 'penempatan',
-            "orderable": false,
           },
           {
             data: 'date_of_joining',

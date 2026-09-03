@@ -388,49 +388,115 @@ class Pkwt460 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
-							</tr>';
+								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Imbalan jasa sebagai berikut :</td>
+							</tr>
 
+
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Gaji Pokok</td>
+										<td colspan="10"> : <b>'.$basicpay.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>
+							';
+
+
+						if($allowance_rent!="Rp 0"){	
 						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="02">Tunjangan Rental</td>
+										<td colspan="10"> : <b>'.$allowance_rent.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+						}
+
+
+						if($allowance_komunikasi!="Rp 0"){	
+						$tbl_2 .= '
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Pulsa</td>
+										<td colspan="10"> : <b>'.$allowance_komunikasi.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+						}
+
+						if($allowance_operation!="Rp 0"){	
+						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Operational</td>
+										<td colspan="10"> : <b>'.$allowance_operation.'</b> Per Bulan</td>
+									</tr>
 
+								</table></td>
+							</tr>';
+						}
+
+
+						if($allowance_meal!="Rp 0"){	
+						$tbl_2 .= '
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_meal.'</b> Per Bulan</td>
+									</tr>
 
+								</table></td>
+							</tr>';
+						}
+
+						if($allowance_transport!="Rp 0"){	
+						$tbl_2 .= '
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_park.' Uang Parkir diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_transport.'</b> Per Bulan</td>
+									</tr>
 
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20"> '.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>
+								</table></td>
+							</tr>';
 
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
-							</tr>
+						}
 
-							<br>
 
+						$tbl_2 .= '
+
+						<br>
 							<tr>
 								<td>5.</td>
 								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>

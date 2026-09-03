@@ -259,8 +259,9 @@ class Pkwt463 extends MY_Controller
 
 				}
 
+
 				$tbl_2 = '
-				<br>
+				<br><br>
 					<div style="text-align: center; text-justify: inter-word;">
 						<b><u>PERJANJIAN KEMITRAAN<br>'.$nomorsurat.'</u></b>
 					</div>
@@ -388,43 +389,135 @@ class Pkwt463 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
-							</tr>';
+								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Imbalan jasa sebagai berikut :</td>
+							</tr>
 
+
+
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Gaji Pokok</td>
+										<td colspan="10"> : <b>'.$basicpay.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>
+							';
+
+
+						if($allowance_rent!="Rp 0"){	
 						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Upah Harian yang didapatkan '.$basicpay.'.</td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="02">Tunjangan Rental</td>
+										<td colspan="10"> : <b>'.$allowance_rent.'</b> Per Bulan</td>
+									</tr>
 
-							<br>
+								</table></td>
+							</tr>';
+						}
+
+
+						if($allowance_komunikasi!="Rp 0"){	
+						$tbl_2 .= '
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Pulsa</td>
+										<td colspan="10"> : <b>'.$allowance_komunikasi.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+						}
+
+						if($allowance_operation!="Rp 0"){	
+						$tbl_2 .= '
 
 							<tr>
-								<td>5.</td>
-								<td colspan="20">Bagi mitra yang tidak didaftarkan BPJS (Kesehatan/Ketenagakerjaan) oleh pihak perusahaan, Apabila terjadi kecelakaan kerja/disaat jam kerja atau Mitra dan Anggota keluarga Mitra sakit atau masuk ke Rumah Sakit maka biaya akan menjadi beban pribadi Mitra dan tidak menjadi beban perusahan</td>
-							</tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Operational</td>
+										<td colspan="10"> : <b>'.$allowance_operation.'</b> Per Bulan</td>
+									</tr>
 
-							<br>
+								</table></td>
+							</tr>';
+						}
+
+
+						if($allowance_meal!="Rp 0"){	
+						$tbl_2 .= '
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_meal.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+						}
+
+						if($allowance_transport!="Rp 0"){	
+						$tbl_2 .= '
+							<tr>
+								<td colspan="0"></td>
+								<td colspan="1">•</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_transport.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+
+						}
+
+
+						$tbl_2 .= '
+
+<br>
+							<tr>
+								<td>5.</td>
+								<td colspan="20">Mitra selama bekerja didaftarkan BPJS Ketenagakerjaan oleh pihak perusahaan berupa jaminan JKK (Jaminan Kecelakaan Kerja) dan JKM (Jaminan Kematian ).</td>
+							</tr>
+							
+							<br><br><br><br><br>
+							<br><br><br><br><br>
+							<br><br><br><br><br><br>
 							<tr>
 								<td>6.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
-
+							
 							<br>
-
 							<tr>
 								<td>7.</td>
-								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%.</td>
+								<td colspan="20">Apabila saya mitra yang bertugas membawa kendaraan (mobil/motor) operasional/milik perusahaan lalu mengalami kerusakan maka beban kerusakan tidak ditanggung oleh perusahaan/client melainkan saya sendiri selaku driver kendaraan tersebut 100%</td>
 							</tr>
-
-							<br>
-							<br>
-							<br>
-							<br>
-							<br>
 							
+							<br>
 							<tr>
 								<td>8.</td>
 								<td colspan="20">Perjanjian Kemitraan ini dengan sendirinya akan berakhir apabila Mitra melakukan pelanggaran berat sebagai berikut :</td>
@@ -446,11 +539,9 @@ class Pkwt463 extends MY_Controller
 								<td colspan="1">c.</td>
 								<td colspan="20">Mencemarkan nama baik perusahaan.</td>
 							</tr>
-
-
-						<br>
+<br>
 							<tr>
-								<td colspan="20">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
+								<td colspan="10">Perjanjian Kemitraan ini berlaku sejak tanggal dimana kedua belah pihak telah menandatangani Perjanjian ini.</td>
 								<td colspan="0"></td>
 								<td colspan="0"></td>
 							</tr>
@@ -508,12 +599,12 @@ class Pkwt463 extends MY_Controller
 				$pdf->writeHTML($tbl_ttd, true, false, false, false, '');
 
 
+				// $pdf->writeHTML($tbl_kk, true, false, false, false, '');
 			
 				// $fname = strtolower($fname);
 				// $pay_month = strtolower(date("F Y"));
 				//Close and output PDF document
 				ob_start();
-				// $pdf->Output('pkwt_'.$fname.'_'.$pay_month.'.pdf', 'I');
 				$pdf->Output('pkwt_'.$namalengkap.'_'.$nomorsurat.'.pdf', 'I');
 				ob_end_flush();
 

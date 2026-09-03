@@ -10,7 +10,7 @@
  */
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Pkwt336 extends MY_Controller 
+class Pkwt335 extends MY_Controller 
 {
 
    /*Function to set JSON output*/
@@ -390,7 +390,7 @@ class Pkwt336 extends MY_Controller
 				<table cellpadding="2" cellspacing="0" border="0" style="text-align: justify;">
 							<tr>
 								<td>1.1</td>
-								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di '.$penempatan.' dengan posisi sebagai karyawan/Staff '.$jabatan.' di Jakarta atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
+								<td colspan="18"><b>PIHAK PERTAMA</b> akan menempatkan <b>PIHAK KEDUA</b> dilokasi kerja <b>PIHAK PERTAMA</b> yaitu di '.$penempatan.' dengan posisi sebagai karyawan/Staff '.$jabatan.' dan atau ditempatkan di tempat lain sesuai dengan kebutuhan <b>PIHAK PERTAMA</b>.</td>
 							</tr>
 				<br>
 							<tr>

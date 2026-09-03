@@ -389,36 +389,25 @@ class Pkwt451 extends MY_Controller
 
 							<tr>
 								<td>4.</td>
-								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Komisi Jasa sebesar :</td>
+								<td colspan="20">Mitra selama memberikan layanan jasanya kepada Perusahaan akan memperoleh Imbalan jasa sebagai berikut :</td>
 							</tr>
 
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$basicpay.' Upah diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>';
 
-
-						if($allowance_meal!="Rp 0"){	
-						$tbl_2 .= '
-					
-							<tr>
-								<td colspan="0"></td>
-								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_meal.' Uang Makan diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
-							</tr>';
-						}
-
-						if($allowance_transport!="Rp 0"){	
-						$tbl_2 .= '
 
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_transport.' Uang Transport diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
-							</tr>';
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Gaji Pokok</td>
+										<td colspan="10"> : <b>'.$basicpay.'</b> Per Bulan</td>
+									</tr>
 
-						}
+								</table></td>
+							</tr>
+							';
+
 
 						if($allowance_rent!="Rp 0"){	
 						$tbl_2 .= '
@@ -426,17 +415,31 @@ class Pkwt451 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_rent.' Uang Sewa Motor diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja.</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="02">Tunjangan Rental</td>
+										<td colspan="10"> : <b>'.$allowance_rent.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
+
 						if($allowance_komunikasi!="Rp 0"){	
 						$tbl_2 .= '
-
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_komunikasi.' Uang Komunikasi diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Pulsa</td>
+										<td colspan="10"> : <b>'.$allowance_komunikasi.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
@@ -446,23 +449,53 @@ class Pkwt451 extends MY_Controller
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">'.$allowance_operation.' Uang Operasional diberikan sesuai dengan kehadiran '.$waktukerja.' Hari Kerja dalam 1 bulan kerja</td>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Operational</td>
+										<td colspan="10"> : <b>'.$allowance_operation.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
 							</tr>';
 						}
 
+
+						if($allowance_meal!="Rp 0"){	
 						$tbl_2 .= '
-
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Total Bayaran Harian yang didapatkan dengan perhitungan (Total Upah/Hari Kerja) '.$this->Xin_model->rupiah($sum_salary).'/'.$waktukerja.' Hari Kerja sebesar <b>'.$this->Xin_model->rupiah($sum_salary/$waktukerja).'/ Hari</b></td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_meal.'</b> Per Bulan</td>
+									</tr>
 
+								</table></td>
+							</tr>';
+						}
+
+						if($allowance_transport!="Rp 0"){	
+						$tbl_2 .= '
 							<tr>
 								<td colspan="0"></td>
 								<td colspan="1">•</td>
-								<td colspan="20">Komisi lain-lain berupa insentive dimana akan diberikan apabila mencapai target sesuai dengan skema yang berlaku:</td>
-							</tr>
+								<td colspan="20">
+								<table cellpadding="2" cellspacing="0" border="0">
+									<tr>
+										<td colspan="2">Tunjangan Makan</td>
+										<td colspan="10"> : <b>'.$allowance_transport.'</b> Per Bulan</td>
+									</tr>
+
+								</table></td>
+							</tr>';
+
+						}
+
+
+						$tbl_2 .= '
 
 							<br>
 
@@ -472,13 +505,14 @@ class Pkwt451 extends MY_Controller
 							</tr>
 							
 							<br>
-							<br>
-							<br>
 							<tr>
 								<td>6.</td>
 								<td colspan="20">Apabila saya mitra yang bertugas membawa barang ataupun uang maka saya bertanggung jawab penuh terhadap product / barang maupun uang yang menjadi tanggung jawab saya sebagai sales / motorist , apabila dikemudian hari terdapat kerusakan ataupun kehilangan barang/product akan menjadi tanggung jawab pribadi. Apabila kehilangan uang yang sengaja dilakukan oleh karyawan tersebut (lalai) akan menjadi tanggung jawab pribadi kecuali karyawan mengalami kejadian perampokan.</td>
 							</tr>
 							
+							<br>
+							<br>
+							<br>
 							<br>
 							<tr>
 								<td>7.</td>

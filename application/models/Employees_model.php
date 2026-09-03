@@ -810,6 +810,32 @@ class Employees_model extends CI_Model
 	}
 
 	//ambil Company name table company
+	function get_approval_name($id)
+	{
+		if ($id == null) {
+			return "";
+		} else if ($id == 0) {
+			return "";
+		} else {
+			$this->db->select('xin_employees.first_name');
+			$this->db->from('xin_employee_request');
+			$this->db->join('xin_employees', 'xin_employees.user_id = xin_employee_request.approved_hrdby');
+			$this->db->where('secid', $id);
+
+
+			$query = $this->db->get()->row_array();
+
+			//return $query['name'];
+			if (empty($query)) {
+				return "";
+			} else {
+				return $query['first_name'];
+			}
+		}
+	}
+
+
+	//ambil Company name table company
 	function get_company_name($id)
 	{
 		if ($id == null) {
@@ -4689,7 +4715,7 @@ class Employees_model extends CI_Model
 				$nama_penempatan = '<h6 style="color: grey; font-size: 12px;">' . strtoupper($record->penempatan) . '</h6>';
 
 				$data[] = array(
-					"id" => $view . $text_resign,
+					"id" => $text_resign . $view . $button_send_email,
 					// "id" 			=> $record->employee_id . $text_pin,
 					"ktp_no" 		=> $record->ktp_no . $tombol_verifikasi,
 					"first_name" 	=> $nip . $nama_lenkap,
@@ -5947,7 +5973,7 @@ class Employees_model extends CI_Model
 			$filterPeriode = "";
 			if (($sdate != null) && ($edate != "")) {
 				// $filterPeriode = "tx_cio.date_cio = '" . $status . "'";
-				$filterPeriode = "DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'";
+				$filterPeriode = "DATE_FORMAT(xin_employees.created_at, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'";
 
 				// $filterPeriode = "DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'";
 
@@ -5999,15 +6025,20 @@ class Employees_model extends CI_Model
 			$this->db->select('xin_employees.user_id');
 			$this->db->select('xin_employees.employee_id');
 			$this->db->select('xin_employees.first_name');
+			$this->db->select('xin_employees.company_id');
 			$this->db->select('xin_employees.project_id');
-			$this->db->select('xin_employees.employee_id');
+			// $this->db->select('xin_employees.employee_id');
 			$this->db->select('xin_projects.title');
 			// $this->db->select('xin_employees.designation_id');
 			$this->db->select('xin_designations.designation_name');
-			$this->db->select('xin_employees.employee_id');
+			// $this->db->select('xin_employees.employee_id');
 			$this->db->select('xin_employees.penempatan');
 			$this->db->select('xin_employees.date_of_joining');
-			$this->db->select('xin_employees.id_screening');
+			$this->db->select('xin_employees.created_at');
+			$this->db->select('xin_employees.verification_id');
+
+		
+
 			// $this->db->select('tx_cio.date_cio');
 			if ($searchQuery != '') {
 				$this->db->where($searchQuery);
@@ -6045,16 +6076,39 @@ class Employees_model extends CI_Model
 				// 	$nama_interviewer = $nama_interviewer['interview_rto_by_name'];
 				// }
 
+				if ($record->company_id == 1) {
+					$pt = "PT. KOPERASI JASA KARYAWAN";
+				} else if ($record->company_id == 2) {
+					$pt = "PT. SIPRAMA CAKRAWALA";
+				} else if ($record->company_id == 3) {
+					$pt = "PT. KRISTA AULIA CAKRAWALA";
+				} else if ($record->company_id == 4) {
+					$pt = "PT. MATA CAKRAWALA";
+				} else {
+					$pt = "PT. DAICHI NUSANTARA AMARTA";
+				}
 
+				$nip = '<strong>' . strtoupper($record->employee_id) . '</strong>';
+				$nama_lenkap = '<h6 style="color: grey; font-size: 13px;">' . strtoupper($record->first_name) . '</h6>';
+
+				$project_name = '<strong>' . strtoupper($record->title) . '</strong>';
+				$pt_name = '<h6 style="color: grey; font-size: 13px;">' . strtoupper($pt) . '</h6>';
+
+				$posisi = '<strong>' . strtoupper($record->designation_name) . '</strong>';
+				$penempatan = '<h6 style="color: grey; font-size: 13px;">' . strtoupper($record->penempatan) . '</h6>';
+
+				// $approval_name = strtoupper($this->get_approval_name($record->verification_id));
+				// $approval_date = strtoupper($this->get_approval_date($record->verification_id));
+
+				$action = '<button type="button" class="btn btn-xs btn-outline-success"> LIHAT </button>';
 
 				$data[] = array(
-					"employee_id" => $record->employee_id,
-					"fullname" => strtoupper($record->first_name),
-					"project_name" => strtoupper($record->title),
-					"jabatan_name" => strtoupper($record->designation_name),
-					"penempatan" => strtoupper($record->penempatan),
+					"id" => $action,
+					"employee_id" => $nip . $nama_lenkap,
+					"project_name" => $project_name . $pt_name,
+					"jabatan_name" => $posisi . $penempatan,
 					"date_of_joining" => strtoupper($record->date_of_joining),
-					"nama_interviewer" => strtoupper($record->id_screening)
+					"nama_interviewer" => substr(strtoupper($this->get_approval_name($record->verification_id)), 0, 5) . '...<br>' . substr($record->created_at, 0, 10),
 				);
 			}
 		} else {
@@ -6133,12 +6187,9 @@ class Employees_model extends CI_Model
 		$filterStatus = "";
 		if (($sdate != null) && ($sdate != "") && ($sdate != '0')) {
 			$filterStatus = "(
-				DATE_FORMAT(xin_employees.date_of_joining, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'
+				DATE_FORMAT(xin_employees.created_at, '%Y-%m-%d') BETWEEN '" . $sdate . "' AND '" . $edate . "'
 			)";
 
-			// $filterStatus = "(
-			// 	DATE_FORMAT(tx_cio.date_cio, '%Y-%m-%d') BETWEEN '2025-05-01' AND '2025-05-31'
-			// )";
 		} else {
 			$filterStatus = "";
 		}
@@ -6156,11 +6207,20 @@ class Employees_model extends CI_Model
 		$this->db->select('xin_projects.title');
 		$this->db->select('xin_employees.designation_id');
 		$this->db->select('xin_designations.designation_name');
+		$this->db->select('xin_employees.ktp_no');
+		$this->db->select('xin_employees.kk_no');
+		$this->db->select('mt_marital.kode');
+		$this->db->select('xin_employees.contact_no');
+		$this->db->select('xin_employees.email');
+		$this->db->select('xin_employees.tempat_lahir');
+		$this->db->select('xin_employees.date_of_birth');
+		$this->db->select('xin_employees.gender');
+		$this->db->select('xin_employees.alamat_ktp');
 		$this->db->select('xin_employees.penempatan');
+		$this->db->select('xin_employees.ibu_kandung');
 		$this->db->select('xin_employees.date_of_joining');
+		$this->db->select('xin_employees.created_at');
 		$this->db->select('xin_employees.id_screening');
-
-
 
 		// $dbtraxes->where($kondisiDefaultQuery);
 		if ($searchQuery != '') {
@@ -6177,8 +6237,8 @@ class Employees_model extends CI_Model
 		}
 		$this->db->join('xin_projects', 'xin_projects.project_id = xin_employees.project_id', 'left');
 		$this->db->join('xin_designations', 'xin_designations.designation_id = xin_employees.designation_id', 'left');
-		// $this->db->join('(SELECT contract_id, employee_id, from_date, to_date, file_name, upload_pkwt, no_surat FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
-		// $this->db->join('(SELECT * FROM xin_employee_contract WHERE contract_id IN ( SELECT MAX(contract_id) FROM xin_employee_contract GROUP BY employee_id)) b', 'b.employee_id = xin_employees.employee_id', 'left');
+		$this->db->join('mt_marital', 'mt_marital.id_marital = xin_employees.marital_status', 'left');
+
 		$records = $this->db->get('xin_employees')->result();
 		$tes_query = $this->db->last_query();
 
@@ -6192,12 +6252,23 @@ class Employees_model extends CI_Model
 				trim(strtoupper($record->first_name), " "),
 				strtoupper($record->title),
 				strtoupper($record->designation_name),
+				strtoupper($record->ktp_no),
+				strtoupper($record->kk_no),
+				strtoupper($record->kode),
+				strtoupper($record->contact_no),
+				strtoupper($record->email),
+				strtoupper($record->tempat_lahir),
+				strtoupper($record->date_of_birth),
+				strtoupper($record->gender),
+				strtoupper($record->alamat_ktp),
 				strtoupper($record->penempatan),
+				strtoupper($record->ibu_kandung),
 				strtoupper($record->date_of_joining),
-				strtoupper($record->id_screening),
+				strtoupper($record->created_at . ' ' . $record->id_screening),
 
 			);
 		}
+
 
 		//print_r($this->db->last_query());
 		//die;
@@ -6768,7 +6839,7 @@ class Employees_model extends CI_Model
 
 				if ($record->cancel_status == 1) {
 
-					if ($session_id == 21528204 || $session_id == 1 || $session_id == 21532091) {
+					if ($session_id == 21528204 || $session_id == 1 || $session_id == 21532091 || $session_id == 21541934 || $session_id == 21544022) {
 						$action = $open_cancel . ' ' . $open_revisi;
 					} else {
 						// $action = $menunggu_approve_hrd;
@@ -6776,7 +6847,7 @@ class Employees_model extends CI_Model
 					}
 				} else {
 
-					if ($session_id == 21528204 || $session_id == 1 || $session_id == 21532091 || $session_id ==21541934) {
+					if ($session_id == 21528204 || $session_id == 1 || $session_id == 21532091 || $session_id ==21541934 || $session_id == 21544022) {
 						$action = $open_approve . '<br>' . $open_remove;
 					} else {
 						$action = $menunggu_approve_hrd;
@@ -10797,6 +10868,13 @@ class Employees_model extends CI_Model
 		// $query = $this->db->get('projects')->result_array();
 
 		// return $query;
+	}
+
+	public function limitCharacters($text, $limit) {
+	    if (mb_strlen($text, 'UTF-8') > $limit) {
+	        return mb_substr($text, 0, $limit, 'UTF-8') . '...';
+	    }
+	    return $text;
 	}
 
 	//update data kontrak
