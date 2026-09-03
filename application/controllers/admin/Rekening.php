@@ -33,7 +33,7 @@ class Rekening extends MY_Controller
 		parent::__construct();
 		//load the models
 		$this->load->library('session');
-		$this->load->model("Employees_model");
+		// $this->load->model("Employees_model");
 		// $this->load->model("Saltab_model");
 		// $this->load->model("Register_model");
 		// $this->load->model("Xin_model");
@@ -6601,70 +6601,6 @@ class Rekening extends MY_Controller
 		$postData = $this->input->post();
 
 		$bank_code = $postData['bank_input'];
-
-		// $no_rekening_jelas = urldecode($no_rekening);
-
-		if ($bank_code == "" || $bank_code == null) {
-			$pesan = array(
-				"is_success" => false,
-				"message" => "Kode Bank Kosong",
-			);
-
-			echo json_encode($pesan);
-		} else {
-			// set post fields
-			$post_variable = [
-				"bank_code" => $bank_code,
-				"account_number" => $postData['norek_input'],
-				"account_name" => $postData['pemilik_rekening_input']
-			];
-
-			$input_post = json_encode($post_variable);
-			// $input_post = "{'account_bank': '". $bank_code ."','account_number':'".$no_rekening."'}";
-
-			$curl = curl_init();
-
-			curl_setopt_array($curl, array(
-				CURLOPT_URL => 'https://use.api.co.id/validation/bank',
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_ENCODING => '',
-				CURLOPT_MAXREDIRS => 10,
-				CURLOPT_TIMEOUT => 0,
-				CURLOPT_FOLLOWLOCATION => true,
-				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-				CURLOPT_CUSTOMREQUEST => 'POST',
-				CURLOPT_POSTFIELDS => $input_post,
-				CURLOPT_HTTPHEADER => array('x-api-co-id:ACPJ5oVrIf2XVzpdamB1cjDn5Hwd2hKUpnfdz1jidnFSfaFMuw', 'Content-Type:application/json'),
-			));
-
-			$response = curl_exec($curl);
-			$err = curl_error($curl);
-
-			curl_close($curl);
-			// echo $response;
-
-			$pesan = array(
-				"is_success" => false,
-				"message" => "cURL Error #:" . $err,
-			);
-
-			if ($err) {
-				echo json_encode($pesan);
-			} else {
-				// $hasil_api = json_decode($response);
-				// $data_hasil_api = $hasil_api->data;
-
-				echo $response;
-			}
-		}
-	}
-
-	//Cek rekening bank menggunakan API
-	public function cek_rekening_via_API_2()
-	{
-		$postData = $this->input->post();
-
-		$bank_code = $this->Employees_model->get_id_bank_verifikasi($postData['bank_input']);
 
 		// $no_rekening_jelas = urldecode($no_rekening);
 
