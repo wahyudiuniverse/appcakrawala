@@ -313,6 +313,36 @@
 	</div>
 </div>
 
+<!-- MODAL UNTUK VERIFIKASI DITOLAK -->
+<div class="modal fade" id="veriftolakModal" role="dialog" aria-labelledby="veriftolakModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg" role="document" style="top: 20%;">
+
+					<div style="width:100%; margin:auto; background:#ffffff; border-radius:15px; overflow:hidden; text-align:center; font-family:Arial, sans-serif; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+
+					    <!-- Header Merah -->
+					    <div style="background:#ff5257; padding:20px 0 18px;">
+					        <div style="font-size:58px; line-height:1; color:#ffffff;">
+					            ⚠
+					        </div>
+					    </div>
+
+					    <!-- Content -->
+					    <div style="padding:18px 20px 24px;">
+
+				<div style="font-size:26px; font-weight:bold; color:#343b5c; margin-bottom:10px;">Akses Dibatasi!
+				</div>
+
+				<div style="font-size:16px; color:#59627d; line-height:21px; margin-bottom:22px;">
+					Beberapa Layanan Fitur atau Modul untuk Kamu dibatasi.
+				</div>
+
+				<button type='button' id="close_modal_email" class='btn btn-secondary' data-dismiss='modal'>Close</button>
+			</div>
+
+		</div>
+	</div>
+</div> 
+
 <!-- MODAL UNTUK EMAIL -->
 <div class="modal fade" id="emailModal" role="dialog" aria-labelledby="emailModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl" role="document">
@@ -583,38 +613,17 @@
 				</div>
 			</div>
 
-			<!-- <div class="card-header with-elements"> <span class="card-header-title mr-2"><strong>LIST EMPLOYEES</strong></span> </div> -->
 			<div class="card-body">
-				<!-- <div class="box-datatable table-responsive" id="btn-place">
-          <table class="display dataTable table table-striped table-bordered" id="tabel_employees2" style="width:100%">
-            <thead>
-              <tr>
-                <th>Aksi</th>
-                <th>Periode Salary</th>
-                <th>Periode Cutoff</th>
-                <th>Project</th>
-                <th>Sub Project</th>
-                <th>Total MPP</th>
-                <th>Release by</th>
-                <th>Release on</th>
-              </tr>
-            </thead>
-          </table>
-        </div> -->
+
 				<div class="box-datatable table-responsive">
 					<table class="datatables-demo table table-striped table-bordered" id="tabel_employees">
 						<thead>
 							<tr>
-								<th>Aksi</th>
-								<th>NIP - PIN - Status</th>
-								<th>NIK</th>
-								<th>Nama Lengkap</th>
-								<th>Verifikasi</th>
-								<th>Project</th>
-								<th>Sub Project</th>
-								<th>Jabatan</th>
-								<th>Penempatan</th>
-								<th>Periode Kontrak</th>
+								<th>ID</th>
+								<th>KTP</th>
+								<th>NAMA LENGKAP</th>
+								<th>PROJECT</th>
+								<th>POSISI</th>
 							</tr>
 						</thead>
 					</table>
@@ -1004,80 +1013,66 @@
 		var search_periode_from = "";
 		var search_periode_to = "";
 
-		employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
+		// employee_table = $('#tabel_employees').DataTable().on('search.dt', () => eventFired('Search'));
 
-		// employee_table = $('#tabel_employees').DataTable({
-		//   //"bDestroy": true,
-		//   'processing': true,
-		//   'serverSide': true,
-		//   // 'stateSave': true,
-		//   'bFilter': true,
-		//   'serverMethod': 'post',
-		//   //'dom': 'plBfrtip',
-		//   'dom': 'lfrtip',
-		//   //"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
-		//   //'columnDefs': [{
-		//   //  targets: 11,
-		//   //  type: 'date-eu'
-		//   //}],
-		//   'order': [
-		//     [3, 'asc']
-		//   ],
-		//   'ajax': {
-		//     'url': '<?= base_url() ?>admin/reports/list_employees',
-		//     data: {
-		//       [csrfName]: csrfHash,
-		//       session_id: session_id,
-		//       project: project,
-		//       sub_project: sub_project,
-		//       status: status,
-		//       //base_url_catat: base_url_catat
-		//     },
-		//     error: function(xhr, ajaxOptions, thrownError) {
-		//       alert("Status :" + xhr.status);
-		//       alert("responseText :" + xhr.responseText);
-		//     },
-		//   },
-		//   'columns': [{
-		//       data: 'aksi',
-		//       "orderable": false
-		//     },
-		//     {
-		//       data: 'employee_id',
-		//       // "orderable": false,
-		//       //searchable: true
-		//     },
-		//     {
-		//       data: 'pincode',
-		//       "orderable": false,
-		//     },
-		//     {
-		//       data: 'first_name',
-		//       // "orderable": false,
-		//       //searchable: true
-		//     },
-		//     {
-		//       data: 'project',
-		//       "orderable": false
-		//     },
-		//     {
-		//       data: 'sub_project',
-		//       "orderable": false,
-		//     },
-		//     {
-		//       data: 'designation_name',
-		//       // "orderable": false,
-		//     },
-		//     {
-		//       data: 'penempatan',
-		//       //"orderable": false,
-		//     },
-		//     {
-		//       data: 'periode',
-		//       "orderable": false,
-		//     },
-		//   ]
-		// }).on('search.dt', () => eventFired('Search'));
+		employee_table = $('#tabel_employees').DataTable({
+				"searchDelay": 1000,
+				//"bDestroy": true,
+				'processing': true,
+				'serverSide': true,
+				// 'stateSave': true,
+				'bFilter': true,
+				'serverMethod': 'post',
+				//'dom': 'plBfrtip',
+				'dom': 'lfrtip',
+				//"buttons": ['csv', 'excel', 'pdf', 'print'], // colvis > if needed
+				//'columnDefs': [{
+				//  targets: 11,
+				//  type: 'date-eu'
+				//}],
+				'order': [
+					[3, 'asc']
+				],
+				'ajax': {
+					'url': '<?= base_url() ?>admin/reports/list_employees',
+					data: {
+						[csrfName]: csrfHash,
+						session_id: session_id,
+						project: project,
+						sub_project: sub_project,
+						status: status,
+						//base_url_catat: base_url_catat
+					},
+					error: function(xhr, ajaxOptions, thrownError) {
+						alert("Status :" + xhr.status);
+						alert("responseText :" + xhr.responseText);
+					},
+				},
+				'columns': [{
+						data: 'id',
+						"orderable": false
+					},
+					{
+						data: 'ktp_no',
+						"orderable": false,
+						//searchable: true
+					},
+					{
+						data: 'first_name',
+						// "orderable": false,
+						//searchable: true
+					},
+					{
+						data: 'project',
+						"orderable": false
+					},
+					{
+						data: 'designation_name',
+						"orderable": false,
+					},
+				]
+		});
+
 	});
 </script>
 
@@ -1387,13 +1382,8 @@
 					},
 				},
 				'columns': [{
-						data: 'aksi',
+						data: 'id',
 						"orderable": false
-					},
-					{
-						data: 'employee_id',
-						"orderable": false,
-						//searchable: true
 					},
 					{
 						data: 'ktp_no',
@@ -1406,99 +1396,12 @@
 						//searchable: true
 					},
 					{
-						data: 'verifikasi',
-						"defaultContent": '',
-						"orderable": false,
-						render: function(data, type, row, meta) {
-							if (type === 'display') {
-								var currentCell = $("#tabel_employees").DataTable().cells({
-									"row": meta.row,
-									"column": meta.col
-								}).nodes(0);
-								$.ajax({
-									url: '<?= base_url() ?>admin/Reports/get_detail_verifikasi_employee/',
-									method: 'post',
-									dataType: 'html',
-									data: {
-										[csrfName]: csrfHash,
-										employee_id: row.periode,
-										actual_verification_id: data,
-									},
-									beforeSend: function() {
-										// return loading_html_text;
-										$(currentCell).html(loading_html_text);
-									},
-									success: function(response) {
-										$(currentCell).html(response);
-										// return response;
-									},
-									error: function(xhr, status, error) {
-										// html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-										// html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-										// // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-										// $('.isi-modal').html(html_text); //coba pake iframe
-										// $('#button_save_pin').attr("hidden", true);
-									}
-								});
-								// return null;
-								// return '<a href="/edit/' + data + '">Edit</a>';
-							}
-						}
-					},
-					{
 						data: 'project',
 						"orderable": false
 					},
 					{
-						data: 'sub_project',
-						"orderable": false,
-					},
-					{
 						data: 'designation_name',
 						"orderable": false,
-					},
-					{
-						data: 'penempatan',
-						// "orderable": false,
-					},
-					{
-						data: 'periode',
-						"defaultContent": '',
-						"orderable": false,
-						render: function(data, type, row, meta) {
-							if (type === 'display') {
-								var currentCell = $("#tabel_employees").DataTable().cells({
-									"row": meta.row,
-									"column": meta.col
-								}).nodes(0);
-								$.ajax({
-									url: '<?= base_url() ?>admin/Reports/get_detail_pkwt_employee/',
-									method: 'post',
-									dataType: 'html',
-									data: {
-										[csrfName]: csrfHash,
-										employee_id: data,
-									},
-									beforeSend: function() {
-										// return loading_html_text;
-										$(currentCell).html(loading_html_text);
-									},
-									success: function(response) {
-										$(currentCell).html(response);
-										// return response;
-									},
-									error: function(xhr, status, error) {
-										// html_text = "<strong><span style='color:#FF0000;'>ERROR.</span> Silahkan foto pesan error di bawah dan kirimkan ke whatsapp IT Care di nomor: 085174123434</strong>";
-										// html_text = html_text + "<iframe srcdoc='" + xhr.responseText + "' style='zoom:1' frameborder='0' height='250' width='99.6%'></iframe>";
-										// // html_text = "Gagal fetch data. Kode error: " + xhr.status;
-										// $('.isi-modal').html(html_text); //coba pake iframe
-										// $('#button_save_pin').attr("hidden", true);
-									}
-								});
-								// return null;
-								// return '<a href="/edit/' + data + '">Edit</a>';
-							}
-						}
 					},
 				]
 			});
@@ -3517,6 +3420,20 @@
 				$('#button_coba_lagi').attr("hidden", false);
 			}
 		});
+
+	}
+</script>
+
+
+<!-- Tombol VERIFIKASI DITOLAK -->
+<script type="text/javascript">
+	function verifikasi_ditolak() {
+
+				$('.info-modal-veriftolak').attr("hidden", false);
+				$('.isi-modal-veriftolak').attr("hidden", false);
+				$('#button_coba_lagi').attr("hidden", true);
+				$('#button_send_email').attr("hidden", false);
+				$('#veriftolakModal').appendTo("body").modal('show');
 
 	}
 </script>

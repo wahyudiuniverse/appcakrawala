@@ -294,7 +294,7 @@ function get_list_skk_report($postData = null)
 			}
 
 			## Kondisi Default 
-			$kondisiDefaultQuery = "xin_qrcode_skk.cancel_status = 0 AND xin_qrcode_skk.approve_hrd is not null";
+			$kondisiDefaultQuery = "xin_qrcode_skk.jenis_dokumen in (1,2) AND xin_qrcode_skk.cancel_status = 0 AND xin_qrcode_skk.approve_hrd is not null";
 
 			## Total number of records without filtering
 			$this->db->select('count(*) as allcount');
